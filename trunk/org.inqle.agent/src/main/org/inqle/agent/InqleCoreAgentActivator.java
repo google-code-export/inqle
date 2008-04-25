@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 
 public class InqleCoreAgentActivator implements BundleActivator {
 		
-		static Logger log = Logger.getLogger(inqle.agent.equinox.InqleCoreAgentActivator.class);
+		static Logger log = Logger.getLogger(InqleCoreAgentActivator.class);
 
 		private AgentInvestigator agent;
 		
