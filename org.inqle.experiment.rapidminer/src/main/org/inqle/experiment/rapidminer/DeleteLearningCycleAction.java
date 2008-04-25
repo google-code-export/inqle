@@ -1,0 +1,53 @@
+package org.inqle.experiment.rapidminer;
+
+import org.apache.log4j.Logger;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.sampling.ISampler;
+import org.inqle.ui.rap.IPartType;
+import org.inqle.ui.rap.tree.parts.ModelPart;
+
+/**
+ * @author David Donohue
+ * Feb 8, 2008
+ */
+public class DeleteLearningCycleAction extends Action {
+	private String menuText;
+	private IWorkbenchWindow window;
+	private Persister persister;
+	private LearningCycle learningCycleToDelete = null;
+	private LearningCyclePart learningCyclePart = null;
+	
+	private static final Logger log = Logger.getLogger(DeleteLearningCycleAction.class);
+			
+	public DeleteLearningCycleAction(String menuText, LearningCyclePart learningCyclePart, IWorkbenchWindow window, Persister persister) {
+		this.window = window;
+		this.menuText = menuText;
+		this.learningCyclePart = learningCyclePart;
+		this.learningCycleToDelete  = learningCyclePart.getLearningCycle();
+		this.persister = persister;
+	}
+	
+	public String getText() {
+		return menuText;
+	}
+	
+	@Override
+	public void runWithEvent(Event event) {
+		boolean confirmDelete = false;
+		
+		if (learningCycleToDelete != null) {
+			confirmDelete = MessageDialog.openConfirm(window.getShell(), "Delete this Learning Cycle", "Are you sure you want to delete Learning Cycle\n'" + learningCycleToDelete.getName() + "'?\nTHIS CANNOT BE UNDONE!");
+		}
+		if (confirmDelete) {
+			Persister.remove(learningCycleToDelete, persister.getMetarepositoryModel());
+			IPartType parentPart = learningCyclePart.getParent();
+			parentPart.fireUpdate(parentPart);
+		}
+	}
+}
