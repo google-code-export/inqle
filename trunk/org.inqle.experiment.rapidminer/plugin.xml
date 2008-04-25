@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point 
+   		id="org.inqle.experiment.rapidminer.IRapidMinerExperiment" 
+   		name="RapidMiner Experiment" 
+   		schema="schema/org.inqle.experiment.rapidminer.IRapidMinerExperiment.exsd"/>
+   <extension
+         point="org.inqle.ui.rap.IPartType">
+			<part-type
+           class="org.inqle.experiment.rapidminer.RapidMinerExperimentParts"
+           weight="3000">
+			</part-type>
+			<part-type
+           class="org.inqle.experiment.rapidminer.LearningCycleParts"
+           weight="4000">
+			</part-type>
+   </extension>
+   <extension
+         point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
+      <rapidminer-experiment
+      		 id="org.inqle.experiment.basic.SimpleRegression"
+      		 file="org.inqle.experiment.rapidminer/SimpleRegression.xml"
+      		 name="Simple Regression"
+      		 description="A simple regression experiment"
+      		 type="regression"
+           weight="1000">
+      </rapidminer-experiment>
+      <rapidminer-experiment
+      		 id="org.inqle.experiment.basic.SimpleClassification"
+      		 file="org.inqle.experiment.rapidminer/SimpleClassification.xml"
+      		 name="Simple Classification"
+      		 description="A simple classification experiment"
+      		 type="classification"
+           weight="1000">
+      </rapidminer-experiment>
+   </extension>
+
+</plugin>
