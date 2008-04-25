@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="org.inqle.ui.rap.IPartType" name="Class of Application Parts" schema="schema/org.inqle.ui.rap.IPartType.exsd"/>
+   <extension
+         point="org.eclipse.rap.ui.entrypoint">
+      <entrypoint
+            class="org.inqle.ui.rap.Application"
+            parameter="default"
+            id="org.inqle.ui.rap.Application">
+      </entrypoint>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RAP Perspective"
+            class="org.inqle.ui.rap.Perspective"
+            id="org.inqle.ui.rap.perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            name="Message"
+            icon="icons/sample2.gif"
+            class="org.inqle.ui.rap.View"
+            id="org.inqle.ui.rap.view">
+      </view>
+      <view
+            name="Mailboxes"
+            icon="icons/sample3.gif"
+            class="org.inqle.ui.rap.NavigationView"
+            id="org.inqle.ui.rap.navigationView">
+      </view>
+      <view
+            name="Datasets"
+            icon="icons/sample3.gif"
+            class="org.inqle.ui.rap.DatasetsView"
+            id="org.inqle.ui.rap.datasetsView">
+      </view>
+      <view
+            name="Hello"
+            icon="icons/sample3.gif"
+            class="org.inqle.ui.rap.HelloView"
+            id="org.inqle.ui.rap.helloView">
+      </view>
+      <view
+            name="Parts"
+            icon="icons/sample3.gif"
+            class="org.inqle.ui.rap.tree.PartsView"
+            id="org.inqle.ui.rap.partsView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Mail"
+            id="org.inqle.ui.rap.category">
+      </category>
+      <command
+            name="Open Mailbox"
+            description="Opens a mailbox"
+            categoryId="org.inqle.ui.rap.category"
+            id="org.inqle.ui.rap.open">
+      </command>
+      <command
+            name="Open Message Dialog"
+            description="Opens a message dialog"
+            categoryId="org.inqle.ui.rap.category"
+            id="org.inqle.ui.rap.openMessage">
+      </command>
+   </extension>
+   
+   <extension
+         point="org.inqle.ui.rap.IPartType">
+     <part-type
+           class="org.inqle.ui.rap.tree.parts.Databases"
+           weight="100">
+     </part-type>
+   </extension>
+
+</plugin>
