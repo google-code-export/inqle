@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension-point 
+   		id="org.inqle.agent.IAgent" 
+   		name="Agent" 
+   		schema="schema/org.inqle.agent.IAgent.exsd"/>
+  <extension
+         point="org.inqle.ui.rap.IPartType">
+		<part-type
+           class="org.inqle.agent.AgentParts"
+           weight="5000"/>
+  </extension>
+         
+</plugin>
