@@ -1,0 +1,63 @@
+package org.inqle.data.rdf;
+
+import java.net.URI;
+
+public class RDF {
+
+	public static final String RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+	public static final String RDFS = "http://www.w3.org/2000/01/rdf-schema#";
+	public static final String XSD = "http://www.w3.org/2001/XMLSchema#";
+	public static final String OWL = "http://www.w3.org/2002/07/owl#";
+	public static final String DC = "http://purl.org/dc/elements/1.1/";
+	public static final String GEO = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+	public static final String TYPE = RDF + "type";
+	public static final String JA = "http://jena.hpl.hp.com/2005/11/Assembler#";
+	public static final String FRESNEL = "http://www.w3.org/2004/09/fresnel#";
+	public static final String INQLE = "http://inqle.org/ns/v1/";
+	
+	public static final String SDB = "http://jena.hpl.hp.com/2007/sdb#";	
+	public static final String THEWEBSEMANTIC = "http://thewebsemantic.com/";
+	public static final String JAVA_CLASS = THEWEBSEMANTIC + "javaclass";
+	//public static final String JAVA_CLASS = INQLE + "javaClass";
+	public static final String HAS_PERSISTABLE_MEMBER_ATTRIBUTE = INQLE + "hasPersistableMemberAttribute";
+	public static final String JENABEAN_ID_ATTRIBUTE = "id";
+	
+	
+	/**
+	 * This method is intended to be called in cases where the URI fragment 
+	 * is guaranteed to be a legitimate string for the purposes
+	 * of creating a URI.  E.g. any of the above URI constants can
+	 * be passed as an argument.
+	 * @param uriFragment the string to append at end of the new URI.
+	 * @return
+	 */
+	public static URI getUri(String uriFragment) {
+		URI newUri = URI.create(INQLE + uriFragment);
+		return newUri;
+	}
+	
+	public static URI classUri(Class clazz) {
+		URI newUri = URI.create(INQLE + clazz.getName());
+		return newUri;
+	}
+
+	public static URI instanceUri(String string) {
+		URI newUri = URI.create(INQLE + string);
+		return newUri;
+	}
+	
+	public static URI parameterUri(String attribute) {
+		URI newUri = URI.create(INQLE + attribute);
+		return newUri;
+	}
+
+	public static URI classPropertyUri(Class<?> clazz, String property) {
+		URI newUri = URI.create(INQLE + clazz.getName() + "_" + property);
+		return newUri;
+	}
+	
+	public static String getPrefixClause(String prefix, String uri) {
+		String str = "PREFIX " + prefix.trim() + ": <" + uri.trim() + ">\n";
+		return str;
+	}
+}

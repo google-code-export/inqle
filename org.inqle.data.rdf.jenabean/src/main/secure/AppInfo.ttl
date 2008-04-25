@@ -1,0 +1,90 @@
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix daml:    <http://www.daml.org/2001/03/daml+oil#> .
+
+<http://inqle.org/ns/v1/hasId>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/hasModelName>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://thewebsemantic.com/javaclass>
+      a       owl:AnnotationProperty .
+
+<http://inqle.org/ns/v1/AppInfo>
+      a       owl:Class ;
+      <http://thewebsemantic.com/javaclass>
+              "org.inqle.user.data.rdf.AppInfo" .
+
+<http://org.inqle.user.data.rdf.jena/hasDbURL>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://inqle.org/ns/v1/hasServerBaseUri>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/hasDbClass>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/hasDbType>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/Connection/d1991c4f-0e15-4863-b146-0e7b0d019f39>
+      a       <http://org.inqle.user.data.rdf.jena/Connection> ;
+      <http://org.inqle.user.data.rdf.jena/hasDbClass>
+              "org.postgresql.Driver"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://org.inqle.user.data.rdf.jena/hasDbPassword>
+              "~Arden"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://org.inqle.user.data.rdf.jena/hasDbType>
+              "PostgreSQL"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://org.inqle.user.data.rdf.jena/hasDbURL>
+              "jdbc:postgresql://localhost:5432/test_inqle_repositories"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://org.inqle.user.data.rdf.jena/hasDbUser>
+              "inqle"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://org.inqle.user.data.rdf.jena/hasId>
+              "d1991c4f-0e15-4863-b146-0e7b0d019f39"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://org.inqle.user.data.rdf.jena/connection>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/hasDbPassword>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/RDBModel>
+      a       owl:Class ;
+      <http://thewebsemantic.com/javaclass>
+              "org.inqle.user.data.rdf.jena.RDBModel" .
+
+<http://org.inqle.user.data.rdf.jena/RDBModel/ea099ae9-7c23-4b98-b5c8-0765bffc8f36>
+      a       <http://org.inqle.user.data.rdf.jena/RDBModel> ;
+      <http://org.inqle.user.data.rdf.jena/connection>
+              <http://org.inqle.user.data.rdf.jena/Connection/d1991c4f-0e15-4863-b146-0e7b0d019f39> ;
+      <http://org.inqle.user.data.rdf.jena/hasId>
+              "ea099ae9-7c23-4b98-b5c8-0765bffc8f36"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://org.inqle.user.data.rdf.jena/hasModelName>
+              "org.inqle.repository.model"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://inqle.org/ns/v1/AppInfo/AppInfoInstance>
+      a       <http://inqle.org/ns/v1/AppInfo> ;
+      <http://inqle.org/ns/v1/hasId>
+              "AppInfoInstance"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://inqle.org/ns/v1/hasRepositoryNamedModel>
+              <http://org.inqle.user.data.rdf.jena/RDBModel/ea099ae9-7c23-4b98-b5c8-0765bffc8f36> ;
+      <http://inqle.org/ns/v1/hasServerBaseUrl>
+              "http://inqle.org/TestServerUrl"^^<http://www.w3.org/2001/XMLSchema#string> .
+
+<http://org.inqle.user.data.rdf.jena/Connection>
+      a       owl:Class ;
+      <http://thewebsemantic.com/javaclass>
+              "org.inqle.user.data.rdf.jena.Connection" .
+
+<http://org.inqle.user.data.rdf.jena/hasDbUser>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://org.inqle.user.data.rdf.jena/hasId>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://inqle.org/ns/v1/hasServerBaseUrl>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://inqle.org/ns/v1/hasRepositoryNamedModel>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
