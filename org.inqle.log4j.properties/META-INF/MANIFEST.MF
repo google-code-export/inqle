@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Properties Plug-in
+Bundle-SymbolicName: org.inqle.log4j.properties
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .
+Fragment-Host: org.apache.log4j
