@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Rap Plug-in
+Bundle-SymbolicName: org.inqle.ui.rap;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: INQLING, LLC
+Require-Bundle: org.eclipse.rap.ui,
+ org.inqle.data.rdf.jenabean,
+ org.inqle.core.extensions,
+ org.eclipse.rap.core.databinding,
+ org.eclipse.rap.core.databinding.beans,
+ org.eclipse.rap.jface.databinding,
+ org.inqle.core,
+ org.eclipse.rwt.widgets.upload
+Import-Package: javax.servlet;version="2.4.0",
+ javax.servlet.http;version="2.4.0",
+ org.apache.log4j
+Eclipse-RegisterBuddy: org.inqle.core.extensions
+Bundle-RegisterBuddy: org.inqle.core.extensions
+Export-Package: org.inqle.ui.rap,
+ org.inqle.ui.rap.actions,
+ org.inqle.ui.rap.images,
+ org.inqle.ui.rap.table,
+ org.inqle.ui.rap.tree,
+ org.inqle.ui.rap.tree.parts
+Bundle-ClassPath: bin/main/,
+ .
