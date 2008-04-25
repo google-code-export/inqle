@@ -1,0 +1,66 @@
+/**
+ * 
+ */
+package org.inqle.agent.rap;
+
+import org.eclipse.swt.widgets.Shell;
+import org.inqle.agent.IAgent;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.actions.DynaWizard;
+
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
+
+/**
+ * @author David Donohue
+ * Feb 27, 2008
+ */
+public interface IAgentFactory {
+
+	public static final String ID = "org.inqle.data.sampling.rap.IAgentFactory";
+	
+	/**
+	 * Set the base agent to the provided agent
+	 * @param agent
+	 */
+	public void setBaseAgent(IAgent agent);
+	
+	/**
+	 * Return the base agent.  If none exists, creates a new default agent and returns it
+	 * @return
+	 */
+	public IAgent getBaseAgent();
+	
+	/**
+	 * Create a new agent and return it
+	 * @return
+	 */
+	public IAgent newAgent();
+	
+	/**
+	 * Create a wizard, without a agent model bean yet set.
+	 * @param model
+	 * @param persister
+	 * @param shell
+	 * @return
+	 */
+	public IAgentWizard createWizard(Model model, Persister persister, Shell shell);
+
+	public String getName();
+
+	public boolean hasWizard();
+
+	/**
+	 * Create a wizard, using a replica of the base agent as the 
+	 * model bean
+	 * @param metarepositoryModel
+	 * @param persister
+	 * @param shell
+	 * @return
+	 */
+	public IAgentWizard createWizardForReplica(Model model,
+			Persister persister, Shell shell);
+
+	public IAgentFactory cloneFactory(IAgent childAgent);
+	
+}
