@@ -1,0 +1,116 @@
+package org.inqle.data.sampling;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.inqle.data.rdf.jena.RdfTable;
+
+public class DataTable implements Serializable {
+
+	private RdfTable rdfTable = new RdfTable();
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2474824355950690870L;
+	
+	private List<DataColumn> columns = new ArrayList<DataColumn>();
+	private List<List<DataCell>> rows = new ArrayList<List<DataCell>>();
+
+	private static Logger log = Logger.getLogger(DataTable.class);
+	
+	/**
+	 * By default, the ID column is the first column (index=0)
+	 */
+	private int idColumnIndex = 0;
+
+	private int labelColumnIndex = -1;
+
+	public void addRow(List<DataCell> row) {
+		rows.add(row);
+	}
+
+	public DataCell getCell(int rowIndex, int columnIndex) {
+		List<DataCell> row = rows.get(rowIndex);
+		return row.get(columnIndex);
+	}
+
+	public DataColumn getColumn(int columnIndex) {
+		return columns.get(columnIndex);
+	}
+
+	public List<DataCell> getRow(int rowIndex) {
+		return rows.get(rowIndex);
+	}
+
+	public List<List<DataCell>> getRows() {
+		return rows;
+	}
+
+	public List<DataColumn> getColumns() {
+		return columns;
+	}
+
+	public int getIdColumnIndex() {
+		return idColumnIndex;
+	}
+
+	public void setIdColumnIndex(int idColumnIndex) {
+		this.idColumnIndex = idColumnIndex;
+	}
+	
+//	public int getLabelColumnIndex() {
+//		return labelColumnIndex;
+//	}
+//
+//	public void setLabelColumnIndex(int labelColumnIndex) {
+//		this.labelColumnIndex  = labelColumnIndex;
+//	}
+	
+	public void addColumn(DataColumn column) {
+		columns.add(column);
+	}
+
+	public void setColumns(List<DataColumn> dataColumns) {
+		columns = dataColumns;
+	}
+	
+	/**
+	 * Is this DataTable complete and ready to be run through an experiment?
+	 * @return
+	 */
+	public boolean isLearnable() {
+		if (columns != null && columns.size() > 0 && rows != null && rows.size() > 0 && labelColumnIndex > -1 && labelColumnIndex != idColumnIndex) {
+			return true;
+		}
+		return false;
+	}
+
+	public RdfTable getRdfTable() {
+		return rdfTable;
+	}
+
+	public void setRdfTable(RdfTable rdfTable) {
+		this.rdfTable = rdfTable;
+	}
+
+	/**
+	 * Get List of all DataColumns, excluding the ID
+	 * @return
+	 */
+	public List<DataColumn> getLearnableColumns() {
+		log.info("getLearnableColumns() called; getIdColumnIndex()=" + getIdColumnIndex());
+		List<DataColumn> learnableColumns = new ArrayList<DataColumn>(getColumns());
+		log.info("all columns=" + learnableColumns);
+		try {
+			learnableColumns.remove(getIdColumnIndex());
+		} catch (Exception e) {
+			log.warn("Unable to remove ID column from the list of columns.  All columns will be used for learning.", e);
+		}
+		log.info("returning learnable columns=" + learnableColumns);
+		return learnableColumns;
+	}
+
+}
