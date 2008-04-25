@@ -1,0 +1,37 @@
+/**
+ * 
+ */
+package org.inqle.core.util;
+
+/**
+ * Contains constants and other core static functions.
+ * @author David Donohue
+ * Nov 28, 2007
+ */
+public class InqleInfo {
+
+	//Core services
+	//public static final String SERVICE_FACTORY = "org.inqle.core.factory";
+	
+	//Attributes for services
+	//public static final String ATTRIBUTE_GOAL = "creates";
+	public static final String ATTRIBUTE_WEIGHT = "weight";
+
+	public static final String INQLE_HOME = "inqle.home";
+
+	public static final String FILENAME_APPINFO = "AppInfo.ttl";
+
+	public static final String PLUGINS_FOLDER = "plugins";
+
+	public static final String REPOSITORY_MODEL_NAME = "org.inqle.repository.model";
+
+	public static final String APPLICATION_TITLE = "Server Administration";
+
+	public static String getRootFilePath() {
+		return System.getProperty(INQLE_HOME);
+	}
+	
+	public static String getPluginsDirectory() {
+		return System.getProperty(INQLE_HOME) + PLUGINS_FOLDER + "/";
+	}
+}

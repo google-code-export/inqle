@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core Plug-in
+Bundle-SymbolicName: org.inqle.core;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .,
+ bin/,
+ lib/commons-logging-1.1.jar,
+ lib/junit-4.4.jar
+Bundle-Vendor: INQLING, LLC
+Import-Package: org.osgi.framework;version="1.3.0",
+ org.xml.sax
+Eclipse-LazyStart: false
+Export-Package: junit.extensions,
+ junit.framework,
+ junit.runner,
+ junit.textui,
+ org.hamcrest,
+ org.hamcrest.core,
+ org.hamcrest.internal,
+ org.inqle.core.domain,
+ org.inqle.core.util,
+ org.junit,
+ org.junit.experimental.results,
+ org.junit.experimental.theories,
+ org.junit.experimental.theories.internal,
+ org.junit.experimental.theories.suppliers,
+ org.junit.internal,
+ org.junit.internal.requests,
+ org.junit.internal.runners,
+ org.junit.matchers,
+ org.junit.runner,
+ org.junit.runner.manipulation,
+ org.junit.runner.notification,
+ org.junit.runners
