@@ -31,8 +31,9 @@ public class RunAgentAction extends Action {
 		this.window = window;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
-		this.agentToRun  = (IAgent)agentPart.getAgentFactory().getBaseAgent();
+		this.agentToRun  = agentPart.getAgentFactory().getBaseAgent();
 		this.persister = persister;
+		assert(agentToRun != null);
 	}
 	
 	public String getText() {
@@ -41,8 +42,10 @@ public class RunAgentAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
+		log.info("Running agent " + agentToRun + " of class " + agentToRun.getClass());
 		if (agentToRun != null) {
-			agentToRun.run();
+			new Thread(agentToRun).start();
+			log.info("Started new thread running agent: " + agentToRun);
 			agentPart.getParent().fireUpdatePart();
 		}
 	}

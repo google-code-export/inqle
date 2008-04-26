@@ -34,7 +34,7 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 		return true;
 	}
 
-	public IAgent newAgent() {
+	public JUnitTestRunnerAgent newAgent() {
 		return new JUnitTestRunnerAgent();
 	}
 

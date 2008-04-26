@@ -15,7 +15,6 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
@@ -33,7 +32,10 @@ public class AgentPart extends PartType {
 
 	protected IAgentFactory agentFactory;
 
-	private static final String ICON_PATH = "org/inqle/agent/agent.png";
+	private static final String ICON_PATH_AGENT = "org/inqle/agent/images/agent.png";
+	private static final String ICON_PATH_RUNNING = "org/inqle/agent/images/running.gif";
+	private static final String ICON_PATH_STOPPED = "org/inqle/agent/images/stopped.png";
+	private static final String ICON_PATH_STOPPING = "org/inqle/agent/images/stopping.gif";
 
 	private List<CustomizedAgentPart> childParts = new ArrayList<CustomizedAgentPart>();
 	
@@ -63,7 +65,17 @@ public class AgentPart extends PartType {
 	
 	@Override
 	public String getIconPath() {
-		return ICON_PATH;
+		IAgent agent = agentFactory.getBaseAgent();
+		if (agent.getMode() == IAgent.RUNNING) {
+			return ICON_PATH_RUNNING;
+		}
+		if (agent.getMode() == IAgent.STOPPED) {
+			return ICON_PATH_STOPPED;
+		}
+		if (agent.getMode() == IAgent.STOPPING) {
+			return ICON_PATH_STOPPING;
+		}
+		return ICON_PATH_AGENT;
 	}
 	
 	public IAgentFactory getAgentFactory() {
@@ -137,6 +149,7 @@ public class AgentPart extends PartType {
 		IAgent agent = agentFactory.getBaseAgent();
 		if (agent.getMode() == IAgent.STOPPED) {
 			//"Run this agent" action
+			log.info("Adding agentPart w/ agentFactory=" + this.getAgentFactory());
 			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow, persister);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
 			manager.add(runAgentAction);

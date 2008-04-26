@@ -3,7 +3,7 @@ package org.inqle.testing;
 public interface IJUnitTest {
 	
 	public static final String ID = "org.inqle.testing.IJUnitTest";
-	public static final String TEST_CLASS_ATTRIBUTE = "test_class";
+	public static final String TEST_CLASS_ATTRIBUTE = "class";
 
 	public Class<?> getJUnitTestClass();
 	
