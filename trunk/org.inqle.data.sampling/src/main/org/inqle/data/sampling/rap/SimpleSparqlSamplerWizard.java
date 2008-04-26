@@ -9,9 +9,11 @@ import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.DataTable;
+import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SimpleSparqlSampler;
 import org.inqle.ui.rap.actions.NameDescriptionPage;
 import org.inqle.ui.rap.actions.SingleTextPage;
@@ -26,7 +28,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class SimpleSparqlSamplerWizard extends SamplerWizard {
 
 	static Logger log = Logger.getLogger(SimpleSparqlSamplerWizard.class);
-	private SimpleSparqlSampler sampler;
+	//private SimpleSparqlSampler sampler;
 
 	//protected SimpleSparqlSampler bean;
 	
@@ -36,6 +38,7 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 
 	@Override
 	public void addPages() {
+		SimpleSparqlSampler sampler = (SimpleSparqlSampler) bean;
 		//log.info("addPages() called; SimpleSparqlSamplerWizard has model bean: " + JenabeanWriter.toString(sampler));
 //		SingleTextPage samplerNamePage = new SingleTextPage(sampler, "name", "Sampler name", null);
 //		samplerNamePage.setLabelText("Sampler Name");
@@ -79,23 +82,24 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 		return sparql;
 	}
 
-	@Override
-	public Object getBean() {
-		return this.sampler;
-	}
+//	@Override
+//	public Object getBean() {
+//		return this.sampler;
+//	}
 
-	public void setBean(SimpleSparqlSampler sampler) {
-		//assert(samplerObject instanceof SimpleSparqlSampler);
-		//this.sampler = (SimpleSparqlSampler)samplerObject;
-		this.sampler = sampler;
-		//log.info("setBean() called; SimpleSparqlSamplerWizard has model bean: " + JenabeanWriter.toString(sampler));
-	}
+//	public void setBean(SimpleSparqlSampler sampler) {
+//		//assert(samplerObject instanceof SimpleSparqlSampler);
+//		//this.sampler = (SimpleSparqlSampler)samplerObject;
+//		this.sampler = sampler;
+//		//log.info("setBean() called; SimpleSparqlSamplerWizard has model bean: " + JenabeanWriter.toString(sampler));
+//	}
 	
 	/**
 	 * TODO make this work without removeInterimData
 	 */
 	@Override
 	public boolean performFinish() {
+		ISampler sampler = (ISampler) bean;
 		sampler.removeInterimData();
 		return super.performFinish();
 	}
