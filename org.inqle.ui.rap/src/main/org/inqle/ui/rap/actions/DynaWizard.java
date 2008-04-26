@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
@@ -37,6 +38,8 @@ public abstract class DynaWizard extends Wizard {
 	protected Persister persister;
 	protected Shell shell;
 	protected IPart part = null;
+
+	protected IBasicJenabean bean;
 	/**
 	 * @param bean
 	 */
@@ -72,12 +75,13 @@ public abstract class DynaWizard extends Wizard {
 	public void setPart(IPart part) {
 		this.part = part;
 	}
+	
+	public IBasicJenabean getBean() {
+		return bean;
+	}
 
-	/**
-	 * Retrieve the object to be used as the model, 
-	 * for storing info from this wizard
-	 * @return
-	 */
-	public abstract Object getBean();
+	public void setBean(IBasicJenabean bean) {
+		this.bean = bean;
+	}
 
 }
