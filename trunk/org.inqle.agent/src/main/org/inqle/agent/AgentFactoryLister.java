@@ -6,7 +6,7 @@ import java.util.List;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.core.extensions.util.ExtensionFactory;
 
-public class AgentLister {
+public class AgentFactoryLister {
 
 	public static List<IAgent> listAgents() {
 		List<IAgent> agents = new ArrayList<IAgent>();

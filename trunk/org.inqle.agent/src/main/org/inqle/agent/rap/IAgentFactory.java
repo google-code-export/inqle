@@ -46,8 +46,6 @@ public interface IAgentFactory {
 	 */
 	public IAgentWizard createWizard(Model model, Persister persister, Shell shell);
 
-	public String getName();
-
 	public boolean hasWizard();
 
 	/**

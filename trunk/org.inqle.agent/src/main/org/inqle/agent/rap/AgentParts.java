@@ -20,7 +20,7 @@ public class AgentParts extends PartType {
 	
 	private Logger log = Logger.getLogger(AgentParts.class);
 	
-	private static final String ICON_PATH = "org/inqle/agent/images/agents.jpeg";
+	private static final String ICON_PATH = "org/inqle/agent/images/agents.png";
 	/* 
 	 * 
 	 * The children = the list of all IAgent plugins

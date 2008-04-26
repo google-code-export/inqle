@@ -13,9 +13,9 @@ import org.inqle.data.rdf.jenabean.BasicJenabean;
  * @author David Donohue
  * Apr 7, 2008
  */
-public abstract class AAgentFactory extends BasicJenabean implements IAgentFactory {
+public abstract class AAgentFactory implements IAgentFactory {
 
-	private IAgent baseAgent;
+	protected IAgent baseAgent;
 
 
 	/* (non-Javadoc)

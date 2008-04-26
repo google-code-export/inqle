@@ -33,7 +33,7 @@ public class AgentPart extends PartType {
 
 	protected IAgentFactory agentFactory;
 
-	private static final String ICON_PATH = "org/inqle/agent/agent.jpeg";
+	private static final String ICON_PATH = "org/inqle/agent/agent.png";
 
 	private List<CustomizedAgentPart> childParts = new ArrayList<CustomizedAgentPart>();
 	
@@ -41,12 +41,12 @@ public class AgentPart extends PartType {
 
 	private boolean childrenIntialized = false;
 
-	private IAgent agent;
+	//private IAgent agent;
 	
 	public AgentPart(IAgentFactory agentFactory) {
 		//agentPartCount++;
 		this.agentFactory = agentFactory;
-		this.agent = agentFactory.getBaseAgent();
+		//this.agent = agentFactory.getBaseAgent();
 	}
 	
 	/**
@@ -54,8 +54,9 @@ public class AgentPart extends PartType {
 	 */
 	@Override
 	public String getName() {
+		IAgent agent = agentFactory.getBaseAgent();
 		if (agent == null || agent.getName() == null) {
-			return agentFactory.getName();
+			return agent.getClass().getName();
 		}
 		return agent.getName();
 	}
@@ -82,6 +83,7 @@ public class AgentPart extends PartType {
 		"\n} }\n";
 		
 	private String getSparqlToFindChildren() {
+		IAgent agent = agentFactory.getBaseAgent();
 		String sparql = SPARQL_BEGIN +
 			" . ?agentUri a ?classUri\n" +
 			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + agent.getClass().getName() + "\" \n" +
@@ -103,6 +105,7 @@ public class AgentPart extends PartType {
 	}
 	
 	public void initChildren() {
+		IAgent agent = agentFactory.getBaseAgent();
 		//initCount++;
 		//log.info("Agent #" + agentPartCount + ": initChildren #" + initCount);
 		//query for all RDBModel children
@@ -131,11 +134,20 @@ public class AgentPart extends PartType {
 	
 	@Override
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
-		//"Run this wizard" action
-		//IAgent replicaOfAgent = agentFactory.replicateAgent();
-//		AgentWizardAction runAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_RUN, "Run this agent", this, workbenchWindow, persister);
-//		///runAgentWizardAction.setAgent(replicaOfAgent);
-//		manager.add(runAgentWizardAction);
+		IAgent agent = agentFactory.getBaseAgent();
+		if (agent.getMode() == IAgent.STOPPED) {
+			//"Run this agent" action
+			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow, persister);
+			///runAgentWizardAction.setAgent(replicaOfAgent);
+			manager.add(runAgentAction);
+		}
+		
+		if (agent.getMode() == IAgent.RUNNING) {
+			//"Run this agent" action
+			StopAgentAction stopAgentAction = new StopAgentAction("Stop this agent", this);
+			///runAgentWizardAction.setAgent(replicaOfAgent);
+			manager.add(stopAgentAction);
+		}
 		
 		if (!agentFactory.hasWizard()) {
 			return;
