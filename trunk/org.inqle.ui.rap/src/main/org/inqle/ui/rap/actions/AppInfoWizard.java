@@ -35,10 +35,10 @@ public class AppInfoWizard extends DynaWizard {
 		addPage(metarepositoryPage);
 	}
 
-	@Override
-	public Object getBean() {
-		return appInfo;
-	}
+//	@Override
+//	public Object getBean() {
+//		return appInfo;
+//	}
 
 	public void setBean(AppInfo appInfo) {
 		this.appInfo = appInfo;
