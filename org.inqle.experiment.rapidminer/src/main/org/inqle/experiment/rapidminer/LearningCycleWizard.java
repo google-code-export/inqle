@@ -20,14 +20,15 @@ import com.hp.hpl.jena.ontology.OntModel;
  */
 public class LearningCycleWizard extends DynaWizard {
 
-	private LearningCycle learningCycle;
+	//private LearningCycle learningCycle;
 
 	private static Logger log = Logger.getLogger(LearningCycleWizard.class);
 	
 	public LearningCycleWizard(LearningCycle learningCycle, OntModel learningCycleModel, Persister persister,
 			Shell shell) {
 		super(learningCycleModel, persister, shell);
-		this.learningCycle = learningCycle;
+//		this.learningCycle = learningCycle;
+		this.bean = learningCycle;
 	}
 
 	/* (non-Javadoc)
@@ -35,6 +36,7 @@ public class LearningCycleWizard extends DynaWizard {
 	 */
 	@Override
 	public void addPages() {
+		LearningCycle learningCycle = (LearningCycle)bean;
 		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(learningCycle, "Name and Description", null);
 		addPage(nameDescriptionPage);
 		
@@ -55,10 +57,10 @@ public class LearningCycleWizard extends DynaWizard {
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.rap.actions.DynaWizard#getBean()
 	 */
-	@Override
-	public Object getBean() {
-		// TODO Auto-generated method stub
-		return this.learningCycle;
-	}
+//	@Override
+//	public Object getBean() {
+//		// TODO Auto-generated method stub
+//		return this.learningCycle;
+//	}
 
 }
