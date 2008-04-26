@@ -2,9 +2,9 @@
 <?eclipse version="3.2"?>
 <plugin>
 	<extension-point 
-   		id="org.inqle.agent.IAgent" 
+   		id="org.inqle.agent.rap.IAgentFactory" 
    		name="Agent" 
-   		schema="schema/org.inqle.agent.IAgent.exsd"/>
+   		schema="schema/org.inqle.agent.rap.IAgentFactory.exsd"/>
   <extension-point 
    		id="org.inqle.testing.IJUnitTest" 
    		name="JUnit Test" 
@@ -12,13 +12,21 @@
   <extension
          point="org.inqle.ui.rap.IPartType">
 		<part-type
-           class="org.inqle.agent.AgentParts"
+           class="org.inqle.agent.rap.AgentParts"
            weight="5000"/>
+  </extension>
+  <extension
+         point="org.inqle.agent.rap.IAgentFactory">
+		<agent
+           class="org.inqle.testing.JUnitTestRunnerAgentFactory"
+           name="JUnit Tester Agent"
+           description="This agent runs all available JUnit Test plugins"
+           weight="90000"/>
   </extension>
   <extension
          point="org.inqle.testing.IJUnitTest">
 		<junit-test
-           class="org.inqle.test.data.rdf.TestJenabean"
+           class="org.inqle.test.data.TestJenabean"
            weight="1000"/>
   </extension>
 </plugin>

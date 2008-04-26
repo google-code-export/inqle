@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public interface IAgentFactory {
 
-	public static final String ID = "org.inqle.data.sampling.rap.IAgentFactory";
+	public static final String ID = "org.inqle.agent.rap.IAgentFactory";
 	
 	/**
 	 * Set the base agent to the provided agent

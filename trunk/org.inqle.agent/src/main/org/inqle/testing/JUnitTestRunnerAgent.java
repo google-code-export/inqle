@@ -54,10 +54,12 @@ public class JUnitTestRunnerAgent extends AAgent {
 	@Override
 	public void run() {
 		mode = RUNNING;
+		log.info("Starting to run()");
 		if (getTestsToRun() == null) {
 			selectAllTests();
 		}
 		
+		log.info("Running these tests: " + getTestsToRun());
 		//run each test
 		for (IJUnitTest junitTest: getTestsToRun()) {
 			if (mode != RUNNING) {

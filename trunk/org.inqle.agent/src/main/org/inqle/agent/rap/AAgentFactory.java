@@ -22,6 +22,9 @@ public abstract class AAgentFactory implements IAgentFactory {
 	 * @see org.inqle.data.sampling.rap.IAgentFactory#getBaseAgent()
 	 */
 	public IAgent getBaseAgent() {
+		if (baseAgent == null) {
+			baseAgent = newAgent();
+		}
 		return baseAgent;
 	}
 
