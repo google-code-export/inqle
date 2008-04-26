@@ -27,6 +27,10 @@ public class InqleInfo {
 
 	public static final String APPLICATION_TITLE = "Server Administration";
 
+	public static final String NAME_ATTRIBUTE = "name";
+
+	public static final String DESCRIPTION_ATTRIBUTE = "description";
+
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
 	}
