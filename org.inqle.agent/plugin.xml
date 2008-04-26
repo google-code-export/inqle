@@ -5,11 +5,20 @@
    		id="org.inqle.agent.IAgent" 
    		name="Agent" 
    		schema="schema/org.inqle.agent.IAgent.exsd"/>
+  <extension-point 
+   		id="org.inqle.testing.IJUnitTest" 
+   		name="JUnit Test" 
+   		schema="schema/org.inqle.testing.IJUnitTest.exsd"/>
   <extension
          point="org.inqle.ui.rap.IPartType">
 		<part-type
            class="org.inqle.agent.AgentParts"
            weight="5000"/>
   </extension>
-         
+  <extension
+         point="org.inqle.testing.IJUnitTest">
+		<junit-test
+           class="org.inqle.test.data.rdf.TestJenabean"
+           weight="1000"/>
+  </extension>
 </plugin>

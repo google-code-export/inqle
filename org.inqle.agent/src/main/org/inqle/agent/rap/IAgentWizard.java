@@ -4,6 +4,7 @@
 package org.inqle.agent.rap;
 
 import org.eclipse.jface.wizard.IWizard;
+import org.inqle.agent.IAgent;
 import org.inqle.ui.rap.IPart;
 
 /**

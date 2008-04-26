@@ -12,7 +12,25 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
  */
 public abstract class AAgent extends BasicJenabean implements IAgent {
 
+	protected int mode = STOPPED;
+	
 	public void clone(AAgent objectToClone) {
 		super.clone(objectToClone);
+	}
+	
+	public void run() {
+		mode = RUNNING;
+	}
+	
+	public void stop() {
+		mode = STOPPING;
+	}
+
+	public int getMode() {
+		return mode;
+	}
+
+	public void setMode(int mode) {
+		this.mode = mode;
 	}
 }
