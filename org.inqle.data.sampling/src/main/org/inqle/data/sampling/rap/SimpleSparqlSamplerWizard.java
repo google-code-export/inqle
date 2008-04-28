@@ -94,13 +94,10 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 //		//log.info("setBean() called; SimpleSparqlSamplerWizard has model bean: " + JenabeanWriter.toString(sampler));
 //	}
 	
-	/**
-	 * TODO make this work without removeInterimData
-	 */
 	@Override
 	public boolean performFinish() {
-		ISampler sampler = (ISampler) bean;
-		sampler.removeInterimData();
+		//ISampler sampler = (ISampler) bean;
+		//sampler.removeInterimData();
 		return super.performFinish();
 	}
 }

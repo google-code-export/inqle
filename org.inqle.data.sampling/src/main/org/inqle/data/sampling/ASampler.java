@@ -37,7 +37,7 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 	protected Collection<String> availableNamedModels;
 	protected DataColumn[] dataColumns;
 	protected DataColumn labelDataColumn;
-	protected DataTable resultDataTable = new DataTable();
+	//protected DataTable resultDataTable = new DataTable();
 	protected Collection<String> selectedNamedModels;
 	protected DataColumn subjectDataColumn;
 	protected String id;
@@ -50,7 +50,7 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 	 * @param sampler the provided sampler
 	 */
 	public void clone(ISampler templateSampler) {
-		setAvailableNamedModels(templateSampler.getAvailableNamedModels());
+//		setAvailableNamedModels(templateSampler.getAvailableNamedModels());
 		setDataColumns(templateSampler.getDataColumns());
 		//setLabelDataColumn(templateSampler.getLabelDataColumn());
 		//setResultDataTable(templateSampler.getResultDataTable());
@@ -61,9 +61,9 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 		
 	}
 
-	public Collection<String> getAvailableNamedModels() {
-		return availableNamedModels;
-	}
+//	public Collection<String> getAvailableNamedModels() {
+//		return availableNamedModels;
+//	}
 
 	public DataColumn[] getDataColumns() {
 		return dataColumns;
@@ -89,18 +89,18 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 		return subjectDataColumn;
 	}
 
-	/**
-	 * (Called prior to saving the object).  Remove all values not desired when saving this object
-	 */
-	public void removeInterimData() {
-		availableNamedModels = null;
-		dataColumns = null;
-		resultDataTable = null;
-	}
+//	/**
+//	 * (Called prior to saving the object).  Remove all values not desired when saving this object
+//	 */
+//	public void removeInterimData() {
+//		availableNamedModels = null;
+//		dataColumns = null;
+//		resultDataTable = null;
+//	}
 
-	public void setAvailableNamedModels(Collection<String> availableNamedModels) {
-		this.availableNamedModels = availableNamedModels;
-	}
+//	public void setAvailableNamedModels(Collection<String> availableNamedModels) {
+//		this.availableNamedModels = availableNamedModels;
+//	}
 
 	public void setDataColumns(DataColumn[] dataColumns) {
 		this.dataColumns = dataColumns;
@@ -137,11 +137,11 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 		this.name = name;		
 	}
 
-	/**
-	 * Override to perform all steps of this sampler
-	 */
-	public DataTable execute(Persister persister) {
-		return null;
-	}
+//	/**
+//	 * Override to perform all steps of this sampler
+//	 */
+//	public DataTable execute(Persister persister) {
+//		return null;
+//	}
 
 }
