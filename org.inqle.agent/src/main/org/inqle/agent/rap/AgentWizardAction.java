@@ -56,7 +56,7 @@ public class AgentWizardAction extends Action {
 		if (mode == MODE_RUN) {
 			//wizard = new AgentRunnerWizard(agent, window.getShell());
 		} else if (mode == MODE_OPEN) {
-			wizard = agentFactory.createWizardForReplica(persister.getMetarepositoryModel(), persister, window.getShell());
+			wizard = agentFactory.createWizardForReplica(persister.getMetarepositoryModel(), window.getShell());
 			wizard.setPart(agentPart);
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();

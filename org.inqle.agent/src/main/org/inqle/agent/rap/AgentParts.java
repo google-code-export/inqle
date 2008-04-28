@@ -39,6 +39,7 @@ public class AgentParts extends PartType {
 		for (Object object: objects) {
 			if (object == null) continue;
 			IAgentFactory agentFactory = (IAgentFactory)object;
+			agentFactory.setPersister(persister);
 			AgentPart part = new AgentPart(agentFactory);
 			part.setParent(this);
 			part.setPersister(persister);

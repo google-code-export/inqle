@@ -17,14 +17,13 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 		return newFactory;
 	}
 
-	public IAgentWizard createWizard(Model model, Persister persister, Shell shell) {
+	public IAgentWizard createWizard(Model model, Shell shell) {
 		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, persister, shell);
 		newWizard.setBean(newAgent());
 		return newWizard;
 	}
 
-	public IAgentWizard createWizardForReplica(Model model, Persister persister,
-			Shell shell) {
+	public IAgentWizard createWizardForReplica(Model model, Shell shell) {
 		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, persister, shell);
 		newWizard.setBean((IAgent)getBaseAgent().createReplica());
 		return newWizard;
@@ -35,7 +34,9 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 	}
 
 	public JUnitTestRunnerAgent newAgent() {
-		return new JUnitTestRunnerAgent();
+		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
+		newAgent.setPersister(persister);
+		return newAgent;
 	}
 
 }
