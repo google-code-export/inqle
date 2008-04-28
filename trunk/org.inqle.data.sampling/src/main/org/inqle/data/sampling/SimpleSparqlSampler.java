@@ -56,28 +56,24 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 		"} } \n " +
 		" LIMIT " + MAXIMUM_ROWS_INITIAL_QUERY;
 	protected Collection<String> selectedPredicates;
-	protected Collection<String> availablePredicates;
+	//protected Collection<String> availablePredicates;
 
 
-	public void selectPredicates(Persister persister) {
+	public Collection<String> selectPredicates(Collection<String> modelsToUse, Persister persister) {
 		//if predicates already selected, return
 		if (selectedPredicates != null) {
-			return;
+			return selectedPredicates;
 		}
-		selectAvailablePredicates(persister);
-		selectedPredicates = (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(availablePredicates), MINIMUM_LEARNABLE_PREDICATES, MAXIMUM_LEARNABLE_PREDICATES);
+		List<String> availablePredicates = selectAvailablePredicates(modelsToUse, persister);
+		return (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(availablePredicates), MINIMUM_LEARNABLE_PREDICATES, MAXIMUM_LEARNABLE_PREDICATES);
 	}
 
 
-	public void selectAvailablePredicates(Persister persister) {
-		//if available predicates already populated, return
-		if (availablePredicates != null) {
-			return;
-		}
+	public List<String> selectAvailablePredicates(Collection<String> modelsToUse, Persister persister) {
 		QueryCriteria queryCriteria = new QueryCriteria(persister);
 		queryCriteria.addNamedModelIds(selectedNamedModels);
 		queryCriteria.setQuery(SPARQL_GET_DISTINCT_PREDICATES);
-		availablePredicates = Queryer.selectUriList(queryCriteria);
+		return Queryer.selectUriList(queryCriteria);
 	}
 
 	/**
@@ -85,9 +81,9 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	 * retrieve the data to be mined.  Populate the query and dataColumns attributes
 	 * @return
 	 */
-	public String generateSparql(Persister persister) {
+	public String generateSparql(Collection<String> modelsToUse, Persister persister) {
 		//first step: select predicates, if not already done
-		selectPredicates(persister);
+		selectPredicates(modelsToUse, persister);
 
 		if (selectedPredicates == null || selectedPredicates.size() < MINIMUM_LEARNABLE_PREDICATES || selectedPredicates.size() > MAXIMUM_LEARNABLE_PREDICATES) {
 			log.error("Expect selection of between " + MINIMUM_LEARNABLE_PREDICATES + " and " + MAXIMUM_LEARNABLE_PREDICATES + " predicates.");
@@ -130,17 +126,17 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 		sparql += whereClause;
 		sparql += "} } LIMIT " + MAXIMUM_ROWS_DATATABLE;
 		
-		query = sparql;
+		//query = sparql;
 		return sparql;
 		
 	}
 
 
-	@Override
-	public void removeInterimData() {
-		super.removeInterimData();
-		this.availablePredicates = null;
-	}
+//	@Override
+//	public void removeInterimData() {
+//		super.removeInterimData();
+//		this.availablePredicates = null;
+//	}
 	
 	//@RdfProperty(RDF.INQLE + "selectedPredicates")
 	public Collection<String> getSelectedPredicates() {
@@ -159,17 +155,17 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	public void clone(ISampler templateSampler) {
 		super.clone(templateSampler);
 		setSelectedPredicates(((SimpleSparqlSampler)templateSampler).getSelectedPredicates());
-		setAvailablePredicates(((SimpleSparqlSampler)templateSampler).getAvailablePredicates());
+		//setAvailablePredicates(((SimpleSparqlSampler)templateSampler).getAvailablePredicates());
 	}
 
-	public Collection<String> getAvailablePredicates() {
-		return availablePredicates;
-	}
-
-
-	public void setAvailablePredicates(Collection<String> availablePredicates) {
-		this.availablePredicates = availablePredicates;
-	}
+//	public Collection<String> getAvailablePredicates() {
+//		return availablePredicates;
+//	}
+//
+//
+//	public void setAvailablePredicates(Collection<String> availablePredicates) {
+//		this.availablePredicates = availablePredicates;
+//	}
 
 	public SimpleSparqlSampler createClone() {
 		SimpleSparqlSampler newSampler = new SimpleSparqlSampler();

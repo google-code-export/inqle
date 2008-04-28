@@ -42,13 +42,13 @@ public interface ISampler extends IBasicJenabean {
 	 * Get the Collection of IDs of NamedModels which are candidates for sampling.
 	 * @return the list of choosable NamedModels
 	 */
-	public Collection<String> getAvailableNamedModels();
+//	public Collection<String> getAvailableNamedModels();
 	
 	/**
 	 * Set the Collection of IDs of NamedModel which are candidates for sampling.
 	 * @param the list of choosable NamedModels
 	 */
-	public void setAvailableNamedModels(Collection<String> availableNamedModels);
+//	public void setAvailableNamedModels(Collection<String> availableNamedModels);
 	
 	/**
 	 * Get the Collection of IDs of NamedModel which have been selected for 
@@ -73,14 +73,14 @@ public interface ISampler extends IBasicJenabean {
 
 	public Dictionary<?, ?> getProperties();
 	
-	/**
-	 * Prepare this object for archiving.
-	 * Remove any attributes stored in this object, which are not of 
-	 * historical value.  This method is called before storing a ISampler object
-	 * after experimentation.  Examples of such attributes include
-	 * choosable data models,
-	 */
-	public void removeInterimData();
+//	/**
+//	 * Prepare this object for archiving.
+//	 * Remove any attributes stored in this object, which are not of 
+//	 * historical value.  This method is called before storing a ISampler object
+//	 * after experimentation.  Examples of such attributes include
+//	 * choosable data models,
+//	 */
+//	public void removeInterimData();
 
 	@Id
 	public String getId();

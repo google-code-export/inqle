@@ -54,7 +54,7 @@ public abstract class ASparqlSampler extends ASampler {
 
 	//protected Persister persister;
 
-	protected String query;
+	//protected String query;
 	
 	static Logger log = Logger.getLogger(ASparqlSampler.class);
 	
@@ -66,11 +66,10 @@ public abstract class ASparqlSampler extends ASampler {
 	 * Perform all steps to get to final resultant DataTable.
 	 * Honor any existing fields, and otherwise make random decisions
 	 */
-	@Override
 	public DataTable execute(Persister persister) {
-		selectNamedModels(persister);
-		generateSparql(persister);
-		DataTable resultDataTable = doQuery(persister);
+		Collection<String> modelsToUse = selectNamedModels(persister);
+		String sparql = generateSparql(modelsToUse, persister);
+		DataTable resultDataTable = doQuery(sparql, persister);
 		return resultDataTable;
 	}
 	
@@ -81,16 +80,17 @@ public abstract class ASparqlSampler extends ASampler {
 	 * @param datamodelOptions the Collection of available data models to consider
 	 * @return
 	 */
-	public void selectAvailableNamedModels(Persister persister) {
-		if (getAvailableNamedModels() != null) {
-			return;
-		}
+	public Collection<String> selectAvailableNamedModels(Persister persister) {
+//		if (getAvailableNamedModels() != null) {
+//			return getAvailableNamedModels();
+//		}
 		List<NamedModel> allNamedModels = persister.listNamedModels();
 		
 		if (allNamedModels != null) {
 			List<String> allNamedModelIds = JenabeanConverter.getIds(allNamedModels);
-			setAvailableNamedModels(allNamedModelIds);
+			return allNamedModelIds;
 		}
+		return null;
 	}
 
 	/**
@@ -101,44 +101,44 @@ public abstract class ASparqlSampler extends ASampler {
 	 * @return
 	 * 
 	 */
-	public void selectNamedModels(Persister persister) {
+	@SuppressWarnings("unchecked")
+	public Collection<String> selectNamedModels(Persister persister) {
 		//if named models already selected, return
 		if (getSelectedNamedModels() != null) {
-			return;
+			return getSelectedNamedModels();
 		}
 		//...otherwise populate the list of available named models
-		selectAvailableNamedModels(persister);
+		Collection<String> choosableNamedModels = selectAvailableNamedModels(persister);
 		
-		Collection<String> choosableNamedModels = getAvailableNamedModels();
 		int countChoosableNamedModels = choosableNamedModels.size();
 		
 		//if we do not have enough choosable datamodels, return null
-		if (countChoosableNamedModels < getMinimumNumberOfNamedModels()) {
-			return;
-		}
+//		if (countChoosableNamedModels < getMinimumNumberOfNamedModels()) {
+//			return;
+//		}
 		
 		//if we do have enough choosable datamodels, return the entire list of choosable datamodels
-		if (countChoosableNamedModels > getMaximumNumberOfNamedModels()) {
-			return;
-		}
+//		if (countChoosableNamedModels > getMaximumNumberOfNamedModels()) {
+//			return;
+//		}
 		
 		//we must select a subset of the choosable datamodels
 		//randomly remove datamodels until we reach the maximum acceptable number
 		Collection<String> selectedNamedModels = (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(choosableNamedModels), getMinimumNumberOfNamedModels(), getMaximumNumberOfNamedModels());
 		
-		if (selectedNamedModels != null) {
-			setSelectedNamedModels(selectedNamedModels);
-		}
+		//if (selectedNamedModels != null) {
+		return selectedNamedModels;
+		//}
 	}
 
 	/**
 	 * Do a SPARQL query, and convert results into a learnable DataTable
 	 * @return
 	 */
-	protected DataTable doQuery(Persister persister) {
+	protected DataTable doQuery(String sparql, Persister persister) {
 		QueryCriteria queryCriteria = new QueryCriteria(persister);
 		queryCriteria.addNamedModelIds(getSelectedNamedModels());
-		queryCriteria.setQuery(query);
+		queryCriteria.setQuery(sparql);
 		
 		DataColumn[] dataColumns = getDataColumns();
 		
@@ -164,7 +164,7 @@ public abstract class ASparqlSampler extends ASampler {
 	 * 
 	 * @return sparql the SPARQL query string, to generate the learnable table of data
 	 */
-	protected abstract String generateSparql(Persister persister);
+	protected abstract String generateSparql(Collection<String> modelsToUse, Persister persister);
 
 	/**
 	 * TODO Make this configurable
@@ -182,18 +182,18 @@ public abstract class ASparqlSampler extends ASampler {
 		return DEFAULT_MINIMUM_NUMBER_OF_DATAMODELS;
 	}
 
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
+//	public String getQuery() {
+//		return query;
+//	}
+//
+//	public void setQuery(String query) {
+//		this.query = query;
+//	}
 
 	@Override
 	public void clone(ISampler templateSampler) {
 		super.clone((ASparqlSampler)templateSampler);
-		setQuery(((ASparqlSampler)templateSampler).getQuery());
+//		setQuery(((ASparqlSampler)templateSampler).getQuery());
 	}
 	
 	/**
