@@ -104,68 +104,68 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 	 * Finally, run the ExampleSet through the experiment.
 	 */
 	public ExperimentResult execute() {
-		selectSampler();
-		DataTable dataTable = sampler.execute(persister);
-		selectLabel(dataTable);
-		selectRapidMinerExperiment(dataTable);
-		return runDataThroughExperiment(dataTable);
+		ISampler samplerToUse = selectSampler();
+		DataTable resultDataTable = samplerToUse.execute(persister);
+		IRapidMinerExperiment experimentToUse = selectRapidMinerExperiment(resultDataTable);
+		DataColumn labelDataColumn = selectLabel(resultDataTable);
+		return runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
 	}
 
-	private void selectSampler() {
+	private ISampler selectSampler() {
 		if (getSampler() != null) {
-			return;
+			return getSampler();
 		}
 		
 		List<ISampler> availableSamplers = SamplerLister.listSamplers();
 		int randomIndex = RandomListChooser.chooseRandomIndex(availableSamplers.size());
-		setSampler(availableSamplers.get(randomIndex));
+		return availableSamplers.get(randomIndex);
 	}
 
 	/**
 	 * Ensure that the labelDataColumn field is populated with an appropriate field
 	 * @param dataTable
 	 */
-	private void selectLabel(DataTable dataTable) {
+	private DataColumn selectLabel(DataTable dataTable) {
 		assert(dataTable != null);
 		List<DataColumn> columns = dataTable.getColumns();
 		if (getLabelDataColumn() != null && columns.contains(getLabelDataColumn())) {
-			return;
+			return getLabelDataColumn();
 		}
 		
 		//otherwise, randomly select
 		int randomIndex = RandomListChooser.chooseRandomIndex(columns.size());
-		setLabelDataColumn(columns.get(randomIndex));
+		return columns.get(randomIndex);
 	}
 	
-	private void selectRapidMinerExperiment(DataTable dataTable) {
+	private IRapidMinerExperiment selectRapidMinerExperiment(DataTable dataTable) {
 		assert(dataTable.getColumns().contains(getLabelDataColumn()));
 		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(persister, dataTable, getLabelDataColumn());
 		if (getRapidMinerExperiment() != null && acceptableExperiments.contains(getRapidMinerExperiment())) {
-			return;
+			return getRapidMinerExperiment();
 		}
 		
 		//otherwise, randomly select
 		int randomIndex = RandomListChooser.chooseRandomIndex(acceptableExperiments.size());
-		setRapidMinerExperiment(acceptableExperiments.get(randomIndex));
+		return acceptableExperiments.get(randomIndex);
 	}
 	
 	/**
 	 * @param dataTable
 	 * @return
 	 */
-	private ExperimentResult runDataThroughExperiment(DataTable dataTable) {
+	private ExperimentResult runDataThroughExperiment(DataTable dataTable, IRapidMinerExperiment rapidMinerExperiment, DataColumn labelDataColumn) {
 		//the results to return
 		ExperimentResult experimentResult = new ExperimentResult();
 		
 		//get a RapidMiner Process object, representing the Experiment
-		com.rapidminer.Process process = getRapidMinerExperiment().getProcess();
+		com.rapidminer.Process process = rapidMinerExperiment.getProcess();
 		
 		//convert the DataTable into a RapidMiner MemoryExampleTable
 		DataPreparer preparer = new DataPreparer(dataTable);
 		MemoryExampleTable exampleTable = preparer.createExampleTable();
 		
 		//convert the MemoryExampleTable into a RapidMiner ExampleSet
-		int labelIndex = dataTable.getColumns().indexOf(getLabelDataColumn());
+		int labelIndex = dataTable.getColumns().indexOf(labelDataColumn);
 		Attribute labelAttribute = exampleTable.getAttribute(labelIndex);
 		Attribute weightAttribute = null;
 		Attribute idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());

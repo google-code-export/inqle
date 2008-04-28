@@ -36,4 +36,12 @@
       </rapidminer-experiment>
    </extension>
 
+<extension
+         point="org.inqle.agent.rap.IAgentFactory">
+		<agent
+           class="org.inqle.experiment.rapidminer.agent.ExperimenterAgentFactory"
+           name="Experimenter Agent"
+           description="This agent runs learning cycles, generating experiment results"
+           weight="1000"/>
+  </extension>
 </plugin>
