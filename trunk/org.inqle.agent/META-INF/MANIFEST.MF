@@ -42,4 +42,5 @@ Bundle-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.ui.rap, 
  org.inqle.data.rdf.jenabean
 Eclipse-LazyStart: true
-Export-Package: org.inqle.agent
+Export-Package: org.inqle.agent,
+ org.inqle.agent.rap

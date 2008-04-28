@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 
 /**
@@ -51,7 +52,6 @@ public class JUnitTestRunnerAgent extends AAgent {
 	/**
 	 * @see java.lang.Runnable#run()
 	 */
-	@Override
 	public void run() {
 		mode = RUNNING;
 		log.info("Starting to run()");
@@ -66,7 +66,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 				break;
 			}
 			
-			Result result = org.junit.runner.JUnitCore.runClasses(junitTest.getJUnitTestClass());
+			Result result = JUnitCore.runClasses(junitTest.getJUnitTestClass());
 			
 			testingResults.add(result);
 			log.info("JUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNIT\nRan JUnit test: " + junitTest + ".  Results=\n");

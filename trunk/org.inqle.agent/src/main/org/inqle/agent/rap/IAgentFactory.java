@@ -44,7 +44,7 @@ public interface IAgentFactory {
 	 * @param shell
 	 * @return
 	 */
-	public IAgentWizard createWizard(Model model, Persister persister, Shell shell);
+	public IAgentWizard createWizard(Model model, Shell shell);
 
 	public boolean hasWizard();
 
@@ -56,9 +56,12 @@ public interface IAgentFactory {
 	 * @param shell
 	 * @return
 	 */
-	public IAgentWizard createWizardForReplica(Model model,
-			Persister persister, Shell shell);
+	public IAgentWizard createWizardForReplica(Model model, Shell shell);
 
 	public IAgentFactory cloneFactory(IAgent childAgent);
+
+	public Persister getPersister();
+	
+	public void setPersister(Persister persister);
 	
 }
