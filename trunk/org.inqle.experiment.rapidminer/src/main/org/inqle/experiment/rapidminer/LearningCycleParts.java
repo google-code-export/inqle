@@ -42,8 +42,7 @@ public class LearningCycleParts extends PartType {
 	
 	public void initChildren() {
 		childParts = new ArrayList<LearningCyclePart>();
-		for (Object learningCycleObject: persister.reconstituteList(LearningCycle.class)) {
-			LearningCycle learningCycle = (LearningCycle)learningCycleObject;
+		for (LearningCycle learningCycle: LearningCycleLister.listLearningCycles(persister)) {
 			if (learningCycle == null) {
 				log.warn("Found Learning Cycle that is null; skipping");
 			}
