@@ -8,18 +8,23 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 
 /**
- * Abstract base class for creating agents.  Must implement run() method.
+ * Abstract base class for creating agents.  New agent classes
+ * must implement run() method.  
+ * 
  * In this method, be sure to set mode to RUNNING at the outset.
  * In the course of cycling, increment the counter cycleCount each time, and test for if
  * cycleCount == stoppingPoint.  When it does, set mode to STOPPED and exit.
  * Also in the course of cycling, test to see if mode = STOPPING.  If so, set mode to STOPPED and exit.
  * 
+ * The run() method should not modify any field values.  Instead
+ * work with local variables.  This way, the agent will be returned to the 
+ * exact same state after running as it had before running.  
  * @author David Donohue
  * Apr 24, 2008
  */
 public abstract class AAgent extends BasicJenabean implements IAgent {
 
-	public static final int CYCLE_CONTINUOUSLY = 0;
+	public static final int CYCLE_CONTINUOUSLY = -1;
 	protected int mode = STOPPED;
 	protected int cycleCount = 0;
 	/**
@@ -29,8 +34,14 @@ public abstract class AAgent extends BasicJenabean implements IAgent {
 	protected Persister persister;
 	
 	public void clone(AAgent objectToClone) {
-		setNumberOfCycles(objectToClone.getNumberOfCycles());
+		setStoppingPoint(objectToClone.getStoppingPoint());
 		super.clone(objectToClone);
+	}
+	
+	public void replicate(AAgent objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
 	}
 	
 	public void stop() {
@@ -45,11 +56,11 @@ public abstract class AAgent extends BasicJenabean implements IAgent {
 		this.mode = mode;
 	}
 
-	public int getNumberOfCycles() {
+	public int getStoppingPoint() {
 		return stoppingPoint;
 	}
 
-	public void setNumberOfCycles(int numberOfCycles) {
+	public void setStoppingPoint(int numberOfCycles) {
 		this.stoppingPoint = numberOfCycles;
 	}
 	
