@@ -102,21 +102,6 @@ public class RdfTableSelectorPage extends BeanWizardPage {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
     //create the TableViewer
-		createBoundViewer(table);
-		//log.info("Set List items to:" + beans);
-//		bindList(listWidget, bean, beanValueId, this.beanItemClass, this.widgetToBeanItemConverter, this.beanItemToWidgetConverter);
-		//log.info("Created CheckboxTableViewer using bean:" + JenabeanWriter.toString(this.bean));
-	}
-
-	/**
-	 * Create a TableViewer, given the provided Table, the Javabean acting as the 
-	 * data model, and the class of objects representing each row.
-	 * Add the databinding to each row
-	 * @param table
-	 * @param modelBean
-	 * @return
-	 */
-	private void createBoundViewer(Table table) {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -140,7 +125,9 @@ public class RdfTableSelectorPage extends BeanWizardPage {
 		labelProvider.setColumnFields(propertyNames);
 		tableViewer.setLabelProvider(labelProvider);
 		refreshTableData();
-		
+		//log.info("Set List items to:" + beans);
+//		bindList(listWidget, bean, beanValueId, this.beanItemClass, this.widgetToBeanItemConverter, this.beanItemToWidgetConverter);
+		//log.info("Created CheckboxTableViewer using bean:" + JenabeanWriter.toString(this.bean));
 	}
 	
 

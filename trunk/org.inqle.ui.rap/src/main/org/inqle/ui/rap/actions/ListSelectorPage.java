@@ -2,6 +2,7 @@ package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.conversion.IConverter;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ListViewer;
@@ -40,8 +41,6 @@ public class ListSelectorPage extends BeanWizardPage {
 
 	private Object[] items;
 
-	private String listItemDisplayField;
-
 	protected Composite composite;
 
 	private static final Logger log = Logger.getLogger(ListSelectorPage.class);
@@ -67,11 +66,17 @@ public class ListSelectorPage extends BeanWizardPage {
 	protected void createList() {
 		new Label (composite, SWT.NONE).setText(labelText);	
 		ListViewer viewer = new ListViewer(composite, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		viewer.getList().setLayoutData(gridData);
 		viewer.setContentProvider(new ArrayContentProvider());
+		//viewer.setContentProvider(new ObservableListContentProvider());
 		viewer.add(items);	
 		bindItem(viewer, bean, beanValueId);
+	}
+	
+	@Override
+	public void onEnterPageFromPrevious() {
+		createList();
 	}
 
 	/**
@@ -92,10 +97,5 @@ public class ListSelectorPage extends BeanWizardPage {
 
 	public void setListItems(Object[] items) {
 		this.items = items;
-	}
-	
-	@Deprecated
-	public void setListItemDisplayField(String listItemDisplayField) {
-		this.listItemDisplayField = listItemDisplayField;
 	}
 }

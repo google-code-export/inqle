@@ -37,13 +37,11 @@ public class NameDescriptionPage extends BeanWizardPage {
 	
 	public NameDescriptionPage(IBasicJenabean bean, String title, ImageDescriptor titleImage) {
 		super(bean, null, title, titleImage);
-		log.info("Created NameDescriptionPage() for bean:" + bean);
 		assert(this.bean != null);
 	}
 
 	@Override
 	public void addElements(Composite composite) {
-		log.info("addElements() for bean:" + bean);
 		new Label (composite, SWT.NONE).setText("Name");	
 		Text name = new Text(composite, SWT.BORDER);
     GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);

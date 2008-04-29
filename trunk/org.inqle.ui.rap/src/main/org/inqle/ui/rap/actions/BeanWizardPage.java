@@ -6,6 +6,7 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateListStrategy;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.Realm;
@@ -38,7 +39,6 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 public abstract class BeanWizardPage extends DynaWizardPage {
 
 	protected IBasicJenabean bean;
-	@Deprecated
 	protected String beanValueId;
 	protected Composite parentComposite;
 	protected Composite selfComposite;
@@ -81,7 +81,9 @@ public abstract class BeanWizardPage extends DynaWizardPage {
 	}
 	
 	/**
-	 * Bind an ISelectionProvider (e.g. a ListViewer) to the bean object
+	 * Bind an ISelectionProvider (e.g. a ListViewer) to the bean object.
+	 * Permits selecting single item from a ListViewer
+	 * Objects in List selector have the same class as the object in bean field
 	 * @param viewer
 	 * @param viewerItemField the name of the field (within the viewer's item) to display
 	 * @param beanObject
@@ -93,7 +95,7 @@ public abstract class BeanWizardPage extends DynaWizardPage {
 		IObservableValue observedBean = BeansObservables.observeValue(realm, beanObject, beanObjectValueId);
 		
 		//bindingContext.bindValue(detailObservable, observedBean, null, null);
-		bindingContext.bindValue(selection, observedBean, null, null);
+		bindingContext.bindValue(selection, observedBean, new UpdateValueStrategy(), new UpdateValueStrategy());
 	}
 	
 	/**

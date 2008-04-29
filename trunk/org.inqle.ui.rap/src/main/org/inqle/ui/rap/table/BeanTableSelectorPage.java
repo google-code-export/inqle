@@ -79,6 +79,8 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 
 	private static final Logger log = Logger.getLogger(BeanTableSelectorPage.class);
 	
+	protected CheckboxTableViewer viewer;
+	
 	/**
 	 * the List of property names = columns in the table, in the model Javabean, using Javabean property convention
 	 */
@@ -96,7 +98,6 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 		super(modelBean, modelBeanValueId, title, titleImage);
 		this.modelListClass = modelListClass;
 		assert(this.bean != null);
-		assert(this.beanValueId != null);
 	}
 
 	/**
@@ -114,21 +115,6 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
     //create the TableViewer
-		CheckboxTableViewer tableViewer = createBoundViewer(table, bean);
-		//log.info("Set List items to:" + beans);
-//		bindList(listWidget, bean, beanValueId, this.beanItemClass, this.widgetToBeanItemConverter, this.beanItemToWidgetConverter);
-		//log.info("Created CheckboxTableViewer using bean:" + JenabeanWriter.toString(this.bean));
-	}
-
-	/**
-	 * Create a TableViewer, given the provided Table, the Javabean acting as the 
-	 * data model, and the class of objects representing each row.
-	 * Add the databinding to each row
-	 * @param table
-	 * @param modelBean
-	 * @return
-	 */
-	private CheckboxTableViewer createBoundViewer(Table table, Object modelBean) {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
@@ -141,7 +127,7 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 			log.debug("Added column: " + propertyName);
 		}
 		
-		final CheckboxTableViewer viewer = new CheckboxTableViewer(table);
+		viewer = new CheckboxTableViewer(table);
 		
 		ObservableListContentProvider olContentProvider = new ObservableListContentProvider();
 		viewer.setContentProvider(olContentProvider);
@@ -149,12 +135,26 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 		BeanTableLabelProvider labelProvider = new BeanTableLabelProvider();
 		labelProvider.setColumnFields(propertyNames);
 		viewer.setLabelProvider(labelProvider);
+		//refreshTableData();
+		//log.info("Set List items to:" + beans);
+//		bindList(listWidget, bean, beanValueId, this.beanItemClass, this.widgetToBeanItemConverter, this.beanItemToWidgetConverter);
+		//log.info("Created CheckboxTableViewer using bean:" + JenabeanWriter.toString(this.bean));
+	}
+
+
+
+	private void refreshTableData() {
 		WritableList writableListInput = new WritableList(beans, tableBeanClass);
 		viewer.setInput(writableListInput); 
 		BeanTableCheckedList checkedBoxes = new BeanTableCheckedList(viewer);
 
-		bindList(checkedBoxes, modelBean, beanValueId, modelListClass, tableBeanToListItemConverter, listItemToTableBeanConverter);
-		return viewer;
+		bindList(checkedBoxes, bean, beanValueId, modelListClass, tableBeanToListItemConverter, listItemToTableBeanConverter);
+		
+	}
+	
+	@Override
+	public void onEnterPageFromPrevious() {
+		refreshTableData();
 	}
 
 	/**
