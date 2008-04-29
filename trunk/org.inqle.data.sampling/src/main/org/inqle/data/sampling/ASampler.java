@@ -1,16 +1,15 @@
 package org.inqle.data.sampling;
 
-import java.util.Dictionary;
 import java.util.Collection;
+import java.util.Dictionary;
 
-import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.BasicJenabean;
 
 import thewebsemantic.Namespace;
 
 /**
- * This is a basic (if not abstract) implementation of the ISampler 
+ * This is a basic, abstract implementation of the ISampler 
  * interface.  It is intended to be subclassed by new Sampler algorithms.
  * New implementations should:
  *  * to enable persisting your class to RDF store,
@@ -35,11 +34,11 @@ import thewebsemantic.Namespace;
 public abstract class ASampler extends BasicJenabean implements ISampler {
 
 	protected Collection<String> availableNamedModels;
-	protected DataColumn[] dataColumns;
+//	protected DataColumn[] dataColumns;
 	protected DataColumn labelDataColumn;
 	//protected DataTable resultDataTable = new DataTable();
 	protected Collection<String> selectedNamedModels;
-	protected DataColumn subjectDataColumn;
+//	protected DataColumn subjectDataColumn;
 	protected String id;
 	protected Dictionary<?, ?> properties;
 	private String name;
@@ -51,23 +50,29 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 	 */
 	public void clone(ISampler templateSampler) {
 //		setAvailableNamedModels(templateSampler.getAvailableNamedModels());
-		setDataColumns(templateSampler.getDataColumns());
+		//setDataColumns(templateSampler.getDataColumns());
 		//setLabelDataColumn(templateSampler.getLabelDataColumn());
 		//setResultDataTable(templateSampler.getResultDataTable());
 		setSelectedNamedModels(templateSampler.getSelectedNamedModels());
 		//setSubjectDataColumn(templateSampler.getSubjectDataColumn());
 		setProperties(templateSampler.getProperties());
 		setName(templateSampler.getName());
-		
+		super.clone(templateSampler);
+	}
+	
+	public void replicate(ISampler objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
 	}
 
 //	public Collection<String> getAvailableNamedModels() {
 //		return availableNamedModels;
 //	}
 
-	public DataColumn[] getDataColumns() {
-		return dataColumns;
-	}
+//	public DataColumn[] getDataColumns() {
+//		return dataColumns;
+//	}
 
 	public DataColumn getLabelDataColumn() {
 		return labelDataColumn;
@@ -85,9 +90,9 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 		return selectedNamedModels;
 	}
 
-	public DataColumn getSubjectDataColumn() {
-		return subjectDataColumn;
-	}
+//	public DataColumn getSubjectDataColumn() {
+//		return subjectDataColumn;
+//	}
 
 //	/**
 //	 * (Called prior to saving the object).  Remove all values not desired when saving this object
@@ -102,9 +107,9 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 //		this.availableNamedModels = availableNamedModels;
 //	}
 
-	public void setDataColumns(DataColumn[] dataColumns) {
-		this.dataColumns = dataColumns;
-	}
+//	public void setDataColumns(DataColumn[] dataColumns) {
+//		this.dataColumns = dataColumns;
+//	}
 
 	public void setLabelDataColumn(DataColumn labelDataColumn) {
 		this.labelDataColumn = labelDataColumn;
@@ -118,9 +123,9 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 		this.selectedNamedModels = selectedNamedModels;
 	}
 
-	public void setSubjectDataColumn(DataColumn subjectDataColumn) {
-		this.subjectDataColumn = subjectDataColumn;
-	}
+//	public void setSubjectDataColumn(DataColumn subjectDataColumn) {
+//		this.subjectDataColumn = subjectDataColumn;
+//	}
 
 	public void setProperties(Dictionary<?, ?> properties) {
 		this.properties = properties;

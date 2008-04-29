@@ -1,14 +1,18 @@
 package org.inqle.data.sampling;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.RdfTable;
 
-public class DataTable implements Serializable {
-
+//public class DataTable implements Serializable {
+/**
+ * The INQLE representation of a learnable, minable table of data
+ * 
+ * TODO implement an interface IDataTable?
+ */
+public class DataTable {
 	private RdfTable rdfTable = new RdfTable();
 	
 	/**
@@ -19,6 +23,8 @@ public class DataTable implements Serializable {
 	private List<DataColumn> columns = new ArrayList<DataColumn>();
 	private List<List<DataCell>> rows = new ArrayList<List<DataCell>>();
 
+	private String query;
+	
 	private static Logger log = Logger.getLogger(DataTable.class);
 	
 	/**
@@ -111,6 +117,14 @@ public class DataTable implements Serializable {
 		}
 		log.info("returning learnable columns=" + learnableColumns);
 		return learnableColumns;
+	}
+
+	public String getQuery() {
+		return query;
+	}
+
+	public void setQuery(String query) {
+		this.query = query;
 	}
 
 }

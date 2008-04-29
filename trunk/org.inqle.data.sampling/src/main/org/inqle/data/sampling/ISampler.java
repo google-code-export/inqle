@@ -36,7 +36,7 @@ import thewebsemantic.Id;
 public interface ISampler extends IBasicJenabean {
 	
 	public static final String PROPERTY_WEIGHT = "weight";
-	public static final String URI_UNKNOWN_SUBJECT = RDF.INQLE + "unknownSubject";
+	public static final String URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES = RDF.INQLE + "subjectContainingCommonAttributes";
 	public static final String ID = "org.inqle.data.sampling.ISampler";
 	/**
 	 * Get the Collection of IDs of NamedModels which are candidates for sampling.
@@ -63,9 +63,9 @@ public interface ISampler extends IBasicJenabean {
 	 */
 	public void setSelectedNamedModels(Collection<String> selectedNamedModels);
 	
-	public void setDataColumns(DataColumn[] dataColumns);
+	//public void setDataColumns(DataColumn[] dataColumns);
 	
-	public DataColumn[] getDataColumns();
+	//public DataColumn[] getDataColumns();
 	
 //	public DataTable getResultDataTable();
 //	

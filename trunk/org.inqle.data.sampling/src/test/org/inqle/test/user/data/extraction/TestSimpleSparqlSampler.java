@@ -43,7 +43,7 @@ public class TestSimpleSparqlSampler {
 		//assertEquals(true, availablePredicates.size() > 5);
 		Collection<String> selectedPredicates = sss.getSelectedPredicates();
 		assertEquals(true, (selectedPredicates.size() >= SimpleSparqlSampler.MINIMUM_LEARNABLE_PREDICATES && selectedPredicates.size() <= SimpleSparqlSampler.MAXIMUM_LEARNABLE_PREDICATES));
-		assertEquals(selectedPredicates.size() + 1, sss.getDataColumns().length);
+		assertEquals(selectedPredicates.size() + 1, resultTable.getColumns().size());
 		assertEquals(true, selectedPredicates.size() > 0);
 		assertNotNull(resultTable);
 		log.info(DataTableWriter.dataTableToString(resultTable));
