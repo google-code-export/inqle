@@ -130,4 +130,10 @@ public class RapidMinerExperiment extends BasicJenabean implements IRapidMinerEx
 		setExperimentType(objectToBeCloned.getExperimentType());
 		setExperimentClassPath(objectToBeCloned.getExperimentClassPath());
 	}
+	
+	public void replicate(RapidMinerExperiment objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
+	}
 }

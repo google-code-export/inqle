@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.experiment.rapidminer.ExperimentResult;
 import org.inqle.experiment.rapidminer.LearningCycle;
@@ -56,9 +57,16 @@ public class ExperimenterAgent extends AAgent {
 		//run each test
 		while (cycleCount != stoppingPoint && mode == RUNNING) {
 			ExperimentResult experimentResult = learningCycleToRun.execute();
+			if (experimentResult == null) {
+				log.warn("Resulting ExperimentResult is null.  Skip to next cycle.");
+				continue;
+			}
+			log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
 			persister.persist(experimentResult, persister.getMetarepositoryModel());
 			cycleCount ++;
 		}
+		log.info("Exiting.  Completed " + cycleCount + " cycles.");
+		mode = STOPPED;
 		
 	}
 

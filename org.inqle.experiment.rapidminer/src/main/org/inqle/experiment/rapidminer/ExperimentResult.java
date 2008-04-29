@@ -34,6 +34,13 @@ public class ExperimentResult extends BasicJenabean {
 	public void clone(ExperimentResult copyFieldsFrom) {
 		setLearningCycle(copyFieldsFrom.getLearningCycle());
 		setPerformanceVector(copyFieldsFrom.getPerformanceVector());
+		super.clone(copyFieldsFrom);
+	}
+	
+	public void replicate(ExperimentResult objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
 	}
 	
 	/* (non-Javadoc)
