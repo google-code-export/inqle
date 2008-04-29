@@ -52,7 +52,8 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 		this.persister = persister;
 	}
 	
-	public void onEnterPage() {
+	@Override
+	public void onEnterPageFromPrevious() {
 		updateRows();
 		//tableViewer.refresh();
 		refreshTableData();
@@ -62,8 +63,8 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 		QueryCriteria queryCriteria = new QueryCriteria(persister);
 		queryCriteria.setQuery(getQuery());
 		queryCriteria.addNamedModelIds(getNamedModelIds());
-		log.debug("Performing query:\n" + getQuery() + "\non these named models:\n" + getNamedModelIds());
+		log.info("Performing query:\n" + getQuery() + "\non these named models:\n" + getNamedModelIds());
 		resultRdfTable = Queryer.selectRdfTable(queryCriteria);
-		log.debug("Retrieved " + resultRdfTable.getResultList());
+		log.info("Retrieved " + resultRdfTable.getResultList());
 	}
 }

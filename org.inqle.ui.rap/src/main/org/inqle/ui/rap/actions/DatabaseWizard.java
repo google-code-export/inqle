@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
@@ -54,6 +55,7 @@ public class DatabaseWizard extends Wizard {
 	public void setDatabasePart(DatabasePart databasePart) {
 		this.databasePart  = databasePart;
 		this.startingConnection = databasePart.getConnection();
+		resetConnection();
 	}
 	
 
@@ -61,10 +63,11 @@ public class DatabaseWizard extends Wizard {
 	
 	@Override
 	public void addPages() {
-		resetConnection();
 		
+		resetConnection();
+		log.info("addPages() using Connection:\n" + JenabeanWriter.toString(connection));
 		ConnectionPage connectionPage = new ConnectionPage("Database Connection Info", connection, shell);
-		addPage((IWizardPage) connectionPage);
+		addPage(connectionPage);
 	}
 	
 	/* (non-Javadoc)
@@ -74,12 +77,12 @@ public class DatabaseWizard extends Wizard {
 	public boolean performFinish() {
 		DBConnector connector = new DBConnector(connection);
 		boolean connectionSucceeds = connector.testConnection();
-		boolean saveConnection = true;
+		boolean confirmSave = true;
 		
 		if (! connectionSucceeds) {
-			saveConnection = MessageDialog.openConfirm(shell.getShell(), "Connection Fails", "Unable to connect to this database.  Save it anyway?");
+			confirmSave = MessageDialog.openConfirm(shell.getShell(), "Connection Fails", "Unable to connect to this database.  Save it anyway?");
 		}
-		if (saveConnection) {
+		if (confirmSave) {
 			if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {
 				persister.createNewDBConnection(connection);
 				parentPart.fireUpdate(parentPart);

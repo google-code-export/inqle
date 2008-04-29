@@ -1,5 +1,6 @@
 package org.inqle.ui.rap.actions;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.Realm;
@@ -21,6 +22,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 /**
 	 * This generates the wizard page for creating a database connection
@@ -29,6 +31,7 @@ import org.inqle.data.rdf.jena.sdb.DBConnector;
 	 */
 	public class ConnectionPage extends WizardPage {
 		
+		private static Logger log = Logger.getLogger(ConnectionPage.class);
 		private Connection connection = null;
 
 		private Shell shell;
@@ -69,6 +72,7 @@ import org.inqle.data.rdf.jena.sdb.DBConnector;
 		
 		public void createControl(Composite pageParent) {
 			
+			log.info("createControl() using Connection:\n" + JenabeanWriter.toString(connection));
 			Composite composite = new Composite(pageParent, SWT.NONE);
 	    // create the desired layout for this wizard page
 			GridLayout gl = new GridLayout(2, false);
@@ -81,6 +85,9 @@ import org.inqle.data.rdf.jena.sdb.DBConnector;
 			new Label (composite, SWT.NONE).setText("Change Database Type");
 
 			final List dbTypeList = new List (composite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+			dbTypeList.setLayoutData(gridData);
+			
 			//log.info("DBTYPES has " + DBTYPES.length);
 			for (int i=0; i<DBTYPES.length; i++) {
 				dbTypeList.add (DBTYPES[i]);

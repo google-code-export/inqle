@@ -68,7 +68,7 @@ public class DatabaseWizardAction extends Action {
 		DatabaseWizard wizard = new DatabaseWizard(mode, parentPart, persister, window.getShell());
 		
 		//for MODE_NEW, do not add a starting base Connection
-		if (mode == MODE_EDIT || mode == MODE_CLONE) {
+		if (databasePart != null) {
 			wizard.setDatabasePart(databasePart);
 		}
 		
