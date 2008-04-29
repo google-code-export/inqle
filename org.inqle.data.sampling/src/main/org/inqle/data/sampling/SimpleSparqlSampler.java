@@ -15,7 +15,6 @@ import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
-import thewebsemantic.RdfProperty;
 
 /** 
  * This simple sampler does the following:
@@ -55,81 +54,187 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 		"?subject ?predicate ?object \n " +
 		"} } \n " +
 		" LIMIT " + MAXIMUM_ROWS_INITIAL_QUERY;
+	
 	protected Collection<String> selectedPredicates;
 	//protected Collection<String> availablePredicates;
 
 
+	/**
+	 * Select the predicates to use.  When predicates are already specified, 
+	 * use them.
+	 * 
+	 * TODO Test each pre-selected predicate, to ensure it is available in the data models.  When not available, add reandom attributes to compensate.
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
 	public Collection<String> selectPredicates(Collection<String> modelsToUse, Persister persister) {
 		//if predicates already selected, return
-		if (selectedPredicates != null) {
+		if (selectedPredicates != null && selectedPredicates.size() > 0) {
 			return selectedPredicates;
 		}
 		List<String> availablePredicates = selectAvailablePredicates(modelsToUse, persister);
-		return (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(availablePredicates), MINIMUM_LEARNABLE_PREDICATES, MAXIMUM_LEARNABLE_PREDICATES);
+		return (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(availablePredicates), getMinimumNumberOfPredicates(), getMaximumNumberOfPredicates());
+	}
+
+
+	private int getMaximumNumberOfPredicates() {
+		return MAXIMUM_LEARNABLE_PREDICATES;
+	}
+
+
+	private int getMinimumNumberOfPredicates() {
+		return MINIMUM_LEARNABLE_PREDICATES;
 	}
 
 
 	public List<String> selectAvailablePredicates(Collection<String> modelsToUse, Persister persister) {
 		QueryCriteria queryCriteria = new QueryCriteria(persister);
-		queryCriteria.addNamedModelIds(selectedNamedModels);
+		queryCriteria.addNamedModelIds(modelsToUse);
 		queryCriteria.setQuery(SPARQL_GET_DISTINCT_PREDICATES);
 		return Queryer.selectUriList(queryCriteria);
 	}
 
-	/**
-	 * Given a set of selected predicates, generate a SPARQL query, which will 
-	 * retrieve the data to be mined.  Populate the query and dataColumns attributes
-	 * @return
-	 */
-	public String generateSparql(Collection<String> modelsToUse, Persister persister) {
+	@Override
+	public List<DataColumn> selectDataColumns(Collection<String> modelsToUse,
+			Persister persister) {
+		List<DataColumn> dataColumnsList = new ArrayList<DataColumn>();
 		//first step: select predicates, if not already done
-		selectPredicates(modelsToUse, persister);
-
-		if (selectedPredicates == null || selectedPredicates.size() < MINIMUM_LEARNABLE_PREDICATES || selectedPredicates.size() > MAXIMUM_LEARNABLE_PREDICATES) {
-			log.error("Expect selection of between " + MINIMUM_LEARNABLE_PREDICATES + " and " + MAXIMUM_LEARNABLE_PREDICATES + " predicates.");
+		Collection<String> predicatesToUse = selectPredicates(modelsToUse, persister);
+		log.info("predicatesToUse=" + predicatesToUse);
+		if (predicatesToUse == null || predicatesToUse.size() < getMinimumNumberOfPredicates() || predicatesToUse.size() > getMaximumNumberOfPredicates()) {
+			log.error("Expect selection of between " + getMinimumNumberOfPredicates() + " and " + getMaximumNumberOfPredicates() + " predicates.");
 			//clear the previously selected attributes
-			return null;
+			return dataColumnsList;
 		}
-		//construct SPARQL:
-		String sparql = "SELECT $" + SUBJECT_LABEL;
 		
 		int i=0;
-		String whereClause = "";
-		List<DataColumn> dataColumnsList = new ArrayList<DataColumn>();
-		dataColumnsList.add(new DataColumn(SUBJECT_LABEL, ISampler.URI_UNKNOWN_SUBJECT));
-		for (String selectedPredicate: selectedPredicates) {
+		
+		dataColumnsList.add(new DataColumn(SUBJECT_LABEL, ISampler.URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES));
+		for (String predicateToUse: predicatesToUse) {
 			
 			//add attribute to SELECT clause
 			String predicateLabel = "attribute" + i;
-			sparql += " $" + predicateLabel;
 			
 			//add statement to WHERE clause
-			if (i > 0) {
-				whereClause += " . ";
-			}
-			whereClause += " $" + SUBJECT_LABEL + " <" +
-				selectedPredicate.toString() +
-				"> $" +
-				predicateLabel +
-				" \n";
-			
 			//create column for this predicate and add to list of columns
-			DataColumn dataColumn = new DataColumn(predicateLabel, selectedPredicate);
+			log.info("Adding predicate " + predicateLabel + " = " + predicateToUse);
+			DataColumn dataColumn = new DataColumn(predicateLabel, predicateToUse);
 			dataColumnsList.add(dataColumn);
 			
 			i++;
 		}
-		DataColumn[] dc = new DataColumn[]{};
-		setDataColumns((DataColumn[]) dataColumnsList.toArray(dc));
+		return dataColumnsList;
+	}
+	
+	/**
+	 * Given a set of selected predicates, generate a SPARQL query, which will 
+	 * retrieve the data to be mined.  As a side effect, populate the dataColumns attributes
+	 * The first item in the List of DataColumns is the subject
+	 * @return the generated SPARQL query
+	 * 
+	 * TODO for algorithms which walk across arcs, add corresponding SPARQL statements to the query
+	 * TODO provide this method in abstract class (complete w/ Arc support) such that implmeenters must only identify a list of DataColumns
+	 */
+	@Override
+	public String generateSparql(List<DataColumn> dataColumns) {
+		assert(dataColumns != null & dataColumns.size() > 0);
+		//construct SPARQL: The first column is the subject
+		//String sparql = "SELECT $" + dataColumns.get(0).getQueryLabel();
+		String subjectLabel = dataColumns.get(0).getQueryLabel();
+		String sparql = "SELECT ";
+		int i=0;
+		String whereClause = "";
+		
+		for (DataColumn dataColumn: dataColumns) {
+			
+			//add attribute to SELECT clause
+			sparql += " $" + dataColumn.getQueryLabel();
+			
+			if (i < 1) {
+				i++;
+				continue;
+			}
+			
+			//add statement to WHERE clause
+			if (i > 1) {
+				whereClause += " . ";
+			}
+			
+			whereClause += " $" + subjectLabel + " <" +
+			dataColumn.getColumnUri().toString() +
+				"> $" +
+				dataColumn.getQueryLabel() +
+				" \n";
+			i++;
+		}
 
 		sparql += "\n{ GRAPH ?anyGraph { \n ";
 		sparql += whereClause;
 		sparql += "} } LIMIT " + MAXIMUM_ROWS_DATATABLE;
 		
-		//query = sparql;
 		return sparql;
 		
 	}
+	
+	
+	
+//	/**
+//	 * Given a set of selected predicates, generate a SPARQL query, which will 
+//	 * retrieve the data to be mined.  As a side effect, populate the dataColumns attributes
+//	 * @return the generated SPARQL query
+//	 */
+//	@Override
+//	public String generateSparql(Collection<String> modelsToUse, Persister persister) {
+//		//first step: select predicates, if not already done
+//		Collection<String> predicatesToUse = selectPredicates(modelsToUse, persister);
+//
+//		if (predicatesToUse == null || predicatesToUse.size() < MINIMUM_LEARNABLE_PREDICATES || selectedPredicates.size() > MAXIMUM_LEARNABLE_PREDICATES) {
+//			log.error("Expect selection of between " + MINIMUM_LEARNABLE_PREDICATES + " and " + MAXIMUM_LEARNABLE_PREDICATES + " predicates.");
+//			//clear the previously selected attributes
+//			return null;
+//		}
+//		//construct SPARQL:
+//		String sparql = "SELECT $" + SUBJECT_LABEL;
+//		
+//		int i=0;
+//		String whereClause = "";
+//		List<DataColumn> dataColumnsList = new ArrayList<DataColumn>();
+//		dataColumnsList.add(new DataColumn(SUBJECT_LABEL, ISampler.URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES));
+//		for (String predicateToUse: predicatesToUse) {
+//			
+//			//add attribute to SELECT clause
+//			String predicateLabel = "attribute" + i;
+//			sparql += " $" + predicateLabel;
+//			
+//			//add statement to WHERE clause
+//			if (i > 0) {
+//				whereClause += " . ";
+//			}
+//			whereClause += " $" + SUBJECT_LABEL + " <" +
+//				predicateToUse.toString() +
+//				"> $" +
+//				predicateLabel +
+//				" \n";
+//			
+//			//create column for this predicate and add to list of columns
+//			DataColumn dataColumn = new DataColumn(predicateLabel, predicateToUse);
+//			dataColumnsList.add(dataColumn);
+//			
+//			i++;
+//		}
+//		DataColumn[] dc = new DataColumn[]{};
+//		setDataColumns((DataColumn[]) dataColumnsList.toArray(dc));
+//
+//		sparql += "\n{ GRAPH ?anyGraph { \n ";
+//		sparql += whereClause;
+//		sparql += "} } LIMIT " + MAXIMUM_ROWS_DATATABLE;
+//		
+//		return sparql;
+//		
+//	}
+	
+	
+	
 
 
 //	@Override
@@ -178,4 +283,5 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 		newSampler.replicate(this);
 		return newSampler;
 	}
+
 }

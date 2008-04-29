@@ -132,11 +132,18 @@ public class DataColumn extends BasicJenabean implements Serializable {
 		this.valuesList = valuesList;
 	}
 
-	public void clone(DataColumn objectToBeCloned) {
-		setColumnUri(objectToBeCloned.getColumnUri());
-		setQueryLabel(objectToBeCloned.getQueryLabel());
-		setUriPath(objectToBeCloned.getUriPath());
-		setDataType(objectToBeCloned.getDataType());
+	public void clone(DataColumn objectToClone) {
+		setColumnUri(objectToClone.getColumnUri());
+		setQueryLabel(objectToClone.getQueryLabel());
+		setUriPath(objectToClone.getUriPath());
+		setDataType(objectToClone.getDataType());
+		super.clone(objectToClone);
+	}
+	
+	public void replicate(DataColumn objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
 	}
 	
 	@Override

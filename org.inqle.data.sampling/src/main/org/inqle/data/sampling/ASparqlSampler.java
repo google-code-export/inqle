@@ -67,12 +67,21 @@ public abstract class ASparqlSampler extends ASampler {
 	 * Honor any existing fields, and otherwise make random decisions
 	 */
 	public DataTable execute(Persister persister) {
+		assert(persister != null);
 		Collection<String> modelsToUse = selectNamedModels(persister);
-		String sparql = generateSparql(modelsToUse, persister);
-		DataTable resultDataTable = doQuery(sparql, persister);
+		log.info("modelsToUse=" + modelsToUse);
+		List<DataColumn> dataColumnsToUse = selectDataColumns(modelsToUse, persister);
+		log.info("dataColumnsToUse=" + dataColumnsToUse);
+//		String sparql = generateSparql(modelsToUse, persister);
+		String sparql = generateSparql(dataColumnsToUse);
+		log.info("sparql=" + sparql);
+		DataTable resultDataTable = doQuery(modelsToUse, dataColumnsToUse, sparql, persister);
 		return resultDataTable;
 	}
 	
+	public abstract List<DataColumn> selectDataColumns(Collection<String> modelsToUse,
+			Persister persister);
+
 	/**
 	 * Get the Collection of NamedModels from which to extract data.  Implementations should
 	 * return the user-specified values, if present.  Otherwise selects automatically 
@@ -85,12 +94,12 @@ public abstract class ASparqlSampler extends ASampler {
 //			return getAvailableNamedModels();
 //		}
 		List<NamedModel> allNamedModels = persister.listNamedModels();
-		
+		log.info("allNamedModels=" + allNamedModels);
 		if (allNamedModels != null) {
 			List<String> allNamedModelIds = JenabeanConverter.getIds(allNamedModels);
 			return allNamedModelIds;
 		}
-		return null;
+		return new ArrayList<String>();
 	}
 
 	/**
@@ -103,14 +112,16 @@ public abstract class ASparqlSampler extends ASampler {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<String> selectNamedModels(Persister persister) {
+		log.info("getSelectedNamedModels()=" + getSelectedNamedModels());
 		//if named models already selected, return
-		if (getSelectedNamedModels() != null) {
+		if (getSelectedNamedModels() != null && getSelectedNamedModels().size() > 0) {
+			log.info("getSelectedNamedModels().size()=" + getSelectedNamedModels().size());
 			return getSelectedNamedModels();
 		}
 		//...otherwise populate the list of available named models
 		Collection<String> choosableNamedModels = selectAvailableNamedModels(persister);
-		
-		int countChoosableNamedModels = choosableNamedModels.size();
+		log.info("choosableNamedModels=" + choosableNamedModels);
+		//int countChoosableNamedModels = choosableNamedModels.size();
 		
 		//if we do not have enough choosable datamodels, return null
 //		if (countChoosableNamedModels < getMinimumNumberOfNamedModels()) {
@@ -133,22 +144,22 @@ public abstract class ASparqlSampler extends ASampler {
 
 	/**
 	 * Do a SPARQL query, and convert results into a learnable DataTable
+	 * @param dataColumnsToUse 
 	 * @return
 	 */
-	protected DataTable doQuery(String sparql, Persister persister) {
+	protected DataTable doQuery(Collection<String> namedModelsToUse, List<DataColumn> dataColumnsToUse, String sparql, Persister persister) {
 		QueryCriteria queryCriteria = new QueryCriteria(persister);
-		queryCriteria.addNamedModelIds(getSelectedNamedModels());
+		queryCriteria.addNamedModelIds(namedModelsToUse);
 		queryCriteria.setQuery(sparql);
-		
-		DataColumn[] dataColumns = getDataColumns();
 		
 		RdfTable resultRdfTable = Queryer.selectRdfTable(queryCriteria);
 		log.debug(RdfTableWriter.dataTableToString(resultRdfTable));
-		DataTable resultDataTable = DataTableFactory.createDataTable(resultRdfTable, Arrays.asList(dataColumns));
-		
+		//DataTable resultDataTable = DataTableFactory.createDataTable(resultRdfTable, Arrays.asList(dataColumns));
+		DataTable resultDataTable = DataTableFactory.createDataTable(resultRdfTable, dataColumnsToUse);
 		//add column info to the DataTable
-		List<DataColumn> columnsList = Arrays.asList(dataColumns);
-		resultDataTable.setColumns(columnsList);
+		//List<DataColumn> columnsList = Arrays.asList(dataColumns);
+		//resultDataTable.setColumns(columnsList);
+		//resultDataTable.setColumns(dataColumnsToUse);
 		
 		//setResultDataTable(resultDataTable);
 		return resultDataTable;
@@ -164,7 +175,8 @@ public abstract class ASparqlSampler extends ASampler {
 	 * 
 	 * @return sparql the SPARQL query string, to generate the learnable table of data
 	 */
-	protected abstract String generateSparql(Collection<String> modelsToUse, Persister persister);
+	protected abstract String generateSparql(List<DataColumn> dataColumns);
+	//protected abstract String generateSparql(Collection<String> modelsToUse, Persister persister);
 
 	/**
 	 * TODO Make this configurable
