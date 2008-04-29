@@ -21,7 +21,12 @@ public class Connection extends JenaAssemblerObject {
 		setDbType(oldConnection.getDbType());
 		setDbURL(oldConnection.getDbURL());
 		setDbUser(oldConnection.getDbUser());
-		
+	}
+	
+	public void replicate(Connection oldConnection) {
+		clone(oldConnection);
+		setId(oldConnection.getId());
+		super.replicate(oldConnection);
 	}
 	
 	@RdfProperty(NS + "dbClass")

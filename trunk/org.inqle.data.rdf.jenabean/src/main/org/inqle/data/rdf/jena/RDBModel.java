@@ -1,10 +1,8 @@
 package org.inqle.data.rdf.jena;
 
-import java.util.UUID;
-
+import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
-import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
 
 @Namespace(NS)
 public class RDBModel extends NamedModel {
@@ -28,6 +26,12 @@ public class RDBModel extends NamedModel {
 		super.clone(objectToBeCloned);
 		setModelName(objectToBeCloned.getModelName());
 		setConnection(objectToBeCloned.getConnection());
+	}
+	
+	public void replicate(RDBModel objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
 	}
 	
 	@Override
