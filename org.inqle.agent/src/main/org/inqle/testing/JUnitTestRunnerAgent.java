@@ -55,13 +55,13 @@ public class JUnitTestRunnerAgent extends AAgent {
 	public void run() {
 		mode = RUNNING;
 		log.info("Starting to run()");
-		if (getTestsToRun() == null) {
-			selectAllTests();
-		}
+		
+		IJUnitTest[] testsToRun =	selectTestsToRun();
+
 		
 		log.info("Running these tests: " + getTestsToRun());
 		//run each test
-		for (IJUnitTest junitTest: getTestsToRun()) {
+		for (IJUnitTest junitTest: testsToRun) {
 			if (mode != RUNNING) {
 				break;
 			}
@@ -86,10 +86,13 @@ public class JUnitTestRunnerAgent extends AAgent {
 		this.testsToRun = testsToRun;
 	}
 
-	private void selectAllTests() {
+	private IJUnitTest[] selectTestsToRun() {
+		if (getTestsToRun() != null) {
+			return getTestsToRun();
+		}
 		List<IJUnitTest> listOfTests = JUnitTestLister.listJUnitTests();
 		IJUnitTest[] testArray = {};
-		setTestsToRun(listOfTests.toArray(testArray));
+		return listOfTests.toArray(testArray);
 	}
 
 }
