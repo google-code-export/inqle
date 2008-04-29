@@ -70,6 +70,12 @@ public class AppInfo extends BasicJenabean {
 		super.clone(objectToBeCloned);
 	}
 	
+	public void replicate(AppInfo objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
+	}
+	
 	@Override
 	public IBasicJenabean createClone() {
 		AppInfo newAppInfo = new AppInfo();

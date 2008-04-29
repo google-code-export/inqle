@@ -1,6 +1,7 @@
 package org.inqle.data.rdf.jena;
 
 import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
+
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 
@@ -58,6 +59,12 @@ public class FileModel extends NamedModel {
 		setDirectory(objectToBeCloned.getDirectory());
 		setMapName(objectToBeCloned.getMapName());
 		setFileEncoding(objectToBeCloned.getFileEncoding());
+	}
+	
+	public void replicate(FileModel objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+		super.replicate(objectToClone);
 	}
 	
 	@Override
