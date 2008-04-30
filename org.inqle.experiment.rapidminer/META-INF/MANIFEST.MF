@@ -38,6 +38,7 @@ Import-Package: com.hp.hpl.jena.query,
 Export-Package: org.inqle.experiment.rapidminer
 Bundle-ClassPath: bin/main/,
  .,
+ lib/joone-engine.jar,
  lib/rapidminer.jar
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.ui.rap, 
