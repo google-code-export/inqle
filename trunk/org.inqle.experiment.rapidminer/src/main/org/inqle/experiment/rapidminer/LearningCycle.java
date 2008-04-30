@@ -12,6 +12,7 @@ import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.DataTable;
+import org.inqle.data.sampling.DataTableWriter;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 
@@ -116,10 +117,16 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		DataTable resultDataTable = samplerToUse.execute(persister);
 		if (resultDataTable == null) {
 			log.warn("Sampler " + samplerToUse + " of class " + samplerToUse.getClass() + " was unable" +
-					" to retrieve a DataTable of results");
+					" to retrieve a DataTable of results.");
 			return null;
 		}
 		DataColumn labelDataColumn = selectLabel(resultDataTable);
+		log.info("LLLLL Selected label DataColumn =" + labelDataColumn);
+		//assign data type to this data column
+		int labelDataColumnIndex = resultDataTable.getColumns().indexOf(labelDataColumn);
+		DataPreparer preparer = new DataPreparer(resultDataTable);
+		preparer.assignDataType(labelDataColumnIndex);
+		
 		IRapidMinerExperiment experimentToUse = selectRapidMinerExperiment(resultDataTable, labelDataColumn);
 		if (experimentToUse == null) {
 			log.warn("No RapidMiner experiment was found to match the resultDataTable, labelDataColumn");
@@ -144,18 +151,20 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 	 */
 	private DataColumn selectLabel(DataTable dataTable) {
 		assert(dataTable != null);
-		List<DataColumn> columns = dataTable.getColumns();
-		if (getLabelDataColumn() != null && columns.contains(getLabelDataColumn())) {
+		List<DataColumn> learnableColumns = dataTable.getLearnableColumns();
+		if (getLabelDataColumn() != null && learnableColumns.contains(getLabelDataColumn())) {
 			return getLabelDataColumn();
 		}
 		
 		//otherwise, randomly select
-		int randomIndex = RandomListChooser.chooseRandomIndex(columns.size());
-		return columns.get(randomIndex);
+		int randomIndex = RandomListChooser.chooseRandomIndex(learnableColumns.size());
+		return learnableColumns.get(randomIndex);
 	}
 	
 	private IRapidMinerExperiment selectRapidMinerExperiment(DataTable dataTable, DataColumn labelDataColumn) {
 		assert(dataTable.getColumns().contains(labelDataColumn));
+		assert(persister != null);
+		log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nDataTable=" + DataTableWriter.dataTableToString(dataTable));
 		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(persister, dataTable, labelDataColumn);
 		
 		if (acceptableExperiments == null || acceptableExperiments.size() == 0) {
@@ -189,22 +198,28 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		//get a RapidMiner Process object, representing the Experiment
 		com.rapidminer.Process process = rapidMinerExperiment.getProcess();
 		
+		if (process == null) {
+			log.warn("Unable to retrieve a RapidMiner experiment/process object for rapidMinerExperiment" + rapidMinerExperiment.getExperimentClassPath());
+			return null;
+		}
 		//convert the DataTable into a RapidMiner MemoryExampleTable
 		DataPreparer preparer = new DataPreparer(dataTable);
 		MemoryExampleTable exampleTable = preparer.createExampleTable();
 		
 		//convert the MemoryExampleTable into a RapidMiner ExampleSet
 		int labelIndex = dataTable.getColumns().indexOf(labelDataColumn);
+		log.info("labelIndex=" + labelIndex);
 		assert(labelIndex >= 0);
 		Attribute labelAttribute = exampleTable.getAttribute(labelIndex);
 		Attribute weightAttribute = null;
 		Attribute idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
+		log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
 		ExampleSet exampleSet = 
 			exampleTable.createExampleSet(
 					labelAttribute, 
 					weightAttribute, 
 					idAttribute);
-		
+		log.info("Created exampleSet of size " + exampleSet.size() + " and label attribute=" + exampleSet.getAttributes().getLabel());
 		//run this ExampleSet against the RapidMiner process
 		IOObject[] inputIOObjects = new IOObject[] { exampleSet };
 		IOContainer input = new IOContainer(inputIOObjects);

@@ -3,6 +3,7 @@ package org.inqle.experiment.rapidminer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -13,6 +14,8 @@ import com.rapidminer.tools.Ontology;
 
 public class RapidMinerExperimentLister {
 
+	private static Logger log = Logger.getLogger(RapidMinerExperimentLister.class);
+	
 	public static List<IRapidMinerExperiment> listRapidMinerExperiments(Persister persister) {
 		List<IRapidMinerExperiment> experiments = new ArrayList<IRapidMinerExperiment>();
 		
@@ -44,10 +47,12 @@ public class RapidMinerExperimentLister {
 	public static List<IRapidMinerExperiment> listMatchingExperiments(Persister persister, 
 			DataTable dataTable, DataColumn labelDataColumn) {
 		List<IRapidMinerExperiment> allExperiments = listRapidMinerExperiments(persister);
+		log.info("listMatchingExperiments(): allExperiments=" + allExperiments);
 		List<IRapidMinerExperiment> matchingExperiments = new ArrayList<IRapidMinerExperiment>();
-		
+		log.info("listMatchingExperiments(): labelDataColumn.getDataType()=" + labelDataColumn.getDataType() + " (Ontology.REAL=" + Ontology.REAL + "; Ontology.NOMINAL=" + Ontology.NOMINAL + ")");
 		for (IRapidMinerExperiment experiment: allExperiments) {
-			String[] types = experiment.getExperimentType().split("|");
+			
+			String[] types = experiment.getExperimentType().split("\\|");
 			ArrayList<String> typeList = new ArrayList<String>();
 			for (String type: types) {
 				if (type == null) {
@@ -55,6 +60,8 @@ public class RapidMinerExperimentLister {
 				}
 				typeList.add(type.trim().toLowerCase());
 			}
+			log.info("listMatchingExperiments(): experiment '" + experiment.getName() + "' is of type " + experiment.getExperimentType());
+			log.info("which translates to type list: " + typeList);
 			if (labelDataColumn.getDataType() == Ontology.REAL && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
 				matchingExperiments.add(experiment);
 			}

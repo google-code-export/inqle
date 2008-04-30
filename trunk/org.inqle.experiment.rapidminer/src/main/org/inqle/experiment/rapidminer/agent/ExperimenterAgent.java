@@ -56,12 +56,15 @@ public class ExperimenterAgent extends AAgent {
 		cycleCount = 0;
 		//run each test
 		while (cycleCount != stoppingPoint && mode == RUNNING) {
+			log.info("############### Running Cycle #" + cycleCount);
+			cycleCount++;
 			ExperimentResult experimentResult = learningCycleToRun.execute();
 			if (experimentResult == null) {
 				log.warn("Resulting ExperimentResult is null.  Skip to next cycle.");
 				continue;
 			}
-			log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
+			//log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
+			log.info("Storing experiment result; error=" + experimentResult.getOperatorException());
 			persister.persist(experimentResult, persister.getMetarepositoryModel());
 			cycleCount ++;
 		}

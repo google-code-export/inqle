@@ -32,7 +32,7 @@ public class DataPreparer {
 	public static final int DEFAULT_MAX_NOMINAL_VALUES = 500;
 	
 	/** the default minimum ratio of number of rows over distinct values for a non-numeric data column's values to be considered nominal (otherwise it is a string)*/
-	public static final double DEFAULT_MIN_NOMINAL_RATIO = 1;
+	public static final double DEFAULT_MIN_NOMINAL_RATIO = 1.01;
 	
 	private int maxCountForNominal = DEFAULT_MAX_NOMINAL_VALUES;
 	private double minRowsToCountRatio = DEFAULT_MIN_NOMINAL_RATIO;
@@ -104,17 +104,17 @@ public class DataPreparer {
 		List<DataColumn> columns = dataTable.getColumns();
 		int columnCounter = 0;
 		for (DataColumn column: columns) {
-			log.info("column " + columnCounter + ": getting data type...");
-			int dataType = assignDataType(dataTable, columnCounter, DEFAULT_MAX_NOMINAL_VALUES, DEFAULT_MIN_NOMINAL_RATIO);
-			log.info("column #" + columnCounter + ": DataType=" + dataType);
+			int dataType = assignDataType(columnCounter);
 			
 			Attribute thisAttribute = AttributeFactory.createAttribute(column.getColumnIdentifier(), dataType);
 			if (dataType != Ontology.REAL) {
 				PolynominalMapping mapping = new PolynominalMapping();
 				LinkedHashSet<String> valuesSet = column.getValuesSet();
-				
+				int i=0;
 				for (String strVal: valuesSet) {
-					mapping.mapString(strVal);
+					log.info("Mapping " + i + ": " + strVal);
+					mapping.mapString(strVal.trim());
+					i++;
 				}
 				thisAttribute.setMapping(mapping);
 			}
@@ -125,6 +125,10 @@ public class DataPreparer {
 	}
 	
 	
+	public int assignDataType(int columnIndex) {
+		return assignDataType(columnIndex, DEFAULT_MAX_NOMINAL_VALUES, DEFAULT_MIN_NOMINAL_RATIO);
+	}
+
 	/**
 	 * For the provided DataTable, assigns a RapidMiner data type to the
 	 * column of the specified index
@@ -135,13 +139,19 @@ public class DataPreparer {
 	 * for a column to be considered to have nominal value
 	 * @return dataType the integer data type
 	 */
-	public int assignDataType(DataTable dataTable, int columnIndex, int maxCountForNominal, double minRowsToCountRatio) {
+	public int assignDataType(int columnIndex, int maxCountForNominal, double minRowsToCountRatio) {
 		DataColumn column = dataTable.getColumn(columnIndex);
+		
+		//if dataType is already assigned, return
+		if (column.getDataType() != DataColumn.DATA_TYPE_UNASSIGNED) {
+			return column.getDataType();
+		}
+		
 		List<String> columnValues = getValuesByColumn().get(columnIndex);
 		//default to data type STRING
 		int dataType = Ontology.STRING;
 		
-		log.info("Column " + columnIndex + ": Retrieved " + columnValues.size() + " records");
+		log.info("CCCCCCCCCCCCCCCC Column " + columnIndex + "=" + column);
 		
 		boolean allNumericSoFar = true;
 		LinkedHashSet<String> valuesSet = new LinkedHashSet<String>();
@@ -160,16 +170,18 @@ public class DataPreparer {
 			}
 		}
 		
+		log.info("vvvvvvvvvvvvvvvvv valuesSet=" + valuesSet);
 		int numDistinctValues = valuesSet.size();
 		
 		if (allNumericSoFar) {
 			log.info("column " + columnIndex + ": set to REAL data type = " + Ontology.REAL);
 			dataType = Ontology.REAL;
 		} else {
-			if (numDistinctValues <= maxCountForNominal && (columnValues.size() / numDistinctValues >= minRowsToCountRatio)) {
+			if (numDistinctValues < maxCountForNominal && (columnValues.size() / numDistinctValues > minRowsToCountRatio)) {
 				dataType = Ontology.NOMINAL;
 				log.info("column " + columnIndex + ": set to NOMINAL data type = " + Ontology.NOMINAL);
 			} else {
+				dataType = Ontology.STRING;
 				log.info("column " + columnIndex + ": set to STRING data type = " + Ontology.STRING);
 			}
 			//otherwise leave as String
@@ -186,9 +198,16 @@ public class DataPreparer {
 			List<List<String>> valsByColumn = new ArrayList<List<String>>();
 			List<List<DataCell>> rows = dataTable.getRows();
 			
+			//initialize each column
+			for (@SuppressWarnings("unused")
+			DataColumn column: dataTable.getColumns()) {
+				valsByColumn.add(new ArrayList<String>());
+			}
+			
 			//loop thru each row
 			for (List<DataCell> row: rows) {
 				int colIndex = 0;
+				//loop thru each column
 				for (DataCell cell: row) {
 					valsByColumn.get(colIndex).add(cell.toString());
 					colIndex++;

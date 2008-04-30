@@ -20,7 +20,7 @@
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleRegression"
-      		 file="org.inqle.experiment.rapidminer/SimpleRegression.xml"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegression.xml"
       		 name="Simple Regression"
       		 description="A simple regression experiment"
       		 type="regression"
@@ -28,7 +28,7 @@
       </rapidminer-experiment>
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleClassification"
-      		 file="org.inqle.experiment.rapidminer/SimpleClassification.xml"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleClassification.xml"
       		 name="Simple Classification"
       		 description="A simple classification experiment"
       		 type="classification"
