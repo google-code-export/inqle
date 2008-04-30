@@ -29,6 +29,8 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	 */
 	private static final long serialVersionUID = 2076932473606244248L;
 
+	public static final int DATA_TYPE_UNASSIGNED = -999;
+
 	/** the RDF URI of this column */
 	private String columnUri;
 	
@@ -37,7 +39,7 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	
 	/** the RapidMiner data type, from the edu.udo.cs.yale.tools.Ontology class.
 	 * Possible values = Ontology.NOMINAL, Ontology.REAL, Ontology.String */
-	private int dataType;
+	private int dataType = DATA_TYPE_UNASSIGNED;
 	
 	/**
 	 * an array containing the path of predicate URIs to this column
