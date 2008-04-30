@@ -52,7 +52,7 @@ public class DataTableFactory {
 			
 			dataTable.addRow(row);
 		}//loop back to next result
-
+		
 		return dataTable;
 	}
 }

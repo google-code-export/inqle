@@ -1,6 +1,8 @@
 package org.inqle.data.sampling;
 
 import java.io.Serializable;
+
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 
 /**
@@ -25,6 +27,9 @@ public class DataCell implements Serializable {
 	}
 	
 	public String toString() {
+		if (node instanceof Literal) {
+			return ((Literal)node).getLexicalForm();
+		}
 		return node.toString();
 	}
 }
