@@ -56,7 +56,7 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	
 	@Override
 	public String toString() {
-		return getName();
+		return getClass() + "(" + getName() + ")";
 	}
 
 	public abstract IBasicJenabean createClone();
