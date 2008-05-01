@@ -2,6 +2,7 @@ package org.inqle.ui.rap;
 
 import java.util.List;
 
+import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.core.extensions.util.IJavaExtension;
 
 public interface IPartType extends IPart, IJavaExtension {
