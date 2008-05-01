@@ -1,12 +1,9 @@
 package org.inqle.experiment.rapidminer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.sampling.DataCell;
@@ -112,7 +109,7 @@ public class DataPreparer {
 				LinkedHashSet<String> valuesSet = column.getValuesSet();
 				int i=0;
 				for (String strVal: valuesSet) {
-					log.info("Mapping " + i + ": " + strVal);
+					log.debug("Mapping " + i + ": " + strVal);
 					mapping.mapString(strVal.trim());
 					i++;
 				}
@@ -126,7 +123,7 @@ public class DataPreparer {
 	
 	
 	public int assignDataType(int columnIndex) {
-		return assignDataType(columnIndex, DEFAULT_MAX_NOMINAL_VALUES, DEFAULT_MIN_NOMINAL_RATIO);
+		return assignDataType(columnIndex, maxCountForNominal, minRowsToCountRatio);
 	}
 
 	/**
@@ -142,6 +139,8 @@ public class DataPreparer {
 	public int assignDataType(int columnIndex, int maxCountForNominal, double minRowsToCountRatio) {
 		DataColumn column = dataTable.getColumn(columnIndex);
 		
+		log.debug("CCCCCCCCCCCCCCCC assignDataType() for Column " + columnIndex + "=" + column);
+		
 		//if dataType is already assigned, return
 		if (column.getDataType() != DataColumn.DATA_TYPE_UNASSIGNED) {
 			return column.getDataType();
@@ -150,8 +149,6 @@ public class DataPreparer {
 		List<String> columnValues = getValuesByColumn().get(columnIndex);
 		//default to data type STRING
 		int dataType = Ontology.STRING;
-		
-		log.info("CCCCCCCCCCCCCCCC Column " + columnIndex + "=" + column);
 		
 		boolean allNumericSoFar = true;
 		LinkedHashSet<String> valuesSet = new LinkedHashSet<String>();
@@ -169,24 +166,27 @@ public class DataPreparer {
 				}
 			}
 		}
-		
-		log.info("vvvvvvvvvvvvvvvvv valuesSet=" + valuesSet);
 		int numDistinctValues = valuesSet.size();
-		
-		if (allNumericSoFar) {
-			log.info("column " + columnIndex + ": set to REAL data type = " + Ontology.REAL);
-			dataType = Ontology.REAL;
+		if (numDistinctValues < 2) {
+			dataType = Ontology.SINGLE_VALUE;
+			log.debug("column " + column + ": set to SINGLE_VALUE data type = " + Ontology.SINGLE_VALUE);
 		} else {
-			if (numDistinctValues < maxCountForNominal && (columnValues.size() / numDistinctValues > minRowsToCountRatio)) {
-				dataType = Ontology.NOMINAL;
-				log.info("column " + columnIndex + ": set to NOMINAL data type = " + Ontology.NOMINAL);
+			if (allNumericSoFar) {
+				log.debug("column " + column + ": set to REAL data type = " + Ontology.REAL);
+				dataType = Ontology.REAL;
 			} else {
-				dataType = Ontology.STRING;
-				log.info("column " + columnIndex + ": set to STRING data type = " + Ontology.STRING);
+				if (numDistinctValues < maxCountForNominal && (columnValues.size() / numDistinctValues > minRowsToCountRatio)) {
+					dataType = Ontology.NOMINAL;
+					log.debug("column " + column + ": set to NOMINAL data type = " + Ontology.NOMINAL);
+				} else {
+					//otherwise leave as String
+					dataType = Ontology.STRING;
+					log.debug("column " + column + ": set to STRING data type = " + Ontology.STRING);
+				}
 			}
-			//otherwise leave as String
 		}
-		
+		log.debug("ddddddddddddddddd dataType=" + dataType);
+		log.debug("vvvvvvvvvvvvvvvvv valuesSet=" + valuesSet);
 		column.setValuesSet(valuesSet);
 		column.setValuesList(valuesList);
 		column.setDataType(dataType);
