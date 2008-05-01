@@ -3,6 +3,7 @@ package org.inqle.ui.rap;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.IDeltaListener;
 /**
@@ -15,9 +16,7 @@ import org.inqle.ui.rap.tree.IDeltaListener;
  * 
  * removed: extends Listener
  */
-public interface IPart {	
-		
-	public String getName();
+public interface IPart extends INamedAndDescribed {	
 	
 	public Image getIcon();
 	

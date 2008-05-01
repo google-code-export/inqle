@@ -18,19 +18,29 @@ public abstract class Part implements IPart {
 	protected String name = null;
 	protected IPartType parent;
 	protected IDeltaListener listener = null;
+	protected String description;
 	
 	public String getName() {
 		return name;
 	}
+	public String getDescription() {
+		return description;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public void setParent(IPartType parent) {
 		this.parent = parent;
 	}
 	public IPartType getParent() {
 		return parent;
 	}
-	public String toString() {
-		return getName();
-	}
+
 	protected Persister persister;
 	
 	/**
@@ -84,5 +94,9 @@ public abstract class Part implements IPart {
 	}
 	public Persister getPersister() {
 		return persister;
+	}
+	
+	public String toString() {
+		return getClass() + "(" + getName() + ")";
 	}
 }

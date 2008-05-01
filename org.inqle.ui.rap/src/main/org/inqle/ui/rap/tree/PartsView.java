@@ -32,6 +32,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
@@ -139,6 +140,9 @@ public class PartsView extends ViewPart implements IMenuListener {
 	class ViewLabelProvider extends LabelProvider {
 
 		public String getText(Object obj) {
+			if (obj instanceof INamedAndDescribed) {
+				return ((INamedAndDescribed)obj).getName();
+			}
 			return obj.toString();
 		}
 		public Image getImage(Object obj) {
