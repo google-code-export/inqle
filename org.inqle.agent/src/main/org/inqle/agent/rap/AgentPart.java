@@ -149,7 +149,7 @@ public class AgentPart extends PartType {
 		IAgent agent = agentFactory.getBaseAgent();
 		if (agent.getMode() == IAgent.STOPPED) {
 			//"Run this agent" action
-			log.info("Adding agentPart w/ agentFactory=" + this.getAgentFactory());
+			log.trace("Adding agentPart w/ agentFactory=" + this.getAgentFactory());
 			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow, persister);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
 			manager.add(runAgentAction);

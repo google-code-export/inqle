@@ -16,6 +16,9 @@ import org.inqle.data.rdf.jenabean.Persister;
  */
 public abstract class AAgentFactory implements IAgentFactory {
 
+	private String name;
+	private String description;
+	
 	protected IAgent baseAgent;
 
 	protected Persister persister;
@@ -43,6 +46,22 @@ public abstract class AAgentFactory implements IAgentFactory {
 
 	public void setPersister(Persister persister) {
 		this.persister = persister;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
