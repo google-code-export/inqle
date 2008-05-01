@@ -21,7 +21,7 @@ public class ExperimentResult extends BasicJenabean {
 
 	private PerformanceVector performanceVector;
 	private LearningCycle learningCycle;
-	private OperatorException operatorException;
+	private Exception learningException;
 	
 	public PerformanceVector getPerformanceVector() {
 		return performanceVector;
@@ -71,12 +71,12 @@ public class ExperimentResult extends BasicJenabean {
 		this.learningCycle = learningCycle;
 	}
 
-	public OperatorException getOperatorException() {
-		return operatorException;
+	public Exception getException() {
+		return learningException;
 	}
 
-	public void setOperatorException(OperatorException operatorException) {
-		this.operatorException = operatorException;
+	public void setException(Exception learningException) {
+		this.learningException = learningException;
 	}
 
 

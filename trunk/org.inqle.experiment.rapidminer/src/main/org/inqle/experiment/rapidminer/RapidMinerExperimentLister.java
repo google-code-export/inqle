@@ -58,7 +58,7 @@ public class RapidMinerExperimentLister {
 				}
 				typeList.add(type.trim().toLowerCase());
 			}
-			log.trace("listMatchingExperiments(): experiment '" + experiment.getName() + "' is of type " + experiment.getExperimentType());
+			
 			if (labelDataColumn.getDataType() == Ontology.REAL && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
 				matchingExperiments.add(experiment);
 			}

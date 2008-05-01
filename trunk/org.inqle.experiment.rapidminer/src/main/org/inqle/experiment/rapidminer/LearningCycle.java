@@ -132,7 +132,7 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		
 		IRapidMinerExperiment experimentToUse = selectRapidMinerExperiment(resultDataTable, labelDataColumn);
 		if (experimentToUse == null) {
-			log.warn("No RapidMiner experiment was found to match the resultDataTable, labelDataColumn");
+			log.warn("No RapidMiner experiment was found to match the labelDataColumn=" + labelDataColumn);
 			return null;
 		}
 		return runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
@@ -171,7 +171,7 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(persister, dataTable, labelDataColumn);
 		
 		if (acceptableExperiments == null || acceptableExperiments.size() == 0) {
-			log.warn("selectRapidMinerExperiment() finds no acceptableExperiments");
+			//log.warn("selectRapidMinerExperiment() finds no acceptable Experiments");
 			return null;
 		}
 		
@@ -226,13 +226,12 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
 				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
 		);
-		log.info("\n\nother attributes:");
 		int i=0;
 		Iterator<?> regularAttributeI = exampleSet.getAttributes().iterator();
 		while (regularAttributeI.hasNext()) {
 			i++;
 			Attribute regularAttribute = (Attribute)regularAttributeI.next();
-			log.info("\n\nREGULAR Attribute #" + i + "=" + regularAttribute);
+			log.info("\n\nREGULAR Attribute =" + regularAttribute);
 		}
 		//run this ExampleSet against the RapidMiner process
 		IOObject[] inputIOObjects = new IOObject[] { exampleSet };
@@ -240,9 +239,9 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		IOContainer results = new IOContainer();
 		try {
 			results = process.run(input);
-		} catch (OperatorException e) {
+		} catch (Exception e) {
 			log.error("Error running experiment:", e);
-			experimentResult.setOperatorException(e);
+			experimentResult.setException(e);
 		}
 		
 		experimentResult.setLearningCycle(this);

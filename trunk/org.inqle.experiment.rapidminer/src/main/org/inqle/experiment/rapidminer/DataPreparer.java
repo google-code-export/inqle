@@ -14,6 +14,7 @@ import com.rapidminer.example.Attribute;
 import com.rapidminer.example.table.AttributeFactory;
 import com.rapidminer.example.table.DoubleArrayDataRow;
 import com.rapidminer.example.table.MemoryExampleTable;
+import com.rapidminer.example.table.NominalMapping;
 import com.rapidminer.example.table.PolynominalMapping;
 import com.rapidminer.tools.Ontology;
 
@@ -67,6 +68,8 @@ public class DataPreparer {
 			List<DataCell> row = dataTable.getRow(rowIndex);
 			//loop thru each column
 			for (int colIndex = 0; colIndex < dataTable.getColumns().size(); colIndex++) {
+				Attribute attribute = attributes.get(colIndex);
+				
 				DataColumn column = dataTable.getColumn(colIndex);
 				DataCell cell = row.get(colIndex);
 
@@ -78,7 +81,12 @@ public class DataPreparer {
 						log.error("Unable to cast datum '" + cell.toString() + "' as a number.", e);
 					}
 				} else {//Nominal or String
-					val = column.getValuesList().indexOf(cell.toString());
+					NominalMapping mapping = attribute.getMapping();
+					//val = column.getValuesSet().indexOf(cell.toString());
+					val = mapping.mapString(cell.toString());
+					if (column.getDataType() == Ontology.NOMINAL) {
+						log.info("Cell val '" + cell + "' maps to " + val);
+					}
 				}
 				//fill with proper data here
 				data[colIndex] = val;
@@ -112,6 +120,9 @@ public class DataPreparer {
 					log.debug("Mapping " + i + ": " + strVal);
 					mapping.mapString(strVal.trim());
 					i++;
+				}
+				if (dataType == Ontology.NOMINAL) {
+					log.info("Created mapping NOMINAL column: " + column + "\n\rMapping has " + mapping.size() + " values:" + mapping.getValues());
 				}
 				thisAttribute.setMapping(mapping);
 			}
