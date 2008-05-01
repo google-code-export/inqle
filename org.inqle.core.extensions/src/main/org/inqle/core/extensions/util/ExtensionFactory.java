@@ -87,7 +87,7 @@ public class ExtensionFactory {
 	 * @param spec
 	 * @return
 	 */
-	private static Object createExtensionObject(IExtensionSpec spec) {
+	public static Object createExtensionObject(IExtensionSpec spec) {
 		Object instance = null;
 		String className = spec.getAttribute(ATTRIBUTE_CLASS);
 		if (className == null) {
