@@ -117,7 +117,7 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 			
 			//add statement to WHERE clause
 			//create column for this predicate and add to list of columns
-			log.info("Adding predicate " + predicateLabel + " = " + predicateToUse);
+			log.trace("Adding predicate " + predicateLabel + " = " + predicateToUse);
 			DataColumn dataColumn = new DataColumn(predicateLabel, predicateToUse);
 			dataColumnsList.add(dataColumn);
 			

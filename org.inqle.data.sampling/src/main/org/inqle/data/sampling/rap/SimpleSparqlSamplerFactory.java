@@ -11,6 +11,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 
+	private String name;
+	private String description;
+	
 	static Logger log = Logger.getLogger(SimpleSparqlSamplerFactory.class);
 
 	private SimpleSparqlSampler baseSampler;
@@ -35,7 +38,7 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 	}
 
 	public String getName() {
-		return "Simple SPARQL Sampler";
+		return name;
 	}
 
 	public void setBaseSampler(ISampler sampler) {
@@ -91,4 +94,20 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 		return newFactory;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	@Override
+	public String toString() {
+		return getClass() + "(" + getName() + ")";
+	}
 }
