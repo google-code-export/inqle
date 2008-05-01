@@ -1,29 +1,21 @@
 package org.inqle.data.rdf.jenabean;
 
+import org.inqle.core.domain.INamedAndDescribed;
+
 /**
  * Base interface for (persistable) Jenabean objects
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface IBasicJenabean {
+public interface IBasicJenabean extends INamedAndDescribed {
 
 	public static final String ID_ATTRIBUTE = "id";
-	public static final String NAME_ATTRIBUTE = "name";
-	public static final String DESCRIPTION_ATTRIBUTE = "description";
 	
 	public String getId();
 	
 	public void setId(String id);
 	
 	public String getUri();
-	
-	public String getName();
-	
-	public void setName(String name);
-	
-	public String getDescription();
-	
-	public void setDescription(String description);
 	
 	/**
 	 * Copy all values from the provided ISampler to this one
