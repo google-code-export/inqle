@@ -10,6 +10,8 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 
+
+
 import thewebsemantic.Namespace;
 
 /**
@@ -168,6 +170,8 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	
 	@Override
 	public String toString() {
-		return getColumnIdentifier();
+		String str = "[DataType=" + dataType + "]";
+		
+		return getColumnIdentifier() + str;
 	}
 }

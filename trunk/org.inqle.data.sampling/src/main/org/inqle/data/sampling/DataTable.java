@@ -107,15 +107,15 @@ public class DataTable {
 	 * @return
 	 */
 	public List<DataColumn> getLearnableColumns() {
-		log.info("getLearnableColumns() called; getIdColumnIndex()=" + getIdColumnIndex());
+		log.trace("getLearnableColumns() called; getIdColumnIndex()=" + getIdColumnIndex());
 		List<DataColumn> learnableColumns = new ArrayList<DataColumn>(getColumns());
-		log.info("all columns=" + learnableColumns);
+		log.trace("all columns=" + learnableColumns);
 		try {
 			learnableColumns.remove(getIdColumnIndex());
 		} catch (Exception e) {
 			log.warn("Unable to remove ID column from the list of columns.  All columns will be used for learning.", e);
 		}
-		log.info("returning learnable columns=" + learnableColumns);
+		log.trace("returning learnable columns=" + learnableColumns);
 		return learnableColumns;
 	}
 

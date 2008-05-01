@@ -4,6 +4,7 @@
 package org.inqle.data.sampling.rap;
 
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.actions.DynaWizard;
@@ -15,7 +16,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Feb 27, 2008
  */
-public interface ISamplerFactory {
+public interface ISamplerFactory extends INamedAndDescribed {
 
 	public static final String ID = "org.inqle.data.sampling.rap.ISamplerFactory";
 	
