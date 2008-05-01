@@ -31,7 +31,7 @@ public class Activator extends Plugin {
 		//initialize RapidMiner
 		String rapidMinerHome = InqleInfo.getPluginsDirectory() + context.getBundle().getSymbolicName();
 		System.setProperty(SYSTEM_PROPERTY_RAPIDMINER_HOME, rapidMinerHome);
-		boolean addWekaOperators = false;
+		boolean addWekaOperators = true;
 		boolean searchJDBCInLibDir = false;
 		boolean searchJDBCInClasspath = false;
 		boolean addPlugins = true;

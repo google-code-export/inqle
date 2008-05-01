@@ -47,9 +47,7 @@ public class RapidMinerExperimentLister {
 	public static List<IRapidMinerExperiment> listMatchingExperiments(Persister persister, 
 			DataTable dataTable, DataColumn labelDataColumn) {
 		List<IRapidMinerExperiment> allExperiments = listRapidMinerExperiments(persister);
-		log.info("listMatchingExperiments(): allExperiments=" + allExperiments);
 		List<IRapidMinerExperiment> matchingExperiments = new ArrayList<IRapidMinerExperiment>();
-		log.info("listMatchingExperiments(): labelDataColumn.getDataType()=" + labelDataColumn.getDataType() + " (Ontology.REAL=" + Ontology.REAL + "; Ontology.NOMINAL=" + Ontology.NOMINAL + ")");
 		for (IRapidMinerExperiment experiment: allExperiments) {
 			
 			String[] types = experiment.getExperimentType().split("\\|");
@@ -60,8 +58,7 @@ public class RapidMinerExperimentLister {
 				}
 				typeList.add(type.trim().toLowerCase());
 			}
-			log.info("listMatchingExperiments(): experiment '" + experiment.getName() + "' is of type " + experiment.getExperimentType());
-			log.info("which translates to type list: " + typeList);
+			log.trace("listMatchingExperiments(): experiment '" + experiment.getName() + "' is of type " + experiment.getExperimentType());
 			if (labelDataColumn.getDataType() == Ontology.REAL && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
 				matchingExperiments.add(experiment);
 			}

@@ -3,6 +3,7 @@
  */
 package org.inqle.experiment.rapidminer;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,6 +27,7 @@ import com.rapidminer.operator.IOObject;
 import com.rapidminer.operator.MissingIOObjectException;
 import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.performance.PerformanceVector;
+import com.rapidminer.tools.Ontology;
 
 /**
  * Contains the results of an experiment
@@ -121,7 +123,8 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 			return null;
 		}
 		DataColumn labelDataColumn = selectLabel(resultDataTable);
-		log.info("LLLLL Selected label DataColumn =" + labelDataColumn);
+		//log.info("LLLLL Selected label DataColumn =" + labelDataColumn + " of data type " + labelDataColumn.getDataType());
+		
 		//assign data type to this data column
 		int labelDataColumnIndex = resultDataTable.getColumns().indexOf(labelDataColumn);
 		DataPreparer preparer = new DataPreparer(resultDataTable);
@@ -164,7 +167,7 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 	private IRapidMinerExperiment selectRapidMinerExperiment(DataTable dataTable, DataColumn labelDataColumn) {
 		assert(dataTable.getColumns().contains(labelDataColumn));
 		assert(persister != null);
-		log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nDataTable=" + DataTableWriter.dataTableToString(dataTable));
+		//log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nDataTable=" + DataTableWriter.dataTableToString(dataTable));
 		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(persister, dataTable, labelDataColumn);
 		
 		if (acceptableExperiments == null || acceptableExperiments.size() == 0) {
@@ -208,18 +211,29 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		
 		//convert the MemoryExampleTable into a RapidMiner ExampleSet
 		int labelIndex = dataTable.getColumns().indexOf(labelDataColumn);
-		log.info("labelIndex=" + labelIndex);
+		
 		assert(labelIndex >= 0);
 		Attribute labelAttribute = exampleTable.getAttribute(labelIndex);
 		Attribute weightAttribute = null;
 		Attribute idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
-		log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
+		//log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
 		ExampleSet exampleSet = 
 			exampleTable.createExampleSet(
 					labelAttribute, 
 					weightAttribute, 
 					idAttribute);
-		log.info("Created exampleSet of size " + exampleSet.size() + " and label attribute=" + exampleSet.getAttributes().getLabel());
+		log.info("Created exampleSet of size " + exampleSet.size() + "."
+				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
+				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
+		);
+		log.info("\n\nother attributes:");
+		int i=0;
+		Iterator<?> regularAttributeI = exampleSet.getAttributes().iterator();
+		while (regularAttributeI.hasNext()) {
+			i++;
+			Attribute regularAttribute = (Attribute)regularAttributeI.next();
+			log.info("\n\nREGULAR Attribute #" + i + "=" + regularAttribute);
+		}
 		//run this ExampleSet against the RapidMiner process
 		IOObject[] inputIOObjects = new IOObject[] { exampleSet };
 		IOContainer input = new IOContainer(inputIOObjects);

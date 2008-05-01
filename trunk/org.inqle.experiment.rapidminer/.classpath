@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main"/>
+	<classpathentry exported="true" kind="lib" path="lib/weka.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/joone-engine.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/rapidminer.jar"/>
 	<classpathentry exported="true" kind="lib" path="bin/main/"/>
