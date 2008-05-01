@@ -69,12 +69,12 @@ public abstract class ASparqlSampler extends ASampler {
 	public DataTable execute(Persister persister) {
 		assert(persister != null);
 		Collection<String> modelsToUse = selectNamedModels(persister);
-		log.info("modelsToUse=" + modelsToUse);
+		log.debug("modelsToUse=" + modelsToUse);
 		List<DataColumn> dataColumnsToUse = selectDataColumns(modelsToUse, persister);
-		log.info("dataColumnsToUse=" + dataColumnsToUse);
+		log.debug("dataColumnsToUse=" + dataColumnsToUse);
 //		String sparql = generateSparql(modelsToUse, persister);
 		String sparql = generateSparql(dataColumnsToUse);
-		log.info("sparql=" + sparql);
+		log.debug("sparql=" + sparql);
 		DataTable resultDataTable = doQuery(modelsToUse, dataColumnsToUse, sparql, persister);
 		return resultDataTable;
 	}
@@ -94,7 +94,7 @@ public abstract class ASparqlSampler extends ASampler {
 //			return getAvailableNamedModels();
 //		}
 		List<NamedModel> allNamedModels = persister.listNamedModels();
-		log.info("allNamedModels=" + allNamedModels);
+		log.debug("allNamedModels=" + allNamedModels);
 		if (allNamedModels != null) {
 			List<String> allNamedModelIds = JenabeanConverter.getIds(allNamedModels);
 			return allNamedModelIds;
@@ -112,15 +112,15 @@ public abstract class ASparqlSampler extends ASampler {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<String> selectNamedModels(Persister persister) {
-		log.info("getSelectedNamedModels()=" + getSelectedNamedModels());
+		log.debug("getSelectedNamedModels()=" + getSelectedNamedModels());
 		//if named models already selected, return
 		if (getSelectedNamedModels() != null && getSelectedNamedModels().size() > 0) {
-			log.info("getSelectedNamedModels().size()=" + getSelectedNamedModels().size());
+			log.debug("getSelectedNamedModels().size()=" + getSelectedNamedModels().size());
 			return getSelectedNamedModels();
 		}
 		//...otherwise populate the list of available named models
 		Collection<String> choosableNamedModels = selectAvailableNamedModels(persister);
-		log.info("choosableNamedModels=" + choosableNamedModels);
+		log.debug("choosableNamedModels=" + choosableNamedModels);
 		//int countChoosableNamedModels = choosableNamedModels.size();
 		
 		//if we do not have enough choosable datamodels, return null
