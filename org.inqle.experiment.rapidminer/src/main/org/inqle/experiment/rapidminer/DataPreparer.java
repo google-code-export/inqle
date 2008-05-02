@@ -180,15 +180,15 @@ public class DataPreparer {
 				}
 			}
 		}
-		if (allNumericSoFar) {
+		int numDistinctValues = valuesSet.size();
+		if (numDistinctValues < 2) {
+			dataType = Ontology.SINGLE_VALUE;
+			log.debug("column " + column + ": set to SINGLE_VALUE data type = " + Ontology.SINGLE_VALUE);
+		} else if (allNumericSoFar) {
 			log.debug("column " + column + ": set to REAL data type = " + Ontology.REAL);
 			dataType = Ontology.REAL;
 		} else {
-			int numDistinctValues = valuesSet.size();
-			if (numDistinctValues < 2) {
-				dataType = Ontology.SINGLE_VALUE;
-				log.debug("column " + column + ": set to SINGLE_VALUE data type = " + Ontology.SINGLE_VALUE);
-			} else {
+			 {
 				if (numDistinctValues < maxCountForNominal && (columnValues.size() / numDistinctValues > minRowsToCountRatio)) {
 					dataType = Ontology.NOMINAL;
 					log.debug("column " + column + ": set to NOMINAL data type = " + Ontology.NOMINAL);
