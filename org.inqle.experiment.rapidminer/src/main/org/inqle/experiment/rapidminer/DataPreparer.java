@@ -80,7 +80,10 @@ public class DataPreparer {
 					} catch (Exception e) {
 						log.error("Unable to cast datum '" + cell.toString() + "' as a number.", e);
 					}
+				} else if (column.getDataType() == Ontology.SINGLE_VALUE) {
+					//do not add anything?
 				} else {//Nominal or String
+					log.trace("Get mapping for non-numeric attribute: " + attribute + "; ALL VALUES=" + column.getValuesList());
 					NominalMapping mapping = attribute.getMapping();
 					//val = column.getValuesSet().indexOf(cell.toString());
 					val = mapping.mapString(cell.toString());
@@ -177,14 +180,14 @@ public class DataPreparer {
 				}
 			}
 		}
-		int numDistinctValues = valuesSet.size();
-		if (numDistinctValues < 2) {
-			dataType = Ontology.SINGLE_VALUE;
-			log.debug("column " + column + ": set to SINGLE_VALUE data type = " + Ontology.SINGLE_VALUE);
+		if (allNumericSoFar) {
+			log.debug("column " + column + ": set to REAL data type = " + Ontology.REAL);
+			dataType = Ontology.REAL;
 		} else {
-			if (allNumericSoFar) {
-				log.debug("column " + column + ": set to REAL data type = " + Ontology.REAL);
-				dataType = Ontology.REAL;
+			int numDistinctValues = valuesSet.size();
+			if (numDistinctValues < 2) {
+				dataType = Ontology.SINGLE_VALUE;
+				log.debug("column " + column + ": set to SINGLE_VALUE data type = " + Ontology.SINGLE_VALUE);
 			} else {
 				if (numDistinctValues < maxCountForNominal && (columnValues.size() / numDistinctValues > minRowsToCountRatio)) {
 					dataType = Ontology.NOMINAL;
