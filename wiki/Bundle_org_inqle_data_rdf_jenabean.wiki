@@ -1,0 +1,128 @@
+#summary THis page describes INQLE bundle org.inqle.data.rdf.jenabean
+
+= Introduction =
+
+This bundle contributes a toolkit, which leverages the [http://jena.sourceforge.net/ Jena Semantic Web Framework], maintained by [http://www.hpl.hp.com/ HP Labs] since 2000. This bundle supports working with RDF databases. It permits 3 main activities:
+  # Object-RDF Persistence (ORDFP), using the elegant open source project [http://code.google.com/p/jenabean/ Jenabean]
+  # SPARQL Queries on RDF Databases
+  # Bulk loading of RDF data from a file
+
+
+= Details =
+
+===1. Object - RDF Persistance (ORDFP)===
+Object-RDF Persistance means that data objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [[http://en.wikipedia.org/wiki/JavaBeans|Javabean standard]] (class must implement Serializable, have no argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
+
+Note that Jenabean (and this INQLE bundle) supports persisting javabeans which contain lists, serializable objects, other nested javabeans, primitives.
+
+Examples of IPersistable which contributors might wish to create include:
+ContentPacket - to contain blog posts, discussion thread, etc. for a Content Management System plugin
+LaboratoryReport - to contain a set of laboratory data, from a medical study
+
+This bundle specifies these persistable classes. They map to the corresponding [[http://jena.sourceforge.net/assembler/assembler-howto.html|Jena Assembler]] RDF class:
+**FileModel** - contains info about a single RDF database stored in a file
+**RDBModel** - contains information about a single RDF database stored in a relational database: its name, and its Connection
+**Connection** - contains database connection info.
+**AppInfo** - to contain application-specific configuration, including administrative account info, the location of the RepositoryDatamodel (i.e., the data model which contains all other Datamodel and DBConnectionInfo objects)
+
+Example of how to create, store, and load an persistable object:
+
+
+**(1)** **See the [[http://code.google.com/p/jenabean/w/list|Jenabean documentation]] on how to best structure your class to be persisted. Here is an example**
+[[code]]
+@Namespace(RDF.INQLE)
+public class BlogPost {
+
+    private String id;
+    private String blogTitle;
+    private String blogBody;
+
+    @Id
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+                this.id = id;
+    }
+
+    public String getBlogTitle() {
+        return this.blogTitle;
+    }
+
+    public void setBolgTitle(String blogTitle) {
+        this.blogTitle = blogTitle;
+    }
+
+    // ... other getter and setter method for blogBody
+
+}
+
+[[code]]
+
+**(2) Create instance of this class. Each persistable javabean must have a unique ID, which must be a valid URI:**
+[[code]]
+BlogPost blogPost = new BlogPost();
+String blogPostId = UUID.randomUUID().toString();
+blogPost.setId(blogPostId);
+
+[[code]]
+
+**(3) Add data to this object:**
+[[code]]
+blogPost.setTitle("This is title of first blog post");
+blogPost.setBody("Here is the body of the first blog post.");
+[[code]]
+
+**(4) Persist this object:**
+[[code]]
+//retrieve appInfo from HttpSession cache or from file or wherever
+AppInfo appInfo = session.getAttribute("appInfo");
+
+//retrieve URI of the blog's datamodel from session cache or wherever
+String blogModelId = (String)session.getAttribute("blogModel");
+
+//create new persister, passing it the AppInfo object
+Persister persister = new Persister(appInfo);
+
+//Get a Jena Model object
+Model blogModel = persister.getDatamodel(blogModelUri);
+
+//persist
+persister.persist(blogPost, blogModel);
+[[code]]
+**(5) Later retrieve this object:**
+[[code]]
+BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId, blogModel, true);
+[[code]]
+
+===2. SPARQL Querying===
+The [[http://www.w3.org/TR/rdf-sparql-query/|SPARQL]] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datamodels, of type FileDatamodel and/or DBDatamodel. Thus multiple RDF files and/or databases can be queried simultaneously.
+
+**Usage:**
+Simply create a QueryCriteria object, add as many Datamodel objects as desired, add the SPARQL query, and call querySelect method
+[[code]]
+QueryCriteria queryCriteria = new QueryCriteria(appInfo);
+queryCriteria.addNamedModel(namedModel1);
+queryCriteria.addNamedModel(namedModel2);
+queryCriteria.setQuery(mySparql);
+RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+[[code]]
+
+When a single, database-backed datamodel is added, then a faster SDB query will be done. Otherwise, a slower Jena ARQ query will be done.
+
+===3. Bulk Loading of RDF Data from a File===
+This bundle supports loading RDF data from a file with any of these RDF syntaxes:
+* RDF/XML
+* N-TRIPLE
+* N3
+* Turtle
+
+To load data, your code can do the following:
+[[code]]
+//loadIntoThisModel is the Jena Model to load the data into
+Loader loader = new Loader(loadIntoThisModel);
+
+//fullFilepath = the path to the file to load
+loader.loadFile(fullFilepath, DEFAULT_URI);
+[[code]]
