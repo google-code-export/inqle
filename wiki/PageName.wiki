@@ -1,15 +1,13 @@
-#This summarizes INQLE's architecture
-
 =INQLE Architecture=
 
 INQLE is a standalone, server-based application. It runs on any operating system. As a prerequisite, it requires only Java 1.5 and above, and a Relational database system. [[http://jena.sourceforge.net/SDB/|Supported RDBMS]] include
-* MySQL
-* PostgreSQL
-* MSSQL
-* Oracle
-* IBM DB2
-* HSQLDB
-* Derby
+  * MySQL
+  * PostgreSQL
+  * MSSQL
+  * Oracle
+  * IBM DB2
+  * HSQLDB
+  * Derby
 
 INQLE runs in a plug-in framework called [[http://www.eclipse.org/equinox/|Equinox OSGi]], (from [[http://www.eclipse.org/|Eclipse]]). As such, the core application consists of a number of component plugins, also known as "bundles", each of which contributes a set of functionality. This infrastructure permits INQLE to be extended, through contribution of new bundles. Below is a synopsis of the bundles that comprise the core INQLE server.
 
