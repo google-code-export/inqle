@@ -14,4 +14,4 @@ INQLE runs in a plug-in framework called [http://www.eclipse.org/equinox/ Equino
 Here is a list of bundles.
 
 || *Bundle* || *Description* ||
-|| [Bundle_org.inqle.data.rdf.jenabean org.inqle.data.rdf.jenabean] || Contains Jena toolkit, for working with RDF, Jenabean library for Java-to-RDF persistence, and adaptor code for simplifying both SPARQL queries and persisting INQLE objects in RDF store ||
+|| [Bundle_org_inqle_data_rdf_jenabean org.inqle.data.rdf.jenabean] || Contains Jena toolkit, for working with RDF, Jenabean library for Java-to-RDF persistence, and adaptor code for simplifying both SPARQL queries and persisting INQLE objects in RDF store ||
