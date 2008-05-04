@@ -20,15 +20,15 @@ ContentPacket - to contain blog posts, discussion thread, etc. for a Content Man
 LaboratoryReport - to contain a set of laboratory data, from a medical study
 
 This bundle specifies these persistable classes. They map to the corresponding [http://jena.sourceforge.net/assembler/assembler-howto.html Jena Assembler] RDF class:
-**FileModel** - contains info about a single RDF database stored in a file
-**RDBModel** - contains information about a single RDF database stored in a relational database: its name, and its Connection
-**Connection** - contains database connection info.
-**AppInfo** - to contain application-specific configuration, including administrative account info, the location of the RepositoryDatamodel (i.e., the data model which contains all other Datamodel and DBConnectionInfo objects)
+  *FileModel* - contains info about a single RDF database stored in a file
+  *RDBModel* - contains information about a single RDF database stored in a relational database: its name, and its Connection
+  *Connection* - contains database connection info.
+  *AppInfo* - to contain application-specific configuration, including administrative account info, the location of the Metarepository Datamodel (i.e., the data model which contains all other Datamodel and Connection objects)
 
 Example of how to create, store, and load an persistable object:
 
 
-**(1)** **See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to best structure your class to be persisted. Here is an example**
+*(1) See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to best structure your class to be persisted.* Here is an example
 {{{
 @Namespace(RDF.INQLE)
 public class BlogPost {
@@ -60,7 +60,7 @@ public class BlogPost {
 
 }}}
 
-**(2) Create instance of this class. Each persistable javabean must have a unique ID, which must be a valid URI:**
+*(2) Create instance of this class.* Each persistable javabean must have a unique ID, which must be a valid URI:
 {{{
 BlogPost blogPost = new BlogPost();
 String blogPostId = UUID.randomUUID().toString();
@@ -68,13 +68,13 @@ blogPost.setId(blogPostId);
 
 }}}
 
-**(3) Add data to this object:**
+*(3) Add data to this object:*
 {{{
 blogPost.setTitle("This is title of first blog post");
 blogPost.setBody("Here is the body of the first blog post.");
 }}}
 
-**(4) Persist this object:**
+*(4) Persist this object:*
 {{{
 //retrieve appInfo from HttpSession cache or from file or wherever
 AppInfo appInfo = session.getAttribute("appInfo");
@@ -91,7 +91,7 @@ Model blogModel = persister.getDatamodel(blogModelUri);
 //persist
 persister.persist(blogPost, blogModel);
 }}}
-**(5) Later retrieve this object:**
+*(5) Later retrieve this object:*
 {{{
 BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId, blogModel, true);
 }}}
@@ -99,7 +99,7 @@ BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId,
 ===2. SPARQL Querying===
 The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datamodels, of type FileDatamodel and/or DBDatamodel. Thus multiple RDF files and/or databases can be queried simultaneously.
 
-**Usage:**
+*Usage:*
 Simply create a QueryCriteria object, add as many Datamodel objects as desired, add the SPARQL query, and call querySelect method
 {{{
 QueryCriteria queryCriteria = new QueryCriteria(appInfo);
@@ -113,10 +113,10 @@ When a single, database-backed datamodel is added, then a faster SDB query will 
 
 ===3. Bulk Loading of RDF Data from a File===
 This bundle supports loading RDF data from a file with any of these RDF syntaxes:
-* RDF/XML
-* N-TRIPLE
-* N3
-* Turtle
+  * RDF/XML
+  * N-TRIPLE
+  * N3
+  * Turtle
 
 To load data, your code can do the following:
 {{{
