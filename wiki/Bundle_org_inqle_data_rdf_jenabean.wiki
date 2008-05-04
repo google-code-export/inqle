@@ -11,7 +11,7 @@ This bundle contributes a toolkit, which leverages the [http://jena.sourceforge.
 = Details =
 
 ===1. Object - RDF Persistance (ORDFP)===
-Object-RDF Persistance means that data objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [[http://en.wikipedia.org/wiki/JavaBeans|Javabean standard]] (class must implement Serializable, have no argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
+Object-RDF Persistance means that data objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [http://en.wikipedia.org/wiki/JavaBeans|Javabean standard] (class must implement Serializable, have no argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
 
 Note that Jenabean (and this INQLE bundle) supports persisting javabeans which contain lists, serializable objects, other nested javabeans, primitives.
 
@@ -19,7 +19,7 @@ Examples of IPersistable which contributors might wish to create include:
 ContentPacket - to contain blog posts, discussion thread, etc. for a Content Management System plugin
 LaboratoryReport - to contain a set of laboratory data, from a medical study
 
-This bundle specifies these persistable classes. They map to the corresponding [[http://jena.sourceforge.net/assembler/assembler-howto.html|Jena Assembler]] RDF class:
+This bundle specifies these persistable classes. They map to the corresponding [http://jena.sourceforge.net/assembler/assembler-howto.html Jena Assembler] RDF class:
 **FileModel** - contains info about a single RDF database stored in a file
 **RDBModel** - contains information about a single RDF database stored in a relational database: its name, and its Connection
 **Connection** - contains database connection info.
@@ -28,7 +28,7 @@ This bundle specifies these persistable classes. They map to the corresponding [
 Example of how to create, store, and load an persistable object:
 
 
-**(1)** **See the [[http://code.google.com/p/jenabean/w/list|Jenabean documentation]] on how to best structure your class to be persisted. Here is an example**
+**(1)** **See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to best structure your class to be persisted. Here is an example**
 {{{
 @Namespace(RDF.INQLE)
 public class BlogPost {
@@ -97,7 +97,7 @@ BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId,
 }}}
 
 ===2. SPARQL Querying===
-The [[http://www.w3.org/TR/rdf-sparql-query/|SPARQL]] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datamodels, of type FileDatamodel and/or DBDatamodel. Thus multiple RDF files and/or databases can be queried simultaneously.
+The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datamodels, of type FileDatamodel and/or DBDatamodel. Thus multiple RDF files and/or databases can be queried simultaneously.
 
 **Usage:**
 Simply create a QueryCriteria object, add as many Datamodel objects as desired, add the SPARQL query, and call querySelect method
