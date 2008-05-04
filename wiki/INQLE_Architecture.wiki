@@ -9,6 +9,8 @@ INQLE is a standalone, server-based application. It runs on any operating system
   * HSQLDB
   * Derby
 
-INQLE runs in a plug-in framework called [[http://www.eclipse.org/equinox/|Equinox OSGi]], (from [[http://www.eclipse.org/|Eclipse]]). As such, the core application consists of a number of component plugins, also known as "bundles", each of which contributes a set of functionality. This infrastructure permits INQLE to be extended, through contribution of new bundles. Below is a synopsis of the bundles that comprise the core INQLE server.
+INQLE runs in a plug-in framework called [http://www.eclipse.org/equinox/|Equinox OSGi], (from [http://www.eclipse.org/|Eclipse]). As such, the core application consists of a number of component plugins, also known as "bundles", each of which contributes a set of functionality. This infrastructure permits INQLE to be extended, through contribution of new bundles. Below is a synopsis of the bundles that comprise the core INQLE server.
 
 Here is a list of bundles.
+
+|| table || cells ||
