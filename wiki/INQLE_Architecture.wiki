@@ -1,3 +1,4 @@
+#labels Featured
 =INQLE Architecture=
 
 INQLE is a standalone, server-based application. It runs on any operating system. As a prerequisite, it requires only Java 1.5 and above, and a Relational database system. [http://jena.sourceforge.net/SDB/ Supported RDBMS] include
