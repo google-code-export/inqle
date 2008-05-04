@@ -1,8 +1,8 @@
-[INQLE_Architecture INQLE Architecture] --> code bundle: org.inqle.data.rdf.jenabean
-
 = Introduction =
 
-This bundle contributes a toolkit, which leverages the [http://jena.sourceforge.net/ Jena Semantic Web Framework], maintained by [http://www.hpl.hp.com/ HP Labs] since 2000. This bundle supports working with RDF databases. It permits 3 main activities:
+This bundle is part of INQLE's code base (see [INQLE_Architecture INQLE Architecture]).
+This bundle contributes code, enabling INQLE to work with semantic, RDF, data.
+It contains a toolkit, which leverages the [http://jena.sourceforge.net/ Jena Semantic Web Framework], maintained by [http://www.hpl.hp.com/ HP Labs] since 2000. This bundle supports working with RDF databases. It permits 3 main activities:
   # Object-RDF Persistence (ORDFP), using the elegant open source project [http://code.google.com/p/jenabean/ Jenabean]
   # SPARQL Queries on RDF Databases
   # Bulk loading of RDF data from a file
