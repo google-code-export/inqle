@@ -1,4 +1,4 @@
-#summary THis page describes INQLE bundle org.inqle.data.rdf.jenabean
+#summary This page describes INQLE bundle org.inqle.data.rdf.jenabean
 
 = Introduction =
 
