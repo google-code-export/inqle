@@ -11,7 +11,7 @@ It contains a toolkit, which leverages the [http://jena.sourceforge.net/ Jena Se
 = Details =
 
 ===1. Object - RDF Persistance (ORDFP)===
-Object-RDF Persistance means that data objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [http://en.wikipedia.org/wiki/JavaBeans|Javabean standard] (class must implement Serializable, have no argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
+Object-RDF Persistance means that Java objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [http://en.wikipedia.org/wiki/JavaBeans|Javabean standard] (class must implement Serializable, have no argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
 
 Note that Jenabean (and this INQLE bundle) supports persisting javabeans which contain lists, serializable objects, other nested javabeans, primitives.
 
