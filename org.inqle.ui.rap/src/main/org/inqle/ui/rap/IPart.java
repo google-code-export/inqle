@@ -46,4 +46,10 @@ public interface IPart extends INamedAndDescribed {
 	public void setPersister(Persister persister);
 	
 	public Persister getPersister();
+	
+	/**
+	 * Get the object which this part mediates.  This could be 
+	 * @return
+	 */
+	public Object getObject();
 }

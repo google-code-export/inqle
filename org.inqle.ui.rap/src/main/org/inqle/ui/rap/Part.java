@@ -99,4 +99,11 @@ public abstract class Part implements IPart {
 	public String toString() {
 		return getClass() + "(" + getName() + ")";
 	}
+	
+	/**
+	 * Parts which actually represent a data object should return that object.
+	 */
+	public Object getObject() {
+		return null;
+	}
 }
