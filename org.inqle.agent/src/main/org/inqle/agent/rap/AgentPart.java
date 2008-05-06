@@ -177,4 +177,9 @@ public class AgentPart extends PartType {
 		manager.add(cloneAgentWizardAction);
 	}
 
+	@Override
+	public Object getObject() {
+		return agentFactory.getBaseAgent();
+	}
+
 }
