@@ -152,4 +152,9 @@ public class SamplerPart extends PartType {
 		manager.add(cloneSamplerWizardAction);
 	}
 
+	@Override
+	public Object getObject() {
+		return samplerFactory.getBaseSampler();
+	}
+
 }
