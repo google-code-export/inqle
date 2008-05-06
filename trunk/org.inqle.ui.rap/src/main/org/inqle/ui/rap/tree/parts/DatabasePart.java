@@ -147,6 +147,11 @@ public class DatabasePart extends PartType {
 	public boolean hasModelNamed(String modelName) {
 		return modelNames.contains(modelName);
 	}
+
+	@Override
+	public Object getObject() {
+		return connection;
+	}
 }
 
 /*

@@ -50,4 +50,9 @@ public class ModelPart extends Part {
 		DeleteModelAction deleteDatabaseAction = new DeleteModelAction("Delete", this, workbenchWindow, this.persister);
 		manager.add(deleteDatabaseAction);
 	}
+	
+	@Override
+	public Object getObject() {
+		return rdbModel;
+	}
 }
