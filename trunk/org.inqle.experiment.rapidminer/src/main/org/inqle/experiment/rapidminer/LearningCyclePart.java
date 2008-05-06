@@ -44,4 +44,9 @@ public class LearningCyclePart extends Part {
 	public LearningCycle getLearningCycle() {
 		return learningCycle;
 	}
+
+	@Override
+	public Object getObject() {
+		return learningCycle;
+	}
 }

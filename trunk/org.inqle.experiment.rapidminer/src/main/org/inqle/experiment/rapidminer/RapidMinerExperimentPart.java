@@ -32,5 +32,10 @@ public class RapidMinerExperimentPart extends Part {
 	public String getIconPath() {
 		return ICON_PATH;
 	}
+
+	@Override
+	public Object getObject() {
+		return rapidMinerExperiment;
+	}
 	
 }
