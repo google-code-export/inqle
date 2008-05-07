@@ -202,8 +202,12 @@ public abstract class ASparqlSampler extends ASampler {
 //		this.query = query;
 //	}
 
-	@Override
-	public void clone(ISampler templateSampler) {
+	public void replicate(ASparqlSampler objectToClone) {
+		clone(objectToClone);
+		super.replicate(objectToClone);
+	}
+	
+	public void clone(ASparqlSampler templateSampler) {
 		super.clone((ASparqlSampler)templateSampler);
 //		setQuery(((ASparqlSampler)templateSampler).getQuery());
 	}

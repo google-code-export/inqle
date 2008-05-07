@@ -60,20 +60,19 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 		return sampler;
 	}
 
-	public SimpleSparqlSampler replicateSampler() {
-//		log.info("Before replicating, baseSampler=" + JenabeanWriter.toString(baseSampler));
-//		log.info("Before replicating, getBaseSampler()=" + JenabeanWriter.toString((SimpleSparqlSampler)getBaseSampler()));
-		SimpleSparqlSampler replicaSampler = new SimpleSparqlSampler();
-		replicaSampler.replicate(baseSampler);
-		//log.info("Created replicaSampler=" + JenabeanWriter.toString(replicaSampler));
-		return replicaSampler;
-	}
+//	public SimpleSparqlSampler replicateSampler() {
+////		log.info("Before replicating, baseSampler=" + JenabeanWriter.toString(baseSampler));
+////		log.info("Before replicating, getBaseSampler()=" + JenabeanWriter.toString((SimpleSparqlSampler)getBaseSampler()));
+//		SimpleSparqlSampler replicaSampler = baseSampler.createReplica();
+//		//log.info("Created replicaSampler=" + JenabeanWriter.toString(replicaSampler));
+//		return replicaSampler;
+//	}
 
 	public ISamplerWizard createWizardForReplica(Model model,
 			Persister persister, Shell shell) {
 		//log.info("createWizardForReplica()...");
 		SimpleSparqlSamplerWizard wizard = createWizard(model, persister, shell);
-		SimpleSparqlSampler replica = replicateSampler();
+		SimpleSparqlSampler replica = baseSampler.createReplica();
 		wizard.setBean(replica);
 		//log.info("Created wizard with (replica) Sampler: " + JenabeanWriter.toString(replica));
 		return wizard;
