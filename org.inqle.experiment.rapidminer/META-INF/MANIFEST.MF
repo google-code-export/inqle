@@ -10,7 +10,11 @@ Require-Bundle: org.inqle.core,
  org.eclipse.rap.jface,
  org.inqle.ui.rap,
  org.inqle.data.sampling,
- org.inqle.agent
+ org.inqle.agent,
+ org.eclipse.rap.core.databinding,
+ org.eclipse.rap.core.databinding.beans,
+ org.eclipse.rap.jface.databinding,
+ org.eclipse.rap.ui
 Import-Package: com.hp.hpl.jena.query,
  com.hp.hpl.jena.rdf.model,
  com.hp.hpl.jena.util,
