@@ -33,6 +33,8 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
+ * 
+ * TODO extend DynaWizard instead of Wizard
  */
 public class ModelWizard extends Wizard {
 
@@ -153,6 +155,10 @@ public class ModelWizard extends Wizard {
 	public void addPages() {
 		RDBModelInfoPage rdbModelInfoPage = new RDBModelInfoPage("Dataset Info");
 		addPage(rdbModelInfoPage);
+		
+		//TODO add description field
+//		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
+//		addPage(nameDescriptionPage);
 	}
 	
 	/* (non-Javadoc)

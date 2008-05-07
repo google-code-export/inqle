@@ -42,10 +42,10 @@
             id="org.inqle.ui.rap.datasetsView">
       </view>
       <view
-            name="Hello"
-            icon="icons/sample3.gif"
-            class="org.inqle.ui.rap.HelloView"
-            id="org.inqle.ui.rap.helloView">
+            name="Detail"
+            icon="icons/detail.gif"
+            class="org.inqle.ui.rap.DetailView"
+            id="org.inqle.ui.rap.detailView">
       </view>
       <view
             name="Parts"
