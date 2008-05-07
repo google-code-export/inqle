@@ -1,5 +1,8 @@
 package org.inqle.ui.rap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
@@ -17,6 +20,8 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
+import org.inqle.core.extensions.util.ExtensionFactory;
+import org.inqle.core.extensions.util.IExtensionSpec;
 
 /**
  * An action bar advisor is responsible for creating, adding, and disposing of the
@@ -25,13 +30,17 @@ import org.eclipse.ui.application.IActionBarConfigurer;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
-    // Actions - important to allocate these only in makeActions, and then use them
+    private static final String VIEWS = "org.eclipse.ui.views";
+		private static final String NAME = "name";
+		private static final String ID = "id";
+		// Actions - important to allocate these only in makeActions, and then use them
     // in the fill methods.  This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
     private IWorkbenchAction exitAction;
     private IAction aboutAction;
-    private OpenViewAction openViewAction;
-    private Action messagePopupAction;
+    //private OpenViewAction openViewAction;
+    //private Action messagePopupAction;
+		private List<OpenViewAction> openViewActions = new ArrayList<OpenViewAction>();
     
 
     public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
@@ -51,16 +60,22 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         aboutAction = new AboutAction(window);
         register(aboutAction);
         
-        openViewAction = new OpenViewAction(window, "Open Another Message View", View.ID);
-        register(openViewAction);
-        
-        messagePopupAction = new MessagePopupAction("Open Message", window);
-        register(messagePopupAction);
+        //Create a new OpenViewAction for each view plugin
+        List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(VIEWS);
+        for(IExtensionSpec extensionSpec: extensionSpecs) {
+        	OpenViewAction openViewAction = new OpenViewAction(window, extensionSpec.getAttribute(NAME), extensionSpec.getAttribute(ID));
+        	openViewActions.add(openViewAction);
+        	register(openViewAction);
+        }
+//        
+//        messagePopupAction = new MessagePopupAction("Open Message", window);
+//        register(messagePopupAction);
     }
     
     protected void fillMenuBar(IMenuManager menuBar) {
         MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
         MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
+        MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
         
         menuBar.add(fileMenu);
         // Add a group marker indicating where action set menus will appear.
@@ -68,10 +83,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         menuBar.add(helpMenu);
         
         // File
-        fileMenu.add(messagePopupAction);
-        fileMenu.add(openViewAction);
-        fileMenu.add(new Separator());
+        //fileMenu.add(messagePopupAction);
+        //fileMenu.add(openViewAction);
+        //fileMenu.add(new Separator());
         fileMenu.add(exitAction);
+        
+        //window
+        for(OpenViewAction openViewAction: openViewActions) {
+        	windowMenu.add(openViewAction);
+        }
         
         // Help
         helpMenu.add(aboutAction);
@@ -80,7 +100,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     protected void fillCoolBar(ICoolBarManager coolBar) {
         IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.RIGHT);
         coolBar.add(new ToolBarContributionItem(toolbar, "main"));   
-        toolbar.add(openViewAction);
-        toolbar.add(messagePopupAction);
+        //toolbar.add(openViewAction);
+        //toolbar.add(messagePopupAction);
     }
 }
