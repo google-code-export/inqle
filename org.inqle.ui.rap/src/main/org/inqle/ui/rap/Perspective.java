@@ -19,7 +19,7 @@ public class Perspective implements IPerspectiveFactory {
 		layout.addStandaloneView(PartsView.ID,  false, IPageLayout.LEFT, 0.25f, editorArea);
 		IFolderLayout folder = layout.createFolder("messages", IPageLayout.TOP, 0.5f, editorArea);
 		folder.addPlaceholder(View.ID + ":*");
-		folder.addView(HelloView.ID);
+		folder.addView(DetailView.ID);
 		
 		layout.getViewLayout(PartsView.ID).setCloseable(false);
 		//layout.getViewLayout(NavigationView.ID).setCloseable(false);

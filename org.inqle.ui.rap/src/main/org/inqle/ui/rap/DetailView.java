@@ -1,41 +1,34 @@
 package org.inqle.ui.rap;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
-import org.inqle.core.domain.INamedAndDescribed;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 /**
  * This view shows a &quot;mail message&quot;. This class is contributed through
  * the plugin.xml.
  */
-public class HelloView extends ViewPart implements ISelectionListener {
+public class DetailView extends ViewPart implements ISelectionListener {
 
-	private static final Logger log = Logger.getLogger(HelloView.class);
+	private static final Logger log = Logger.getLogger(DetailView.class);
 	
-	public static final String ID = "org.inqle.ui.rap.helloView";
-	private Composite parent;
+	public static final String ID = "org.inqle.ui.rap.detailView";
 
 	private BeanViewer beanViewer;
 	
+	@Override
 	public void createPartControl(Composite parent) {
-		this.parent = parent;
 		getSite().getPage().addSelectionListener(this);
 		beanViewer = new BeanViewer(parent);
+	}
+	
+	@Override
+	public void dispose() {
+		getSite().getPage().removeSelectionListener(this);
 	}
 	
 //	public void resetView(Object objectToDetail) {

@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -35,35 +36,42 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 //		composite.setLayout(fillLayout);
 		//create controls
 		//Font boldFont = JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT);    
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 2;
+		//GridData compositeLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		composite.setLayout(gridLayout);
 		
 		Label l = new Label(composite, SWT.NONE);
 		l.setText("Name");
 		//l.setFont(boldFont);
-		nameWidget = new Text(composite, SWT.BORDER);
+		nameWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
 	  GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	  nameWidget.setLayoutData(gridData);
 	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Class");
 		//l.setFont(boldFont);
-		classWidget = new Text(composite, SWT.BORDER);
+		classWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
 	  gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	  classWidget.setLayoutData(gridData);
 	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Description");
 		//l.setFont(boldFont);
-	  descriptionWidget = new Text(composite, SWT.BORDER);
-	  gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	  descriptionWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
+	  gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
 	  descriptionWidget.setLayoutData(gridData);
 	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
 		//l.setFont(boldFont);
-	  detailWidget = new Text(composite, SWT.BORDER);
-	  gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	  detailWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
+	  //gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
+	  //gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true);
+	  gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 	  detailWidget.setLayoutData(gridData);
 	  
+	  composite.setVisible(false);
 	}
 	
 	//private ISelection selection;
@@ -84,37 +92,59 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 
 	@Override
 	public void refresh() {
+		composite.setVisible(true);
 		log.info("Refreshing...");
 		
-		String clazz = bean.getClass().getName();
+//		nameWidget.setText("");
+//		classWidget.setText("");
+//		descriptionWidget.setText("");
+//		detailWidget.setText("");
+		
+		String clazz = "";
+		if (bean != null) {
+			clazz = bean.getClass().getName();
+		}
 		String name = "";
 		String description = "";
 		String detail = "";
 		
 
 		if (bean instanceof INamedAndDescribed) {
-			log.info("...is INamedAndDescribed");
+			log.info("...is INamedAndDescribed...");
 			INamedAndDescribed namedAndDescribed = (INamedAndDescribed)bean;
 			name = namedAndDescribed.getName();
 			description = namedAndDescribed.getDescription();
 			//MessageDialog.openInformation(composite.getShell(), "Selected object '" + namedAndDescribed.getName() + "'", "Description:\n" + namedAndDescribed.getDescription());
 		}
 		if (bean instanceof IBasicJenabean) {
-			log.info("...is IBasicJenabean");
 			detail = JenabeanWriter.toString(bean);
+			log.info("...is IBasicJenabean...");
 		  //MessageDialog.openInformation(composite.getShell(), "Detail=", JenabeanWriter.toString(bean));
 		}
+		
+		if (name == null) {
+			name = "";
+		}
+		if (clazz == null) {
+			clazz = "";
+		}
+		if (description == null) {
+			description = "";
+		}
+		if (detail == null) {
+			detail = "";
+		}
+		log.info("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
 		
 		nameWidget.setText(name);
 		classWidget.setText(clazz);
 		descriptionWidget.setText(description);
 		detailWidget.setText(detail);
 	  
-		nameWidget.pack();
-		classWidget.pack();
-		descriptionWidget.pack();
-		detailWidget.pack();
-	  log.info("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
+//		nameWidget.pack();
+//		classWidget.pack();
+//		descriptionWidget.pack();
+//		detailWidget.pack();
 		
 //		composite.setVisible(false);
 //		composite.setVisible(true);
