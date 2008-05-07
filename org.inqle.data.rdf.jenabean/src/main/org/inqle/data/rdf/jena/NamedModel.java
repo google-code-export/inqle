@@ -23,4 +23,14 @@ public abstract class NamedModel extends JenaAssemblerObject {
 	public void setModelName(String modelName) {
 		this.modelName = modelName;
 	}
+	
+	@Override
+	public String getName() {
+		return getModelName();
+	}
+	
+	@Override
+	public void setName(String name) {
+		setModelName(name);
+	}
 }
