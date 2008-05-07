@@ -49,7 +49,7 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	 * Make an exact replica of the provided Sampler
 	 * @return the new sampler
 	 */
-	public ISampler replicateSampler();
+	//public ISampler replicateSampler();
 	
 	/**
 	 * Create a wizard, without a sampler model bean yet set.

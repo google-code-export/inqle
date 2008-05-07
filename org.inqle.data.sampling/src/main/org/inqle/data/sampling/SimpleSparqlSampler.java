@@ -256,11 +256,15 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	 * Add the values from the provided template to this
 	 * @param sampler
 	 */
-	@Override
-	public void clone(ISampler templateSampler) {
+	public void clone(SimpleSparqlSampler templateSampler) {
 		super.clone(templateSampler);
 		setSelectedPredicates(((SimpleSparqlSampler)templateSampler).getSelectedPredicates());
 		//setAvailablePredicates(((SimpleSparqlSampler)templateSampler).getAvailablePredicates());
+	}
+	
+	public void replicate(SimpleSparqlSampler objectToClone) {
+		clone(objectToClone);
+		super.replicate(objectToClone);
 	}
 
 //	public Collection<String> getAvailablePredicates() {

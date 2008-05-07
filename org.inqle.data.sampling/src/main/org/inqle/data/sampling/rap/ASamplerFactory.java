@@ -64,9 +64,9 @@ public abstract class ASamplerFactory implements ISamplerFactory {
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.ISamplerFactory#replicateSampler()
 	 */
-	public ISampler replicateSampler() {
-		return null;
-	}
+//	public ISampler replicateSampler() {
+//		return null;
+//	}
 
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.ISamplerFactory#setBaseSampler(org.inqle.data.sampling.ISampler)

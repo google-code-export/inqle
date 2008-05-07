@@ -10,7 +10,7 @@ import org.inqle.ui.rap.actions.DynaWizardDialog;
 
 public class SamplerWizardAction extends Action {
 
-	public static final int MODE_RUN = 1;
+	//public static final int MODE_RUN = 1;
 	public static final int MODE_OPEN = 2;
 	public static final int MODE_CLONE = 3;
 	private SamplerPart samplerPart;
@@ -53,9 +53,9 @@ public class SamplerWizardAction extends Action {
 		//log.info(JenabeanWriter.toString(testSampler));
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		ISamplerWizard wizard = null;
-		if (mode == MODE_RUN) {
+		//if (mode == MODE_RUN) {
 			//wizard = new SamplerRunnerWizard(sampler, window.getShell());
-		} else if (mode == MODE_OPEN) {
+		if (mode == MODE_OPEN) {
 			wizard = samplerFactory.createWizardForReplica(persister.getMetarepositoryModel(), persister, window.getShell());
 			wizard.setPart(samplerPart);
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
