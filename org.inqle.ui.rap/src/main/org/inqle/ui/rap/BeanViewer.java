@@ -19,7 +19,6 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 public class BeanViewer extends Viewer implements ISelectionListener {
 
-	private Composite parentComposite;
 	private Composite composite;
 	private Text nameWidget;
 	private Text classWidget;
@@ -27,7 +26,7 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 	private Text detailWidget;
 	
 	public BeanViewer(Composite parentComposite) {
-		this.parentComposite = parentComposite;
+		//this.parentComposite = parentComposite;
 		
 		composite = new Composite(parentComposite, SWT.NONE);
 		//composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true));
@@ -93,7 +92,7 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 	@Override
 	public void refresh() {
 		composite.setVisible(true);
-		log.info("Refreshing...");
+		log.trace("Refreshing...");
 		
 //		nameWidget.setText("");
 //		classWidget.setText("");
@@ -110,7 +109,7 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		
 
 		if (bean instanceof INamedAndDescribed) {
-			log.info("...is INamedAndDescribed...");
+			log.trace("...is INamedAndDescribed...");
 			INamedAndDescribed namedAndDescribed = (INamedAndDescribed)bean;
 			name = namedAndDescribed.getName();
 			description = namedAndDescribed.getDescription();
@@ -118,7 +117,7 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		}
 		if (bean instanceof IBasicJenabean) {
 			detail = JenabeanWriter.toString(bean);
-			log.info("...is IBasicJenabean...");
+			log.trace("...is IBasicJenabean...");
 		  //MessageDialog.openInformation(composite.getShell(), "Detail=", JenabeanWriter.toString(bean));
 		}
 		
@@ -134,7 +133,7 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		if (detail == null) {
 			detail = "";
 		}
-		log.info("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
+		log.trace("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
 		
 		nameWidget.setText(name);
 		classWidget.setText(clazz);
@@ -152,13 +151,13 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 
 	@Override
 	public void setSelection(ISelection selection, boolean arg1) {
-		log.info("setSelection(" + selection + ", " + arg1 + ")");
+		log.trace("setSelection(" + selection + ", " + arg1 + ")");
 		//this.selection = selection;
 	}
 	
 	@Override
 	public void inputChanged(Object input, Object oldInput) {
-		log.info("inputChanged(" + input + ", " + oldInput + ")");
+		log.trace("inputChanged(" + input + ", " + oldInput + ")");
 	}
 	
 //	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {

@@ -39,7 +39,7 @@ public class QuerySolutionTableLabelProvider extends CellLabelProvider {
 		QuerySolution querySolution = (QuerySolution)querySolutionObj;
 		String fieldName = columnFields.get(cell.getColumnIndex());
 		String cellValue = QuerySolutionValueExtractor.getDisplayable(querySolution, fieldName);
-		log.debug("Update cell " + querySolution + ":" + fieldName + "=" + cellValue);
+		log.trace("Update cell: " + fieldName + "=" + cellValue);
 		cell.setText(cellValue);
 	}
 
