@@ -22,15 +22,13 @@ public class ExperimenterAgent extends AAgent {
 		super.clone(objectToClone);
 	}
 	
-	@Override
-	public IBasicJenabean createClone() {
+	public ExperimenterAgent createClone() {
 		ExperimenterAgent newAgent = new ExperimenterAgent();
 		newAgent.clone(this);
 		return newAgent;
 	}
 
-	@Override
-	public IBasicJenabean createReplica() {
+	public ExperimenterAgent createReplica() {
 		ExperimenterAgent newAgent = new ExperimenterAgent();
 		newAgent.replicate(this);
 		return newAgent;
