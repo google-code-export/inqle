@@ -117,23 +117,23 @@ public class DetailView extends ViewPart implements ISelectionListener {
 
 	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
 		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
-	  log.info("Selection Made in Tree" + iSelection.toString());
+	  log.trace("Selection Made in Tree" + iSelection.toString());
 		if(iSelection instanceof IStructuredSelection) {
 	     IStructuredSelection selection = (IStructuredSelection)iSelection;
 	     
 	     Object firstSelectedObject = selection.getFirstElement();
 	     if (firstSelectedObject == null) {
-	    	 log.info("firstSelectedObject is null");
+	    	 log.trace("firstSelectedObject is null");
 	    	 return;
 	     }
 	     
 	     if (firstSelectedObject instanceof IPart) {
 	     	 Object representedObject = ((IPart) firstSelectedObject).getObject();
 	     	 beanViewer.setInput(representedObject);
-	     	 log.info("is an IPart");
+	     	 log.trace("is an IPart");
 	     	 //resetView(representedObject);
 	     } else {
-	    	 log.info("not an IPart");
+	    	 log.trace("not an IPart");
 	    	 beanViewer.setInput(firstSelectedObject);
 	     }
 	     
