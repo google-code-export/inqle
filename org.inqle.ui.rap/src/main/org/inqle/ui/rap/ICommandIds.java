@@ -10,6 +10,6 @@ package org.inqle.ui.rap;
 public interface ICommandIds {
 
     public static final String CMD_OPEN = "org.inqle.ui.rap.open";
-    public static final String CMD_OPEN_MESSAGE = "org.inqle.ui.rap.openMessage";
+    //public static final String CMD_OPEN_MESSAGE = "org.inqle.ui.rap.openMessage";
     
 }

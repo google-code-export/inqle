@@ -33,6 +33,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     private static final String VIEWS = "org.eclipse.ui.views";
 		private static final String NAME = "name";
 		private static final String ID = "id";
+		private static final String ICON = "icon";
 		// Actions - important to allocate these only in makeActions, and then use them
     // in the fill methods.  This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
@@ -63,10 +64,18 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         //Create a new OpenViewAction for each view plugin
         List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(VIEWS);
         for(IExtensionSpec extensionSpec: extensionSpecs) {
-        	OpenViewAction openViewAction = new OpenViewAction(window, extensionSpec.getAttribute(NAME), extensionSpec.getAttribute(ID));
-        	openViewActions.add(openViewAction);
+//        	OpenViewAction openViewAction = new OpenViewAction(window, extensionSpec.getAttribute(NAME), extensionSpec.getAttribute(ID), extensionSpec.getPluginId(), extensionSpec.getAttribute(ICON));
+//        	openViewActions.add(openViewAction);
+//        	register(openViewAction);
+        	
+        	String icon = extensionSpec.getAttribute(ICON);
+        	OpenViewAction openViewAction = new OpenViewAction(window, extensionSpec.getAttribute(NAME), extensionSpec.getAttribute(ID), extensionSpec.getPluginId(), icon);
+        	if (icon != null && icon.length() > 0) {
+        		openViewActions.add(openViewAction);
+        	}
         	register(openViewAction);
         }
+        
 //        
 //        messagePopupAction = new MessagePopupAction("Open Message", window);
 //        register(messagePopupAction);
@@ -80,6 +89,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         menuBar.add(fileMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
+        menuBar.add(windowMenu);
         menuBar.add(helpMenu);
         
         // File
