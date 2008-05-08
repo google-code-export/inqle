@@ -11,7 +11,9 @@ public class LearningCycleLister {
 		assert(persister != null);
 		List<LearningCycle> learningCycles = new ArrayList<LearningCycle>();
 		//add the base (uncustomized) LearningCycle
-		learningCycles.add(new LearningCycle());
+		LearningCycle baseLC = new LearningCycle();
+		baseLC.setPersister(persister);
+		learningCycles.add(baseLC);
 		
 		//add any customized LearningCycle objects
 		for (Object lcObject: persister.reconstituteList(LearningCycle.class)) {
