@@ -8,6 +8,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * When run, this action will show a message dialog.
  */
+@Deprecated
 public class MessagePopupAction extends Action {
 
     private final IWorkbenchWindow window;
@@ -16,9 +17,9 @@ public class MessagePopupAction extends Action {
         super(text);
         this.window = window;
         // The id is used to refer to the action in a menu or toolbar
-        setId(ICommandIds.CMD_OPEN_MESSAGE);
+        //setId(ICommandIds.CMD_OPEN_MESSAGE);
         // Associate the action with a pre-defined command, to allow key bindings.
-        setActionDefinitionId(ICommandIds.CMD_OPEN_MESSAGE);
+        //setActionDefinitionId(ICommandIds.CMD_OPEN_MESSAGE);
         setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.inqle.ui.rap", "/icons/sample3.gif"));
     }
 

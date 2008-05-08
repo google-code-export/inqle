@@ -11,14 +11,17 @@ import org.inqle.ui.rap.tree.PartsView;
  */
 public class Perspective implements IPerspectiveFactory {
 
+	private static final String EDITOR_FOLDER_ID = "org.inqle.ui.rap.editorFolder";
+
 	public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
 		layout.setEditorAreaVisible(false);
 		
 		//layout.addStandaloneView(NavigationView.ID,  false, IPageLayout.LEFT, 0.25f, editorArea);
 		layout.addStandaloneView(PartsView.ID,  false, IPageLayout.LEFT, 0.25f, editorArea);
-		IFolderLayout folder = layout.createFolder("messages", IPageLayout.TOP, 0.5f, editorArea);
-		folder.addPlaceholder(View.ID + ":*");
+		IFolderLayout folder = layout.createFolder(EDITOR_FOLDER_ID, IPageLayout.TOP, 0.5f, editorArea);
+		//folder.addPlaceholder(View.ID + ":*");
+		folder.addPlaceholder("org.inqle.*");
 		folder.addView(DetailView.ID);
 		
 		layout.getViewLayout(PartsView.ID).setCloseable(false);
