@@ -53,8 +53,9 @@ public class ExtensionFactory {
 				//String extensionId = extensions[i].getNamespaceIdentifier() + "." + extensions[i].getSimpleIdentifier();
 				IConfigurationElement [] configElements = extensions[i].getConfigurationElements();
 				//log.info("Found extensions w/ configElements of length="+configElements.length);
+				
 				for (int j = 0; j < configElements.length; j++) {
-					IExtensionSpec sInfo = ExtensionSpecFactory.createExtensionSpec(configElements[j]);
+					IExtensionSpec sInfo = ExtensionSpecFactory.createExtensionSpec(configElements[j], extensions[i].getContributor().getName());
 					extList.add(sInfo);
 					//log.info("Added configElement " + sInfo.toString());
 				}
@@ -138,7 +139,7 @@ public class ExtensionFactory {
 				for (int j = 0; j < configElements.length; j++) {
 					String foundVal = configElements[j].getAttribute(attribute);
 					if (foundVal != null && foundVal.equals(value)) {
-						IExtensionSpec sElement = ExtensionSpecFactory.createExtensionSpec(configElements[j]);
+						IExtensionSpec sElement = ExtensionSpecFactory.createExtensionSpec(configElements[j], extensions[i].getContributor().getName());
 						extList.add(sElement);
 							//log.trace("Added matching configElement w/ " + attribute + "=" + foundVal + "; element=" + sElement.toString());
 

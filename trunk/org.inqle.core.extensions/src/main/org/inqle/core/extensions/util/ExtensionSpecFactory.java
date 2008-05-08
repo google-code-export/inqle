@@ -9,11 +9,10 @@ import org.eclipse.core.runtime.IConfigurationElement;
  */
 public class ExtensionSpecFactory {
 
-	public static IExtensionSpec createExtensionSpec(IConfigurationElement element) {
-
+	public static IExtensionSpec createExtensionSpec(IConfigurationElement element, String pluginId) {
 		//first try to instantiate ExtensionSpec.
 		//If unsuccessful, return ConfigInfo instead
-		IExtensionSpec sortableCofigInfo = new ExtensionSpec(element);
+		IExtensionSpec sortableCofigInfo = new ExtensionSpec(element, pluginId);
 		return sortableCofigInfo;
 	}
 }
