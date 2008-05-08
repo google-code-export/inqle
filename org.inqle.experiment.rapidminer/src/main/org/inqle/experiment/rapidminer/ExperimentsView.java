@@ -12,6 +12,7 @@ import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -37,19 +38,23 @@ public class ExperimentsView extends ViewPart {
 
 	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
 	
+	private static final int COLUMN_WIDTH = 100;
+	private static final int DEFAULT_RECORD_COUNT = 100;
+	
 	public static final String SPARQL_END =
-		"\n} } ORDER BY DESC(?creationDate) LIMIT 100 OFFSET 0 \n";
+		"\n} } ORDER BY DESC(?creationDate) \n";
 	
 	//TODO clean up name URI
 	public static final String SPARQL_BEGIN = 
 		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 		"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-		"SELECT ?name ?id ?uri ?creationDate \n" +
+		"SELECT ?id ?creationDate \n" +
 		"{\n" +
 		"GRAPH ?g {\n" +
 		"?uri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id\n" +
 		". ?uri inqle:creationDate ?creationDate\n" +
 		". OPTIONAL { ?uri inqle:name ?name }\n";
+
 	
 	private Composite composite;
 	
@@ -72,7 +77,15 @@ public class ExperimentsView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		this.composite = new Composite(parent, SWT.None);
+		//composite = new Composite(parent, SWT.None);
+		composite = parent;
+//		GridLayout gridLayout = new GridLayout();
+//		composite.setLayout(gridLayout);
+		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		
+		composite.setLayoutData(gridData);
+		showTable();
 	}
 	
 	public void createTable() {
@@ -80,6 +93,11 @@ public class ExperimentsView extends ViewPart {
 //			table.clearAll();
 //		}
 
+		//if no data, return
+		if (rows == null || rows.size() == 0) {
+			return;
+		}
+		
 		Table table = new Table(composite, SWT.NONE);
 		
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -92,14 +110,11 @@ public class ExperimentsView extends ViewPart {
 			TableColumn column = new TableColumn(table,SWT.LEFT);
 			column.setText(propertyName);
 			column.setResizable(true);
-			column.setWidth(200);
-			
-			//column.pack();
-			log.debug("Added column: " + propertyName);
+			column.setWidth(COLUMN_WIDTH);
+			log.trace("Added column: " + propertyName);
 		}
 		
 		tableViewer = new TableViewer(table);
-		
 		ObservableListContentProvider olContentProvider = new ObservableListContentProvider();
 		tableViewer.setContentProvider(olContentProvider);
 		
@@ -109,14 +124,22 @@ public class ExperimentsView extends ViewPart {
 	}
 	
 	public void showTable() {
+		if (rows == null || rows.size() == 0) {
+			doQuery();
+		}
+		if (rows == null || rows.size() == 0) {
+			return;
+		}
 		if (tableViewer == null) {
 			createTable();
 		}
-		WritableList writableListInput = new WritableList(getRows(), tableBeanClass);
-		log.debug("getRows():" + getRows());
+		
+		WritableList writableListInput = new WritableList(rows, tableBeanClass);
+		log.info("writableListInput=" + writableListInput);
 		tableViewer.setInput(writableListInput);
-		tableViewer.refresh();
-		//this.getShell().pack(true);
+		//tableViewer.getTable().pack();
+		tableViewer.refresh(false);
+		//composite.getShell().pack();
 	}
 
 
@@ -140,30 +163,30 @@ public class ExperimentsView extends ViewPart {
 	}
 
 	public List<QuerySolution> getRows() {
-		if (rows == null || rows.size() == 0) {
-			doQuery();
-		}
 		return rows;
 	}
 	
 	public void doQuery() {
-		log.info("doQuery()");
 		String sparql = getSparql();
-		log.info("Querying w/ SPARQL:" + sparql);
+		log.trace("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria(getPersister());
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
 		queryCriteria.addNamedModel(persister.getAppInfo().getRepositoryNamedModel());
 		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		log.info("Received these results: " + resultTable.getResultList());
+		log.trace("Received these results: " + resultTable.getResultList());
 		setRdfTable(resultTable);
 	}
 
 	private String getSparql() {
+		String recordCount = String.valueOf(DEFAULT_RECORD_COUNT);
+		String offset = "0";
+		
 		String sparql = SPARQL_BEGIN +
 			". ?uri a ?classUri\n" +
 			". ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
 			SPARQL_END;
+		sparql +=  "LIMIT " + recordCount + " OFFSET " + offset;
 		return sparql;
 	}
 
