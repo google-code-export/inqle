@@ -93,6 +93,10 @@ public abstract class BasicJenabean implements IBasicJenabean {
 		return updateDate;
 	}
 	
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+	
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}

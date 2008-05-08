@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -496,6 +497,9 @@ public class Persister {
 	 */
 	public void persist(Object persistableObj, Model model, boolean persistMembers) {
 		log.debug("Persister.persist():" + JenabeanWriter.toString(persistableObj));
+		if (persistableObj instanceof IBasicJenabean) {
+			((IBasicJenabean)persistableObj).setUpdateDate(new Date());
+		}
 		Bean2RDF writer = new Bean2RDF(model);
 		if (persistMembers) {
 			writer.saveDeep(persistableObj);

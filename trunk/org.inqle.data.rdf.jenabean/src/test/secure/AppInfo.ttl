@@ -10,7 +10,25 @@
 <http://inqle.org/ns/v1/description>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
 
+<http://jena.hpl.hp.com/2005/11/Assembler#RDBModel/fe526fe8-8024-4724-8ada-76313a368280>
+      a       <http://jena.hpl.hp.com/2005/11/Assembler#RDBModel> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#connection>
+              <http://jena.hpl.hp.com/2005/11/Assembler#Connection/a0ac74f5-4fb0-422c-8140-994c0f9d9817> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#creationDate>
+              "2008-05-08T12:06:50.954Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#id>
+              "fe526fe8-8024-4724-8ada-76313a368280"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#modelName>
+              "org.inqle.repository.model"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#name>
+              "org.inqle.repository.model"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#updateDate>
+              "2008-05-08T12:06:50.954Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
 <http://jena.hpl.hp.com/2005/11/Assembler#description>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://jena.hpl.hp.com/2005/11/Assembler#creationDate>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
 
 <http://jena.hpl.hp.com/2005/11/Assembler#updateDate>
@@ -21,36 +39,6 @@
 
 <http://inqle.org/ns/v1/id>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
-
-<http://jena.hpl.hp.com/2005/11/Assembler#RDBModel/0233160a-76b4-4671-80fb-10f3914991c2>
-      a       <http://jena.hpl.hp.com/2005/11/Assembler#RDBModel> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#connection>
-              <http://jena.hpl.hp.com/2005/11/Assembler#Connection/cbfc8240-40db-4785-aabe-aec36d6cc723> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#id>
-              "0233160a-76b4-4671-80fb-10f3914991c2"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#modelName>
-              "org.inqle.repository.model"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#name>
-              "org.inqle.repository.model"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#updateDate>
-              "2008-05-08T01:26:21.909Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
-
-<http://jena.hpl.hp.com/2005/11/Assembler#Connection/cbfc8240-40db-4785-aabe-aec36d6cc723>
-      a       <http://jena.hpl.hp.com/2005/11/Assembler#Connection> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#dbClass>
-              "org.postgresql.Driver"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#dbPassword>
-              "~Arden"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#dbType>
-              "PostgreSQL"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#dbURL>
-              "jdbc:postgresql://localhost:5432/test_inqle_repositories"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#dbUser>
-              "inqle"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#id>
-              "cbfc8240-40db-4785-aabe-aec36d6cc723"^^<http://www.w3.org/2001/XMLSchema#string> ;
-      <http://jena.hpl.hp.com/2005/11/Assembler#updateDate>
-              "2008-05-08T01:26:21.574Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 
 <http://jena.hpl.hp.com/2005/11/Assembler#id>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
@@ -75,10 +63,32 @@
 <http://thewebsemantic.com/javaclass>
       a       owl:AnnotationProperty .
 
+<http://jena.hpl.hp.com/2005/11/Assembler#Connection/a0ac74f5-4fb0-422c-8140-994c0f9d9817>
+      a       <http://jena.hpl.hp.com/2005/11/Assembler#Connection> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#creationDate>
+              "2008-05-08T12:06:50.894Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#dbClass>
+              "org.postgresql.Driver"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#dbPassword>
+              "~Arden"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#dbType>
+              "PostgreSQL"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#dbURL>
+              "jdbc:postgresql://localhost:5432/test_inqle_repositories"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#dbUser>
+              "inqle"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#id>
+              "a0ac74f5-4fb0-422c-8140-994c0f9d9817"^^<http://www.w3.org/2001/XMLSchema#string> ;
+      <http://jena.hpl.hp.com/2005/11/Assembler#updateDate>
+              "2008-05-08T12:06:50.894Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+
 <http://jena.hpl.hp.com/2005/11/Assembler#modelName>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
 
 <http://jena.hpl.hp.com/2005/11/Assembler#dbURL>
+      a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+
+<http://inqle.org/ns/v1/creationDate>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
 
 <http://jena.hpl.hp.com/2005/11/Assembler#dbClass>
@@ -86,14 +96,16 @@
 
 <http://inqle.org/ns/v1/AppInfo/AppInfoInstance>
       a       <http://inqle.org/ns/v1/AppInfo> ;
+      <http://inqle.org/ns/v1/creationDate>
+              "2008-05-08T12:06:50.835Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
       <http://inqle.org/ns/v1/id>
               "AppInfoInstance"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://inqle.org/ns/v1/repositoryNamedModel>
-              <http://jena.hpl.hp.com/2005/11/Assembler#RDBModel/0233160a-76b4-4671-80fb-10f3914991c2> ;
+              <http://jena.hpl.hp.com/2005/11/Assembler#RDBModel/fe526fe8-8024-4724-8ada-76313a368280> ;
       <http://inqle.org/ns/v1/serverBaseUrl>
               "http://inqle.org/TestServerUrl"^^<http://www.w3.org/2001/XMLSchema#string> ;
       <http://inqle.org/ns/v1/updateDate>
-              "2008-05-08T01:26:21.919Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+              "2008-05-08T12:06:50.835Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 
 <http://inqle.org/ns/v1/name>
       a       <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
