@@ -35,20 +35,21 @@ public class ExperimentsView extends ViewPart {
 
 	private static final Logger log = Logger.getLogger(ExperimentsView.class);
 
-	public static final String ID = "org.inqle.ui.rap.experimentsView";
+	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
 	
 	public static final String SPARQL_END =
-		"\n} }\n";
+		"\n} } ORDER BY DESC(?creationDate) LIMIT 100 OFFSET 0 \n";
 	
 	//TODO clean up name URI
 	public static final String SPARQL_BEGIN = 
 		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 		"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-		"SELECT ?name ?id ?uri \n" +
+		"SELECT ?name ?id ?uri ?creationDate \n" +
 		"{\n" +
 		"GRAPH ?g {\n" +
-		"?uri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n" +
-		"?uri " + RDF.INQLE + "name";
+		"?uri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id\n" +
+		". ?uri inqle:creationDate ?creationDate\n" +
+		". OPTIONAL { ?uri inqle:name ?name }\n";
 	
 	private Composite composite;
 	
@@ -65,7 +66,7 @@ public class ExperimentsView extends ViewPart {
 	protected List<String> propertyNames = new ArrayList<String>();
 
 	private Persister persister;
-	
+	private TableViewer tableViewer;
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
 	 */
@@ -74,7 +75,7 @@ public class ExperimentsView extends ViewPart {
 		this.composite = new Composite(parent, SWT.None);
 	}
 	
-		public void refreshTable() {
+	public void createTable() {
 //		if (table != null) {
 //			table.clearAll();
 //		}
@@ -97,7 +98,7 @@ public class ExperimentsView extends ViewPart {
 			log.debug("Added column: " + propertyName);
 		}
 		
-		TableViewer tableViewer = new TableViewer(table);
+		tableViewer = new TableViewer(table);
 		
 		ObservableListContentProvider olContentProvider = new ObservableListContentProvider();
 		tableViewer.setContentProvider(olContentProvider);
@@ -105,7 +106,12 @@ public class ExperimentsView extends ViewPart {
 		QuerySolutionTableLabelProvider labelProvider = new QuerySolutionTableLabelProvider();
 		labelProvider.setColumnFields(propertyNames);
 		tableViewer.setLabelProvider(labelProvider);
-		
+	}
+	
+	public void showTable() {
+		if (tableViewer == null) {
+			createTable();
+		}
 		WritableList writableListInput = new WritableList(getRows(), tableBeanClass);
 		log.debug("getRows():" + getRows());
 		tableViewer.setInput(writableListInput);
@@ -119,6 +125,8 @@ public class ExperimentsView extends ViewPart {
 	 */
 	@Override
 	public void setFocus() {
+		log.info("ExperimentsView.setFocus()");
+		showTable();
 	}
 	
 	/**
@@ -132,23 +140,29 @@ public class ExperimentsView extends ViewPart {
 	}
 
 	public List<QuerySolution> getRows() {
+		if (rows == null || rows.size() == 0) {
+			doQuery();
+		}
 		return rows;
 	}
 	
 	public void doQuery() {
+		log.info("doQuery()");
 		String sparql = getSparql();
+		log.info("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria(getPersister());
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
 		queryCriteria.addNamedModel(persister.getAppInfo().getRepositoryNamedModel());
 		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+		log.info("Received these results: " + resultTable.getResultList());
 		setRdfTable(resultTable);
 	}
 
 	private String getSparql() {
 		String sparql = SPARQL_BEGIN +
-			" . ?uri a ?classUri\n" +
-			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
+			". ?uri a ?classUri\n" +
+			". ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
 			SPARQL_END;
 		return sparql;
 	}

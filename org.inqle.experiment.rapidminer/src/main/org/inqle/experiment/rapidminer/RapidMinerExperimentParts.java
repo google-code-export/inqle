@@ -22,7 +22,7 @@ public class RapidMinerExperimentParts extends PartType {
 
 	private Logger log = Logger.getLogger(RapidMinerExperimentParts.class);
 	
-	private static final String ICON_PATH = "org/inqle/experiment/images/experiments.jpeg";
+	private static final String ICON_PATH = "org/inqle/experiment/images/experiments.png";
 	/* 
 	 * 
 	 * The children = the list of all IRapidMinerExperiment plugins
