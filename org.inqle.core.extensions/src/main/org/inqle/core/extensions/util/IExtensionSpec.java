@@ -15,4 +15,6 @@ public interface IExtensionSpec extends Comparable<Object> {
 	public IConfigurationElement getConfigElement();
 	
 	public int getWeight();
+	
+	public String getPluginId();
 }

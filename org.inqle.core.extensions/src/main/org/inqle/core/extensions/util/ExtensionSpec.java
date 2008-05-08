@@ -12,9 +12,11 @@ import org.inqle.core.util.InqleInfo;
 public class ExtensionSpec implements IExtensionSpec {
 
 	protected IConfigurationElement element;
+	private String pluginId;
 	
-	ExtensionSpec(IConfigurationElement elem) {
-		element = elem;
+	ExtensionSpec(IConfigurationElement element, String pluginId) {
+		this.element = element;
+		this.pluginId = pluginId;
 	}
 	
 	public String getAttribute(String attr) {
@@ -66,6 +68,10 @@ public class ExtensionSpec implements IExtensionSpec {
 		}
 		str += "/>";
 		return str;
+	}
+
+	public String getPluginId() {
+		return pluginId;
 	}
 
 }
