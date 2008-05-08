@@ -1,5 +1,7 @@
 package org.inqle.data.rdf.jenabean;
 
+import java.util.Date;
+
 import org.inqle.core.domain.INamedAndDescribed;
 
 /**
@@ -12,6 +14,12 @@ public interface IBasicJenabean extends INamedAndDescribed {
 	public static final String ID_ATTRIBUTE = "id";
 	
 	public String getId();
+	
+	public Date getCreationDate();
+	
+	public Date getUpdateDate();
+	
+	public void setUpdateDate(Date updateDate);
 	
 	public void setId(String id);
 	

@@ -3,6 +3,7 @@
  */
 package org.inqle.data.rdf.jenabean;
 
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -21,6 +22,8 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	private String id;
 	private String description;
 	private String name;
+	private Date creationDate;
+	private Date updateDate;
 	
 	@Id
 	public String getId() {
@@ -74,5 +77,23 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	public void replicate(IBasicJenabean template) {
 		clone(template);
 		setId(template.getId());
+	}
+	
+	public Date getCreationDate() {
+		if (creationDate == null) {
+			creationDate = new Date();
+		}
+		return creationDate;
+	}
+	
+	public Date getUpdateDate() {
+		if (updateDate == null) {
+			updateDate = getCreationDate();
+		}
+		return updateDate;
+	}
+	
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 }
