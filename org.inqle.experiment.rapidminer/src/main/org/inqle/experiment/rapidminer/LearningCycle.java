@@ -135,7 +135,15 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 			log.warn("No RapidMiner experiment was found to match the labelDataColumn=" + labelDataColumn);
 			return null;
 		}
-		return runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
+		ExperimentResult experimentResult = runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
+		
+		//add metadata to experimentResult
+		experimentResult.setSampler(samplerToUse);
+		experimentResult.setExperimentLabel(labelDataColumn);
+		experimentResult.setRapidMinerExperiment(experimentToUse);
+		experimentResult.setExperimentAttributes(resultDataTable.getLearnableColumns());
+		experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()));
+		return experimentResult;
 	}
 
 	private ISampler selectSampler() {
@@ -197,7 +205,6 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 	private ExperimentResult runDataThroughExperiment(DataTable dataTable, IRapidMinerExperiment rapidMinerExperiment, DataColumn labelDataColumn) {
 		//the results to return
 		ExperimentResult experimentResult = new ExperimentResult();
-		
 		//get a RapidMiner Process object, representing the Experiment
 		com.rapidminer.Process process = rapidMinerExperiment.getProcess();
 		
