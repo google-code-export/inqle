@@ -4,6 +4,7 @@
 package org.inqle.experiment.rapidminer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -39,6 +40,16 @@ public class ExperimentsView extends SparqlView {
 
 	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
 
+	private static final String[] PROPERTY_NAMES = {
+		"creationDate",
+		"id",
+		"experimentSubject",
+		"experimentLabel",
+		"correlation",
+		"root_mean_squared_error"
+	};
+
+	//TODO optional fields will render the columns retrieved on any pass thru variable. Must extract columns from the query
 	@Override
 	public String getSparql() {
 		
@@ -51,6 +62,8 @@ public class ExperimentsView extends SparqlView {
 			"?uri inqle:id ?id\n" +
 			". ?uri inqle:creationDate ?creationDate\n" +
 			". OPTIONAL { ?uri inqle:name ?name }\n" +
+			". OPTIONAL { ?uri inqle:correlation ?correlation }\n" +
+			". OPTIONAL { ?uri inqle:root_mean_squared_error ?root_mean_squared_error }\n" +
 				". ?uri a ?classUri\n" +
 			". ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
@@ -58,4 +71,8 @@ public class ExperimentsView extends SparqlView {
 		return sparql;
 	}
 
+	@Override
+	public List<String> getPropertyNames() {
+		return Arrays.asList(PROPERTY_NAMES);
+	}
 }
