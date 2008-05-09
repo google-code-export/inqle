@@ -25,6 +25,8 @@ import com.hp.hpl.jena.query.QuerySolution;
  */
 public class QuerySolutionTableLabelProvider extends CellLabelProvider {
 
+//	protected int rowNumColumnIndex = -1;
+	
 	protected List<String> columnFields = new ArrayList<String>();
 	
 	public static final Logger log = Logger.getLogger(QuerySolutionTableLabelProvider.class);
@@ -34,7 +36,6 @@ public class QuerySolutionTableLabelProvider extends CellLabelProvider {
 	 */
 	@Override
 	public void update(ViewerCell cell) {
-		
 		Object querySolutionObj = cell.getElement();
 		QuerySolution querySolution = (QuerySolution)querySolutionObj;
 		String fieldName = columnFields.get(cell.getColumnIndex());
@@ -46,4 +47,8 @@ public class QuerySolutionTableLabelProvider extends CellLabelProvider {
 	public void setColumnFields(List<String> columnFields) {
 		this.columnFields = columnFields;
 	}
+
+//	public void setRowNumColumnIndex(int rowNumColumnIndex) {
+//		this.rowNumColumnIndex = rowNumColumnIndex;
+//	}
 }
