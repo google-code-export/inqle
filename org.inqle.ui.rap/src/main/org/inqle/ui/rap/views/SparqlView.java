@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -36,10 +37,10 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 
 	private static final Logger log = Logger.getLogger(SparqlView.class);
 	
-	private static final int COLUMN_WIDTH = 100;
+	private static final int COLUMN_WIDTH = 120;
 
-	private static final int DEFAULT_RECORD_COUNT = 100;
-
+	private static final int DEFAULT_RECORD_COUNT_INDEX = 0;
+	private static final String[] RECORD_COUNT_OPTIONS = {"10", "20", "50", "100", "200", "500", "1000", "5000", "10000" };
 	private static final String DESC = "DESC";
 	private static final String ASC = "ASC";
 
@@ -60,7 +61,11 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	protected Button refreshButton;
 	protected String currentSortColumn = "creationDate";
 	protected String currentSortDirection = DEFAULT_SORT_DIRECTION;
-
+	protected org.eclipse.swt.widgets.List recordCountList;
+	protected Button previousButton;
+	protected Button nextButton;
+	protected Label resultDescription;
+	
 	private int offset = 0;
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -77,21 +82,43 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
     composite.setLayout(gridLayout);
     
 		showForm();
+		showResultDescription();
 		showTable();
+		refreshForm();
 	}
-	
+
 	private void showForm() {
 		Composite formComposite = new Composite(composite, SWT.NONE);
 		RowLayout rowLayout = new RowLayout();
 		formComposite.setLayout(rowLayout);
 		
+		//select list for number of records to show
+		recordCountList = new org.eclipse.swt.widgets.List(formComposite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		recordCountList.setItems(RECORD_COUNT_OPTIONS);
+		recordCountList.setSelection(DEFAULT_RECORD_COUNT_INDEX);
 		//GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//formComposite.setLayoutData(gridData);
 		refreshButton = new Button(formComposite, SWT.PUSH);
 		refreshButton.setText("Refresh");
 		refreshButton.addSelectionListener(this);
+		
 	}
 
+	private void showResultDescription() {
+		Composite descriptionComposite = new Composite(composite, SWT.NONE);
+		RowLayout rowLayout = new RowLayout();
+		descriptionComposite.setLayout(rowLayout);
+		resultDescription = new Label(descriptionComposite, SWT.NONE);
+		resultDescription.setText("No Experiment Results found.");
+		
+		previousButton = new Button(descriptionComposite, SWT.PUSH);
+		previousButton.setText("<--");
+		previousButton.addSelectionListener(this);
+		nextButton = new Button(descriptionComposite, SWT.PUSH);
+		nextButton.setText("-->");
+		nextButton.addSelectionListener(this);
+	}
+	
 	public void createTable() {
 		//if no data, return
 		if (rows == null || rows.size() == 0) {
@@ -138,12 +165,17 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		if (rows == null || rows.size() == 0) {
 			doQuery();
 		}
-		if (rows == null || rows.size() == 0) {
-			return;
-		}
+		
 		if (tableViewer == null) {
+			//if no data, do not create the table
+			if (rows == null || rows.size() == 0) {
+				return;
+			}
+			//otherwise, do create the table
 			createTable();
 		}
+		//update the results description
+		resultDescription.setText("Showing results " + (offset + 1) + " to " + (rows.size() + offset));
 		
 		WritableList writableListInput = new WritableList(rows, tableBeanClass);
 		log.trace("writableListInput=" + writableListInput);
@@ -165,7 +197,9 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	public void setRdfTable(RdfTable rdfTable) {
 		//this.rdfTable = rdfTable;
 		this.rows = rdfTable.getResultList();
-		this.propertyNames = rdfTable.getVarNameList();
+		if (getPropertyNames() == null) {
+			setPropertyNames(rdfTable.getVarNameList());
+		}
 	}
 
 	public List<QuerySolution> getRows() {
@@ -174,7 +208,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	
 	public void doQuery() {
 		String sparql = getSparql();
-		log.info("Querying w/ SPARQL:" + sparql);
+		log.trace("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria(getPersister());
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
@@ -198,7 +232,10 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	}
 	
 	public int getRecordCount() {
-		return DEFAULT_RECORD_COUNT;
+		int selectedIndex = recordCountList.getSelectionIndex();
+		String recordCountStr = RECORD_COUNT_OPTIONS[selectedIndex];
+		int recordCount = Integer.parseInt(recordCountStr);
+		return recordCount;
 	}
 	
 	public int getOffset() {
@@ -209,13 +246,57 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	 * SelectionListener method
 	 */
 	public void widgetSelected(SelectionEvent event) {
+		log.trace("event=" + event);
 		if (event.getSource() == refreshButton) {
-			log.info("Refresh clicked");
-			doQuery();
-			showTable();
+			log.trace("Refresh clicked");
+			refreshView();
+		}
+		
+		if (event.getSource() == previousButton) {
+			offset = offset - getRecordCount();
+			if (offset < 0) {
+				offset = 0;
+			}
+			log.trace("Previous clicked");
+			refreshView();
+		}
+		
+		if (event.getSource() == nextButton) {
+			if (rows.size() < getRecordCount()) {
+				refreshForm();
+				return;
+			}
+			offset = offset + getRecordCount();
+			
+			log.trace("Next clicked");
+			refreshView();
 		}
 	}
 	
+	private void refreshView() {
+		doQuery();
+		refreshForm();
+		showTable();
+	}
+
+	private void refreshForm() {
+		if (offset <= 0) {
+			log.trace("Disabled previousButton");
+			previousButton.setEnabled(false);
+		} else {
+			log.trace("Enabled previousButton");
+			previousButton.setEnabled(true);
+		}
+		if (rows.size() < getRecordCount()) {
+			log.trace("Disabled nextButton");
+			nextButton.setEnabled(false);
+		} else {
+			log.trace("Enabled nextButton");
+			nextButton.setEnabled(true);
+		}
+		
+	}
+
 	/**
 	 * SelectionListener method
 	 */
@@ -227,7 +308,6 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	 * Listener method (for clicking of column header)
 	 */
 	public void handleEvent(Event event) {
-		log.info("Clicked " + event.widget);
 		if (event.widget instanceof TableColumn) {
 			
 			TableColumn column = (TableColumn) event.widget;
@@ -239,7 +319,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 				currentSortColumn = column.getText();
 				currentSortDirection = DEFAULT_SORT_DIRECTION;
 			}
-			log.info("Sort by " + currentSortColumn + " " + currentSortDirection);
+			log.trace("Sort by " + currentSortColumn + " " + currentSortDirection);
+			//no need to refresh the form, since we are only changing sort
 			doQuery();
 			showTable();
 		}
@@ -268,5 +349,18 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 
 	public void setCurrentSortDirection(String currentSortDirection) {
 		this.currentSortDirection = currentSortDirection;
+	}
+
+	/**
+	 * Override to specify the property names of your implementation.  This prevents the 
+	 * problem that optional fields might be missed in the first page
+	 * @return
+	 */
+	public List<String> getPropertyNames() {
+		return propertyNames;
+	}
+
+	public void setPropertyNames(List<String> propertyNames) {
+		this.propertyNames = propertyNames;
 	}
 }
