@@ -22,6 +22,7 @@ Export-Package: org.inqle.ui.rap,
  org.inqle.ui.rap.images,
  org.inqle.ui.rap.table,
  org.inqle.ui.rap.tree,
- org.inqle.ui.rap.tree.parts
+ org.inqle.ui.rap.tree.parts,
+ org.inqle.ui.rap.views
 Bundle-ClassPath: bin/main/,
  .

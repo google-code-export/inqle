@@ -14,13 +14,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 public class OpenViewAction extends Action {
 	
 	private final IWorkbenchWindow window;
-	private int instanceNum = 0;
+	//private int instanceNum = 0;
 	private final String viewId;
 	
 	private static final Logger log = Logger.getLogger(OpenViewAction.class);
 	
 	public OpenViewAction(IWorkbenchWindow window, String label, String viewId, String pluginId, String iconPath) {
-		log.info("Create OpenViewAction: viewId=" + viewId + "; pluginId=" + pluginId + "; iconPath=" + iconPath);
+		log.trace("Create OpenViewAction: viewId=" + viewId + "; pluginId=" + pluginId + "; iconPath=" + iconPath);
 		this.window = window;
 		this.viewId = viewId;
         setText(label);
