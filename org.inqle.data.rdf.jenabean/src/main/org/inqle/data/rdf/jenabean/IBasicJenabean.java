@@ -15,28 +15,16 @@ public interface IBasicJenabean extends INamedAndDescribed {
 	
 	public String getId();
 	
-	public Date getCreationDate();
-	
-	public Date getUpdateDate();
-	
-	public void setUpdateDate(Date updateDate);
-	
 	public void setId(String id);
 	
 	public String getUri();
-	
-	/**
-	 * Copy all values from the provided ISampler to this one
-	 * @return
-	 */
-	public void replicate(IBasicJenabean templateSampler);
 	
 	/**
 	 * Copy all values from the provided ISampler to this one,
 	 * except do not copy the ID (i.e. allow this sampler to have a unique ID)
 	 * @return
 	 */
-	public void clone(IBasicJenabean templateSampler);
+	public void clone(IBasicJenabean objectToBeCloned);
 	
 	/**
 	 * Create new clone of self.  
@@ -44,9 +32,4 @@ public interface IBasicJenabean extends INamedAndDescribed {
 	 */
 	public IBasicJenabean createClone();
 	
-	/**
-	 * Create new replica of self.  
-	 * The replica has all fields identical to self
-	 */
-	public IBasicJenabean createReplica();
 }

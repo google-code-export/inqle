@@ -22,14 +22,9 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	private String id;
 	private String description;
 	private String name;
-	private Date creationDate;
-	private Date updateDate;
 	
 	@Id
 	public String getId() {
-		if (id == null) {
-			id = UUID.randomUUID().toString();
-		}
 		return id;
 	}
 	
@@ -59,45 +54,17 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	
 	@Override
 	public String toString() {
-		return getClass() + "(" + getName() + ")";
+		String s = getClass().toString() + " {\n";
+		s += "[name=" + name + "]\n";
+		s += "[description=" + description + "]\n";
+		s += "}";
+		return s;
 	}
 
-	public abstract IBasicJenabean createClone();
-
-	public abstract IBasicJenabean createReplica();
 
 	public void clone(IBasicJenabean template) {
 		setName(template.getName());
 		setDescription(template.getDescription());
 	}
 
-	/**
-	 * Add all field values from the provided template sampler to this sampler, including the ID field
-	 */
-	public void replicate(IBasicJenabean template) {
-		clone(template);
-		setId(template.getId());
-	}
-	
-	public Date getCreationDate() {
-		if (creationDate == null) {
-			creationDate = new Date();
-		}
-		return creationDate;
-	}
-	
-	public Date getUpdateDate() {
-		if (updateDate == null) {
-			updateDate = getCreationDate();
-		}
-		return updateDate;
-	}
-	
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-	
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
 }

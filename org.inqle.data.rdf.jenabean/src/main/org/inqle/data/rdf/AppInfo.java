@@ -3,6 +3,7 @@ package org.inqle.data.rdf;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -15,7 +16,7 @@ import thewebsemantic.Namespace;
  * Dec 4, 2007
  */
 @Namespace(RDF.INQLE)
-public class AppInfo extends BasicJenabean {
+public class AppInfo extends UniqueJenabean {
 	
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	public static final String APPINFO_INSTANCE = "AppInfoInstance";
@@ -76,15 +77,13 @@ public class AppInfo extends BasicJenabean {
 		super.replicate(objectToClone);
 	}
 	
-	@Override
-	public IBasicJenabean createClone() {
+	public AppInfo createClone() {
 		AppInfo newAppInfo = new AppInfo();
 		newAppInfo.clone(this);
 		return newAppInfo;
 	}
 
-	@Override
-	public IBasicJenabean createReplica() {
+	public AppInfo createReplica() {
 		AppInfo newAppInfo = new AppInfo();
 		newAppInfo.replicate(this);
 		return newAppInfo;
