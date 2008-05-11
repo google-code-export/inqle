@@ -67,14 +67,12 @@ public class FileModel extends NamedModel {
 		super.replicate(objectToClone);
 	}
 	
-	@Override
 	public FileModel createClone() {
 		FileModel newObj = new FileModel();
 		newObj.clone(this);
 		return newObj;
 	}
 
-	@Override
 	public FileModel createReplica() {
 		FileModel newObj = new FileModel();
 		newObj.replicate(this);

@@ -1,5 +1,6 @@
 package org.inqle.data.rdf.jena.sdb;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -314,7 +315,7 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 			int stepType = step.getStepType();
 			String objectStr = "";
 			String predicate = step.getPredicate();
-			RDFNode object = step.getObject();
+			Object object = step.getObject();
 			
 			if (object == null) {
 				if (stepType == ArcStep.OUTGOING) {
@@ -327,10 +328,13 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 					subjectStr = newNode;
 					lastNode = newNode;
 				}
-			} else if (object instanceof Resource) {
+			} else if (object instanceof URI) {
 				subjectStr = lastNode;
-				objectStr = "<" + ((Resource)object).getURI() + ">";
-			} else if (object instanceof Literal) {
+				objectStr = "<" + ((URI)object).toString() + ">";
+			} else if (object instanceof String) {
+				subjectStr = lastNode;
+				objectStr = "\"" + object.toString() + "\"";
+			} else {
 				subjectStr = lastNode;
 				objectStr = object.toString();
 			}

@@ -497,8 +497,8 @@ public class Persister {
 	 */
 	public void persist(Object persistableObj, Model model, boolean persistMembers) {
 		log.debug("Persister.persist():" + JenabeanWriter.toString(persistableObj));
-		if (persistableObj instanceof IBasicJenabean) {
-			((IBasicJenabean)persistableObj).setUpdateDate(new Date());
+		if (persistableObj instanceof IUniqueJenabean) {
+			((IUniqueJenabean)persistableObj).setUpdateDate(new Date());
 		}
 		Bean2RDF writer = new Bean2RDF(model);
 		if (persistMembers) {

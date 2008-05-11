@@ -31,17 +31,14 @@ public class RDBModel extends NamedModel {
 	public void replicate(RDBModel objectToClone) {
 		clone(objectToClone);
 		setId(objectToClone.getId());
-		super.replicate(objectToClone);
 	}
 	
-	@Override
 	public RDBModel createClone() {
 		RDBModel newObj = new RDBModel();
 		newObj.clone(this);
 		return newObj;
 	}
 
-	@Override
 	public RDBModel createReplica() {
 		RDBModel newObj = new RDBModel();
 		newObj.replicate(this);
