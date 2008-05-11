@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Id;
@@ -33,7 +34,7 @@ import thewebsemantic.Id;
  * @author David Donohue
  * Dec 26, 2007
  */
-public interface ISampler extends IBasicJenabean {
+public interface ISampler extends IUniqueJenabean {
 	
 	public static final String PROPERTY_WEIGHT = "weight";
 	public static final String URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES = RDF.INQLE + "subjectContainingCommonAttributes";
