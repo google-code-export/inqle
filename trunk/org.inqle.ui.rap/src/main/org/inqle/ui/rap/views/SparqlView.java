@@ -133,7 +133,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		table.setLinesVisible(true);
 
 		//add columns
-		for (String propertyName: propertyNames) {
+		for (String propertyName: getPropertyNames()) {
 			TableColumn column = new TableColumn(table,SWT.LEFT);
 			column.setText(propertyName);
 			column.setToolTipText("Click to sort");
@@ -148,7 +148,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		tableViewer.setContentProvider(olContentProvider);
 		
 		QuerySolutionTableLabelProvider labelProvider = new QuerySolutionTableLabelProvider();
-		labelProvider.setColumnFields(propertyNames);
+		labelProvider.setColumnFields(getPropertyNames());
 		tableViewer.setLabelProvider(labelProvider);
 	}
 	
@@ -178,7 +178,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		resultDescription.setText("Showing results " + (offset + 1) + " to " + (rows.size() + offset));
 		
 		WritableList writableListInput = new WritableList(rows, tableBeanClass);
-		log.trace("writableListInput=" + writableListInput);
+		log.info("writableListInput=" + writableListInput);
 		tableViewer.setInput(writableListInput);
 		//tableViewer.getTable().pack();
 		tableViewer.refresh(false);
@@ -208,13 +208,13 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	
 	public void doQuery() {
 		String sparql = getSparql();
-		log.trace("Querying w/ SPARQL:" + sparql);
+		log.info("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria(getPersister());
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
 		queryCriteria.addNamedModel(persister.getAppInfo().getRepositoryNamedModel());
 		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		log.trace("Received these results: " + resultTable.getResultList());
+		log.info("Received these results: " + resultTable.getResultList());
 		setRdfTable(resultTable);
 	}
 
