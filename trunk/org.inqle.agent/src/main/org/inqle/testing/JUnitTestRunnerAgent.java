@@ -32,8 +32,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 	/**
 	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createClone()
 	 */
-	@Override
-	public IBasicJenabean createClone() {
+	public JUnitTestRunnerAgent createClone() {
 		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
 		newAgent.clone(this);
 		return newAgent;
@@ -42,8 +41,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 	/**
 	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createReplica()
 	 */
-	@Override
-	public IBasicJenabean createReplica() {
+	public JUnitTestRunnerAgent createReplica() {
 		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
 		newAgent.replicate(this);
 		return newAgent;

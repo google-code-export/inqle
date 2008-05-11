@@ -1,6 +1,7 @@
 package org.inqle.agent;
 
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 
 /**
  * All agent classes must implement this interface
@@ -10,7 +11,7 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
  * @author David Donohue
  * Apr 24, 2008
  */
-public interface IAgent extends IBasicJenabean, Runnable {
+public interface IAgent extends IUniqueJenabean, Runnable {
 
 	
 	public static final int STOPPED = 0;

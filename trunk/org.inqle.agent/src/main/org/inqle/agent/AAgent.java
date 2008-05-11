@@ -6,6 +6,7 @@ package org.inqle.agent;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 /**
  * Abstract base class for creating agents.  New agent classes
@@ -22,7 +23,7 @@ import org.inqle.data.rdf.jenabean.Persister;
  * @author David Donohue
  * Apr 24, 2008
  */
-public abstract class AAgent extends BasicJenabean implements IAgent {
+public abstract class AAgent extends UniqueJenabean implements IAgent {
 
 	public static final int CYCLE_CONTINUOUSLY = -1;
 	protected int mode = STOPPED;

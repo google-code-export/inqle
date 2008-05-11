@@ -27,6 +27,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
  * Feb 26, 2008
  */
 public class AgentPart extends PartType {
+	
 	//static int agentPartCount = 0;
 	//int initCount = 0;
 
@@ -181,5 +182,4 @@ public class AgentPart extends PartType {
 	public Object getObject() {
 		return agentFactory.getBaseAgent();
 	}
-
 }
