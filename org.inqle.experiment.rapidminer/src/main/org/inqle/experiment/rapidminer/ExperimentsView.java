@@ -56,7 +56,7 @@ public class ExperimentsView extends SparqlView {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?id ?creationDate \n" +
+			"SELECT ?id ?creationDate ?name ?correlation ?root_mean_squared_error\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
 			"?uri inqle:id ?id\n" +

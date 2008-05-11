@@ -61,8 +61,8 @@ public class ExperimenterAgent extends AAgent {
 				log.warn("Resulting ExperimentResult is null.  Skip to next cycle.");
 				continue;
 			}
-			//log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
-			log.info("Storing experiment result");
+			log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
+			//log.info("Storing experiment result");
 			persister.persist(experimentResult, persister.getMetarepositoryModel());
 			cycleCount ++;
 		}

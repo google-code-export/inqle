@@ -137,7 +137,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		ExperimentResult experimentResult = runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
 		
 		//add metadata to experimentResult
-		//experimentResult.setSampler(samplerToUse);
+		experimentResult.setSampler(samplerToUse);
 		experimentResult.setExperimentLabelArc(labelDataColumn.getArc());
 		experimentResult.setRapidMinerExperiment(experimentToUse);
 		experimentResult.setExperimentAttributeArcs(resultDataTable.getLearnableColumnArcs());
