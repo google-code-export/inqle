@@ -21,12 +21,12 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * Apr 22, 2008
  */
 @Namespace(RDF.INQLE)
-public class ExperimentResult extends GlobalJenabean {
+public class ExperimentResult extends UniqueJenabean {
 
 	//private PerformanceVector performanceVector;
 	//private LearningCycle learningCycle;
 	//private Exception learningException;
-	//private ISampler sampler;
+	private ISampler sampler;
 	private Arc experimentLabelArc;
 	private Collection<Arc> experimentAttributeArcs;
 	private String experimentSubject;
@@ -38,7 +38,7 @@ public class ExperimentResult extends GlobalJenabean {
 		String s = getClass().toString() + " {";
 		s += super.toString();
 		//s += "[learningCycle=" + learningCycle + "]\n";
-		//s += "[sampler=" + sampler + "]\n";
+		s += "[sampler=" + sampler + "]\n";
 		s += "[experimentSubject=" + experimentSubject + "]\n";
 		s += "[experimentAttributeArcs=" + experimentAttributeArcs + "]\n";
 		s += "[experimentLabelArc=" + experimentLabelArc + "]\n";
@@ -53,12 +53,6 @@ public class ExperimentResult extends GlobalJenabean {
 //	public PerformanceVector getPerformanceVector() {
 //		return performanceVector;
 //	}
-
-	@Override
-	public String getId() {
-		String hash = JavaHasher.hashSha256(toString());
-		return hash;
-	}
 	
 	public void setPerformanceVector(PerformanceVector performanceVector) {
 		//this.performanceVector = performanceVector;
@@ -77,10 +71,10 @@ public class ExperimentResult extends GlobalJenabean {
 		super.clone(copyFieldsFrom);
 	}
 	
-//	public void replicate(ExperimentResult objectToClone) {
-//		clone(objectToClone);
-//		setId(objectToClone.getId());
-//	}
+	public void replicate(ExperimentResult objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createClone()
@@ -94,11 +88,11 @@ public class ExperimentResult extends GlobalJenabean {
 	/* (non-Javadoc)
 	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createReplica()
 	 */
-//	public ExperimentResult createReplica() {
-//		ExperimentResult newExperimentResult = new ExperimentResult();
-//		newExperimentResult.replicate(this);
-//		return newExperimentResult;
-//	}
+	public ExperimentResult createReplica() {
+		ExperimentResult newExperimentResult = new ExperimentResult();
+		newExperimentResult.replicate(this);
+		return newExperimentResult;
+	}
 
 //	public LearningCycle getLearningCycle() {
 //		return learningCycle;
@@ -116,9 +110,9 @@ public class ExperimentResult extends GlobalJenabean {
 //		this.learningException = learningException;
 //	}
 
-//	public void setSampler(ISampler sampler) {
-//		this.sampler = sampler;
-//	}
+	public void setSampler(ISampler sampler) {
+		this.sampler = sampler;
+	}
 
 	public void setExperimentLabelArc(Arc experimentLabelArc) {
 		this.experimentLabelArc = experimentLabelArc;
@@ -152,9 +146,9 @@ public class ExperimentResult extends GlobalJenabean {
 		return experimentLabelArc;
 	}
 
-//	public ISampler getSampler() {
-//		return sampler;
-//	}
+	public ISampler getSampler() {
+		return sampler;
+	}
 
 	public double getCorrelation() {
 		return correlation;
