@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.RdfTable;
+import org.inqle.data.rdf.jenabean.Arc;
 
 //public class DataTable implements Serializable {
 /**
@@ -117,6 +118,14 @@ public class DataTable {
 		}
 		log.trace("returning learnable columns=" + learnableColumns);
 		return learnableColumns;
+	}
+	
+	public List<Arc> getLearnableColumnArcs() {
+		List<Arc> learnableArcs = new ArrayList<Arc>();
+		for (DataColumn dataColumn: getLearnableColumns()) {
+			learnableArcs.add(dataColumn.getArc());
+		}
+		return learnableArcs;
 	}
 
 	public String getQuery() {

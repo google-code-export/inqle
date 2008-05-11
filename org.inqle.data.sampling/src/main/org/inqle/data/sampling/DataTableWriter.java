@@ -52,7 +52,7 @@ public class DataTableWriter {
 		List<DataColumn> columns = dataTable.getColumns();
 		int i=0;
 		for (DataColumn column: columns) {
-			s += "\n" + i + ") " + column.getQueryLabel() + ": <" + column.getColumnUri() + "> Path=" + column.getUriPath();
+			s += "\n" + i + ") " + column.getQueryLabel() + ": <" + column.getColumnUri() + "> Path=" + column.getArc();
 			i++;
 		}
 		return s;

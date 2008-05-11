@@ -5,6 +5,7 @@ import java.util.Dictionary;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -31,7 +32,7 @@ import thewebsemantic.Namespace;
  * Feb 29, 2008
  */
 @Namespace(RDF.INQLE)
-public abstract class ASampler extends BasicJenabean implements ISampler {
+public abstract class ASampler extends UniqueJenabean implements ISampler {
 
 	protected Collection<String> availableNamedModels;
 //	protected DataColumn[] dataColumns;
@@ -63,7 +64,6 @@ public abstract class ASampler extends BasicJenabean implements ISampler {
 	public void replicate(ISampler objectToClone) {
 		clone(objectToClone);
 		setId(objectToClone.getId());
-		super.replicate(objectToClone);
 	}
 
 //	public Collection<String> getAvailableNamedModels() {

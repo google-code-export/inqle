@@ -7,6 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.ArcStep;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 
@@ -23,8 +25,7 @@ import thewebsemantic.Namespace;
  * TODO use Arc to represent the uriPath
  * TODO move data-containing fields (valuesSet and valuesList) into DataTable class
  */
-@Namespace(RDF.INQLE)
-public class DataColumn extends BasicJenabean implements Serializable {
+public class DataColumn {
 	
 	/**
 	 * 
@@ -33,8 +34,8 @@ public class DataColumn extends BasicJenabean implements Serializable {
 
 	public static final int DATA_TYPE_UNASSIGNED = -999;
 
-	/** the RDF URI of this column */
-	private String columnUri;
+	///** the RDF URI of this column */
+	//private String columnUri;
 	
 	/** the label applied to this predicate in the SPARQL query */
 	private String queryLabel;
@@ -46,7 +47,8 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	/**
 	 * an array containing the path of predicate URIs to this column
 	 */
-	private String[] uriPath = new String[] {};
+	//private String[] uriPath = new String[] {};
+	private Arc arc;
 
 	private LinkedHashSet<String> valuesSet = new LinkedHashSet<String>();
 
@@ -54,11 +56,20 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	
 	public DataColumn() {}
 	
+	/**
+	 * Convenience constructor for cases where the arc is a single predicate
+	 * @param queryLabel
+	 * @param columnUri
+	 */
 	public DataColumn(String queryLabel, String columnUri) {
 		this.queryLabel = queryLabel;
-		this.columnUri = columnUri;
+		//this.columnUri = columnUri;
 		//by default, assume the Arc to this column = a single step (i.e. this column only)
-		this.uriPath = new String[] {columnUri};
+		//this.uriPath = new String[] {columnUri};
+		arc = new Arc();
+		ArcStep arcStep = new ArcStep();
+		arcStep.setPredicate(columnUri);
+		arc.addArcStep(arcStep);
 	}
 	
 	/**
@@ -66,7 +77,8 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	 * @return the number of steps
 	 */
 	public int getNumSteps() {
-		return uriPath.length;
+		//return uriPath.length;
+		return arc.getArcSteps().length;
 	}
 
 	public void setDataType(int rapidMinerOntologyDataType) {
@@ -84,17 +96,21 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	 * @return a String array of (predicate) URIs, representing
 	 * the steps from the subject to this column
 	 */
-	public String[] getUriPath() {
-		return uriPath;
-	}
+//	public String[] getUriPath() {
+//		return uriPath;
+//	}
 	
+	/**
+	 * The columnUri is the first URI in the arc
+	 */
 	public String getColumnUri() {
-		return this.columnUri;
+		//return this.columnUri;
+		return arc.getArcSteps()[0].getPredicate();
 	}
 	
-	public void setColumnUri(String columnUri) {
-		this.columnUri = columnUri;
-	}
+//	public void setColumnUri(String columnUri) {
+//		this.columnUri = columnUri;
+//	}
 	
 	/**
 	 * @return queryLabel the label used in the SPARQL, which was used to
@@ -129,49 +145,58 @@ public class DataColumn extends BasicJenabean implements Serializable {
 	}
 
 	public String getColumnIdentifier() {
-		return queryLabel + Arrays.asList(uriPath).toString();
+		//return queryLabel + Arrays.asList(uriPath).toString();
+		return queryLabel + Arrays.asList(arc.getArcSteps()).toString();
 	}
 
 	public void setValuesList(List<String> valuesList) {
 		this.valuesList = valuesList;
 	}
 
-	public void clone(DataColumn objectToClone) {
-		setColumnUri(objectToClone.getColumnUri());
-		setQueryLabel(objectToClone.getQueryLabel());
-		setUriPath(objectToClone.getUriPath());
-		setDataType(objectToClone.getDataType());
-		super.clone(objectToClone);
-	}
-	
-	public void replicate(DataColumn objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-		super.replicate(objectToClone);
-	}
-	
-	@Override
-	public IBasicJenabean createClone() {
-		DataColumn newDataColumn = new DataColumn();
-		newDataColumn.clone(this);
-		return newDataColumn;
-	}
+//	public void clone(DataColumn objectToClone) {
+//		setColumnUri(objectToClone.getColumnUri());
+//		setQueryLabel(objectToClone.getQueryLabel());
+//		setUriPath(objectToClone.getUriPath());
+//		setDataType(objectToClone.getDataType());
+//		super.clone(objectToClone);
+//	}
+//	
+//	public void replicate(DataColumn objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//		super.replicate(objectToClone);
+//	}
+//	
+//	@Override
+//	public IBasicJenabean createClone() {
+//		DataColumn newDataColumn = new DataColumn();
+//		newDataColumn.clone(this);
+//		return newDataColumn;
+//	}
+//
+//	@Override
+//	public IBasicJenabean createReplica() {
+//		DataColumn newDataColumn = new DataColumn();
+//		newDataColumn.replicate(this);
+//		return newDataColumn;
+//	}
 
-	@Override
-	public IBasicJenabean createReplica() {
-		DataColumn newDataColumn = new DataColumn();
-		newDataColumn.replicate(this);
-		return newDataColumn;
-	}
-
-	public void setUriPath(String[] uriPath) {
-		this.uriPath = uriPath;
-	}
+//	public void setUriPath(String[] uriPath) {
+//		this.uriPath = uriPath;
+//	}
 	
 	@Override
 	public String toString() {
 		String str = "[DataType=" + dataType + "]";
 		
 		return getColumnIdentifier() + str;
+	}
+
+	public Arc getArc() {
+		return arc;
+	}
+
+	public void setArc(Arc arc) {
+		this.arc = arc;
 	}
 }
