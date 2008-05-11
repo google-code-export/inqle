@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
  * Apr 18, 2008
  */
 @Namespace(RDF.INQLE)
-public class RapidMinerExperiment extends BasicJenabean implements IRapidMinerExperiment {
+public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerExperiment {
 
 	private String experimentClassPath;
 	private String experimentXml;
@@ -110,20 +110,19 @@ public class RapidMinerExperiment extends BasicJenabean implements IRapidMinerEx
 		this.experimentType = type;
 	}
 	
-	@Override
 	public RapidMinerExperiment createClone() {
 		RapidMinerExperiment newObj = new RapidMinerExperiment();
 		newObj.clone(this);
 		return newObj;
 	}
 
-	@Override
-	public RapidMinerExperiment createReplica() {
-		RapidMinerExperiment newObj = new RapidMinerExperiment();
-		newObj.replicate(this);
-		return newObj;
-	}
+//	public RapidMinerExperiment createReplica() {
+//		RapidMinerExperiment newObj = new RapidMinerExperiment();
+//		newObj.replicate(this);
+//		return newObj;
+//	}
 
+	
 	public void clone(RapidMinerExperiment objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		setExperimentXml(objectToBeCloned.getExperimentXml());
@@ -131,9 +130,9 @@ public class RapidMinerExperiment extends BasicJenabean implements IRapidMinerEx
 		setExperimentClassPath(objectToBeCloned.getExperimentClassPath());
 	}
 	
-	public void replicate(RapidMinerExperiment objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-		super.replicate(objectToClone);
-	}
+//	public void replicate(RapidMinerExperiment objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//		super.replicate(objectToClone);
+//	}
 }

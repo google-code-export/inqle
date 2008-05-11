@@ -11,6 +11,7 @@ import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.DataTable;
 import org.inqle.data.sampling.DataTableWriter;
@@ -35,7 +36,7 @@ import com.rapidminer.tools.Ontology;
  * Apr 16, 2008
  */
 @Namespace(RDF.INQLE)
-public class LearningCycle extends BasicJenabean implements ILearningCycle {
+public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	private ISampler sampler;
 	private DataColumn labelDataColumn;
 	private IRapidMinerExperiment rapidMinerExperiment;
@@ -72,7 +73,6 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		this.rapidMinerExperiment = rapidMinerExperiment;
 	}
 
-	@Override
 	public LearningCycle createClone() {
 		LearningCycle newObj = new LearningCycle();
 		newObj.setPersister(persister);
@@ -80,7 +80,6 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		return newObj;
 	}
 
-	@Override
 	public LearningCycle createReplica() {
 		LearningCycle newObj = new LearningCycle();
 		newObj.setPersister(persister);
@@ -138,11 +137,11 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 		ExperimentResult experimentResult = runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
 		
 		//add metadata to experimentResult
-		experimentResult.setSampler(samplerToUse);
-		experimentResult.setExperimentLabel(labelDataColumn);
+		//experimentResult.setSampler(samplerToUse);
+		experimentResult.setExperimentLabelArc(labelDataColumn.getArc());
 		experimentResult.setRapidMinerExperiment(experimentToUse);
-		experimentResult.setExperimentAttributes(resultDataTable.getLearnableColumns());
-		experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()));
+		experimentResult.setExperimentAttributeArcs(resultDataTable.getLearnableColumnArcs());
+		experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
 		return experimentResult;
 	}
 
@@ -248,10 +247,10 @@ public class LearningCycle extends BasicJenabean implements ILearningCycle {
 			results = process.run(input);
 		} catch (Exception e) {
 			log.error("Error running experiment:", e);
-			experimentResult.setException(e);
+			//experimentResult.setException(e);
 		}
 		
-		experimentResult.setLearningCycle(this);
+		//experimentResult.setLearningCycle(this);
 		try {
 			experimentResult.setPerformanceVector(results.get(PerformanceVector.class));
 		} catch (MissingIOObjectException e) {

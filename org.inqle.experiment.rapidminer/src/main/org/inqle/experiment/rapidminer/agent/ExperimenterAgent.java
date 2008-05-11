@@ -62,7 +62,7 @@ public class ExperimenterAgent extends AAgent {
 				continue;
 			}
 			//log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
-			log.info("Storing experiment result; error=" + experimentResult.getException());
+			log.info("Storing experiment result");
 			persister.persist(experimentResult, persister.getMetarepositoryModel());
 			cycleCount ++;
 		}
