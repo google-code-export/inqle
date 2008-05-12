@@ -10,12 +10,25 @@ public abstract class UniqueJenabean extends BasicJenabean implements IUniqueJen
 	private Date creationDate;
 	private Date updateDate;
 
+//	@Id
+//	public String getId() {
+//		if (super.getId() == null) {
+//			setId(UUID.randomUUID().toString());
+//		}
+//		return super.getId();
+//	}
+	
+	/**
+	 * If the ID is null, it will be set to the ID of the base object.
+	 * New ID is created upon cloning this object.
+	 */
+	@Override
 	@Id
 	public String getId() {
-		if (super.getId() == null) {
-			setId(UUID.randomUUID().toString());
+		if (id == null) {
+			id = this.getClass().getName();
 		}
-		return super.getId();
+		return id;
 	}
 	
 	public Date getCreationDate() {
@@ -38,6 +51,15 @@ public abstract class UniqueJenabean extends BasicJenabean implements IUniqueJen
 	
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+	
+	/**
+	 * Assign a clone a new unique ID
+	 * @param objectToClone
+	 */
+	public void clone(IUniqueJenabean objectToClone) {
+		super.clone(objectToClone);
+		setId(UUID.randomUUID().toString());
 	}
 	
 	public void replicate(IUniqueJenabean objectToReplicate) {

@@ -48,11 +48,16 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 		}
 		
 		public String getStringRepresentation() {
-			String string = "Arc: {";
-			for (ArcStep arcStep: arcStepList) {
-				string += arcStep + " --> ";
+			String s = "";
+			if (arcStepList.size() == 1) {
+				s = arcStepList.get(0).toString();
+				return s;
 			}
-			string += "}";
-			return string;
+			s = "Arc: {";
+			for (ArcStep arcStep: arcStepList) {
+				s += arcStep + " --> ";
+			}
+			s += "}";
+			return s;
 		}
 	}

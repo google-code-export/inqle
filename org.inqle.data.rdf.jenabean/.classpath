@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="bin/main" path="src/main"/>
 	<classpathentry kind="src" output="bin/test" path="src/test"/>
-	<classpathentry exported="true" kind="lib" path="lib/jenabean-0.0.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jenabean-0.0.4.jar" sourcepath="/jenabean"/>
 	<classpathentry exported="true" kind="lib" path="lib/antlr-2.7.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/arq.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/arq-extra.jar"/>

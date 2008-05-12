@@ -19,9 +19,9 @@ import thewebsemantic.TypeWrapper;
  */
 public abstract class BasicJenabean implements IBasicJenabean {
 
-	private String id;
-	private String description;
-	private String name;
+	protected String id;
+	protected String description;
+	protected String name;
 	
 	@Id
 	public String getId() {
