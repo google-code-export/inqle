@@ -56,12 +56,14 @@ public class ExperimentsView extends SparqlView {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?id ?creationDate ?name ?correlation ?root_mean_squared_error\n" +
+			"SELECT ?id ?creationDate ?name ?experimentLabel ?correlation ?root_mean_squared_error\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
 			"?uri inqle:id ?id\n" +
 			". ?uri inqle:creationDate ?creationDate\n" +
 			". OPTIONAL { ?uri inqle:name ?name }\n" +
+			". OPTIONAL { ?uri inqle:experimentLabelArc ?experimentLabelArc .\n" +
+			"?experimentLabelArc inqle:stringRepresentation ?experimentLabel}\n" +
 			". OPTIONAL { ?uri inqle:correlation ?correlation }\n" +
 			". OPTIONAL { ?uri inqle:root_mean_squared_error ?root_mean_squared_error }\n" +
 				". ?uri a ?classUri\n" +

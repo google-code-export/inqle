@@ -129,6 +129,16 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 		setExperimentType(objectToBeCloned.getExperimentType());
 		setExperimentClassPath(objectToBeCloned.getExperimentClassPath());
 	}
+
+	public String getStringRepresentation() {
+		String s = getClass().toString() + " {\n";
+		//s += super.toString();
+		s += "[experimentType=" + experimentType + "]\n";
+		s += "[experimentClassPath=" + experimentClassPath + "]\n";
+		s += "[experimentXml=" + experimentXml + "]\n";
+		s += "}";
+		return s;
+	}
 	
 //	public void replicate(RapidMinerExperiment objectToClone) {
 //		clone(objectToClone);
