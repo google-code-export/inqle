@@ -20,6 +20,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 public class BeanViewer extends Viewer implements ISelectionListener {
 
 	private Composite composite;
+	private Text idWidget;
 	private Text nameWidget;
 	private Text classWidget;
 	private Text descriptionWidget;
@@ -41,10 +42,17 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		composite.setLayout(gridLayout);
 		
 		Label l = new Label(composite, SWT.NONE);
+		l.setText("ID");
+		//l.setFont(boldFont);
+		idWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
+	  GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	  idWidget.setLayoutData(gridData);
+	  
+		l = new Label(composite, SWT.NONE);
 		l.setText("Name");
 		//l.setFont(boldFont);
 		nameWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
-	  GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	  gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	  nameWidget.setLayoutData(gridData);
 	  
 	  l = new Label(composite, SWT.NONE);
@@ -103,6 +111,7 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		if (bean != null) {
 			clazz = bean.getClass().getName();
 		}
+		String id = "";
 		String name = "";
 		String description = "";
 		String detail = "";
@@ -116,11 +125,18 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 			//MessageDialog.openInformation(composite.getShell(), "Selected object '" + namedAndDescribed.getName() + "'", "Description:\n" + namedAndDescribed.getDescription());
 		}
 		if (bean instanceof IBasicJenabean) {
-			detail = JenabeanWriter.toString(bean);
 			log.trace("...is IBasicJenabean...");
+			try {
+				id = ((IBasicJenabean)bean).getId();
+				detail = JenabeanWriter.toString(bean);
+			} catch (Exception e) {
+				log.error("Unable to write IBasicJenabean to RDF:\nname=" + name + "\ndescription=" + description + "\nclass=" + clazz, e);
+			}
 		  //MessageDialog.openInformation(composite.getShell(), "Detail=", JenabeanWriter.toString(bean));
 		}
-		
+		if (id == null) {
+			id = "";
+		}
 		if (name == null) {
 			name = "";
 		}
@@ -133,8 +149,8 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		if (detail == null) {
 			detail = "";
 		}
-		log.trace("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
-		
+		//log.info("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
+		idWidget.setText(id);
 		nameWidget.setText(name);
 		classWidget.setText(clazz);
 		descriptionWidget.setText(description);

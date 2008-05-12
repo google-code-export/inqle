@@ -178,7 +178,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		resultDescription.setText("Showing results " + (offset + 1) + " to " + (rows.size() + offset));
 		
 		WritableList writableListInput = new WritableList(rows, tableBeanClass);
-		log.info("writableListInput=" + writableListInput);
+		log.trace("writableListInput=" + writableListInput);
 		tableViewer.setInput(writableListInput);
 		//tableViewer.getTable().pack();
 		tableViewer.refresh(false);
@@ -208,13 +208,13 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	
 	public void doQuery() {
 		String sparql = getSparql();
-		log.info("Querying w/ SPARQL:" + sparql);
+		log.trace("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria(getPersister());
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
 		queryCriteria.addNamedModel(persister.getAppInfo().getRepositoryNamedModel());
 		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		log.info("Received these results: " + resultTable.getResultList());
+		log.trace("Received these results: " + resultTable.getResultList());
 		setRdfTable(resultTable);
 	}
 
