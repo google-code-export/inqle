@@ -26,7 +26,7 @@ public class ExperimentResult extends UniqueJenabean {
 	//private PerformanceVector performanceVector;
 	//private LearningCycle learningCycle;
 	//private Exception learningException;
-	private ISampler sampler;
+	private String samplerClassName;
 	private Arc experimentLabelArc;
 	private Collection<Arc> experimentAttributeArcs;
 	private String experimentSubject;
@@ -38,7 +38,7 @@ public class ExperimentResult extends UniqueJenabean {
 		String s = getClass().toString() + " {";
 		s += super.toString();
 		//s += "[learningCycle=" + learningCycle + "]\n";
-		s += "[sampler=" + sampler + "]\n";
+		s += "[samplerClassName=" + samplerClassName + "]\n";
 		s += "[experimentSubject=" + experimentSubject + "]\n";
 		s += "[experimentAttributeArcs=" + experimentAttributeArcs + "]\n";
 		s += "[experimentLabelArc=" + experimentLabelArc + "]\n";
@@ -110,9 +110,9 @@ public class ExperimentResult extends UniqueJenabean {
 //		this.learningException = learningException;
 //	}
 
-	public void setSampler(ISampler sampler) {
-		this.sampler = sampler;
-	}
+//	public void setSampler(ISampler sampler) {
+//		this.sampler = sampler;
+//	}
 
 	public void setExperimentLabelArc(Arc experimentLabelArc) {
 		this.experimentLabelArc = experimentLabelArc;
@@ -146,9 +146,9 @@ public class ExperimentResult extends UniqueJenabean {
 		return experimentLabelArc;
 	}
 
-	public ISampler getSampler() {
-		return sampler;
-	}
+//	public ISampler getSampler() {
+//		return sampler;
+//	}
 
 	public double getCorrelation() {
 		return correlation;
@@ -164,6 +164,14 @@ public class ExperimentResult extends UniqueJenabean {
 
 	public void setRoot_mean_squared_error(double root_mean_squared_error) {
 		this.root_mean_squared_error = root_mean_squared_error;
+	}
+
+	public String getSamplerClassName() {
+		return samplerClassName;
+	}
+
+	public void setSamplerClassName(String samplerClassName) {
+		this.samplerClassName = samplerClassName;
 	}
 
 
