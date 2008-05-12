@@ -137,11 +137,16 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		ExperimentResult experimentResult = runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
 		
 		//add metadata to experimentResult
+		DataColumn idColumn = resultDataTable.getColumn(resultDataTable.getIdColumnIndex());
+		
 		experimentResult.setSamplerClassName(samplerToUse.getClass().getName());
+		experimentResult.setExperimentSubjectArc(idColumn.getArc());
 		experimentResult.setExperimentLabelArc(labelDataColumn.getArc());
-//		experimentResult.setRapidMinerExperiment(experimentToUse);
-		experimentResult.setExperimentAttributeArcs(resultDataTable.getLearnableColumnArcs());
-		experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
+		experimentResult.setRapidMinerExperiment(experimentToUse);
+		experimentResult.setExperimentAttributeArcs(resultDataTable.getLearnableColumnArcSet());
+		//experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
+		log.info("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
+		log.info("resultDataTable.getLearnableColumnArcSet()=" + resultDataTable.getLearnableColumnArcSet());
 		return experimentResult;
 	}
 
@@ -150,7 +155,8 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			return getSampler();
 		}
 		
-		List<ISampler> availableSamplers = SamplerLister.listSamplers();
+		SamplerLister lister = new SamplerLister(persister);
+		List<ISampler> availableSamplers = lister.listSamplers();
 		int randomIndex = RandomListChooser.chooseRandomIndex(availableSamplers.size());
 		return availableSamplers.get(randomIndex);
 	}
@@ -205,7 +211,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		//the results to return
 		ExperimentResult experimentResult = new ExperimentResult();
 		//get a RapidMiner Process object, representing the Experiment
-		com.rapidminer.Process process = rapidMinerExperiment.getProcess();
+		com.rapidminer.Process process = rapidMinerExperiment.createProcess();
 		
 		if (process == null) {
 			log.warn("Unable to retrieve a RapidMiner experiment/process object for rapidMinerExperiment" + rapidMinerExperiment.getExperimentClassPath());

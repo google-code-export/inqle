@@ -28,7 +28,7 @@ public class RapidMinerExperimentLister {
 			experiments.add(experiment);
 		}
 		
-		//TODO add experiments from RDF
+		//TODO v0.2: add experiments from RDF
 		
 		return experiments;
 	}
