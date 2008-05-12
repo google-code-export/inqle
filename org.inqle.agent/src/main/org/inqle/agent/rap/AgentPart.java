@@ -148,16 +148,16 @@ public class AgentPart extends PartType {
 	@Override
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		IAgent agent = agentFactory.getBaseAgent();
-		if (agent.getMode() == IAgent.STOPPED) {
+		int mode = agent.getMode();
+		if (mode == IAgent.STOPPED) {
 			//"Run this agent" action
-			log.trace("Adding agentPart w/ agentFactory=" + this.getAgentFactory());
+			log.trace("Adding 'Run this agent' for agentFactory=" + this.getAgentFactory());
 			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow, persister);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
 			manager.add(runAgentAction);
 		}
 		
-		if (agent.getMode() == IAgent.RUNNING) {
-			//"Run this agent" action
+		if (mode == IAgent.RUNNING) {
 			StopAgentAction stopAgentAction = new StopAgentAction("Stop this agent", this);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
 			manager.add(stopAgentAction);

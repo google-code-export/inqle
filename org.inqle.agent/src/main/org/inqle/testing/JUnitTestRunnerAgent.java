@@ -51,7 +51,8 @@ public class JUnitTestRunnerAgent extends AAgent {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		mode = RUNNING;
+		setRunning();
+		
 		log.info("Starting to run()");
 		
 		IJUnitTest[] testsToRun =	selectTestsToRun();
@@ -60,7 +61,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 		log.info("Running these tests: " + getTestsToRun());
 		//run each test
 		for (IJUnitTest junitTest: testsToRun) {
-			if (mode != RUNNING) {
+			if (getMode() != RUNNING) {
 				break;
 			}
 			
@@ -73,7 +74,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 			log.info("getFailureCount()=" + result.getFailureCount());
 		}
 		
-		mode = STOPPED;
+		setStopped();
 	}
 
 	private IJUnitTest[] getTestsToRun() {
