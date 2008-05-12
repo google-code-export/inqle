@@ -79,14 +79,12 @@ import thewebsemantic.Namespace;
 			return newArcStep;
 		}
 		
-		@Override
-		public String toString() {
+		public String getStringRepresentation() {
 			String string = predicate;
 			if (object != null) {
 				string += " = " + object;
 			}
 			return string;
 		}
-		
 		
 	}

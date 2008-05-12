@@ -12,6 +12,7 @@ import java.util.List;
  * @author David Donohue
  * Feb 22, 2008
  */
+@Deprecated
 public class Arcs {
 	private List<Arc> arcs = new ArrayList<Arc>();
 	

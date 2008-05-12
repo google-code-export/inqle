@@ -20,4 +20,6 @@ import org.inqle.core.domain.INamedAndDescribed;
  */
 public interface IGlobalJenabean extends INamedAndDescribed {
 	
+	public String getStringRepresentation();
+	public void setStringRepresentation(String stringRepresentation);
 }
