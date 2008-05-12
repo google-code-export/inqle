@@ -9,7 +9,7 @@ Below are the milestones, past and future, for project INQLE
 
 = Details =
 
-(in process, expected June 2008)
+(in process, expected to be released in June 2008)
 Version 0.1
   * Eclipse RAP-based user interface, in Equinox OSGi container
   * Management of Jena-based RDF databases
