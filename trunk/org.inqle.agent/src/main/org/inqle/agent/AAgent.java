@@ -3,10 +3,12 @@
  */
 package org.inqle.agent;
 
+import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.testing.JUnitTestRunnerAgent;
 
 /**
  * Abstract base class for creating agents.  New agent classes
@@ -26,8 +28,11 @@ import org.inqle.data.rdf.jenabean.UniqueJenabean;
 public abstract class AAgent extends UniqueJenabean implements IAgent {
 
 	public static final int CYCLE_CONTINUOUSLY = -1;
-	protected int mode = STOPPED;
+	//protected int mode = STOPPED;
 	protected int cycleCount = 0;
+	
+	private static Logger log = Logger.getLogger(AAgent.class);
+	
 	/**
 	 * the number of times to cycle.  0 = cycle continuously
 	 */
@@ -45,17 +50,30 @@ public abstract class AAgent extends UniqueJenabean implements IAgent {
 		super.replicate(objectToClone);
 	}
 	
-	public void stop() {
-		mode = STOPPING;
+	public void setRunning() {
+		AgentRegistry registry = AgentRegistry.getInstance();
+		registry.registerRunning(this);
+	}
+	
+	public void setStopped() {
+		AgentRegistry registry = AgentRegistry.getInstance();
+		registry.registerStopped(this);
+	}
+	
+	public void setStopping() {
+		AgentRegistry registry = AgentRegistry.getInstance();
+		registry.registerStopping(this);
 	}
 
 	public int getMode() {
-		return mode;
+		//return mode;
+		AgentRegistry registry = AgentRegistry.getInstance();
+		return registry.getMode(this);
 	}
 
-	public void setMode(int mode) {
-		this.mode = mode;
-	}
+//	public void setMode(int mode) {
+//		this.mode = mode;
+//	}
 
 	public int getStoppingPoint() {
 		return stoppingPoint;

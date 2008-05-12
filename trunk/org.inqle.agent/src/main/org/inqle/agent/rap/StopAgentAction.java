@@ -38,7 +38,7 @@ public class StopAgentAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		if (agentToStop != null) {
-			agentToStop.stop();
+			agentToStop.setStopping();
 			agentPart.getParent().fireUpdatePart();
 		}
 	}
