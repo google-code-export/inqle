@@ -4,14 +4,17 @@
 package org.inqle.experiment.rapidminer;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.inqle.core.util.JavaHasher;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.sampling.ISampler;
 
+import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 import com.rapidminer.operator.performance.PerformanceVector;
@@ -23,13 +26,22 @@ import com.rapidminer.operator.performance.PerformanceVector;
 @Namespace(RDF.INQLE)
 public class ExperimentResult extends UniqueJenabean {
 
+	@Override
+	@Id
+	public String getId() {
+		if (id == null) {
+			id = UUID.randomUUID().toString();
+		}
+		return id;
+	}
+	
 	//private PerformanceVector performanceVector;
 	//private LearningCycle learningCycle;
 	//private Exception learningException;
 	private String samplerClassName;
 	private Arc experimentLabelArc;
-	private Collection<Arc> experimentAttributeArcs;
-	private String experimentSubject;
+	private ArcSet experimentAttributeArcs;
+	private Arc experimentSubjectArc;
 	private IRapidMinerExperiment rapidMinerExperiment;
 	private double correlation;
 	private double root_mean_squared_error;
@@ -39,7 +51,7 @@ public class ExperimentResult extends UniqueJenabean {
 		s += super.toString();
 		//s += "[learningCycle=" + learningCycle + "]\n";
 		s += "[samplerClassName=" + samplerClassName + "]\n";
-		s += "[experimentSubject=" + experimentSubject + "]\n";
+		s += "[experimentSubject=" + experimentSubjectArc + "]\n";
 		s += "[experimentAttributeArcs=" + experimentAttributeArcs + "]\n";
 		s += "[experimentLabelArc=" + experimentLabelArc + "]\n";
 		s += "[rapidMinerExperiment=" + rapidMinerExperiment + "]\n";
@@ -62,7 +74,7 @@ public class ExperimentResult extends UniqueJenabean {
 	}
 	
 	public void clone(ExperimentResult copyFieldsFrom) {
-		setExperimentSubject(copyFieldsFrom.getExperimentSubject());
+		setExperimentSubjectArc(copyFieldsFrom.getExperimentSubjectArc());
 		setExperimentAttributeArcs(copyFieldsFrom.getExperimentAttributeArcs());
 		setExperimentLabelArc(copyFieldsFrom.getExperimentLabelArc());
 		setRapidMinerExperiment(copyFieldsFrom.getRapidMinerExperiment());
@@ -118,12 +130,12 @@ public class ExperimentResult extends UniqueJenabean {
 		this.experimentLabelArc = experimentLabelArc;
 	}
 
-	public void setExperimentAttributeArcs(Collection<Arc> experimentAttributeArcs) {
+	public void setExperimentAttributeArcs(ArcSet experimentAttributeArcs) {
 		this.experimentAttributeArcs = experimentAttributeArcs;
 	}
 
-	public void setExperimentSubject(String experimentSubject) {
-		this.experimentSubject = experimentSubject;
+	public void setExperimentSubjectArc(Arc experimentSubjectArc) {
+		this.experimentSubjectArc = experimentSubjectArc;
 	}
 
 	public void setRapidMinerExperiment(IRapidMinerExperiment rapidMinerExperiment) {
@@ -134,11 +146,11 @@ public class ExperimentResult extends UniqueJenabean {
 		return rapidMinerExperiment;
 	}
 
-	public String getExperimentSubject() {
-		return experimentSubject;
+	public Arc getExperimentSubjectArc() {
+		return experimentSubjectArc;
 	}
 
-	public Collection<Arc> getExperimentAttributeArcs() {
+	public ArcSet getExperimentAttributeArcs() {
 		return experimentAttributeArcs;
 	}
 

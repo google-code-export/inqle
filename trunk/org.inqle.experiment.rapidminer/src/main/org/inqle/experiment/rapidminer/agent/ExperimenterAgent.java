@@ -43,7 +43,7 @@ public class ExperimenterAgent extends AAgent {
 	}
 
 	public void run() {
-		mode = RUNNING;
+		setRunning();
 		log.info("Starting to run()");
 		LearningCycle learningCycleToRun = getLearningCycle();
 		if (learningCycleToRun == null) {
@@ -53,7 +53,7 @@ public class ExperimenterAgent extends AAgent {
 		log.info("Running this LearningCycle: " + learningCycleToRun);
 		cycleCount = 0;
 		//run each test
-		while (cycleCount != stoppingPoint && mode == RUNNING) {
+		while (cycleCount != stoppingPoint && getMode() == RUNNING) {
 			log.info("############### Running Cycle #" + cycleCount);
 			cycleCount++;
 			ExperimentResult experimentResult = learningCycleToRun.execute();
@@ -67,7 +67,7 @@ public class ExperimenterAgent extends AAgent {
 			cycleCount ++;
 		}
 		log.info("Exiting.  Completed " + cycleCount + " cycles.");
-		mode = STOPPED;
+		setStopped();
 		
 	}
 

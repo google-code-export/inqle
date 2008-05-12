@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.RDF;
 
+import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 /**
@@ -26,6 +27,16 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 
 	private static Logger log = Logger.getLogger(RapidMinerExperiment.class);
 	private String experimentType;
+	
+	@Override
+	@Id
+	public String getId() {
+		if (experimentClassPath != null) {
+			return experimentClassPath;
+		} else {
+			return super.getId();
+		}
+	}
 	
 	/**
 	 * @see org.inqle.experiment.rapidminer.IRapidMinerExperiment#getExperimentFilePath()
@@ -79,7 +90,7 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 	/**
 	 * Get a RapidMiner Process object
 	 */
-	public com.rapidminer.Process getProcess() {
+	public com.rapidminer.Process createProcess() {
 		if (getExperimentXml() != null) {
 			try {
 				return new com.rapidminer.Process(getExperimentXml());
@@ -106,8 +117,8 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 		return experimentType;
 	}
 	
-	public void setExperimentType(String type) {
-		this.experimentType = type;
+	public void setExperimentType(String experimentType) {
+		this.experimentType = experimentType;
 	}
 	
 	public RapidMinerExperiment createClone() {
@@ -132,7 +143,6 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
-		//s += super.toString();
 		s += "[experimentType=" + experimentType + "]\n";
 		s += "[experimentClassPath=" + experimentClassPath + "]\n";
 		s += "[experimentXml=" + experimentXml + "]\n";

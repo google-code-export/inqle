@@ -25,5 +25,5 @@ public interface IRapidMinerExperiment extends IGlobalJenabean {
 	
 	public void setExperimentType(String type);
 	
-	public com.rapidminer.Process getProcess();
+	public com.rapidminer.Process createProcess();
 }
