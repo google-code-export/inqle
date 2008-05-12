@@ -65,4 +65,10 @@ public class TestJenabean {
 		System.out.println("Loaded beanWithInterfaceReloaded:" + JenabeanWriter.toString(beanWithInterfaceReloaded));
 		//assertEquals(beanWithInterface, beanWithInterfaceReloaded);
 	}
+	
+	@Test
+	public void writeGlobalJenabean() {
+		GlobalJenabeanObject globalJenabeanObject = new GlobalJenabeanObject();
+		JenabeanWriter.toString(globalJenabeanObject);
+	}
 }

@@ -15,7 +15,7 @@ import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.util.Converter;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
-import org.inqle.data.rdf.jenabean.Arcs;
+import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.RDF2Bean;
@@ -262,14 +262,14 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 	
 	/**
 	 * Get list of Jenabean IDs which match the provided class and the 
-	 * provided Arcs
+	 * provided ArcSet
 	 * @param clazz
-	 * @param arcs the Arcs object, containing how to restrict the 
+	 * @param arcSet the ArcSet object, containing how to restrict the 
 	 * list
 	 * @return
 	 */
-	public static List<String> getJenabeanIds(Class<?> clazz, Arcs arcs, QueryCriteria queryCriteria) {
-		String sparql = getSparqlJenabeanId(clazz, arcs);
+	public static List<String> getJenabeanIds(Class<?> clazz, ArcSet arcSet, QueryCriteria queryCriteria) {
+		String sparql = getSparqlJenabeanId(clazz, arcSet);
 		queryCriteria.setQuery(sparql);
 		List<String> results = selectSimpleList(queryCriteria, "id");
 		return results;
@@ -280,10 +280,10 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 	 * RDF object which is of the provided class and matches the provided
 	 * arcs
 	 * @param clazz the provided class
-	 * @param arcs
+	 * @param arcSet
 	 * @return
 	 */
-	public static String getSparqlJenabeanId(Class<?> clazz, Arcs arcs) {
+	public static String getSparqlJenabeanId(Class<?> clazz, ArcSet arcSet) {
 		TypeWrapper classWrapper = TypeWrapper.wrap(clazz);
 		String classBaseUri = classWrapper.inspect();
 		String classUri = classBaseUri + clazz.getCanonicalName();
@@ -293,14 +293,14 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 		sparql += "GRAPH ?g {\n";
 		sparql += "?uri a <" + classUri + "> \n";
 		sparql += " . ?uri <" + idPredicate + "> ?id \n";
-		sparql += getSparqlWhereFromArcs("?uri", arcs);
+		sparql += getSparqlWhereFromArcs("?uri", arcSet);
 		sparql += "} }\n";
 		return sparql;
 	}
 	
-	private static String getSparqlWhereFromArcs(String subject, Arcs arcs) {
+	private static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
 		String sparql = "";
-		for (Arc arc: arcs.getArcs()) {
+		for (Arc arc: arcSet.getArcs()) {
 			sparql += getSparqlWhereFromArc(subject, arc);
 		}
 		return sparql;
@@ -345,12 +345,12 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 	
 	/**
 	 * Retrieve a Collection of jenabeans which match the provided 
-	 * list of Arcs, from the specified model
+	 * list of ArcSet, from the specified model
 	 * @param clazz
 	 * @param model
 	 * @return
 	 */
-	public Collection<?> reconstituteList(Class<?> clazz, Arcs arcs, Model model, Persister persister) {
+	public Collection<?> reconstituteList(Class<?> clazz, ArcSet arcSet, Model model, Persister persister) {
 		RDF2Bean loader = new RDF2Bean(model);
 		Collection<?> objects = loader.load(clazz);
 		//log.debug("Retrieved these Connections:" + connections);

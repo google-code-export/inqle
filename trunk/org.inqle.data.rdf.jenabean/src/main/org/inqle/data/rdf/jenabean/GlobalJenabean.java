@@ -1,9 +1,18 @@
 package org.inqle.data.rdf.jenabean;
 
 import org.inqle.core.util.JavaHasher;
-
+import org.inqle.data.rdf.RDF;
 import thewebsemantic.Id;
+import thewebsemantic.Namespace;
 
+/**
+ * This class is intended to be a base class for objects, which are intended to be
+ * reusable and generatable by different INQLE servers.  When an object implementing IGlobalJenabean
+ * 
+ * @author David Donohue
+ * May 12, 2008
+ */
+@Namespace(RDF.INQLE)
 public abstract class GlobalJenabean extends BasicJenabean implements IGlobalJenabean {
 
 //	@Id
@@ -24,5 +33,9 @@ public abstract class GlobalJenabean extends BasicJenabean implements IGlobalJen
 	@Override
 	public String toString() {
 		return getStringRepresentation();
+	}
+	
+	public int compareTo(IGlobalJenabean anotherBean) {
+		return getStringRepresentation().compareTo(anotherBean.getStringRepresentation());
 	}
 }

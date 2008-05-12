@@ -1,5 +1,7 @@
 package org.inqle.data.rdf.jenabean;
 
+import java.net.URI;
+
 import org.inqle.data.rdf.RDF;
 import thewebsemantic.Namespace;
 
@@ -80,11 +82,16 @@ import thewebsemantic.Namespace;
 		}
 		
 		public String getStringRepresentation() {
-			String string = predicate;
+			String s = "<" + predicate + ">";
 			if (object != null) {
-				string += " = " + object;
+				s += "=";
+				if (object instanceof URI) {
+					s += "<" + object + ">";
+				} else {
+					s += object;
+				}
 			}
-			return string;
+			return s;
 		}
 		
 	}

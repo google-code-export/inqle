@@ -18,8 +18,9 @@ import org.inqle.core.domain.INamedAndDescribed;
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface IGlobalJenabean extends INamedAndDescribed {
+public interface IGlobalJenabean extends IBasicJenabean, Comparable<IGlobalJenabean> {
 	
 	public String getStringRepresentation();
 	public void setStringRepresentation(String stringRepresentation);
+	public int compareTo(IGlobalJenabean anotherBean);
 }
