@@ -13,7 +13,16 @@ public abstract class GlobalJenabean extends BasicJenabean implements IGlobalJen
 	@Id
 	@Override
 	public String getId() {
-		String hash = JavaHasher.hashSha256(toString());
+		String hash = JavaHasher.hashSha256(getStringRepresentation());
 		return hash;
+	}
+	
+	public void setStringRepresentation(String stringRepresentation) {
+		//do nothing, let the string representation be generated from the fields
+	}
+	
+	@Override
+	public String toString() {
+		return getStringRepresentation();
 	}
 }

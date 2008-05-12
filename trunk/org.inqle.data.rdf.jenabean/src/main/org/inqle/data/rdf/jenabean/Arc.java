@@ -47,7 +47,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 			return arc;
 		}
 		
-		public String toString() {
+		public String getStringRepresentation() {
 			String string = "Arc: {";
 			for (ArcStep arcStep: arcStepList) {
 				string += arcStep + " --> ";
