@@ -58,6 +58,7 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 		selectPredicatesPage.setQuery(SimpleSparqlSampler.SPARQL_GET_DISTINCT_PREDICATES);
 		selectPredicatesPage.setPropertyNames(Arrays.asList(new String[]{"predicate"}));
 		selectPredicatesPage.setKeyPropertyName("predicate");
+		selectPredicatesPage.setColumnWidth(500);
 		addPage(selectPredicatesPage);
 		
 //		ColumnAssignerPage columnAssignerPage = new ColumnAssignerPage(sampler, "Identify roles in learning");
@@ -66,21 +67,21 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 //		addPage(samplingResultsPage);
 	}
 
-	@Deprecated
-	private String getTestSparql() {
-		String sparql = 
-			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-			"PREFIX ja: <" + RDF.JA + ">\n" + 
-			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?uri ?class \n" +
-			"{\n" +
-			"GRAPH ?g {\n";
-			//"?uri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n";
-		sparql += " ?uri a ?classUri\n" +
-			" . ?classUri <" + RDF.JAVA_CLASS + "> ?class \n";
-		sparql += "\n} }\n";
-		return sparql;
-	}
+//	@Deprecated
+//	private String getTestSparql() {
+//		String sparql = 
+//			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+//			"PREFIX ja: <" + RDF.JA + ">\n" + 
+//			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+//			"SELECT ?uri ?class \n" +
+//			"{\n" +
+//			"GRAPH ?g {\n";
+//			//"?uri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n";
+//		sparql += " ?uri a ?classUri\n" +
+//			" . ?classUri <" + RDF.JAVA_CLASS + "> ?class \n";
+//		sparql += "\n} }\n";
+//		return sparql;
+//	}
 
 //	@Override
 //	public Object getBean() {

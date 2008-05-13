@@ -101,4 +101,6 @@ public interface ISampler extends IUniqueJenabean {
 	 * @return
 	 */
 	public DataTable execute(Persister persister);
+	
+	public ISampler createClone();
 }

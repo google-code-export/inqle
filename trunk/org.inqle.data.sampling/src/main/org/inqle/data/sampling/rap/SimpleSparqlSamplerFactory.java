@@ -49,11 +49,11 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 		return true;
 	}
 
-	public ISampler cloneSampler() {
-		SimpleSparqlSampler sampler = new SimpleSparqlSampler();
-		sampler.clone(getBaseSampler());
-		return sampler;
-	}
+//	public ISampler cloneSampler() {
+//		SimpleSparqlSampler sampler = new SimpleSparqlSampler();
+//		sampler.clone(getBaseSampler());
+//		return sampler;
+//	}
 
 	public ISampler newSampler() {
 		SimpleSparqlSampler sampler = new SimpleSparqlSampler();
@@ -79,19 +79,18 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 	}
 	
 	public ISamplerFactory cloneFactory() {
-		//log.info("SimpleSparqlSamplerFactory.clone()");
 		SimpleSparqlSamplerFactory newFactory = new SimpleSparqlSamplerFactory();
 		newFactory.setBaseSampler(baseSampler);
 		return newFactory;
 	}
 	
-	public ISamplerFactory cloneFactory(ISampler newBaseSampler) {
-		SimpleSparqlSampler newSSSampler = (SimpleSparqlSampler)newBaseSampler;
-		//log.info("SimpleSparqlSamplerFactory.clone(newBaseSampler)");
-		SimpleSparqlSamplerFactory newFactory = new SimpleSparqlSamplerFactory();
-		newFactory.setBaseSampler(newSSSampler);
-		return newFactory;
-	}
+//	public ISamplerFactory cloneFactory(ISampler newBaseSampler) {
+//		SimpleSparqlSampler newSSSampler = (SimpleSparqlSampler)newBaseSampler;
+//		//log.info("SimpleSparqlSamplerFactory.clone(newBaseSampler)");
+//		SimpleSparqlSamplerFactory newFactory = new SimpleSparqlSamplerFactory();
+//		newFactory.setBaseSampler(newSSSampler);
+//		return newFactory;
+//	}
 
 	public void setName(String name) {
 		this.name = name;

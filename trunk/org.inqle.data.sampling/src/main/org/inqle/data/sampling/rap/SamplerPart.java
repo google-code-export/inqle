@@ -17,6 +17,7 @@ import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
+import org.inqle.data.sampling.SamplerLister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 
@@ -69,25 +70,25 @@ public class SamplerPart extends PartType {
 		return samplerFactory;
 	}
 	
-	public static final String SPARQL_BEGIN = 
-		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-		"PREFIX ja: <" + RDF.JA + ">\n" + 
-		"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-		"SELECT ?id \n" +
-		"{\n" +
-		"GRAPH ?g {\n" +
-		"?samplerUri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n";
-	
-	public static final String SPARQL_END =
-		"\n} }\n";
-		
-	private String getSparqlToFindChildren() {
-		String sparql = SPARQL_BEGIN +
-			" . ?samplerUri a ?classUri\n" +
-			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + sampler.getClass().getName() + "\" \n" +
-			SPARQL_END;
-		return sparql;
-	}
+//	public static final String SPARQL_BEGIN = 
+//		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+//		"PREFIX ja: <" + RDF.JA + ">\n" + 
+//		"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+//		"SELECT ?id \n" +
+//		"{\n" +
+//		"GRAPH ?g {\n" +
+//		"?samplerUri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n";
+//	
+//	public static final String SPARQL_END =
+//		"\n} }\n";
+//		
+//	private String getSparqlToFindChildren() {
+//		String sparql = SPARQL_BEGIN +
+//			" . ?samplerUri a ?classUri\n" +
+//			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + sampler.getClass().getName() + "\" \n" +
+//			SPARQL_END;
+//		return sparql;
+//	}
 	
 	@Override
 	public IPart[] getChildren() {
@@ -106,20 +107,23 @@ public class SamplerPart extends PartType {
 		//initCount++;
 		//log.info("Sampler #" + samplerPartCount + ": initChildren #" + initCount);
 		//query for all RDBModel children
-		AppInfo appInfo = persister.getAppInfo();
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
-		queryCriteria.setQuery(getSparqlToFindChildren());
-		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		
-		//for each item in resultTable, add a ModelPart
-		childParts = new ArrayList<CustomizedSamplerPart>();
-		for (QuerySolution row: resultTable.getResultList()) {
-			Literal idLiteral = row.getLiteral("id");
-			log.debug("Reconstituting Sampler of class " + sampler.getClass() + ": " + idLiteral.getLexicalForm());
-			ISampler childSampler = (ISampler)Persister.reconstitute(sampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
+//		AppInfo appInfo = persister.getAppInfo();
+//		QueryCriteria queryCriteria = new QueryCriteria(persister);
+//		queryCriteria.setQuery(getSparqlToFindChildren());
+//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
+//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+//		
+//		//for each item in resultTable, add a ModelPart
+//		childParts = new ArrayList<CustomizedSamplerPart>();
+//		for (QuerySolution row: resultTable.getResultList()) {
+//			Literal idLiteral = row.getLiteral("id");
+//			log.debug("Reconstituting Sampler of class " + sampler.getClass() + ": " + idLiteral.getLexicalForm());
+//			ISampler childSampler = (ISampler)Persister.reconstitute(sampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
 			
-			ISamplerFactory childSamplerFactory = samplerFactory.cloneFactory(childSampler);
+		childParts = new ArrayList<CustomizedSamplerPart>();
+		for (ISampler childSampler: SamplerLister.listCustomSamplers(sampler, persister)) {
+			ISamplerFactory childSamplerFactory = samplerFactory.cloneFactory();
+			childSamplerFactory.setBaseSampler(childSampler);
 			CustomizedSamplerPart part = new CustomizedSamplerPart(childSamplerFactory);
 			part.setParent(this);
 			part.setPersister(persister);
@@ -146,7 +150,8 @@ public class SamplerPart extends PartType {
 //		manager.add(deleteSamplerAction);
 		
 		//"Clone this Sampler" action.  This wizard works with a clone of the base sampler
-		ISampler cloneOfSampler = samplerFactory.cloneSampler();
+		//ISampler cloneOfSampler = samplerFactory.cloneSampler();
+		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
 		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Clone this sampler", this, workbenchWindow, persister);
 		cloneSamplerWizardAction.setSampler(cloneOfSampler); 
 		manager.add(cloneSamplerWizardAction);

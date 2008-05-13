@@ -43,7 +43,7 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	 * base sampler except has unique ID.
 	 * @return the new sampler
 	 */
-	public ISampler cloneSampler();
+//	public ISampler cloneSampler();
 	
 	/**
 	 * Make an exact replica of the provided Sampler
@@ -86,6 +86,6 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	 * @param childSampler
 	 * @return
 	 */
-	public ISamplerFactory cloneFactory(ISampler childSampler);
+//	public ISamplerFactory cloneFactory(ISampler childSampler);
 	
 }

@@ -18,15 +18,11 @@ import com.hp.hpl.jena.rdf.model.Literal;
 
 public class SamplerLister {
 
-	private Persister persister;
+//	private Persister persister;
 
 	static Logger log = Logger.getLogger(SamplerLister.class);
 	
-	public SamplerLister(Persister persister) {
-		this.persister = persister;
-	}
-	
-	public List<ISampler> listCustomSamplers(ISampler baseSampler) {
+	public static List<ISampler> listCustomSamplers(ISampler baseSampler, Persister persister) {
 		List<ISampler> customSamplers = new ArrayList<ISampler>();
 		AppInfo appInfo = persister.getAppInfo();
 		QueryCriteria queryCriteria = new QueryCriteria(persister);
@@ -45,7 +41,7 @@ public class SamplerLister {
 		return customSamplers;
 	}
 		
-	public List<ISampler> listSamplers() {
+	public static List<ISampler> listSamplers(Persister persister) {
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		
 		//first add the base plugins
@@ -55,7 +51,7 @@ public class SamplerLister {
 			ISamplerFactory samplerFactory = (ISamplerFactory)object;
 			ISampler baseSampler = samplerFactory.newSampler();
 			samplers.add(baseSampler);
-			samplers.addAll(listCustomSamplers(baseSampler));
+			samplers.addAll(listCustomSamplers(baseSampler, persister));
 		}
 		
 		return samplers;
