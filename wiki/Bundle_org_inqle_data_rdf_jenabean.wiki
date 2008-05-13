@@ -4,7 +4,7 @@ Bundle *org.inqle.data.rdf.jenabean* is a packet of code, comprising part of INQ
 This bundle enables INQLE to work with semantic, RDF, data.
 It contains 2 toolkits for working with RDF data
   * [http://jena.sourceforge.net/ Jena Semantic Web Framework], maintained by [http://www.hpl.hp.com/ HP Labs] since 2000.  This framework facilitates many, many operations using RDF.  Most notably, it allows INQLE to do SPARQL Queries on RDF Databases and to bulk load RDF data from a file
-  * [http://code.google.com/p/jenabean/ Jenabean] for persisting Java objects to an RDF store and reconstituting them back from the RDF object store.  We call this ability to store Java objects as RDF "Object-RDF Persistence".
+  * [http://code.google.com/p/jenabean/ Jenabean] for persisting Java objects to an RDF store and reconstituting them back from the RDF object store.  We term this ability to store Java objects as RDF *Object-RDF Persistence*.
 
 = Details =
 
