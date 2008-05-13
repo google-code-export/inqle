@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.actions.DynaWizardDialog;
@@ -31,6 +32,7 @@ public class SamplerWizardAction extends Action {
 		this.samplerFactory = samplerPart.getSamplerFactory();
 		this.window = window;
 		this.persister = persister;
+//		log.info("Created SamplerWizardAction.");
 	}
 	
 
@@ -49,17 +51,20 @@ public class SamplerWizardAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
+		log.trace("Running SamplerWizardAction");
 		//SimpleSparqlSampler testSampler = new SimpleSparqlSampler();
-		//log.info(JenabeanWriter.toString(testSampler));
+//		log.info("Running SamplerWizardAction for sampler: " + JenabeanWriter.toString(sampler));
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		ISamplerWizard wizard = null;
 		//if (mode == MODE_RUN) {
 			//wizard = new SamplerRunnerWizard(sampler, window.getShell());
 		if (mode == MODE_OPEN) {
+			log.trace("Opening wizard...");
 			wizard = samplerFactory.createWizardForReplica(persister.getMetarepositoryModel(), persister, window.getShell());
 			wizard.setPart(samplerPart);
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();
+			log.trace("Opened wizard.");
 		} else if (mode == MODE_CLONE) {
 			sampler.setName("Clone of " + sampler.getName());
 			persister.persist(sampler, persister.getMetarepositoryModel());
