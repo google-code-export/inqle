@@ -43,8 +43,7 @@ public class LearningCycleWizard extends DynaWizard {
 		ListSelectorPage samplerSelectorPage = new ListSelectorPage(learningCycle, "sampler", "Select sampler to use", null);
 		samplerSelectorPage.setBeanItemClass(ISampler.class);
 		ISampler[] nullSamplerArray = {};
-		SamplerLister lister = new SamplerLister(persister);
-		samplerSelectorPage.setListItems(lister.listSamplers().toArray(nullSamplerArray));
+		samplerSelectorPage.setListItems(SamplerLister.listSamplers(persister).toArray(nullSamplerArray));
 		addPage(samplerSelectorPage);
 		
 		SamplingResultPage samplingResultsPage = new SamplingResultPage(learningCycle, "Result of Sampling");
