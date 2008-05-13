@@ -72,6 +72,8 @@ public class RdfTableSelectorPage extends BeanWizardPage {
 	private String keyPropertyName;
 
 	protected CheckboxTableViewer tableViewer;
+
+	private int columnWidth;
 	
 	/**
 	 * Create a new page.
@@ -110,7 +112,7 @@ public class RdfTableSelectorPage extends BeanWizardPage {
 			TableColumn column = new TableColumn(table,SWT.LEFT);
 			column.setText(propertyName);
 			column.setResizable(true);
-			column.setWidth(200);
+			column.setWidth(columnWidth);
 			
 			//column.pack();
 			log.debug("Added column: " + propertyName);
@@ -181,5 +183,9 @@ public class RdfTableSelectorPage extends BeanWizardPage {
 	 */
 	public void setKeyPropertyName(String keyPropertyName) {
 		this.keyPropertyName = keyPropertyName;		
+	}
+
+	public void setColumnWidth(int columnWidth) {
+		this.columnWidth = columnWidth;
 	}
 }
