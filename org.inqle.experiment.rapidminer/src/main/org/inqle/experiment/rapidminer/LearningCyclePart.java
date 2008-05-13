@@ -49,4 +49,9 @@ public class LearningCyclePart extends Part {
 	public Object getObject() {
 		return learningCycle;
 	}
+	
+	@Override
+	public String getIconPath() {
+		return ICON_PATH;
+	}
 }

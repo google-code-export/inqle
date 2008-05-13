@@ -155,8 +155,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			return getSampler();
 		}
 		
-		SamplerLister lister = new SamplerLister(persister);
-		List<ISampler> availableSamplers = lister.listSamplers();
+		List<ISampler> availableSamplers = SamplerLister.listSamplers(persister);
 		int randomIndex = RandomListChooser.chooseRandomIndex(availableSamplers.size());
 		return availableSamplers.get(randomIndex);
 	}
