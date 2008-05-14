@@ -2,7 +2,7 @@
 
 = Introduction =
 The list of tasks for this project can be seen here:
-http://code.google.com/p/inqle/issues/list?can=1&q=label%3AType-Task&sort=milestone+priority&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles
+http://code.google.com/p/inqle/issues/list?can=1&q=label:Type-Task&sort=-status+milestone+priority&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary
 
 Below are the milestones, past and future, for project INQLE
 
