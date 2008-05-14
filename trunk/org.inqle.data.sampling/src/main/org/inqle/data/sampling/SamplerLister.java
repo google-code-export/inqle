@@ -22,25 +22,30 @@ public class SamplerLister {
 
 	static Logger log = Logger.getLogger(SamplerLister.class);
 	
+//	public static List<ISampler> listCustomSamplers(ISampler baseSampler, Persister persister) {
+//		List<ISampler> customSamplers = new ArrayList<ISampler>();
+//		AppInfo appInfo = persister.getAppInfo();
+//		QueryCriteria queryCriteria = new QueryCriteria(persister);
+//		queryCriteria.setQuery(getSparqlToFindChildren(baseSampler));
+//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
+//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+//		
+//		//for each item in resultTable, add a ModelPart
+//		for (QuerySolution row: resultTable.getResultList()) {
+//			Literal idLiteral = row.getLiteral("id");
+//			log.debug("Reconstituting Sampler of class " + baseSampler.getClass() + ": " + idLiteral.getLexicalForm());
+//			ISampler customSampler = (ISampler)Persister.reconstitute(baseSampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
+//			customSamplers.add(customSampler);
+//		}
+//		
+//		return customSamplers;
+//	}
+	
+	@SuppressWarnings("unchecked")
 	public static List<ISampler> listCustomSamplers(ISampler baseSampler, Persister persister) {
-		List<ISampler> customSamplers = new ArrayList<ISampler>();
-		AppInfo appInfo = persister.getAppInfo();
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
-		queryCriteria.setQuery(getSparqlToFindChildren(baseSampler));
-		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		
-		//for each item in resultTable, add a ModelPart
-		for (QuerySolution row: resultTable.getResultList()) {
-			Literal idLiteral = row.getLiteral("id");
-			log.debug("Reconstituting Sampler of class " + baseSampler.getClass() + ": " + idLiteral.getLexicalForm());
-			ISampler customSampler = (ISampler)Persister.reconstitute(baseSampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
-			customSamplers.add(customSampler);
-		}
-		
-		return customSamplers;
+		return (List<ISampler>) persister.reconstituteAll(baseSampler.getClass());
 	}
-		
+	
 	public static List<ISampler> listSamplers(Persister persister) {
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		
@@ -58,19 +63,19 @@ public class SamplerLister {
 	}
 	
 	
-	private static String getSparqlToFindChildren(ISampler sampler) {
-		String sparql = "PREFIX rdf: <" + RDF.RDF + ">\n" + 
-			"PREFIX ja: <" + RDF.JA + ">\n" + 
-			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?id \n" +
-			"{\n" +
-			"GRAPH ?g {\n" +
-			"?samplerUri inqle:id ?id \n" +
-			" . ?samplerUri a ?classUri\n" +
-			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + 
-			sampler.getClass().getName()  +
-			"\" \n" +
-			"\n} }\n";
-		return sparql;
-	}
+//	private static String getSparqlToFindChildren(ISampler sampler) {
+//		String sparql = "PREFIX rdf: <" + RDF.RDF + ">\n" + 
+//			//"PREFIX ja: <" + RDF.JA + ">\n" + 
+//			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+//			"SELECT ?id \n" +
+//			"{\n" +
+//			"GRAPH ?g {\n" +
+//			"?samplerUri inqle:id ?id \n" +
+//			" . ?samplerUri a ?classUri\n" +
+//			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + 
+//			sampler.getClass().getName()  +
+//			"\" \n" +
+//			"\n} }\n";
+//		return sparql;
+//	}
 }
