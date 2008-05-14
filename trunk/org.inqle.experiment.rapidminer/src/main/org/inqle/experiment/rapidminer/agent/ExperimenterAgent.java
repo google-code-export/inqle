@@ -72,7 +72,7 @@ public class ExperimenterAgent extends AAgent {
 	}
 
 	private LearningCycle selectRandomLearningCycle() {
-		List<LearningCycle> allLearningCycles = LearningCycleLister.listLearningCycles(persister);
+		List<LearningCycle> allLearningCycles = LearningCycleLister.listAllLearningCycles(persister);
 		int randomIndex = RandomListChooser.chooseRandomIndex(allLearningCycles.size());
 		return allLearningCycles.get(randomIndex);
 	}

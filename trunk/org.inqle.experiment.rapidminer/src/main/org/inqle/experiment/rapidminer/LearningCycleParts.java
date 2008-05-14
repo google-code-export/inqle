@@ -27,6 +27,9 @@ public class LearningCycleParts extends PartType {
 	
 	private static final String ICON_PATH = "org/inqle/experiment/images/learning_cycle.gif";
 	
+	//this part contains the base learning cycle
+	private LearningCycle learningCycle = new LearningCycle();
+	
 	@Override
 	public IPart[] getChildren() {
 		if (! this.childrenIntialized ) {
@@ -42,7 +45,7 @@ public class LearningCycleParts extends PartType {
 	
 	public void initChildren() {
 		childParts = new ArrayList<LearningCyclePart>();
-		for (LearningCycle learningCycle: LearningCycleLister.listLearningCycles(persister)) {
+		for (LearningCycle learningCycle: LearningCycleLister.listCustomizedLearningCycles(persister)) {
 			if (learningCycle == null) {
 				log.warn("Found Learning Cycle that is null; skipping");
 			}
@@ -60,7 +63,7 @@ public class LearningCycleParts extends PartType {
 	 */
 	@Override
 	public String getName() {
-		return "Learning Cycles";
+		return "Learning Cycle";
 	}
 	
 	@Override
