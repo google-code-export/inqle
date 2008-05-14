@@ -10,6 +10,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.PartType;
+import org.inqle.agent.AgentLister;
 import org.inqle.agent.IAgent;
 import org.inqle.core.extensions.util.ExtensionFactory;
 
@@ -36,9 +37,17 @@ public class AgentParts extends PartType {
 			return nullIPartArr;
 		}
 		List<IPart> parts = new ArrayList<IPart>();
-		for (Object object: objects) {
-			if (object == null) continue;
-			IAgentFactory agentFactory = (IAgentFactory)object;
+//		for (Object object: objects) {
+//			if (object == null) continue;
+//			IAgentFactory agentFactory = (IAgentFactory)object;
+//			agentFactory.setPersister(persister);
+//			AgentPart part = new AgentPart(agentFactory);
+//			part.setParent(this);
+//			part.setPersister(persister);
+//			part.addListener(listener);
+//			parts.add(part);
+//		}
+		for (IAgentFactory agentFactory: AgentLister.listAgentFactories()) {
 			agentFactory.setPersister(persister);
 			AgentPart part = new AgentPart(agentFactory);
 			part.setParent(this);

@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.agent.AgentLister;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
@@ -83,26 +84,26 @@ public class AgentPart extends PartType {
 		return agentFactory;
 	}
 	
-	public static final String SPARQL_BEGIN = 
-		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-		"PREFIX ja: <" + RDF.JA + ">\n" + 
-		"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-		"SELECT ?id \n" +
-		"{\n" +
-		"GRAPH ?g {\n" +
-		"?agentUri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n";
-	
-	public static final String SPARQL_END =
-		"\n} }\n";
+//	public static final String SPARQL_BEGIN = 
+//		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+//		"PREFIX ja: <" + RDF.JA + ">\n" + 
+//		"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+//		"SELECT ?id \n" +
+//		"{\n" +
+//		"GRAPH ?g {\n" +
+//		"?agentUri inqle:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?id \n";
+//	
+//	public static final String SPARQL_END =
+//		"\n} }\n";
 		
-	private String getSparqlToFindChildren() {
-		IAgent agent = agentFactory.getBaseAgent();
-		String sparql = SPARQL_BEGIN +
-			" . ?agentUri a ?classUri\n" +
-			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + agent.getClass().getName() + "\" \n" +
-			SPARQL_END;
-		return sparql;
-	}
+//	private String getSparqlToFindChildren() {
+//		IAgent agent = agentFactory.getBaseAgent();
+//		String sparql = SPARQL_BEGIN +
+//			" . ?agentUri a ?classUri\n" +
+//			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + agent.getClass().getName() + "\" \n" +
+//			SPARQL_END;
+//		return sparql;
+//	}
 	
 	@Override
 	public IPart[] getChildren() {
@@ -122,19 +123,20 @@ public class AgentPart extends PartType {
 		//initCount++;
 		//log.info("Agent #" + agentPartCount + ": initChildren #" + initCount);
 		//query for all RDBModel children
-		AppInfo appInfo = persister.getAppInfo();
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
-		queryCriteria.setQuery(getSparqlToFindChildren());
-		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+//		AppInfo appInfo = persister.getAppInfo();
+//		QueryCriteria queryCriteria = new QueryCriteria(persister);
+//		queryCriteria.setQuery(getSparqlToFindChildren());
+//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
+//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
 		
 		//for each item in resultTable, add a ModelPart
 		childParts = new ArrayList<CustomizedAgentPart>();
-		for (QuerySolution row: resultTable.getResultList()) {
-			Literal idLiteral = row.getLiteral("id");
-			log.debug("Reconstituting Agent of class " + agent.getClass() + ": " + idLiteral.getLexicalForm());
-			IAgent childAgent = (IAgent)Persister.reconstitute(agent.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
-			
+//		for (QuerySolution row: resultTable.getResultList()) {
+//			Literal idLiteral = row.getLiteral("id");
+//			log.debug("Reconstituting Agent of class " + agent.getClass() + ": " + idLiteral.getLexicalForm());
+//		IAgent childAgent = (IAgent)Persister.reconstitute(agent.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
+		
+		for (IAgent childAgent: AgentLister.listCustomAgents(agent, persister)) {
 			IAgentFactory childAgentFactory = agentFactory.cloneFactory(childAgent);
 			CustomizedAgentPart part = new CustomizedAgentPart(childAgentFactory);
 			part.setParent(this);
