@@ -31,11 +31,25 @@ public class InqleInfo {
 
 	public static final String DESCRIPTION_ATTRIBUTE = "description";
 
+	public static final String INQLE_VERSION = "0.1";
+
+	public static final String PROJECT_WEBSITE = "http://code.google.com/p/inqle/";
+
+	public static final String TEMP_FOLDER = "assets/temp/";
+
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
 	}
 	
 	public static String getPluginsDirectory() {
 		return System.getProperty(INQLE_HOME) + PLUGINS_FOLDER + "/";
+	}
+	
+	public static String getInqleVersion() {
+		return INQLE_VERSION;
+	}
+
+	public static String getTempDirectory() {
+		return System.getProperty("java.io.tmpdir");
 	}
 }
