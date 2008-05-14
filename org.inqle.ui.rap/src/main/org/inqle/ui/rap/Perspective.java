@@ -21,7 +21,8 @@ public class Perspective implements IPerspectiveFactory {
 		layout.addStandaloneView(PartsView.ID,  false, IPageLayout.LEFT, 0.25f, editorArea);
 		IFolderLayout folder = layout.createFolder(EDITOR_FOLDER_ID, IPageLayout.TOP, 0.5f, editorArea);
 		//folder.addPlaceholder(View.ID + ":*");
-		folder.addPlaceholder("org.inqle.*");
+		//folder.addPlaceholder("org.inqle.*");
+		folder.addPlaceholder("*");
 		folder.addView(DetailView.ID);
 		
 		layout.getViewLayout(PartsView.ID).setCloseable(false);

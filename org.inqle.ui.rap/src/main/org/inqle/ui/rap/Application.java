@@ -14,7 +14,9 @@ import org.inqle.core.util.InqleInfo;
 public class Application implements IEntryPoint {
 
 	public int createUI() {
-		System.setProperty(InqleInfo.INQLE_HOME, Platform.getInstallLocation().getURL().getPath());
+		String inqleHome = Platform.getInstallLocation().getURL().getPath();
+		System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
+		System.setProperty("java.io.tmpdir", inqleHome + InqleInfo.TEMP_FOLDER);
 		Display display = PlatformUI.createDisplay();
 		PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
 		return PlatformUI.RETURN_OK;

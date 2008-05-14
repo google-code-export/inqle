@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -147,12 +149,13 @@ public class LoadDataWizard extends Wizard {
 	    	public void uploadFinished(final UploadEvent uploadEvent) {
 	    		log.info("uploadFinished() received event " + uploadEvent);
 	        if (uploadEvent.isFinished()) {
-	          String uploadedFileName = filePath.getLastFileUploaded();
-	          
-	          File uploadedFile = new File (tempDir, uploadedFileName);
+	          //String uploadedFileName = filePath.getLastFileUploaded();
+	          File uploadedFile = filePath.getLastUploadedFile();
+	          //File uploadedFile = new File (tempDir, uploadedFileName);
 	          log.info("Uploaded file " + uploadedFile.getAbsolutePath());
 	          //File uploadedFile = new File(uploadedFileName);
-	          importFile(uploadedFile.getName());
+	          //importFile(uploadedFile.getName());
+	          importFile(uploadedFile);
 	        }
 	    	}
 	    });
@@ -196,15 +199,17 @@ public class LoadDataWizard extends Wizard {
 	}
 	
 	public void importFile(File file) {
+		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Importing Data...", "Importing file " + file.getName() + "..." );
     Loader loader = new Loader(modelToLoad);
     loader.load(file, defaultUri);
+    popup.close();
 	}
 	
-	public void importFile(String fileName) {
-    File file = new File( tempDir, fileName );
-    Loader loader = new Loader(modelToLoad);
-    loader.load(file, defaultUri);
-	}
+//	public void importFile(String fileName) {
+//    File file = new File( tempDir, fileName );
+//    Loader loader = new Loader(modelToLoad);
+//    loader.load(file, defaultUri);
+//	}
 
 	/**
 	 * Clean up the uploader to prevent javascript errors on repeated calls
