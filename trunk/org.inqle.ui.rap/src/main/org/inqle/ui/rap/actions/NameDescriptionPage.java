@@ -48,9 +48,10 @@ public class NameDescriptionPage extends BeanWizardPage {
     name.setLayoutData(gridData);
     
     new Label (composite, SWT.NONE).setText("Description");	
-		Text description = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		Text description = new Text(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 		//description.setSize (description.computeSize (500, 200));
 		//gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		//description.setEditable(true);
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		description.setLayoutData(gridData);
 		

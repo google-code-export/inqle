@@ -32,7 +32,7 @@ public class Databases extends PartType {
 	static Logger log = Logger.getLogger(Databases.class);
 	
 	public void initChildren() {
-		Collection<?> connectionObjects = persister.reconstituteList(Connection.class);
+		Collection<?> connectionObjects = persister.reconstituteAll(Connection.class);
 		for (Object connectionObject: connectionObjects) {
 			connections.add((Connection)connectionObject);
 		}
