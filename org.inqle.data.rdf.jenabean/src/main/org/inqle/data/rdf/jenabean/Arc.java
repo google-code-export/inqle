@@ -7,8 +7,6 @@ import java.util.List;
 
 import thewebsemantic.Namespace;
 
-import com.hp.hpl.jena.rdf.model.RDFNode;
-
 
 /**
 	 * This class represents an individual Arc

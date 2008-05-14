@@ -27,6 +27,7 @@ public class Loader {
 	}
 	
 	public void loadFile(String filePath, String defaultUri) {
+		log.info("loading file from: " + filePath);
 		File file = new File(filePath);
 		//String fileExtension = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
 		load(file, defaultUri);
