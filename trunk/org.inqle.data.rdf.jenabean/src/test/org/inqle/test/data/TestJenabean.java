@@ -71,4 +71,39 @@ public class TestJenabean {
 		GlobalJenabeanObject globalJenabeanObject = new GlobalJenabeanObject();
 		JenabeanWriter.toString(globalJenabeanObject);
 	}
+	
+	//@Test
+	public void testJenabeanArraysOfJenabeans() {
+		BeanWithString bean1 = new BeanWithString();
+		bean1.setId("bean1");
+		bean1.setString("string1");
+		BeanWithString bean2 = new BeanWithString();
+		bean2.setId("bean2");
+		bean2.setString("string2");
+		BeanWithString[] beanArray = new BeanWithString[] {
+				bean1,
+				bean2
+		};
+		
+		BeanWithArrays beanWithArrays = new BeanWithArrays();
+		beanWithArrays.setId("beanWithArrays");
+		beanWithArrays.setBeanArray(beanArray);
+		
+		//save the beanWithArrays
+		Model memoryModel = ModelFactory.createDefaultModel();
+		
+		Bean2RDF writer = new Bean2RDF(memoryModel);
+		writer.save(beanWithArrays);
+		System.out.println("Saved beanWithArrays:" + JenabeanWriter.toString(beanWithArrays));
+		
+		//load the beanWithArrays
+		RDF2Bean reader = new RDF2Bean(memoryModel);
+		BeanWithArrays beanWithArraysReloaded = null;
+		try {
+			beanWithArraysReloaded = (BeanWithArrays)reader.loadDeep(BeanWithArrays.class, "beanWithArrays");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Loaded beanWithArraysReloaded:" + JenabeanWriter.toString(beanWithArraysReloaded));
+	}
 }

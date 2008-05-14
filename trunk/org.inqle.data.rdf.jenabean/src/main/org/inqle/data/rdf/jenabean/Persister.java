@@ -585,8 +585,8 @@ public class Persister {
 	
 	public List<NamedModel> listNamedModels() {
 		List<NamedModel> namedModels = new ArrayList<NamedModel>();
-		namedModels.addAll((Collection<? extends NamedModel>) reconstituteList(RDBModel.class));
-		namedModels.addAll((Collection<? extends NamedModel>) reconstituteList(FileModel.class));
+		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(RDBModel.class));
+		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(FileModel.class));
 		return namedModels;
 	}
 	
@@ -596,8 +596,8 @@ public class Persister {
 	 * @param model
 	 * @return
 	 */
-	public Collection<?> reconstituteList(Class<?> clazz) {
-		return reconstituteList(clazz, getMetarepositoryModel());
+	public Collection<?> reconstituteAll(Class<?> clazz) {
+		return reconstituteAll(clazz, getMetarepositoryModel());
 	}
 	
 	/**
@@ -606,7 +606,7 @@ public class Persister {
 	 * @param model
 	 * @return
 	 */
-	public Collection<?> reconstituteList(Class<?> clazz, Model model) {
+	public Collection<?> reconstituteAll(Class<?> clazz, Model model) {
 		RDF2Bean loader = new RDF2Bean(model);
 		Collection<?> objects = loader.loadDeep(clazz);
 		//log.debug("Retrieved these Connections:" + connections);
