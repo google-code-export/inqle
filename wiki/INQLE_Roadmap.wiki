@@ -7,16 +7,24 @@ http://code.google.com/p/inqle/issues/list?can=1&q=label:Type-Task&sort=-status+
 Below are the milestones, past and future, for project INQLE
 
 
-= Details =
+= Releases =
+
+==Version 0.1==
+First release with basic functionality for local data.
 
 (in process, expected to be released in June 2008)
-Version 0.1
   * Eclipse RAP-based user interface, in Equinox OSGi container
   * Management of Jena-based RDF databases
-  * Single sampling algorithm: SimpleSparqlSampler, which extracts exampleset, in which each row has common set of predicates
+  * Single sampling algorithm: SimpleSparqlSampler, which extracts example set, in which each row has common set of predicates
   * RapidMiner-based experiments
   * Jenabean-based Object-RDF persistence
   * Full support for running the learning cycle
   * Extensible, runnable agent plugin type, including agent for running 
   * support for customization of LearningCycle and/or its components
   * viewing history of experiment results
+
+==Version 0.2==
+Enhanced connectivity to data.
+
+  * Sampling algorithms which combine local with remote data
+  * More to come...
