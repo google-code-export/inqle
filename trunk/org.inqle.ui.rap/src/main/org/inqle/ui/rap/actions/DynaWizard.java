@@ -11,6 +11,7 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
+import org.inqle.ui.rap.pages.SingleTextPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -56,10 +57,10 @@ public abstract class DynaWizard extends Wizard {
 	public boolean performFinish() {
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
-		log.info("Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of size:" + saveToModel.size());
+		log.trace("Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of size:" + saveToModel.size());
 		persister.persist(getBean(), saveToModel, true);
-		
-		if (part != null) {
+		log.info("Persisted.  Now update UI...");
+		if (part != null && part.getParent() != null) {
 			part.getParent().fireUpdatePart();
 		}
 		return true;

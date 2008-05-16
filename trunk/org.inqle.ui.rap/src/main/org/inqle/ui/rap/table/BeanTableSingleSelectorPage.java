@@ -33,8 +33,8 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
-import org.inqle.ui.rap.actions.BeanWizardPage;
-import org.inqle.ui.rap.actions.DynaWizardPage;
+import org.inqle.ui.rap.pages.BeanWizardPage;
+import org.inqle.ui.rap.pages.DynaWizardPage;
 
 /**
  * This generates a wizard page which has a table of data.  

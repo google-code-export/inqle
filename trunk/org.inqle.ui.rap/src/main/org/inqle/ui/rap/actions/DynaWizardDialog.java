@@ -8,6 +8,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.ui.rap.pages.DynaWizardPage;
 
 /**
  * This class intercepts a few wizard events
