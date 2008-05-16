@@ -3,8 +3,8 @@ package org.inqle.experiment.rapidminer;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.ui.rap.actions.BeanWizardPage;
-import org.inqle.ui.rap.actions.DynaWizardPage;
+import org.inqle.ui.rap.pages.BeanWizardPage;
+import org.inqle.ui.rap.pages.DynaWizardPage;
 
 
 public class SamplerSelectorPage extends BeanWizardPage {

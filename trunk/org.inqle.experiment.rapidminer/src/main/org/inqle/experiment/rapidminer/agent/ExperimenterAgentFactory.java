@@ -5,8 +5,6 @@ import org.inqle.agent.IAgent;
 import org.inqle.agent.rap.AAgentFactory;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.agent.rap.IAgentWizard;
-import org.inqle.data.rdf.jenabean.Persister;
-
 import com.hp.hpl.jena.rdf.model.Model;
 
 public class ExperimenterAgentFactory extends AAgentFactory {
@@ -14,6 +12,9 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 	public IAgentFactory cloneFactory(IAgent childAgent) {
 		ExperimenterAgentFactory newFactory = new ExperimenterAgentFactory();
 		newFactory.setBaseAgent(childAgent);
+		newFactory.setPersister(persister);
+		newFactory.setName(getName());
+		newFactory.setDescription(getDescription());
 		return newFactory;
 	}
 
