@@ -16,6 +16,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
+import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 
 /**

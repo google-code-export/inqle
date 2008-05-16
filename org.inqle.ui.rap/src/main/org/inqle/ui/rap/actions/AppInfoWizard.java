@@ -8,6 +8,8 @@ import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.pages.ConnectionPage;
+import org.inqle.ui.rap.pages.SingleTextPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 

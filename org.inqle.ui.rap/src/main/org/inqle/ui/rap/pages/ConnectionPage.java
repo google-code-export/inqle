@@ -1,4 +1,4 @@
-package org.inqle.ui.rap.actions;
+package org.inqle.ui.rap.pages;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -64,7 +64,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 			"jdbc:productname://localhost:1234/databasename" 
 		};
 		
-		ConnectionPage(String pageName, Connection connection, Shell shell) {
+		public ConnectionPage(String pageName, Connection connection, Shell shell) {
 			super(pageName);
 			this.connection = connection;
 			this.shell = shell;

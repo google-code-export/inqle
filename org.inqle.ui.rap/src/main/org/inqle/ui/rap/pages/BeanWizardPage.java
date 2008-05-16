@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.inqle.ui.rap.actions;
+package org.inqle.ui.rap.pages;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.DataBindingContext;
