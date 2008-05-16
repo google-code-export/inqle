@@ -1,6 +1,7 @@
 package org.inqle.data.sampling;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -43,7 +44,10 @@ public class SamplerLister {
 	
 	@SuppressWarnings("unchecked")
 	public static List<ISampler> listCustomSamplers(ISampler baseSampler, Persister persister) {
-		return (List<ISampler>) persister.reconstituteAll(baseSampler.getClass());
+		Class<?> samplerClass = baseSampler.getClass();
+		Collection<?> samplerObjCollection = persister.reconstituteAll(samplerClass);
+		List<?> samplerObjList = new ArrayList<Object>(samplerObjCollection);
+		return (List<ISampler>) samplerObjList;
 	}
 	
 	public static List<ISampler> listSamplers(Persister persister) {
