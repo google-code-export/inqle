@@ -78,6 +78,7 @@ public class LoadDataWizardAction extends Action {
 	class LoadDataWizardDialog extends WizardDialog {
 		public LoadDataWizardDialog(Shell parentShell, LoadDataWizard newWizard) {
 			super(parentShell, newWizard);
+			//this.getButton(WizardDialog.CANCEL).setEnabled(false);
 		}
 		
 		/**

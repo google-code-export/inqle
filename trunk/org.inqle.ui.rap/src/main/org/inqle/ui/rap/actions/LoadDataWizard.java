@@ -199,10 +199,28 @@ public class LoadDataWizard extends Wizard {
 	}
 	
 	public void importFile(File file) {
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Importing Data...", "Importing file " + file.getName() + "..." );
+		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + file.getName() + "..." );
+		popup.open();
+		log.info("Rendered popup");
     Loader loader = new Loader(modelToLoad);
-    loader.load(file, defaultUri);
+    boolean success = loader.load(file, defaultUri);
     popup.close();
+    if (success) {
+    	if (loader.getCountLoaded() == 0) {
+    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
+    	} else {
+    		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + loader.getCountLoaded() + " statements from file " + file.getName()); 
+    	}
+    } else {
+    	String errorMessage = "Unable to load data from file " + file.getName();
+    	if (loader.getError() != null) {
+    		errorMessage +=  "\n" + loader.getError().getMessage();
+    	}
+    	MessageDialog.openError(getShell(), "Error loading data", errorMessage);
+    }
+    log.info("Success? " + success);
+    
+    //if (popup != null) popup.close();
 	}
 	
 //	public void importFile(String fileName) {
