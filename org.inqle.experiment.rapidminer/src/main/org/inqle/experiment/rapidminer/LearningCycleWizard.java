@@ -9,8 +9,8 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 import org.inqle.ui.rap.actions.DynaWizard;
-import org.inqle.ui.rap.actions.ListSelectorPage;
-import org.inqle.ui.rap.actions.NameDescriptionPage;
+import org.inqle.ui.rap.pages.ListSelectorPage;
+import org.inqle.ui.rap.pages.NameDescriptionPage;
 
 import com.hp.hpl.jena.ontology.OntModel;
 

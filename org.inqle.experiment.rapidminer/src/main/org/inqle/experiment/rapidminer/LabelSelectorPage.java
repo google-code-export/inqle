@@ -10,8 +10,8 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.DataTable;
 import org.inqle.data.sampling.IDataTableProvider;
-import org.inqle.ui.rap.actions.DynaWizardPage;
-import org.inqle.ui.rap.actions.ListSelectorPage;
+import org.inqle.ui.rap.pages.DynaWizardPage;
+import org.inqle.ui.rap.pages.ListSelectorPage;
 
 /**
  * @author David Donohue
