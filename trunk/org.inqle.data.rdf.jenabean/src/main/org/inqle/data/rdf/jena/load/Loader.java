@@ -22,6 +22,8 @@ public class Loader {
 
 	private Exception exception;
 
+	private long countLoaded;
+
 	public Loader(Model model) {
 		this.model = model;
 	}
@@ -33,13 +35,15 @@ public class Loader {
 		load(file, defaultUri);
 	}
 	
-	public void load(File file, String defaultUri) {
+	public boolean load(File file, String defaultUri) {
+		boolean overallSuccessLoading = false;
+		long initialSize = model.size();
 		try {
 
       // Importing models inside a transaction helps performance.
       // Without this, the model each statement is auto-committed as it is
       // added.
-			log.info("Before loading: model has " + model.size() + " statements.");
+			log.info("Before loading: model has " + initialSize + " statements.");
       model.begin();
       
     	InputStream in = new FileInputStream(file);
@@ -48,14 +52,14 @@ public class Loader {
       }
 
       //try reading from each of 3 RDF languages, or from Excel 97+
-      boolean successReadingCurrentURL = false;
+      //boolean successReadingCurrentURL = false;
       
 	    for (int i=0; i<langs.length; i++) {
 	    	try {
 	    		log.info("Trying to read file '" + file.getPath() + "' using " + langs[i] + " format...");
 	    		//Read the triples from the file into the model
 	    		model = model.read(in, defaultUri, langs[i]);
-	    		successReadingCurrentURL = true;
+	    		overallSuccessLoading = true;
 	    		break;
 	    	} catch (Exception e) {
 	    		log.info("Unable to read file '" + file.getPath() + "' using " + langs[i] + " format.");
@@ -63,10 +67,11 @@ public class Loader {
 	    		in = new FileInputStream(file);
 	    	}
       }
-      if (!successReadingCurrentURL) {
+      if (!overallSuccessLoading) {
       	log.error("FAILED to load file '" + file.getPath() + "'");
       } else {
 	      log.info("SUCCESS loading: model now has " + model.size() + " statements.");
+	      countLoaded = model.size() - initialSize;
       }
       model.commit();
     } catch (Exception e) {
@@ -74,13 +79,14 @@ public class Loader {
       setError(e);
     } finally {
 
-      try {
-        // Close the database connection
-    	  model.close();
-      } catch (Exception e) {
-      	log.error("Error closing database connection.", e);
-      }
+//      try {
+//        // Close the database connection
+//    	  model.close();
+//      } catch (Exception e) {
+//      	log.error("Error closing database connection.", e);
+//      }
     }
+    return overallSuccessLoading;
 	}
 
 	private void setError(Exception exception) {
@@ -89,5 +95,9 @@ public class Loader {
 	
 	public Exception getError() {
 		return exception;
+	}
+
+	public long getCountLoaded() {
+		return countLoaded;
 	}
 }
