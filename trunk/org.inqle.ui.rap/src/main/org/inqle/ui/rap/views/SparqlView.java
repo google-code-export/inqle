@@ -209,7 +209,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	public void doQuery() {
 		String sparql = getSparql();
 		log.trace("Querying w/ SPARQL:" + sparql);
-		QueryCriteria queryCriteria = new QueryCriteria(getPersister());
+		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
 		queryCriteria.addNamedModel(persister.getAppInfo().getRepositoryNamedModel());
@@ -220,12 +220,12 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 
 	public abstract String getSparql();
 
-	private Persister getPersister() {
-		if (persister == null) {
-			persister = Persister.createPersister();
-		}
-		return persister;
-	}
+//	private Persister getPersister() {
+//		if (persister == null) {
+//			persister = Persister.getInstance();
+//		}
+//		return persister;
+//	}
 
 	public void setPersister(Persister persister) {
 		this.persister = persister;

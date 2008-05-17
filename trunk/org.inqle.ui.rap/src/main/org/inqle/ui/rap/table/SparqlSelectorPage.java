@@ -60,7 +60,7 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 	}
 
 	private void updateRows() {
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
+		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(getQuery());
 		queryCriteria.addNamedModelIds(getNamedModelIds());
 		log.info("Performing query:\n" + getQuery() + "\non these named models:\n" + getNamedModelIds());

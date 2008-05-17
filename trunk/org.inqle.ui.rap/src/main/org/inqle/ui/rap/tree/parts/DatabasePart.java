@@ -95,7 +95,7 @@ public class DatabasePart extends PartType {
 		
 		//query for all RDBModel children
 		AppInfo appInfo = persister.getAppInfo();
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
+		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(getSparqlToFindChildRDBModels());
 		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
 		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
