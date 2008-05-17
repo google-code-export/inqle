@@ -36,7 +36,7 @@ public class ExperimenterAgentWizard extends AAgentWizard {
 		ListSelectorPage learningCycleSelectorPage = new ListSelectorPage(bean, "learningCycle", "Select Learning Cycle to use", null);
 		learningCycleSelectorPage.setBeanItemClass(ILearningCycle.class);
 		ILearningCycle[] nullLCArray = {};
-		learningCycleSelectorPage.setListItems(LearningCycleLister.listAllLearningCycles(persister).toArray(nullLCArray));
+		learningCycleSelectorPage.setListItems(LearningCycleLister.listAllLearningCycles().toArray(nullLCArray));
 		addPage(learningCycleSelectorPage);
 		
 		NumericFieldPage numberOfRunsPage = new NumericFieldPage(bean, "stoppingPoint", "Enter Number of Executions", "Select number of executions to run (-1 to run continuously).", null);

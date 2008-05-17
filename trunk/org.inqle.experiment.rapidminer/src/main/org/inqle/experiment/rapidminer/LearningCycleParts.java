@@ -45,7 +45,7 @@ public class LearningCycleParts extends PartType {
 	
 	public void initChildren() {
 		childParts = new ArrayList<LearningCyclePart>();
-		for (LearningCycle learningCycle: LearningCycleLister.listCustomizedLearningCycles(persister)) {
+		for (LearningCycle learningCycle: LearningCycleLister.listCustomizedLearningCycles()) {
 			if (learningCycle == null) {
 				log.warn("Found Learning Cycle that is null; skipping");
 			}
