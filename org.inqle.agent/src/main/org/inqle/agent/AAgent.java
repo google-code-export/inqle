@@ -37,7 +37,7 @@ public abstract class AAgent extends UniqueJenabean implements IAgent {
 	 * the number of times to cycle.  0 = cycle continuously
 	 */
 	protected int stoppingPoint = CYCLE_CONTINUOUSLY;
-	protected Persister persister;
+	//protected Persister persister;
 	
 	public void clone(AAgent objectToClone) {
 		setStoppingPoint(objectToClone.getStoppingPoint());
@@ -83,11 +83,11 @@ public abstract class AAgent extends UniqueJenabean implements IAgent {
 		this.stoppingPoint = numberOfCycles;
 	}
 	
-	public Persister getPersister() {
-		return persister;
-	}
-
-	public void setPersister(Persister persister) {
-		this.persister = persister;
-	}
+//	public Persister getPersister() {
+//		return persister;
+//	}
+//
+//	public void setPersister(Persister persister) {
+//		this.persister = persister;
+//	}
 }

@@ -175,7 +175,7 @@ public class AgentPart extends PartType {
 		
 		//"Clone this Agent" action.  This wizard works with a clone of the base agent
 		IAgent cloneOfAgent = (IAgent)agentFactory.getBaseAgent().createClone();
-		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Clone this agent", this, workbenchWindow, persister);
+		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Create customization of this agent", this, workbenchWindow, persister);
 		cloneAgentWizardAction.setAgent(cloneOfAgent); 
 		manager.add(cloneAgentWizardAction);
 	}

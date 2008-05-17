@@ -20,7 +20,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public abstract class AAgentWizard extends DynaWizard implements IAgentWizard {
 
-	protected IBasicJenabean bean;
+	//protected IBasicJenabean bean;
 
 	public AAgentWizard(Model saveToModel, Persister persister, Shell shell) {
 		super(saveToModel, persister, shell);
