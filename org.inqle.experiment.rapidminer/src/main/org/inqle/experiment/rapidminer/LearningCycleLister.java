@@ -7,8 +7,10 @@ import org.inqle.data.rdf.jenabean.Persister;
 
 public class LearningCycleLister {
 
-	public static List<LearningCycle> listCustomizedLearningCycles(Persister persister) {
-		assert(persister != null);
+	//public static List<LearningCycle> listCustomizedLearningCycles(Persister persister) {
+	public static List<LearningCycle> listCustomizedLearningCycles() {
+		//assert(persister != null);
+		Persister persister = Persister.getInstance();
 		List<LearningCycle> learningCycles = new ArrayList<LearningCycle>();
 		
 		//add any customized LearningCycle objects
@@ -20,13 +22,15 @@ public class LearningCycleLister {
 		return learningCycles;
 	}
 	
-	public static List<LearningCycle> listAllLearningCycles(Persister persister) {
+	//public static List<LearningCycle> listAllLearningCycles(Persister persister) {
+	public static List<LearningCycle> listAllLearningCycles() {
+		Persister persister = Persister.getInstance();
 		List<LearningCycle> learningCycles = new ArrayList<LearningCycle>();
 		//add the base (uncustomized) LearningCycle
 		LearningCycle baseLC = new LearningCycle();
 		baseLC.setPersister(persister);
 		learningCycles.add(baseLC);
-		learningCycles.addAll(listCustomizedLearningCycles(persister));
+		learningCycles.addAll(listCustomizedLearningCycles());
 		return learningCycles;
 	}
 }

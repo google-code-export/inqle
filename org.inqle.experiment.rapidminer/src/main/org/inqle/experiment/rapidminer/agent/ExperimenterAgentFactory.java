@@ -35,7 +35,7 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 
 	public IAgent newAgent() {
 		ExperimenterAgent newAgent = new ExperimenterAgent();
-		newAgent.setPersister(persister);
+		//newAgent.setPersister(persister);
 		return newAgent;
 	}
 

@@ -43,6 +43,7 @@ public class ExperimenterAgent extends AAgent {
 	}
 
 	public void run() {
+		Persister persister = Persister.getInstance();
 		setRunning();
 		log.info("Starting to run()");
 		LearningCycle learningCycleToRun = getLearningCycle();
@@ -72,7 +73,7 @@ public class ExperimenterAgent extends AAgent {
 	}
 
 	private LearningCycle selectRandomLearningCycle() {
-		List<LearningCycle> allLearningCycles = LearningCycleLister.listAllLearningCycles(persister);
+		List<LearningCycle> allLearningCycles = LearningCycleLister.listAllLearningCycles();
 		int randomIndex = RandomListChooser.chooseRandomIndex(allLearningCycles.size());
 		return allLearningCycles.get(randomIndex);
 	}
