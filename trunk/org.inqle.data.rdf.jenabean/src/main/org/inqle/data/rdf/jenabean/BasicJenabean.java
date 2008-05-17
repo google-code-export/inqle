@@ -41,6 +41,9 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	}
 
 	public String getName() {
+		if (name == null) {
+			return this.getClass().getName();
+		}
 		return name;
 	}
 

@@ -80,8 +80,8 @@ public class TestQueryStore {
 	@Test
 	public void queryStore() {
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.createPersister(appInfo);
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
+		Persister persister = Persister.getInstance(appInfo);
+		QueryCriteria queryCriteria = new QueryCriteria();
 		//NamedModel testDatamodel = (NamedModel)persister.reconstitute(NamedModel.class, TestCreateStores.TEST_DATAMODEL_ID, persister.getRepositoryModel(), true);
 		NamedModel testDatamodel = (NamedModel)persister.getNamedModel(TestCreateStores.TEST_DATAMODEL_ID);
 		assert(testDatamodel != null);

@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
 public class AppInfo extends UniqueJenabean {
 	
 	public static final String DEFAULT_CHARSET = "UTF-8";
-	public static final String APPINFO_INSTANCE = "AppInfoInstance";
+	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
 	//private String serverBaseUri;
 	private String serverBaseUrl;
 	private NamedModel repositoryNamedModel;
@@ -27,7 +27,7 @@ public class AppInfo extends UniqueJenabean {
 	
 	@Id
 	public String getId() {
-		return APPINFO_INSTANCE;
+		return APPINFO_INSTANCE_ID;
 	}
 	
 	/*

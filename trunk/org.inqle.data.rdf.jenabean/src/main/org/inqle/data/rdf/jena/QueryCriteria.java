@@ -42,12 +42,13 @@ public class QueryCriteria {
 	private DataSource dataSource = null;
 	private String query = "";
 	
-	private Persister persister = null;
+	//private Persister persister = null;
 	
 	static Logger log = Logger.getLogger(QueryCriteria.class);
 	
-	public QueryCriteria(Persister persister) {
-		this.persister = persister;
+	//public QueryCriteria(Persister persister) {
+	public QueryCriteria() {
+		//this.persister = persister;
 		this.dataSource = DatasetFactory.create();
 	}
 	
@@ -57,6 +58,7 @@ public class QueryCriteria {
 	 * @param datamodelUri
 	 */
 	public void addNamedModel(String namedModelUri) {
+		Persister persister = Persister.getInstance();
 		NamedModel namedModel = (NamedModel)Persister.reconstitute(NamedModel.class, namedModelUri, persister.getMetarepositoryModel(), true);
 		addNamedModel(namedModel);
 	}
@@ -67,6 +69,7 @@ public class QueryCriteria {
 	 */
 	public void addNamedModel(NamedModel namedModel) {
 		assert(namedModel != null);
+		Persister persister = Persister.getInstance();
 		namedModels.add(namedModel);
 		Model model = persister.getModel(namedModel);
 		assert(model != null);
@@ -81,6 +84,7 @@ public class QueryCriteria {
 	 */
 	public void addNamedModelIds(Collection<String> namedModelIds) {
 		if (namedModelIds == null) return;
+		Persister persister = Persister.getInstance();
 		for (String namedModelId: namedModelIds) {
 			NamedModel datamodel = persister.getNamedModel(namedModelId);
 			addNamedModel(datamodel);

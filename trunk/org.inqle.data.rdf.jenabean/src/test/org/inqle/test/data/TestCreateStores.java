@@ -56,7 +56,7 @@ public class TestCreateStores {
 		//assertEquals(repositoryNamedModel.getJavaClass(), RDBModel.class.getName());
 		
 		//create the Persister
-		Persister persister = Persister.createPersister(appInfo);
+		Persister persister = Persister.getInstance(appInfo);
 		
 		//create the repository model
 		Connection repositoryConnection = null;
@@ -78,7 +78,7 @@ public class TestCreateStores {
 	@Test
 	public void testInsertStatement() {
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.createPersister(appInfo);
+		Persister persister = Persister.getInstance(appInfo);
 		Model repositoryModel = persister.getMetarepositoryModel();
 		log.info("Got repositoryModel");
 		//try to add statements
@@ -104,7 +104,7 @@ public class TestCreateStores {
 	public void createTestConnection() {
 		
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.createPersister(appInfo);
+		Persister persister = Persister.getInstance(appInfo);
 		Model repositoryModel = persister.getMetarepositoryModel();
 		assertNotNull(repositoryModel);
 		

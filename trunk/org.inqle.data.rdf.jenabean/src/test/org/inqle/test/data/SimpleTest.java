@@ -18,7 +18,7 @@ public class SimpleTest {
 	public static void main(String[] args) {
 		//get a Model
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.createPersister(appInfo);
+		Persister persister = Persister.getInstance(appInfo);
 		Model repositoryModel = persister.getMetarepositoryModel();
 		System.out.println("BEFORE: Repository model has " + repositoryModel.size() + " statements");
 		
