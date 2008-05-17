@@ -37,7 +37,7 @@ public class CustomizedAgentPart extends AgentPart {
 		}
 		
 		//"Open this Agent" action.  This wizard works with a replica of the base agent
-		//log.info("CustomizedAgentPart.addActions()...");
+		log.info("CustomizedAgentPart.addActions(): persister=" + persister);
 		AgentWizardAction editAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_OPEN, "Edit this agent...", this, workbenchWindow, persister);
 		manager.add(editAgentWizardAction);
 		

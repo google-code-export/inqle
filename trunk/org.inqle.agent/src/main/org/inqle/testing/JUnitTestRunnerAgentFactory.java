@@ -35,7 +35,7 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 
 	public JUnitTestRunnerAgent newAgent() {
 		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
-		newAgent.setPersister(persister);
+		//newAgent.setPersister(persister);
 		return newAgent;
 	}
 

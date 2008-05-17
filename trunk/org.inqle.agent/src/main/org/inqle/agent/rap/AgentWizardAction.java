@@ -21,7 +21,7 @@ public class AgentWizardAction extends Action {
 	private IAgentFactory agentFactory;
 	private IAgent agent = null;
 
-	static Logger log = Logger.getLogger(AgentWizardAction.class);
+	private static Logger log = Logger.getLogger(AgentWizardAction.class);
 	
 	public AgentWizardAction(int mode, String menuText, AgentPart agentPart, IWorkbenchWindow window, Persister persister) {
 		// TODO Auto-generated constructor stub
@@ -56,9 +56,12 @@ public class AgentWizardAction extends Action {
 		if (mode == MODE_RUN) {
 			//wizard = new AgentRunnerWizard(agent, window.getShell());
 		} else if (mode == MODE_OPEN) {
+			//log.info("Creating wizard...");
 			wizard = agentFactory.createWizardForReplica(persister.getMetarepositoryModel(), window.getShell());
 			wizard.setPart(agentPart);
+			//log.info("Creating dialog...");
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
+			//log.info("Opening dialog...");
 			dialog.open();
 		} else if (mode == MODE_CLONE) {
 			agent.setName("Clone of " + agent.getName());
