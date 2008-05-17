@@ -121,7 +121,7 @@ public class SamplerPart extends PartType {
 //			ISampler childSampler = (ISampler)Persister.reconstitute(sampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
 			
 		childParts = new ArrayList<CustomizedSamplerPart>();
-		for (ISampler childSampler: SamplerLister.listCustomSamplers(sampler, persister)) {
+		for (ISampler childSampler: SamplerLister.listCustomSamplers(sampler)) {
 			ISamplerFactory childSamplerFactory = samplerFactory.cloneFactory();
 			childSamplerFactory.setBaseSampler(childSampler);
 			CustomizedSamplerPart part = new CustomizedSamplerPart(childSamplerFactory);

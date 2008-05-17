@@ -29,8 +29,8 @@ public class TestSimpleSparqlSampler {
 	@Test
 	public void testRunDESAutomatically() {
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.createPersister(appInfo);
-		assertEquals(appInfo.getId(), AppInfo.APPINFO_INSTANCE);
+		Persister persister = Persister.getInstance(appInfo);
+		assertEquals(appInfo.getId(), AppInfo.APPINFO_INSTANCE_ID);
 		
 		SimpleSparqlSampler sss = new SimpleSparqlSampler();
 		assertNotNull(sss);

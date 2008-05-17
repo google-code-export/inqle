@@ -89,7 +89,8 @@ public abstract class ASparqlSampler extends ASampler {
 	 * @param datamodelOptions the Collection of available data models to consider
 	 * @return
 	 */
-	public Collection<String> selectAvailableNamedModels(Persister persister) {
+	public Collection<String> selectAvailableNamedModels() {
+		Persister persister = Persister.getInstance();
 //		if (getAvailableNamedModels() != null) {
 //			return getAvailableNamedModels();
 //		}
@@ -119,7 +120,7 @@ public abstract class ASparqlSampler extends ASampler {
 			return getSelectedNamedModels();
 		}
 		//...otherwise populate the list of available named models
-		Collection<String> choosableNamedModels = selectAvailableNamedModels(persister);
+		Collection<String> choosableNamedModels = selectAvailableNamedModels();
 		log.debug("choosableNamedModels=" + choosableNamedModels);
 		//int countChoosableNamedModels = choosableNamedModels.size();
 		
@@ -148,7 +149,7 @@ public abstract class ASparqlSampler extends ASampler {
 	 * @return
 	 */
 	protected DataTable doQuery(Collection<String> namedModelsToUse, List<DataColumn> dataColumnsToUse, String sparql, Persister persister) {
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
+		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(namedModelsToUse);
 		queryCriteria.setQuery(sparql);
 		
