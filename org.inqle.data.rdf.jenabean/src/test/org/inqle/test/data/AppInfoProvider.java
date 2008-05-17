@@ -76,7 +76,7 @@ public class AppInfoProvider {
 		
 		return (AppInfo)Persister.reconstitute(
 				AppInfo.class, 
-				AppInfo.APPINFO_INSTANCE,
+				AppInfo.APPINFO_INSTANCE_ID,
 				getAppInfoModel(), 
 				true);
 	}

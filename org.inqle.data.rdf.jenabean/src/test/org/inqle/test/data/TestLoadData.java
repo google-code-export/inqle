@@ -41,7 +41,7 @@ public class TestLoadData {
 	public void load() {
 		//get the test model
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.createPersister(appInfo);
+		Persister persister = Persister.getInstance(appInfo);
 		Model testModel = persister.getModel(TestCreateStores.TEST_DATAMODEL_ID);
 		
 		//assume the model begins blank

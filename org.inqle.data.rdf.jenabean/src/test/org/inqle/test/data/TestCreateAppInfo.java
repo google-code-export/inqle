@@ -21,6 +21,6 @@ public class TestCreateAppInfo {
 		AppInfoProvider.createAppInfo();
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
 		assertNotNull(appInfo);
-		assertEquals(appInfo.getId(), AppInfo.APPINFO_INSTANCE);
+		assertEquals(appInfo.getId(), AppInfo.APPINFO_INSTANCE_ID);
 	}
 }

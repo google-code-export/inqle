@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -25,11 +24,9 @@ import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
-import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.ModelMaker;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.util.FileManager;
@@ -63,59 +60,82 @@ public class Persister {
 	/* *********************************************************************
 	 * *** FACTORY METHODS
 	 * ********************************************************************* */
+	private Persister() {}
 	
 	/**
-	 * private constructor.  Use static method <code>createPersister()</code>
-	 * to create new instance of Persister
-	 * @param appInfo
-	 */
-	private Persister(AppInfo appInfo) {
-		persisterId++;
-		this.appInfo = appInfo;
+	* AgentRegistryHolder is loaded on the first execution of AgentRegistry.getInstance() 
+	* or the first access to AgentRegistryHolder.instance, not before.
+	*/
+	private static class PersisterHolder { 
+		private final static Persister instance = new Persister();
+	}
+	 
+	public static Persister getInstance() {
+		return PersisterHolder.instance;
 	}
 	
-	/**
-	 * Creates a new Persister, using the provided AppInfo object
-	 * @param appInfo
-	 * @return
-	 */
-	public static Persister createPersister(AppInfo appInfo) {
-		assert(appInfo != null);
-		Persister persister = new Persister(appInfo);
+	public static Persister getInstance(AppInfo appInfo) {
+		Persister persister = PersisterHolder.instance;
+		persister.setAppInfo(appInfo);
 		return persister;
 	}
 	
-	/**
-	 * Create a new Persister, by loading the AppInfo file from its known location
-	 * @return
-	 */
-	public static Persister createPersister() {
-		AppInfo appInfo = loadAppInfo();
-		Persister persister = new Persister(appInfo);
-		return persister;
-	}
+//	/**
+//	 * private constructor.  Use static method <code>createPersister()</code>
+//	 * to create new instance of Persister
+//	 * @param appInfo
+//	 */
+//	private Persister(AppInfo appInfo) {
+//		persisterId++;
+//		this.appInfo = appInfo;
+//	}
+//	
+//	/**
+//	 * Creates a new Persister, using the provided AppInfo object
+//	 * @param appInfo
+//	 * @return
+//	 */
+//	public static Persister createPersister(AppInfo appInfo) {
+//		assert(appInfo != null);
+//		Persister persister = new Persister(appInfo);
+//		return persister;
+//	}
+//	
+//	/**
+//	 * Create a new Persister, by loading the AppInfo file from its known location
+//	 * @return
+//	 */
+//	public static Persister createPersister() {
+//		AppInfo appInfo = loadAppInfo();
+//		Persister persister = new Persister(appInfo);
+//		return persister;
+//	}
 
 	/* *********************************************************************
 	 * *** APPINFO METHODS
 	 * ********************************************************************* */
 	
+	private void setAppInfo(AppInfo appInfo) {
+		this.appInfo = appInfo;
+	}
+
 	public AppInfo getAppInfo() {
-		if (this.appInfo == null) {
-			this.appInfo = Persister.loadAppInfo();
+		if (appInfo == null) {
+			appInfo = Persister.loadAppInfo();
 		}
-		return this.appInfo;
+		return appInfo;
 	}
 	
 	public static AppInfo loadAppInfo() {
 		RDF2Bean reader = new RDF2Bean(getAppInfoModel());
-		AppInfo appInfo = null;
+		AppInfo loadedAppInfo = null;
 		try {
-			appInfo = (AppInfo)reader.load(AppInfo.class, AppInfo.APPINFO_INSTANCE);
-			//log.info("Retrieved appInfo:" + JenabeanWriter.toString(appInfo));
+			loadedAppInfo = (AppInfo)reader.load(AppInfo.class, AppInfo.APPINFO_INSTANCE_ID);
+			//log.info("Retrieved appInfo:" + JenabeanWriter.toString(loadedAppInfo));
 		} catch (NotFoundException e) {
 			log.warn("AppInfo not available.");
 		}
-		return appInfo;
+		return loadedAppInfo;
 	}
 	
 	/**
@@ -254,7 +274,7 @@ public class Persister {
 		
 		Model repositoryModel = getMetarepositoryModel();
 		//if the model being requested is not in the Repositories model, retrieve that specially
-		if (namedModel.getId().equals(appInfo.getRepositoryNamedModel().getId())) {
+		if (namedModel.getId().equals(getAppInfo().getRepositoryNamedModel().getId())) {
 			//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): return metarepository model");
 			return repositoryModel;
 		}
@@ -330,7 +350,7 @@ public class Persister {
 	public OntModel getOntModel(NamedModel namedModel) {
 		OntModel repositoryOntModel = getMetarepositoryModel();
 		//if the model being requested is not in the Repositories model, retrieve that specially
-		if (namedModel.getId().equals(appInfo.getRepositoryNamedModel().getId())) {
+		if (namedModel.getId().equals(getAppInfo().getRepositoryNamedModel().getId())) {
 			return repositoryOntModel;
 		}
 		
@@ -380,7 +400,7 @@ public class Persister {
 		}
 		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
 		Connection logConnection = null;
-		NamedModel logNamedModel = appInfo.getLogNamedModel();
+		NamedModel logNamedModel = getAppInfo().getLogNamedModel();
 		
 		if (logNamedModel instanceof RDBModel) {
 			logConnection = ((RDBModel)logNamedModel).getConnection();
@@ -402,7 +422,7 @@ public class Persister {
 		}
 		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
 		Connection repositoryConnection = null;
-		NamedModel repositoryNamedModel = appInfo.getRepositoryNamedModel();
+		NamedModel repositoryNamedModel = getAppInfo().getRepositoryNamedModel();
 		
 		if (repositoryNamedModel instanceof RDBModel) {
 			repositoryConnection = ((RDBModel)repositoryNamedModel).getConnection();
@@ -496,16 +516,18 @@ public class Persister {
 	 * TODO verify this works as described above
 	 */
 	public void persist(Object persistableObj, Model model, boolean persistMembers) {
-		log.debug("Persister.persist():" + JenabeanWriter.toString(persistableObj));
+		log.trace("Persister.persist():" + JenabeanWriter.toString(persistableObj));
 		if (persistableObj instanceof IUniqueJenabean) {
 			((IUniqueJenabean)persistableObj).setUpdateDate(new Date());
 		}
+		//log.info("set update date");
 		Bean2RDF writer = new Bean2RDF(model);
 		if (persistMembers) {
 			writer.saveDeep(persistableObj);
 		} else {
 			writer.save(persistableObj);
 		}
+		//log.info("Saved");
 	}
 
 	/**
@@ -753,7 +775,7 @@ public class Persister {
 public OntModel getRepositoryModel() {
 	
 	Connection repositoryConnection = null;
-	NamedModel repositoryNamedModel = appInfo.getRepositoryNamedModel();
+	NamedModel repositoryNamedModel = getAppInfo().getRepositoryNamedModel();
 	
 	if (repositoryNamedModel instanceof RDBModel) {
 		repositoryConnection = ((RDBModel)repositoryNamedModel).getConnection();
