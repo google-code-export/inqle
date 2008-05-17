@@ -43,14 +43,15 @@ public class SamplerLister {
 //	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<ISampler> listCustomSamplers(ISampler baseSampler, Persister persister) {
+	public static List<ISampler> listCustomSamplers(ISampler baseSampler) {
+		Persister persister = Persister.getInstance();
 		Class<?> samplerClass = baseSampler.getClass();
 		Collection<?> samplerObjCollection = persister.reconstituteAll(samplerClass);
 		List<?> samplerObjList = new ArrayList<Object>(samplerObjCollection);
 		return (List<ISampler>) samplerObjList;
 	}
 	
-	public static List<ISampler> listSamplers(Persister persister) {
+	public static List<ISampler> listSamplers() {
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		
 		//first add the base plugins
@@ -60,7 +61,7 @@ public class SamplerLister {
 			ISamplerFactory samplerFactory = (ISamplerFactory)object;
 			ISampler baseSampler = samplerFactory.newSampler();
 			samplers.add(baseSampler);
-			samplers.addAll(listCustomSamplers(baseSampler, persister));
+			samplers.addAll(listCustomSamplers(baseSampler));
 		}
 		
 		return samplers;

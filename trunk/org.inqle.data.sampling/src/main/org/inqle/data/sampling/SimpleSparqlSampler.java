@@ -88,7 +88,7 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 
 
 	public List<String> selectAvailablePredicates(Collection<String> modelsToUse, Persister persister) {
-		QueryCriteria queryCriteria = new QueryCriteria(persister);
+		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(modelsToUse);
 		queryCriteria.setQuery(SPARQL_GET_DISTINCT_PREDICATES);
 		return Queryer.selectUriList(queryCriteria);
