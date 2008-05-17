@@ -23,7 +23,7 @@ public class AllParts extends PartType {
 	private Logger log = Logger.getLogger(AllParts.class);
 	
 	public AllParts() {
-		persister = Persister.createPersister();
+		persister = Persister.getInstance();
 	}
 	/* 
 	 * 
