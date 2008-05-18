@@ -31,13 +31,12 @@ public class LearningCyclePart extends Part {
 		LearningCycleWizardAction editLCWizardAction = 
 			new LearningCycleWizardAction(
 					"Edit this learning cycle...", 
-					workbenchWindow, 
-					persister);
+					workbenchWindow);
 		editLCWizardAction.setPartToRefresh(this);
 		editLCWizardAction.setLearningCycle(learningCycle);
 		manager.add(editLCWizardAction);
 		
-		DeleteLearningCycleAction deleteLCAction = new DeleteLearningCycleAction("Delete", this, workbenchWindow, persister);
+		DeleteLearningCycleAction deleteLCAction = new DeleteLearningCycleAction("Delete", this, workbenchWindow);
 		manager.add(deleteLCAction);
 	}
 

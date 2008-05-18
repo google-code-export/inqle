@@ -5,7 +5,6 @@ package org.inqle.experiment.rapidminer;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 import org.inqle.ui.rap.actions.DynaWizard;
@@ -24,9 +23,8 @@ public class LearningCycleWizard extends DynaWizard {
 
 	private static Logger log = Logger.getLogger(LearningCycleWizard.class);
 	
-	public LearningCycleWizard(LearningCycle learningCycle, OntModel learningCycleModel, Persister persister,
-			Shell shell) {
-		super(learningCycleModel, persister, shell);
+	public LearningCycleWizard(LearningCycle learningCycle, OntModel learningCycleModel, Shell shell) {
+		super(learningCycleModel, shell);
 //		this.learningCycle = learningCycle;
 		this.bean = learningCycle;
 	}
@@ -47,7 +45,7 @@ public class LearningCycleWizard extends DynaWizard {
 		addPage(samplerSelectorPage);
 		
 		SamplingResultPage samplingResultsPage = new SamplingResultPage(learningCycle, "Result of Sampling");
-		samplingResultsPage.setPersister(persister);
+		//samplingResultsPage.setPersister(persister);
 		addPage(samplingResultsPage);
 		
 		LabelSelectorPage labelSelectorPage = new LabelSelectorPage(learningCycle, "labelDataColumn", "Select column to be used as the label", null);

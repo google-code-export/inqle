@@ -44,8 +44,8 @@ public class RapidMinerExperimentLister {
 	 * TODO make this more sophisticated, matching algorithms to experiments
 	 * also on basis of the attributes and other factors
 	 */
-	public static List<IRapidMinerExperiment> listMatchingExperiments(Persister persister, 
-			DataTable dataTable, DataColumn labelDataColumn) {
+	public static List<IRapidMinerExperiment> listMatchingExperiments(DataTable dataTable, DataColumn labelDataColumn) {
+		Persister persister = Persister.getInstance();
 		List<IRapidMinerExperiment> allExperiments = listRapidMinerExperiments(persister);
 		List<IRapidMinerExperiment> matchingExperiments = new ArrayList<IRapidMinerExperiment>();
 		for (IRapidMinerExperiment experiment: allExperiments) {

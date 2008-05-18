@@ -53,19 +53,18 @@ public class ExperimenterAgent extends AAgent {
 		
 		log.info("Running this LearningCycle: " + learningCycleToRun);
 		cycleCount = 0;
-		//run each test
-		while (cycleCount != stoppingPoint && getMode() == RUNNING) {
-			log.info("############### Running Cycle #" + cycleCount);
+		//run each test until interrupted or (cycleCount >= stoppingPoint OR stopping point set to 0 or less [meaning cycle continuously])
+		while ((stoppingPoint <= 0 || cycleCount < stoppingPoint) && getMode() == RUNNING) {
+			log.info("############### Running Cycle #" + cycleCount + " of " + stoppingPoint);
 			cycleCount++;
 			ExperimentResult experimentResult = learningCycleToRun.execute();
 			if (experimentResult == null) {
 				log.warn("Resulting ExperimentResult is null.  Skip to next cycle.");
 				continue;
 			}
-			log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
+			log.trace("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
 			//log.info("Storing experiment result");
 			persister.persist(experimentResult, persister.getMetarepositoryModel());
-			cycleCount ++;
 		}
 		log.info("Exiting.  Completed " + cycleCount + " cycles.");
 		setStopped();

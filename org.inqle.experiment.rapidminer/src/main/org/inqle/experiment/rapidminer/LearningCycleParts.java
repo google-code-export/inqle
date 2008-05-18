@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.RDF;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 
@@ -28,7 +27,7 @@ public class LearningCycleParts extends PartType {
 	private static final String ICON_PATH = "org/inqle/experiment/images/learning_cycle.gif";
 	
 	//this part contains the base learning cycle
-	private LearningCycle learningCycle = new LearningCycle();
+	//private LearningCycle learningCycle = new LearningCycle();
 	
 	@Override
 	public IPart[] getChildren() {
@@ -51,7 +50,7 @@ public class LearningCycleParts extends PartType {
 			}
 			LearningCyclePart childPart = new LearningCyclePart(learningCycle);
 			childPart.setParent(this);
-			childPart.setPersister(persister);
+			//childPart.setPersister(persister);
 			childPart.addListener(listener);
 			childParts.add(childPart);
 		}
@@ -76,8 +75,7 @@ public class LearningCycleParts extends PartType {
 		LearningCycleWizardAction newExperimentWizardAction = 
 			new LearningCycleWizardAction(
 					"Create a new customized learning cycle...", 
-					workbenchWindow, 
-					persister);
+					workbenchWindow);
 		newExperimentWizardAction.setPartToRefresh(this);
 		manager.add(newExperimentWizardAction);
 	}

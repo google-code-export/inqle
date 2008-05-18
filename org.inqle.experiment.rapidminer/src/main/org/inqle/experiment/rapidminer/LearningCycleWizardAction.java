@@ -22,20 +22,20 @@ public class LearningCycleWizardAction extends Action {
 	
 	private IWorkbenchWindow window;
 	private String menuText;
-	private Persister persister;
+	//private Persister persister;
 	//private int mode = NEW;
 	private LearningCycle learningCycle;
 	
 	private static Logger log = Logger.getLogger(LearningCycleWizardAction.class);
 	private IPart partToRefresh;
 	
-	public LearningCycleWizardAction(String menuText,	IWorkbenchWindow workbenchWindow, Persister persister) {
+	public LearningCycleWizardAction(String menuText,	IWorkbenchWindow workbenchWindow) {
 		//this.mode = mode;
 		this.window = workbenchWindow;
 		this.menuText = menuText;
-		this.persister = persister;
+		//this.persister = persister;
 		learningCycle = new LearningCycle();
-		learningCycle.setPersister(persister);
+		//learningCycle.setPersister(persister);
 		//initialize a unique id now, so we can see an ID in logging
 		learningCycle.getId();
 	}
@@ -48,7 +48,8 @@ public class LearningCycleWizardAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
-		LearningCycleWizard learningCycleWizard = new LearningCycleWizard(learningCycle, persister.getMetarepositoryModel(), persister, window.getShell());
+		Persister persister = Persister.getInstance();
+		LearningCycleWizard learningCycleWizard = new LearningCycleWizard(learningCycle, persister.getMetarepositoryModel(), window.getShell());
 		if (partToRefresh != null) {
 			learningCycleWizard.setPart(partToRefresh);
 		}
