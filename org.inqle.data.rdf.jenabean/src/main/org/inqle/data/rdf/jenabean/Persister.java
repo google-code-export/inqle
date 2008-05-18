@@ -174,14 +174,11 @@ public class Persister {
 	 * Creates a new Jena SDB Model, 
 	 * given a Connection object and the name of a model.
 	 * 
-	 * Best practice is to close() the model after use.
-	 * 
 	 * TODO Note that this might be different from a SDB data model
 	 * @param dbConnectionInfo
 	 * @param dbModelName
 	 * @return
 	 */
-	@Deprecated
 	public Model createDBModel(Connection connection, String dbModelName) {
 		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
 		DBConnector dbConnector = new DBConnector(connection);
