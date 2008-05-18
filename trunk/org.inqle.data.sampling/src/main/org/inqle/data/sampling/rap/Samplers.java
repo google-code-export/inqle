@@ -1,17 +1,12 @@
 package org.inqle.data.sampling.rap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.sampling.ISampler;
-import org.inqle.ui.rap.IPart;
-import org.inqle.ui.rap.IPartType;
-import org.inqle.ui.rap.PartType;
 import org.inqle.core.extensions.util.ExtensionFactory;
+import org.inqle.ui.rap.IPart;
+import org.inqle.ui.rap.PartType;
 
 /**
  * @author David Donohue
@@ -40,7 +35,7 @@ public class Samplers extends PartType {
 			if (object == null) continue;
 			ISamplerFactory samplerFactory = (ISamplerFactory)object;
 			SamplerPart part = new SamplerPart(samplerFactory);
-			part.setPersister(persister);
+			//part.setPersister(persister);
 			part.addListener(this.listener);
 			parts.add(part);
 		}

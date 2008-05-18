@@ -5,7 +5,6 @@ package org.inqle.data.sampling.rap;
 
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.domain.INamedAndDescribed;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.actions.DynaWizard;
 
@@ -58,7 +57,7 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	 * @param shell
 	 * @return
 	 */
-	public ISamplerWizard createWizard(Model model, Persister persister, Shell shell);
+	public ISamplerWizard createWizard(Model model, Shell shell);
 
 	public String getName();
 
@@ -72,8 +71,7 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	 * @param shell
 	 * @return
 	 */
-	public ISamplerWizard createWizardForReplica(Model model,
-			Persister persister, Shell shell);
+	public ISamplerWizard createWizardForReplica(Model model, Shell shell);
 
 	/**
 	 * Creates a clone of the ISamplerFactory, using the current base sampler

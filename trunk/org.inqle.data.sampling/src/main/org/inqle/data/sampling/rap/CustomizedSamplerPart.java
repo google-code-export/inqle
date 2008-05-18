@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
-import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.IPart;
 
 /**
@@ -39,13 +38,13 @@ public class CustomizedSamplerPart extends SamplerPart {
 		
 		//"Open this Sampler" action.  This wizard works with a replica of the base sampler
 		//log.info("CustomizedSamplerPart.addActions()...");
-		SamplerWizardAction editSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_OPEN, "Edit this sampler...", this, workbenchWindow, persister);
+		SamplerWizardAction editSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_OPEN, "Edit this sampler...", this, workbenchWindow);
 		manager.add(editSamplerWizardAction);
 		
 		//Delete action
 		//ISampler replicaOfSampler = samplerFactory.replicateSampler();
 		log.debug("Created replica of sampler:" + JenabeanWriter.toString(samplerFactory.getBaseSampler()));
-		DeleteSamplerAction deleteSamplerAction = new DeleteSamplerAction("Delete", this, workbenchWindow, persister);
+		DeleteSamplerAction deleteSamplerAction = new DeleteSamplerAction("Delete", this, workbenchWindow);
 		manager.add(deleteSamplerAction);
 	}
 	

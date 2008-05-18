@@ -4,7 +4,6 @@
 package org.inqle.data.sampling.rap;
 
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -28,8 +27,7 @@ public abstract class ASamplerFactory implements ISamplerFactory {
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.ISamplerFactory#createWizard(org.inqle.data.sampling.ISampler, com.hp.hpl.jena.rdf.model.Model, org.inqle.data.rdf.jenabean.Persister, org.eclipse.swt.widgets.Shell)
 	 */
-	public ISamplerWizard createWizard(Model model,
-			Persister persister, Shell shell) {
+	public ISamplerWizard createWizard(Model model, Shell shell) {
 		return null;
 	}
 

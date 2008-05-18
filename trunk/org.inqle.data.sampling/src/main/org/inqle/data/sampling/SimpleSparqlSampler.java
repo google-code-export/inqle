@@ -12,7 +12,6 @@ import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
@@ -67,12 +66,12 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<String> selectPredicates(Collection<String> modelsToUse, Persister persister) {
+	public Collection<String> selectPredicates(Collection<String> modelsToUse) {
 		//if predicates already selected, return
 		if (selectedPredicates != null && selectedPredicates.size() > 0) {
 			return selectedPredicates;
 		}
-		List<String> availablePredicates = selectAvailablePredicates(modelsToUse, persister);
+		List<String> availablePredicates = selectAvailablePredicates(modelsToUse);
 		return (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(availablePredicates), getMinimumNumberOfPredicates(), getMaximumNumberOfPredicates());
 	}
 
@@ -87,7 +86,7 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	}
 
 
-	public List<String> selectAvailablePredicates(Collection<String> modelsToUse, Persister persister) {
+	public List<String> selectAvailablePredicates(Collection<String> modelsToUse) {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(modelsToUse);
 		queryCriteria.setQuery(SPARQL_GET_DISTINCT_PREDICATES);
@@ -95,11 +94,10 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	}
 
 	@Override
-	public List<DataColumn> selectDataColumns(Collection<String> modelsToUse,
-			Persister persister) {
+	public List<DataColumn> selectDataColumns(Collection<String> modelsToUse) {
 		List<DataColumn> dataColumnsList = new ArrayList<DataColumn>();
 		//first step: select predicates, if not already done
-		Collection<String> predicatesToUse = selectPredicates(modelsToUse, persister);
+		Collection<String> predicatesToUse = selectPredicates(modelsToUse);
 		log.trace("predicatesToUse=" + predicatesToUse);
 		if (predicatesToUse == null || predicatesToUse.size() < getMinimumNumberOfPredicates() || predicatesToUse.size() > getMaximumNumberOfPredicates()) {
 			log.error("Expect selection of between " + getMinimumNumberOfPredicates() + " and " + getMaximumNumberOfPredicates() + " predicates.");

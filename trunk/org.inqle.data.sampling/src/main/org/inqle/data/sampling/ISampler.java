@@ -1,13 +1,10 @@
 package org.inqle.data.sampling;
 
-import java.net.URI;
-import java.util.Dictionary;
 import java.util.Collection;
+import java.util.Dictionary;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Id;
 
@@ -96,11 +93,9 @@ public interface ISampler extends IUniqueJenabean {
 	
 	/**
 	 * Execute this sampler in automated fashion
-	 * @param persister the Persister to use for 
-	 * doing queries or looking up information
 	 * @return
 	 */
-	public DataTable execute(Persister persister);
+	public DataTable execute();
 	
 	public ISampler createClone();
 }

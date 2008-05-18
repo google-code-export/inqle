@@ -4,7 +4,6 @@
 package org.inqle.data.sampling.rap;
 
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.actions.DynaWizard;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -19,8 +18,8 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public abstract class SamplerWizard extends DynaWizard implements ISamplerWizard {
 
-	public SamplerWizard(Model saveToModel, Persister persister, Shell shell) {
-		super(saveToModel, persister, shell);
+	public SamplerWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
 	}
 
 }
