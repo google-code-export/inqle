@@ -2,15 +2,8 @@ package org.inqle.agent.rap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.IAgent;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.IPartType;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 /**
  * @author David Donohue

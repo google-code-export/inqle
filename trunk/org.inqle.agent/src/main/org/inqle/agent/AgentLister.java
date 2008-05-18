@@ -10,11 +10,12 @@ import org.inqle.data.rdf.jenabean.Persister;
 public class AgentLister {
 
 	@SuppressWarnings("unchecked")
-	public static List<IAgent> listCustomAgents(IAgent baseAgent, Persister persister) {
+	public static List<IAgent> listCustomAgents(IAgent baseAgent) {
+		Persister persister = Persister.getInstance();
 		return (List<IAgent>) persister.reconstituteAll(baseAgent.getClass());
 	}
 	
-	public static List<IAgent> listAgents(Persister persister) {
+	public static List<IAgent> listAgents() {
 		List<IAgent> agents = new ArrayList<IAgent>();
 		
 		//first add the base plugins
@@ -24,7 +25,7 @@ public class AgentLister {
 			IAgentFactory agentFactory = (IAgentFactory)object;
 			IAgent agent = agentFactory.newAgent();
 			agents.add(agent);
-			agents.addAll(listCustomAgents(agent, persister));
+			agents.addAll(listCustomAgents(agent));
 		}
 		
 		return agents;

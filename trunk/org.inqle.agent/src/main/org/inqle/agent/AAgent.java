@@ -4,11 +4,7 @@
 package org.inqle.agent;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
-import org.inqle.testing.JUnitTestRunnerAgent;
 
 /**
  * Abstract base class for creating agents.  New agent classes

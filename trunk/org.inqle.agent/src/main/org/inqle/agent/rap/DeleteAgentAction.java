@@ -6,11 +6,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.IAgent;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPartType;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 /**
  * @author David Donohue
@@ -19,7 +16,7 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
 public class DeleteAgentAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister;
+	//private Persister persister;
 	private IAgent agentToDelete = null;
 	private CustomizedAgentPart agentPart = null;
 	
@@ -27,12 +24,12 @@ public class DeleteAgentAction extends Action {
 	
 	//public DeleteAgentAction(String menuText, CustomizedAgentPart agentPart, IAgent agentToDelete, IWorkbenchWindow window, Persister persister) {
 		
-	public DeleteAgentAction(String menuText, CustomizedAgentPart agentPart, IWorkbenchWindow window, Persister persister) {
+	public DeleteAgentAction(String menuText, CustomizedAgentPart agentPart, IWorkbenchWindow window) {
 		this.window = window;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
 		this.agentToDelete  = (IAgent)agentPart.getAgentFactory().getBaseAgent().createReplica();
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
 	public String getText() {
@@ -54,6 +51,7 @@ public class DeleteAgentAction extends Action {
 			confirmDelete = MessageDialog.openConfirm(window.getShell(), "Delete this Agent", "Are you sure you want to delete agent\n'" + agentToDelete.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (confirmDelete) {
+			Persister persister = Persister.getInstance();
 			Persister.remove(agentToDelete, persister.getMetarepositoryModel());
 			IPartType parentPart = agentPart.getParent();
 			parentPart.fireUpdate(parentPart);

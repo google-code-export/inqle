@@ -8,7 +8,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
@@ -19,7 +18,7 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
 public class RunAgentAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister;
+	//private Persister persister;
 	private IAgent agentToRun = null;
 	private AgentPart agentPart = null;
 	
@@ -27,12 +26,12 @@ public class RunAgentAction extends Action {
 	
 	//public DeleteAgentAction(String menuText, CustomizedAgentPart agentPart, IAgent agentToRun, IWorkbenchWindow window, Persister persister) {
 		
-	public RunAgentAction(String menuText, AgentPart agentPart, IWorkbenchWindow window, Persister persister) {
+	public RunAgentAction(String menuText, AgentPart agentPart, IWorkbenchWindow window) {
 		this.window = window;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
 		this.agentToRun  = agentPart.getAgentFactory().getBaseAgent();
-		this.persister = persister;
+		//this.persister = persister;
 		assert(agentToRun != null);
 	}
 	

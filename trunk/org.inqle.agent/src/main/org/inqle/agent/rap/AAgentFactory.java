@@ -4,8 +4,6 @@
 package org.inqle.agent.rap;
 
 import org.inqle.agent.IAgent;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.Persister;
 
 /**
  * Abstract implementation of IAgentFactory.  Methods do nothing
@@ -21,7 +19,7 @@ public abstract class AAgentFactory implements IAgentFactory {
 	
 	protected IAgent baseAgent;
 
-	protected Persister persister;
+	//protected Persister persister;
 
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.IAgentFactory#getBaseAgent()
@@ -40,13 +38,13 @@ public abstract class AAgentFactory implements IAgentFactory {
 		this.baseAgent = baseAgent;
 	}
 
-	public Persister getPersister() {
-		return persister;
-	}
-
-	public void setPersister(Persister persister) {
-		this.persister = persister;
-	}
+//	public Persister getPersister() {
+//		return persister;
+//	}
+//
+//	public void setPersister(Persister persister) {
+//		this.persister = persister;
+//	}
 
 	public String getName() {
 		return name;

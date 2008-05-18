@@ -14,7 +14,7 @@ public class AgentWizardAction extends Action {
 	public static final int MODE_OPEN = 2;
 	public static final int MODE_CLONE = 3;
 	private AgentPart agentPart;
-	private Persister persister;
+	//private Persister persister;
 	private IWorkbenchWindow window;
 	private String menuText;
 	private int mode;
@@ -23,14 +23,14 @@ public class AgentWizardAction extends Action {
 
 	private static Logger log = Logger.getLogger(AgentWizardAction.class);
 	
-	public AgentWizardAction(int mode, String menuText, AgentPart agentPart, IWorkbenchWindow window, Persister persister) {
+	public AgentWizardAction(int mode, String menuText, AgentPart agentPart, IWorkbenchWindow window) {
 		// TODO Auto-generated constructor stub
 		this.mode = mode;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
 		this.agentFactory = agentPart.getAgentFactory();
 		this.window = window;
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
 
@@ -49,6 +49,7 @@ public class AgentWizardAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
+		Persister persister = Persister.getInstance();
 		//SimpleSparqlAgent testAgent = new SimpleSparqlAgent();
 		//log.info(JenabeanWriter.toString(testAgent));
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());

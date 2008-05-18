@@ -5,7 +5,6 @@ import org.inqle.agent.IAgent;
 import org.inqle.agent.rap.AAgentFactory;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.agent.rap.IAgentWizard;
-import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -18,13 +17,13 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 	}
 
 	public IAgentWizard createWizard(Model model, Shell shell) {
-		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, persister, shell);
+		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, shell);
 		newWizard.setBean(newAgent());
 		return newWizard;
 	}
 
 	public IAgentWizard createWizardForReplica(Model model, Shell shell) {
-		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, persister, shell);
+		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, shell);
 		newWizard.setBean((IAgent)getBaseAgent().createReplica());
 		return newWizard;
 	}
