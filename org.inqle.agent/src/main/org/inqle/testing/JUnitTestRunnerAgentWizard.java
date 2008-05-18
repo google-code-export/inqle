@@ -19,9 +19,8 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 	
-	public JUnitTestRunnerAgentWizard(Model saveToModel, Persister persister,
-			Shell shell) {
-		super(saveToModel, persister, shell);
+	public JUnitTestRunnerAgentWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
 	}
 
 	/**

@@ -11,17 +11,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.AgentLister;
 import org.inqle.agent.IAgent;
-import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
-
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.rdf.model.Literal;
 
 /**
  * @author David Donohue
@@ -136,11 +127,11 @@ public class AgentPart extends PartType {
 //			log.debug("Reconstituting Agent of class " + agent.getClass() + ": " + idLiteral.getLexicalForm());
 //		IAgent childAgent = (IAgent)Persister.reconstitute(agent.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
 		
-		for (IAgent childAgent: AgentLister.listCustomAgents(agent, persister)) {
+		for (IAgent childAgent: AgentLister.listCustomAgents(agent)) {
 			IAgentFactory childAgentFactory = agentFactory.cloneFactory(childAgent);
 			CustomizedAgentPart part = new CustomizedAgentPart(childAgentFactory);
 			part.setParent(this);
-			part.setPersister(persister);
+			//part.setPersister(persister);
 			part.addListener(listener);
 			childParts.add(part);
 		}
@@ -154,7 +145,7 @@ public class AgentPart extends PartType {
 		if (mode == IAgent.STOPPED) {
 			//"Run this agent" action
 			log.trace("Adding 'Run this agent' for agentFactory=" + this.getAgentFactory());
-			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow, persister);
+			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
 			manager.add(runAgentAction);
 		}
@@ -175,7 +166,7 @@ public class AgentPart extends PartType {
 		
 		//"Clone this Agent" action.  This wizard works with a clone of the base agent
 		IAgent cloneOfAgent = (IAgent)agentFactory.getBaseAgent().createClone();
-		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Create customization of this agent", this, workbenchWindow, persister);
+		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Create customization of this agent", this, workbenchWindow);
 		cloneAgentWizardAction.setAgent(cloneOfAgent); 
 		manager.add(cloneAgentWizardAction);
 	}

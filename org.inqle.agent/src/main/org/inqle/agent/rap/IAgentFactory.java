@@ -6,7 +6,6 @@ package org.inqle.agent.rap;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.agent.IAgent;
 import org.inqle.core.domain.INamedAndDescribed;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.actions.DynaWizard;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -61,8 +60,8 @@ public interface IAgentFactory extends INamedAndDescribed {
 
 	public IAgentFactory cloneFactory(IAgent childAgent);
 
-	public Persister getPersister();
-	
-	public void setPersister(Persister persister);
+//	public Persister getPersister();
+//	
+//	public void setPersister(Persister persister);
 	
 }

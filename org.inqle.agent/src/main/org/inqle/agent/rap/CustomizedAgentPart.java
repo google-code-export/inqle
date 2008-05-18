@@ -37,14 +37,14 @@ public class CustomizedAgentPart extends AgentPart {
 		}
 		
 		//"Open this Agent" action.  This wizard works with a replica of the base agent
-		log.info("CustomizedAgentPart.addActions(): persister=" + persister);
-		AgentWizardAction editAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_OPEN, "Edit this agent...", this, workbenchWindow, persister);
+		//log.info("CustomizedAgentPart.addActions(): persister=" + persister);
+		AgentWizardAction editAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_OPEN, "Edit this agent...", this, workbenchWindow);
 		manager.add(editAgentWizardAction);
 		
 		//Delete action
 		//IAgent replicaOfAgent = agentFactory.replicateAgent();
 		log.debug("Created replica of agent:" + JenabeanWriter.toString(agentFactory.getBaseAgent()));
-		DeleteAgentAction deleteAgentAction = new DeleteAgentAction("Delete", this, workbenchWindow, persister);
+		DeleteAgentAction deleteAgentAction = new DeleteAgentAction("Delete", this, workbenchWindow);
 		manager.add(deleteAgentAction);
 	}
 	

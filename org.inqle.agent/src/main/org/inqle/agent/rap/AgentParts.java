@@ -1,18 +1,13 @@
 package org.inqle.agent.rap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.IPart;
-import org.inqle.ui.rap.IPartType;
-import org.inqle.ui.rap.PartType;
 import org.inqle.agent.AgentLister;
-import org.inqle.agent.IAgent;
 import org.inqle.core.extensions.util.ExtensionFactory;
+import org.inqle.ui.rap.IPart;
+import org.inqle.ui.rap.PartType;
 
 /**
  * @author David Donohue
@@ -26,8 +21,6 @@ public class AgentParts extends PartType {
 	/* 
 	 * 
 	 * The children = the list of all IAgent plugins
-	 * add to each child a reference to the Persister object,
-	 * such that the entire tree may use common database connections
 	 * @see org.inqle.ui.rap.IPartType#getChildren()
 	 */
 	public IPart[] getChildren() {
@@ -48,10 +41,10 @@ public class AgentParts extends PartType {
 //			parts.add(part);
 //		}
 		for (IAgentFactory agentFactory: AgentLister.listAgentFactories()) {
-			agentFactory.setPersister(persister);
+			//agentFactory.setPersister(persister);
 			AgentPart part = new AgentPart(agentFactory);
 			part.setParent(this);
-			part.setPersister(persister);
+			//part.setPersister(persister);
 			part.addListener(listener);
 			parts.add(part);
 		}
