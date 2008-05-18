@@ -21,18 +21,18 @@ import org.inqle.ui.rap.tree.parts.DatabasePart;
 public class DeleteDatabaseAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister;
+	//private Persister persister;
 	private Connection connectionToDelete = null;
 	private IPart databasePart = null;
 	
 	private static final Logger log = Logger.getLogger(DeleteDatabaseAction.class);
 	
-	public DeleteDatabaseAction(String menuText, DatabasePart databasePart, IWorkbenchWindow window, Persister persister) {
+	public DeleteDatabaseAction(String menuText, DatabasePart databasePart, IWorkbenchWindow window) {
 		this.window = window;
 		this.menuText = menuText;
 		this.databasePart = databasePart;
 		this.connectionToDelete  = databasePart.getConnection();
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
 	public String getText() {
@@ -54,6 +54,7 @@ public class DeleteDatabaseAction extends Action {
 			deleteObject = MessageDialog.openConfirm(window.getShell(), "Delete this database", "Are you sure you want to delete database\n'" + databasePart.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (deleteObject) {
+			Persister persister = Persister.getInstance();
 			persister.deleteConnection(connectionToDelete);
 			IPartType parentPart = databasePart.getParent();
 			parentPart.fireUpdate(parentPart);

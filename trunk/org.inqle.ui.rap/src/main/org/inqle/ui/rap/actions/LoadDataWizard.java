@@ -4,7 +4,6 @@
 package org.inqle.ui.rap.actions;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -17,9 +16,6 @@ import org.eclipse.rwt.widgets.Upload;
 import org.eclipse.rwt.widgets.UploadAdapter;
 import org.eclipse.rwt.widgets.UploadEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -40,9 +36,9 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public class LoadDataWizard extends Wizard {
 
-	private final File tempDir = Persister.getTempDirectory();
+	//private final File tempDir = Persister.getTempDirectory();
 	private Connection connection = null;
-	private Persister persister;
+	//private Persister persister;
 	static Logger log = Logger.getLogger(LoadDataWizard.class);
 	Composite composite;
 	private Model modelToLoad = null;
@@ -173,13 +169,13 @@ public class LoadDataWizard extends Wizard {
 	
 	
 	
-	public LoadDataWizard(ModelPart modelPart,	Connection connection, Persister persister) {
-
-		this.persister = persister;
+	public LoadDataWizard(ModelPart modelPart,	Connection connection) {
+		Persister persister = Persister.getInstance();
+		//this.persister = persister;
 		this.modelPart = modelPart;
 		this.connection = connection;
 		this.modelToLoad = persister.getModel(modelPart.getRdbModel());
-		log.info("Temp Dir = " + tempDir.getAbsolutePath() + ": can write? " + tempDir.canWrite());
+		//log.info("Temp Dir = " + tempDir.getAbsolutePath() + ": can write? " + tempDir.canWrite());
 	}
 
 	@Override

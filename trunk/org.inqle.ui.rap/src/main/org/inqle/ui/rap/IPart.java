@@ -4,7 +4,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.core.domain.INamedAndDescribed;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.IDeltaListener;
 /**
  * Implementations of IPart must implement a set of methods,
@@ -43,9 +42,9 @@ public interface IPart extends INamedAndDescribed {
 
 	public void fireUpdatePart();
 
-	public void setPersister(Persister persister);
+	//public void setPersister(Persister persister);
 	
-	public Persister getPersister();
+	//public Persister getPersister();
 	
 	/**
 	 * Get the object which this part mediates.  This could be 

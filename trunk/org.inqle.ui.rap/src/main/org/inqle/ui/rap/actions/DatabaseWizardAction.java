@@ -3,19 +3,11 @@
  */
 package org.inqle.ui.rap.actions;
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
@@ -32,7 +24,7 @@ public class DatabaseWizardAction extends Action {
 	
 	private String id = null;
 	private IWorkbenchWindow window;
-	private Persister persister = null;
+	//private Persister persister = null;
 	private int mode = MODE_NEW;
 	private IPartType parentPart = null;
 	private IPart thisPart = null;
@@ -40,12 +32,12 @@ public class DatabaseWizardAction extends Action {
 	
 	private static final Logger log = Logger.getLogger(DatabaseWizardAction.class);
 	
-	public DatabaseWizardAction(int mode, String menuText, IPartType parentPart, IWorkbenchWindow window, Persister persister) {
+	public DatabaseWizardAction(int mode, String menuText, IPartType parentPart, IWorkbenchWindow window) {
 		this.mode = mode;
 		this.menuText = menuText;
 		this.parentPart = parentPart;
 		this.window = window;
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
 	/**
@@ -65,7 +57,7 @@ public class DatabaseWizardAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		DatabaseWizard wizard = new DatabaseWizard(mode, parentPart, persister, window.getShell());
+		DatabaseWizard wizard = new DatabaseWizard(mode, parentPart, window.getShell());
 		
 		//for MODE_NEW, do not add a starting base Connection
 		if (databasePart != null) {

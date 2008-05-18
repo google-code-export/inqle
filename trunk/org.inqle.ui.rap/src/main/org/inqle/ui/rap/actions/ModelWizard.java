@@ -39,7 +39,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class ModelWizard extends Wizard {
 
 	private Connection connection = null;
-	private Persister persister;
+	//private Persister persister;
 	static Logger log = Logger.getLogger(ModelWizard.class);
 	Composite composite;
 	int mode;
@@ -134,10 +134,10 @@ public class ModelWizard extends Wizard {
 
 	}
 	
-	public ModelWizard(int mode, DatabasePart databasePart,	Persister persister) {
+	public ModelWizard(int mode, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
-		this.persister = persister;
+		//this.persister = persister;
 		this.connection = databasePart.getConnection();
 	}
 
@@ -179,7 +179,7 @@ public class ModelWizard extends Wizard {
 					"Unable to connect to this database.  Cannot create new dataset in this database.");
 			return true;
 		}
-		
+		Persister persister = Persister.getInstance();
 		persister.persist(rdbModel, persister.getMetarepositoryModel()); 
 		if (this.mode == ModelWizardAction.MODE_NEW || this.mode == ModelWizardAction.MODE_CLONE) {
 			Model newModel = persister.createDBModel(connection, rdbModel.getModelName());

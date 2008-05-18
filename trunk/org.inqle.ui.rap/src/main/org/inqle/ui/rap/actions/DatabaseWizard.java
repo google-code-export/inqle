@@ -6,7 +6,6 @@ package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
@@ -29,7 +28,7 @@ public class DatabaseWizard extends Wizard {
 	
 	private Connection startingConnection = null;
 	private Connection connection = null;
-	private Persister persister;
+	//private Persister persister;
 	static Logger log = Logger.getLogger(DatabaseWizard.class);
 	Composite composite;
 	int mode;
@@ -38,10 +37,10 @@ public class DatabaseWizard extends Wizard {
 	private IPartType parentPart = null;
 	private IPart databasePart = null;
 	
-	public DatabaseWizard(int mode, IPartType parentPart,	Persister persister, Shell parentShell) {
+	public DatabaseWizard(int mode, IPartType parentPart, Shell parentShell) {
 		this.mode = mode;
 		this.parentPart = parentPart;
-		this.persister = persister;
+		//this.persister = persister;
 		this.shell = parentShell;
 	}
 
@@ -76,6 +75,7 @@ public class DatabaseWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
+		Persister persister = Persister.getInstance();
 		DBConnector connector = new DBConnector(connection);
 		boolean connectionSucceeds = connector.testConnection();
 		boolean confirmSave = true;

@@ -3,23 +3,13 @@
  */
 package org.inqle.ui.rap.actions;
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
@@ -30,17 +20,17 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
 public class LoadDataWizardAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister = null;
+	//private Persister persister = null;
 	private ModelPart modelPart = null;
 	private Connection connection = null;
 	
 	private static final Logger log = Logger.getLogger(LoadDataWizardAction.class);
 	
-	public LoadDataWizardAction(String menuText, ModelPart modelPart, IWorkbenchWindow window, Persister persister) {
+	public LoadDataWizardAction(String menuText, ModelPart modelPart, IWorkbenchWindow window) {
 		this.menuText = menuText;
 		this.modelPart = modelPart;
 		this.window = window;
-		this.persister = persister;
+		//this.persister = persister;
 		this.connection  = ((DatabasePart)modelPart.getParent()).getConnection();
 	}
 	
@@ -55,7 +45,7 @@ public class LoadDataWizardAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		LoadDataWizard wizard = new LoadDataWizard(modelPart, connection, persister);
+		LoadDataWizard wizard = new LoadDataWizard(modelPart, connection);
 		//DummyWizard wizard = new DummyWizard();
 		
 		LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);

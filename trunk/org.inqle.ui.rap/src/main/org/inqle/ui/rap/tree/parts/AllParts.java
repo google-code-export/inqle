@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.inqle.core.extensions.util.ExtensionFactory;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.PartType;
@@ -23,7 +22,7 @@ public class AllParts extends PartType {
 	private Logger log = Logger.getLogger(AllParts.class);
 	
 	public AllParts() {
-		persister = Persister.getInstance();
+		//persister = Persister.getInstance();
 	}
 	/* 
 	 * 
@@ -43,7 +42,7 @@ public class AllParts extends PartType {
 			if (partObject == null) continue;
 			IPart part = (IPart)partObject;
 			part.setParent(this);
-			part.setPersister(persister);
+			//part.setPersister(persister);
 			part.addListener(this.listener);
 			//log.info("AllParts adding part: " + part.getName());
 			topLevelParts.add(part);

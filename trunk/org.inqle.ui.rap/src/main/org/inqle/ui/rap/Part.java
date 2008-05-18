@@ -4,12 +4,9 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.rwt.graphics.Graphics;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.IDeltaListener;
 import org.inqle.ui.rap.tree.NullDeltaListener;
 
@@ -41,7 +38,7 @@ public abstract class Part implements IPart {
 		return parent;
 	}
 
-	protected Persister persister;
+	//protected Persister persister;
 	
 	/**
 	 * Override to point to custom icon in the classpath, as in
@@ -89,12 +86,12 @@ public abstract class Part implements IPart {
 	public void fireUpdatePart() {
 		listener.updatePart(this);
 	}
-	public void setPersister(Persister persister) {
-		this.persister = persister;
-	}
-	public Persister getPersister() {
-		return persister;
-	}
+//	public void setPersister(Persister persister) {
+//		this.persister = persister;
+//	}
+//	public Persister getPersister() {
+//		return persister;
+//	}
 	
 	public String toString() {
 		return getClass() + "(" + getName() + ")";
