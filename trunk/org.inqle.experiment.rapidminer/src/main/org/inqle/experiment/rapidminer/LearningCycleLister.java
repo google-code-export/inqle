@@ -16,7 +16,7 @@ public class LearningCycleLister {
 		//add any customized LearningCycle objects
 		for (Object lcObject: persister.reconstituteAll(LearningCycle.class)) {
 			LearningCycle learningCycle = (LearningCycle)lcObject;
-			learningCycle.setPersister(persister);
+			//learningCycle.setPersister(persister);
 			learningCycles.add(learningCycle);
 		}
 		return learningCycles;
@@ -24,11 +24,10 @@ public class LearningCycleLister {
 	
 	//public static List<LearningCycle> listAllLearningCycles(Persister persister) {
 	public static List<LearningCycle> listAllLearningCycles() {
-		Persister persister = Persister.getInstance();
 		List<LearningCycle> learningCycles = new ArrayList<LearningCycle>();
 		//add the base (uncustomized) LearningCycle
 		LearningCycle baseLC = new LearningCycle();
-		baseLC.setPersister(persister);
+		//baseLC.setPersister(persister);
 		learningCycles.add(baseLC);
 		learningCycles.addAll(listCustomizedLearningCycles());
 		return learningCycles;

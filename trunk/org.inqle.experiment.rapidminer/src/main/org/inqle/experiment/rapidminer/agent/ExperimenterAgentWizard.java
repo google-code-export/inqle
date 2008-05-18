@@ -3,9 +3,6 @@ package org.inqle.experiment.rapidminer.agent;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.agent.rap.AAgentWizard;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.sampling.ISampler;
-import org.inqle.data.sampling.SamplerLister;
 import org.inqle.experiment.rapidminer.ILearningCycle;
 import org.inqle.experiment.rapidminer.LearningCycleLister;
 import org.inqle.ui.rap.pages.ListSelectorPage;
@@ -18,9 +15,8 @@ public class ExperimenterAgentWizard extends AAgentWizard {
 
 	private static Logger log = Logger.getLogger(ExperimenterAgentWizard.class);
 	
-	public ExperimenterAgentWizard(Model saveToModel, Persister persister,
-			Shell shell) {
-		super(saveToModel, persister, shell);
+	public ExperimenterAgentWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
 	}
 
 	@Override

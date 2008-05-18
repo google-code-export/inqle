@@ -3,32 +3,12 @@
  */
 package org.inqle.experiment.rapidminer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.databinding.observable.list.WritableList;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.part.ViewPart;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.table.QuerySolutionTableLabelProvider;
 import org.inqle.ui.rap.views.SparqlView;
-
-import thewebsemantic.TypeWrapper;
-
-import com.hp.hpl.jena.query.QuerySolution;
 
 /**
  * @author David Donohue

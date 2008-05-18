@@ -9,12 +9,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.DataTable;
-import org.inqle.data.sampling.DataTableWriter;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 
@@ -26,9 +23,7 @@ import com.rapidminer.example.table.MemoryExampleTable;
 import com.rapidminer.operator.IOContainer;
 import com.rapidminer.operator.IOObject;
 import com.rapidminer.operator.MissingIOObjectException;
-import com.rapidminer.operator.OperatorException;
 import com.rapidminer.operator.performance.PerformanceVector;
-import com.rapidminer.tools.Ontology;
 
 /**
  * Contains the results of an experiment
@@ -40,14 +35,14 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	private ISampler sampler;
 	private DataColumn labelDataColumn;
 	private IRapidMinerExperiment rapidMinerExperiment;
-	private Persister persister;
+	//private Persister persister;
 
 	private static Logger log = Logger.getLogger(LearningCycle.class);
 	
-	public void setPersister(Persister persister) {
-		this.persister = persister;
-	}
-	
+//	public void setPersister(Persister persister) {
+//		this.persister = persister;
+//	}
+//	
 	public ISampler getSampler() {
 		return sampler;
 	}
@@ -75,14 +70,14 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 
 	public LearningCycle createClone() {
 		LearningCycle newObj = new LearningCycle();
-		newObj.setPersister(persister);
+		//newObj.setPersister(persister);
 		newObj.clone(this);
 		return newObj;
 	}
 
 	public LearningCycle createReplica() {
 		LearningCycle newObj = new LearningCycle();
-		newObj.setPersister(persister);
+		//newObj.setPersister(persister);
 		newObj.replicate(this);
 		return newObj;
 	}
@@ -115,7 +110,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			log.warn("Unable to retrieve any sampler.");
 			return null;
 		}
-		DataTable resultDataTable = samplerToUse.execute(persister);
+		DataTable resultDataTable = samplerToUse.execute();
 		if (resultDataTable == null) {
 			log.warn("Sampler " + samplerToUse + " of class " + samplerToUse.getClass() + " was unable" +
 					" to retrieve a DataTable of results.");
@@ -178,9 +173,8 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	
 	private IRapidMinerExperiment selectRapidMinerExperiment(DataTable dataTable, DataColumn labelDataColumn) {
 		assert(dataTable.getColumns().contains(labelDataColumn));
-		assert(persister != null);
 		//log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nDataTable=" + DataTableWriter.dataTableToString(dataTable));
-		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(persister, dataTable, labelDataColumn);
+		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(dataTable, labelDataColumn);
 		
 		if (acceptableExperiments == null || acceptableExperiments.size() == 0) {
 			//log.warn("selectRapidMinerExperiment() finds no acceptable Experiments");

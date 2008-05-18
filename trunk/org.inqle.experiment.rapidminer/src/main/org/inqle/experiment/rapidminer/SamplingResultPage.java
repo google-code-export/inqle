@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.DataTable;
@@ -46,7 +45,7 @@ public class SamplingResultPage extends RdfTablePage implements IDataTableProvid
 		ISampler sampler = (ISampler) origSampler.createReplica();
 		//ISampler sampler = ((LearningCycle)bean).getSampler();
 		//log.info("onEnterPage(): sampler=" + JenabeanWriter.toString(sampler));
-		this.dataTable = sampler.execute(persister);
+		this.dataTable = sampler.execute();
 		//log.info("resultDataTable.getRdfTable()=" + RdfTableWriter.dataTableToString(dataTable.getRdfTable()));
 		setRdfTable(dataTable.getRdfTable());
 		List<String> columnNames = new ArrayList<String>();

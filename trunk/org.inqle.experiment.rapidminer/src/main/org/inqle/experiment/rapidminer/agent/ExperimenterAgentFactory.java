@@ -12,19 +12,19 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 	public IAgentFactory cloneFactory(IAgent childAgent) {
 		ExperimenterAgentFactory newFactory = new ExperimenterAgentFactory();
 		newFactory.setBaseAgent(childAgent);
-		newFactory.setPersister(persister);
+		//newFactory.setPersister(persister);
 		newFactory.setName(getName());
 		newFactory.setDescription(getDescription());
 		return newFactory;
 	}
 
 	public IAgentWizard createWizard(Model model, Shell shell) {
-		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, persister, shell);
+		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
 		return newWizard;
 	}
 
 	public IAgentWizard createWizardForReplica(Model model,	Shell shell) {
-		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, persister, shell);
+		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
 		newWizard.setBean(getBaseAgent().createReplica());
 		return newWizard;
 	}
