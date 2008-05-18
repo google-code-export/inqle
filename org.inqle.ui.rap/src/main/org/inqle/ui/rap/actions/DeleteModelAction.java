@@ -21,18 +21,18 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
 public class DeleteModelAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister;
+	//private Persister persister;
 	private NamedModel namedModelToDelete = null;
 	private ModelPart modelPart = null;
 	
 	private static final Logger log = Logger.getLogger(DeleteModelAction.class);
 	
-	public DeleteModelAction(String menuText, ModelPart modelPart, IWorkbenchWindow window, Persister persister) {
+	public DeleteModelAction(String menuText, ModelPart modelPart, IWorkbenchWindow window) {
 		this.window = window;
 		this.menuText = menuText;
 		this.modelPart = modelPart;
 		this.namedModelToDelete  = modelPart.getRdbModel();
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
 	public String getText() {
@@ -54,6 +54,7 @@ public class DeleteModelAction extends Action {
 			deleteObject = MessageDialog.openConfirm(window.getShell(), "Delete this database", "Are you sure you want to delete dataset\n'" + modelPart.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (deleteObject) {
+			Persister persister = Persister.getInstance();
 			persister.deleteModel(namedModelToDelete);
 			IPartType parentPart = modelPart.getParent();
 			parentPart.fireUpdate(parentPart);

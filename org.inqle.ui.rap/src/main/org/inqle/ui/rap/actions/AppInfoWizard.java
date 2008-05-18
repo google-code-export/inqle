@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.RDBModel;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.SingleTextPage;
 
@@ -21,8 +20,8 @@ public class AppInfoWizard extends DynaWizard {
 
 	private AppInfo appInfo;
 
-	public AppInfoWizard(Model saveToModel, Persister persister, Shell shell) {
-		super(saveToModel, persister, shell);
+	public AppInfoWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
 	}
 
 	@Override

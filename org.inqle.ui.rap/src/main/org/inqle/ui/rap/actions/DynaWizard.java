@@ -4,7 +4,6 @@
 package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
@@ -36,7 +35,6 @@ public abstract class DynaWizard extends Wizard {
 	private static Logger log = Logger.getLogger(DynaWizard.class);
 	
 	protected Model saveToModel;
-	protected Persister persister;
 	protected Shell shell;
 	protected IPart part = null;
 
@@ -44,17 +42,18 @@ public abstract class DynaWizard extends Wizard {
 	/**
 	 * @param bean
 	 */
-	public DynaWizard(Model saveToModel, Persister persister, Shell shell) {
+	public DynaWizard(Model saveToModel, Shell shell) {
 		assert(saveToModel != null);
-		assert(persister != null);
+		//assert(persister != null);
 		assert(shell != null);
 		this.saveToModel = saveToModel;
-		this.persister = persister;
+		//this.persister = persister;
 		this.shell = shell;
 	}
 	
 	@Override
 	public boolean performFinish() {
+		Persister persister = Persister.getInstance();
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
 		log.trace("Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of size:" + saveToModel.size());

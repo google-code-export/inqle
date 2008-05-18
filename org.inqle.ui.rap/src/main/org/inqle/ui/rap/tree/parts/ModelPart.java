@@ -3,7 +3,6 @@ package org.inqle.ui.rap.tree.parts;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.RDBModel;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.Part;
 import org.inqle.ui.rap.actions.DeleteModelAction;
 import org.inqle.ui.rap.actions.LoadDataWizardAction;
@@ -14,9 +13,9 @@ public class ModelPart extends Part {
 	private static final String ICON_PATH = "org/inqle/ui/rap/images/table.gif";
 	private RDBModel rdbModel;
 	
-	public ModelPart(RDBModel rdbModel, Persister persister) {
+	public ModelPart(RDBModel rdbModel) {
 		this.rdbModel = rdbModel;
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	public String getModelName() {
 		return rdbModel.getModelName();
@@ -38,16 +37,16 @@ public class ModelPart extends Part {
 	@Override
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		//"Edit this dataset" action
-		ModelWizardAction editModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_EDIT, "Edit this dataset...", (DatabasePart)this.getParent(), workbenchWindow, persister);
+		ModelWizardAction editModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_EDIT, "Edit this dataset...", (DatabasePart)this.getParent(), workbenchWindow);
 		editModelWizardAction.setModelPart(this);
 		manager.add(editModelWizardAction);
 		
 		//"Load data" action
-		LoadDataWizardAction loadDataWizardAction = new LoadDataWizardAction("Load data...", this, workbenchWindow, persister);
+		LoadDataWizardAction loadDataWizardAction = new LoadDataWizardAction("Load data...", this, workbenchWindow);
 		manager.add(loadDataWizardAction);
 		
 		//Delete action
-		DeleteModelAction deleteDatabaseAction = new DeleteModelAction("Delete", this, workbenchWindow, this.persister);
+		DeleteModelAction deleteDatabaseAction = new DeleteModelAction("Delete", this, workbenchWindow);
 		manager.add(deleteDatabaseAction);
 	}
 	

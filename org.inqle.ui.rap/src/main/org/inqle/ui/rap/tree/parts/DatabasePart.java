@@ -1,14 +1,10 @@
 package org.inqle.ui.rap.tree.parts;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.rwt.graphics.Graphics;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
@@ -26,8 +22,6 @@ import org.inqle.ui.rap.actions.ModelWizardAction;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 
 public class DatabasePart extends PartType {
 	
@@ -62,9 +56,9 @@ public class DatabasePart extends PartType {
 		return sparql;
 	}
 	
-	public DatabasePart(Connection connection, Persister persister) {
+	public DatabasePart(Connection connection) {
 		this.connection = connection;
-		this.persister = persister;
+		//this.persister = persister;
 		modelParts = new ArrayList<ModelPart>();
 	}
 
@@ -94,6 +88,7 @@ public class DatabasePart extends PartType {
 	public void initChildren() {
 		
 		//query for all RDBModel children
+		Persister persister = Persister.getInstance();
 		AppInfo appInfo = persister.getAppInfo();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(getSparqlToFindChildRDBModels());
@@ -106,9 +101,9 @@ public class DatabasePart extends PartType {
 			Literal modelId = row.getLiteral("modelId");
 			RDBModel rdbModel = (RDBModel)Persister.reconstitute(RDBModel.class, modelId.getLexicalForm(), persister.getMetarepositoryModel(), false);
 			rdbModel.setConnection(this.connection);
-			ModelPart modelPart = new ModelPart(rdbModel, persister);
+			ModelPart modelPart = new ModelPart(rdbModel);
 			modelPart.setParent(this);
-			modelPart.setPersister(this.persister);
+			//modelPart.setPersister(this.persister);
 			modelParts.add(modelPart);
 		}
 		this.childrenIntialized = true;
@@ -117,21 +112,21 @@ public class DatabasePart extends PartType {
 	@Override
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		//"Add a dataset" action
-		ModelWizardAction newModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow, persister);
+		ModelWizardAction newModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
 		manager.add(newModelWizardAction);
 		
 		//"Edit this database" action
-		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow, persister);
+		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow);
 		editDatabaseWizardAction.setDatabasePart(this);
 		manager.add(editDatabaseWizardAction);
 		
 		//"Clone this database" action
-		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", this.getParent(), workbenchWindow, persister);
+		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", this.getParent(), workbenchWindow);
 		cloneDatabaseWizardAction.setDatabasePart(this);
 		manager.add(cloneDatabaseWizardAction);
 		
 		//Delete action
-		DeleteDatabaseAction deleteDatabaseAction = new DeleteDatabaseAction("Delete", this, workbenchWindow, this.persister);
+		DeleteDatabaseAction deleteDatabaseAction = new DeleteDatabaseAction("Delete", this, workbenchWindow);
 		manager.add(deleteDatabaseAction);
 	}
 

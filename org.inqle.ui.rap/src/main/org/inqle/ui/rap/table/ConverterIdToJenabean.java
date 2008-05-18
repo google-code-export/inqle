@@ -2,8 +2,6 @@ package org.inqle.ui.rap.table;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.conversion.IConverter;
-import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.rdf.model.Model;

@@ -8,12 +8,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Control;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.query.QuerySolution;
 
@@ -27,7 +25,7 @@ import com.hp.hpl.jena.query.QuerySolution;
  */
 public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 
-	private Persister persister;
+	//private Persister persister;
 
 	private RdfTable resultRdfTable = new RdfTable();
 
@@ -48,9 +46,9 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 
 	protected abstract String getQuery();
 
-	public void setPersister(Persister persister) {
-		this.persister = persister;
-	}
+//	public void setPersister(Persister persister) {
+//		this.persister = persister;
+//	}
 	
 	@Override
 	public void onEnterPageFromPrevious() {

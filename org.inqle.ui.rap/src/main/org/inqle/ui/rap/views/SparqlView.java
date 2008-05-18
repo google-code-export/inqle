@@ -55,7 +55,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	 */
 	protected Class<?> tableBeanClass = QuerySolution.class;
 
-	protected Persister persister;
+	//protected Persister persister;
 	protected TableViewer tableViewer;
 	protected List<String> propertyNames;
 	protected Button refreshButton;
@@ -207,6 +207,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	}
 	
 	public void doQuery() {
+		Persister persister = Persister.getInstance();
 		String sparql = getSparql();
 		log.trace("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -227,9 +228,9 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 //		return persister;
 //	}
 
-	public void setPersister(Persister persister) {
-		this.persister = persister;
-	}
+//	public void setPersister(Persister persister) {
+//		this.persister = persister;
+//	}
 	
 	public int getRecordCount() {
 		int selectedIndex = recordCountList.getSelectionIndex();
