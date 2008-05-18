@@ -350,11 +350,11 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 	 * @param model
 	 * @return
 	 */
-	public Collection<?> reconstituteList(Class<?> clazz, ArcSet arcSet, Model model, Persister persister) {
-		RDF2Bean loader = new RDF2Bean(model);
-		Collection<?> objects = loader.load(clazz);
-		//log.debug("Retrieved these Connections:" + connections);
-		return objects;
-	}
+//	public Collection<?> reconstituteList(Class<?> clazz, ArcSet arcSet, Model model, Persister persister) {
+//		RDF2Bean loader = new RDF2Bean(model);
+//		Collection<?> objects = loader.load(clazz);
+//		//log.debug("Retrieved these Connections:" + connections);
+//		return objects;
+//	}
 	
 }
