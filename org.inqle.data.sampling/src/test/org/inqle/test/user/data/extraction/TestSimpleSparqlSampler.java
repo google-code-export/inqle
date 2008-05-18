@@ -11,7 +11,6 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.DataTable;
 import org.inqle.data.sampling.DataTableWriter;
 import org.inqle.data.sampling.SimpleSparqlSampler;
@@ -29,14 +28,14 @@ public class TestSimpleSparqlSampler {
 	@Test
 	public void testRunDESAutomatically() {
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Persister persister = Persister.getInstance(appInfo);
+		//Persister persister = Persister.getInstance(appInfo);
 		assertEquals(appInfo.getId(), AppInfo.APPINFO_INSTANCE_ID);
 		
 		SimpleSparqlSampler sss = new SimpleSparqlSampler();
 		assertNotNull(sss);
 		
 		//get list of choosable datamodels
-		DataTable resultTable = sss.execute(persister);
+		DataTable resultTable = sss.execute();
 		//assertNotNull(sss.getAvailableNamedModels());
 		assertNotNull(sss.getSelectedNamedModels());
 		//Collection<String> availablePredicates = sss.getAvailablePredicates();

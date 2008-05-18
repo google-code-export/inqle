@@ -1,7 +1,6 @@
 package org.inqle.data.sampling;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -66,21 +65,19 @@ public abstract class ASparqlSampler extends ASampler {
 	 * Perform all steps to get to final resultant DataTable.
 	 * Honor any existing fields, and otherwise make random decisions
 	 */
-	public DataTable execute(Persister persister) {
-		assert(persister != null);
-		Collection<String> modelsToUse = selectNamedModels(persister);
+	public DataTable execute() {
+		Collection<String> modelsToUse = selectNamedModels();
 		log.debug("modelsToUse=" + modelsToUse);
-		List<DataColumn> dataColumnsToUse = selectDataColumns(modelsToUse, persister);
+		List<DataColumn> dataColumnsToUse = selectDataColumns(modelsToUse);
 		log.debug("dataColumnsToUse=" + dataColumnsToUse);
 //		String sparql = generateSparql(modelsToUse, persister);
 		String sparql = generateSparql(dataColumnsToUse);
 		log.debug("sparql=" + sparql);
-		DataTable resultDataTable = doQuery(modelsToUse, dataColumnsToUse, sparql, persister);
+		DataTable resultDataTable = doQuery(modelsToUse, dataColumnsToUse, sparql);
 		return resultDataTable;
 	}
 	
-	public abstract List<DataColumn> selectDataColumns(Collection<String> modelsToUse,
-			Persister persister);
+	public abstract List<DataColumn> selectDataColumns(Collection<String> modelsToUse);
 
 	/**
 	 * Get the Collection of NamedModels from which to extract data.  Implementations should
@@ -112,7 +109,7 @@ public abstract class ASparqlSampler extends ASampler {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<String> selectNamedModels(Persister persister) {
+	public Collection<String> selectNamedModels() {
 		log.debug("getSelectedNamedModels()=" + getSelectedNamedModels());
 		//if named models already selected, return
 		if (getSelectedNamedModels() != null && getSelectedNamedModels().size() > 0) {
@@ -148,7 +145,7 @@ public abstract class ASparqlSampler extends ASampler {
 	 * @param dataColumnsToUse 
 	 * @return
 	 */
-	protected DataTable doQuery(Collection<String> namedModelsToUse, List<DataColumn> dataColumnsToUse, String sparql, Persister persister) {
+	protected DataTable doQuery(Collection<String> namedModelsToUse, List<DataColumn> dataColumnsToUse, String sparql) {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(namedModelsToUse);
 		queryCriteria.setQuery(sparql);

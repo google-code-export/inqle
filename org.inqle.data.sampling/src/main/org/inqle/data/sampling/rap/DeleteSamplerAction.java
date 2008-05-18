@@ -5,12 +5,9 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.IPartType;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 /**
  * @author David Donohue
@@ -19,7 +16,7 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
 public class DeleteSamplerAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister;
+	//private Persister persister;
 	private ISampler samplerToDelete = null;
 	private CustomizedSamplerPart samplerPart = null;
 	
@@ -27,13 +24,13 @@ public class DeleteSamplerAction extends Action {
 	
 	//public DeleteSamplerAction(String menuText, CustomizedSamplerPart samplerPart, ISampler samplerToDelete, IWorkbenchWindow window, Persister persister) {
 		
-	public DeleteSamplerAction(String menuText, CustomizedSamplerPart samplerPart, IWorkbenchWindow window, Persister persister) {
+	public DeleteSamplerAction(String menuText, CustomizedSamplerPart samplerPart, IWorkbenchWindow window) {
 		this.window = window;
 		this.menuText = menuText;
 		this.samplerPart = samplerPart;
 		ISampler baseSampler = samplerPart.getSamplerFactory().getBaseSampler();
 		this.samplerToDelete  = (ISampler)baseSampler.createReplica();
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
 	public String getText() {
@@ -55,6 +52,7 @@ public class DeleteSamplerAction extends Action {
 			confirmDelete = MessageDialog.openConfirm(window.getShell(), "Delete this Sampler", "Are you sure you want to delete sampler\n'" + samplerToDelete.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (confirmDelete) {
+			Persister persister = Persister.getInstance();
 			Persister.remove(samplerToDelete, persister.getMetarepositoryModel());
 			IPartType parentPart = samplerPart.getParent();
 			parentPart.fireUpdate(parentPart);

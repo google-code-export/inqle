@@ -6,16 +6,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.extensions.util.ExtensionFactory;
-import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.rap.ISamplerFactory;
-
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.rdf.model.Literal;
 
 public class SamplerLister {
 

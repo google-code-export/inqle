@@ -4,24 +4,11 @@ import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.sampling.DataTable;
-import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SimpleSparqlSampler;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
-import org.inqle.ui.rap.pages.SingleTextPage;
 import org.inqle.ui.rap.table.BeanTableSelectorPage;
-import org.inqle.ui.rap.table.ConverterIdToJenabean;
-import org.inqle.ui.rap.table.ConverterJenabeanToId;
-import org.inqle.ui.rap.table.RdfTableSelectorPage;
-import org.inqle.ui.rap.table.SparqlSelectorPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -32,8 +19,8 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 
 	//protected SimpleSparqlSampler bean;
 	
-	public SimpleSparqlSamplerWizard(Model saveToModel, Persister persister, Shell shell) {
-		super(saveToModel, persister, shell);
+	public SimpleSparqlSamplerWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
 	}
 
 	@Override
@@ -48,13 +35,14 @@ public class SimpleSparqlSamplerWizard extends SamplerWizard {
 		addPage(nameDescriptionPage);
 		
 		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedNamedModels", String.class, "Select dataset(s) for sampling", null);
+		Persister persister = Persister.getInstance();
 		selectedModelsPage.setBeans(persister.listNamedModels());
 		selectedModelsPage.setTableBeanClass(NamedModel.class);
 		selectedModelsPage.setPropertyNames(Arrays.asList(new String[]{"modelName", "id", "class"}));
 		addPage(selectedModelsPage);
 		
 		SamplerBackedSparqlSelectorPage selectPredicatesPage = new SamplerBackedSparqlSelectorPage(sampler, "selectedPredicates", String.class, "Select predicates for learning", null);
-		selectPredicatesPage.setPersister(persister);
+		//selectPredicatesPage.setPersister(persister);
 		selectPredicatesPage.setQuery(SimpleSparqlSampler.SPARQL_GET_DISTINCT_PREDICATES);
 		selectPredicatesPage.setPropertyNames(Arrays.asList(new String[]{"predicate"}));
 		selectPredicatesPage.setKeyPropertyName("predicate");

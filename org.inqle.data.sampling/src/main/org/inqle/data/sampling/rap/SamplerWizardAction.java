@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.actions.DynaWizardDialog;
@@ -15,7 +14,7 @@ public class SamplerWizardAction extends Action {
 	public static final int MODE_OPEN = 2;
 	public static final int MODE_CLONE = 3;
 	private SamplerPart samplerPart;
-	private Persister persister;
+	//private Persister persister;
 	private IWorkbenchWindow window;
 	private String menuText;
 	private int mode;
@@ -24,14 +23,14 @@ public class SamplerWizardAction extends Action {
 
 	static Logger log = Logger.getLogger(SamplerWizardAction.class);
 	
-	public SamplerWizardAction(int mode, String menuText, SamplerPart samplerPart, IWorkbenchWindow window, Persister persister) {
+	public SamplerWizardAction(int mode, String menuText, SamplerPart samplerPart, IWorkbenchWindow window) {
 		// TODO Auto-generated constructor stub
 		this.mode = mode;
 		this.menuText = menuText;
 		this.samplerPart = samplerPart;
 		this.samplerFactory = samplerPart.getSamplerFactory();
 		this.window = window;
-		this.persister = persister;
+		//this.persister = persister;
 //		log.info("Created SamplerWizardAction.");
 	}
 	
@@ -59,13 +58,15 @@ public class SamplerWizardAction extends Action {
 		//if (mode == MODE_RUN) {
 			//wizard = new SamplerRunnerWizard(sampler, window.getShell());
 		if (mode == MODE_OPEN) {
+			Persister persister = Persister.getInstance();
 			log.trace("Opening wizard...");
-			wizard = samplerFactory.createWizardForReplica(persister.getMetarepositoryModel(), persister, window.getShell());
+			wizard = samplerFactory.createWizardForReplica(persister.getMetarepositoryModel(), window.getShell());
 			wizard.setPart(samplerPart);
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();
 			log.trace("Opened wizard.");
 		} else if (mode == MODE_CLONE) {
+			Persister persister = Persister.getInstance();
 			sampler.setName("Clone of " + sampler.getName());
 			persister.persist(sampler, persister.getMetarepositoryModel());
 			samplerPart.fireUpdatePart();

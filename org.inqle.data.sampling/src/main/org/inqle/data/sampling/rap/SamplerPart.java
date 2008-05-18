@@ -9,20 +9,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
-
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.rdf.model.Literal;
 
 /**
  * @author David Donohue
@@ -126,7 +116,7 @@ public class SamplerPart extends PartType {
 			childSamplerFactory.setBaseSampler(childSampler);
 			CustomizedSamplerPart part = new CustomizedSamplerPart(childSamplerFactory);
 			part.setParent(this);
-			part.setPersister(persister);
+			//part.setPersister(persister);
 			part.addListener(listener);
 			childParts.add(part);
 		}
@@ -152,7 +142,7 @@ public class SamplerPart extends PartType {
 		//"Clone this Sampler" action.  This wizard works with a clone of the base sampler
 		//ISampler cloneOfSampler = samplerFactory.cloneSampler();
 		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
-		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Clone this sampler", this, workbenchWindow, persister);
+		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Clone this sampler", this, workbenchWindow);
 		cloneSamplerWizardAction.setSampler(cloneOfSampler); 
 		manager.add(cloneSamplerWizardAction);
 	}

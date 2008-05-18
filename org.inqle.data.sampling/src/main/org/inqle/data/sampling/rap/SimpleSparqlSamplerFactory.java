@@ -2,7 +2,6 @@ package org.inqle.data.sampling.rap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SimpleSparqlSampler;
@@ -29,11 +28,12 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 		return baseSampler;
 	}
 
-	public SimpleSparqlSamplerWizard createWizard(Model model, Persister persister, Shell shell) {
+	public SimpleSparqlSamplerWizard createWizard(Model model, Shell shell) {
+		Persister persister = Persister.getInstance();
 		if (model == null) {
 			model = persister.getMetarepositoryModel();
 		}
-		SimpleSparqlSamplerWizard wizard = new SimpleSparqlSamplerWizard(model, persister, shell);
+		SimpleSparqlSamplerWizard wizard = new SimpleSparqlSamplerWizard(model, shell);
 		return wizard;
 	}
 
@@ -68,10 +68,9 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 //		return replicaSampler;
 //	}
 
-	public ISamplerWizard createWizardForReplica(Model model,
-			Persister persister, Shell shell) {
+	public ISamplerWizard createWizardForReplica(Model model, Shell shell) {
 		//log.info("createWizardForReplica()...");
-		SimpleSparqlSamplerWizard wizard = createWizard(model, persister, shell);
+		SimpleSparqlSamplerWizard wizard = createWizard(model, shell);
 		SimpleSparqlSampler replica = baseSampler.createReplica();
 		wizard.setBean(replica);
 		//log.info("Created wizard with (replica) Sampler: " + JenabeanWriter.toString(replica));
