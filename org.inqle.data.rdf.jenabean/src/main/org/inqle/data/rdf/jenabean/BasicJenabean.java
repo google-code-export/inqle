@@ -6,8 +6,11 @@ package org.inqle.data.rdf.jenabean;
 import java.util.Date;
 import java.util.UUID;
 
+import org.inqle.data.rdf.RDF;
+
 
 import thewebsemantic.Id;
+import thewebsemantic.Namespace;
 import thewebsemantic.TypeWrapper;
 
 /**
@@ -17,6 +20,7 @@ import thewebsemantic.TypeWrapper;
  * @author David Donohue
  * Jan 25, 2008
  */
+@Namespace(RDF.INQLE)
 public abstract class BasicJenabean implements IBasicJenabean {
 
 	protected String id;

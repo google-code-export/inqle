@@ -3,8 +3,12 @@ package org.inqle.data.rdf.jenabean;
 import java.util.Date;
 import java.util.UUID;
 
-import thewebsemantic.Id;
+import org.inqle.data.rdf.RDF;
 
+import thewebsemantic.Id;
+import thewebsemantic.Namespace;
+
+@Namespace(RDF.INQLE)
 public abstract class UniqueJenabean extends BasicJenabean implements IUniqueJenabean {
 
 	private Date creationDate;
