@@ -27,6 +27,7 @@ import org.osgi.service.component.ComponentContext;
  * TODO permit selection on basis of user input: decide() method should take some argument which contains such info
  * TODO permit weighting of DES by user using RDF annotations, via the GUI
  */
+@Deprecated
 public class SamplerDecider implements ISamplerDecider {
 
 	private int totalWeight = 0;
@@ -125,20 +126,20 @@ public class SamplerDecider implements ISamplerDecider {
 		/*ISampler[] deStrategies = (ISampler[])context.locateServices("org.inqle.data.sampling.ISampler");
 		for (ISampler des: deStrategies) {*/
 		System.out.println("Registering Sampler " + des.getClass());
-		Dictionary<?, ?> properties = des.getProperties();
-		if (properties == null) {
-			//log.error("Unable to add ISampler " + des + " as it does not have any properties.  At a minimum, should have property '" + IStrategy.PROPERTY_WEIGHT + "'.");
-			return;
-		}
+//		Dictionary<?, ?> properties = des.getProperties();
+//		if (properties == null) {
+//			//log.error("Unable to add ISampler " + des + " as it does not have any properties.  At a minimum, should have property '" + IStrategy.PROPERTY_WEIGHT + "'.");
+//			return;
+//		}
 		int weight = 1;
-		try {
-			Integer weightInt = Integer.parseInt((String)des.getProperties().get(ISampler.PROPERTY_WEIGHT));
-			weight = weightInt.intValue();
-		} catch (NumberFormatException e) {
-			//default weight is 1
-			//log.warn("ISampler of class " + des.getClass() + " does not have a recognizable numeric value for attribute " + IStrategy.PROPERTY_WEIGHT + "  Assigning it a value of 1");
-			weight = 1;
-		}
+//		try {
+//			Integer weightInt = Integer.parseInt((String)des.getProperties().get(ISampler.PROPERTY_WEIGHT));
+//			weight = weightInt.intValue();
+//		} catch (NumberFormatException e) {
+//			//default weight is 1
+//			//log.warn("ISampler of class " + des.getClass() + " does not have a recognizable numeric value for attribute " + IStrategy.PROPERTY_WEIGHT + "  Assigning it a value of 1");
+//			weight = 1;
+//		}
 		if (weight > 0) {
 			totalWeight += weight;
 			

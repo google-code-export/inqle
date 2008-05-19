@@ -69,7 +69,7 @@ public interface ISampler extends IUniqueJenabean {
 //	
 //	public void setResultDataTable(DataTable resultDataTable);
 
-	public Dictionary<?, ?> getProperties();
+	//public Dictionary<?, ?> getProperties();
 	
 //	/**
 //	 * Prepare this object for archiving.
@@ -85,7 +85,7 @@ public interface ISampler extends IUniqueJenabean {
 	
 	public String getUri();
 	
-	public void setProperties(Dictionary<?, ?> properties);
+	//public void setProperties(Dictionary<?, ?> properties);
 	
 	public String getName();
 

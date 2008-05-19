@@ -94,6 +94,7 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	}
 
 	@Override
+	//TODO: add predicates if too few, remove attributes if too many
 	public List<DataColumn> selectDataColumns(Collection<String> modelsToUse) {
 		List<DataColumn> dataColumnsList = new ArrayList<DataColumn>();
 		//first step: select predicates, if not already done
@@ -188,13 +189,13 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	 */
 	public void clone(SimpleSparqlSampler templateSampler) {
 		super.clone(templateSampler);
-		setSelectedPredicates(((SimpleSparqlSampler)templateSampler).getSelectedPredicates());
+		setSelectedPredicates(templateSampler.getSelectedPredicates());
 		//setAvailablePredicates(((SimpleSparqlSampler)templateSampler).getAvailablePredicates());
 	}
 	
 	public void replicate(SimpleSparqlSampler objectToClone) {
 		clone(objectToClone);
-		super.replicate(objectToClone);
+		setId(objectToClone.getId());
 	}
 
 //	public Collection<String> getAvailablePredicates() {

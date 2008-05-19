@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.extensions.util.ExtensionFactory;
+import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.rap.ISamplerFactory;
 
@@ -34,15 +35,36 @@ public class SamplerLister {
 //		return customSamplers;
 //	}
 	
-	@SuppressWarnings("unchecked")
 	public static List<ISampler> listCustomSamplers(ISampler baseSampler) {
+		log.info("listing customized Samplers for base sampler of id=" + baseSampler.getId() + "\n" + baseSampler);
 		Persister persister = Persister.getInstance();
 		Class<?> samplerClass = baseSampler.getClass();
 		Collection<?> samplerObjCollection = persister.reconstituteAll(samplerClass);
-		List<?> samplerObjList = new ArrayList<Object>(samplerObjCollection);
-		return (List<ISampler>) samplerObjList;
+		
+		//remove the base (uncustomized) sampler if it is present, and add true custom samplers to the List
+		List<ISampler> samplers = new ArrayList<ISampler>();
+		for (Object samplerObj: samplerObjCollection) {
+			ISampler sampler = (ISampler) samplerObj;
+			if(sampler.getId().equals(baseSampler.getId())) {
+				continue;
+			}
+			//if the current sampler has already been added, skip it
+			if (samplers != null && samplers.contains(sampler)) {
+				log.info("Sampler already added; skipping it: " + sampler);
+				continue;
+			}
+			log.info("Adding Sampler of id=" + sampler.getId() + "\n" + sampler);
+			samplers.add(sampler);
+		}
+		//List<?> samplerObjList = new ArrayList<Object>(samplerObjCollection);
+		//return (List<ISampler>) samplerObjList;
+		return samplers;
 	}
 	
+	/**
+	 * List plugin samplers plus their customized children
+	 * @return
+	 */
 	public static List<ISampler> listSamplers() {
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		
@@ -59,20 +81,19 @@ public class SamplerLister {
 		return samplers;
 	}
 	
-	
-//	private static String getSparqlToFindChildren(ISampler sampler) {
-//		String sparql = "PREFIX rdf: <" + RDF.RDF + ">\n" + 
-//			//"PREFIX ja: <" + RDF.JA + ">\n" + 
-//			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-//			"SELECT ?id \n" +
-//			"{\n" +
-//			"GRAPH ?g {\n" +
-//			"?samplerUri inqle:id ?id \n" +
-//			" . ?samplerUri a ?classUri\n" +
-//			" . ?classUri <" + RDF.JAVA_CLASS + "> \"" + 
-//			sampler.getClass().getName()  +
-//			"\" \n" +
-//			"\n} }\n";
-//		return sparql;
+//	public static List<ISamplerFactory> listSamplerFactorys(Persister persister) {
+//		List<ISamplerFactory> samplerFactories = new ArrayList<ISamplerFactory>();
+//		
+//		List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(ISamplerFactory.ID);
+//		
+//		for (IExtensionSpec extensionSpec: extensionSpecs) {
+//			if (extensionSpec == null) continue;
+//			ISamplerFactory experiment = SamplerFactoryFactory.createSamplerFactory(extensionSpec);
+//			experiments.add(experiment);
+//		}
+//		
+//		//TODO v0.2: add experiments from RDF
+//		
+//		return experiments;
 //	}
 }
