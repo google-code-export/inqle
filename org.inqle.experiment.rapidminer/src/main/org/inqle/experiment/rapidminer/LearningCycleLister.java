@@ -22,13 +22,12 @@ public class LearningCycleLister {
 		return learningCycles;
 	}
 	
-	//public static List<LearningCycle> listAllLearningCycles(Persister persister) {
 	public static List<LearningCycle> listAllLearningCycles() {
 		List<LearningCycle> learningCycles = new ArrayList<LearningCycle>();
 		//add the base (uncustomized) LearningCycle
 		LearningCycle baseLC = new LearningCycle();
-		//baseLC.setPersister(persister);
 		learningCycles.add(baseLC);
+		//add all customized learning cycles
 		learningCycles.addAll(listCustomizedLearningCycles());
 		return learningCycles;
 	}
