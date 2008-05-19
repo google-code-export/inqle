@@ -52,4 +52,14 @@ public class InqleInfo {
 	public static String getTempDirectory() {
 		return System.getProperty("java.io.tmpdir");
 	}
+
+	public static final String ATTRIBUTE_CLASS = "class";
+
+	public static final String FILE_ATTRIBUTE = "file";
+
+	public static final String WEIGHT_ATTRIBUTE = "weight";
+
+	public static final String TYPE_ATTRIBUTE = "type";
+
+	public static final String ID_ATTRIBUTE = "id";
 }
