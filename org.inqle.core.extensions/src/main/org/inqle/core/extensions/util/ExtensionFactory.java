@@ -10,10 +10,10 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+import org.inqle.core.util.InqleInfo;
 
 public class ExtensionFactory {
 
-	private static final String ATTRIBUTE_CLASS = "class";
 	private static Logger log = Logger.getLogger(ExtensionFactory.class);
 	/**
 	 * Get a list of all extension points
@@ -90,9 +90,9 @@ public class ExtensionFactory {
 	 */
 	public static Object createExtensionObject(IExtensionSpec spec) {
 		Object instance = null;
-		String className = spec.getAttribute(ATTRIBUTE_CLASS);
+		String className = spec.getAttribute(InqleInfo.ATTRIBUTE_CLASS);
 		if (className == null) {
-			log.error("Unable to instantiate object from spec " + spec + " as it lacks attribute '" + ATTRIBUTE_CLASS + "'.");
+			log.error("Unable to instantiate object from spec " + spec + " as it lacks attribute '" + InqleInfo.ATTRIBUTE_CLASS + "'.");
 			return null;
 		}
 		Class<?> clazz;
