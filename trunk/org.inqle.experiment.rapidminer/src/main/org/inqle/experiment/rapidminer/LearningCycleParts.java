@@ -76,6 +76,7 @@ public class LearningCycleParts extends PartType {
 			new LearningCycleWizardAction(
 					"Create a new customized learning cycle...", 
 					workbenchWindow);
+		newExperimentWizardAction.setLearningCycle(new LearningCycle().createClone());
 		newExperimentWizardAction.setPartToRefresh(this);
 		manager.add(newExperimentWizardAction);
 	}

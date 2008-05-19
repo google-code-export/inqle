@@ -3,13 +3,18 @@
  */
 package org.inqle.experiment.rapidminer;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
+import org.inqle.experiment.rapidminer.agent.ExperimenterBeanProvider;
 import org.inqle.ui.rap.actions.DynaWizard;
 import org.inqle.ui.rap.pages.ListSelectorPage;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
+import org.inqle.ui.rap.pages.RadioOrListSelectorPage;
 
 import com.hp.hpl.jena.ontology.OntModel;
 
@@ -21,6 +26,11 @@ public class LearningCycleWizard extends DynaWizard {
 
 	//private LearningCycle learningCycle;
 
+	private static final String[] RADIO_OPTIONS = {
+		"Use a randomly-selected Sampler",
+		"Use the below-selected Sampler"
+	};
+	
 	private static Logger log = Logger.getLogger(LearningCycleWizard.class);
 	
 	public LearningCycleWizard(LearningCycle learningCycle, OntModel learningCycleModel, Shell shell) {
@@ -38,10 +48,21 @@ public class LearningCycleWizard extends DynaWizard {
 		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(learningCycle, "Name and Description", null);
 		addPage(nameDescriptionPage);
 		
-		ListSelectorPage samplerSelectorPage = new ListSelectorPage(learningCycle, "sampler", "Select sampler to use", null);
-		samplerSelectorPage.setBeanItemClass(ISampler.class);
+//		ListSelectorPage samplerSelectorPage = new ListSelectorPage(learningCycle, "sampler", "Select sampler to use", null);
+//		samplerSelectorPage.setBeanItemClass(ISampler.class);
+//		ISampler[] nullSamplerArray = {};
+//		samplerSelectorPage.setListItems(SamplerLister.listSamplers().toArray(nullSamplerArray));
+//		addPage(samplerSelectorPage);
+		
+		RadioOrListSelectorPage samplerSelectorPage = new RadioOrListSelectorPage(bean, "sampler", "Select Sampler to use", null);
+		samplerSelectorPage.setBeanItemClass(ILearningCycle.class);
 		ISampler[] nullSamplerArray = {};
 		samplerSelectorPage.setListItems(SamplerLister.listSamplers().toArray(nullSamplerArray));
+		List<String> radioOptionTexts = Arrays.asList(RADIO_OPTIONS);
+		samplerSelectorPage.setRadioOptionTexts(radioOptionTexts);
+		SamplerBeanProvider samplerBeanProvider = new SamplerBeanProvider();
+		samplerBeanProvider.setBean(bean);
+		samplerSelectorPage.setRadioBeanProvider(samplerBeanProvider);
 		addPage(samplerSelectorPage);
 		
 		SamplingResultPage samplingResultsPage = new SamplingResultPage(learningCycle, "Result of Sampling");

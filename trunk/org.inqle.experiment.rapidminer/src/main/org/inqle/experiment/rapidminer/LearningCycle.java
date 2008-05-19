@@ -32,7 +32,11 @@ import com.rapidminer.operator.performance.PerformanceVector;
  */
 @Namespace(RDF.INQLE)
 public class LearningCycle extends UniqueJenabean implements ILearningCycle {
+	public static final int USE_RANDOM_SAMPLER = 0;
+	public static final int USE_SELECTED_SAMPLER = 1;
+	
 	private ISampler sampler;
+	private int samplerMode = USE_RANDOM_SAMPLER;
 	private DataColumn labelDataColumn;
 	private IRapidMinerExperiment rapidMinerExperiment;
 	//private Persister persister;
@@ -85,6 +89,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	public void clone(LearningCycle objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		setSampler(objectToBeCloned.getSampler());
+		setSamplerMode(objectToBeCloned.getSamplerMode());
 		setLabelDataColumn(objectToBeCloned.getLabelDataColumn());
 		setRapidMinerExperiment(objectToBeCloned.getRapidMinerExperiment());
 	}
@@ -138,18 +143,23 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		experimentResult.setExperimentSubjectArc(idColumn.getArc());
 		experimentResult.setExperimentLabelArc(labelDataColumn.getArc());
 		experimentResult.setRapidMinerExperiment(experimentToUse);
-		experimentResult.setExperimentAttributeArcs(resultDataTable.getLearnableColumnArcSet());
+		List<DataColumn> learnableDataColumns = resultDataTable.getLearnableColumns();
+		learnableDataColumns.remove(labelDataColumn);
+		experimentResult.setExperimentAttributeArcs(DataTable.getArcSet(learnableDataColumns));
 		//experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
-		log.info("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
-		log.info("resultDataTable.getLearnableColumnArcSet()=" + resultDataTable.getLearnableColumnArcSet());
+		log.trace("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
+		log.info("resultDataTable.getLearnableColumnArcSet()=" + DataTable.getArcSet(learnableDataColumns));
 		return experimentResult;
 	}
 
 	private ISampler selectSampler() {
-		if (getSampler() != null) {
-			return getSampler();
+		if (samplerMode == USE_RANDOM_SAMPLER || getSampler() == null) {
+			return selectRandomSampler();
 		}
-		
+		return getSampler();
+	}
+	
+	public ISampler selectRandomSampler() {
 		List<ISampler> availableSamplers = SamplerLister.listSamplers();
 		int randomIndex = RandomListChooser.chooseRandomIndex(availableSamplers.size());
 		return availableSamplers.get(randomIndex);
@@ -256,6 +266,14 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			//no PerformanceVector present
 		}
 		return experimentResult;
+	}
+
+	public int getSamplerMode() {
+		return samplerMode;
+	}
+
+	public void setSamplerMode(int samplerMode) {
+		this.samplerMode = samplerMode;
 	}
 	
 }
