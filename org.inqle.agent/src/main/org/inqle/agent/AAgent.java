@@ -4,7 +4,10 @@
 package org.inqle.agent;
 
 import org.apache.log4j.Logger;
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
+
+import thewebsemantic.Namespace;
 
 /**
  * Abstract base class for creating agents.  New agent classes
@@ -21,6 +24,7 @@ import org.inqle.data.rdf.jenabean.UniqueJenabean;
  * @author David Donohue
  * Apr 24, 2008
  */
+@Namespace(RDF.INQLE)
 public abstract class AAgent extends UniqueJenabean implements IAgent {
 
 	public static final int CYCLE_CONTINUOUSLY = -1;

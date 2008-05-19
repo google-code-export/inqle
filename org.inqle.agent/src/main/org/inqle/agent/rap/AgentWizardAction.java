@@ -5,6 +5,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.IAgent;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.actions.DynaWizardDialog;
 
@@ -57,6 +58,7 @@ public class AgentWizardAction extends Action {
 		if (mode == MODE_RUN) {
 			//wizard = new AgentRunnerWizard(agent, window.getShell());
 		} else if (mode == MODE_OPEN) {
+			log.info("Creating wizard w/ part:" + JenabeanWriter.toString(agentPart));
 			//log.info("Creating wizard...");
 			wizard = agentFactory.createWizardForReplica(persister.getMetarepositoryModel(), window.getShell());
 			wizard.setPart(agentPart);
