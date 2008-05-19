@@ -41,8 +41,8 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 	protected Collection<String> selectedNamedModels;
 //	protected DataColumn subjectDataColumn;
 	protected String id;
-	protected Dictionary<?, ?> properties;
-	private String name;
+	//protected Dictionary<?, ?> properties;
+//	private String name;
 	
 	/**
 	 * Add all field values from the provided template sampler to this sampler,
@@ -56,8 +56,8 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 		//setResultDataTable(templateSampler.getResultDataTable());
 		setSelectedNamedModels(templateSampler.getSelectedNamedModels());
 		//setSubjectDataColumn(templateSampler.getSubjectDataColumn());
-		setProperties(templateSampler.getProperties());
-		setName(templateSampler.getName());
+		//setProperties(templateSampler.getProperties());
+		//setName(templateSampler.getName());
 		super.clone(templateSampler);
 	}
 	
@@ -78,9 +78,9 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 		return labelDataColumn;
 	}
 
-	public Dictionary<?, ?> getProperties() {
-		return properties;
-	}
+//	public Dictionary<?, ?> getProperties() {
+//		return properties;
+//	}
 
 //	public DataTable getResultDataTable() {
 //		return resultDataTable;
@@ -127,10 +127,11 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //		this.subjectDataColumn = subjectDataColumn;
 //	}
 
-	public void setProperties(Dictionary<?, ?> properties) {
-		this.properties = properties;
-	}
+//	public void setProperties(Dictionary<?, ?> properties) {
+//		this.properties = properties;
+//	}
 
+	@Override
 	public String getName() {
 		if (name == null) {
 			return this.getClass().getName();
@@ -138,9 +139,9 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;		
-	}
+//	public void setName(String name) {
+//		this.name = name;		
+//	}
 
 //	/**
 //	 * Override to perform all steps of this sampler

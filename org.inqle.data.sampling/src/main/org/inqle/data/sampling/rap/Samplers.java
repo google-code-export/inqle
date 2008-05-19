@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.extensions.util.ExtensionFactory;
+import org.inqle.core.extensions.util.IExtensionSpec;
+import org.inqle.data.sampling.SamplerFactoryFactory;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 
@@ -14,7 +16,7 @@ import org.inqle.ui.rap.PartType;
  */
 public class Samplers extends PartType {
 	
-	private Logger log = Logger.getLogger(Samplers.class);
+	private static Logger log = Logger.getLogger(Samplers.class);
 	
 	private static final String ICON_PATH = "org/inqle/data/sampling/rap/images/samplers.jpeg";
 	/* 
@@ -25,15 +27,20 @@ public class Samplers extends PartType {
 	 * @see org.inqle.ui.rap.IPartType#getChildren()
 	 */
 	public IPart[] getChildren() {
-		List<Object> objects =  ExtensionFactory.getExtensions(ISamplerFactory.ID);
+		//List<Object> objects =  ExtensionFactory.getExtensions(ISamplerFactory.ID);
+		List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(ISamplerFactory.ID);
 		IPart[] nullIPartArr = new IPart[] {};
-		if (objects == null) {
+		if (extensionSpecs == null) {
 			return nullIPartArr;
 		}
 		List<IPart> parts = new ArrayList<IPart>();
-		for (Object object: objects) {
-			if (object == null) continue;
-			ISamplerFactory samplerFactory = (ISamplerFactory)object;
+		//for (Object object: objects) {
+		for (IExtensionSpec extensionSpec: extensionSpecs) {
+			if (extensionSpec == null) {
+				continue;
+			}
+			//ISamplerFactory samplerFactory = (ISamplerFactory)object;
+			ISamplerFactory samplerFactory = SamplerFactoryFactory.createSamplerFactory(extensionSpec);
 			SamplerPart part = new SamplerPart(samplerFactory);
 			//part.setPersister(persister);
 			part.addListener(this.listener);

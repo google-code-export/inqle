@@ -16,7 +16,9 @@
          point="org.inqle.data.sampling.rap.ISamplerFactory">
       <sampler-factory
       		 class="org.inqle.data.sampling.rap.SimpleSparqlSamplerFactory"
-           weight="1000">
+           weight="1000"
+           name="SimpleSparqlSampler"
+           description="From 1 or more datasets, this Sampler selects 2-3 RDF predicates as attributes.  It then attempts to assemble a set of data which has these attributes in common.">
       </sampler-factory>
    </extension>
 

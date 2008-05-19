@@ -23,7 +23,7 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 	public ISampler getBaseSampler() {
 		//log.info("getBaseSampler() called");
 		if (baseSampler == null) {
-			baseSampler = new SimpleSparqlSampler();
+			baseSampler = newSampler();
 		}
 		return baseSampler;
 	}
@@ -55,8 +55,10 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 //		return sampler;
 //	}
 
-	public ISampler newSampler() {
+	public SimpleSparqlSampler newSampler() {
 		SimpleSparqlSampler sampler = new SimpleSparqlSampler();
+		sampler.setName(getName());
+		sampler.setDescription(getDescription());
 		return sampler;
 	}
 
@@ -80,6 +82,8 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 	public ISamplerFactory cloneFactory() {
 		SimpleSparqlSamplerFactory newFactory = new SimpleSparqlSamplerFactory();
 		newFactory.setBaseSampler(baseSampler);
+		newFactory.setName(getName());
+		newFactory.setDescription(getDescription());
 		return newFactory;
 	}
 	

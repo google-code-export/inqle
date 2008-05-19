@@ -121,13 +121,32 @@ public class DataTable {
 		return learnableColumns;
 	}
 	
-	public ArcSet getLearnableColumnArcSet() {
+//	/**
+//	 * Get List of all DataColumns, excluding the ID
+//	 * @return
+//	 */
+//	public List<DataColumn> getRegularAttributeColumns() {
+//		log.trace("getRegularAttributeColumns() called; getIdColumnIndex()=" + getIdColumnIndex());
+//		List<DataColumn> learnableColumns = new ArrayList<DataColumn>(getColumns());
+//		log.trace("all columns=" + learnableColumns);
+//		DataColumn idColumn = getColumn(getIdColumnIndex());
+//		DataColumn labelColumn = getColumn(getColumnIndex());
+//		try {
+//			learnableColumns.remove(getIdColumnIndex());
+//		} catch (Exception e) {
+//			log.warn("Unable to remove ID column from the list of columns.  All columns will be used for learning.", e);
+//		}
+//		log.trace("returning learnable columns=" + learnableColumns);
+//		return learnableColumns;
+//	}
+	
+	public static ArcSet getArcSet(List<DataColumn> dataColumns) {
 //		List<Arc> learnableArcs = new ArrayList<Arc>();
 //		for (DataColumn dataColumn: getLearnableColumns()) {
 //			learnableArcs.add(dataColumn.getArc());
 //		}
 		ArcSet learnableArcs = new ArcSet();
-		for (DataColumn dataColumn: getLearnableColumns()) {
+		for (DataColumn dataColumn: dataColumns) {
 			learnableArcs.addArc(dataColumn.getArc());
 		}
 		return learnableArcs;
