@@ -72,7 +72,7 @@ public class TestJenabean {
 		JenabeanWriter.toString(globalJenabeanObject);
 	}
 	
-	//@Test
+	@Test
 	public void testJenabeanArraysOfJenabeans() {
 		BeanWithString bean1 = new BeanWithString();
 		bean1.setId("bean1");

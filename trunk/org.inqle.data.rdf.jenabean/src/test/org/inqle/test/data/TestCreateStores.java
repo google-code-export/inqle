@@ -199,7 +199,7 @@ public class TestCreateStores {
 
 		//TODO test persister.remove() method
 		log.info("BEFORE remove(): testModel.size()=" + testModel.size());
-		persister.remove(appInfo, testModel);
+		Persister.remove(appInfo, testModel);
 		log.info("AFTER remove(): testModel.size()=" + testModel.size());
 		//assertEquals(0, testModel.size());
 		
@@ -208,6 +208,6 @@ public class TestCreateStores {
 		assertEquals(0, testModel.size());
 		
 		//close the Persister
-		persister.close();
+		//persister.close();
 	}
 }
