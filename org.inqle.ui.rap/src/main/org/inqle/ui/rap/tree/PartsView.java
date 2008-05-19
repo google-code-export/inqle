@@ -20,6 +20,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
+import org.inqle.ui.rap.actions.RefreshPartAction;
 import org.inqle.ui.rap.tree.parts.AllParts;
 
 /**
@@ -195,119 +196,8 @@ public class PartsView extends ViewPart implements IMenuListener {
 		
 		//add any Actions for this part
 		selectedPart.addActions(manager, getSite().getWorkbenchWindow());
+		
+		//add the Refresh option
+		manager.add(new RefreshPartAction(selectedPart));
 	}
 }
-
-
-/*
-
-
-class IPart {
-	private String name;
-	private IPartType shell;
-	
-	public IPart(String name) {
-		this.name = name;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setParent(IPartType shell) {
-		this.parent = shell;
-	}
-	public IPartType getParent() {
-		return shell;
-	}
-	public String toString() {
-		return getName();
-	}
-}
-
-
-class IPartType extends IPart {
-	private ArrayList children;
-	public IPartType(String name) {
-		super(name);
-		children = new ArrayList();
-	}
-	public void addChild(IPart child) {
-		children.add(child);
-		child.setParent(this);
-	}
-	public void removeChild(IPart child) {
-		children.remove(child);
-		child.setParent(null);
-	}
-	public IPart[] getChildren() {
-		return (IPart[]) children.toArray(new IPart[children.size()]);
-	}
-	public boolean hasChildren() {
-		return children.size()>0;
-	}
-}
-
-
-	/
-   * Starting with the provided IPartType, recursively 
-   * construct children and their children.
-   * @param parentPartType
-   * @return
-   
-	private IPartType getIPartType(IPartType parentPartType) {
-		Object[] children = parentPartType.getChildren();
-		IPartType shell = new IPartType(parentPartType.getName());
-		//add any children
-		for (Object child: children) {
-			String childName = null;
-			if (! (child instanceof IPart)) {
-				continue;
-			}
-			childName = ((IPart)child).getName();
-			if (child instanceof IPartType) {
-				IPartType childPartType = (IPartType) child;
-				IPartType subChildParent = getIPartType(childPartType);
-				shell.addChild(subChildParent);
-			} else {
-				shell.addChild(new IPart(childName));
-			}
-		}
-		return shell;
-	}
-
-
-private Menu getContextMenu() {
-		contextMenu = new Menu (shell.getShell(), SWT.POP_UP);
-		contextMenu.addListener(SWT.Show, new MenuShowListener());
-		return contextMenu;
-	}
-
-**
-	 * Add context-sensitive options to the right click menu
-	 * @author David Donohue
-	 * Feb 6, 2008
-	 *
-	public class MenuShowListener implements Listener {
-
-		//we only are concerned with right-clickings of single IPart objects
-		public void handleEvent(Event event) {
-			//log.info("Right click received: " + event);
-		  TreeItem[] selectedItems = viewer.getTree().getSelection();
-			if(selectedItems.length != 1) {
-        return;
-	    }
-			TreeItem selectedItem = selectedItems[0];
-			Object selectedObj = selectedItem.getData();
-			if (! (selectedObj instanceof IPart)) {
-				return;
-			}
-			
-			IPart selectedPart = (IPart)selectedObj;
-			//Menu contextMenu = getContextMenu();
-			
-			selectedPart.addContextMenuItems(contextMenu);
-			contextMenu.setVisible(true);
-	    //MessageDialog.openInformation(shell.getShell(), "Right Clicked", selectedPart.getName());
-		}
-
-	}
-*/
