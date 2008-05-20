@@ -43,8 +43,7 @@ Export-Package: org.inqle.experiment.rapidminer
 Bundle-ClassPath: bin/main/,
  .,
  lib/joone-engine.jar,
- lib/rapidminer.jar,
- lib/weka.jar
+ lib/rapidminer.jar
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.ui.rap, 
  org.inqle.data.rdf.jenabean
