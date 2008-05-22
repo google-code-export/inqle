@@ -9,6 +9,13 @@ Require-Bundle: org.eclipse.rap.rwt,
 Export-Package: org.eclipse.rwt.widgets,
  org.eclipse.rwt.widgets.upload.servlet
 Import-Package: javax.servlet;version="[2.3.0,2.5.0]",
- javax.servlet.http;version="[2.3.0,2.5.0]"
-Eclipse-RegisterBuddy: org.apache.commons.fileupload
-Bundle-RegisterBuddy: org.apache.commons.fileupload
+ javax.servlet.http;version="[2.3.0,2.5.0]",
+ org.xml.sax,
+ javax.xml.parsers,
+ org.w3c.dom,
+ org.xml.sax.ext,
+ org.xml.sax.helpers
+Eclipse-RegisterBuddy: org.apache.commons.fileupload,
+ org.eclipse.rap.ui.workbench
+Bundle-RegisterBuddy: org.apache.commons.fileupload,
+ org.eclipse.rap.ui.workbench
