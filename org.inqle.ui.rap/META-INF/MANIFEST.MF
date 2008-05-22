@@ -14,7 +14,12 @@ Require-Bundle: org.eclipse.rap.ui,
  org.eclipse.rwt.widgets.upload
 Import-Package: javax.servlet;version="2.4.0",
  javax.servlet.http;version="2.4.0",
- org.apache.log4j
+ org.apache.log4j,
+ org.xml.sax,
+ javax.xml.parsers,
+ org.w3c.dom,
+ org.xml.sax.ext,
+ org.xml.sax.helpers
 Eclipse-RegisterBuddy: org.inqle.core.extensions
 Bundle-RegisterBuddy: org.inqle.core.extensions
 Export-Package: org.inqle.ui.rap,
