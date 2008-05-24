@@ -15,7 +15,7 @@ public abstract class NamedModel extends JenaAssemblerObject {
 
 	private String modelName;
 
-	@RdfProperty(NS + "modelName")
+	//@RdfProperty(NS + "modelName")
 	public String getModelName() {
 		return modelName;
 	}
@@ -32,5 +32,10 @@ public abstract class NamedModel extends JenaAssemblerObject {
 	@Override
 	public void setName(String name) {
 		setModelName(name);
+	}
+	
+	public void clone(RDBModel objectToBeCloned) {
+		super.clone(objectToBeCloned);
+		setModelName(objectToBeCloned.getModelName());
 	}
 }
