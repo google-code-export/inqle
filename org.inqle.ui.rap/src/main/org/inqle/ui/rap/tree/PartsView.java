@@ -18,8 +18,11 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.inqle.core.domain.INamedAndDescribed;
+import org.inqle.data.rdf.AppInfo;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
+import org.inqle.ui.rap.actions.AppInfoWizardAction;
 import org.inqle.ui.rap.actions.RefreshPartAction;
 import org.inqle.ui.rap.tree.parts.AllParts;
 
@@ -145,6 +148,13 @@ public class PartsView extends ViewPart implements IMenuListener {
      * it.
      */
 	public void createPartControl(Composite parent) {
+		//if AppInfo not yet set up, show the setup wizard
+		Persister persister = Persister.getInstance();
+		while (persister.getAppInfo() == null) {
+			AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(getSite().getWorkbenchWindow());
+			appInfoWizardAction.run();
+		}
+		
 		this.parent = parent;
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		
@@ -156,6 +166,7 @@ public class PartsView extends ViewPart implements IMenuListener {
 		//viewer.addSelectionChangedListener(new ViewSelectionChangeListener());
 		contextMenuManager = getContextMenuManager();
 		viewer.getTree().setMenu(contextMenuManager.createContextMenu(viewer.getTree()));
+		
 		AllParts allParts = new AllParts();
 		allParts.addListener(viewContentProvider);
 		viewer.setInput(allParts);

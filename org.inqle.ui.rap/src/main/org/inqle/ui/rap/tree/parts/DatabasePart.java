@@ -13,6 +13,7 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
@@ -113,6 +114,7 @@ public class DatabasePart extends PartType {
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		//"Add a dataset" action
 		ModelWizardAction newModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
+		newModelWizardAction.setRdbModel(getNewRDBModel());
 		manager.add(newModelWizardAction);
 		
 		//"Edit this database" action
@@ -128,6 +130,12 @@ public class DatabasePart extends PartType {
 		//Delete action
 		DeleteDatabaseAction deleteDatabaseAction = new DeleteDatabaseAction("Delete", this, workbenchWindow);
 		manager.add(deleteDatabaseAction);
+	}
+
+	private RDBModel getNewRDBModel() {
+		RDBModel newModel = new RDBModel();
+		newModel.setConnection(this.getConnection());
+		return newModel.createClone();
 	}
 
 	public Connection getConnection() {

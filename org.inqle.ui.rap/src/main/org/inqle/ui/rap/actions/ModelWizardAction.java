@@ -8,6 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
@@ -22,10 +23,11 @@ public class ModelWizardAction extends Action {
 	public static final int MODE_CLONE = 2;
 	private String menuText;
 	private IWorkbenchWindow window;
-	private Persister persister = null;
+	//private Persister persister = null;
 	private int mode = MODE_NEW;
-	private ModelPart modelPart = null;
+	//private ModelPart modelPart = null;
 	private DatabasePart databasePart;
+	private RDBModel rdbModel;
 	
 	private static final Logger log = Logger.getLogger(ModelWizardAction.class);
 	
@@ -34,16 +36,17 @@ public class ModelWizardAction extends Action {
 		this.menuText = menuText;
 		this.databasePart = databasePart;
 		this.window = window;
-		this.persister = persister;
+		//this.persister = persister;
 	}
 	
-	public ModelPart getModelPart() {
-		return modelPart;
-	}
+//	public ModelPart getModelPart() {
+//		return modelPart;
+//	}
 
-	public void setModelPart(ModelPart modelPart) {
-		this.modelPart = modelPart;
-	}
+//	public void setModelPart(ModelPart modelPart) {
+//		this.modelPart = modelPart;
+//		this.rdbModel = modelPart.getRdbModel();
+//	}
 	
 	public String getText() {
 		return menuText;
@@ -52,14 +55,22 @@ public class ModelWizardAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		ModelWizard wizard = new ModelWizard(mode, databasePart);
+		ModelWizard wizard = new ModelWizard(mode, rdbModel, databasePart);
 		
 		//for MODE_NEW, do not add a starting base Connection
-		if (mode == MODE_EDIT || mode == MODE_CLONE) {
-			wizard.setModelPart(modelPart);
-		}
+		//if (mode == MODE_EDIT || mode == MODE_CLONE) {
+			//wizard.setModelPart(modelPart);
+		//}
 		
 		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 		dialog.open();
+	}
+
+	public RDBModel getRdbModel() {
+		return rdbModel;
+	}
+
+	public void setRdbModel(RDBModel rdbModel) {
+		this.rdbModel = rdbModel;
 	}
 }
