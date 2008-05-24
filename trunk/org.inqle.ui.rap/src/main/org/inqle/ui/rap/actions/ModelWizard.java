@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
@@ -46,7 +47,7 @@ public class ModelWizard extends Wizard {
 
 	Composite parent;
 	private DatabasePart databasePart = null;
-	private ModelPart modelPart;
+	//private ModelPart modelPart;
 	private RDBModel startingModel;
 	private RDBModel rdbModel;
 
@@ -62,6 +63,7 @@ public class ModelWizard extends Wizard {
 		}
 		
 		public void createControl(Composite pageParent) {
+			
 			parent = pageParent;
 			
 			//initialize the RDBModel to the base starting RDBModel
@@ -134,11 +136,12 @@ public class ModelWizard extends Wizard {
 
 	}
 	
-	public ModelWizard(int mode, DatabasePart databasePart) {
+	public ModelWizard(int mode, RDBModel startingModel, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
-		//this.persister = persister;
+		this.startingModel = startingModel;
 		this.connection = databasePart.getConnection();
+		resetModel();
 	}
 
 	/**
@@ -146,13 +149,13 @@ public class ModelWizard extends Wizard {
 	 * If this is not set, we will create a new connection afresh.
 	 * @param databasePart
 	 */
-	public void setModelPart(ModelPart modelPart) {
-		this.modelPart  = modelPart;
-		this.startingModel = modelPart.getRdbModel();
-	}
+//	public void setModelPart(ModelPart modelPart) {
+//		//this.modelPart  = modelPart;
+//		this.startingModel = modelPart.getRdbModel();
+//	}
 
 	@Override
-	public void addPages() {
+	public void addPages() {		
 		RDBModelInfoPage rdbModelInfoPage = new RDBModelInfoPage("Dataset Info");
 		addPage(rdbModelInfoPage);
 		
@@ -166,6 +169,7 @@ public class ModelWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
+
 		if (databasePart.hasModelNamed(rdbModel.getModelName())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
 					"This database already has a dataset named '" + rdbModel.getModelName() + "'.\nPlease choose a different name.");
@@ -181,9 +185,11 @@ public class ModelWizard extends Wizard {
 		}
 		Persister persister = Persister.getInstance();
 		persister.persist(rdbModel, persister.getMetarepositoryModel()); 
+		log.info("Saved dataset RDBModel=" + JenabeanWriter.toString(rdbModel));
 		if (this.mode == ModelWizardAction.MODE_NEW || this.mode == ModelWizardAction.MODE_CLONE) {
 			Model newModel = persister.createDBModel(connection, rdbModel.getModelName());
 			//persister.persist(rdbModel, newModel, false);
+			log.info("Created new model " + newModel);
 			databasePart.fireUpdate(databasePart);
 		} else if (this.mode == ModelWizardAction.MODE_EDIT) {
 			databasePart.fireUpdatePart();
@@ -195,11 +201,12 @@ public class ModelWizard extends Wizard {
 	public final void resetModel() {
 		if (mode == ModelWizardAction.MODE_EDIT) {
 			rdbModel = startingModel.createReplica();
-		} else if (mode == ModelWizardAction.MODE_CLONE) {
-			rdbModel = startingModel.createClone();
+		//} else if (mode == ModelWizardAction.MODE_CLONE) {
 		} else {
-			rdbModel = new RDBModel();
-			rdbModel.setConnection(this.connection);
+			rdbModel = startingModel.createClone();
+//		} else {
+//			rdbModel = new RDBModel();
+//			rdbModel.setConnection(this.connection);
 		}
 		assert(rdbModel != null);
 	}

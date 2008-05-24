@@ -38,7 +38,8 @@ public class ModelPart extends Part {
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		//"Edit this dataset" action
 		ModelWizardAction editModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_EDIT, "Edit this dataset...", (DatabasePart)this.getParent(), workbenchWindow);
-		editModelWizardAction.setModelPart(this);
+		//editModelWizardAction.setModelPart(this);
+		editModelWizardAction.setRdbModel(rdbModel);
 		manager.add(editModelWizardAction);
 		
 		//"Load data" action

@@ -6,6 +6,9 @@ import org.eclipse.swt.widgets.Display;
 //import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.AppInfo;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.actions.AppInfoWizardAction;
 
 /**
  * This class controls all aspects of the application's execution
@@ -17,6 +20,7 @@ public class Application implements IEntryPoint {
 		String inqleHome = Platform.getInstallLocation().getURL().getPath();
 		System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
 		System.setProperty("java.io.tmpdir", inqleHome + InqleInfo.TEMP_FOLDER);
+				
 		Display display = PlatformUI.createDisplay();
 		PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
 		return PlatformUI.RETURN_OK;
