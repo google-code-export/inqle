@@ -48,7 +48,7 @@ import com.hp.hpl.jena.util.FileUtils;
 public class Persister {
 	
 	public static final String SYSTEM_PROPERTY_TEMP_DIR = "java.io.tmpdir";
-	public static final String FILENAME_APPINFO = "secure/AppInfo.ttl";
+	public static final String FILENAME_APPINFO = "_private/AppInfo.ttl";
 	public static final String TEMP_DIRECTORY = "assets/temp/";
 	public static final Class<?>[] MODEL_CLASSES = {RDBModel.class, FileModel.class};
 	private AppInfo appInfo = null;
@@ -160,8 +160,13 @@ public class Persister {
 	 * @return
 	 */
 	private static OntModel getAppInfoModel() {
-		OntModel appInfoModel = ModelFactory.createOntologyModel();
-		appInfoModel.add(FileManager.get().loadModel( getAppInfoFilePath() ));
+		OntModel appInfoModel = null;
+		try {
+			appInfoModel = ModelFactory.createOntologyModel();
+			appInfoModel.add(FileManager.get().loadModel( getAppInfoFilePath() ));
+		} catch (Exception e) {
+			log.error("Error getting Model for AppInfo:", e);
+		}
 		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
 		return appInfoModel;
 	}

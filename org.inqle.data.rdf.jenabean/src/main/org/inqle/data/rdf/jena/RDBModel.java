@@ -17,14 +17,8 @@ public class RDBModel extends NamedModel {
 		this.connection = connection;
 	}
 	
-	/**
-	 * Generate a copy of the provided oldConnection, except give the new copy a random unique ID
-	 * @param oldConnection
-	 * @return
-	 */
 	public void clone(RDBModel objectToBeCloned) {
 		super.clone(objectToBeCloned);
-		setModelName(objectToBeCloned.getModelName());
 		setConnection(objectToBeCloned.getConnection());
 	}
 	
