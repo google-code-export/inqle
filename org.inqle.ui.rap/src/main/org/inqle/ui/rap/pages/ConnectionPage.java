@@ -35,6 +35,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		private Connection connection = null;
 
 		private Shell shell;
+		private String pageTitle;
 		
 		private static final String[] DBTYPES = {
 			"Derby", 
@@ -64,15 +65,21 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 			"jdbc:productname://localhost:1234/databasename" 
 		};
 		
-		public ConnectionPage(String pageName, Connection connection, Shell shell) {
-			super(pageName);
+		public ConnectionPage(String pageTitle, Connection connection, Shell shell) {
+			super(pageTitle);
+			this.pageTitle = pageTitle;
 			this.connection = connection;
 			this.shell = shell;
 		}
 		
+		@Override
+		public String getTitle() {
+			return pageTitle;
+		}
+		
 		public void createControl(Composite pageParent) {
 			
-			log.info("createControl() using Connection:\n" + JenabeanWriter.toString(connection));
+//			log.info("createControl() using Connection:\n" + JenabeanWriter.toString(connection));
 			Composite composite = new Composite(pageParent, SWT.NONE);
 	    // create the desired layout for this wizard page
 			GridLayout gl = new GridLayout(2, false);

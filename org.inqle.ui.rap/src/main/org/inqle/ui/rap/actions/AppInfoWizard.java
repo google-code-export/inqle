@@ -12,6 +12,7 @@ import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.actions.ModelWizard.RDBModelInfoPage;
 import org.inqle.ui.rap.pages.ConnectionPage;
@@ -43,6 +44,7 @@ public class AppInfoWizard extends Wizard {
 		metarepositoryModel = (RDBModel)appInfo.getRepositoryNamedModel();
 		if (metarepositoryModel == null) {
 			metarepositoryModel = new RDBModel();
+			metarepositoryModel.setModelName("Metarepository");
 		}
 		metarepositoryConnection = metarepositoryModel.getConnection();
 		if (metarepositoryConnection == null) {
@@ -50,10 +52,19 @@ public class AppInfoWizard extends Wizard {
 			metarepositoryModel.setConnection(metarepositoryConnection);
 		}
 //		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
-		ConnectionPage metarepositoryPage = new ConnectionPage("Metarepository Database Connection Info", metarepositoryConnection, shell);
+		ConnectionPage metarepositoryPage = new ConnectionPage(
+				"Specify database connection info for your INQLE server", 
+				metarepositoryConnection, 
+				shell
+		);
 		addPage(metarepositoryPage);
 		
-		SingleTextPage metarepositoryModelInfoPage = new SingleTextPage(metarepositoryModel, "modelName", "Enter any name for yoru Metarepository Model", null);
+		SingleTextPage metarepositoryModelInfoPage = new SingleTextPage(
+				metarepositoryModel, 
+				"modelName", 
+				"Enter any name for your Metarepository Model", 
+				null
+		);
 		addPage(metarepositoryModelInfoPage);
 	}
 
@@ -62,14 +73,15 @@ public class AppInfoWizard extends Wizard {
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
 		
-//		metarepositoryModel.setConnection(metarepositoryConnection);
-//		appInfo.setRepositoryNamedModel(metarepositoryModel);
+		metarepositoryModel.setConnection(metarepositoryConnection);
+		appInfo.setRepositoryNamedModel(metarepositoryModel);
+		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			log.error("Unable to save AppInfo to " + Persister.getAppInfoFilePath(), e);
 		}
-		return false;
+		return true;
 	}
 
 //	@Override
