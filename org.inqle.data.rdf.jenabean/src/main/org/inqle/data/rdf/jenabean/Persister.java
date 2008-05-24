@@ -48,7 +48,7 @@ import com.hp.hpl.jena.util.FileUtils;
 public class Persister {
 	
 	public static final String SYSTEM_PROPERTY_TEMP_DIR = "java.io.tmpdir";
-	public static final String FILENAME_APPINFO = "_private/AppInfo.ttl";
+	public static final String FILENAME_APPINFO = "assets/_private/AppInfo.ttl";
 	public static final String TEMP_DIRECTORY = "assets/temp/";
 	public static final Class<?>[] MODEL_CLASSES = {RDBModel.class, FileModel.class};
 	private AppInfo appInfo = null;
