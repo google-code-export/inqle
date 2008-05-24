@@ -36,11 +36,11 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 
 	protected Collection<String> availableNamedModels;
 //	protected DataColumn[] dataColumns;
-	protected DataColumn labelDataColumn;
+	//protected DataColumn labelDataColumn;
 	//protected DataTable resultDataTable = new DataTable();
 	protected Collection<String> selectedNamedModels;
 //	protected DataColumn subjectDataColumn;
-	protected String id;
+	//protected String id;
 	//protected Dictionary<?, ?> properties;
 //	private String name;
 	
@@ -74,9 +74,9 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //		return dataColumns;
 //	}
 
-	public DataColumn getLabelDataColumn() {
-		return labelDataColumn;
-	}
+//	public DataColumn getLabelDataColumn() {
+//		return labelDataColumn;
+//	}
 
 //	public Dictionary<?, ?> getProperties() {
 //		return properties;
@@ -111,9 +111,9 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //		this.dataColumns = dataColumns;
 //	}
 
-	public void setLabelDataColumn(DataColumn labelDataColumn) {
-		this.labelDataColumn = labelDataColumn;
-	}
+//	public void setLabelDataColumn(DataColumn labelDataColumn) {
+//		this.labelDataColumn = labelDataColumn;
+//	}
 
 //	public void setResultDataTable(DataTable resultDataTable) {
 //		this.resultDataTable = resultDataTable;
