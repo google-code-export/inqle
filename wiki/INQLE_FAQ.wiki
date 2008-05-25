@@ -1,0 +1,10 @@
+#summary Some frequently asked questions about INQLE
+
+  # What is INQLE?
+It is software, which runs on a server, and can mine your data, discovering correlations that might exist therein.
+
+  # What does INQLE stand for?
+Intelligent Network of Querying and Learning Engines
+
+  # Isn't that a little lofty?
+We weary at such niggling interrogation.
