@@ -1,0 +1,3 @@
+#summary Describes how to develop for INQLE
+
+The easiest way to develop code for INQLE is to provide 1 or more plugins for INQLE.
