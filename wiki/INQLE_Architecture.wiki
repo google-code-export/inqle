@@ -16,6 +16,8 @@ Here is a list of bundles.
 || *Bundle* || *Description* ||
 || [Bundle_org_inqle_core org.inqle.core] || Contains core INQLE constants and utilities. ||
 || org.inqle.core.extensions || Contains utilities for working with Eclipse extensions. ||
+|| org.inqle.core.db|| Contains JDBC libraries for connecting to the abobe listed relational databases. ||
 || [Bundle_org_inqle_data_rdf_jenabean org.inqle.data.rdf.jenabean] || Contains Jena toolkit, for working with RDF, Jenabean library for Java-to-RDF persistence, and adaptor code for simplifying both SPARQL queries and persisting INQLE objects in RDF store ||
 || [Bundle_org_inqle_ui_rap org.inqle.ui.rap] || Contains code for running the web-based user interface, using Eclipse RAP.  Includes UI code for wizards for making database connections, dataset objects (RDBModel). ||
-|| [Bundle_org_inqle_experiment_rapidminer org.inqle.experiment.rapidminer] || Contains RapidMiner library, and java classes for . ||
+|| [Bundle_org_inqle_experiment_rapidminer org.inqle.experiment.rapidminer] || Contains RapidMiner library, and code for executing the Learning Cycle.  Also includes user interface code for creating custom Learning Cycles. ||
+|| [Bundle_org_inqle_agent org.inqle.agent] || Contains RapidMiner library, and code for executing the Learning Cycle.  Also includes user interface code for creating custom Learning Cycles. ||
