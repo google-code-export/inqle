@@ -1,1 +1,10 @@
 #summary Describes what types of plugins are available for INQLE.
+
+INQLE runs within an Eclipse OSGi container.  This means it was developed to have maximal firendlienss for plugins.  Where possible, INQLE's functionality has been abstracted into plugin types.  Thus, most of the functions that INQLE performs can be expanded in new directions.
+
+INQLE provides the following plugin types
+
+== *Plugin* == *Identifier* == *Description* ==
+== Samplers == [Building_Sampler_Plugins org.inqle.data.sampling.rap.ISamplerFactory] == Data sampling is the core task that INQLE performs, in the course of learning about data.  Sophisticated samplers can perform advanced activities, like combining local data with remote data or learning from past experiments.
+
+Implement interface ISamplerFactory or extend class ASamplerFactory, to provide your own sampling algorithm.  Sampler Factories, in turn, can provide the sampler, which will do the work, and optionally a SamplerWizard, which permits users to customize your sampler in the user interface ==
