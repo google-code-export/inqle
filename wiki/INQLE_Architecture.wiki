@@ -6,7 +6,6 @@ INQLE is a standalone, server-based application. It runs on any operating system
   * PostgreSQL
   * MSSQL
   * Oracle
-  * IBM DB2
   * HSQLDB
   * Derby
 
@@ -15,4 +14,8 @@ INQLE runs in a plug-in framework called [http://www.eclipse.org/equinox/ Equino
 Here is a list of bundles.
 
 || *Bundle* || *Description* ||
+|| [Bundle_org_inqle_core org.inqle.core] || Contains core INQLE constants and utilities. ||
+|| org.inqle.core.extensions || Contains utilities for working with Eclipse extensions. ||
 || [Bundle_org_inqle_data_rdf_jenabean org.inqle.data.rdf.jenabean] || Contains Jena toolkit, for working with RDF, Jenabean library for Java-to-RDF persistence, and adaptor code for simplifying both SPARQL queries and persisting INQLE objects in RDF store ||
+|| [Bundle_org_inqle_ui_rap org.inqle.ui.rap] || Contains code for running the web-based user interface, using Eclipse RAP.  Includes UI code for wizards for making database connections, dataset objects (RDBModel). ||
+|| [Bundle_org_inqle_experiment_rapidminer org.inqle.experiment.rapidminer] || Contains RapidMiner library, and java classes for . ||
