@@ -1,0 +1,1 @@
+#summary Describes what types of plugins are available for INQLE.
