@@ -1,3 +1,14 @@
 #summary Describes how to develop for INQLE
 
-The easiest way to develop code for INQLE is to provide 1 or more plugins for INQLE.
+The easiest way to develop code for INQLE is to provide 1 or more plugins for INQLE.  The different types of plugins that you can create for INQLE are described under Plugins_for_INQLE.  We suggest you start here.
+
+==Developing on the INQLE Core==
+Writing code for core INQLE requires expertise in ~2 or more of these areas:
+  * Java
+  * Equinox OSGi
+  * Eclipse RCP or RAP
+  * Jena RDF
+
+We develop INQLE core using the Eclipse Integrated Development Envirement (IDE).
+
+===Getting INQLE Source Code===
