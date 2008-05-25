@@ -1,7 +1,7 @@
 #labels Featured
 =INQLE Architecture=
 
-INQLE is a standalone, server-based application. It runs on any operating system. As a prerequisite, it requires only Java 1.5 and above, and a Relational database system. [http://jena.sourceforge.net/SDB/ Supported RDBMS] include
+INQLE is a standalone, server-based Java application.  It runs on any operating system.  As a prerequisite, it requires only [http://java.sun.com/javase/downloads/index.jsp Java SE version 6 and above], and a relational database system. [http://jena.sourceforge.net/SDB/ Supported RDBMS] include
   * MySQL
   * PostgreSQL
   * MSSQL
@@ -9,9 +9,10 @@ INQLE is a standalone, server-based application. It runs on any operating system
   * HSQLDB
   * Derby
 
+==Plugin Framework==
 INQLE runs in a plug-in framework called [http://www.eclipse.org/equinox/ Equinox OSGi], (from [http://www.eclipse.org/ Eclipse]). As such, the core application consists of a number of component plugins, also known as "bundles", each of which contributes a set of functionality. This infrastructure permits INQLE to be extended, through contribution of new bundles. Below is a synopsis of the bundles that comprise the core INQLE server.
 
-Here is a list of bundles.
+Here is a list of OSGi bundles which we have developed, to facilitate INQLE's functionality.
 
 || *Bundle* || *Description* ||
 || org.inqle.core || Contains core INQLE constants and utilities. ||
@@ -21,3 +22,8 @@ Here is a list of bundles.
 || [Bundle_org_inqle_ui_rap org.inqle.ui.rap] || Contains code for running the web-based user interface, using Eclipse RAP.  Includes UI code for wizards for making database connections, dataset objects (!RDBModel). ||
 || [Bundle_org_inqle_experiment_rapidminer org.inqle.experiment.rapidminer] || Contains !RapidMiner library, and code for executing the Learning Cycle.  Also includes user interface code for creating custom Learning Cycles. ||
 || [Bundle_org_inqle_agent org.inqle.agent] || Contains code for running automated agents, plus provides a basic implementation for running !JUnit tests from the RAP user interface. ||
+
+==Eclipse RAP User Interface==
+[http://www.eclipse.org/rap/ Eclipse RAP] is a web application framework, for generating functional web applications, with similar emphasis on productivity that is the hallmark of  the extremely successful [http://wiki.eclipse.org/index.php/Rich_Client_Platform Eclipse desktop client].
+
+The INQLE interface thus is a rich, AJAX-based web page.  Coding for Eclipse RAP is 80% identical to coding an application based on Eclipse RCP (Rich Client Platform).  The RAP framework translates the Java code into appropriate mix of front-end HTML and AJAX-powered Javascript, and back-end Java code running on the Server.  The complexity inherent in such server-to-rich client interaction is hidden by the RAP framework.
