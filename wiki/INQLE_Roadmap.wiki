@@ -15,8 +15,8 @@ First release with basic functionality for local data.
 (in process, expected to be released in June 2008)
   * Eclipse RAP-based user interface, in Equinox OSGi container
   * Management of Jena-based RDF databases
-  * Single sampling algorithm: SimpleSparqlSampler, which extracts example set, in which each row has common set of predicates
-  * RapidMiner-based experiments
+  * Single sampling algorithm: !SimpleSparqlSampler, which extracts example set, in which each row has common set of predicates
+  * !RapidMiner-based experiments
   * Jenabean-based Object-RDF persistence
   * Full support for running the learning cycle
   * Extensible, runnable agent plugin type, including agent for running 
