@@ -106,7 +106,7 @@ public class DatabaseWizard extends Wizard {
 		} else if (mode == DatabaseWizardAction.MODE_CLONE) {
 			connection = startingConnection.createClone();
 		} else {
-			connection = new Connection();
+			connection = new Connection().createClone();
 		}
 		assert(connection != null);
 	}

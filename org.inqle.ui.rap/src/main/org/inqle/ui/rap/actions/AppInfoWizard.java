@@ -12,6 +12,7 @@ import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.actions.ModelWizard.RDBModelInfoPage;
@@ -78,6 +79,11 @@ public class AppInfoWizard extends Wizard {
 		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);
+//			Persister persister = Persister.getInstance();
+//			persister.createNewDBConnection(metarepositoryConnection);
+			DBConnector connector = new DBConnector(metarepositoryConnection);
+			int status = connector.tryToCreateSDBStore();
+			log.info("Tried to create new SDB store for Metarepository, with status=" + status);
 		} catch (Exception e) {
 			log.error("Unable to save AppInfo to " + Persister.getAppInfoFilePath(), e);
 		}
