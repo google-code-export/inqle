@@ -11,6 +11,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
+import org.inqle.data.rdf.jena.Connection;
 
 /**
  * @author David Donohue
@@ -29,6 +30,7 @@ public class DatabaseWizardAction extends Action {
 	private IPartType parentPart = null;
 	private IPart thisPart = null;
 	private DatabasePart databasePart;
+	private Connection connection;
 	
 	private static final Logger log = Logger.getLogger(DatabaseWizardAction.class);
 	
@@ -58,6 +60,7 @@ public class DatabaseWizardAction extends Action {
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		DatabaseWizard wizard = new DatabaseWizard(mode, parentPart, window.getShell());
+		//wizard.setConnection(connection);
 		
 		//for MODE_NEW, do not add a starting base Connection
 		if (databasePart != null) {
@@ -66,5 +69,9 @@ public class DatabaseWizardAction extends Action {
 		
 		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 		dialog.open();
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 }
