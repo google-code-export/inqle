@@ -31,4 +31,5 @@ Export-Package: org.inqle.ui.rap,
  org.inqle.ui.rap.tree.parts,
  org.inqle.ui.rap.views
 Bundle-ClassPath: bin/main/,
- .
+ .,
+ lib/commons-csv-20070725.jar
