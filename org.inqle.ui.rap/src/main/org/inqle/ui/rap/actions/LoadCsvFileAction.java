@@ -17,16 +17,16 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
  * @author David Donohue
  * Feb 8, 2008
  */
-public class LoadDataWizardAction extends Action {
+public class LoadCsvFileAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
 	//private Persister persister = null;
 	private ModelPart modelPart = null;
 	private Connection connection = null;
 	
-	private static final Logger log = Logger.getLogger(LoadDataWizardAction.class);
+	private static final Logger log = Logger.getLogger(LoadCsvFileAction.class);
 	
-	public LoadDataWizardAction(String menuText, ModelPart modelPart, IWorkbenchWindow window) {
+	public LoadCsvFileAction(String menuText, ModelPart modelPart, IWorkbenchWindow window) {
 		this.menuText = menuText;
 		this.modelPart = modelPart;
 		this.window = window;
@@ -45,7 +45,7 @@ public class LoadDataWizardAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		LoadDataWizard wizard = new LoadDataWizard(modelPart, connection);
+		LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelPart, connection);
 		//DummyWizard wizard = new DummyWizard();
 		
 		LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);
@@ -65,32 +65,32 @@ public class LoadDataWizardAction extends Action {
 	 * @author David Donohue
 	 * Feb 21, 2008
 	 */
-	class LoadDataWizardDialog extends WizardDialog {
-		public LoadDataWizardDialog(Shell parentShell, LoadDataWizard newWizard) {
-			super(parentShell, newWizard);
-			//this.getButton(WizardDialog.CANCEL).setEnabled(false);
-		}
-		
-		/**
-		 * this disposes of uploader on clicking the wizard's cancel button
-		 */
-		@Override
-		protected void cancelPressed() {
-			closeUploader();
-		}
-		/**
-		 * this disposes of uploader on clicking the wizard's "X" in upper right
-		 */
-		@Override
-		protected boolean canHandleShellCloseEvent() {
-			closeUploader();
-		  return true;
-		}
-		
-		private void closeUploader() {
-			LoadDataWizard wizard = (LoadDataWizard)getWizard();
-		  wizard.closeUploader();
-		  close();
-		}
-	}
+//	class LoadCsvWizardDialog extends WizardDialog {
+//		public LoadCsvWizardDialog(Shell parentShell, LoadCsvFileWizard newWizard) {
+//			super(parentShell, newWizard);
+//			//this.getButton(WizardDialog.CANCEL).setEnabled(false);
+//		}
+//		
+//		/**
+//		 * this disposes of uploader on clicking the wizard's cancel button
+//		 */
+//		@Override
+//		protected void cancelPressed() {
+//			closeUploader();
+//		}
+//		/**
+//		 * this disposes of uploader on clicking the wizard's "X" in upper right
+//		 */
+//		@Override
+//		protected boolean canHandleShellCloseEvent() {
+//			closeUploader();
+//		  return true;
+//		}
+//		
+//		private void closeUploader() {
+//			LoadCsvFileWizard wizard = (LoadCsvFileWizard)getWizard();
+//		  wizard.closeUploader();
+//		  close();
+//		}
+//	}
 }

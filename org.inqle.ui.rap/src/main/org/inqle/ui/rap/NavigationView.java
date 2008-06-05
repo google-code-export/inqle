@@ -17,6 +17,7 @@ import org.eclipse.ui.part.ViewPart;
 /**
  * View with a tree viewer. This class is contributed through the plugin.xml.
  */
+@Deprecated
 public class NavigationView extends ViewPart {
 	public static final String ID = "org.inqle.ui.rap.navigationView";
 	private TreeViewer viewer;

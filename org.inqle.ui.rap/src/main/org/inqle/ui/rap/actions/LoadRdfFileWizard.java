@@ -34,18 +34,18 @@ import com.hp.hpl.jena.rdf.model.Model;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class LoadDataWizard extends Wizard {
+public class LoadRdfFileWizard extends Wizard {
 
 	//private final File tempDir = Persister.getTempDirectory();
 	private Connection connection = null;
 	//private Persister persister;
-	static Logger log = Logger.getLogger(LoadDataWizard.class);
+	static Logger log = Logger.getLogger(LoadRdfFileWizard.class);
 	Composite composite;
 	private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
 	
 	private ModelPart modelPart = null;
-	LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
+	//LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
 	LoadFilePage loadFilePage = new LoadFilePage("Load Data from Local File");
 	
 	Upload filePath = null;
@@ -69,48 +69,48 @@ public class LoadDataWizard extends Wizard {
 	 * @author David Donohue
 	 * Feb 8, 2008
 	 */
-	class LoadFromPage extends WizardPage {
-		Button fileRadioButton = null;
-		Button webRadioButton = null;
-		
-		LoadFromPage(String pageName) {
-			super(pageName);
-		}
-		
-		public void createControl(Composite pageParent) {
-			
-			composite = new Composite(pageParent, SWT.NONE);
-	    // create the desired layout for this wizard page
-			GridLayout gl = new GridLayout(2, false);
-			composite.setLayout(gl);
-	    
-	    //create the form
-			GridData gridData;
-			
-			new Label (composite, SWT.NONE).setText("Load data from");	
-			fileRadioButton = new Button(composite, SWT.RADIO);
-	    fileRadioButton.setText("Local file");
-	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-	    fileRadioButton.setLayoutData(gridData);
-	    
-	    new Label (composite, SWT.NONE).setText("");	
-	    webRadioButton = new Button(composite, SWT.RADIO);
-	    webRadioButton.setText("Remote file via the web");
-	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-	    webRadioButton.setLayoutData(gridData);
-	    
-	    setControl(composite);
-
-		}
-		
-		public IWizardPage getNextPage(){	
-		   if (fileRadioButton.getSelection()) {
-		       return ((LoadDataWizard)getWizard()).loadFilePage;
-		   }
-		   return ((LoadDataWizard)getWizard()).loadFromPage;
-		}
-
-	}
+//	class LoadFromPage extends WizardPage {
+//		Button fileRadioButton = null;
+//		Button webRadioButton = null;
+//		
+//		LoadFromPage(String pageName) {
+//			super(pageName);
+//		}
+//		
+//		public void createControl(Composite pageParent) {
+//			
+//			composite = new Composite(pageParent, SWT.NONE);
+//	    // create the desired layout for this wizard page
+//			GridLayout gl = new GridLayout(2, false);
+//			composite.setLayout(gl);
+//	    
+//	    //create the form
+//			GridData gridData;
+//			
+//			new Label (composite, SWT.NONE).setText("Load data from");	
+//			fileRadioButton = new Button(composite, SWT.RADIO);
+//	    fileRadioButton.setText("Local file");
+//	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+//	    fileRadioButton.setLayoutData(gridData);
+//	    
+//	    new Label (composite, SWT.NONE).setText("");	
+//	    webRadioButton = new Button(composite, SWT.RADIO);
+//	    webRadioButton.setText("Remote file via the web");
+//	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+//	    webRadioButton.setLayoutData(gridData);
+//	    
+//	    setControl(composite);
+//
+//		}
+//		
+//		public IWizardPage getNextPage(){	
+//		   if (fileRadioButton.getSelection()) {
+//		       return ((LoadRdfFileWizard)getWizard()).loadFilePage;
+//		   }
+//		   return ((LoadRdfFileWizard)getWizard()).loadFromPage;
+//		}
+//
+//	}
 	
 	class LoadFilePage extends WizardPage {
 		
@@ -169,7 +169,7 @@ public class LoadDataWizard extends Wizard {
 	
 	
 	
-	public LoadDataWizard(ModelPart modelPart,	Connection connection) {
+	public LoadRdfFileWizard(ModelPart modelPart,	Connection connection) {
 		Persister persister = Persister.getInstance();
 		//this.persister = persister;
 		this.modelPart = modelPart;
@@ -180,7 +180,7 @@ public class LoadDataWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		addPage(loadFromPage);
+		//addPage(loadFromPage);
 		addPage(loadFilePage);
 	}
 	

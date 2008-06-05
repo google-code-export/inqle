@@ -18,6 +18,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVStrategy;
 import org.apache.commons.csv.writer.CSVConfig;
 import org.apache.log4j.Logger;
+import org.inqle.data.rdf.RDF;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -27,23 +28,45 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 
+/**
+ * Performs importation of a CSV file into RDF.
+ * 
+ * Assumes that the headers are in the first row.
+ * Assumes that the data begins in the row after the header.
+ * 
+ * Supports 3 methods of naming the subject:
+ * Sequential number, starting with 1
+ * Random UUID a 16 digit hexadecimal number.
+ * Value from specified column (converted into form that is acceptable to be appended onto a URI)
+		
+ * Parses each cell to see if it matches any of these data types:
+ * Integer
+ * Double (real number)
+ * Date, using these date patterns: "yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss", 
+ * "yyyy.MM.dd HH:mm:ss",	"yyyy/MM/dd", "yyyy-MM-dd", "yyyy.MM.dd"
+ * 
+ * If the cell cannot be cast to any of these then it is stored as a String data type.
+ * @author David Donohue
+ * Jun 3, 2008
+ */
 public class CsvImporter {
 
 	public static final int ID_TYPE_SEQUENTIAL = 0;
 	public static final int ID_TYPE_UUID = 1;
 	public static final int ID_TYPE_CELL_VALUE = 2;
 	public static final String[] idTypes = {
-		"Sequential",
-		"Random UUID",
-		"Value from specified column"
+		"Sequential (use only if you use a unique subject prefix)",
+		"Random UUID (always safe)",
+		"Value from specified column (gets converted into a URI-safe format)"
 	};
 	
 	private static final String[] DATE_FORMATS_TO_TRY = {
 		"yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm:ss",
-		"yyyy/MM/dd", "yyyy-MM-dd", "yyyy.MM.dd",
+		"yyyy/MM/dd", "yyyy-MM-dd", "yyyy.MM.dd"
 	};
 	
-	private List<String> columnPredicates = new ArrayList<String>();
+	//the final list of predicate URIs
+	private List<String> columnPredicateUris = new ArrayList<String>();
 	
 	private CSVParser csvParser;
 	
@@ -62,12 +85,13 @@ public class CsvImporter {
 	/**
 	 * 
 	 */
-	private int idType = ID_TYPE_SEQUENTIAL;
+	private int idType = ID_TYPE_UUID;
 	
 	/**
-	 * the string to append before the value in the subject column, 
+	 * the string to append before the value in the subject column.
+	 * Default to UNKNOWN_SUBJECT
 	 */
-	private String subjectPrefix;
+	private String subjectPrefix = RDF.UNKNOWN_SUBJECT;
 	
 	private String[][] rawData;
 	                 
@@ -77,7 +101,7 @@ public class CsvImporter {
 		csvParser = new CSVParser(new BufferedReader(new InputStreamReader(inputStream)), csvStrategy);
 	}
 
-	public long getHeaderIndex() {
+	public int getHeaderIndex() {
 		return headerIndex;
 	}
 
@@ -93,6 +117,10 @@ public class CsvImporter {
 		this.subjectIndex = subjectIndex;
 	}
 
+	/**
+	 * Get the data of the CSV, as an array rows, where each row is an array of Strings.
+	 * @return
+	 */
 	public String[][] getRawData() {
 		if (rawData == null) {
 			try {
@@ -117,6 +145,13 @@ public class CsvImporter {
 		this.subjectPrefix = subjectPrefix;
 	}
 
+	/**
+	 * The ID type is the method for generating the ID.  Options include:
+	 * ID_TYPE_SEQUENTIAL = 0;	use a sequential number, starting with 1
+	 * ID_TYPE_UUID = 1;
+	public static final int ID_TYPE_CELL_VALUE = 2;
+	 * @return
+	 */
 	public int getIdType() {
 		return idType;
 	}
@@ -125,12 +160,12 @@ public class CsvImporter {
 		this.idType = idType;
 	}
 	
-	public void setPredicate(int columnIndex, String predicateUri) {
-		columnPredicates.set(columnIndex, predicateUri);
+	public void setPredicateUri(int columnIndex, String predicateUri) {
+		columnPredicateUris.set(columnIndex, predicateUri);
 	}
 	
-	public String getPredicate(int columnIndex) {
-		return columnPredicates.get(columnIndex);
+	public String getPredicateUri(int columnIndex) {
+		return columnPredicateUris.get(columnIndex);
 	}
 	
 	/**
@@ -146,7 +181,7 @@ public class CsvImporter {
 			Resource subjectResource = model.createResource(subjectUri);
 			Literal objectLiteral = null;
 			for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
-				String predicateUri = getPredicate(columnIndex);
+				String predicateUri = getPredicateUri(columnIndex);
 				//if the predicate is null or blank, continue to next column
 				if (predicateUri == null || predicateUri.length() == 0) {
 					continue;
@@ -218,7 +253,7 @@ public class CsvImporter {
 		String uriStr = getSubjectPrefix();
 		switch (idType) {
 			case ID_TYPE_SEQUENTIAL:
-				uriStr += rowIndex;
+				uriStr += (rowIndex + 1);
 				break;
 			case ID_TYPE_UUID:
 				uriStr += UUID.randomUUID().toString();

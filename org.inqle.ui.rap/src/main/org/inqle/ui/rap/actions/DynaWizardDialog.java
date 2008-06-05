@@ -23,7 +23,6 @@ public class DynaWizardDialog extends WizardDialog {
 	
 	public DynaWizardDialog(Shell parentShell, IWizard newWizard) {
 		super(parentShell, newWizard);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -33,6 +32,7 @@ public class DynaWizardDialog extends WizardDialog {
 	 * and then advance to it.
 	 */
 	public void nextPressed() {
+		//log.info("DynaWizardDialog.nextPressed()");
 		if (getCurrentPage() instanceof DynaWizardPage) {
 			boolean thisPageValid = ((DynaWizardPage)getCurrentPage()).onNextPage();
 			if (!thisPageValid) {
@@ -40,6 +40,7 @@ public class DynaWizardDialog extends WizardDialog {
 			}
 		}
 		IWizardPage nextPage = getCurrentPage().getNextPage();
+		//log.info("next page =" + nextPage.getName());
 		if (nextPage instanceof DynaWizardPage) {
 			((DynaWizardPage)nextPage).onEnterPageFromPrevious();
 		}
