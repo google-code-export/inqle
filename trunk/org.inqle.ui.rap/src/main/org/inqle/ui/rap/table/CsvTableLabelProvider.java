@@ -29,6 +29,8 @@ public class CsvTableLabelProvider extends CellLabelProvider {
 //	protected int rowNumColumnIndex = -1;
 	
 	protected List<String> columnFields = new ArrayList<String>();
+
+//	private CsvImporter csvImporter;
 	
 	public static final Logger log = Logger.getLogger(CsvTableLabelProvider.class);
 	

@@ -1,6 +1,10 @@
 package org.inqle.ui.rap.csv;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +21,7 @@ import java.util.UUID;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVStrategy;
 import org.apache.commons.csv.writer.CSVConfig;
+import org.apache.commons.csv.writer.CSVConfigGuesser;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 
@@ -95,12 +100,43 @@ public class CsvImporter {
 	
 	private String[][] rawData;
 	                 
-	public CsvImporter(InputStream inputStream) {
-		CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
-		CSVStrategy csvStrategy = new CSVStrategy(csvConfig.getDelimiter(), csvConfig.getValueDelimiter(), CSVStrategy.COMMENTS_DISABLED);;
-		csvParser = new CSVParser(new BufferedReader(new InputStreamReader(inputStream)), csvStrategy);
-	}
+//	public CsvImporter(InputStream inputStream) {
+//		log.info("Creating CSVConfigGuesser for inputStream:" + inputStream);
+//		//CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
+//		CSVConfigGuesser configGuesser = new CSVConfigGuesser(inputStream);
+//		log.info("Guessing config...");
+//		CSVConfig csvConfig = configGuesser.guess();
+//		log.info("Creating CSV strategy for config:" + csvConfig);
+//		CSVStrategy csvStrategy = new CSVStrategy(csvConfig.getDelimiter(), csvConfig.getValueDelimiter(), CSVStrategy.COMMENTS_DISABLED);
+//		log.info("Creating CSV parser...");
+//		csvParser = new CSVParser(new BufferedReader(new InputStreamReader(inputStream)), csvStrategy);
+//		log.info("Created CSVParser:" + csvParser);
+//	}
 
+	public CsvImporter(File file) {
+		log.info("Creating CSVConfigGuesser for file:" + file);
+		//CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
+		try {
+			CSVConfigGuesser configGuesser = new CSVConfigGuesser(new FileInputStream(file));
+			log.info("Guessing config...");
+			CSVConfig csvConfig = configGuesser.guess();
+			log.info("Creating CSV strategy for config:" + csvConfig);
+			CSVStrategy csvStrategy = new CSVStrategy(csvConfig.getDelimiter(), csvConfig.getValueDelimiter(), CSVStrategy.COMMENTS_DISABLED);
+			log.info("Creating CSV parser...");
+			csvParser = new CSVParser(new BufferedReader(new FileReader(file)), csvStrategy);
+			log.info("Created CSVParser:" + csvParser);
+			//populate rawData
+			try {
+				rawData = csvParser.getAllValues();
+			} catch (IOException e) {
+				log.error("Unable to read file as comma separated values (CSV) file.", e);
+			}
+		} catch (Exception e) {
+			log.error("Error creating CSVParser:", e);
+		}
+		
+	}
+	
 	public int getHeaderIndex() {
 		return headerIndex;
 	}
@@ -122,14 +158,15 @@ public class CsvImporter {
 	 * @return
 	 */
 	public String[][] getRawData() {
-		if (rawData == null) {
-			try {
-				rawData = csvParser.getAllValues();
-			} catch (IOException e) {
-				log.error("Unable to read file as comma separated values (CSV) file.", e);
-				e.printStackTrace();
-			}
-		}
+		//if (rawData == null) {
+//		String[][] rawData = null;
+//			try {
+//				rawData = csvParser.getAllValues();
+//			} catch (IOException e) {
+//				log.error("Unable to read file as comma separated values (CSV) file.", e);
+//				e.printStackTrace();
+//			}
+		//}
 		return rawData;
 	}
 
