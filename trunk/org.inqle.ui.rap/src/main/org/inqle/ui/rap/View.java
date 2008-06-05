@@ -18,6 +18,7 @@ import org.eclipse.ui.part.ViewPart;
  * This view shows a &quot;mail message&quot;. This class is contributed through
  * the plugin.xml.
  */
+@Deprecated
 public class View extends ViewPart {
 
 	public static final String ID = "org.inqle.ui.rap.view";
