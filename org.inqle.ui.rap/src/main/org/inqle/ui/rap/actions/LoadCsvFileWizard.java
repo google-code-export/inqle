@@ -107,21 +107,26 @@ public class LoadCsvFileWizard extends Wizard {
 
 	public CsvImporter getCsvImporter() {
 		if (csvImporter == null) {
-			if (loadCsvFilePage.getUploadedFile() == null) {
-				log.info("loadCsvFilePage.getUploadedFile()=null");
-				return null;
-			}
-			try {
-				log.info("Get uploaded file...");
-				File uploadedFile = loadCsvFilePage.getUploadedFile();
-				log.info("Retrieve CSV imoirter...");
-				csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
-			} catch (FileNotFoundException e) {
-				log.error("Unable to get uploaded file: " + loadCsvFilePage.getUploadedFile());
-				//leave as null
-			}
+			refreshCsvImporter();
 		}
 		return csvImporter;
+	}
+
+	public void refreshCsvImporter() {
+		if (loadCsvFilePage.getUploadedFile() == null) {
+			log.info("loadCsvFilePage.getUploadedFile()=null");
+			return;
+		}
+		try {
+			log.info("Get uploaded file...");
+			File uploadedFile = loadCsvFilePage.getUploadedFile();
+			log.info("Retrieve CSV importer...");
+			//csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
+			csvImporter = new CsvImporter(uploadedFile);
+		} catch (Exception e) {
+			log.error("Unable to get uploaded file: " + loadCsvFilePage.getUploadedFile());
+			//leave as null
+		}
 	}
 
 	public void setCsvImporter(CsvImporter csvImporter) {

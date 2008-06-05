@@ -48,6 +48,7 @@ public class ResearchSubjectPage extends DynaWizardPage {
 		log.info("getWizard()= a LoadCsvFileWizard");
 		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
 		log.info("loadCsvFileWizard=" + loadCsvFileWizard);
+		loadCsvFileWizard.refreshCsvImporter();
 		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
 		log.info("csvImporter retrieved");
 		String[][] data = csvImporter.getRawData();
@@ -81,7 +82,15 @@ public class ResearchSubjectPage extends DynaWizardPage {
 		CsvTableLabelProvider labelProvider = new CsvTableLabelProvider();
 		tableViewer.setLabelProvider(labelProvider);
 		
-		WritableList writableListInput = new WritableList(Arrays.asList(data), String[].class);
+		int numToDisplay = 20;
+		int numAvailable = data.length - (csvImporter.getHeaderIndex() + 1);
+		if (numAvailable < numToDisplay) {
+			numToDisplay = numAvailable;
+		}
+		String[][] dataToDisplay = new String[numToDisplay][];
+    System.arraycopy( data, csvImporter.getHeaderIndex() + 1, dataToDisplay, 0, numToDisplay );
+    
+		WritableList writableListInput = new WritableList(Arrays.asList(dataToDisplay), String[].class);
 		//log.debug("getRows():" + getRows());
 		tableViewer.setInput(writableListInput);
 		tableViewer.refresh();
@@ -97,6 +106,16 @@ public class ResearchSubjectPage extends DynaWizardPage {
 	@Override
 	public void onEnterPageFromPrevious() {
 		refreshTableData();
+	}
+	
+	/**
+	 * Prevent the back button from being pressed.  
+	 * Due to a limitation of RAP, we cannot refresh the table with new info.
+	 */
+	@Override
+	public boolean onPreviousPage() {
+		this.setMessage("Due to RAP limitation, we are unable to go back.  You may instead close and restart this wizard.");
+		return false;
 	}
 
 }
