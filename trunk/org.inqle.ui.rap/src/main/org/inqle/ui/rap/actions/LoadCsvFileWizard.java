@@ -112,7 +112,9 @@ public class LoadCsvFileWizard extends Wizard {
 				return null;
 			}
 			try {
+				log.info("Get uploaded file...");
 				File uploadedFile = loadCsvFilePage.getUploadedFile();
+				log.info("Retrieve CSV imoirter...");
 				csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
 			} catch (FileNotFoundException e) {
 				log.error("Unable to get uploaded file: " + loadCsvFilePage.getUploadedFile());
