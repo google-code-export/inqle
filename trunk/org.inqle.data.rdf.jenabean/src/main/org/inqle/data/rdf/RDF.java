@@ -21,6 +21,7 @@ public class RDF {
 	//public static final String JAVA_CLASS = INQLE + "javaClass";
 	public static final String HAS_PERSISTABLE_MEMBER_ATTRIBUTE = INQLE + "hasPersistableMemberAttribute";
 	public static final String JENABEAN_ID_ATTRIBUTE = "id";
+	public static final String UNKNOWN_SUBJECT = INQLE + "unknownSubject";
 	
 	
 	/**
