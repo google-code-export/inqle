@@ -28,8 +28,10 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.pages.CsvDisplayPage;
+import org.inqle.ui.rap.pages.CsvPredicatesPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
-import org.inqle.ui.rap.pages.ResearchSubjectPage;
+import org.inqle.ui.rap.pages.CsvSubjectPage;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -63,11 +65,20 @@ public class LoadCsvFileWizard extends Wizard {
 
 	@Override
 	public void addPages() {
-		loadCsvFilePage = new LoadFilePage("Load spreadsheet data file (Comma Separated Values, CSV)");
+		loadCsvFilePage = new LoadFilePage("Specify the delimited text file to load.");
 		addPage(loadCsvFilePage);
 		
-		ResearchSubjectPage researchSubjectPage = new ResearchSubjectPage("Specify info about the experiment subject", null);
-		addPage(researchSubjectPage);
+		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
+		addPage(csvDisplayPage);
+		
+		CsvSubjectPage csvSubjectPage = new CsvSubjectPage("Specify info about the experiment subject.", null);
+		addPage(csvSubjectPage);
+		
+		CsvPredicatesPage csvPredicatesPage = new CsvPredicatesPage("Specify the URI of a predicate representing each column.", null);
+		addPage(csvPredicatesPage);
+		
+		//TODO add a page to capture any other descriptive info, e.g. 
+		//e.g. info describing the subjects
 	}
 	
 	/* (non-Javadoc)
