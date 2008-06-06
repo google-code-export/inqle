@@ -59,7 +59,7 @@ public class CsvImporter {
 	public static final int ID_TYPE_SEQUENTIAL = 0;
 	public static final int ID_TYPE_UUID = 1;
 	public static final int ID_TYPE_CELL_VALUE = 2;
-	public static final String[] idTypes = {
+	public static final String[] ID_TYPES = {
 		"Sequential (use only if you use a unique subject prefix)",
 		"Random UUID (always safe)",
 		"Value from specified column (gets converted into a URI-safe format)"
