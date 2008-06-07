@@ -31,7 +31,8 @@ public class LabelSelectorPage extends ListSelectorPage {
 	}
 	
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
+		Composite composite = selfComposite;
 		this.composite = composite;
 		assert(composite != null);
 	}
