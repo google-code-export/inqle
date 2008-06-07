@@ -46,6 +46,7 @@ public class LoadCsvFileWizard extends DynaWizard {
 
 	public LoadCsvFileWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
+		log.info("CCCCCCCCCCCCCreating new LoadCsvFileWizard");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -56,7 +57,7 @@ public class LoadCsvFileWizard extends DynaWizard {
 	//private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
 	
-	LoadFilePage loadCsvFilePage = new LoadFilePage("Load Data from CSV File");
+	LoadFilePage loadFilePage = new LoadFilePage("Load Data from CSV File");
 	
 	private CsvImporter csvImporter;
 	private ModelPart modelPart;
@@ -73,8 +74,8 @@ public class LoadCsvFileWizard extends DynaWizard {
 
 	@Override
 	public void addPages() {
-		loadCsvFilePage = new LoadFilePage("Specify the delimited text file to load.");
-		addPage(loadCsvFilePage);
+		loadFilePage = new LoadFilePage("Specify the delimited text file to load.");
+		addPage(loadFilePage);
 		
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
 		addPage(csvDisplayPage);
@@ -139,24 +140,25 @@ public class LoadCsvFileWizard extends DynaWizard {
 
 	public CsvImporter getCsvImporter() {
 		if (csvImporter == null) {
+			log.info("RRRRRRRRRRefreshing csvImporter in LoadCsvFileWizard");
 			refreshCsvImporter();
 		}
 		return csvImporter;
 	}
 
 	public void refreshCsvImporter() {
-		if (loadCsvFilePage.getUploadedFile() == null) {
-			log.error("loadCsvFilePage.getUploadedFile()=null");
+		if (loadFilePage.getUploadedFile() == null) {
+			log.error("loadFilePage.getUploadedFile()=null");
 			return;
 		}
 		try {
-			log.trace("Get uploaded file...");
-			File uploadedFile = loadCsvFilePage.getUploadedFile();
-			log.trace("Retrieve CSV importer...");
+			log.info("Get uploaded file...");
+			File uploadedFile = loadFilePage.getUploadedFile();
+			log.info("Got file " + uploadedFile + ".  Retrieve CSV importer...");
 			//csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
 			csvImporter = new CsvImporter(uploadedFile);
 		} catch (Exception e) {
-			log.error("Unable to get uploaded file: " + loadCsvFilePage.getUploadedFile());
+			log.error("Unable to get uploaded file: " + loadFilePage.getUploadedFile());
 			//leave as null
 		}
 	}
@@ -166,13 +168,13 @@ public class LoadCsvFileWizard extends DynaWizard {
 	}
 
 //	public void closeUploader() {
-//		loadCsvFilePage.closeUploader();
+//		loadFilePage.closeUploader();
 //	}
 	
 	@Override
 	public void prepareForClose() {
 		//log.info("Disposing of uploaderWidget=" + uploaderWidget);
-		loadCsvFilePage.closeUploader();
+		loadFilePage.closeUploader();
 	}
 
 
