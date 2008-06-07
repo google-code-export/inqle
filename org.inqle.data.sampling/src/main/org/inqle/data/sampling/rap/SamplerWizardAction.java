@@ -50,26 +50,30 @@ public class SamplerWizardAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
-		log.trace("Running SamplerWizardAction");
+		log.info("Running SamplerWizardAction");
 		//SimpleSparqlSampler testSampler = new SimpleSparqlSampler();
 //		log.info("Running SamplerWizardAction for sampler: " + JenabeanWriter.toString(sampler));
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		ISamplerWizard wizard = null;
-		//if (mode == MODE_RUN) {
-			//wizard = new SamplerRunnerWizard(sampler, window.getShell());
-		if (mode == MODE_OPEN) {
-			Persister persister = Persister.getInstance();
-			log.trace("Opening wizard...");
-			wizard = samplerFactory.createWizardForReplica(persister.getMetarepositoryModel(), window.getShell());
-			wizard.setPart(samplerPart);
-			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
-			dialog.open();
-			log.trace("Opened wizard.");
-		} else if (mode == MODE_CLONE) {
-			Persister persister = Persister.getInstance();
-			sampler.setName("Clone of " + sampler.getName());
-			persister.persist(sampler, persister.getMetarepositoryModel());
-			samplerPart.fireUpdatePart();
+		try {
+			ISamplerWizard wizard = null;
+			//if (mode == MODE_RUN) {
+				//wizard = new SamplerRunnerWizard(sampler, window.getShell());
+			if (mode == MODE_OPEN) {
+				Persister persister = Persister.getInstance();
+				log.trace("Opening wizard...");
+				wizard = samplerFactory.createWizardForReplica(persister.getMetarepositoryModel(), window.getShell());
+				wizard.setPart(samplerPart);
+				DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
+				dialog.open();
+				log.trace("Opened wizard.");
+			} else if (mode == MODE_CLONE) {
+				Persister persister = Persister.getInstance();
+				sampler.setName("Clone of " + sampler.getName());
+				persister.persist(sampler, persister.getMetarepositoryModel());
+				samplerPart.fireUpdatePart();
+			}
+		} catch (Exception e) {
+			log.error("Error running SamplerWizardAction", e);
 		}
 	}
 
