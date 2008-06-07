@@ -49,15 +49,19 @@ public class LoadRdfFileAction extends Action {
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		//LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelPart, connection);
-		Model modelToImportInto = Persister.getInstance().getModel(modelPart.getRdbModel());
-		LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelToImportInto, window.getShell());
-		//DummyWizard wizard = new DummyWizard();
-		
-		DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
-		//LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);
-		//UploadDialog dialog = new UploadDialog(window.getShell(), "Upload File", true);
+		try {
+			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getRdbModel());
+			LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelToImportInto, window.getShell());
+			//DummyWizard wizard = new DummyWizard();
+			
+			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
+			//LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);
+			//UploadDialog dialog = new UploadDialog(window.getShell(), "Upload File", true);
 
-		dialog.open();
+			dialog.open();
+		} catch (Exception e) {
+			log.error("Error running LoadRdfFileAction", e);
+		}
 	}
 	
 	

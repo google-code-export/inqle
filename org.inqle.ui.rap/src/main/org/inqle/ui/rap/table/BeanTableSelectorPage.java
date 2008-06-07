@@ -104,7 +104,8 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 	 * Add form elements.
 	 */
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
+		Composite composite = selfComposite;
 		assert(composite != null);
 		assert(beans != null);
 		

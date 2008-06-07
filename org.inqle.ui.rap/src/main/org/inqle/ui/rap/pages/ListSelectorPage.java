@@ -55,8 +55,8 @@ public class ListSelectorPage extends BeanWizardPage {
 	 * Add form elements.
 	 */
 	@Override
-	public void addElements(Composite composite) {
-		this.composite = composite;
+	public void addElements() {
+		this.composite = selfComposite;
 		assert(composite != null);
 		assert(initialItems != null);
 		

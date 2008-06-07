@@ -55,13 +55,13 @@ public class LoadCsvFileWizard extends DynaWizard {
 	static Logger log = Logger.getLogger(LoadCsvFileWizard.class);
 	Composite composite;
 	//private Model modelToLoad = null;
-	private String defaultUri = RDF.INQLE;
+//	private String defaultUri = RDF.INQLE;
 	
-	LoadFilePage loadFilePage = new LoadFilePage("Load Data from CSV File");
+	LoadFilePage loadFilePage;
 	
 	private CsvImporter csvImporter;
-	private ModelPart modelPart;
-	private Connection connection;
+//	private ModelPart modelPart;
+//	private Connection connection;
 	private CsvSubjectPage csvSubjectPage;
 	private CsvPredicatesPage csvPredicatesPage;
 	
@@ -99,7 +99,7 @@ public class LoadCsvFileWizard extends DynaWizard {
 		CsvImporter importer = getCsvImporter();
 		
 		//show the "importing..." dialog
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + importer.getFile().getName() + "..." );
+		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Loading Data...", "Loading from file " + importer.getFile().getName() + "..." );
 		popup.open();
 		
 		//prepare the CsvImporter...
@@ -172,9 +172,40 @@ public class LoadCsvFileWizard extends DynaWizard {
 //	}
 	
 	@Override
+	public boolean canFinish() {
+		//TODO test that prefix & subjectclass are URIs
+		try {
+			if (csvSubjectPage == null || csvSubjectPage.getIdTypeIndex() < 0) {
+				return false;
+			}
+			if (csvSubjectPage.getIdTypeIndex() == CsvImporter.ID_TYPE_CELL_VALUE && csvSubjectPage.getSubjectColumnIndex() < 0) {
+				return false;
+			}
+			if (csvSubjectPage.getSubjectPrefix() == null || csvSubjectPage.getSubjectPrefix().length() == 0) {
+				return false;
+			}
+			if (csvSubjectPage.getSubjectClassUri() == null || csvSubjectPage.getSubjectClassUri().length() == 0) {
+				return false;
+			}
+			if (csvPredicatesPage == null || csvPredicatesPage.getPredicateUris() == null || csvPredicatesPage.getPredicateUris().size() == 0) {
+				return false;
+			}
+		} catch (Exception e) {
+			log.error("Error validating wizard", e);
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
 	public void prepareForClose() {
 		//log.info("Disposing of uploaderWidget=" + uploaderWidget);
-		loadFilePage.closeUploader();
+		if (loadFilePage != null) {
+			loadFilePage.closeUploader();
+		}
+		if (csvImporter != null) {
+			csvImporter.cleanUp();
+		}
 	}
 
 

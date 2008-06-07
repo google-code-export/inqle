@@ -71,11 +71,13 @@ public class LoadFilePage extends DynaWizardPage {
 	}
 
 	public void closeUploader() {
-		uploadWidget.dispose();
+		if (uploadWidget != null) {
+			uploadWidget.dispose();
+		}
 	}
 
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
 		// TODO Auto-generated method stub
 		
 	}

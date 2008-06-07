@@ -137,6 +137,7 @@ public class CsvImporter {
 			//populate rawData
 			//try {
 			rawData = csvParser.getAllValues();
+			
 			fileReader.close();
 			fis.close();
 			//} catch (IOException e) {
@@ -381,5 +382,9 @@ public class CsvImporter {
 
 	public void setSubjectClassUri(String subjectClassUri) {
 		this.subjectClassUri = subjectClassUri;
+	}
+	
+	public void cleanUp() {
+		file.delete();
 	}
 }
