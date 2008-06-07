@@ -4,6 +4,7 @@
 package org.inqle.ui.rap.pages;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -57,6 +58,7 @@ public class CsvSubjectPage extends DynaWizardPage {
 		String[] headers = data[csvImporter.getHeaderIndex()];
 		
 		//set the page layout
+		//Composite pageComposite = new Composite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 		Composite pageComposite = new Composite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		pageComposite.setLayoutData(gridData);
@@ -74,6 +76,7 @@ public class CsvSubjectPage extends DynaWizardPage {
 			idTypeList.setItems(CsvImporter.ID_TYPES);
 			idTypeList.setSelection(csvImporter.getIdType());
 			gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+			idTypeList.setToolTipText("This defines which method will be used to generate the ID for each subject (row).");
 			//GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			idTypeList.setLayoutData(gridData);
 			
@@ -99,12 +102,13 @@ public class CsvSubjectPage extends DynaWizardPage {
 			});
 			new Label (formComposite, SWT.NONE).setText("Subject Class");
 			subjectClassText = new Text(formComposite, SWT.BORDER);
+			subjectClassText.setToolTipText("Enter the URI of the RDF class of which each subject (row) is a member.  For each subject (row), a statement will be added that says: 'This row IS A [your value for Subject Class]'.");
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			subjectClassText.setLayoutData(gridData);
-			subjectClassText.setToolTipText("enter the URI of the RDF class of which each row is a member.");
 			
 			new Label (formComposite, SWT.NONE).setText("Subject Prefix");
 			subjectPrefixText = new Text(formComposite, SWT.BORDER);
+			subjectPrefixText.setToolTipText("Enter the prefix to be used in creating the ID of each subject (row).");
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			subjectPrefixText.setLayoutData(gridData);
 			
@@ -118,13 +122,15 @@ public class CsvSubjectPage extends DynaWizardPage {
 					subjectPrefixText.setText(subjectClassText.getText() + "/");
 				}
 			});
+			selfComposite.setSize(selfComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			selfComposite.pack(true);
 		} catch (Exception e) {
 			log.error("Unable to render CSV Import Page's form", e);
 		}
 	}
 
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
 		
 	}
 	
@@ -133,19 +139,48 @@ public class CsvSubjectPage extends DynaWizardPage {
 		refreshTableData();
 	}
 	
+	@Override
+	public boolean onNextPage() {
+		String validationMessage = "";
+		if (getSubjectClassUri() == null || getSubjectClassUri().length() == 0) {
+			validationMessage += "Please enter a value for 'Subject Class'.\n";
+		}
+		if (getSubjectPrefix() == null || getSubjectPrefix().length() == 0) {
+			validationMessage += "Please enter a value for 'Subject Prefix'.\n";
+		}
+		
+		if (validationMessage.length() > 0) {
+			setMessage(validationMessage, DialogPage.WARNING);
+			return false;
+		}
+		return true;
+	}
+	
 	public int getIdTypeIndex() {
+		if (idTypeList == null) {
+			return -1;
+		}
 		return idTypeList.getSelectionIndex();
 	}
 	
 	public int getSubjectColumnIndex() {
+		if (subjectColumnList == null) {
+			return -1;
+		}
 		return subjectColumnList.getSelectionIndex();
 	}
 	
 	public String getSubjectClassUri() {
+		if (subjectClassText == null) {
+			return null;
+		}
 		return subjectClassText.getText();
 	}
 	
 	public String getSubjectPrefix() {
+		if (subjectPrefixText == null) {
+			return null;
+		}
 		return subjectPrefixText.getText();
 	}
 

@@ -87,7 +87,8 @@ public class RdfTablePage extends BeanWizardPage {
 	 * Add form elements upon initial construction
 	 */
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
+		Composite composite = selfComposite;
 		assert(composite != null);
 		this.composite = composite;
 //		table = new Table(composite, SWT.NONE);

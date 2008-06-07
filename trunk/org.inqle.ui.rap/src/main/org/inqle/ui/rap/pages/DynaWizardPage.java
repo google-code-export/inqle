@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public abstract class DynaWizardPage extends WizardPage {
 
-	protected Composite parentComposite;
+	//protected Composite parentComposite;
 	protected Composite selfComposite;
 	
 	private static Logger log = Logger.getLogger(DynaWizardPage.class);
@@ -49,13 +49,14 @@ public abstract class DynaWizardPage extends WizardPage {
 	 * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
 	 */
 	public void createControl(Composite parent) {
-		this.parentComposite = parent;
+//		this.parentComposite = parent;
 		selfComposite = new Composite(parent, SWT.NONE);
 		GridLayout gl = new GridLayout(2, false);
 		selfComposite.setLayout(gl);
 		
 		//add any form elements
-		addElements(selfComposite);
+		//addElements(selfComposite);
+		addElements();
 		
 		setControl(selfComposite);
 	}
@@ -75,7 +76,7 @@ public abstract class DynaWizardPage extends WizardPage {
 			
 	 * @param composite the composite to add the controls to
 	 */
-	public abstract void addElements(Composite composite);
+	public abstract void addElements();
 
 	public void setLabelText(String labelText) {
 		this.labelText = labelText;

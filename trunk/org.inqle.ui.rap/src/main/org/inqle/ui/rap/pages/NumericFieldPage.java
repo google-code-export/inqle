@@ -28,7 +28,8 @@ public class NumericFieldPage extends BeanWizardPage {
 	 * @see org.inqle.ui.rap.pages.DynaWizardPage#addElements(org.eclipse.swt.widgets.Composite)
 	 */
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
+		Composite composite = selfComposite;
 		new Label (composite, SWT.NONE).setText(labelText);	
 		Text numericField = new Text(composite, SWT.BORDER);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);

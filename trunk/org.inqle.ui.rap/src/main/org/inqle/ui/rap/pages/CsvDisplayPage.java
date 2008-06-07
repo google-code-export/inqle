@@ -38,7 +38,7 @@ public class CsvDisplayPage extends DynaWizardPage {
 	 * 
 	 */
 	public void refreshTableData() {
-		log.info("refreshTableData()...");
+		log.info("CsvDisplayPage.refreshTableData()...");
 		if (getWizard() == null || (!(getWizard() instanceof LoadCsvFileWizard))) {
 			log.info("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
 			return;
@@ -46,12 +46,12 @@ public class CsvDisplayPage extends DynaWizardPage {
 		log.info("getWizard()= a LoadCsvFileWizard");
 		
 		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
-		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
+		log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		loadCsvFileWizard.refreshCsvImporter();
 		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
-		//log.info("csvImporter retrieved");
+		log.info("csvImporter retrieved");
 		String[][] data = csvImporter.getRawData();
-		//log.info("data= " + data);
+		log.info("data= " + data);
 		String[] headers = data[csvImporter.getHeaderIndex()];
 		
 		//set the page layout
@@ -68,6 +68,9 @@ public class CsvDisplayPage extends DynaWizardPage {
 		
 		try {
 			//Generate the table showing the data
+			//selfComposite.dispose();
+			selfComposite.redraw();
+			selfComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
 			Table table = new Table(selfComposite, SWT.NONE);
 			
 			table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -107,6 +110,8 @@ public class CsvDisplayPage extends DynaWizardPage {
 			//log.debug("getRows():" + getRows());
 			tableViewer.setInput(writableListInput);
 			tableViewer.refresh();
+			selfComposite.setSize(selfComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			selfComposite.pack(true);
 			//this.getShell().pack(true);
 		} catch (Exception e) {
 			log.error("Unable to render CSV Import Page Tabular data", e);
@@ -115,7 +120,7 @@ public class CsvDisplayPage extends DynaWizardPage {
 	}
 
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
 		
 	}
 	

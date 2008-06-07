@@ -90,6 +90,7 @@ public class DynaWizardDialog extends WizardDialog {
 		if (wizard instanceof DynaWizard) {
 			((DynaWizard)wizard).prepareForClose();
 		}
+		wizard.dispose();
 		close();
 	}
 

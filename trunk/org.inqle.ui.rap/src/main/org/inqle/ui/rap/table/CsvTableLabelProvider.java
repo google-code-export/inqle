@@ -45,7 +45,7 @@ public class CsvTableLabelProvider extends CellLabelProvider {
 	public void update(ViewerCell cell) {
 		String[] row = (String[])cell.getElement();
 		String cellValue = row[cell.getColumnIndex()];
-		//log.trace("Update cell: " + fieldName + "=" + cellValue);
+		log.info("Update cell for col #" + cell.getColumnIndex() + ":" + cellValue + "=" + cellValue);
 		cell.setText(cellValue);
 	}
 

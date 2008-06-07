@@ -40,8 +40,6 @@ public abstract class BeanWizardPage extends DynaWizardPage {
 
 	protected IBasicJenabean bean;
 	protected String beanValueId;
-	protected Composite parentComposite;
-	protected Composite selfComposite;
 	protected Realm realm = Realm.getDefault();
 	protected DataBindingContext bindingContext;
 	
