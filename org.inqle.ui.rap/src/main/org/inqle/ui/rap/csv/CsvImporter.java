@@ -124,20 +124,25 @@ public class CsvImporter {
 		log.trace("Creating CSVConfigGuesser for file:" + file);
 		//CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
 		try {
-			CSVConfigGuesser configGuesser = new CSVConfigGuesser(new FileInputStream(file));
+			FileInputStream fis = new FileInputStream(file);
+			CSVConfigGuesser configGuesser = new CSVConfigGuesser(fis);
 			log.trace("Guessing config...");
 			CSVConfig csvConfig = configGuesser.guess();
 			log.trace("Creating CSV strategy for config:" + csvConfig);
 			CSVStrategy csvStrategy = new CSVStrategy(csvConfig.getDelimiter(), csvConfig.getValueDelimiter(), CSVStrategy.COMMENTS_DISABLED);
 			log.trace("Creating CSV parser...");
-			csvParser = new CSVParser(new BufferedReader(new FileReader(file)), csvStrategy);
+			FileReader fileReader = new FileReader(file);
+			csvParser = new CSVParser(new BufferedReader(fileReader), csvStrategy);
 			log.trace("Created CSVParser:" + csvParser);
 			//populate rawData
 			//try {
-				rawData = csvParser.getAllValues();
+			rawData = csvParser.getAllValues();
+			fileReader.close();
+			fis.close();
 			//} catch (IOException e) {
 				//log.error("Unable to read file as comma separated values (CSV) file.", e);
 			//}
+			
 		} catch (Exception e) {
 			log.error("Error creating CSVParser:", e);
 			this.error = e;
@@ -243,6 +248,8 @@ public class CsvImporter {
 					if (predicateUri == null || predicateUri.length() == 0) {
 						continue;
 					}
+					//TODO support for qnames here
+					//TODO add another wizard page to map any new/unknown prefixes.
 					predicateProperty = model.createProperty(predicateUri);
 					String cell = row[columnIndex];
 					log.info("Cell for row #" + rowIndex + ", col #" + columnIndex + " = " + cell);
