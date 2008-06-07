@@ -66,5 +66,31 @@ public class DynaWizardDialog extends WizardDialog {
 		}
 		super.backPressed();
 	}
+	
+	/**
+	 * this disposes of uploader on clicking the wizard's cancel button
+	 */
+	@Override
+	protected void cancelPressed() {
+		prepareWizardForClose();
+	}
+
+	/**
+	 * this disposes of uploader on clicking the wizard's "X" in upper right
+	 */
+	@Override
+	protected boolean canHandleShellCloseEvent() {
+		prepareWizardForClose();
+		return true;
+	}
+	
+	private void prepareWizardForClose() {
+		log.info("prepareWizardForClose()...");
+		IWizard wizard = getWizard();
+		if (wizard instanceof DynaWizard) {
+			((DynaWizard)wizard).prepareForClose();
+		}
+		close();
+	}
 
 }

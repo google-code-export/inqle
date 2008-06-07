@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.load.Loader;
@@ -34,27 +35,32 @@ import com.hp.hpl.jena.rdf.model.Model;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class LoadRdfFileWizard extends Wizard {
+public class LoadRdfFileWizard extends DynaWizard {
+
+	public LoadRdfFileWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
+		// TODO Auto-generated constructor stub
+	}
 
 	//private final File tempDir = Persister.getTempDirectory();
 	private Connection connection = null;
 	//private Persister persister;
 	static Logger log = Logger.getLogger(LoadRdfFileWizard.class);
 	Composite composite;
-	private Model modelToLoad = null;
+	//private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
 	
 	private ModelPart modelPart = null;
 	//LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
 	LoadFilePage loadFilePage = new LoadFilePage("Load Data from Local File");
 	
-	Upload filePath = null;
+	Upload uploaderWidget = null;
 	/*
 	 UploadAdapter uploadAdapter = new UploadAdapter() {
   	public void uploadFinished(final UploadEvent uploadEvent) {
   		log.info("uploadFinished() received event " + uploadEvent);
       if (uploadEvent.isFinished() && uploadEvent.getUploadedTotal() > 0) {
-        String uploadedFileName = filePath.getLastFileUploaded();
+        String uploadedFileName = uploaderWidget.getLastFileUploaded();
         log.info("Uploaded file " + uploadedFileName);
         File tempDir = new File ( System.getProperty(JAVA_TEMP_DIR_PROPERTY));
         File uploadedFile = new File (tempDir, uploadedFileName);
@@ -135,18 +141,18 @@ public class LoadRdfFileWizard extends Wizard {
 			new Label (composite, SWT.NONE).setText("Select file to upload");	
 			String servletUrl = RWT.getRequest().getContextPath().trim() + "/upload";
 			//String servletUrl = "/rap/upload";
-			filePath = new Upload(composite, SWT.NONE, servletUrl, true);
+			uploaderWidget = new Upload(composite, SWT.NONE, servletUrl, true);
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-	    filePath.setLayoutData(gridData);
-	    log.info("Upload servlet =" + filePath.getServlet());
+	    uploaderWidget.setLayoutData(gridData);
+	    log.info("Upload servlet =" + uploaderWidget.getServlet());
 	    
 	    
-	    filePath.addUploadListener(new UploadAdapter() {
+	    uploaderWidget.addUploadListener(new UploadAdapter() {
 	    	public void uploadFinished(final UploadEvent uploadEvent) {
 	    		log.info("uploadFinished() received event " + uploadEvent);
 	        if (uploadEvent.isFinished()) {
-	          //String uploadedFileName = filePath.getLastFileUploaded();
-	          File uploadedFile = filePath.getLastUploadedFile();
+	          //String uploadedFileName = uploaderWidget.getLastFileUploaded();
+	          File uploadedFile = uploaderWidget.getLastUploadedFile();
 	          //File uploadedFile = new File (tempDir, uploadedFileName);
 	          log.info("Uploaded file " + uploadedFile.getAbsolutePath());
 	          //File uploadedFile = new File(uploadedFileName);
@@ -160,8 +166,8 @@ public class LoadRdfFileWizard extends Wizard {
 			setControl(composite);
 		}
 
-		public Upload getFilePath() {
-			return filePath;
+		public Upload getUploaderWidget() {
+			return uploaderWidget;
 		}
 	}
 	
@@ -169,14 +175,14 @@ public class LoadRdfFileWizard extends Wizard {
 	
 	
 	
-	public LoadRdfFileWizard(ModelPart modelPart,	Connection connection) {
-		Persister persister = Persister.getInstance();
-		//this.persister = persister;
-		this.modelPart = modelPart;
-		this.connection = connection;
-		this.modelToLoad = persister.getModel(modelPart.getRdbModel());
-		//log.info("Temp Dir = " + tempDir.getAbsolutePath() + ": can write? " + tempDir.canWrite());
-	}
+//	public LoadRdfFileWizard(ModelPart modelPart,	Connection connection) {
+//		Persister persister = Persister.getInstance();
+//		//this.persister = persister;
+//		this.modelPart = modelPart;
+//		this.connection = connection;
+//		this.modelToLoad = persister.getModel(modelPart.getRdbModel());
+//		//log.info("Temp Dir = " + tempDir.getAbsolutePath() + ": can write? " + tempDir.canWrite());
+//	}
 
 	@Override
 	public void addPages() {
@@ -189,7 +195,7 @@ public class LoadRdfFileWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		closeUploader();
+		prepareForClose();
 		//close wizard regardless
 		return true;
 	}
@@ -198,7 +204,7 @@ public class LoadRdfFileWizard extends Wizard {
 		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + file.getName() + "..." );
 		popup.open();
 		log.info("Rendered popup");
-    Loader loader = new Loader(modelToLoad);
+    Loader loader = new Loader(saveToModel);
     boolean success = loader.load(file, defaultUri);
     popup.close();
     if (success) {
@@ -225,14 +231,23 @@ public class LoadRdfFileWizard extends Wizard {
 //    loader.load(file, defaultUri);
 //	}
 
+	@Override
+	public void prepareForClose() {
+		log.info("Disposing of uploaderWidget=" + uploaderWidget);
+		if (uploaderWidget != null) {
+			uploaderWidget.dispose();
+		}
+	}
+	
 	/**
 	 * Clean up the uploader to prevent javascript errors on repeated calls
 	 */
-	public void closeUploader() {
-		//filePath.removeUploadListener(uploadAdapter);
-		if (filePath != null) {
-			filePath.dispose();
-		}
-	}
+//	public void closeUploader() {
+//		//uploaderWidget.removeUploadListener(uploadAdapter);
+//		log.info("Disposing of uploaderWidget=" + uploaderWidget);
+//		if (uploaderWidget != null) {
+//			uploaderWidget.dispose();
+//		}
+//	}
 
 }

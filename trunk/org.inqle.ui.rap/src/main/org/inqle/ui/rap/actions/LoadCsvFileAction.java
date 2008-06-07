@@ -10,8 +10,11 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * @author David Donohue
@@ -45,7 +48,8 @@ public class LoadCsvFileAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelPart, connection);
+		Model modelToImportInto = Persister.getInstance().getModel(modelPart.getRdbModel());
+		LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelToImportInto, window.getShell());
 		//DummyWizard wizard = new DummyWizard();
 		
 		LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);

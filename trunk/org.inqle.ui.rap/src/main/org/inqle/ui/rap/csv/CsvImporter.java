@@ -75,6 +75,9 @@ public class CsvImporter {
 	
 	private CSVParser csvParser;
 	
+	private int countSavedStatements = 0;
+	private int countSavedRows = 0;
+	
 	private static Logger log = Logger.getLogger(CsvImporter.class);
 	
 	/**
@@ -99,6 +102,9 @@ public class CsvImporter {
 	private String subjectPrefix = RDF.UNKNOWN_SUBJECT;
 	
 	private String[][] rawData;
+	private File file;
+	private Exception error;
+	private String subjectClassUri;
 	                 
 //	public CsvImporter(InputStream inputStream) {
 //		log.info("Creating CSVConfigGuesser for inputStream:" + inputStream);
@@ -114,25 +120,27 @@ public class CsvImporter {
 //	}
 
 	public CsvImporter(File file) {
-		log.info("Creating CSVConfigGuesser for file:" + file);
+		this.file = file;
+		log.trace("Creating CSVConfigGuesser for file:" + file);
 		//CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
 		try {
 			CSVConfigGuesser configGuesser = new CSVConfigGuesser(new FileInputStream(file));
-			log.info("Guessing config...");
+			log.trace("Guessing config...");
 			CSVConfig csvConfig = configGuesser.guess();
-			log.info("Creating CSV strategy for config:" + csvConfig);
+			log.trace("Creating CSV strategy for config:" + csvConfig);
 			CSVStrategy csvStrategy = new CSVStrategy(csvConfig.getDelimiter(), csvConfig.getValueDelimiter(), CSVStrategy.COMMENTS_DISABLED);
-			log.info("Creating CSV parser...");
+			log.trace("Creating CSV parser...");
 			csvParser = new CSVParser(new BufferedReader(new FileReader(file)), csvStrategy);
-			log.info("Created CSVParser:" + csvParser);
+			log.trace("Created CSVParser:" + csvParser);
 			//populate rawData
-			try {
+			//try {
 				rawData = csvParser.getAllValues();
-			} catch (IOException e) {
-				log.error("Unable to read file as comma separated values (CSV) file.", e);
-			}
+			//} catch (IOException e) {
+				//log.error("Unable to read file as comma separated values (CSV) file.", e);
+			//}
 		} catch (Exception e) {
 			log.error("Error creating CSVParser:", e);
+			this.error = e;
 		}
 		
 	}
@@ -209,60 +217,91 @@ public class CsvImporter {
 	 * Save the CSV file as a number of RDF statements, into the specified Jena model
 	 * @param model
 	 */
-	public void saveStatements(Model model) {
+	public boolean saveStatements(Model model) {
+		countSavedStatements = 0;
+		countSavedRows = 0;
 		String[][] data = getRawData();
 		model.begin();
-		for (int rowIndex = headerIndex + 1; rowIndex < data.length; rowIndex++) {
-			String[] row = data[rowIndex];
-			String subjectUri = getSubjectUri(row, rowIndex);
-			Resource subjectResource = model.createResource(subjectUri);
-			Literal objectLiteral = null;
-			for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
-				String predicateUri = getPredicateUri(columnIndex);
-				//if the predicate is null or blank, continue to next column
-				if (predicateUri == null || predicateUri.length() == 0) {
-					continue;
-				}
+		
+		try {
+			for (int rowIndex = headerIndex + 1; rowIndex < data.length; rowIndex++) {
+				log.info("Storing row #" + (rowIndex + 1) + " ...");
+				String[] row = data[rowIndex];
+				String subjectUri = getSubjectUri(row, rowIndex);
+				Resource subjectResource = model.createResource(subjectUri);
+				String predicateUri = RDF.TYPE;
 				Property predicateProperty = model.createProperty(predicateUri);
-				String cell = row[columnIndex];
-				//if this cell is null or blank, continue to the next column
-				if (cell == null || cell.length() == 0) {
-					continue;
-				}
-				Statement statementForThisCell = null;
+				Resource subjectClass = model.createResource(getSubjectClassUri());
 				
-				//if integer, store integer
-				try {
-					Integer cellInteger = Integer.parseInt(cell);
-					objectLiteral = ResourceFactory.createTypedLiteral(cellInteger);
-				} catch (NumberFormatException e) {
-					//leave null
-				}
-				if (objectLiteral == null) {
+				Statement subjectTypeStatement = model.createStatement(subjectResource, predicateProperty, subjectClass);
+				model.add(subjectTypeStatement);
+				
+				Literal objectLiteral = null;
+				for (int columnIndex = 0; columnIndex < row.length; columnIndex++) {
+					predicateUri = getPredicateUri(columnIndex);
+					//if the predicate is null or blank, continue to next column
+					if (predicateUri == null || predicateUri.length() == 0) {
+						continue;
+					}
+					predicateProperty = model.createProperty(predicateUri);
+					String cell = row[columnIndex];
+					log.info("Cell for row #" + rowIndex + ", col #" + columnIndex + " = " + cell);
+					//if this cell is null or blank, continue to the next column
+					if (cell == null || cell.length() == 0) {
+						continue;
+					}
+					
+					//zero the objects to be created for this cell
+					Statement statementForThisCell = null;
+					objectLiteral = null;
+					
+					//if integer, store integer
 					try {
-						Double cellDouble = Double.parseDouble(cell);
-						objectLiteral = ResourceFactory.createTypedLiteral(cellDouble);
+						Integer cellInteger = Integer.parseInt(cell);
+						objectLiteral = ResourceFactory.createTypedLiteral(cellInteger);
 					} catch (NumberFormatException e) {
 						//leave null
 					}
-				}
-				if (objectLiteral == null) {
-					XSDDateTime cellDate = tryToParseDate(cell);
-					if (cellDate != null) {
-						objectLiteral = ResourceFactory.createTypedLiteral(cellDate);
+					if (objectLiteral == null) {
+						try {
+							Double cellDouble = Double.parseDouble(cell);
+							objectLiteral = ResourceFactory.createTypedLiteral(cellDouble);
+						} catch (NumberFormatException e) {
+							//leave null
+						}
 					}
+					if (objectLiteral == null) {
+						XSDDateTime cellDate = tryToParseDate(cell);
+						if (cellDate != null) {
+							objectLiteral = ResourceFactory.createTypedLiteral(cellDate);
+						}
+					}
+					
+					//if unable to parse, use the string value
+					if (objectLiteral == null) {
+						objectLiteral = ResourceFactory.createTypedLiteral(cell);
+					}
+					
+					statementForThisCell = model.createStatement(subjectResource, predicateProperty, objectLiteral);
+					model.add(statementForThisCell);
+
+					countSavedStatements++;
+					log.info("#" + countSavedStatements + " Saved:" + statementForThisCell);
 				}
-				
-				//if unable to parse, use the string value
-				if (objectLiteral == null) {
-					objectLiteral = ResourceFactory.createTypedLiteral(cell);
-				}
-				
-				statementForThisCell = model.createStatement(subjectResource, predicateProperty, objectLiteral);
-				model.add(statementForThisCell);
+				countSavedRows++;
 			}
+			model.commit();
+		} catch (Exception e) {
+			model.abort();
+			this.error = e;
+			log.error("Error inserting statements", e);
+			return false;
 		}
-		model.commit();
+		return true;
+	}
+
+	private String getSubjectClassUri() {
+		return subjectClassUri;
 	}
 
 	private XSDDateTime tryToParseDate(String putativeDateString) {
@@ -307,5 +346,33 @@ public class CsvImporter {
 				
 		}
 		return uriStr;
+	}
+
+	public int getCountSavedStatements() {
+		return countSavedStatements;
+	}
+
+	public int getCountSavedRows() {
+		return countSavedRows;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public Exception getError() {
+		return error;
+	}
+
+	public List<String> getColumnPredicateUris() {
+		return columnPredicateUris;
+	}
+
+	public void setColumnPredicateUris(List<String> columnPredicateUris) {
+		this.columnPredicateUris = columnPredicateUris;
+	}
+
+	public void setSubjectClassUri(String subjectClassUri) {
+		this.subjectClassUri = subjectClassUri;
 	}
 }

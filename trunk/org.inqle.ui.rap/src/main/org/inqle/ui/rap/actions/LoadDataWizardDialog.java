@@ -16,25 +16,11 @@ import org.eclipse.swt.widgets.Shell;
 			//this.getButton(WizardDialog.CANCEL).setEnabled(false);
 		}
 		
-		/**
-		 * this disposes of uploader on clicking the wizard's cancel button
-		 */
-		@Override
-		protected void cancelPressed() {
-			closeUploader();
-		}
-		/**
-		 * this disposes of uploader on clicking the wizard's "X" in upper right
-		 */
-		@Override
-		protected boolean canHandleShellCloseEvent() {
-			closeUploader();
-		  return true;
-		}
 		
-		protected void closeUploader() {
-			LoadRdfFileWizard wizard = (LoadRdfFileWizard)getWizard();
-		  wizard.closeUploader();
-		  close();
-		}
+		
+//		protected void closeUploader() {
+//			LoadRdfFileWizard wizard = (LoadRdfFileWizard)getWizard();
+//		  wizard.closeUploader();
+//		  close();
+//		}
 	}
