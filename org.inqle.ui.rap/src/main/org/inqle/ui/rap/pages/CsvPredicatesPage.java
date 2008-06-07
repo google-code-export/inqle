@@ -9,6 +9,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -25,6 +28,8 @@ public class CsvPredicatesPage extends DynaWizardPage {
 	
 	private static Logger log = Logger.getLogger(CsvPredicatesPage.class);
 	private Text[] predicateUriTexts;
+	private ScrolledComposite pageComposite;
+	private Composite formComposite;
 	
 	public CsvPredicatesPage(String title, ImageDescriptor titleImage) {
 		super(title, titleImage);
@@ -42,7 +47,6 @@ public class CsvPredicatesPage extends DynaWizardPage {
 			log.error("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
 			return;
 		}
-		log.info("getWizard()= a LoadCsvFileWizard");
 		
 		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
@@ -53,18 +57,18 @@ public class CsvPredicatesPage extends DynaWizardPage {
 		String[] headers = data[csvImporter.getHeaderIndex()];
 		
 		//set the page layout
+		selfComposite.dispose();
 		GridData gridData;
-		ScrolledComposite pageComposite = new ScrolledComposite(parentComposite, SWT.H_SCROLL | SWT.V_SCROLL);
+		pageComposite = new ScrolledComposite(parentComposite, SWT.H_SCROLL | SWT.V_SCROLL);
 		//ScrolledComposite formComposite = new ScrolledComposite(parentComposite, SWT.H_SCROLL | SWT.V_SCROLL);
-		pageComposite.setExpandHorizontal(true);
-		pageComposite.setExpandVertical(true);
+		
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 //		pageComposite.setLayoutData(gridData);
 //		pageComposite.setLayout (new GridLayout (1,false));
 		
 		//Generate the form at the top of the page
-		Composite formComposite = new Composite(pageComposite, SWT.NONE);
-		pageComposite.setContent(formComposite);
+		formComposite = new Composite(pageComposite, SWT.NONE);
+		
 //		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 //		formComposite.setLayoutData(gridData);
 		formComposite.setLayout (new GridLayout (2,false));
@@ -84,9 +88,19 @@ public class CsvPredicatesPage extends DynaWizardPage {
 				log.error("Unable to render form field for column " + header, e);
 			}
 		}
-		//formComposite.setSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		pageComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
+		
+		pageComposite.setContent(formComposite);
+		pageComposite.setExpandHorizontal(true);
+		pageComposite.setExpandVertical(true);
+		//pageComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		formComposite.setSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
+		pageComposite.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle r = pageComposite.getClientArea();
+				pageComposite.setMinSize(formComposite.computeSize(r.width, SWT.DEFAULT));
+			}
+		});
 	}
 
 	@Override

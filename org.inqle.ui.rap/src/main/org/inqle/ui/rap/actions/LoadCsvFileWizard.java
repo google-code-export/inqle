@@ -23,6 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.load.Loader;
@@ -41,13 +42,18 @@ import com.hp.hpl.jena.rdf.model.Model;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class LoadCsvFileWizard extends Wizard {
+public class LoadCsvFileWizard extends DynaWizard {
+
+	public LoadCsvFileWizard(Model saveToModel, Shell shell) {
+		super(saveToModel, shell);
+		// TODO Auto-generated constructor stub
+	}
 
 	//private final File tempDir = Persister.getTempDirectory();
 	//private Persister persister;
 	static Logger log = Logger.getLogger(LoadCsvFileWizard.class);
 	Composite composite;
-	private Model modelToLoad = null;
+	//private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
 	
 	LoadFilePage loadCsvFilePage = new LoadFilePage("Load Data from CSV File");
@@ -55,13 +61,15 @@ public class LoadCsvFileWizard extends Wizard {
 	private CsvImporter csvImporter;
 	private ModelPart modelPart;
 	private Connection connection;
+	private CsvSubjectPage csvSubjectPage;
+	private CsvPredicatesPage csvPredicatesPage;
 	
-	public LoadCsvFileWizard(ModelPart modelPart,	Connection connection) {
-		Persister persister = Persister.getInstance();
-		this.modelPart = modelPart;
-		this.connection = connection;
-		this.modelToLoad = persister.getModel(modelPart.getRdbModel());
-	}
+//	public LoadCsvFileWizard(ModelPart modelPart,	Connection connection) {
+//		Persister persister = Persister.getInstance();
+//		this.modelPart = modelPart;
+//		this.connection = connection;
+//		this.modelToLoad = persister.getModel(modelPart.getRdbModel());
+//	}
 
 	@Override
 	public void addPages() {
@@ -71,10 +79,10 @@ public class LoadCsvFileWizard extends Wizard {
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
 		addPage(csvDisplayPage);
 		
-		CsvSubjectPage csvSubjectPage = new CsvSubjectPage("Specify info about the experiment subject.", null);
+		csvSubjectPage = new CsvSubjectPage("Specify info about the experiment subject.", null);
 		addPage(csvSubjectPage);
 		
-		CsvPredicatesPage csvPredicatesPage = new CsvPredicatesPage("Specify the URI of a predicate representing each column.", null);
+		csvPredicatesPage = new CsvPredicatesPage("Specify the URI of a predicate representing each column.", null);
 		addPage(csvPredicatesPage);
 		
 		//TODO add a page to capture any other descriptive info, e.g. 
@@ -86,35 +94,48 @@ public class LoadCsvFileWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		//closeUploader();
-		//close wizard regardless
-		return true;
-	}
-	
-	public void importFile(File file) {
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + file.getName() + "..." );
+		//Get the CsvImporter
+		CsvImporter importer = getCsvImporter();
+		
+		//show the "importing..." dialog
+		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + importer.getFile().getName() + "..." );
 		popup.open();
-		log.info("Rendered popup");
-    Loader loader = new Loader(modelToLoad);
-    boolean success = loader.load(file, defaultUri);
+		
+		//prepare the CsvImporter...
+		importer.setIdType(csvSubjectPage.getIdTypeIndex());
+		importer.setSubjectIndex(csvSubjectPage.getSubjectColumnIndex());
+		importer.setSubjectPrefix(csvSubjectPage.getSubjectPrefix());
+		importer.setSubjectClassUri(csvSubjectPage.getSubjectClassUri());
+		importer.setColumnPredicateUris(csvPredicatesPage.getPredicateUris());
+		
+		//do the import
+		boolean success = importer.saveStatements(saveToModel);
+		
+		//close the "importing..." dialog
     popup.close();
+    
+    //show success
     if (success) {
-    	if (loader.getCountLoaded() == 0) {
-    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
+    	if (importer.getCountSavedStatements() == 0) {
+    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + importer.getFile().getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
     	} else {
-    		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + loader.getCountLoaded() + " statements from file " + file.getName()); 
+    		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + importer.getCountSavedStatements() + " statements, " + importer.getCountSavedRows() + " rows, from file " + importer.getFile().getName()); 
     	}
     } else {
-    	String errorMessage = "Unable to load data from file " + file.getName();
-    	if (loader.getError() != null) {
-    		errorMessage +=  "\n" + loader.getError().getMessage();
+    	String errorMessage = "Unable to load data from file " + importer.getFile().getName();
+    	if (importer.getError() != null) {
+    		errorMessage +=  "\nError=" + importer.getError().getMessage();
     	}
     	MessageDialog.openError(getShell(), "Error loading data", errorMessage);
     }
     log.info("Success? " + success);
     
-    //if (popup != null) popup.close();
+		//prepare to be closed...
+		prepareForClose();
+		//close wizard regardless
+		return true;
 	}
+
 
 	public CsvImporter getCsvImporter() {
 		if (csvImporter == null) {
@@ -125,13 +146,13 @@ public class LoadCsvFileWizard extends Wizard {
 
 	public void refreshCsvImporter() {
 		if (loadCsvFilePage.getUploadedFile() == null) {
-			log.info("loadCsvFilePage.getUploadedFile()=null");
+			log.error("loadCsvFilePage.getUploadedFile()=null");
 			return;
 		}
 		try {
-			log.info("Get uploaded file...");
+			log.trace("Get uploaded file...");
 			File uploadedFile = loadCsvFilePage.getUploadedFile();
-			log.info("Retrieve CSV importer...");
+			log.trace("Retrieve CSV importer...");
 			//csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
 			csvImporter = new CsvImporter(uploadedFile);
 		} catch (Exception e) {
@@ -144,15 +165,15 @@ public class LoadCsvFileWizard extends Wizard {
 		this.csvImporter = csvImporter;
 	}
 
-	public void closeUploader() {
+//	public void closeUploader() {
+//		loadCsvFilePage.closeUploader();
+//	}
+	
+	@Override
+	public void prepareForClose() {
+		//log.info("Disposing of uploaderWidget=" + uploaderWidget);
 		loadCsvFilePage.closeUploader();
 	}
-	
-//	public void importFile(String fileName) {
-//    File file = new File( tempDir, fileName );
-//    Loader loader = new Loader(modelToLoad);
-//    loader.load(file, defaultUri);
-//	}
 
 
 

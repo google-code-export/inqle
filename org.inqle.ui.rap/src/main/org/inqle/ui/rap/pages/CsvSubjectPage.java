@@ -42,12 +42,11 @@ public class CsvSubjectPage extends DynaWizardPage {
 	 * 
 	 */
 	public void refreshTableData() {
-		log.info("refreshTableData()...");
 		if (getWizard() == null || (!(getWizard() instanceof LoadCsvFileWizard))) {
-			log.info("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
+			log.error("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
 			return;
 		}
-		log.info("getWizard()= a LoadCsvFileWizard");
+//		log.info("getWizard()= a LoadCsvFileWizard");
 		
 		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
@@ -140,6 +139,14 @@ public class CsvSubjectPage extends DynaWizardPage {
 	
 	public int getSubjectColumnIndex() {
 		return subjectColumnList.getSelectionIndex();
+	}
+	
+	public String getSubjectClassUri() {
+		return subjectClassText.getText();
+	}
+	
+	public String getSubjectPrefix() {
+		return subjectPrefixText.getText();
 	}
 
 }

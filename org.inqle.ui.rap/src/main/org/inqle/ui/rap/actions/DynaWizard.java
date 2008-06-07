@@ -83,5 +83,12 @@ public abstract class DynaWizard extends Wizard {
 	public void setBean(IBasicJenabean bean) {
 		this.bean = bean;
 	}
+	
+	/**
+	 * Override if any operations are needed prior to closing the wizard.  This 
+	 * is called upon a close event from the DynaWizardDialog
+	 */
+	public void prepareForClose() {
+	}
 
 }
