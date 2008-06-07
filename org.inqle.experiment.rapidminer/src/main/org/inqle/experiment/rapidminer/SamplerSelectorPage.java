@@ -16,7 +16,7 @@ public class SamplerSelectorPage extends BeanWizardPage {
 	}
 
 	@Override
-	public void addElements(Composite composite) {
+	public void addElements() {
 		
 	}
 
