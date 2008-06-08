@@ -42,35 +42,28 @@ public class CsvPredicatesPage extends DynaWizardPage {
 	 * 
 	 */
 	public void refreshTableData() {
-//		log.info("refreshTableData()...");
+		//Generate the form at the top of the page
+		formComposite = new Composite(scrollingComposite, SWT.NONE);
+		formComposite.setLayout (new GridLayout (2,false));
+		
+		log.info("CsvPredicatesPage.refreshTableData()...");
 		if (getWizard() == null || (!(getWizard() instanceof LoadCsvFileWizard))) {
 			log.error("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
 			return;
 		}
 		
 		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
-		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
+		log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
-		//log.info("csvImporter retrieved");
+		log.info("csvImporter retrieved");
 		String[][] data = csvImporter.getRawData();
-		//log.info("data= " + data);
+		log.info("data= " + data);
 		String[] headers = data[csvImporter.getHeaderIndex()];
 		
 		//set the page layout
 		//Composite parentComposite = selfComposite.getParent();
 		//selfComposite.dispose();
 		GridData gridData;
-		scrollingComposite = new ScrolledComposite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
-		
-//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//		scrollingComposite.setLayout (new GridLayout (1,false));
-		
-		//Generate the form at the top of the page
-		formComposite = new Composite(scrollingComposite, SWT.NONE);
-		
-//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//		formComposite.setLayoutData(gridData);
-		formComposite.setLayout (new GridLayout (2,false));
 		
 		predicateUriTexts = new Text[headers.length];
 		int headerIndex = 0;
@@ -100,12 +93,27 @@ public class CsvPredicatesPage extends DynaWizardPage {
 				scrollingComposite.setMinSize(formComposite.computeSize(r.width, SWT.DEFAULT));
 			}
 		});
-		selfComposite.pack(true);
+		//selfComposite.pack(true);
 	}
 
 	@Override
 	public void addElements() {
+	}
+	
+	@Override
+	public void createControl(Composite parent) {
+		log.info("CsvPredicatesPage.createControl()");
+		scrollingComposite = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		
+//	GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//	scrollingComposite.setLayout (new GridLayout (1,false));
+	
+		//Generate the form at the top of the page
+		//formComposite = new Composite(scrollingComposite, SWT.NONE);
+		
+	//	gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	//	formComposite.setLayoutData(gridData);
+		setControl(scrollingComposite);
 	}
 	
 	@Override

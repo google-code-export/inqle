@@ -58,21 +58,22 @@ public class CsvSubjectPage extends DynaWizardPage {
 		String[] headers = data[csvImporter.getHeaderIndex()];
 		
 		//set the page layout
+		GridData gridData;
 		//Composite pageComposite = new Composite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
-		Composite pageComposite = new Composite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		pageComposite.setLayoutData(gridData);
-		pageComposite.setLayout (new GridLayout (1,false));
+//		Composite pageComposite = new Composite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
+//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		pageComposite.setLayoutData(gridData);
+//		pageComposite.setLayout (new GridLayout (1,false));
 		
 		//Generate the form at the top of the page
-		Composite formComposite = new Composite(pageComposite, SWT.NONE);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		formComposite.setLayoutData(gridData);
-		formComposite.setLayout (new GridLayout (2,false));
+		//Composite formComposite = new Composite(pageComposite, SWT.NONE);
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		formComposite.setLayoutData(gridData);
+//		formComposite.setLayout (new GridLayout (2,false));
 		
 		try {
-			new Label (formComposite, SWT.NONE).setText("ID Type");
-			idTypeList = new List(formComposite, SWT.BORDER | SWT.SINGLE | SWT.DROP_DOWN);//SWT.V_SCROLL | 
+			new Label (selfComposite, SWT.NONE).setText("ID Type");
+			idTypeList = new List(selfComposite, SWT.BORDER | SWT.SINGLE | SWT.DROP_DOWN);//SWT.V_SCROLL | 
 			idTypeList.setItems(CsvImporter.ID_TYPES);
 			idTypeList.setSelection(csvImporter.getIdType());
 			gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
@@ -80,8 +81,8 @@ public class CsvSubjectPage extends DynaWizardPage {
 			//GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			idTypeList.setLayoutData(gridData);
 			
-			new Label (formComposite, SWT.NONE).setText("Subject Column");
-			subjectColumnList = new List(formComposite, SWT.BORDER | SWT.SINGLE | SWT.DROP_DOWN);//SWT.V_SCROLL | 
+			new Label (selfComposite, SWT.NONE).setText("Subject Column");
+			subjectColumnList = new List(selfComposite, SWT.BORDER | SWT.SINGLE | SWT.DROP_DOWN);//SWT.V_SCROLL | 
 			subjectColumnList.setItems(headers);
 			gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 			subjectColumnList.setLayoutData(gridData);
@@ -100,14 +101,14 @@ public class CsvSubjectPage extends DynaWizardPage {
 					}
 				}
 			});
-			new Label (formComposite, SWT.NONE).setText("Subject Class");
-			subjectClassText = new Text(formComposite, SWT.BORDER);
+			new Label (selfComposite, SWT.NONE).setText("Subject Class");
+			subjectClassText = new Text(selfComposite, SWT.BORDER);
 			subjectClassText.setToolTipText("Enter the URI of the RDF class of which each subject (row) is a member.  For each subject (row), a statement will be added that says: 'This row IS A [your value for Subject Class]'.");
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			subjectClassText.setLayoutData(gridData);
 			
-			new Label (formComposite, SWT.NONE).setText("Subject Prefix");
-			subjectPrefixText = new Text(formComposite, SWT.BORDER);
+			new Label (selfComposite, SWT.NONE).setText("Subject Prefix");
+			subjectPrefixText = new Text(selfComposite, SWT.BORDER);
 			subjectPrefixText.setToolTipText("Enter the prefix to be used in creating the ID of each subject (row).");
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			subjectPrefixText.setLayoutData(gridData);
@@ -120,6 +121,7 @@ public class CsvSubjectPage extends DynaWizardPage {
 			subjectClassText.addModifyListener (new ModifyListener () {
 				public void modifyText (ModifyEvent event) {
 					subjectPrefixText.setText(subjectClassText.getText() + "/");
+					setMessage("");
 				}
 			});
 			selfComposite.setSize(selfComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
