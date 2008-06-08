@@ -44,6 +44,6 @@ Thus, RDF is a powerful way for representing most any information in a computer-
 
   * How can I convert other data into RDF?
     * Believe it or not, there are a number of free products which can do this:
-http://esw.w3.org/topic/ConverterToRdf
-http://simile.mit.edu/wiki/RDFizers
-http://spire.umbc.edu/firefox/
+      http://esw.w3.org/topic/ConverterToRdf
+      http://simile.mit.edu/wiki/RDFizers
+      http://spire.umbc.edu/firefox/
