@@ -4,6 +4,8 @@
 package org.inqle.ui.rap.pages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -67,6 +69,12 @@ public class CsvPredicatesPage extends DynaWizardPage {
 		
 		predicateUriTexts = new Text[headers.length];
 		int headerIndex = 0;
+		List<String> predicateValues = getCsvImporter().getColumnPredicateUris();
+		if (predicateValues == null) {
+			predicateValues = new ArrayList<String>();
+		}
+		log.info("predicateUris values from form=" + Arrays.asList(getPredicateUris()));
+		log.info("predicateValues from CSV Importer=" + predicateValues);
 		for (String header: headers) {
 			try {
 				new Label (formComposite, SWT.NONE).setText(header);
@@ -75,6 +83,9 @@ public class CsvPredicatesPage extends DynaWizardPage {
 				predicateUriTexts[headerIndex].setLayoutData(gridData);
 				predicateUriTexts[headerIndex].setToolTipText("Enter the full URI of the RDF predicate that represents the data in this column.\nLeave blank to ignore the column.");
 				
+				if (predicateValues.size() > headerIndex) {
+					predicateUriTexts[headerIndex].setText(predicateValues.get(headerIndex));
+				}
 				headerIndex++;
 			} catch (Exception e) {
 				log.error("Unable to render form field for column " + header, e);
@@ -123,9 +134,32 @@ public class CsvPredicatesPage extends DynaWizardPage {
 	
 	public java.util.List<String> getPredicateUris() {
 		ArrayList<String> predicateUris = new ArrayList<String>();
+		
+		int predicateIndex = -1;
 		for (Text predicateUriText: predicateUriTexts) {
+			predicateIndex++;
+			if (predicateUriText == null) {
+				predicateUris.add(null);
+				continue;
+			}
 			predicateUris.add(predicateUriText.getText());
 		}
 		return predicateUris;
+	}
+	
+	private CsvImporter getCsvImporter() {
+		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
+		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
+		return loadCsvFileWizard.getCsvImporter();
+	}
+	
+	@Override
+	public boolean onPreviousPage() {
+		bindValuesToCsvImporter();
+		return true;
+	}
+
+	private void bindValuesToCsvImporter() {
+		getCsvImporter().setColumnPredicateUris(getPredicateUris());
 	}
 }
