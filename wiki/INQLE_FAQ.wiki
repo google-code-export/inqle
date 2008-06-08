@@ -22,7 +22,7 @@ already known.  They might also be true correlations.  In this case, the correla
     * Intelligent Network of Querying and Learning Engines
 
   * Isn't that a little lofty?
-We weary at such niggling interrogation.
+    * We weary at this niggling interrogation.
 
 ==Questions on Using INQLE==
   * What am I supposed to do with my INQLE server?
