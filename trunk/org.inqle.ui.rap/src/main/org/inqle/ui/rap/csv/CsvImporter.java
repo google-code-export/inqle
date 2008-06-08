@@ -344,8 +344,10 @@ public class CsvImporter {
 				break;
 			case ID_TYPE_CELL_VALUE:
 				try {
-					URI uri = new URI(uriStr);
-					uri.resolve(row[getSubjectIndex()]);
+//					URI uri = new URI(uriStr);
+//					uri.resolve(row[getSubjectIndex()]);
+					URI uri = new URI(row[getSubjectIndex()]);
+					uri.resolve(uriStr);
 					uriStr += uri.toString();
 					break;
 				} catch (URISyntaxException e) {

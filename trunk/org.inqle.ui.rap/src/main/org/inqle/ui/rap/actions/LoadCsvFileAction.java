@@ -47,15 +47,14 @@ public class LoadCsvFileAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
-		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		Model modelToImportInto = Persister.getInstance().getModel(modelPart.getRdbModel());
-		LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelToImportInto, window.getShell());
-		//DummyWizard wizard = new DummyWizard();
-		
-		LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);
-		//UploadDialog dialog = new UploadDialog(window.getShell(), "Upload File", true);
-
-		dialog.open();
+		try {
+			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getRdbModel());
+			LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelToImportInto, window.getShell());
+			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
+			dialog.open();
+		} catch (Exception e) {
+			log.error("Error running LoadCsvFileWizard", e);
+		}
 	}
 	
 	

@@ -21,10 +21,11 @@ import org.inqle.ui.rap.table.CsvTableLabelProvider;
 
 /**
  * @author David Donohue
- * Jun 4, 2008
+ * Jun 4, 8
  */
 public class CsvDisplayPage extends DynaWizardPage {
 	
+	private static final int COLUMN_WIDTH = 60;
 	private static Logger log = Logger.getLogger(CsvDisplayPage.class);
 	
 	public CsvDisplayPage(String title, ImageDescriptor titleImage) {
@@ -68,9 +69,7 @@ public class CsvDisplayPage extends DynaWizardPage {
 		
 		try {
 			//Generate the table showing the data
-			//selfComposite.dispose();
-			selfComposite.redraw();
-			selfComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
+			//selfComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
 			Table table = new Table(selfComposite, SWT.NONE);
 			
 			table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -83,7 +82,7 @@ public class CsvDisplayPage extends DynaWizardPage {
 				TableColumn column = new TableColumn(table,SWT.LEFT);
 				column.setText(header);
 				column.setResizable(true);
-				column.setWidth(200);
+				column.setWidth(COLUMN_WIDTH);
 				
 				//column.pack();
 				//log.info("Added column: " + header);
