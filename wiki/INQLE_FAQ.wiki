@@ -3,40 +3,47 @@
 
 ==General Questions==
   * What is INQLE?
-It is software, which runs on a server, and can mine your data, discovering correlations that might exist therein.
+    * It is software, which runs on a server, and can mine your data, discovering correlations that might exist therein.
 
   * Can a computer really do scientific research?
-Not yet.  Current versions of INQLE cannot do scientific research either.  Rather, INQLE is a _data mining_ tool.  It finds statistical correlations that exist between different attributes of a common subject.  
+    * Not yet.  Current versions of INQLE cannot do scientific research either.  Rather, INQLE is a _data mining_ tool.  It finds statistical correlations that exist between different attributes of a common subject.  
 
   * How could INQLE help me?
-Humans are notoriously flawed at making sound decisions.  Present company excluded, of course.  In any case where you would like to predict some outcome (like say "how rested am I today") you could import into INQLE any & all variables which might impact your state of restfulness for a bunch of days.  Plus import the associated restfulness score for those days.  Then, fire up INQLE and see which variables show the strongest association.
+    * Humans are notoriously flawed at making sound decisions.  Present company excluded, of course.  In any case where you would like to predict some outcome (like say "how rested am I today") you could import into INQLE any & all variables which might impact your state of restfulness for a bunch of days.  Plus import the associated restfulness score for those days.  Then, fire up INQLE and see which variables show the strongest association.
 
   * How does INQLE fit into traditional research?
-INQLE assists in the generation of a hypothesis.  As INQLE finds correlations that exist, it can discover previously unknown associations.  Such associations might be spurious, trivial, 
+    * INQLE assists in the generation of a hypothesis.  As INQLE finds correlations that exist, it can discover previously unknown associations.  Such associations might be spurious, trivial, 
 already known.  They might also be true correlations.  In this case, the correlation might or might not represent things that are causally related.  It would be the job of traditional research to test any hypothesis.
 
   * Will INQLE ever be able to do traditional research?
-Yes!  Just as we have modeled the process of data mining by creating the concepts of Samplers, Learning Cyles, and Experimenter Agents, we intend to model traditional research by programmatically creating the concepts of Cohorts, Data Gatherers, and Study Question.
+    * Yes!  Just as we have modeled the process of data mining by creating the concepts of Samplers, Learning Cyles, and Experimenter Agents, we intend to model traditional research by programmatically creating the concepts of Cohorts, Data Gatherers, and Study Question.
 
   * What does INQLE stand for?
-Intelligent Network of Querying and Learning Engines
+    * Intelligent Network of Querying and Learning Engines
 
   * Isn't that a little lofty?
 We weary at such niggling interrogation.
 
 ==Questions on Using INQLE==
+  * What am I supposed to do with my INQLE server?
+    # Load your data into it.
+    # Start the Learning Agent, and watch the correlations that it finds.
+
+  * OK, how can I get my data into my INQLE server?
+    * If you have data in a spreadsheet (and who doesn't), just save it as a delimited text format like Comma-Separated Values (CSV), then use INQLE's importer for such delimited text.  See [http://code.google.com/p/inqle/ "Getting Started Using INQLE"] for details on how to use this importer.
+
   * What format of data can be imported into INQLE?
-INQLE accepts [http://www.w3.org/TR/REC-rdf-syntax/ RDF data].
+    * INQLE accepts [http://www.w3.org/TR/REC-rdf-syntax/ RDF data].
 
   * What is RDF?
-Resource Description Framework.  It is a way of representing data, using 3-part statements: 
-  # a subject (which has a globally unique identifier ("URI")
-  # a predicated (which also has a globally unique URI)
-  # an object (which can be a literal value like "7.5" or "Norman Borlaug", or the URI of another RDF subject.
+    * Resource Description Framework.  It is a way of representing data, using 3-part statements: 
+      # a subject (which has a globally unique identifier ("URI")
+      # a predicated (which also has a globally unique URI)
+      # an object (which can be a literal value like "7.5" or "Norman Borlaug", or the URI of another RDF subject.
 Thus, RDF is a powerful way for representing most any information in a computer-processable way.  The "Unique" in URI allows disparate data on a common subject to be linked together.  This will enable future versions of INQLE to merge local data with remote data.
 
-  * How could I convert spreadsheet data into RDF?
-Believe it or not, there are a number of free products which can do this:
+  * How can I convert other data into RDF?
+    * Believe it or not, there are a number of free products which can do this:
 http://esw.w3.org/topic/ConverterToRdf
 http://simile.mit.edu/wiki/RDFizers
 http://spire.umbc.edu/firefox/
