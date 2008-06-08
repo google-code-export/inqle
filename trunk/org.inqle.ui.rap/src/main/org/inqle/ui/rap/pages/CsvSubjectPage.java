@@ -10,8 +10,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
@@ -48,10 +46,8 @@ public class CsvSubjectPage extends DynaWizardPage {
 			return;
 		}
 //		log.info("getWizard()= a LoadCsvFileWizard");
+		CsvImporter csvImporter = getCsvImporter();
 		
-		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
-		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
-		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
 		//log.info("csvImporter retrieved");
 		String[][] data = csvImporter.getRawData();
 		//log.info("data= " + data);
@@ -131,6 +127,12 @@ public class CsvSubjectPage extends DynaWizardPage {
 		}
 	}
 
+	private CsvImporter getCsvImporter() {
+		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
+		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
+		return loadCsvFileWizard.getCsvImporter();
+	}
+
 	@Override
 	public void addElements() {
 		
@@ -143,6 +145,8 @@ public class CsvSubjectPage extends DynaWizardPage {
 	
 	@Override
 	public boolean onNextPage() {
+		bindValuesToCsvImporter();
+		
 		String validationMessage = "";
 		if (getSubjectClassUri() == null || getSubjectClassUri().length() == 0) {
 			validationMessage += "Please enter a value for 'Subject Class'.\n";
@@ -158,6 +162,20 @@ public class CsvSubjectPage extends DynaWizardPage {
 		return true;
 	}
 	
+	@Override
+	public boolean onPreviousPage() {
+		bindValuesToCsvImporter();
+		return true;
+	}
+	
+	private void bindValuesToCsvImporter() {
+		getCsvImporter().setSubjectIndex(getSubjectColumnIndex());
+		getCsvImporter().setSubjectPrefix(getSubjectPrefix());
+		getCsvImporter().setSubjectClassUri(getSubjectClassUri());
+		getCsvImporter().setIdType(getIdTypeIndex());
+		
+	}
+
 	public int getIdTypeIndex() {
 		if (idTypeList == null) {
 			return -1;
