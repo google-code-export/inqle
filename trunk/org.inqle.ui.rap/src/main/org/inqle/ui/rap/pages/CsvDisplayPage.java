@@ -11,7 +11,9 @@ import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -27,12 +29,28 @@ public class CsvDisplayPage extends DynaWizardPage {
 	
 	private static final int COLUMN_WIDTH = 60;
 	private static Logger log = Logger.getLogger(CsvDisplayPage.class);
+	private Composite composite;
+	private Table table;
 	
 	public CsvDisplayPage(String title, ImageDescriptor titleImage) {
 		super(title, titleImage);
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void createControl(Composite parent) {
+		log.info("CsvDisplayPage.createControl()");
+		composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		table = new Table(composite, SWT.NONE);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		
+		setControl(composite);
+	}
+	
 	/**
 	 * Create and populate the table, using the column names provided in 
 	 * <code>setPropertyNames</code> and the row data provided by <code>setRdfTable</code>
@@ -40,6 +58,7 @@ public class CsvDisplayPage extends DynaWizardPage {
 	 */
 	public void refreshTableData() {
 		log.info("CsvDisplayPage.refreshTableData()...");
+		table.clearAll();
 		if (getWizard() == null || (!(getWizard() instanceof LoadCsvFileWizard))) {
 			log.info("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
 			return;
@@ -55,27 +74,15 @@ public class CsvDisplayPage extends DynaWizardPage {
 		log.info("data= " + data);
 		String[] headers = data[csvImporter.getHeaderIndex()];
 		
-		//set the page layout
-//		Composite pageComposite = new Composite(selfComposite, SWT.H_SCROLL | SWT.V_SCROLL);
-//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//		pageComposite.setLayoutData(gridData);
-//		pageComposite.setLayout (new GridLayout (1,false));
-		
-		
-		//Composite tableComposite = new Composite(pageComposite, SWT.NONE);
-		//gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		//tableComposite.setLayout (new GridLayout (1,false));
-		//tableComposite.setLayoutData(gridData);
-		
 		try {
 			//Generate the table showing the data
-			//selfComposite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
-			Table table = new Table(selfComposite, SWT.NONE);
-			
-			table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			
-			table.setHeaderVisible(true);
-			table.setLinesVisible(true);
+			//composite.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
+//			Table table = new Table(composite, SWT.NONE);
+//			
+//			table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//			
+//			table.setHeaderVisible(true);
+//			table.setLinesVisible(true);
 
 			//add columns
 			for (String header: headers) {
@@ -85,7 +92,7 @@ public class CsvDisplayPage extends DynaWizardPage {
 				column.setWidth(COLUMN_WIDTH);
 				
 				//column.pack();
-				//log.info("Added column: " + header);
+				log.info("Added column: " + header);
 			}
 			
 			TableViewer tableViewer = new TableViewer(table);
@@ -109,8 +116,8 @@ public class CsvDisplayPage extends DynaWizardPage {
 			//log.debug("getRows():" + getRows());
 			tableViewer.setInput(writableListInput);
 			tableViewer.refresh();
-			selfComposite.setSize(selfComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-			selfComposite.pack(true);
+			//composite.setSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			//composite.pack(true);
 			//this.getShell().pack(true);
 		} catch (Exception e) {
 			log.error("Unable to render CSV Import Page Tabular data", e);
@@ -118,6 +125,14 @@ public class CsvDisplayPage extends DynaWizardPage {
 		}
 	}
 
+//	@Override
+//	public void createControl(Composite parent) {
+//		log.info("CsvPredicatesPage.createControl()");
+//		scrollingComposite = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+//		
+//		setControl(scrollingComposite);
+//	}
+	
 	@Override
 	public void addElements() {
 		
