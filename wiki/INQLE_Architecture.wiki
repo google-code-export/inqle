@@ -27,3 +27,6 @@ Here is a list of OSGi bundles which we have developed, to facilitate INQLE's fu
 [http://www.eclipse.org/rap/ Eclipse RAP] is a web application framework, for generating functional web applications, with similar emphasis on productivity that is the hallmark of  the extremely successful [http://wiki.eclipse.org/index.php/Rich_Client_Platform Eclipse desktop client].
 
 The INQLE interface thus is a rich, AJAX-based web page.  Coding for Eclipse RAP is 80% identical to coding an application based on Eclipse RCP (Rich Client Platform).  The RAP framework translates the Java code into appropriate mix of front-end HTML and AJAX-powered Javascript, and back-end Java code running on the Server.  The complexity inherent in such server-to-rich client interaction is hidden by the RAP framework.
+
+==!RapidMiner Machine Learning Suite==
+INQLE incorporates this best-of-breed machine learning tool, to perform its data mining experiments.  Users can author new machine learning experiments using the fine open source application [http://rapid-i.com/content/blogcategory/10/69/ RapidMiner], and add them to INQLE as plugins.  
