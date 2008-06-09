@@ -47,3 +47,6 @@ Thus, RDF is a powerful way for representing most any information in a computer-
       * http://esw.w3.org/topic/ConverterToRdf
       * http://simile.mit.edu/wiki/RDFizers
       * http://spire.umbc.edu/firefox/
+
+  * I am importing my data into INQLE.  The Import CSV wizard asks me for URI of a RDF class of my rows, and URI for each column of my spreadsheet.  How can I find out the which URIs to use?
+    * Good question, because it is important that you use any standard URIs.  You can try [http://swoogle.umbc.edu/ Swoogle] or [http://www.freebase.com/ Freebase].  We will add tools to make this selection process easier!
