@@ -20,7 +20,7 @@ Here is a list of OSGi bundles which we have developed, to facilitate INQLE's fu
 || org.inqle.core.db|| Contains JDBC libraries for connecting to the abobe listed relational databases. ||
 || [Bundle_org_inqle_data_rdf_jenabean org.inqle.data.rdf.jenabean] || Contains Jena toolkit, for working with RDF, Jenabean library for Java-to-RDF persistence, and adaptor code for simplifying both SPARQL queries and persisting INQLE objects in an RDF store. ||
 || [Bundle_org_inqle_ui_rap org.inqle.ui.rap] || Contains code for running the web-based user interface, using Eclipse RAP.  Includes UI code for wizards for making database connections, dataset objects (!RDBModel). ||
-|| [Bundle_org_inqle_experiment_rapidminer org.inqle.experiment.rapidminer] || Contains [http://rapid-i.com/content/blogcategory/10/69/ !RapidMiner] library, and code for executing the Learning Cycle.  Also includes user interface code for creating custom Learning Cycles. ||
+|| [Bundle_org_inqle_experiment_rapidminer org.inqle.experiment.rapidminer] || Contains [http://rapid-i.com/content/blogcategory/10/69/ RapidMiner] library, and code for executing the Learning Cycle.  Also includes user interface code for creating custom Learning Cycles. ||
 || [Bundle_org_inqle_agent org.inqle.agent] || Contains code for running automated agents, plus provides a basic implementation for running !JUnit tests from the RAP user interface. ||
 
 ==Eclipse RAP User Interface==
