@@ -99,12 +99,13 @@ public class CsvImporter {
 	 * the string to append before the value in the subject column.
 	 * Default to UNKNOWN_SUBJECT
 	 */
-	private String subjectPrefix = RDF.UNKNOWN_SUBJECT;
+	private String subjectClassUri = RDF.UNKNOWN_SUBJECT;
+	private String subjectPrefix = subjectClassUri + "/";
 	
 	private String[][] rawData;
 	private File file;
 	private Exception error;
-	private String subjectClassUri;
+	
 	                 
 //	public CsvImporter(InputStream inputStream) {
 //		log.info("Creating CSVConfigGuesser for inputStream:" + inputStream);
@@ -308,7 +309,7 @@ public class CsvImporter {
 		return true;
 	}
 
-	private String getSubjectClassUri() {
+	public String getSubjectClassUri() {
 		return subjectClassUri;
 	}
 

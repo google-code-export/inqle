@@ -116,14 +116,6 @@ public class CsvPredicatesPage extends DynaWizardPage {
 		log.info("CsvPredicatesPage.createControl()");
 		scrollingComposite = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		
-//	GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//	scrollingComposite.setLayout (new GridLayout (1,false));
-	
-		//Generate the form at the top of the page
-		//formComposite = new Composite(scrollingComposite, SWT.NONE);
-		
-	//	gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-	//	formComposite.setLayoutData(gridData);
 		setControl(scrollingComposite);
 	}
 	
@@ -134,7 +126,9 @@ public class CsvPredicatesPage extends DynaWizardPage {
 	
 	public java.util.List<String> getPredicateUris() {
 		ArrayList<String> predicateUris = new ArrayList<String>();
-		
+		if (predicateUriTexts ==  null) {
+			return predicateUris;
+		}
 		int predicateIndex = -1;
 		for (Text predicateUriText: predicateUriTexts) {
 			predicateIndex++;
