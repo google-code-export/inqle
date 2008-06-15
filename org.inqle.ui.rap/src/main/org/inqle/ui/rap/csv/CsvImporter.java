@@ -1,13 +1,13 @@
 package org.inqle.ui.rap.csv;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -121,8 +121,40 @@ public class CsvImporter {
 //	}
 
 	public CsvImporter(File file) {
+		//first convert Max line breaks (\r) to Unix line breaks (\n)
+		log.info("Creating CSV Importer, using file=" + file + "...");    
+    
+		String fileText = "";
+//		try {
+//			log.info("loading file using readFileToString..." + file + "; can read?" + file.canRead());
+//			fileText = FileUtils.readFileToString(file);
+//			log.info("loaded file.");
+//		} catch (Exception e) {
+//			log.error("Error loading file " + file, e);
+//			this.error = e;
+//			return;
+//		}
+		
+		log.info("loading file using readFileToString..." + file + "; can read?" + file.canRead());
+		fileText = CsvImporter.readFileToString(file);
+		log.info("loaded file.");
+		
+		//load and save the file, to fix any problems with CSV files saved using older Mac method 
+		//(which used \r as line feed)
+		log.info("Loaded CSV file, retrieved text:\n" + fileText);
+//		fileText.replaceAll("\\\\r\\\\n", "\n");
+//		fileText.replaceAll("\\\\r", "\n");
+//		log.info("Replaced Carriage Return characters.  CSV file text=\n" + fileText);
+		try {
+			CsvImporter.writeStringToFile(file, fileText);
+		} catch (Exception e) {
+			log.error("Error writing file " + file.getAbsolutePath(), e);
+			this.error = e;
+			return;
+		}
+		
 		this.file = file;
-		log.trace("Creating CSVConfigGuesser for file:" + file);
+		log.info("Creating CSVConfigGuesser for file:" + file);
 		//CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
 		try {
 			FileInputStream fis = new FileInputStream(file);
@@ -389,5 +421,49 @@ public class CsvImporter {
 	
 	public void cleanUp() {
 		file.delete();
+	}
+	
+	public static String readFileToString(File file) {
+		 StringBuffer contents = new StringBuffer();
+     BufferedReader reader = null;
+
+     try
+     {
+         reader = new BufferedReader(new FileReader(file));
+         String text = null;
+
+         // repeat until all lines is read
+         while ((text = reader.readLine()) != null)
+         {
+             contents.append(text)
+                 .append(System.getProperty("line.separator"));
+         }
+     } catch (FileNotFoundException e) {
+         e.printStackTrace();
+     } catch (IOException e) {
+         e.printStackTrace();
+     } finally {
+         try {
+             if (reader != null) {
+                 reader.close();
+             }
+         } catch (IOException e) {
+             log.error("Error closing file " + file);
+         }
+     }
+     return contents.toString();
+	}
+	
+	public static void writeStringToFile(File file, String string) {
+		log.trace("Saving string to file " + file + "\n" + string);
+		try {
+			FileWriter fileWriter = new FileWriter(file);
+			BufferedWriter buffWriter = new BufferedWriter(fileWriter);
+			buffWriter.write(string);
+			buffWriter.close();
+			fileWriter.close();
+		} catch (Exception e) {
+			log.error("Error saving file " + file, e);
+		}
 	}
 }
