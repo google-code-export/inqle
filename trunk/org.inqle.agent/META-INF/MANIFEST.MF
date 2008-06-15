@@ -5,10 +5,10 @@ Bundle-SymbolicName: org.inqle.agent;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: INQLING, LLC
 Require-Bundle: org.inqle.core,
- org.inqle.data.rdf.jenabean,
  org.inqle.core.extensions,
  org.eclipse.rap.jface,
- org.inqle.ui.rap
+ org.inqle.ui.rap,
+ org.inqle.data.rdf.jenabean
 Import-Package: com.hp.hpl.jena.query,
  com.hp.hpl.jena.rdf.model,
  com.hp.hpl.jena.util,

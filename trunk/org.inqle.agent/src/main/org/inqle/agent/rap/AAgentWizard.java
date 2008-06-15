@@ -4,9 +4,8 @@
 package org.inqle.agent.rap;
 
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.ui.rap.actions.DynaWizard;
-
+import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
