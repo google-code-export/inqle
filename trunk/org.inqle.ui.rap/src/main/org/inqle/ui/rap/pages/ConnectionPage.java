@@ -39,6 +39,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		
 		private static final String[] DBTYPES = {
 			"Derby", 
+			"H2",
 			"HSQL",
 			"MsSQL",
 			"MySQL",
@@ -48,7 +49,8 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		};
 		private static final String[] DBDRIVERS = {
 			//"org.apache.derby.jdbc.EmbeddedDriver", 
-			"org.apache.derby.jdbc.ClientDriver", 
+			"org.apache.derby.jdbc.ClientDriver",
+			"org.h2.driver",
 			"org.hsqldb.jdbcDriver",
 			//"com.microsoft.sqlserver.jdbc.SQLServerDriver",
 			"net.sourceforge.jtds.jdbc.Driver",
@@ -59,6 +61,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		};
 		private static final String[] DBURLS = {
 			"jdbc:derby:databasename", 
+			"jdbc:h2:databasename",
 			"jdbc:hsqldb:file:filename",
 			"jdbc:sqlserver://localhost\\SQLExpress;database=databasename",
 			"jdbc:mysql://localhost:3306/databasename",
