@@ -90,9 +90,9 @@ public class ExtensionFactory {
 	 */
 	public static Object createExtensionObject(IExtensionSpec spec) {
 		Object instance = null;
-		String className = spec.getAttribute(InqleInfo.ATTRIBUTE_CLASS);
+		String className = spec.getAttribute(InqleInfo.CLASS_ATTRIBUTE);
 		if (className == null) {
-			log.error("Unable to instantiate object from spec " + spec + " as it lacks attribute '" + InqleInfo.ATTRIBUTE_CLASS + "'.");
+			log.error("Unable to instantiate object from spec " + spec + " as it lacks attribute '" + InqleInfo.CLASS_ATTRIBUTE + "'.");
 			return null;
 		}
 		Class<?> clazz;
