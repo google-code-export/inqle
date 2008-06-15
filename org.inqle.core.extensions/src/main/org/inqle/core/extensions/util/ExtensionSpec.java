@@ -40,7 +40,7 @@ public class ExtensionSpec implements IExtensionSpec {
 	private int getWeight(IConfigurationElement element) {
 		int defaultWeight = 0;
 		int weight = defaultWeight;
-		String weightStr = element.getAttribute(InqleInfo.ATTRIBUTE_WEIGHT);
+		String weightStr = element.getAttribute(InqleInfo.WEIGHT_ATTRIBUTE);
 		if (weightStr == null || weightStr.length()==0) {
 			//throw new MissingServiceAttributeException("In plugin.xml, the attribute '" + InqleInfo.ATTRIBUTE_WEIGHT + "' must be defined.");
 			return defaultWeight;
