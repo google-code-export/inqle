@@ -14,9 +14,6 @@ public class InqleInfo {
 	//public static final String SERVICE_FACTORY = "org.inqle.core.factory";
 	
 	//Attributes for services
-	//public static final String ATTRIBUTE_GOAL = "creates";
-	public static final String ATTRIBUTE_WEIGHT = "weight";
-
 	public static final String INQLE_HOME = "inqle.home";
 
 	public static final String FILENAME_APPINFO = "AppInfo.ttl";
@@ -28,15 +25,21 @@ public class InqleInfo {
 	public static final String APPLICATION_TITLE = "Server Administration";
 
 	public static final String NAME_ATTRIBUTE = "name";
-
+	public static final String CLASS_ATTRIBUTE = "class";
+	public static final String FILE_ATTRIBUTE = "file";
+	public static final String WEIGHT_ATTRIBUTE = "weight";
+	public static final String TYPE_ATTRIBUTE = "type";
+	public static final String ID_ATTRIBUTE = "id";
 	public static final String DESCRIPTION_ATTRIBUTE = "description";
-
+	
 	public static final String INQLE_VERSION = "0.0.9";
 
 	public static final String PROJECT_WEBSITE = "http://code.google.com/p/inqle/";
 
 	public static final String TEMP_FOLDER = "assets/temp/";
 
+	public static final String ASSETS_FOLDER = "assets";
+	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
 	}
@@ -53,13 +56,7 @@ public class InqleInfo {
 		return System.getProperty("java.io.tmpdir");
 	}
 
-	public static final String ATTRIBUTE_CLASS = "class";
-
-	public static final String FILE_ATTRIBUTE = "file";
-
-	public static final String WEIGHT_ATTRIBUTE = "weight";
-
-	public static final String TYPE_ATTRIBUTE = "type";
-
-	public static final String ID_ATTRIBUTE = "id";
+	public static String getAssetsDirectory() {
+		return System.getProperty(INQLE_HOME) + ASSETS_FOLDER + "/";
+	}
 }
