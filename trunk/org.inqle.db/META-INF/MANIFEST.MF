@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Db Plug-in
+Bundle-Name: INQLE DB Plug-in
 Bundle-SymbolicName: org.inqle.db
 Bundle-Version: 1.0.0
 Bundle-ClassPath: postgresql-8.2-506.jdbc3.jar,
