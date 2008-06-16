@@ -7,7 +7,6 @@ Bundle-Activator: org.inqle.db.h2.Activator
 Bundle-Vendor: h2database.com
 Require-Bundle: org.eclipse.core.runtime,
  org.inqle.core
-Eclipse-LazyStart: true
 Export-Package: org.h2,
  org.h2.api,
  org.h2.bnf,
