@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.h2.tools.Server;
 import org.inqle.core.util.InqleInfo;
@@ -48,7 +49,9 @@ public class Activator extends Plugin {
 	}
 
 	private String getH2Directory() {
-		String h2Directory = InqleInfo.getAssetsDirectory() + H2_FOLDER;
+		//String h2Directory = InqleInfo.getAssetsDirectory() + H2_FOLDER;
+		//TODO move setting system property inqle.home into inqle.core and ensure it is started early
+		String h2Directory = Platform.getInstallLocation().getURL().getPath() + InqleInfo.ASSETS_FOLDER + "/" + H2_FOLDER + "/";
 		log.info("H2 Directory = " + h2Directory);
 		return h2Directory;
 	}
