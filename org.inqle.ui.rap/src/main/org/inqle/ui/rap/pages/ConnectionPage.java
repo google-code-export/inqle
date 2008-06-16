@@ -50,7 +50,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		private static final String[] DBDRIVERS = {
 			//"org.apache.derby.jdbc.EmbeddedDriver", 
 			"org.apache.derby.jdbc.ClientDriver",
-			"org.h2.driver",
+			"org.h2.Driver",
 			"org.hsqldb.jdbcDriver",
 			//"com.microsoft.sqlserver.jdbc.SQLServerDriver",
 			"net.sourceforge.jtds.jdbc.Driver",
