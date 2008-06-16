@@ -4,6 +4,7 @@ import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
 
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
+import org.inqle.data.rdf.RDF;
 
 /**
  * from http://jena.sourceforge.net/assembler/assembler-howto.html
@@ -14,58 +15,62 @@ import thewebsemantic.RdfProperty;
  * @author David Donohue
  * Jan 9, 2008
  */
-@Namespace(NS)
+//@Namespace(NS)
+//public class FileModel extends NamedModel {
+@Namespace(RDF.INQLE)
 public class FileModel extends NamedModel {
+
+	private String fileUrl;
 	
+//	private String directory;
+//	private String fileEncoding;
+//	private boolean mapName = false;
 
-	private String directory;
-	private String fileEncoding;
-	private boolean mapName = false;
+//	@RdfProperty(NS + "directory")
+//	public String getDirectory() {
+//		return directory;
+//	}
+//
+//	public void setDirectory(String directoryUri) {
+//		this.directory = directoryUri;
+//	}
+//	
+//	@RdfProperty(NS + "fileEncoding")
+//	public String getFileEncoding() {
+//		return fileEncoding;
+//	}
+//
+//	public void setFileEncoding(String fileEncoding) {
+//		this.fileEncoding = fileEncoding;
+//	}
+//	
+//	@RdfProperty(NS + "mapName")
+//	public boolean getMapName() {
+//		return mapName ;
+//	}
+//
+//	public void setMapName(boolean mapName) {
+//		this.mapName = mapName;
+//	}
 
-	@RdfProperty(NS + "directory")
-	public String getDirectory() {
-		return directory;
-	}
-
-	public void setDirectory(String directoryUri) {
-		this.directory = directoryUri;
-	}
-	
-	@RdfProperty(NS + "fileEncoding")
-	public String getFileEncoding() {
-		return fileEncoding;
-	}
-
-	public void setFileEncoding(String fileEncoding) {
-		this.fileEncoding = fileEncoding;
-	}
-	
-	@RdfProperty(NS + "mapName")
-	public boolean getMapName() {
-		return mapName ;
-	}
-
-	public void setMapName(boolean mapName) {
-		this.mapName = mapName;
-	}
-
-	public String getFileURI() {
-		return getDirectory() + getModelName();
-	}
+//	public String getFileURI() {
+//		return getDirectory() + getModelName();
+//	}
 
 	public void clone(FileModel objectToBeCloned) {
 		super.clone(objectToBeCloned);
-		setModelName(objectToBeCloned.getModelName());
-		setDirectory(objectToBeCloned.getDirectory());
-		setMapName(objectToBeCloned.getMapName());
-		setFileEncoding(objectToBeCloned.getFileEncoding());
+		setFileUrl(objectToBeCloned.getFileUrl());
+		//setModelName(objectToBeCloned.getModelName());
+//		setDirectory(objectToBeCloned.getDirectory());
+//		setMapName(objectToBeCloned.getMapName());
+//		setFileEncoding(objectToBeCloned.getFileEncoding());
 	}
 	
-	public void replicate(FileModel objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-		super.replicate(objectToClone);
-	}
+//	public void replicate(FileModel objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//		super.replicate(objectToClone);
+//	}
 	
 	public FileModel createClone() {
 		FileModel newObj = new FileModel();
@@ -73,9 +78,17 @@ public class FileModel extends NamedModel {
 		return newObj;
 	}
 
-	public FileModel createReplica() {
-		FileModel newObj = new FileModel();
-		newObj.replicate(this);
-		return newObj;
+	public String getFileUrl() {
+		return fileUrl;
 	}
+
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
+
+//	public FileModel createReplica() {
+//		FileModel newObj = new FileModel();
+//		newObj.replicate(this);
+//		return newObj;
+//	}
 }

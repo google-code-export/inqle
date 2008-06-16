@@ -222,7 +222,8 @@ public class Persister {
 	 */
 	public Model createDBModel(RDBModel rdbModel) {
 		Connection connection = rdbModel.getConnection();
-		String dbModelName = rdbModel.getModelName();
+		//String dbModelName = rdbModel.getModelName();
+		String dbModelName = rdbModel.getId();
 		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
 		DBConnector dbConnector = new DBConnector(connection);
 		//DBConnection dbConnection = dbConnector.getJenaConnection();
@@ -295,7 +296,7 @@ public class Persister {
 				return null;
 			}
 			DBConnector connector = new DBConnector(dbConnectionInfo);
-			model = connector.getModel(namedModel.getModelName());
+			model = connector.getModel(namedModel.getId());
 			
 			/*if null, create a new model
 			if (model == null) {
@@ -308,7 +309,7 @@ public class Persister {
 			//connector.close();
 			
 		} else if (namedModel instanceof FileModel){
-			model = Persister.getModelFromFile(((FileModel)namedModel).getFileURI());
+			model = Persister.getModelFromFile(((FileModel)namedModel).getFileUrl());
 		}
 		
 		return model;
@@ -370,7 +371,8 @@ public class Persister {
 				return null;
 			}
 			DBConnector connector = new DBConnector(dbConnectionInfo);
-			ontModel = connector.getOntModel(namedModel.getModelName());
+//			ontModel = connector.getOntModel(namedModel.getModelName());
+			ontModel = connector.getOntModel(namedModel.getId());
 			
 			/*if null, create a new model
 			if (model == null) {
@@ -384,7 +386,7 @@ public class Persister {
 			
 		} else if (namedModel instanceof FileModel){
 			ontModel = ModelFactory.createOntologyModel();
-			ontModel.add(getModelFromFile(((FileModel)namedModel).getFileURI()));
+			ontModel.add(getModelFromFile(((FileModel)namedModel).getFileUrl()));
 		}
 		
 		return ontModel;
@@ -394,27 +396,28 @@ public class Persister {
 	 * *** INTERNAL MODEL METHODS
 	 * ********************************************************************* */
 	
-	public OntModel getLogModel() {
-		//if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
-		if (logModel != null) {
-			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
-			return this.logModel;
-		}
-		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
-		Connection logConnection = null;
-		NamedModel logNamedModel = getAppInfo().getLogNamedModel();
-		
-		if (logNamedModel instanceof RDBModel) {
-			logConnection = ((RDBModel)logNamedModel).getConnection();
-		}
-		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-		DBConnector connector = new DBConnector(logConnection);
-		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + logNamedModel.getModelName());
-		
-		this.logModel = connector.getOntModel(logNamedModel.getModelName());
-		
-		return this.logModel;
-	}
+//	public OntModel getLogModel() {
+//		//if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
+//		if (logModel != null) {
+//			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
+//			return this.logModel;
+//		}
+//		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
+//		Connection logConnection = null;
+//		NamedModel logNamedModel = getAppInfo().getLogNamedModel();
+//		
+//		if (logNamedModel instanceof RDBModel) {
+//			logConnection = ((RDBModel)logNamedModel).getConnection();
+//		}
+//		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
+//		DBConnector connector = new DBConnector(logConnection);
+//		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + logNamedModel.getId());
+//		
+//		//this.logModel = connector.getOntModel(logNamedModel.getModelName());
+//		this.logModel = connector.getOntModel(logNamedModel.getId());
+//		
+//		return this.logModel;
+//	}
 	
 	public OntModel getMetarepositoryModel() {
 		//if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
@@ -431,10 +434,11 @@ public class Persister {
 		}
 		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
 		DBConnector connector = new DBConnector(repositoryConnection);
-		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
-		
-		this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getModelName());
-		
+		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
+		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getId());
+
+		//this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getModelName());
+		this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getId());
 		return this.metarepositoryModel;
 	}
 	
@@ -705,7 +709,7 @@ public class Persister {
 	    connector.close();
 	    return successDeleting;
 		} else if (namedModel instanceof FileModel) {
-			String filePath = FileUtils.toFilename(((FileModel)namedModel).getFileURI());
+			String filePath = FileUtils.toFilename(((FileModel)namedModel).getFileUrl());
 			//not necessary to remove statements: modelToDelete.removeAll();
 			
 			//delete the file

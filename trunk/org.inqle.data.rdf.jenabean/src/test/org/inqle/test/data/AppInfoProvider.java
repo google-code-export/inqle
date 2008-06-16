@@ -44,8 +44,8 @@ public class AppInfoProvider {
 		
 		//Create the repository namedmodel, to contain info about data repositories
 		RDBModel repositoryModel = new RDBModel();
-		repositoryModel.setModelName(InqleInfo.REPOSITORY_MODEL_NAME);
-		repositoryModel.setConnection(connection);
+		repositoryModel.setId(InqleInfo.REPOSITORY_MODEL_NAME);
+		repositoryModel.setConnectionId(connection.getId());
 		
 		//create the AppInfo object
 		AppInfo appInfo = new AppInfo();

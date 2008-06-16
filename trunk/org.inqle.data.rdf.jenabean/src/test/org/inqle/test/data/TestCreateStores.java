@@ -150,8 +150,10 @@ public class TestCreateStores {
 		log.info("create a RDBModel object...");
 		RDBModel testNamedModel = new RDBModel();
 		testNamedModel.setId(TEST_DATAMODEL_ID);
-		testNamedModel.setModelName(MODEL_NAME);
-		testNamedModel.setConnection(testConnectionInfo);
+//		testNamedModel.setModelName(MODEL_NAME);
+//		testNamedModel.setConnection(testConnectionInfo);
+		testNamedModel.setId(MODEL_NAME);
+		testNamedModel.setConnectionId(testConnectionInfo.getId());
 		persister.createDBModel(testNamedModel);
 		//persister.persist(testNamedModel, repositoryModel, true);
 		log.info("retrieve the RDBModel from the metarepository...");
