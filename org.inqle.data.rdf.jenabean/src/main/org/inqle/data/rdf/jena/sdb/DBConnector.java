@@ -2,6 +2,8 @@ package org.inqle.data.rdf.jena.sdb;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.Connection;
@@ -58,6 +60,17 @@ public class DBConnector {
 	public DBConnector(Connection connectionInfo) {
 		this.connectionInfo = connectionInfo;
 		initConnection();
+	}
+	
+	public List<String> getModelNames() {
+		DBConnection jenaConnection = getJenaConnection();
+		ExtendedIterator modelNamesI = jenaConnection.getAllModelNames();
+		List<String> modelNames = new ArrayList<String>();
+		while (modelNamesI.hasNext()) {
+			String modelName = String.valueOf(modelNamesI.next());
+			modelNames.add(modelName);
+		}
+		return modelNames;
 	}
 	
 	/**
