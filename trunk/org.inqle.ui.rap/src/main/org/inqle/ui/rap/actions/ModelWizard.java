@@ -170,9 +170,9 @@ public class ModelWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 
-		if (databasePart.hasModelNamed(rdbModel.getModelName())) {
+		if (databasePart.hasModelNamed(rdbModel.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
-					"This database already has a dataset named '" + rdbModel.getModelName() + "'.\nPlease choose a different name.");
+					"This database already has a dataset named '" + rdbModel.getId() + "'.\nPlease choose a different name.");
 			return false;
 		}
 		DBConnector connector = new DBConnector(connection);
@@ -187,7 +187,7 @@ public class ModelWizard extends Wizard {
 		persister.persist(rdbModel, persister.getMetarepositoryModel()); 
 		log.info("Saved dataset RDBModel=" + JenabeanWriter.toString(rdbModel));
 		if (this.mode == ModelWizardAction.MODE_NEW || this.mode == ModelWizardAction.MODE_CLONE) {
-			Model newModel = persister.createDBModel(connection, rdbModel.getModelName());
+			Model newModel = persister.createDBModel(connection, rdbModel.getId());
 			//persister.persist(rdbModel, newModel, false);
 			log.info("Created new model " + newModel);
 			databasePart.fireUpdate(databasePart);

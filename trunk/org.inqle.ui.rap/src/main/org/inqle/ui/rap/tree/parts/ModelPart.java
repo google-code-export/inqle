@@ -19,7 +19,7 @@ public class ModelPart extends Part {
 		//this.persister = persister;
 	}
 	public String getModelName() {
-		return rdbModel.getModelName();
+		return rdbModel.getId();
 	}
 	
 	@Override

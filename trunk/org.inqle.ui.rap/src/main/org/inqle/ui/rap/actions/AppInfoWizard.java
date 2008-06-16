@@ -45,12 +45,13 @@ public class AppInfoWizard extends Wizard {
 		metarepositoryModel = (RDBModel)appInfo.getRepositoryNamedModel();
 		if (metarepositoryModel == null) {
 			metarepositoryModel = new RDBModel();
-			metarepositoryModel.setModelName("Metarepository");
+			//metarepositoryModel.setModelName("Metarepository");
+			metarepositoryModel.setId("Metarepository");
 		}
 		metarepositoryConnection = metarepositoryModel.getConnection();
 		if (metarepositoryConnection == null) {
 			metarepositoryConnection = new Connection();
-			metarepositoryModel.setConnection(metarepositoryConnection);
+			metarepositoryModel.setConnectionId(metarepositoryConnection.getId());
 		}
 //		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
 		ConnectionPage metarepositoryPage = new ConnectionPage(
@@ -74,7 +75,7 @@ public class AppInfoWizard extends Wizard {
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
 		
-		metarepositoryModel.setConnection(metarepositoryConnection);
+		metarepositoryModel.setConnectionId(metarepositoryConnection.getId());
 		appInfo.setRepositoryNamedModel(metarepositoryModel);
 		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {

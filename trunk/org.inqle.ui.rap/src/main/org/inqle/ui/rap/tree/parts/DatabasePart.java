@@ -12,6 +12,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jena.RdfTable;
+import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -89,23 +90,32 @@ public class DatabasePart extends PartType {
 	public void initChildren() {
 		
 		//query for all RDBModel children
-		Persister persister = Persister.getInstance();
-		AppInfo appInfo = persister.getAppInfo();
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.setQuery(getSparqlToFindChildRDBModels());
-		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+//		Persister persister = Persister.getInstance();
+//		AppInfo appInfo = persister.getAppInfo();
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.setQuery(getSparqlToFindChildRDBModels());
+//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
+//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+		
+		DBConnector dbConnector = new DBConnector(getConnection());
+		List<String> datasetNames = dbConnector.getModelNames();
 		
 		//for each item in resultTable, add a ModelPart
 		modelParts = new ArrayList<ModelPart>();
-		for (QuerySolution row: resultTable.getResultList()) {
-			Literal modelId = row.getLiteral("modelId");
-			RDBModel rdbModel = (RDBModel)Persister.reconstitute(RDBModel.class, modelId.getLexicalForm(), persister.getMetarepositoryModel(), false);
-			rdbModel.setConnection(this.connection);
-			ModelPart modelPart = new ModelPart(rdbModel);
-			modelPart.setParent(this);
-			//modelPart.setPersister(this.persister);
-			modelParts.add(modelPart);
+//		for (QuerySolution row: resultTable.getResultList()) {
+//			Literal modelId = row.getLiteral("modelId");
+//			RDBModel rdbModel = (RDBModel)Persister.reconstitute(RDBModel.class, modelId.getLexicalForm(), persister.getMetarepositoryModel(), false);
+//			rdbModel.setConnectionId(this.connection.getId());
+//			ModelPart modelPart = new ModelPart(rdbModel);
+//			modelPart.setParent(this);
+//			//modelPart.setPersister(this.persister);
+//			modelParts.add(modelPart);
+//		}
+		for (String datasetName: datasetNames) {
+			RDBModel rdbModel = new RDBModel();
+			rdbModel.setConnectionId(getConnection().getId());
+			rdbModel.setId(datasetName);
+			
 		}
 		this.childrenIntialized = true;
 	}
@@ -134,7 +144,7 @@ public class DatabasePart extends PartType {
 
 	private RDBModel getNewRDBModel() {
 		RDBModel newModel = new RDBModel();
-		newModel.setConnection(this.getConnection());
+		newModel.setConnectionId(this.getConnection().getId());
 		return newModel.createClone();
 	}
 
