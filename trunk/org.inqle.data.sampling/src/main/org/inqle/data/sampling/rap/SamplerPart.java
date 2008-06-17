@@ -96,7 +96,7 @@ public class SamplerPart extends PartType {
 	public void initChildren() {
 		//initCount++;
 		//log.info("Sampler #" + samplerPartCount + ": initChildren #" + initCount);
-		//query for all RDBModel children
+		//query for all Dataset children
 //		AppInfo appInfo = persister.getAppInfo();
 //		QueryCriteria queryCriteria = new QueryCriteria(persister);
 //		queryCriteria.setQuery(getSparqlToFindChildren());
