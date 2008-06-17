@@ -1,11 +1,11 @@
 package org.inqle.data.rdf.jena;
 
-import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
+import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
 
-@Namespace(NS)
+@Namespace(RDF.INQLE)
 public class Connection extends JenaAssemblerObject {
 	
 	private String dbClass = null;	
@@ -29,7 +29,6 @@ public class Connection extends JenaAssemblerObject {
 		super.replicate(oldConnection);
 	}
 	
-	@RdfProperty(NS + "dbClass")
 	public String getDbClass() {
 		return dbClass;
 	}
@@ -37,7 +36,6 @@ public class Connection extends JenaAssemblerObject {
 		this.dbClass = dbClass;
 	}
 	
-	@RdfProperty(NS + "dbPassword")
 	public String getDbPassword() {
 		return dbPassword;
 	}
@@ -45,7 +43,6 @@ public class Connection extends JenaAssemblerObject {
 		this.dbPassword = dbPassword;
 	}
 	
-	@RdfProperty(NS + "dbType")
 	public String getDbType() {
 		return dbType;
 	}
@@ -53,7 +50,6 @@ public class Connection extends JenaAssemblerObject {
 		this.dbType = dbType;
 	}
 	
-	@RdfProperty(NS + "dbURL")
 	public String getDbURL() {
 		return dbURL;
 	}
@@ -61,8 +57,6 @@ public class Connection extends JenaAssemblerObject {
 		this.dbURL = dbURL;
 	}
 	
-
-	@RdfProperty(NS + "dbUser")
 	public String getDbUser() {
 		return dbUser;
 	}

@@ -1,8 +1,7 @@
 package org.inqle.data.rdf;
 
-import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
@@ -22,8 +21,8 @@ public class AppInfo extends UniqueJenabean {
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
 	//private String serverBaseUri;
 	private String serverBaseUrl;
-	private NamedModel repositoryNamedModel;
-	private NamedModel logNamedModel;
+	private Dataset metarepositoryDataset;
+	private Connection metarepositoryConnection;
 	
 	@Id
 	public String getId() {
@@ -48,26 +47,26 @@ public class AppInfo extends UniqueJenabean {
 		this.serverBaseUrl = serverBaseUrl;
 	}
 
-	public NamedModel getRepositoryNamedModel() {
-		return this.repositoryNamedModel;
+	public Dataset getMetarepositoryDataset() {
+		return metarepositoryDataset;
 	}
 	
-	public void setRepositoryNamedModel(NamedModel repositoryNamedModel) {
-		this.repositoryNamedModel = repositoryNamedModel;
+	public void setMetarepositoryDataset(Dataset metarepositoryDataset) {
+		this.metarepositoryDataset = metarepositoryDataset;
 	}
 
-	public NamedModel getLogNamedModel() {
-		return logNamedModel;
-	}
-
-	public void setLogNamedModel(NamedModel logNamedModel) {
-		this.logNamedModel = logNamedModel;
-	}
+//	public NamedModel getLogNamedModel() {
+//		return logNamedModel;
+//	}
+//
+//	public void setLogNamedModel(NamedModel logNamedModel) {
+//		this.logNamedModel = logNamedModel;
+//	}
 	
 	public void clone(AppInfo objectToBeCloned) {
 		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
-		setRepositoryNamedModel(objectToBeCloned.getRepositoryNamedModel());
-		setLogNamedModel(objectToBeCloned.getLogNamedModel());
+		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
+		setMetarepositoryConnection(objectToBeCloned.getMetarepositoryConnection());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -87,6 +86,14 @@ public class AppInfo extends UniqueJenabean {
 		AppInfo newAppInfo = new AppInfo();
 		newAppInfo.replicate(this);
 		return newAppInfo;
+	}
+
+	public Connection getMetarepositoryConnection() {
+		return metarepositoryConnection;
+	}
+
+	public void setMetarepositoryConnection(Connection metarepositoryConnection) {
+		this.metarepositoryConnection = metarepositoryConnection;
 	}
 
 }

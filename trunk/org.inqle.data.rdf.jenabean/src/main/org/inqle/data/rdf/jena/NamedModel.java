@@ -1,11 +1,9 @@
 package org.inqle.data.rdf.jena;
 
-import thewebsemantic.Namespace;
-import thewebsemantic.RdfProperty;
-import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+
+import thewebsemantic.Namespace;
 /**
  * from http://jena.sourceforge.net/assembler/assembler-howto.html
  * class ja:NamedModel subClassOf ja:Model
@@ -42,7 +40,7 @@ public abstract class NamedModel extends BasicJenabean {
 //		setModelName(name);
 //	}
 //	
-//	public void clone(RDBModel objectToBeCloned) {
+//	public void clone(Dataset objectToBeCloned) {
 //		super.clone(objectToBeCloned);
 //		setModelName(objectToBeCloned.getModelName());
 //	}

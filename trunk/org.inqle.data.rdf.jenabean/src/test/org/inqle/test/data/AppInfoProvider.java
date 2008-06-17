@@ -2,12 +2,15 @@ package org.inqle.test.data;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
+import org.h2.tools.Server;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Bean2RDF;
@@ -21,13 +24,15 @@ public class AppInfoProvider {
 
 	public static final String APP_HOME = "C:/workspace/";
 	public static final String FILENAME_APPINFO = "org.inqle.data.rdf.jenabean/src/test/secure/AppInfo.ttl";
-	private static final String DB_DRIVER = "org.postgresql.Driver";
-	private static final String DB_TYPE = "PostgreSQL";
-	private static final String DB_URL = "jdbc:postgresql://localhost:5432/test_inqle_repositories";
-	private static final String DB_USER = "inqle";
-	private static final String DB_PASSWORD = "~Arden";
+	private static final String DB_DRIVER = "org.h2.Driver";
+	private static final String DB_TYPE = "H2";
+	//private static final String DB_URL = "jdbc:postgresql://localhost:5432/test_inqle_repositories";
+	private static final String DB_URL = "jdbc:h2:test_inqle_repositories";
+	private static final String DB_USER = "test_user";
+	private static final String DB_PASSWORD = "test_password";
 	
-	public static Logger log = Logger.getLogger(AppInfoProvider.class);
+	private static Logger log = Logger.getLogger(AppInfoProvider.class);
+	private static Server server;
 	
 	public static String getAppInfoFilePath() {
 		return APP_HOME + FILENAME_APPINFO;
@@ -43,7 +48,7 @@ public class AppInfoProvider {
 		connection.setDbPassword(DB_PASSWORD);
 		
 		//Create the repository namedmodel, to contain info about data repositories
-		RDBModel repositoryModel = new RDBModel();
+		Dataset repositoryModel = new Dataset();
 		repositoryModel.setId(InqleInfo.REPOSITORY_MODEL_NAME);
 		repositoryModel.setConnectionId(connection.getId());
 		
@@ -51,8 +56,8 @@ public class AppInfoProvider {
 		AppInfo appInfo = new AppInfo();
 		//appInfo.setServerBaseUri("http://inqle.org/ns/TestServerUri");
 		appInfo.setServerBaseUrl("http://inqle.org/TestServerUrl");
-		appInfo.setRepositoryNamedModel(repositoryModel);
-		
+		appInfo.setMetarepositoryDataset(repositoryModel);
+		appInfo.setMetarepositoryConnection(connection);
 		OntModel m = ModelFactory.createOntologyModel();
 		Bean2RDF writer = new Bean2RDF(m);
 		writer.save(appInfo);
@@ -79,5 +84,22 @@ public class AppInfoProvider {
 				AppInfo.APPINFO_INSTANCE_ID,
 				getAppInfoModel(), 
 				true);
+	}
+	
+	public static Server startDatabaseServer() throws SQLException {
+		if (server != null) {
+			return server;
+		}
+		
+		String[] args = { "-trace", "-tcp", "-web", "-pg", "-baseDir", "~" };
+		
+		server = Server.createTcpServer(args).start();
+	
+		log.info("Started H2 Database Server using these args:" + Arrays.asList(args));
+		return server;
+	}
+	
+	public static void stopDatabaseServer() {
+		server.stop();
 	}
 }

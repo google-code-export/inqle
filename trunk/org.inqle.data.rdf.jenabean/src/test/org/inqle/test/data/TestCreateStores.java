@@ -3,27 +3,25 @@
  */
 package org.inqle.test.data;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.AssemblerVocabulary;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.junit.Test;
 
-import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
@@ -37,7 +35,7 @@ public class TestCreateStores {
 	
 	public static final String DB_NAME = "test_inqle_data";
 	public static final String MODEL_NAME = "test_model";
-	public static final String TEST_DATAMODEL_ID = "TestDataset";
+	public static final String TEST_DATAMODEL_ID = "org.inqle.datasets.TestDataset";
 	//public static final String TEST_DATAMODEL_URI = RDF.INQLE + TEST_DATAMODEL_ID;
 	//public final String URI_DUMMY_1 = RDF.INQLE + "dummy1";
 	//public final String URI_DUMMY_2 = RDF.INQLE + "dummy2";
@@ -48,21 +46,23 @@ public class TestCreateStores {
 	public TestCreateStores() {	}
 	
 	@Test
-	public void createRepositoryModel() {
+	public void createMetarepositoryModel() {
+		
+		//create an AppInfo, pointing to this server
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
 		
-		NamedModel repositoryNamedModel = appInfo.getRepositoryNamedModel();
-		assertNotNull(repositoryNamedModel);
-		//assertEquals(repositoryNamedModel.getJavaClass(), RDBModel.class.getName());
+		Dataset metarepositoryDataset = appInfo.getMetarepositoryDataset();
+		assertNotNull(metarepositoryDataset);
+		//assertEquals(repositoryNamedModel.getJavaClass(), Dataset.class.getName());
 		
 		//create the Persister
 		Persister persister = Persister.getInstance(appInfo);
 		
 		//create the repository model
-		Connection repositoryConnection = null;
-		if (repositoryNamedModel instanceof RDBModel) {
-			repositoryConnection = ((RDBModel)repositoryNamedModel).getConnection();
-		}
+		log.info("Creating Connection to metarepository of id=" + metarepositoryDataset.getConnectionId());
+		//Connection repositoryConnection = persister.getConnection(metarepositoryDataset.getConnectionId());
+		Connection repositoryConnection = appInfo.getMetarepositoryConnection();
+		
 		DBConnector repositoryConnector = new DBConnector(repositoryConnection);
 		//first delete
 		repositoryConnector.deleteSDBStore();
@@ -82,12 +82,15 @@ public class TestCreateStores {
 		Model repositoryModel = persister.getMetarepositoryModel();
 		log.info("Got repositoryModel");
 		//try to add statements
-		Statement dummyStatement = ResourceFactory.createStatement(AssemblerVocabulary.NAMESPACE, AssemblerVocabulary.dbURL, AssemblerVocabulary.directory);
+		Resource subj = ResourceFactory.createResource(RDF.UNKNOWN_SUBJECT);
+		Property pred = ResourceFactory.createProperty(RDF.TYPE);
+		Resource obj = ResourceFactory.createResource(RDF.JAVA_CLASS);
+		Statement dummyStatement = ResourceFactory.createStatement(subj, pred, obj);
 		log.info("made statement");
 		repositoryModel.add(dummyStatement);
 		log.info("added repositoryModel");
 		RDFNode nullObj = null;
-		StmtIterator statements = repositoryModel.listStatements(AssemblerVocabulary.NAMESPACE, AssemblerVocabulary.dbURL, nullObj);
+		StmtIterator statements = repositoryModel.listStatements(subj, pred, nullObj);
 		log.info("listed statements");
 		boolean anyStatements = false;
 		while (statements.hasNext()) {
@@ -102,28 +105,17 @@ public class TestCreateStores {
 	
 	@Test
 	public void createTestConnection() {
-		
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
+		Connection metarepositoryConnection = appInfo.getMetarepositoryConnection();
 		Persister persister = Persister.getInstance(appInfo);
-		Model repositoryModel = persister.getMetarepositoryModel();
-		assertNotNull(repositoryModel);
-		
-		//create a new connection object, using data from the repository connection
-		NamedModel repositoryNamedModel = appInfo.getRepositoryNamedModel();
-		assertNotNull(repositoryNamedModel);
-		
-		Connection repositoryConnection = null;
-		if (repositoryNamedModel instanceof RDBModel) {
-			repositoryConnection = ((RDBModel)repositoryNamedModel).getConnection();
-		}
-		Connection testConnectionInfo = new Connection();
-		testConnectionInfo.setDbClass(repositoryConnection.getDbClass());
-		testConnectionInfo.setDbType(repositoryConnection.getDbType());
-		testConnectionInfo.setDbUser(repositoryConnection.getDbUser());
-		testConnectionInfo.setDbPassword(repositoryConnection.getDbPassword());
-		String dbUrl = repositoryConnection.getDbURL().substring(0, repositoryConnection.getDbURL().lastIndexOf("/"));
-		dbUrl += "/" + DB_NAME;
-		testConnectionInfo.setDbURL(dbUrl);
+		Connection dataConnection = new Connection();
+		dataConnection.setDbClass(metarepositoryConnection.getDbClass());
+		dataConnection.setDbType(metarepositoryConnection.getDbType());
+		dataConnection.setDbUser(metarepositoryConnection.getDbUser());
+		dataConnection.setDbPassword(metarepositoryConnection.getDbPassword());
+		String dbUrl = metarepositoryConnection.getDbURL().substring(0, metarepositoryConnection.getDbURL().lastIndexOf(":") + 1);
+		dbUrl += DB_NAME;
+		dataConnection.setDbURL(dbUrl);
 		
 		//log.info("We have now created a new Conection spec for test data:\n" + JenabeanWriter.toString(testConnectionInfo));
 		//clear the SDB store
@@ -136,28 +128,28 @@ public class TestCreateStores {
 		
 		//add the new test datamodel connection info
 		log.info("Try to create new DB Connection...");
-		int status = persister.createNewDBConnection(testConnectionInfo);
+		int status = persister.createNewDBConnection(dataConnection);
 		//assertEquals(DBConnector.STORE_CREATED, status);
 		//status = persister.createNewDBConnection(testConnectionInfo);
 		assertEquals(DBConnector.STORE_IS_BLANK, status);
 		
 		//try to load the Connection from the database
 		log.info("Try to create DB Connection 3...");
-		Connection testConnectionInfo3 = (Connection)Persister.reconstitute(Connection.class, testConnectionInfo.getId(), repositoryModel, true);
+		Connection testConnectionInfo3 = (Connection)Persister.reconstitute(Connection.class, dataConnection.getId(), persister.getMetarepositoryModel(), true);
 		//log.info(PersistableWriter.persistableToString(testConnectionInfo3));
 		assertNotNull(testConnectionInfo3);
 		
-		log.info("create a RDBModel object...");
-		RDBModel testNamedModel = new RDBModel();
+		log.info("create a Dataset object...");
+		Dataset testNamedModel = new Dataset();
 		testNamedModel.setId(TEST_DATAMODEL_ID);
 //		testNamedModel.setModelName(MODEL_NAME);
 //		testNamedModel.setConnection(testConnectionInfo);
-		testNamedModel.setId(MODEL_NAME);
-		testNamedModel.setConnectionId(testConnectionInfo.getId());
+//		testNamedModel.setId(MODEL_NAME);
+		testNamedModel.setConnectionId(dataConnection.getId());
 		persister.createDBModel(testNamedModel);
 		//persister.persist(testNamedModel, repositoryModel, true);
-		log.info("retrieve the RDBModel from the metarepository...");
-		RDBModel reconstitutedTestNamedModel = (RDBModel)persister.getNamedModel(TEST_DATAMODEL_ID);
+		log.info("retrieve the Dataset from the metarepository...");
+		Dataset reconstitutedTestNamedModel = (Dataset)persister.getNamedModel(TEST_DATAMODEL_ID);
 		assertNotNull(reconstitutedTestNamedModel);
 		String origNamedModelString = JenabeanWriter.toString(testNamedModel);
 		String reconstNamedModelString = JenabeanWriter.toString(reconstitutedTestNamedModel);

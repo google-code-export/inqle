@@ -13,11 +13,10 @@ import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.AssemblerVocabulary;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.FileModel;
+import org.inqle.data.rdf.jena.Datafile;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jena.RDBModel;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 
 import thewebsemantic.Bean2RDF;
@@ -50,7 +49,7 @@ public class Persister {
 	public static final String SYSTEM_PROPERTY_TEMP_DIR = "java.io.tmpdir";
 	public static final String FILENAME_APPINFO = "assets/_private/AppInfo.ttl";
 	public static final String TEMP_DIRECTORY = "assets/temp/";
-	public static final Class<?>[] MODEL_CLASSES = {RDBModel.class, FileModel.class};
+	public static final Class<?>[] MODEL_CLASSES = {Dataset.class, Datafile.class};
 	private AppInfo appInfo = null;
 	private OntModel metarepositoryModel = null;
 	private OntModel logModel = null;
@@ -220,8 +219,8 @@ public class Persister {
 	 * @param dbModelName
 	 * @return
 	 */
-	public Model createDBModel(RDBModel rdbModel) {
-		Connection connection = rdbModel.getConnection();
+	public Model createDBModel(Dataset rdbModel) {
+		Connection connection = getConnection(rdbModel.getConnectionId());
 		//String dbModelName = rdbModel.getModelName();
 		String dbModelName = rdbModel.getId();
 		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
@@ -246,7 +245,7 @@ public class Persister {
 		
 		Model model = dbConnector.getModel(dbModelName);
 		
-		//store the RDBModel object
+		//store the Dataset object
 		persist(rdbModel, getMetarepositoryModel());
 		return model;
 	}
@@ -277,7 +276,7 @@ public class Persister {
 		
 		Model repositoryModel = getMetarepositoryModel();
 		//if the model being requested is not in the Repositories model, retrieve that specially
-		if (namedModel.getId().equals(getAppInfo().getRepositoryNamedModel().getId())) {
+		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
 			//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): return metarepository model");
 			return repositoryModel;
 		}
@@ -285,14 +284,14 @@ public class Persister {
 		//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): get new model");
 		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
 		Model model = null;
-		if (namedModel instanceof RDBModel) {
-			RDBModel rdbModel = (RDBModel)namedModel;
+		if (namedModel instanceof Dataset) {
+			Dataset rdbModel = (Dataset)namedModel;
 			RDF2Bean reader = new RDF2Bean(repositoryModel);
 			Connection dbConnectionInfo;
 			try {
-				dbConnectionInfo = (Connection)reader.load(Connection.class, rdbModel.getConnection().getId());
+				dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
 			} catch (NotFoundException e) {
-				log.error("Unable to load Connection " + rdbModel.getConnection().getId());
+				log.error("Unable to load Connection " + getConnection(rdbModel.getConnectionId()).getId());
 				return null;
 			}
 			DBConnector connector = new DBConnector(dbConnectionInfo);
@@ -300,7 +299,7 @@ public class Persister {
 			
 			/*if null, create a new model
 			if (model == null) {
-				log.debug("Creating RDBModel '" + namedModel.getModelName() + "'...");
+				log.debug("Creating Dataset '" + namedModel.getModelName() + "'...");
 				model = createDBModel(dbConnectionInfo, namedModel.getModelName());
 			}
 			*/
@@ -308,8 +307,8 @@ public class Persister {
 			//close
 			//connector.close();
 			
-		} else if (namedModel instanceof FileModel){
-			model = Persister.getModelFromFile(((FileModel)namedModel).getFileUrl());
+		} else if (namedModel instanceof Datafile){
+			model = Persister.getModelFromFile(((Datafile)namedModel).getFileUrl());
 		}
 		
 		return model;
@@ -353,20 +352,20 @@ public class Persister {
 	public OntModel getOntModel(NamedModel namedModel) {
 		OntModel repositoryOntModel = getMetarepositoryModel();
 		//if the model being requested is not in the Repositories model, retrieve that specially
-		if (namedModel.getId().equals(getAppInfo().getRepositoryNamedModel().getId())) {
+		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
 			return repositoryOntModel;
 		}
 		
 		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
 		OntModel ontModel = null;
-		if (namedModel instanceof RDBModel) {
-			RDBModel rdbModel = (RDBModel)namedModel;
+		if (namedModel instanceof Dataset) {
+			Dataset rdbModel = (Dataset)namedModel;
 			RDF2Bean reader = new RDF2Bean(repositoryOntModel);
 			Connection dbConnectionInfo;
 			try {
-				dbConnectionInfo = (Connection)reader.load(Connection.class, rdbModel.getConnection().getId());
+				dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
 			} catch (NotFoundException e) {
-				log.error("Unable to load Connection info " + rdbModel.getConnection().getId());
+				log.error("Unable to load Connection info " + rdbModel.getConnectionId());
 				e.printStackTrace();
 				return null;
 			}
@@ -376,7 +375,7 @@ public class Persister {
 			
 			/*if null, create a new model
 			if (model == null) {
-				log.debug("Creating RDBModel '" + namedModel.getModelName() + "'...");
+				log.debug("Creating Dataset '" + namedModel.getModelName() + "'...");
 				model = createDBModel(dbConnectionInfo, namedModel.getModelName());
 			}
 			*/
@@ -384,9 +383,9 @@ public class Persister {
 			//close
 			//connector.close();
 			
-		} else if (namedModel instanceof FileModel){
+		} else if (namedModel instanceof Datafile){
 			ontModel = ModelFactory.createOntologyModel();
-			ontModel.add(getModelFromFile(((FileModel)namedModel).getFileUrl()));
+			ontModel.add(getModelFromFile(((Datafile)namedModel).getFileUrl()));
 		}
 		
 		return ontModel;
@@ -406,8 +405,8 @@ public class Persister {
 //		Connection logConnection = null;
 //		NamedModel logNamedModel = getAppInfo().getLogNamedModel();
 //		
-//		if (logNamedModel instanceof RDBModel) {
-//			logConnection = ((RDBModel)logNamedModel).getConnection();
+//		if (logNamedModel instanceof Dataset) {
+//			logConnection = ((Dataset)logNamedModel).getConnection();
 //		}
 //		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
 //		DBConnector connector = new DBConnector(logConnection);
@@ -426,19 +425,16 @@ public class Persister {
 			return this.metarepositoryModel;
 		}
 		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
-		Connection repositoryConnection = null;
-		NamedModel repositoryNamedModel = getAppInfo().getRepositoryNamedModel();
+		Dataset metarepositoryRDBModel = getAppInfo().getMetarepositoryDataset();
+		Connection metarepositoryConnection = getAppInfo().getMetarepositoryConnection();
 		
-		if (repositoryNamedModel instanceof RDBModel) {
-			repositoryConnection = ((RDBModel)repositoryNamedModel).getConnection();
-		}
 		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-		DBConnector connector = new DBConnector(repositoryConnection);
+		DBConnector connector = new DBConnector(metarepositoryConnection);
 		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
-		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getId());
+		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
 
 		//this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getModelName());
-		this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getId());
+		this.metarepositoryModel = connector.getOntModel(metarepositoryRDBModel.getId());
 		return this.metarepositoryModel;
 	}
 	
@@ -447,6 +443,11 @@ public class Persister {
 	 * *** CONNECTION METHODS
 	 * ********************************************************************* */
 	
+	public Connection getConnection(String connectionId) {
+		Object connectionObj = Persister.reconstitute(Connection.class, connectionId, getMetarepositoryModel(), true);
+		return (Connection)connectionObj;
+	}
+
 	/**
 	 * Store a new Connection object in the metarepository and
 	 * create the SDB store in the actual database.
@@ -562,7 +563,6 @@ public class Persister {
 		//the statements to add
 		
 		persistableAsModel.setNsPrefix("inqle", RDF.INQLE);
-		persistableAsModel.setNsPrefix("ja", AssemblerVocabulary.NS);
 		persistableAsModel.setNsPrefix("xsd", RDF.XSD);
 		FileOutputStream fos = null;
 		fos = new FileOutputStream(fileName);
@@ -613,8 +613,8 @@ public class Persister {
 	
 	public List<NamedModel> listNamedModels() {
 		List<NamedModel> namedModels = new ArrayList<NamedModel>();
-		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(RDBModel.class));
-		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(FileModel.class));
+		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(Dataset.class));
+		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(Datafile.class));
 		return namedModels;
 	}
 	
@@ -687,9 +687,9 @@ public class Persister {
 		log.debug("Removing NamedModel: " + namedModel.getUri());
 		Persister.remove(namedModel, getMetarepositoryModel());
 		
-		if (namedModel instanceof RDBModel) {			
+		if (namedModel instanceof Dataset) {			
 			//remove the model
-			DBConnector connector = new DBConnector(((RDBModel)namedModel).getConnection());
+			DBConnector connector = new DBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
 			boolean successDeleting = connector.deleteSDBStore();
 			//DBConnection jenaConnection = connector.getJenaConnection();
 	    //ModelMaker maker = ModelFactory.createModelRDBMaker(jenaConnection);
@@ -708,8 +708,8 @@ public class Persister {
 			//}
 	    connector.close();
 	    return successDeleting;
-		} else if (namedModel instanceof FileModel) {
-			String filePath = FileUtils.toFilename(((FileModel)namedModel).getFileUrl());
+		} else if (namedModel instanceof Datafile) {
+			String filePath = FileUtils.toFilename(((Datafile)namedModel).getFileUrl());
 			//not necessary to remove statements: modelToDelete.removeAll();
 			
 			//delete the file
@@ -783,8 +783,8 @@ public OntModel getRepositoryModel() {
 	Connection repositoryConnection = null;
 	NamedModel repositoryNamedModel = getAppInfo().getRepositoryNamedModel();
 	
-	if (repositoryNamedModel instanceof RDBModel) {
-		repositoryConnection = ((RDBModel)repositoryNamedModel).getConnection();
+	if (repositoryNamedModel instanceof Dataset) {
+		repositoryConnection = ((Dataset)repositoryNamedModel).getConnection();
 	}
 	//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
 	DBConnector connector = new DBConnector(repositoryConnection);
