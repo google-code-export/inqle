@@ -1,5 +1,11 @@
 package org.inqle.test.data;
 
+import java.sql.SQLException;
+
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -23,10 +29,12 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	TestJenabean.class,
+	//TestJenabean.class,
+	TestStartDatabaseServer.class,
 	TestCreateAppInfo.class,
 	TestCreateStores.class,
 	TestLoadData.class,
-	TestQueryStore.class
+	TestQueryStore.class,
+	TestStopDatabaseServer.class
 })
 public class TestSuite { }

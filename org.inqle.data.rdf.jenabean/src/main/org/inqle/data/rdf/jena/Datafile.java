@@ -1,14 +1,12 @@
 package org.inqle.data.rdf.jena;
 
-import static org.inqle.data.rdf.jena.AssemblerVocabulary.NS;
+import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
-import thewebsemantic.RdfProperty;
-import org.inqle.data.rdf.RDF;
 
 /**
  * from http://jena.sourceforge.net/assembler/assembler-howto.html
- * class ja:FileModel subClassOf ja:NamedModel
+ * class ja:Datafile subClassOf ja:NamedModel
  * domainOf ja:directory maxCardinality 1
  * domainOf ja:fileEncoding maxCardinality 1
  * domainOf ja:mapName maxCardinality 1
@@ -16,9 +14,9 @@ import org.inqle.data.rdf.RDF;
  * Jan 9, 2008
  */
 //@Namespace(NS)
-//public class FileModel extends NamedModel {
+//public class Datafile extends NamedModel {
 @Namespace(RDF.INQLE)
-public class FileModel extends NamedModel {
+public class Datafile extends NamedModel {
 
 	private String fileUrl;
 	
@@ -57,7 +55,7 @@ public class FileModel extends NamedModel {
 //		return getDirectory() + getModelName();
 //	}
 
-	public void clone(FileModel objectToBeCloned) {
+	public void clone(Datafile objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		setFileUrl(objectToBeCloned.getFileUrl());
 		//setModelName(objectToBeCloned.getModelName());
@@ -66,14 +64,14 @@ public class FileModel extends NamedModel {
 //		setFileEncoding(objectToBeCloned.getFileEncoding());
 	}
 	
-//	public void replicate(FileModel objectToClone) {
+//	public void replicate(Datafile objectToClone) {
 //		clone(objectToClone);
 //		setId(objectToClone.getId());
 //		super.replicate(objectToClone);
 //	}
 	
-	public FileModel createClone() {
-		FileModel newObj = new FileModel();
+	public Datafile createClone() {
+		Datafile newObj = new Datafile();
 		newObj.clone(this);
 		return newObj;
 	}
@@ -86,8 +84,8 @@ public class FileModel extends NamedModel {
 		this.fileUrl = fileUrl;
 	}
 
-//	public FileModel createReplica() {
-//		FileModel newObj = new FileModel();
+//	public Datafile createReplica() {
+//		Datafile newObj = new Datafile();
 //		newObj.replicate(this);
 //		return newObj;
 //	}

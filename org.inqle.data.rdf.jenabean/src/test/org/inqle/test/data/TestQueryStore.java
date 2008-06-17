@@ -100,4 +100,9 @@ public class TestQueryStore {
 			assertEquals(this.resultCount, numResults);
 		}
 	}
+	
+//	@Test
+//	public void shutdownDBServer() {
+//		AppInfoProvider.stopDatabaseServer();
+//	}
 }

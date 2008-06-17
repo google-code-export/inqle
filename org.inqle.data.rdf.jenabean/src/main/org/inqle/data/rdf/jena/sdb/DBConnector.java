@@ -39,6 +39,11 @@ public class DBConnector {
 	public static final int STORE_IS_BLANK = -1;
 	
 	/**
+	 * This store already exists in the database, and it is blank
+	 */
+	public static final int STORE_NOT_CREATED = 0;
+	
+	/**
 	 * A store was just created in the database
 	 */
 	public static final int STORE_CREATED = 1;
@@ -63,6 +68,7 @@ public class DBConnector {
 	}
 	
 	public List<String> getModelNames() {
+		initConnection();
 		DBConnection jenaConnection = getJenaConnection();
 		ExtendedIterator modelNamesI = jenaConnection.getAllModelNames();
 		List<String> modelNames = new ArrayList<String>();
@@ -232,7 +238,7 @@ public class DBConnector {
 	 */
 	public int tryToCreateSDBStore() {
 		log.info("Trying to create store...");
-		int status = 0;
+		int status = STORE_NOT_CREATED;
 		Store store = getStore();
 		
 		try {
