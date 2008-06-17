@@ -113,7 +113,7 @@ public class AgentPart extends PartType {
 		IAgent agent = agentFactory.getBaseAgent();
 		//initCount++;
 		//log.info("Agent #" + agentPartCount + ": initChildren #" + initCount);
-		//query for all RDBModel children
+		//query for all Dataset children
 //		AppInfo appInfo = persister.getAppInfo();
 //		QueryCriteria queryCriteria = new QueryCriteria(persister);
 //		queryCriteria.setQuery(getSparqlToFindChildren());
