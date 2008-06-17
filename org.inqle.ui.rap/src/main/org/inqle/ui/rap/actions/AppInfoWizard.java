@@ -11,11 +11,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.actions.ModelWizard.RDBModelInfoPage;
+import org.inqle.ui.rap.actions.DatasetWizard.DatasetInfoPage;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.SingleTextPage;
 
@@ -29,7 +29,7 @@ public class AppInfoWizard extends Wizard {
 
 	private AppInfo appInfo = new AppInfo();
 	private Shell shell;
-	private RDBModel metarepositoryModel;
+	private Dataset metarepositoryDataset;
 	private Connection metarepositoryConnection;
 	public AppInfoWizard(Shell parentShell) {
 		this.shell = parentShell;
@@ -41,17 +41,17 @@ public class AppInfoWizard extends Wizard {
 //		SingleTextPage siteUrlPage = new SingleTextPage(appInfo, "serverBaseUrl", "Server URL", null);
 //		siteUrlPage.setLabelText("Enter base URL of this INQLE server");
 //		addPage(siteUrlPage);
-		
-		metarepositoryModel = (RDBModel)appInfo.getRepositoryNamedModel();
-		if (metarepositoryModel == null) {
-			metarepositoryModel = new RDBModel();
-			//metarepositoryModel.setModelName("Metarepository");
-			metarepositoryModel.setId("Metarepository");
+		Persister persister = Persister.getInstance();
+		metarepositoryDataset = (Dataset)appInfo.getMetarepositoryDataset();
+		if (metarepositoryDataset == null) {
+			metarepositoryDataset = new Dataset();
+			//metarepositoryDataset.setModelName("Metarepository");
+			metarepositoryDataset.setId("Metarepository");
 		}
-		metarepositoryConnection = metarepositoryModel.getConnection();
+		metarepositoryConnection = appInfo.getMetarepositoryConnection();
 		if (metarepositoryConnection == null) {
 			metarepositoryConnection = new Connection();
-			metarepositoryModel.setConnectionId(metarepositoryConnection.getId());
+			metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
 		}
 //		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
 		ConnectionPage metarepositoryPage = new ConnectionPage(
@@ -62,9 +62,9 @@ public class AppInfoWizard extends Wizard {
 		addPage(metarepositoryPage);
 		
 		SingleTextPage metarepositoryModelInfoPage = new SingleTextPage(
-				metarepositoryModel, 
-				"modelName", 
-				"Enter any name for your Metarepository Model", 
+				metarepositoryDataset, 
+				"id", 
+				"Enter a unique name for your Metarepository Model, e.g. com.my.domain.metarepositoryModel", 
 				null
 		);
 		addPage(metarepositoryModelInfoPage);
@@ -75,8 +75,9 @@ public class AppInfoWizard extends Wizard {
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
 		
-		metarepositoryModel.setConnectionId(metarepositoryConnection.getId());
-		appInfo.setRepositoryNamedModel(metarepositoryModel);
+		metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
+		appInfo.setMetarepositoryDataset(metarepositoryDataset);
+		appInfo.setMetarepositoryConnection(metarepositoryConnection);
 		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);

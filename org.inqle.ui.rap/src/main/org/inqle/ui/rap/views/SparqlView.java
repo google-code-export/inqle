@@ -213,7 +213,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(sparql);
 		//TODO change to LogModel
-		queryCriteria.addNamedModel(persister.getAppInfo().getRepositoryNamedModel());
+		queryCriteria.addNamedModel(persister.getAppInfo().getMetarepositoryDataset());
 		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
 		log.trace("Received these results: " + resultTable.getResultList());
 		setRdfTable(resultTable);

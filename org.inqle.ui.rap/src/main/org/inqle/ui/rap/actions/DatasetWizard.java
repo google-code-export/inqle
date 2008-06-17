@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -37,19 +37,19 @@ import com.hp.hpl.jena.rdf.model.Model;
  * 
  * TODO extend DynaWizard instead of Wizard
  */
-public class ModelWizard extends Wizard {
+public class DatasetWizard extends Wizard {
 
 	private Connection connection = null;
 	//private Persister persister;
-	static Logger log = Logger.getLogger(ModelWizard.class);
+	static Logger log = Logger.getLogger(DatasetWizard.class);
 	Composite composite;
 	int mode;
 
 	Composite parent;
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
-	private RDBModel startingModel;
-	private RDBModel rdbModel;
+	private Dataset startingModel;
+	private Dataset dataset;
 
 	
 	/**
@@ -57,16 +57,16 @@ public class ModelWizard extends Wizard {
 	 * @author David Donohue
 	 * Feb 8, 2008
 	 */
-	public class RDBModelInfoPage extends WizardPage {
-		RDBModelInfoPage(String pageName) {
+	public class DatasetInfoPage extends WizardPage {
+		DatasetInfoPage(String pageName) {
 			super(pageName);
 		}
 		
 		public void createControl(Composite pageParent) {
-			
+			log.info("DatasetInfoPage.createControl()");
 			parent = pageParent;
 			
-			//initialize the RDBModel to the base starting RDBModel
+			//initialize the Dataset to the base starting Dataset
 			resetModel();
 			
 			composite = new Composite(parent, SWT.NONE);
@@ -127,7 +127,7 @@ public class ModelWizard extends Wizard {
 	    
 	    //TODO change BeansObservables to PojoObservables, when available:  http://fire-change-event.blogspot.com/2007/10/getting-rid-of-those-pesky-could-not.html
 	    IObservableValue modelNameObserveWidget = SWTObservables.observeText(modelName, SWT.FocusOut);
-			IObservableValue modelNameObserveValue = BeansObservables.observeValue(realm, rdbModel, "modelName");
+			IObservableValue modelNameObserveValue = BeansObservables.observeValue(realm, dataset, "modelName");
 			bindingContext.bindValue(modelNameObserveWidget, modelNameObserveValue, null, null);
 	    
 	    setControl(composite);
@@ -136,7 +136,7 @@ public class ModelWizard extends Wizard {
 
 	}
 	
-	public ModelWizard(int mode, RDBModel startingModel, DatabasePart databasePart) {
+	public DatasetWizard(int mode, Dataset startingModel, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
 		this.startingModel = startingModel;
@@ -156,8 +156,8 @@ public class ModelWizard extends Wizard {
 
 	@Override
 	public void addPages() {		
-		RDBModelInfoPage rdbModelInfoPage = new RDBModelInfoPage("Dataset Info");
-		addPage(rdbModelInfoPage);
+		DatasetInfoPage datasetInfoPage = new DatasetInfoPage("Dataset Info");
+		addPage(datasetInfoPage);
 		
 		//TODO add description field
 //		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
@@ -170,9 +170,9 @@ public class ModelWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 
-		if (databasePart.hasModelNamed(rdbModel.getId())) {
+		if (databasePart.hasModelNamed(dataset.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
-					"This database already has a dataset named '" + rdbModel.getId() + "'.\nPlease choose a different name.");
+					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
 			return false;
 		}
 		DBConnector connector = new DBConnector(connection);
@@ -184,14 +184,14 @@ public class ModelWizard extends Wizard {
 			return true;
 		}
 		Persister persister = Persister.getInstance();
-		persister.persist(rdbModel, persister.getMetarepositoryModel()); 
-		log.info("Saved dataset RDBModel=" + JenabeanWriter.toString(rdbModel));
-		if (this.mode == ModelWizardAction.MODE_NEW || this.mode == ModelWizardAction.MODE_CLONE) {
-			Model newModel = persister.createDBModel(connection, rdbModel.getId());
-			//persister.persist(rdbModel, newModel, false);
+		persister.persist(dataset, persister.getMetarepositoryModel()); 
+		log.info("Saved dataset Dataset=" + JenabeanWriter.toString(dataset));
+		if (this.mode == DatasetWizardAction.MODE_NEW || this.mode == DatasetWizardAction.MODE_CLONE) {
+			Model newModel = persister.createDBModel(connection, dataset.getId());
+			//persister.persist(dataset, newModel, false);
 			log.info("Created new model " + newModel);
 			databasePart.fireUpdate(databasePart);
-		} else if (this.mode == ModelWizardAction.MODE_EDIT) {
+		} else if (this.mode == DatasetWizardAction.MODE_EDIT) {
 			databasePart.fireUpdatePart();
 		}
 		//close wizard regardless
@@ -199,16 +199,16 @@ public class ModelWizard extends Wizard {
 	}
 	
 	public final void resetModel() {
-		if (mode == ModelWizardAction.MODE_EDIT) {
-			rdbModel = startingModel.createReplica();
-		//} else if (mode == ModelWizardAction.MODE_CLONE) {
+		if (mode == DatasetWizardAction.MODE_EDIT) {
+			dataset = startingModel.createReplica();
+		//} else if (mode == DatasetWizardAction.MODE_CLONE) {
 		} else {
-			rdbModel = startingModel.createClone();
+			dataset = startingModel.createClone();
 //		} else {
-//			rdbModel = new RDBModel();
-//			rdbModel.setConnection(this.connection);
+//			dataset = new Dataset();
+//			dataset.setConnection(this.connection);
 		}
-		assert(rdbModel != null);
+		assert(dataset != null);
 	}
 
 }
