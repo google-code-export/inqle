@@ -2,19 +2,19 @@ package org.inqle.ui.rap.tree.parts;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.ui.rap.Part;
 import org.inqle.ui.rap.actions.DeleteModelAction;
 import org.inqle.ui.rap.actions.LoadCsvFileAction;
 import org.inqle.ui.rap.actions.LoadRdfFileAction;
-import org.inqle.ui.rap.actions.ModelWizardAction;
+import org.inqle.ui.rap.actions.DatasetWizardAction;
 
 public class ModelPart extends Part {
 
 	private static final String ICON_PATH = "org/inqle/ui/rap/images/table.gif";
-	private RDBModel rdbModel;
+	private Dataset rdbModel;
 	
-	public ModelPart(RDBModel rdbModel) {
+	public ModelPart(Dataset rdbModel) {
 		this.rdbModel = rdbModel;
 		//this.persister = persister;
 	}
@@ -31,16 +31,16 @@ public class ModelPart extends Part {
 	public String getIconPath() {
 		return ICON_PATH;
 	}
-	public RDBModel getRdbModel() {
+	public Dataset getRdbModel() {
 		return this.rdbModel;
 	}
 	
 	@Override
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		//"Edit this dataset" action
-		ModelWizardAction editModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_EDIT, "Edit this dataset...", (DatabasePart)this.getParent(), workbenchWindow);
+		DatasetWizardAction editModelWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_EDIT, "Edit this dataset...", (DatabasePart)this.getParent(), workbenchWindow);
 		//editModelWizardAction.setModelPart(this);
-		editModelWizardAction.setRdbModel(rdbModel);
+		editModelWizardAction.setDataset(rdbModel);
 		manager.add(editModelWizardAction);
 		
 		//"Load RDF File" action

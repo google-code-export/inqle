@@ -10,7 +10,7 @@ import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RDBModel;
+import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jena.sdb.Queryer;
@@ -20,7 +20,7 @@ import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatabaseWizardAction;
 import org.inqle.ui.rap.actions.DeleteDatabaseAction;
-import org.inqle.ui.rap.actions.ModelWizardAction;
+import org.inqle.ui.rap.actions.DatasetWizardAction;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
@@ -44,7 +44,7 @@ public class DatabasePart extends PartType {
 		"SELECT ?modelId \n" +
 		"{\n" +
 		"GRAPH ?g {\n" +
-		"?modelUri a ja:RDBModel \n" +
+		"?modelUri a ja:Dataset \n" +
 		//" . ?modelUri ja:modelName ?modelName\n" +
 		" . ?modelUri ja:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?modelId\n";
 	
@@ -89,7 +89,7 @@ public class DatabasePart extends PartType {
 	
 	public void initChildren() {
 		
-		//query for all RDBModel children
+		//query for all Dataset children
 //		Persister persister = Persister.getInstance();
 //		AppInfo appInfo = persister.getAppInfo();
 //		QueryCriteria queryCriteria = new QueryCriteria();
@@ -104,7 +104,7 @@ public class DatabasePart extends PartType {
 		modelParts = new ArrayList<ModelPart>();
 //		for (QuerySolution row: resultTable.getResultList()) {
 //			Literal modelId = row.getLiteral("modelId");
-//			RDBModel rdbModel = (RDBModel)Persister.reconstitute(RDBModel.class, modelId.getLexicalForm(), persister.getMetarepositoryModel(), false);
+//			Dataset rdbModel = (Dataset)Persister.reconstitute(Dataset.class, modelId.getLexicalForm(), persister.getMetarepositoryModel(), false);
 //			rdbModel.setConnectionId(this.connection.getId());
 //			ModelPart modelPart = new ModelPart(rdbModel);
 //			modelPart.setParent(this);
@@ -112,9 +112,9 @@ public class DatabasePart extends PartType {
 //			modelParts.add(modelPart);
 //		}
 		for (String datasetName: datasetNames) {
-			RDBModel rdbModel = new RDBModel();
-			rdbModel.setConnectionId(getConnection().getId());
-			rdbModel.setId(datasetName);
+			Dataset dataset = new Dataset();
+			dataset.setConnectionId(getConnection().getId());
+			dataset.setId(datasetName);
 			
 		}
 		this.childrenIntialized = true;
@@ -123,8 +123,8 @@ public class DatabasePart extends PartType {
 	@Override
 	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 		//"Add a dataset" action
-		ModelWizardAction newModelWizardAction = new ModelWizardAction(ModelWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
-		newModelWizardAction.setRdbModel(getNewRDBModel());
+		DatasetWizardAction newModelWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
+		newModelWizardAction.setDataset(getNewDataset());
 		manager.add(newModelWizardAction);
 		
 		//"Edit this database" action
@@ -142,10 +142,10 @@ public class DatabasePart extends PartType {
 		manager.add(deleteDatabaseAction);
 	}
 
-	private RDBModel getNewRDBModel() {
-		RDBModel newModel = new RDBModel();
-		newModel.setConnectionId(this.getConnection().getId());
-		return newModel.createClone();
+	private Dataset getNewDataset() {
+		Dataset newDataset = new Dataset();
+		newDataset.setConnectionId(this.getConnection().getId());
+		return newDataset.createClone();
 	}
 
 	public Connection getConnection() {
@@ -168,10 +168,10 @@ public class DatabasePart extends PartType {
 }
 
 /*
-This retrieves all RDBModel objects
-Collection<?> modelObjects = persister.reconstituteList(RDBModel.class);
+This retrieves all Dataset objects
+Collection<?> modelObjects = persister.reconstituteList(Dataset.class);
 for (Object modelObject: modelObjects) {
-	RDBModel rdbModel = (RDBModel)modelObject;
+	Dataset rdbModel = (Dataset)modelObject;
 	ModelPart modelPart = new ModelPart(rdbModel, persister);
 	modelPart.addListener(this.listener);
 	modelPart.setParent(this);
