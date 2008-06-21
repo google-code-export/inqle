@@ -9,21 +9,20 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatabaseWizardAction;
-import org.inqle.ui.rap.actions.DeleteDatabaseAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
+import org.inqle.ui.rap.actions.DeleteDatabaseAction;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Literal;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class DatabasePart extends PartType {
 	
@@ -37,24 +36,21 @@ public class DatabasePart extends PartType {
 	private boolean childrenIntialized = false;
 
 	private List<String> modelNames = new ArrayList<String>();
-	
-	public static final String SPARQL_BEGIN = 
-		"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-		"PREFIX ja: <" + RDF.JA + ">\n" + 
-		"SELECT ?modelId \n" +
-		"{\n" +
-		"GRAPH ?g {\n" +
-		"?modelUri a ja:Dataset \n" +
-		//" . ?modelUri ja:modelName ?modelName\n" +
-		" . ?modelUri ja:" + RDF.JENABEAN_ID_ATTRIBUTE + " ?modelId\n";
-	
-	public static final String SPARQL_END =
-		"\n} }\n";
 		
-	private String getSparqlToFindChildRDBModels() {
-		String sparql = SPARQL_BEGIN;
-		sparql += " . ?modelUri ja:connection <" + connection.getUri() + ">";
-		sparql += SPARQL_END;
+	private String getSparqlToFindChildDatasets() {
+		//Literal literal = ResourceFactory.createTypedLiteral(connection.getId());
+		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
+		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
+		" SELECT ?datasetId \n " +
+		" { \n " +
+		" GRAPH ?g { \n " +
+		" ?datasetUri a inqle:Dataset \n " +
+		" . ?datasetUri inqle:id ?datasetId \n " +
+		" . ?datasetUri inqle:connectionId \"" + connection.getId() + "\"^^xsd:string \n" +
+		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
+		//" . ?datasetUri inqle:connectionId ?anyConnectionId" +
+		//" . ?datasetUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
+		" } }\n";
 		return sparql;
 	}
 	
@@ -90,33 +86,32 @@ public class DatabasePart extends PartType {
 	public void initChildren() {
 		
 		//query for all Dataset children
-//		Persister persister = Persister.getInstance();
-//		AppInfo appInfo = persister.getAppInfo();
-//		QueryCriteria queryCriteria = new QueryCriteria();
-//		queryCriteria.setQuery(getSparqlToFindChildRDBModels());
-//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		
-		DBConnector dbConnector = new DBConnector(getConnection());
-		List<String> datasetNames = dbConnector.getModelNames();
+		Persister persister = Persister.getInstance();
+		AppInfo appInfo = persister.getAppInfo();
+		QueryCriteria queryCriteria = new QueryCriteria();
+		queryCriteria.setQuery(getSparqlToFindChildDatasets());
+		log.info("SPARQL=" + getSparqlToFindChildDatasets());
+		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
+		//RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
+		log.info("datasetIds=" + datasetIds);
+//		DBConnector dbConnector = new DBConnector(getConnection());
+//		List<Dataset> datasets = dbConnector.getDatasets();
+//		log.info("datasets=" + datasets);
 		
 		//for each item in resultTable, add a ModelPart
 		modelParts = new ArrayList<ModelPart>();
-//		for (QuerySolution row: resultTable.getResultList()) {
+		//for (QuerySolution row: resultTable.getResultList()) {
 //			Literal modelId = row.getLiteral("modelId");
-//			Dataset rdbModel = (Dataset)Persister.reconstitute(Dataset.class, modelId.getLexicalForm(), persister.getMetarepositoryModel(), false);
-//			rdbModel.setConnectionId(this.connection.getId());
-//			ModelPart modelPart = new ModelPart(rdbModel);
-//			modelPart.setParent(this);
-//			//modelPart.setPersister(this.persister);
-//			modelParts.add(modelPart);
-//		}
-		for (String datasetName: datasetNames) {
-			Dataset dataset = new Dataset();
-			dataset.setConnectionId(getConnection().getId());
-			dataset.setId(datasetName);
-			
+		for (String datasetId: datasetIds) {
+			Dataset rdbModel = (Dataset)Persister.reconstitute(Dataset.class, datasetId, persister.getMetarepositoryModel(), false);
+			rdbModel.setConnectionId(this.connection.getId());
+			ModelPart modelPart = new ModelPart(rdbModel);
+			modelPart.setParent(this);
+			//modelPart.setPersister(this.persister);
+			modelParts.add(modelPart);
 		}
+		
 		this.childrenIntialized = true;
 	}
 	

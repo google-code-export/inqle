@@ -5,11 +5,6 @@ package org.inqle.ui.rap.actions;
 
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.BeansObservables;
-import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -17,7 +12,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
@@ -26,7 +20,6 @@ import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -48,9 +41,9 @@ public class DatasetWizard extends Wizard {
 	Composite parent;
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
-	private Dataset startingModel;
+	private Dataset startingDataset;
 	private Dataset dataset;
-
+	private Text datasetIdText;
 	
 	/**
 	 * This generates the wizard page for creating a database connection
@@ -58,6 +51,7 @@ public class DatasetWizard extends Wizard {
 	 * Feb 8, 2008
 	 */
 	public class DatasetInfoPage extends WizardPage {
+
 		DatasetInfoPage(String pageName) {
 			super(pageName);
 		}
@@ -89,10 +83,10 @@ public class DatasetWizard extends Wizard {
 			});
 			*/
 			
-			new Label (composite, SWT.NONE).setText("Model Name");	
-	    final Text modelName = new Text(composite, SWT.BORDER);
+			new Label (composite, SWT.NONE).setText("Dataset ID (must be a unique name)");	
+	    datasetIdText = new Text(composite, SWT.BORDER);
 	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-	    modelName.setLayoutData(gridData);
+	    datasetIdText.setLayoutData(gridData);
 			
 	    /*
 	    Button testConnection = new Button(composite, SWT.PUSH);
@@ -118,17 +112,17 @@ public class DatasetWizard extends Wizard {
 	    
 	    //add data binding
 	    // Initiating the realm once sets the default session Realm
-	    if( Realm.getDefault() == null ) {
-	      SWTObservables.getRealm( Display.getCurrent() );
-	    }
-	    Realm realm = Realm.getDefault();
-	    
-	    DataBindingContext bindingContext = new DataBindingContext();
-	    
-	    //TODO change BeansObservables to PojoObservables, when available:  http://fire-change-event.blogspot.com/2007/10/getting-rid-of-those-pesky-could-not.html
-	    IObservableValue modelNameObserveWidget = SWTObservables.observeText(modelName, SWT.FocusOut);
-			IObservableValue modelNameObserveValue = BeansObservables.observeValue(realm, dataset, "modelName");
-			bindingContext.bindValue(modelNameObserveWidget, modelNameObserveValue, null, null);
+//	    if( Realm.getDefault() == null ) {
+//	      SWTObservables.getRealm( Display.getCurrent() );
+//	    }
+//	    Realm realm = Realm.getDefault();
+//	    
+//	    DataBindingContext bindingContext = new DataBindingContext();
+//	    
+//	    //TODO change BeansObservables to PojoObservables, when available:  http://fire-change-event.blogspot.com/2007/10/getting-rid-of-those-pesky-could-not.html
+//	    IObservableValue modelNameObserveWidget = SWTObservables.observeText(datasetIdText, SWT.FocusOut);
+//			IObservableValue modelNameObserveValue = BeansObservables.observeValue(realm, dataset, "id");
+//			bindingContext.bindValue(modelNameObserveWidget, modelNameObserveValue, null, null);
 	    
 	    setControl(composite);
 
@@ -139,7 +133,7 @@ public class DatasetWizard extends Wizard {
 	public DatasetWizard(int mode, Dataset startingModel, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
-		this.startingModel = startingModel;
+		this.startingDataset = startingModel;
 		this.connection = databasePart.getConnection();
 		resetModel();
 	}
@@ -169,7 +163,11 @@ public class DatasetWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
-
+		dataset.setId(datasetIdText.getText());
+		if (dataset.getId() == null || dataset.getId().length() == 0) {
+			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Dataset ID", "");
+			return false;
+		}
 		if (databasePart.hasModelNamed(dataset.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
 					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
@@ -200,10 +198,10 @@ public class DatasetWizard extends Wizard {
 	
 	public final void resetModel() {
 		if (mode == DatasetWizardAction.MODE_EDIT) {
-			dataset = startingModel.createReplica();
+			dataset = startingDataset.createReplica();
 		//} else if (mode == DatasetWizardAction.MODE_CLONE) {
 		} else {
-			dataset = startingModel.createClone();
+			dataset = startingDataset.createClone();
 //		} else {
 //			dataset = new Dataset();
 //			dataset.setConnection(this.connection);
