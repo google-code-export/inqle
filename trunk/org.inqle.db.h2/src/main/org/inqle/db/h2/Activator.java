@@ -1,6 +1,5 @@
 package org.inqle.db.h2;
 
-import java.io.File;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
@@ -25,7 +24,8 @@ public class Activator extends Plugin {
 	// The shared instance
 	private static Activator plugin;
 
-	private Server server;
+	private Server dbServer;
+	private Server webServer;
 	
 	/**
 	 * The constructor
@@ -42,10 +42,18 @@ public class Activator extends Plugin {
 		plugin = this;
 		
 		//log.info("H2 database options");
-		// start the H2 Database server's TCP Server
-		String[] args = { "-trace", "-tcp", "-web", "-pg", "-baseDir", getH2Directory() };
-		server = Server.createTcpServer(args).start();
-		log.info("Started H2 Database Server using these args:" + Arrays.asList(args));
+		// start the H2 Database dbServer's TCP Server
+		String[] args = { "-trace", "-tcp", "-web", "-pg", "-browser", "-baseDir " + getH2Directory() };
+		
+		dbServer = Server.createTcpServer(args).start();
+		log.info("Started H2 DB Server using these args:" + Arrays.asList(args));
+		log.info("H2 DBServer is running? " + dbServer.isRunning(true));
+		log.info("H2 DBServer running at " + dbServer.getURL());
+		
+		webServer = Server.createWebServer(args).start();
+		log.info("Started H2 Web Server using these args:" + Arrays.asList(args));
+		log.info("H2 Web Server is running? " + webServer.isRunning(true));
+		log.info("H2 Web Server running at " + webServer.getURL());
 	}
 
 	private String getH2Directory() {
@@ -63,8 +71,10 @@ public class Activator extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+		webServer.stop();
+		log.info("Stopped H2 Web Server.");
 		
-		server.stop();
+		dbServer.stop();
 		log.info("Stopped H2 Database Server.");
 	}
 
