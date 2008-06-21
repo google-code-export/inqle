@@ -34,11 +34,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		private static final String NAME = "name";
 		private static final String ID = "id";
 		private static final String ICON = "icon";
+		private static final String H2_ADMIN_URL = "http://localhost:8082";
+		private static final String H2_ADMIN_TEXT = "Administer Embedded H2 Server";
+		private static final String PLUGIN_ID = "org.inqle.ui.rap";
+		private static final String H2_ADMIN_ICON_PATH = "icons/h2.jpeg";
 		// Actions - important to allocate these only in makeActions, and then use them
     // in the fill methods.  This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
     private IWorkbenchAction exitAction;
     private IAction aboutAction;
+    private IAction h2AdminAction;
     //private OpenViewAction openViewAction;
     //private Action messagePopupAction;
 		private List<OpenViewAction> openViewActions = new ArrayList<OpenViewAction>();
@@ -60,6 +65,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         
         aboutAction = new AboutAction(window);
         register(aboutAction);
+        
+        h2AdminAction = new NewBrowserAction(window, H2_ADMIN_URL, H2_ADMIN_TEXT, PLUGIN_ID, H2_ADMIN_ICON_PATH);
+        register(h2AdminAction);
         
         //Create a new OpenViewAction for each view plugin
         List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(VIEWS);
@@ -85,11 +93,13 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
         MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
         MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
+        MenuManager toolsMenu = new MenuManager("&Tools", IWorkbenchActionConstants.M_LAUNCH);
         
         menuBar.add(fileMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(windowMenu);
+        menuBar.add(toolsMenu);
         menuBar.add(helpMenu);
         
         // File
@@ -102,6 +112,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         for(OpenViewAction openViewAction: openViewActions) {
         	windowMenu.add(openViewAction);
         }
+        
+        //Tools
+        toolsMenu.add(h2AdminAction);
         
         // Help
         helpMenu.add(aboutAction);
