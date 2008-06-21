@@ -27,15 +27,27 @@ public class EmbeddedDBPage extends WizardPage {
 	}
 
 	public void createControl(Composite parent) {
+		GridData gridData;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout (new GridLayout(2, false));
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-		new Label(composite, SWT.BORDER).setText("Database Name");
-		dbNameText =  new Text(composite, SWT.NONE);
-		new Label(composite, SWT.BORDER).setText("Database Login");
-		dbLoginText =  new Text(composite, SWT.NONE);
-		new Label(composite, SWT.BORDER).setText("Database Password");
-		dbPasswordText =  new Text(composite, SWT.NONE);
+		
+		new Label(composite, SWT.NONE).setText("Database Name");
+		dbNameText =  new Text(composite, SWT.BORDER);
+		dbNameText.setToolTipText("The database name may only contain letters, numerals, and underscores _");
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		dbNameText.setLayoutData(gridData);
+		
+		new Label(composite, SWT.NONE).setText("Database Login");
+		dbLoginText =  new Text(composite, SWT.BORDER);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		dbLoginText.setLayoutData(gridData);
+		
+		new Label(composite, SWT.NONE).setText("Database Password");
+		dbPasswordText =  new Text(composite, SWT.BORDER | SWT.PASSWORD);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		dbPasswordText.setLayoutData(gridData);
+		
 		setControl(composite);
 	}
 	

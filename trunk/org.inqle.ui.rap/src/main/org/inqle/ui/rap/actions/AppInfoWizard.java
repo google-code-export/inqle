@@ -49,6 +49,8 @@ public class AppInfoWizard extends Wizard {
 	private ConnectionPage metarepositoryPage;
 
 	private EmbeddedDBPage embeddedDBPage;
+
+	private SingleTextPage metarepositoryModelInfoPage;
 	public AppInfoWizard(Shell parentShell) {
 		this.shell = parentShell;
 	}
@@ -91,7 +93,7 @@ public class AppInfoWizard extends Wizard {
 		);
 		addPage(metarepositoryPage);
 		
-		SingleTextPage metarepositoryModelInfoPage = new SingleTextPage(
+		metarepositoryModelInfoPage = new SingleTextPage(
 				metarepositoryDataset, 
 				"id", 
 				"Enter a unique name for your Metarepository Model, e.g. com.my.domain.metarepositoryModel", 
@@ -110,6 +112,10 @@ public class AppInfoWizard extends Wizard {
 			} else {
 				return metarepositoryPage;
 			}
+		}
+		
+		if (page == embeddedDBPage || page == metarepositoryPage) {
+			return metarepositoryModelInfoPage;
 		}
 		return super.getNextPage(page);
 	}
