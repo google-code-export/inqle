@@ -136,7 +136,9 @@ public class SimpleSparqlSampler extends ASparqlSampler {
 	 */
 	@Override
 	public String generateSparql(List<DataColumn> dataColumns) {
-		assert(dataColumns != null & dataColumns.size() > 0);
+		if(dataColumns == null || dataColumns.size() == 0) {
+			return null;
+		}
 		//construct SPARQL: The first column is the subject
 		//String sparql = "SELECT $" + dataColumns.get(0).getQueryLabel();
 		String subjectLabel = dataColumns.get(0).getQueryLabel();
