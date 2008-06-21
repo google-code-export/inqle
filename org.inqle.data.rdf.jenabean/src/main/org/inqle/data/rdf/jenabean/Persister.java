@@ -371,7 +371,7 @@ public class Persister {
 			}
 			DBConnector connector = new DBConnector(dbConnectionInfo);
 //			ontModel = connector.getOntModel(namedModel.getModelName());
-			ontModel = connector.getOntModel(namedModel.getId());
+			ontModel = connector.getMemoryOntModel(namedModel.getId());
 			
 			/*if null, create a new model
 			if (model == null) {
@@ -434,7 +434,7 @@ public class Persister {
 		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
 
 		//this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getModelName());
-		this.metarepositoryModel = connector.getOntModel(metarepositoryRDBModel.getId());
+		this.metarepositoryModel = connector.getMemoryOntModel(metarepositoryRDBModel.getId());
 		return this.metarepositoryModel;
 	}
 	
@@ -764,10 +764,10 @@ public class Persister {
 	 * @return the OntModel
 	 * @deprecated use getModel(String namedModelId) instead
 	 */
-	public OntModel getModel(String namedModelId, Class<?> clazz) {
-		NamedModel namedModel = (NamedModel)reconstitute(clazz, namedModelId, getMetarepositoryModel(), true);
-		return getOntModel(namedModel);
-	}
+//	public OntModel getModel(String namedModelId, Class<?> clazz) {
+//		NamedModel namedModel = (NamedModel)reconstitute(clazz, namedModelId, getMetarepositoryModel(), true);
+//		return getOntModel(namedModel);
+//	}
 
 }
 

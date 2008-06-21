@@ -3,10 +3,12 @@ package org.inqle.data.rdf.jena.sdb;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.db.DBConnection;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -19,7 +21,6 @@ import com.hp.hpl.jena.sdb.SDBFactory;
 import com.hp.hpl.jena.sdb.Store;
 import com.hp.hpl.jena.sdb.StoreDesc;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 
 /**
@@ -67,16 +68,20 @@ public class DBConnector {
 		initConnection();
 	}
 	
-	public List<String> getModelNames() {
-		initConnection();
-		DBConnection jenaConnection = getJenaConnection();
-		ExtendedIterator modelNamesI = jenaConnection.getAllModelNames();
-		List<String> modelNames = new ArrayList<String>();
-		while (modelNamesI.hasNext()) {
-			String modelName = String.valueOf(modelNamesI.next());
-			modelNames.add(modelName);
+	/**
+	 * When SDB supports something like this
+	 * getStore().getConnection().getTableNames()
+	 * then switch to that.  For now, reconstitute the objects via Jenabean & Persister
+	 * @return
+	 */
+	public List<org.inqle.data.rdf.jena.Dataset> getDatasets() {
+		Persister persister = Persister.getInstance();
+		Collection<?> datasetObjects = persister.reconstituteAll(Dataset.class);
+		List<org.inqle.data.rdf.jena.Dataset> datasets = new ArrayList<org.inqle.data.rdf.jena.Dataset>();
+		for (Object datasetObject: datasetObjects) {
+			datasets.add((org.inqle.data.rdf.jena.Dataset)datasetObject);
 		}
-		return modelNames;
+		return datasets;
 	}
 	
 	/**
@@ -173,7 +178,8 @@ public class DBConnector {
 	}
 
 	/**
-   * Get a java.sql.Connection object, for Jena SDB queries (and anything else that might need JDBC connection).  
+   * Get a java.sql.Connection object, for Jena queries.
+   * This might not be supported by SDB
    * 
    * @return a java.sql.Connection to the database
    * @throws SQLException 
@@ -279,13 +285,13 @@ public class DBConnector {
 		return maker;
 	}
 	
-	public OntModel getOntModel(String modelName) {
+	public OntModel getMemoryOntModel(String modelName) {
 		Model baseModel = getModel(modelName);
 		
-		OntModelSpec modelSpec = new OntModelSpec( OntModelSpec.OWL_MEM );
-		modelSpec.setImportModelMaker( getModelMaker() );
+		OntModelSpec modelSpec = new OntModelSpec(OntModelSpec.OWL_MEM);
+		modelSpec.setImportModelMaker(getModelMaker());
     
-		OntModel ontModel = ModelFactory.createOntologyModel(modelSpec, baseModel );
+		OntModel ontModel = ModelFactory.createOntologyModel(modelSpec, baseModel);
 		return ontModel;
 	}
 }
