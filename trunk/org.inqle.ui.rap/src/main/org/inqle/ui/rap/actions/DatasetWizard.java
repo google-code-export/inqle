@@ -168,7 +168,11 @@ public class DatasetWizard extends Wizard {
 			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Dataset ID", "");
 			return false;
 		}
-		if (databasePart.hasModelNamed(dataset.getId())) {
+		
+		Persister persister = Persister.getInstance();
+		
+		//if (databasePart.hasModelNamed(dataset.getId())) {
+		if (persister.datasetExists(dataset.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
 					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
 			return false;
@@ -181,7 +185,7 @@ public class DatasetWizard extends Wizard {
 					"Unable to connect to this database.  Cannot create new dataset in this database.");
 			return true;
 		}
-		Persister persister = Persister.getInstance();
+
 		persister.persist(dataset, persister.getMetarepositoryModel()); 
 		log.info("Saved dataset Dataset=" + JenabeanWriter.toString(dataset));
 		if (this.mode == DatasetWizardAction.MODE_NEW || this.mode == DatasetWizardAction.MODE_CLONE) {
