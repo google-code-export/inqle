@@ -52,7 +52,7 @@ public class Persister {
 	public static final Class<?>[] MODEL_CLASSES = {Dataset.class, Datafile.class};
 	private AppInfo appInfo = null;
 	private OntModel metarepositoryModel = null;
-	private OntModel logModel = null;
+	//private OntModel logModel = null;
 	private static Logger log = Logger.getLogger(Persister.class);
 	public static int persisterId = 0;
 	
@@ -389,6 +389,21 @@ public class Persister {
 		}
 		
 		return ontModel;
+	}
+	
+	/**
+	 * Does this server already have a dataset of the provided ID?
+	 * @param datasetId
+	 * @return
+	 */
+	public boolean datasetExists(String datasetId) {
+		boolean hasDatasetId = false;
+		Object existingDataset = reconstitute(Dataset.class, datasetId, getMetarepositoryModel(), false);
+		if (existingDataset != null) {
+			hasDatasetId = true;
+		}
+		
+		return hasDatasetId;
 	}
 	
 	/* *********************************************************************
