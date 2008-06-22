@@ -19,7 +19,7 @@ public class AppInfo extends UniqueJenabean {
 	
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
-	//private String serverBaseUri;
+	private String serverId;
 	private String serverBaseUrl;
 	private Dataset metarepositoryDataset;
 	private Connection metarepositoryConnection;
@@ -29,15 +29,13 @@ public class AppInfo extends UniqueJenabean {
 		return APPINFO_INSTANCE_ID;
 	}
 	
-	/*
-	public String getServerBaseUri() {
-		return this.serverBaseUri;
+	public String getServerId() {
+		return serverId;
 	}
 	
-	public void setServerBaseUri(String serverBaseUri) {
-		this.serverBaseUri = serverBaseUri;
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
 	}
-	*/
 	
 	public String getServerBaseUrl() {
 		return this.serverBaseUrl;
