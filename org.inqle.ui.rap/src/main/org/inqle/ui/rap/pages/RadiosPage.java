@@ -17,8 +17,9 @@ public class RadiosPage extends WizardPage {
 	private List<Button> buttons = new ArrayList<Button>();
 	private List<String> radioOptionTexts = new ArrayList<String>();
 	
-	public RadiosPage(String pageName) {
+	public RadiosPage(String pageName, String pageDescription) {
 		this(pageName, pageName, null);
+		setMessage(pageDescription);
 	}
 	
 	public RadiosPage(String pageName, String title, ImageDescriptor titleImage) {
