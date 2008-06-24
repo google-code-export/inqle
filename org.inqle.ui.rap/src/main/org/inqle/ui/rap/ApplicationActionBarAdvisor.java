@@ -66,7 +66,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         aboutAction = new AboutAction(window);
         register(aboutAction);
         
-        h2AdminAction = new NewBrowserAction(window, H2_ADMIN_URL, H2_ADMIN_TEXT, PLUGIN_ID, H2_ADMIN_ICON_PATH);
+        h2AdminAction = new NewBrowserAction(H2_ADMIN_URL, H2_ADMIN_TEXT, PLUGIN_ID, H2_ADMIN_ICON_PATH);
         register(h2AdminAction);
         
         //Create a new OpenViewAction for each view plugin
