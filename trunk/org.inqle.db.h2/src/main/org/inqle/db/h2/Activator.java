@@ -41,17 +41,18 @@ public class Activator extends Plugin {
 		super.start(context);
 		plugin = this;
 		
-		//log.info("H2 database options");
-		// start the H2 Database dbServer's TCP Server
-		String[] args = { "-trace", "-tcp", "-web", "-pg", "-browser", "-baseDir " + getH2Directory() };
-		
+		//TODO baseDir does not work for embedded H2 database
+		//see http://groups.google.com/group/h2-database/browse_thread/thread/78552045ac8561c4/6ade572579782c4c?lnk=gst&q=baseDir#6ade572579782c4c
+		String[] args = {"-baseDir", getH2Directory()};
 		dbServer = Server.createTcpServer(args).start();
+		
 		log.info("Started H2 DB Server using these args:" + Arrays.asList(args));
 		log.info("H2 DBServer is running? " + dbServer.isRunning(true));
 		log.info("H2 DBServer running at " + dbServer.getURL());
 		
-		webServer = Server.createWebServer(args).start();
-		log.info("Started H2 Web Server using these args:" + Arrays.asList(args));
+		String[] args2 = {"-web"};
+		webServer = Server.createWebServer(args2).start();
+		log.info("Started H2 Web Server using these args:" + Arrays.asList(args2));
 		log.info("H2 Web Server is running? " + webServer.isRunning(true));
 		log.info("H2 Web Server running at " + webServer.getURL());
 	}
@@ -59,7 +60,8 @@ public class Activator extends Plugin {
 	private String getH2Directory() {
 		//String h2Directory = InqleInfo.getAssetsDirectory() + H2_FOLDER;
 		//TODO move setting system property inqle.home into inqle.core and ensure it is started early
-		String h2Directory = Platform.getInstallLocation().getURL().getPath() + InqleInfo.ASSETS_FOLDER + "/" + H2_FOLDER + "/";
+		//String h2Directory = Platform.getInstallLocation().getURL().getPath() + InqleInfo.ASSETS_FOLDER + "/" + H2_FOLDER + "/";
+		String h2Directory = InqleInfo.ASSETS_FOLDER + "/" + H2_FOLDER;
 		log.info("H2 Directory = " + h2Directory);
 		return h2Directory;
 	}
