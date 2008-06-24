@@ -47,7 +47,7 @@ public class EmbeddedDBPage extends WizardPage {
 		
 		new Label(composite, SWT.NONE).setText("Database Password");
 		dbPasswordText =  new Text(composite, SWT.BORDER | SWT.PASSWORD);
-		dbLoginText.setToolTipText("This is the password which INQLE will use to connect to the embedded database.  If you later wish to administer this H2 database, you must remember this password.");
+		dbPasswordText.setToolTipText("This is the password which INQLE will use to connect to the embedded database.  If you later wish to administer this H2 database, you must remember this password.");
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		dbPasswordText.setLayoutData(gridData);
 		

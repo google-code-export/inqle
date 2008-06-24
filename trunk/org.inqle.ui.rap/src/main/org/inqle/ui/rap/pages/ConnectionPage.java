@@ -36,6 +36,11 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 		private Shell shell;
 		private String pageTitle;
+		private Text dbType;
+		private Text dbURL;
+		private Text dbClass;
+		private Text dbUser;
+		private Text dbPassword;
 		
 		private static final String[] DBTYPES = {
 			"Derby", 
@@ -121,27 +126,27 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 			*/
 			
 			new Label (composite, SWT.NONE).setText("Database Type");	
-	    final Text dbType = new Text(composite, SWT.BORDER);
+	    dbType = new Text(composite, SWT.BORDER);
 	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	    dbType.setLayoutData(gridData);
 			
 	    new Label (composite, SWT.NONE).setText("Database URL");	
-	    final Text dbURL = new Text(composite, SWT.BORDER);
+	    dbURL = new Text(composite, SWT.BORDER);
 	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	    dbURL.setLayoutData(gridData);
 	    
 	    new Label (composite, SWT.NONE).setText("Database Driver");	
-	    final Text dbClass = new Text(composite, SWT.BORDER);
+	    dbClass = new Text(composite, SWT.BORDER);
 	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	    dbClass.setLayoutData(gridData);
 			
 	    new Label (composite, SWT.NONE).setText("Database Username");	
-	    Text dbUser = new Text(composite, SWT.BORDER);
+	    dbUser = new Text(composite, SWT.BORDER);
 	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			dbUser.setLayoutData(gridData);
 			
 	    new Label (composite, SWT.NONE).setText("Database Password");
-	    Text dbPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
+	    dbPassword = new Text(composite, SWT.BORDER | SWT.PASSWORD);
 	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 	    dbPassword.setLayoutData(gridData);
 	    
@@ -224,6 +229,31 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 			} else {
 				MessageDialog.openInformation(shell, title, message);
 			}
+		}
+
+		public String getDbType() {
+			if (dbType==null) return null;
+			return dbType.getText();
+		}
+		
+		public String getDbURL() {
+			if (dbURL==null) return null;
+			return dbURL.getText();
+		}
+		
+		public String getDbClass() {
+			if (dbClass==null) return null;
+			return dbClass.getText();
+		}
+		
+		public String getDbUser() {
+			if (dbUser==null) return null;
+			return dbUser.getText();
+		}
+		
+		public String getDbPassword() {
+			if (dbPassword==null) return null;
+			return dbPassword.getText();
 		}
 		
 	}

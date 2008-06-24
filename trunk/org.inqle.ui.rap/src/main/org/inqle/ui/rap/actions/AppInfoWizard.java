@@ -15,6 +15,7 @@ import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.EmbeddedDBPage;
 import org.inqle.ui.rap.pages.RadiosPage;
@@ -70,7 +71,7 @@ public class AppInfoWizard extends Wizard {
 //		addPage(siteUrlPage);
 		//Persister persister = Persister.getInstance();
 		
-		embeddedOrExternalMetarepositoryDBPage = new RadiosPage("Type of Database for Internal Database", "Select whether to use an embedded database to use for the internal database.");
+		embeddedOrExternalMetarepositoryDBPage = new RadiosPage("We will create the internal database used by your INQLE server.", "Select whether to use an embedded database to use for the internal database.");
 		embeddedOrExternalMetarepositoryDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
 		addPage(embeddedOrExternalMetarepositoryDBPage);
 		log.info("added embeddedOrExternalMetarepositoryDBPage");
@@ -101,19 +102,19 @@ public class AppInfoWizard extends Wizard {
 		metarepositoryDatasetPage = new SingleTextPage(
 				metarepositoryDataset, 
 				"id", 
-				"Enter a unique name for your Metarepository Model, e.g. com.my.domain.metarepositoryModel", 
+				"Enter a name for your Metarepository Model.", 
 				null
 		);
 		addPage(metarepositoryDatasetPage);
 		log.info("added metarepositoryDatasetPage");
 		
 		//add form elements for the first dataset
-		embeddedOrExternalFirstDataDBPage = new RadiosPage("Type of Database for Internal Database", "Select whether to use an embedded database to use for the internal database.");
+		embeddedOrExternalFirstDataDBPage = new RadiosPage("Next, we will create a database for storing your data.", "Select whether to use an embedded database, in which to store your data.");
 		embeddedOrExternalFirstDataDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
 		addPage(embeddedOrExternalFirstDataDBPage);
 		log.info("added embeddedOrExternalFirstDataDBPage");
 		
-		embeddedFirstDataDBPage = new EmbeddedDBPage("Internal INQLE Database", "Specify connection info for the embedded H2 database, which will contain internal INQLE information.");
+		embeddedFirstDataDBPage = new EmbeddedDBPage("Database for storing your data", "Specify connection info for the embedded database, in which to store your data.");
 		addPage(embeddedFirstDataDBPage);
 		log.info("added embeddedFirstDataDBPage");
 		
@@ -155,8 +156,61 @@ public class AppInfoWizard extends Wizard {
 		if (page == embeddedMetarepositoryDBPage || page == metarepositoryConnectionPage) {
 			return metarepositoryDatasetPage;
 		}
+
+		if (page == embeddedOrExternalFirstDataDBPage) {
+			if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
+				return embeddedFirstDataDBPage;
+			} else {
+				return firstDataConnectionPage;
+			}
+		}
+		
+		if (page == embeddedFirstDataDBPage || page == firstDataConnectionPage) {
+			return firstDataDatasetPage;
+		}
 		return super.getNextPage(page);
 	}
+
+	@Override
+	public boolean canFinish() {
+		//getContainer().getCurrentPage().getControl().forceFocus();
+		//TODO test that prefix & subjectclass are URIs
+		try {
+			//First data dataset forms
+			if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
+				//embedded database:
+				if (embeddedFirstDataDBPage.getDbName().length()==0) return false;
+				if (embeddedFirstDataDBPage.getDbLogin().length()==0) return false;
+				if (embeddedFirstDataDBPage.getDbPassword().length()==0) return false;
+			} else {
+				//external database:
+				if (firstDataConnectionPage.getDbType().length()==0) return false;
+				if (firstDataConnectionPage.getDbURL().length()==0) return false;
+				if (firstDataConnectionPage.getDbClass().length()==0) return false;
+			}
+			
+			//Metarepository forms
+			if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
+				//embedded database:
+				if (embeddedMetarepositoryDBPage.getDbName().length()==0) return false;
+				if (embeddedMetarepositoryDBPage.getDbLogin().length()==0) return false;
+				if (embeddedMetarepositoryDBPage.getDbPassword().length()==0) return false;
+			} else {
+				//external database:
+				if (metarepositoryConnectionPage.getDbType().length()==0) return false;
+				if (metarepositoryConnectionPage.getDbURL().length()==0) return false;
+				if (metarepositoryConnectionPage.getDbClass().length()==0) return false;
+			}
+			
+			
+		} catch (Exception e) {
+			log.error("Error validating setup wizard", e);
+			return false;
+		}
+		return true;
+	}
+	
+	
 	
 	@Override
 	public boolean performFinish() {
@@ -187,11 +241,11 @@ public class AppInfoWizard extends Wizard {
 		
 		//next create the first data dataset
 		if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-			firstDataConnection.setDbURL(H2_DB_URL_BASE + embeddedMetarepositoryDBPage.getDbName());
+			firstDataConnection.setDbURL(H2_DB_URL_BASE + embeddedFirstDataDBPage.getDbName());
 			firstDataConnection.setDbClass(H2_DB_CLASS);
 			firstDataConnection.setDbType(H2_DB_TYPE);
-			firstDataConnection.setDbUser(embeddedMetarepositoryDBPage.getDbLogin());
-			firstDataConnection.setDbPassword(embeddedMetarepositoryDBPage.getDbPassword());
+			firstDataConnection.setDbUser(embeddedFirstDataDBPage.getDbLogin());
+			firstDataConnection.setDbPassword(embeddedFirstDataDBPage.getDbPassword());
 		}
 		firstDataDataset.setConnectionId(firstDataConnection.getId());
 		
