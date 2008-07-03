@@ -31,7 +31,7 @@ public class DeleteModelAction extends Action {
 		this.window = window;
 		this.menuText = menuText;
 		this.modelPart = modelPart;
-		this.namedModelToDelete  = modelPart.getRdbModel();
+		this.namedModelToDelete  = modelPart.getDataset();
 		//this.persister = persister;
 	}
 	

@@ -48,7 +48,7 @@ public class LoadCsvFileAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		try {
-			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getRdbModel());
+			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getDataset());
 			LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelToImportInto, window.getShell());
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();

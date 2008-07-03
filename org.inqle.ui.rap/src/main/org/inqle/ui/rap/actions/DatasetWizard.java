@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -41,8 +42,8 @@ public class DatasetWizard extends Wizard {
 	Composite parent;
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
-	private Dataset startingDataset;
-	private Dataset dataset;
+	private ExternalDataset startingDataset;
+	private ExternalDataset dataset;
 	private Text datasetIdText;
 	
 	/**
@@ -130,10 +131,10 @@ public class DatasetWizard extends Wizard {
 
 	}
 	
-	public DatasetWizard(int mode, Dataset startingModel, DatabasePart databasePart) {
+	public DatasetWizard(int mode, ExternalDataset startingDataset, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
-		this.startingDataset = startingModel;
+		this.startingDataset = startingDataset;
 		this.connection = databasePart.getConnection();
 		resetModel();
 	}

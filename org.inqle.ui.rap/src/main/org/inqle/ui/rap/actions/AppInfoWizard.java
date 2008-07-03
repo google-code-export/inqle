@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -82,13 +83,14 @@ public class AppInfoWizard extends Wizard {
 		
 		metarepositoryDataset = (Dataset)appInfo.getMetarepositoryDataset();
 		if (metarepositoryDataset == null) {
-			metarepositoryDataset = new Dataset();
+			metarepositoryDataset = new InternalDataset();
 			//metarepositoryDataset.setModelName("Metarepository");
 			metarepositoryDataset.setId("Metarepository");
 		}
-		metarepositoryConnection = appInfo.getMetarepositoryConnection();
+		metarepositoryConnection = appInfo.getDefaultInternalConnection();
 		if (metarepositoryConnection == null) {
 			metarepositoryConnection = new Connection();
+			metarepositoryConnection.setRandomId();
 			metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
 		}
 //		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
@@ -118,10 +120,11 @@ public class AppInfoWizard extends Wizard {
 		addPage(embeddedFirstDataDBPage);
 		log.info("added embeddedFirstDataDBPage");
 		
-		firstDataDataset = new Dataset();
+		firstDataDataset = new InternalDataset();
 		firstDataDataset.setId("FirstDataset");
 		
 		firstDataConnection = new Connection();
+		firstDataConnection.setRandomId();
 		firstDataDataset.setConnectionId(firstDataConnection.getId());
 		
 //		Connection firstDataConnection = firstDataRdbModel.getConnection();
@@ -226,7 +229,7 @@ public class AppInfoWizard extends Wizard {
 		}
 		metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
 		appInfo.setMetarepositoryDataset(metarepositoryDataset);
-		appInfo.setMetarepositoryConnection(metarepositoryConnection);
+		appInfo.setDefaultInternalConnection(metarepositoryConnection);
 		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);

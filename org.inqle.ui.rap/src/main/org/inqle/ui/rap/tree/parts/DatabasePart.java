@@ -9,9 +9,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
@@ -19,10 +18,6 @@ import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatabaseWizardAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
 import org.inqle.ui.rap.actions.DeleteDatabaseAction;
-
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class DatabasePart extends PartType {
 	
@@ -104,9 +99,9 @@ public class DatabasePart extends PartType {
 		//for (QuerySolution row: resultTable.getResultList()) {
 //			Literal modelId = row.getLiteral("modelId");
 		for (String datasetId: datasetIds) {
-			Dataset rdbModel = (Dataset)Persister.reconstitute(Dataset.class, datasetId, persister.getMetarepositoryModel(), false);
-			rdbModel.setConnectionId(this.connection.getId());
-			ModelPart modelPart = new ModelPart(rdbModel);
+			ExternalDataset dataset = (ExternalDataset)Persister.reconstitute(ExternalDataset.class, datasetId, persister.getMetarepositoryModel(), false);
+			dataset.setConnectionId(this.connection.getId());
+			ModelPart modelPart = new ModelPart(dataset);
 			modelPart.setParent(this);
 			//modelPart.setPersister(this.persister);
 			modelParts.add(modelPart);
@@ -137,8 +132,8 @@ public class DatabasePart extends PartType {
 		manager.add(deleteDatabaseAction);
 	}
 
-	private Dataset getNewDataset() {
-		Dataset newDataset = new Dataset();
+	private ExternalDataset getNewDataset() {
+		ExternalDataset newDataset = new ExternalDataset();
 		newDataset.setConnectionId(this.getConnection().getId());
 		return newDataset.createClone();
 	}
