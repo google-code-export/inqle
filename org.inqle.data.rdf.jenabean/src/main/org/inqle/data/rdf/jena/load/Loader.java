@@ -1,5 +1,6 @@
 package org.inqle.data.rdf.jena.load;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,9 +12,13 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public class Loader {
 
+	public static final String LANG_RDF_XML = "RDF/XML";
+	public static final String LANG_N_TRIPLE = "N-TRIPLE";
+	public static final String LANG_N3 = "N3";
+
 	/** types of RDF file formats to try to import */
   private static final String[] langs = {
-  	"RDF/XML", "N-TRIPLE", "N3"
+  	LANG_RDF_XML, LANG_N_TRIPLE, LANG_N3
   };
   
 	public static Logger log = Logger.getLogger(Loader.class);
@@ -26,6 +31,12 @@ public class Loader {
 
 	public Loader(Model model) {
 		this.model = model;
+	}
+	
+	public boolean loadString(String string, String defaultUri, String lang) {
+		byte bytes[] = string.getBytes();
+		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+		return loadStream(byteArrayInputStream, defaultUri, lang);
 	}
 	
 	public void loadFile(String filePath, String defaultUri) {
@@ -55,18 +66,28 @@ public class Loader {
       //boolean successReadingCurrentURL = false;
       
 	    for (int i=0; i<langs.length; i++) {
-	    	try {
-	    		log.info("Trying to read file '" + file.getPath() + "' using " + langs[i] + " format...");
-	    		//Read the triples from the file into the model
-	    		model = model.read(in, defaultUri, langs[i]);
-	    		overallSuccessLoading = true;
+	    	
+	    	overallSuccessLoading = loadStream(in, defaultUri, langs[i]);
+	    	if (overallSuccessLoading) {
 	    		break;
-	    	} catch (Exception e) {
-	    		log.info("Unable to read file '" + file.getPath() + "' using " + langs[i] + " format.");
-	    		//refresh inputstream
+	    	} else {
+	    		//refresh the input stream
 	    		in = new FileInputStream(file);
 	    	}
+	    	
+//	    	try {
+//	    		log.info("Trying to read file '" + file.getPath() + "' using " + langs[i] + " format...");
+//	    		//Read the triples from the file into the model
+//	    		model = model.read(in, defaultUri, langs[i]);
+//	    		overallSuccessLoading = true;
+//	    		break;
+//	    	} catch (Exception e) {
+//	    		log.info("Unable to read file '" + file.getPath() + "' using " + langs[i] + " format.");
+//	    		//refresh inputstream
+//	    		in = new FileInputStream(file);
+//	    	}
       }
+	    
       if (!overallSuccessLoading) {
       	log.error("FAILED to load file '" + file.getPath() + "'");
       } else {
@@ -87,6 +108,19 @@ public class Loader {
 //      }
     }
     return overallSuccessLoading;
+	}
+	
+	public boolean loadStream(InputStream in, String defaultUri, String lang) {
+		boolean success = false;
+		try {
+  		log.info("Trying to read input stream using " + lang + " format...");
+  		//Read the triples from the input stream into the model
+  		model = model.read(in, defaultUri, lang);
+  		success = true;
+  	} catch (Exception e) {
+  		log.info("Unable to read stream using " + lang + " format.");
+  	}
+  	return success;
 	}
 
 	private void setError(Exception exception) {

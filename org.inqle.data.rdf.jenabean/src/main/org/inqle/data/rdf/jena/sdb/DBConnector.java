@@ -72,9 +72,10 @@ public class DBConnector {
 	 * When SDB supports something like this
 	 * getStore().getConnection().getTableNames()
 	 * then switch to that.  For now, reconstitute the objects via Jenabean & Persister
+	 * Yes, this is a circular reference between Persister and DBConnector
 	 * @return
 	 */
-	public List<org.inqle.data.rdf.jena.Dataset> getDatasets() {
+	public List<org.inqle.data.rdf.jena.Dataset> getExternalDatasets() {
 		Persister persister = Persister.getInstance();
 		Collection<?> datasetObjects = persister.reconstituteAll(Dataset.class);
 		List<org.inqle.data.rdf.jena.Dataset> datasets = new ArrayList<org.inqle.data.rdf.jena.Dataset>();

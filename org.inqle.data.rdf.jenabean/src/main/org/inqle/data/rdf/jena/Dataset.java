@@ -5,7 +5,7 @@ import org.inqle.data.rdf.RDF;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
-public class Dataset extends NamedModel {
+public abstract class Dataset extends NamedModel {
 	//private Connection connection;
 	private String connectionId;
 
@@ -22,18 +22,6 @@ public class Dataset extends NamedModel {
 	public void replicate(Dataset objectToClone) {
 		clone(objectToClone);
 		setId(objectToClone.getId());
-	}
-	
-	public Dataset createClone() {
-		Dataset newObj = new Dataset();
-		newObj.clone(this);
-		return newObj;
-	}
-
-	public Dataset createReplica() {
-		Dataset newObj = new Dataset();
-		newObj.replicate(this);
-		return newObj;
 	}
 
 	public String getConnectionId() {

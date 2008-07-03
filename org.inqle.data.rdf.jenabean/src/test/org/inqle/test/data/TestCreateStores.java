@@ -12,7 +12,7 @@ import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -61,7 +61,7 @@ public class TestCreateStores {
 		//create the repository model
 		log.info("Creating Connection to metarepository of id=" + metarepositoryDataset.getConnectionId());
 		//Connection repositoryConnection = persister.getConnection(metarepositoryDataset.getConnectionId());
-		Connection repositoryConnection = appInfo.getMetarepositoryConnection();
+		Connection repositoryConnection = appInfo.getDefaultInternalConnection();
 		
 		DBConnector repositoryConnector = new DBConnector(repositoryConnection);
 		//first delete
@@ -106,7 +106,7 @@ public class TestCreateStores {
 	@Test
 	public void createTestConnection() {
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Connection metarepositoryConnection = appInfo.getMetarepositoryConnection();
+		Connection metarepositoryConnection = appInfo.getDefaultInternalConnection();
 		Persister persister = Persister.getInstance(appInfo);
 		Connection dataConnection = new Connection();
 		dataConnection.setDbClass(metarepositoryConnection.getDbClass());
@@ -140,7 +140,7 @@ public class TestCreateStores {
 		assertNotNull(testConnectionInfo3);
 		
 		log.info("create a Dataset object...");
-		Dataset testNamedModel = new Dataset();
+		ExternalDataset testNamedModel = new ExternalDataset();
 		testNamedModel.setId(TEST_DATAMODEL_ID);
 //		testNamedModel.setModelName(MODEL_NAME);
 //		testNamedModel.setConnection(testConnectionInfo);

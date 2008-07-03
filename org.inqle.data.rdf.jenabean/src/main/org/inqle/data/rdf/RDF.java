@@ -23,6 +23,9 @@ public class RDF {
 	public static final String JENABEAN_ID_ATTRIBUTE = "id";
 	public static final String UNKNOWN_SUBJECT = INQLE + "unknownSubject";
 	
+	public static final String DESCRIPTION_PREDICATE = RDFS + "detail";
+	public static final String NAME_PREDICATE = DC + "name";
+	
 	
 	/**
 	 * This method is intended to be called in cases where the URI fragment 
