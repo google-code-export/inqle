@@ -11,6 +11,7 @@ import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
+import thewebsemantic.RdfProperty;
 import thewebsemantic.TypeWrapper;
 
 /**
@@ -29,6 +30,9 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	
 	@Id
 	public String getId() {
+		if (id==null) {
+			setRandomId();
+		}
 		return id;
 	}
 	
@@ -36,14 +40,20 @@ public abstract class BasicJenabean implements IBasicJenabean {
 		this.id = id;
 	}
 	
+	public void setRandomId() {
+		setId(UUID.randomUUID().toString());
+	}
+	
 	public String getUri() {
 		return TypeWrapper.instanceURI(this);
 	}
 
+	@RdfProperty(RDF.DESCRIPTION_PREDICATE)
 	public String getDescription() {
 		return description;
 	}
 
+	@RdfProperty(RDF.NAME_PREDICATE)
 	public String getName() {
 		if (name == null) {
 			return this.getClass().getName();

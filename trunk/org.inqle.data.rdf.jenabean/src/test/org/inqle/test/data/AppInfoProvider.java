@@ -11,6 +11,7 @@ import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Bean2RDF;
@@ -48,7 +49,7 @@ public class AppInfoProvider {
 		connection.setDbPassword(DB_PASSWORD);
 		
 		//Create the repository namedmodel, to contain info about data repositories
-		Dataset repositoryModel = new Dataset();
+		InternalDataset repositoryModel = new InternalDataset();
 		repositoryModel.setId(InqleInfo.REPOSITORY_MODEL_NAME);
 		repositoryModel.setConnectionId(connection.getId());
 		
@@ -57,7 +58,7 @@ public class AppInfoProvider {
 		//appInfo.setServerBaseUri("http://inqle.org/ns/TestServerUri");
 		appInfo.setServerBaseUrl("http://inqle.org/TestServerUrl");
 		appInfo.setMetarepositoryDataset(repositoryModel);
-		appInfo.setMetarepositoryConnection(connection);
+		appInfo.setDefaultInternalConnection(connection);
 		OntModel m = ModelFactory.createOntologyModel();
 		Bean2RDF writer = new Bean2RDF(m);
 		writer.save(appInfo);

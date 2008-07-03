@@ -7,15 +7,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.extensions.util.ExtensionFactory;
+import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 
@@ -49,12 +55,18 @@ public class Persister {
 	public static final String SYSTEM_PROPERTY_TEMP_DIR = "java.io.tmpdir";
 	public static final String FILENAME_APPINFO = "assets/_private/AppInfo.ttl";
 	public static final String TEMP_DIRECTORY = "assets/temp/";
-	public static final Class<?>[] MODEL_CLASSES = {Dataset.class, Datafile.class};
+	public static final Class<?>[] MODEL_CLASSES = {ExternalDataset.class, Datafile.class};
+	private static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
+	private static final String CACHE_MODEL_ATTRIBUTE = "cacheInMemory";
+	
 	private AppInfo appInfo = null;
 	private OntModel metarepositoryModel = null;
 	//private OntModel logModel = null;
 	private static Logger log = Logger.getLogger(Persister.class);
 	public static int persisterId = 0;
+	
+	private Map<String, Model> cachedModels = null;
+	private Map<String, InternalDataset> internalDatasets = null;
 	
 	/* *********************************************************************
 	 * *** FACTORY METHODS
@@ -251,10 +263,10 @@ public class Persister {
 	}
 	
 	/**
-	 * Given the URI or ID of a NamedModel, get the Jena Model object.
+	 * Given the URI or ID of an external NamedModel, get the Jena Model object.
 	 * 
 	 * Best practice is to close() the model after use.
-	 * @param namedModelUri
+	 * @param namedModelId This could be the ID of a Dataset or a Datafile object
 	 * @return the model, or null if no model found in the metarepository
 	 */
 	public Model getModel(String namedModelId) {
@@ -267,31 +279,121 @@ public class Persister {
 	}
 	
 	/**
+	 * Given the URI or ID of a NamedModel, get the Jena Model object.
+	 * 
+	 * Best practice is to NOT close() the model after use.
+	 * @param modelRoleId the role id of the internal Dataset
+	 * @return the model, or null if no model found in the metarepository
+	 */
+	public Model getInternalModel(String modelRoleId) {
+		InternalDataset internalDataset = getInternalDatasets().get(modelRoleId);
+		
+		if (internalDataset != null) {
+			return getModel(internalDataset);
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the map of internal datasets.  If this does not exist yet (i.e. on first execution
+	 * of this method) then create it.  To create it, first load what exists in the Metarepository.
+	 * Next, get all internal dataset plugins and confirm that each plugin exists.  If it does not, create it.
+	 * @return
+	 * 
+	 * TODO include a refresh persister method, which sets internalDatasets to null and therefore will reload
+	 * this info.  This would allow new plugins to be found and their datasets to be created
+	 */
+	private Map<String, InternalDataset> getInternalDatasets() {
+		if (internalDatasets == null) {
+			internalDatasets = new HashMap<String, InternalDataset>();
+			//load all saved InternalDatasets
+			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
+			Collection<InternalDataset> savedInternalDatasets = new ArrayList<InternalDataset>();
+			savedInternalDatasets = reader.load(InternalDataset.class);
+			if (savedInternalDatasets == null || savedInternalDatasets.size()==0) {
+				log.warn("Unable to load InternalDataset objects.  Perhaps they do not yet exist.");
+			} else {
+				//add each to the internalDatasets in-memory Map
+				for (InternalDataset savedInternalDataset: savedInternalDatasets) {
+					internalDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
+				}
+			}
+			
+			//get all internal dataset extensions
+			List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
+			
+			//find or create the Dataset for each.
+			Connection defaultInternalConnection = getAppInfo().getDefaultInternalConnection();
+			for (IExtensionSpec datasetExtension: datasetExtensions) {
+				String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+				String cacheModelString = datasetExtension.getAttribute(CACHE_MODEL_ATTRIBUTE);
+				boolean cacheModel = Boolean.getBoolean(cacheModelString);
+				if (internalDatasets.containsKey(datasetRoleId)) {
+					continue;
+				}
+				//create the Dataset
+				InternalDataset internalDataset = new InternalDataset();
+				internalDataset.setDatasetRole(datasetRoleId);
+				internalDataset.setConnectionId(defaultInternalConnection.getId());
+				log.info("Created new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
+				internalDatasets.put(datasetRoleId, internalDataset);
+				
+				//create the underlying model in the SDB database
+				Model internalModel = createDBModel(defaultInternalConnection, internalDataset.getId());
+				log.info("Created new Model for role " + datasetRoleId + " of size " + internalModel.size());
+				if (cacheModel) {
+					log.info("Caching model for role " + datasetRoleId);
+					cachedModels.put(datasetRoleId, internalModel);
+				}
+				log.info("assembled list of internal datasets:" + internalDatasets);
+			}
+			//for any that do not exist, create them.
+		}
+		
+		return internalDatasets;
+	}
+
+	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
 	 * @param namedModel
 	 * @return
 	 */
 	public Model getModel(NamedModel namedModel) {
 		assert(namedModel != null);
-		
 		Model repositoryModel = getMetarepositoryModel();
-		//if the model being requested is not in the Repositories model, retrieve that specially
-		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
-			//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): return metarepository model");
-			return repositoryModel;
-		}
 		
 		//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): get new model");
 		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
 		Model model = null;
-		if (namedModel instanceof Dataset) {
-			Dataset rdbModel = (Dataset)namedModel;
+		if (namedModel instanceof InternalDataset) {
+		//if the model being requested is not in the Repositories model, retrieve that specially
+//		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
+//			return repositoryModel;
+//		}
+			if (cachedModels.containsKey(namedModel.getId())) {
+				return cachedModels.get(namedModel.getId());
+			}
+			InternalDataset dataset = (InternalDataset)namedModel;
 			RDF2Bean reader = new RDF2Bean(repositoryModel);
 			Connection dbConnectionInfo;
 			try {
-				dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
+				dbConnectionInfo = (Connection)reader.load(Connection.class, dataset.getConnectionId());
 			} catch (NotFoundException e) {
-				log.error("Unable to load Connection " + getConnection(rdbModel.getConnectionId()).getId());
+				log.error("Unable to load Connection for Internal Dataset: " + getConnection(dataset.getConnectionId()).getId());
+				return null;
+			}
+			DBConnector connector = new DBConnector(dbConnectionInfo);
+			model = connector.getModel(namedModel.getId());
+			
+		} else if (namedModel instanceof ExternalDataset) {
+			ExternalDataset dataset = (ExternalDataset)namedModel;
+			RDF2Bean reader = new RDF2Bean(repositoryModel);
+			Connection dbConnectionInfo;
+			try {
+				//dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
+				dbConnectionInfo = (Connection)reader.load(Connection.class, dataset.getConnectionId());
+			} catch (NotFoundException e) {
+				log.error("Unable to load Connection for External Dataset: " + getConnection(dataset.getConnectionId()).getId());
 				return null;
 			}
 			DBConnector connector = new DBConnector(dbConnectionInfo);
@@ -410,38 +512,14 @@ public class Persister {
 	 * *** INTERNAL MODEL METHODS
 	 * ********************************************************************* */
 	
-//	public OntModel getLogModel() {
-//		//if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
-//		if (logModel != null) {
-//			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
-//			return this.logModel;
-//		}
-//		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
-//		Connection logConnection = null;
-//		NamedModel logNamedModel = getAppInfo().getLogNamedModel();
-//		
-//		if (logNamedModel instanceof Dataset) {
-//			logConnection = ((Dataset)logNamedModel).getConnection();
-//		}
-//		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-//		DBConnector connector = new DBConnector(logConnection);
-//		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + logNamedModel.getId());
-//		
-//		//this.logModel = connector.getOntModel(logNamedModel.getModelName());
-//		this.logModel = connector.getOntModel(logNamedModel.getId());
-//		
-//		return this.logModel;
-//	}
-	
 	public OntModel getMetarepositoryModel() {
-		//if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
 		if (metarepositoryModel != null) {
 			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
 			return this.metarepositoryModel;
 		}
 		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
 		Dataset metarepositoryRDBModel = getAppInfo().getMetarepositoryDataset();
-		Connection metarepositoryConnection = getAppInfo().getMetarepositoryConnection();
+		Connection metarepositoryConnection = getAppInfo().getDefaultInternalConnection();
 		
 		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
 		DBConnector connector = new DBConnector(metarepositoryConnection);

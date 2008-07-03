@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Eclipse-LazyStart: true
 Bundle-ManifestVersion: 2
 Bundle-Name: INQLE Jena and Jenabean Plug-in
-Bundle-SymbolicName: org.inqle.data.rdf.jenabean
+Bundle-SymbolicName: org.inqle.data.rdf.jenabean;singleton:=true
 Bundle-Version: 0.1
 Bundle-ClassPath: .,
  src/,
@@ -188,7 +188,8 @@ Export-Package: com.hp.hpl.jena,
  thewebsemantic.binding
 Require-Bundle: org.inqle.db,
  org.inqle.db.h2,
- org.inqle.core
+ org.inqle.core,
+ org.inqle.core.extensions
 Import-Package: org.apache.commons.logging,
  org.apache.log4j
 Eclipse-BuddyPolicy: registered

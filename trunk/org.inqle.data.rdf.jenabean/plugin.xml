@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="org.inqle.data.datasets" name="Dataset Role" schema="schema/org.inqle.data.datasets.exsd"/>
+   <extension
+         point="org.inqle.data.datasets">
+      
+      <dataset
+           id="org.inqle.datasets.metaRepository"
+           weight="1000"
+           description="contains database connection info for datasets containing external info.  Contains Dataset, Datafile, and Connection objects.">
+					 cacheInMemory="true"
+			</dataset>
+			 
+			<dataset
+           id="org.inqle.datasets.ns"
+           weight="2000"
+           description="contains mappings from namespace abbreviations to their ful URIs">
+					 cacheInMemory="true"
+			</dataset>
+   </extension>
+
+</plugin>

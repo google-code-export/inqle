@@ -22,7 +22,7 @@ public class AppInfo extends UniqueJenabean {
 	private String serverId;
 	private String serverBaseUrl;
 	private Dataset metarepositoryDataset;
-	private Connection metarepositoryConnection;
+	private Connection defaultInternalConnection;
 	
 	@Id
 	public String getId() {
@@ -64,7 +64,7 @@ public class AppInfo extends UniqueJenabean {
 	public void clone(AppInfo objectToBeCloned) {
 		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
 		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
-		setMetarepositoryConnection(objectToBeCloned.getMetarepositoryConnection());
+		setDefaultInternalConnection(objectToBeCloned.getDefaultInternalConnection());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -86,12 +86,12 @@ public class AppInfo extends UniqueJenabean {
 		return newAppInfo;
 	}
 
-	public Connection getMetarepositoryConnection() {
-		return metarepositoryConnection;
+	public Connection getDefaultInternalConnection() {
+		return defaultInternalConnection;
 	}
 
-	public void setMetarepositoryConnection(Connection metarepositoryConnection) {
-		this.metarepositoryConnection = metarepositoryConnection;
+	public void setDefaultInternalConnection(Connection defaultInternalConnection) {
+		this.defaultInternalConnection = defaultInternalConnection;
 	}
 
 }
