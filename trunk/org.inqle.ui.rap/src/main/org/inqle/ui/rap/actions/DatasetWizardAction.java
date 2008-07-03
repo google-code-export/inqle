@@ -9,6 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 
 /**
@@ -25,7 +26,7 @@ public class DatasetWizardAction extends Action {
 	private int mode = MODE_NEW;
 	//private ModelPart modelPart = null;
 	private DatabasePart databasePart;
-	private Dataset dataset;
+	private ExternalDataset dataset;
 	
 	private static final Logger log = Logger.getLogger(DatasetWizardAction.class);
 	
@@ -68,7 +69,7 @@ public class DatasetWizardAction extends Action {
 		return dataset;
 	}
 
-	public void setDataset(Dataset dataset) {
+	public void setDataset(ExternalDataset dataset) {
 		this.dataset = dataset;
 	}
 }
