@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<extension point="org.eclipse.equinox.http.registry.servlets">
+		<servlet
+			alias="/lookup"
+			class="org.inqle.http.lookup.LookupServlet"
+			httpcontextId="org.eclipse.rap.httpcontext"
+			load-on-startup="true">
+		</servlet>
+		
+	</extension>
+</plugin>
