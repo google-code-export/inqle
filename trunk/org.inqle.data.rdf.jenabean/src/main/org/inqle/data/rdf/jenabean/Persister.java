@@ -616,6 +616,7 @@ public class Persister {
 			Class<? extends Object> persistableClass = persistableObj.getClass();
 			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
 			if (targetDataset == null) {
+				log.warn("Unable to persist object " + persistableObj + ".  Perhaps the class definition for class " + persistableClass.getCanonicalName() + " needs to have the TargetDataset annotation.");
 				return;
 			}
 			String targetDatasetRoleId = targetDataset.value();
@@ -688,6 +689,23 @@ public class Persister {
 	/* *********************************************************************
 	 * *** RECONSTITUTING METHODS
 	 * ********************************************************************* */
+	
+	
+	/**
+	 * reconstitue the object of the specified class, from the default TargetDataset (as indicated in
+	 * the classes annotation TargetDataset("org.whatever.dataset.role.id")
+	 * If not annotation is present, return null
+	 */
+	public Object reconstitute(Class<?> persistedClass, String objectId, boolean reconstituteMembers) {
+		TargetDataset targetDataset = persistedClass.getAnnotation(TargetDataset.class);
+		if (targetDataset == null) {
+			log.warn("Unable to reconstitute object of ID " + objectId + " from its target dataset, as no TargetDataset annotation is present in its class definition.");
+			return null;
+		}
+		String targetDatasetRoleId = targetDataset.value();
+		Model targetModel = getInternalModel(targetDatasetRoleId);
+		return Persister.reconstitute(persistedClass, objectId, targetModel, reconstituteMembers);
+	}
 	
 	/**
 	 * Reconstitute an object from Jena OntModel
