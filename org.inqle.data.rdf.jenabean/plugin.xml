@@ -6,10 +6,10 @@
          point="org.inqle.data.datasets">
       
       <dataset
-           id="org.inqle.datasets.metaRepository"
+           id="org.inqle.datasets.log"
            weight="1000"
-           description="contains database connection info for datasets containing external info.  Contains Dataset, Datafile, and Connection objects.">
-					 cacheInMemory="true"
+           description="contains log entries.">
+					 cacheInMemory="false"
 			</dataset>
 			 
 			<dataset

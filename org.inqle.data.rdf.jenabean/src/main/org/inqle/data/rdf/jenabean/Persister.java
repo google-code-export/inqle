@@ -23,6 +23,7 @@ import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 
 import thewebsemantic.Bean2RDF;
@@ -605,6 +606,21 @@ public class Persister {
 		public void persist(Object persistableObj, Model model) {
 			//log.info("Persisting:\n" + JenabeanWriter.toString(persistableObj));
 			persist(persistableObj, model, true);
+		}
+		
+		/**
+		 * If the object has a TargetDataset annotation, persist it to the
+		 * indicated internal dataset.  If not, do nothing.
+		 */
+		public void persist(Object persistableObj) {
+			Class<? extends Object> persistableClass = persistableObj.getClass();
+			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
+			if (targetDataset == null) {
+				return;
+			}
+			String targetDatasetRoleId = targetDataset.value();
+			Model targetModel = getInternalModel(targetDatasetRoleId);
+			persist(persistableObj, targetModel);
 		}
 	
 	/**
