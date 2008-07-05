@@ -1,10 +1,9 @@
 package org.inqle.data.sampling;
 
 import java.util.Collection;
-import java.util.Dictionary;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
@@ -31,6 +30,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Feb 29, 2008
  */
+@TargetDataset(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public abstract class ASampler extends UniqueJenabean implements ISampler {
 

@@ -36,6 +36,7 @@ public interface ISampler extends IUniqueJenabean {
 	//public static final String PROPERTY_WEIGHT = "weight";
 	public static final String URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES = RDF.INQLE + "subjectContainingCommonAttributes";
 	public static final String ID = "org.inqle.data.sampling.ISampler";
+	public static final String SAMPLER_DATASET = "org.inqle.datasets.samplers";
 	/**
 	 * Get the Collection of IDs of NamedModels which are candidates for sampling.
 	 * @return the list of choosable NamedModels

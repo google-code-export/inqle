@@ -93,23 +93,7 @@ public class SamplerPart extends PartType {
 		return childParts.toArray(nullPart);
 	}
 	
-	public void initChildren() {
-		//initCount++;
-		//log.info("Sampler #" + samplerPartCount + ": initChildren #" + initCount);
-		//query for all Dataset children
-//		AppInfo appInfo = persister.getAppInfo();
-//		QueryCriteria queryCriteria = new QueryCriteria(persister);
-//		queryCriteria.setQuery(getSparqlToFindChildren());
-//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-//		
-//		//for each item in resultTable, add a ModelPart
-//		childParts = new ArrayList<CustomizedSamplerPart>();
-//		for (QuerySolution row: resultTable.getResultList()) {
-//			Literal idLiteral = row.getLiteral("id");
-//			log.debug("Reconstituting Sampler of class " + sampler.getClass() + ": " + idLiteral.getLexicalForm());
-//			ISampler childSampler = (ISampler)Persister.reconstitute(sampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
-			
+	public void initChildren() {	
 		childParts = new ArrayList<CustomizedSamplerPart>();
 		for (ISampler childSampler: SamplerLister.listCustomSamplers(sampler)) {
 			ISamplerFactory childSamplerFactory = samplerFactory.cloneFactory();

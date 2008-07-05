@@ -29,10 +29,6 @@ public class SimpleSparqlSamplerFactory implements ISamplerFactory {
 	}
 
 	public SimpleSparqlSamplerWizard createWizard(Model model, Shell shell) {
-		Persister persister = Persister.getInstance();
-		if (model == null) {
-			model = persister.getMetarepositoryModel();
-		}
 		SimpleSparqlSamplerWizard wizard = new SimpleSparqlSamplerWizard(model, shell);
 		return wizard;
 	}

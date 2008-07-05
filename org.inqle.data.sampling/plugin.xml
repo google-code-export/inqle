@@ -13,6 +13,15 @@
 			</part-type>
    </extension>
    <extension
+         point="org.inqle.data.datasets">
+      <dataset
+           id="org.inqle.datasets.samplers"
+           weight="5000"
+           description="contains samplers.">
+					 cacheInMemory="false"
+			</dataset>
+	</extension>
+  <extension
          point="org.inqle.data.sampling.rap.ISamplerFactory">
       <sampler-factory
       		 class="org.inqle.data.sampling.rap.SimpleSparqlSamplerFactory"
