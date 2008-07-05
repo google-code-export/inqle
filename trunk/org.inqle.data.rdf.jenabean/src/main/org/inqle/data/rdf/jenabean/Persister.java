@@ -146,7 +146,7 @@ public class Persister {
 		AppInfo loadedAppInfo = null;
 		try {
 			loadedAppInfo = (AppInfo)reader.load(AppInfo.class, AppInfo.APPINFO_INSTANCE_ID);
-			//log.info("Retrieved appInfo:" + JenabeanWriter.toString(loadedAppInfo));
+			log.info("Retrieved appInfo:" + JenabeanWriter.toString(loadedAppInfo));
 		} catch (NotFoundException e) {
 			log.warn("AppInfo not available.");
 		}
@@ -174,32 +174,32 @@ public class Persister {
 	 * Get the Jena model containing the AppInfo object
 	 * @return
 	 */
-//	private static OntModel getAppInfoModel() {
-//		OntModel appInfoModel = null;
-//		try {
-//			appInfoModel = ModelFactory.createOntologyModel();
-//			appInfoModel.add(FileManager.get().loadModel( getAppInfoFilePath() ));
-//		} catch (Exception e) {
-//			log.error("Error getting Model for AppInfo:", e);
-//		}
-//		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
-//		return appInfoModel;
-//	}
-	
-	/**
-	 * Get the Jena model containing the AppInfo object
-	 * @return
-	 */
 	private static Model getAppInfoModel() {
 		Model appInfoModel = null;
 		try {
-			appInfoModel = FileManager.get().loadModel( getAppInfoFilePath() );
+			appInfoModel = ModelFactory.createDefaultModel();
+			appInfoModel.add(FileManager.get().loadModel( getAppInfoFilePath() ));
 		} catch (Exception e) {
 			log.error("Error getting Model for AppInfo:", e);
 		}
 		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
 		return appInfoModel;
 	}
+	
+	/**
+	 * Get the Jena model containing the AppInfo object
+	 * @return
+	 */
+//	private static Model getAppInfoModel() {
+//		Model appInfoModel = null;
+//		try {
+//			appInfoModel = FileManager.get().loadModel( getAppInfoFilePath() );
+//		} catch (Exception e) {
+//			log.error("Error getting Model for AppInfo:", e);
+//		}
+//		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
+//		return appInfoModel;
+//	}
 
 	/* *********************************************************************
 	 * *** JENA MODEL METHODS
@@ -301,14 +301,14 @@ public class Persister {
 	 * Given the URI or ID of a NamedModel, get the Jena Model object.
 	 * 
 	 * Best practice is to NOT close() the model after use.
-	 * @param modelRoleId the role id of the internal Dataset
+	 * @param datasetRoleId the role id of the internal Dataset
 	 * @return the model, or null if no model found in the metarepository
 	 */
-	public Model getInternalModel(String modelRoleId) {
-		if (modelRoleId.equals(METAREPOSITORY_DATASET)) {
+	public Model getInternalModel(String datasetRoleId) {
+		if (datasetRoleId.equals(METAREPOSITORY_DATASET)) {
 			return getMetarepositoryModel();
 		}
-		InternalDataset internalDataset = getInternalDatasets().get(modelRoleId);
+		InternalDataset internalDataset = getInternalDataset(datasetRoleId);
 		
 		if (internalDataset != null) {
 			return getModel(internalDataset);
@@ -316,10 +316,19 @@ public class Persister {
 		return null;
 	}
 	
+	public InternalDataset getInternalDataset(String datasetRoleId) {
+		if (datasetRoleId.equals(METAREPOSITORY_DATASET)) {
+			return getAppInfo().getMetarepositoryDataset();
+		}
+		return getInternalDatasets().get(datasetRoleId);
+	}
 	/**
 	 * Get the map of internal datasets.  If this does not exist yet (i.e. on first execution
 	 * of this method) then create it.  To create it, first load what exists in the Metarepository.
 	 * Next, get all internal dataset plugins and confirm that each plugin exists.  If it does not, create it.
+	 * As a side-effect, this method populates the in-memory representation
+	 * of any Model objects for whom the corresponding Dataset has cacheInMemory set to true
+	 * 
 	 * @return
 	 * 
 	 * TODO include a refresh persister method, which sets internalDatasets to null and therefore will reload
@@ -392,8 +401,8 @@ public class Persister {
 //		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
 //			return repositoryModel;
 //		}
-			if (cachedModels.containsKey(namedModel.getId())) {
-				return cachedModels.get(namedModel.getId());
+			if (getCachedModels().containsKey(namedModel.getId())) {
+				return getCachedModels().get(namedModel.getId());
 			}
 			InternalDataset dataset = (InternalDataset)namedModel;
 			RDF2Bean reader = new RDF2Bean(repositoryModel);
@@ -954,6 +963,13 @@ public class Persister {
 	public static boolean resourceExists(String uri, Model model) {
 		Resource resource = ResourceFactory.createResource(uri);
 		return model.containsResource(resource);
+	}
+
+	public Map<String, Model> getCachedModels() {
+		if (cachedModels == null) {
+			getInternalDatasets();
+		}
+		return cachedModels;
 	}
 	
 	/* *********************************************************************
