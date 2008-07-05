@@ -187,7 +187,7 @@ public class DatasetWizard extends Wizard {
 			return true;
 		}
 
-		persister.persist(dataset, persister.getMetarepositoryModel()); 
+		persister.persist(dataset); 
 		log.info("Saved dataset Dataset=" + JenabeanWriter.toString(dataset));
 		if (this.mode == DatasetWizardAction.MODE_NEW || this.mode == DatasetWizardAction.MODE_CLONE) {
 			Model newModel = persister.createDBModel(connection, dataset.getId());

@@ -99,7 +99,7 @@ public class DatabasePart extends PartType {
 		//for (QuerySolution row: resultTable.getResultList()) {
 //			Literal modelId = row.getLiteral("modelId");
 		for (String datasetId: datasetIds) {
-			ExternalDataset dataset = (ExternalDataset)Persister.reconstitute(ExternalDataset.class, datasetId, persister.getMetarepositoryModel(), false);
+			ExternalDataset dataset = (ExternalDataset)persister.reconstitute(ExternalDataset.class, datasetId, false);
 			dataset.setConnectionId(this.connection.getId());
 			ModelPart modelPart = new ModelPart(dataset);
 			modelPart.setParent(this);

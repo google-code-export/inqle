@@ -43,21 +43,24 @@ public abstract class DynaWizard extends Wizard {
 	 * @param bean
 	 */
 	public DynaWizard(Model saveToModel, Shell shell) {
-		assert(saveToModel != null);
-		//assert(persister != null);
-		assert(shell != null);
 		this.saveToModel = saveToModel;
-		//this.persister = persister;
 		this.shell = shell;
 	}
 	
+	/**
+	 * Save the bean to the saveToModel.  If this is null, save to the bean's target dataset
+	 */
 	@Override
 	public boolean performFinish() {
 		Persister persister = Persister.getInstance();
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
-		log.trace("Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of size:" + saveToModel.size());
-		persister.persist(getBean(), saveToModel, true);
+		log.trace("Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of role: " + Persister.getDatasetRoleId(getBean()));
+		if (saveToModel != null) {
+			persister.persist(getBean(), saveToModel, true);
+		} else {
+			persister.persist(getBean());
+		}
 		log.info("Persisted.  Now update UI...");
 		if (part != null && part.getParent() != null) {
 			part.getParent().fireUpdatePart();
