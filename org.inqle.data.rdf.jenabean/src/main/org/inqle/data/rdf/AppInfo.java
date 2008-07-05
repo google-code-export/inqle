@@ -2,6 +2,7 @@ package org.inqle.data.rdf;
 
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
@@ -21,7 +22,7 @@ public class AppInfo extends UniqueJenabean {
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
 	private String serverId;
 	private String serverBaseUrl;
-	private Dataset metarepositoryDataset;
+	private InternalDataset metarepositoryDataset;
 	private Connection defaultInternalConnection;
 	
 	@Id
@@ -45,11 +46,11 @@ public class AppInfo extends UniqueJenabean {
 		this.serverBaseUrl = serverBaseUrl;
 	}
 
-	public Dataset getMetarepositoryDataset() {
+	public InternalDataset getMetarepositoryDataset() {
 		return metarepositoryDataset;
 	}
 	
-	public void setMetarepositoryDataset(Dataset metarepositoryDataset) {
+	public void setMetarepositoryDataset(InternalDataset metarepositoryDataset) {
 		this.metarepositoryDataset = metarepositoryDataset;
 	}
 
