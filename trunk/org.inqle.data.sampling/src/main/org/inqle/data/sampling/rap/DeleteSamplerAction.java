@@ -53,7 +53,7 @@ public class DeleteSamplerAction extends Action {
 		}
 		if (confirmDelete) {
 			Persister persister = Persister.getInstance();
-			Persister.remove(samplerToDelete, persister.getMetarepositoryModel());
+			persister.remove(samplerToDelete);
 			IPartType parentPart = samplerPart.getParent();
 			parentPart.fireUpdate(parentPart);
 		}

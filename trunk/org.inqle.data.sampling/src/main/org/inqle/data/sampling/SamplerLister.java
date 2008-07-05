@@ -12,28 +12,7 @@ import org.inqle.data.sampling.rap.ISamplerFactory;
 
 public class SamplerLister {
 
-//	private Persister persister;
-
 	static Logger log = Logger.getLogger(SamplerLister.class);
-	
-//	public static List<ISampler> listCustomSamplers(ISampler baseSampler, Persister persister) {
-//		List<ISampler> customSamplers = new ArrayList<ISampler>();
-//		AppInfo appInfo = persister.getAppInfo();
-//		QueryCriteria queryCriteria = new QueryCriteria(persister);
-//		queryCriteria.setQuery(getSparqlToFindChildren(baseSampler));
-//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-//		
-//		//for each item in resultTable, add a ModelPart
-//		for (QuerySolution row: resultTable.getResultList()) {
-//			Literal idLiteral = row.getLiteral("id");
-//			log.debug("Reconstituting Sampler of class " + baseSampler.getClass() + ": " + idLiteral.getLexicalForm());
-//			ISampler customSampler = (ISampler)Persister.reconstitute(baseSampler.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
-//			customSamplers.add(customSampler);
-//		}
-//		
-//		return customSamplers;
-//	}
 	
 	public static List<ISampler> listCustomSamplers(ISampler baseSampler) {
 //		log.info("listing customized Samplers for base sampler of id=" + baseSampler.getId() + "\n" + baseSampler);
