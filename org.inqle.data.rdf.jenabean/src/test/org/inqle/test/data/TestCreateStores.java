@@ -135,7 +135,7 @@ public class TestCreateStores {
 		
 		//try to load the Connection from the database
 		log.info("Try to create DB Connection 3...");
-		Connection testConnectionInfo3 = (Connection)Persister.reconstitute(Connection.class, dataConnection.getId(), persister.getMetarepositoryModel(), true);
+		Connection testConnectionInfo3 = (Connection)persister.reconstitute(Connection.class, dataConnection.getId(), true);
 		//log.info(PersistableWriter.persistableToString(testConnectionInfo3));
 		assertNotNull(testConnectionInfo3);
 		

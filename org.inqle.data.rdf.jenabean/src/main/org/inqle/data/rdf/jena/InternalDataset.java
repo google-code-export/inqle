@@ -3,11 +3,14 @@
  */
 package org.inqle.data.rdf.jena;
 
+import org.inqle.data.rdf.jenabean.Persister;
+
 /**
  * A Dataset, which contains internal INQLE data
  * @author David Donohue
  * Jul 2, 2008
  */
+@TargetDataset(Persister.METAREPOSITORY_DATASET)
 public class InternalDataset extends Dataset {
 
 	private String datasetRole;
