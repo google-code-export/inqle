@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.inqle.core.util.JavaHasher;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
@@ -23,9 +24,12 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * Apr 22, 2008
  */
+@TargetDataset(ExperimentResult.EXPERIMENTS_DATASET)
 @Namespace(RDF.INQLE)
 public class ExperimentResult extends UniqueJenabean {
 
+	public static final String EXPERIMENTS_DATASET = "org.inqle.datasets.experiments";
+	
 	@Override
 	@Id
 	public String getId() {
@@ -42,7 +46,8 @@ public class ExperimentResult extends UniqueJenabean {
 	private Arc experimentLabelArc;
 	private ArcSet experimentAttributeArcs;
 	private Arc experimentSubjectArc;
-	private IRapidMinerExperiment rapidMinerExperiment;
+	//private IRapidMinerExperiment rapidMinerExperiment;
+	private String rapidMinerExperimentId;
 	private double correlation;
 	private double root_mean_squared_error;
 	
@@ -54,7 +59,7 @@ public class ExperimentResult extends UniqueJenabean {
 		s += "[experimentSubject=" + experimentSubjectArc + "]\n";
 		s += "[experimentAttributeArcs=" + experimentAttributeArcs + "]\n";
 		s += "[experimentLabelArc=" + experimentLabelArc + "]\n";
-		s += "[rapidMinerExperiment=" + rapidMinerExperiment + "]\n";
+		s += "[rapidMinerExperimentId=" + rapidMinerExperimentId + "]\n";
 		//s += "[learningException=" + learningException + "]\n";
 		s += "[correlation=" + correlation + "]\n";
 		s += "[root_mean_squared_error=" + root_mean_squared_error + "]\n";
@@ -77,7 +82,7 @@ public class ExperimentResult extends UniqueJenabean {
 		setExperimentSubjectArc(copyFieldsFrom.getExperimentSubjectArc());
 		setExperimentAttributeArcs(copyFieldsFrom.getExperimentAttributeArcs());
 		setExperimentLabelArc(copyFieldsFrom.getExperimentLabelArc());
-		setRapidMinerExperiment(copyFieldsFrom.getRapidMinerExperiment());
+		setRapidMinerExperimentId(copyFieldsFrom.getRapidMinerExperimentId());
 		setCorrelation(copyFieldsFrom.getCorrelation());
 		setRoot_mean_squared_error(copyFieldsFrom.getRoot_mean_squared_error());
 		super.clone(copyFieldsFrom);
@@ -138,12 +143,12 @@ public class ExperimentResult extends UniqueJenabean {
 		this.experimentSubjectArc = experimentSubjectArc;
 	}
 
-	public void setRapidMinerExperiment(IRapidMinerExperiment rapidMinerExperiment) {
-		this.rapidMinerExperiment = rapidMinerExperiment;
+	public void setRapidMinerExperimentId(String rapidMinerExperimentId) {
+		this.rapidMinerExperimentId = rapidMinerExperimentId;
 	}
 
-	public IRapidMinerExperiment getRapidMinerExperiment() {
-		return rapidMinerExperiment;
+	public String getRapidMinerExperimentId() {
+		return rapidMinerExperimentId;
 	}
 
 	public Arc getExperimentSubjectArc() {

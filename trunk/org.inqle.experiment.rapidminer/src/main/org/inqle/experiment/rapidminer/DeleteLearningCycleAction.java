@@ -42,7 +42,7 @@ public class DeleteLearningCycleAction extends Action {
 		}
 		if (confirmDelete) {
 			Persister persister = Persister.getInstance();
-			Persister.remove(learningCycleToDelete, persister.getMetarepositoryModel());
+			persister.remove(learningCycleToDelete);
 			IPartType parentPart = learningCyclePart.getParent();
 			parentPart.fireUpdate(parentPart);
 		}

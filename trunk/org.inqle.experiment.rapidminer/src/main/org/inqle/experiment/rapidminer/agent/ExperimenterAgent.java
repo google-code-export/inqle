@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
+import org.inqle.agent.IAgent;
 import org.inqle.core.util.RandomListChooser;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.experiment.rapidminer.ExperimentResult;
@@ -101,7 +103,7 @@ public class ExperimenterAgent extends AAgent {
 			}
 			log.trace("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
 			//log.info("Storing experiment result");
-			persister.persist(experimentResult, persister.getMetarepositoryModel());
+			persister.persist(experimentResult);
 		}
 		log.info("Exiting.  Completed " + cycleCount + " cycles.");
 		setStopped();

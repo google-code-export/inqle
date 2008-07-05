@@ -10,13 +10,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
-import org.inqle.experiment.rapidminer.agent.ExperimenterBeanProvider;
 import org.inqle.ui.rap.actions.DynaWizard;
-import org.inqle.ui.rap.pages.ListSelectorPage;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 import org.inqle.ui.rap.pages.RadioOrListSelectorPage;
 
-import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * @author David Donohue
@@ -33,7 +31,7 @@ public class LearningCycleWizard extends DynaWizard {
 	
 	private static Logger log = Logger.getLogger(LearningCycleWizard.class);
 	
-	public LearningCycleWizard(LearningCycle learningCycle, OntModel learningCycleModel, Shell shell) {
+	public LearningCycleWizard(LearningCycle learningCycle, Model learningCycleModel, Shell shell) {
 		super(learningCycleModel, shell);
 //		this.learningCycle = learningCycle;
 		this.bean = learningCycle;

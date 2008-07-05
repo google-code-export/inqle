@@ -16,6 +16,21 @@
            weight="4000">
 			</part-type>
    </extension>
+    <extension
+         point="org.inqle.data.datasets">
+      <dataset
+           id="org.inqle.datasets.learningCycles"
+           weight="7000"
+           description="contains customized Learning Cycles">
+					 cacheInMemory="false"
+			</dataset>
+			<dataset
+           id="org.inqle.datasets.experiments"
+           weight="8000"
+           description="contains experiment results">
+					 cacheInMemory="false"
+			</dataset>
+	</extension>
    <extension
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
       <rapidminer-experiment

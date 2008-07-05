@@ -48,8 +48,7 @@ public class LearningCycleWizardAction extends Action {
 	
 	@Override
 	public void runWithEvent(Event event) {
-		Persister persister = Persister.getInstance();
-		LearningCycleWizard learningCycleWizard = new LearningCycleWizard(learningCycle, persister.getMetarepositoryModel(), window.getShell());
+		LearningCycleWizard learningCycleWizard = new LearningCycleWizard(learningCycle, null, window.getShell());
 		if (partToRefresh != null) {
 			learningCycleWizard.setPart(partToRefresh);
 		}

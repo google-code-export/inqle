@@ -15,8 +15,9 @@ public interface ILearningCycle {
 	/**
 	 * the ID of the ILearningCycle plugin type
 	 */
-	String ID = "org.inqle.experiment.rapidminer.ILearningCycle";;
+	String ID = "org.inqle.experiment.rapidminer.ILearningCycle";
 
+	public static final String LEARNING_CYCLES_DATASET = "org.inqle.datasets.learningCycles";
 	public ISampler getSampler();
 
 	public void setSampler(ISampler sampler);

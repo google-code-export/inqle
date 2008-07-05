@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.DataTable;
@@ -30,6 +31,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * Apr 16, 2008
  */
+@TargetDataset(ILearningCycle.LEARNING_CYCLES_DATASET)
 @Namespace(RDF.INQLE)
 public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	public static final int USE_RANDOM_SAMPLER = 0;
@@ -142,7 +144,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		experimentResult.setSamplerClassName(samplerToUse.getClass().getName());
 		experimentResult.setExperimentSubjectArc(idColumn.getArc());
 		experimentResult.setExperimentLabelArc(labelDataColumn.getArc());
-		experimentResult.setRapidMinerExperiment(experimentToUse);
+		experimentResult.setRapidMinerExperimentId(experimentToUse.getId());
 		List<DataColumn> learnableDataColumns = resultDataTable.getLearnableColumns();
 		learnableDataColumns.remove(labelDataColumn);
 		experimentResult.setExperimentAttributeArcs(DataTable.getArcSet(learnableDataColumns));
