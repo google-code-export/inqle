@@ -11,12 +11,11 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.EmbeddedDBPage;
 import org.inqle.ui.rap.pages.RadiosPage;
@@ -44,7 +43,7 @@ public class AppInfoWizard extends Wizard {
 	private AppInfo appInfo = new AppInfo();
 	private Shell shell;
 	private Connection metarepositoryConnection;
-	private Dataset metarepositoryDataset;
+	private InternalDataset metarepositoryDataset;
 	
 	private RadiosPage embeddedOrExternalMetarepositoryDBPage;
 	private EmbeddedDBPage embeddedMetarepositoryDBPage;
@@ -52,7 +51,7 @@ public class AppInfoWizard extends Wizard {
 	private SingleTextPage metarepositoryDatasetPage;
 	
 	private Connection firstDataConnection;
-	private Dataset firstDataDataset;
+	private ExternalDataset firstDataDataset;
 	
 	private RadiosPage embeddedOrExternalFirstDataDBPage;
 	private EmbeddedDBPage embeddedFirstDataDBPage;
@@ -81,7 +80,7 @@ public class AppInfoWizard extends Wizard {
 		addPage(embeddedMetarepositoryDBPage);
 		log.info("added embeddedMetarepositoryDBPage");
 		
-		metarepositoryDataset = (Dataset)appInfo.getMetarepositoryDataset();
+		metarepositoryDataset = appInfo.getMetarepositoryDataset();
 		if (metarepositoryDataset == null) {
 			metarepositoryDataset = new InternalDataset();
 			//metarepositoryDataset.setModelName("Metarepository");
@@ -120,7 +119,7 @@ public class AppInfoWizard extends Wizard {
 		addPage(embeddedFirstDataDBPage);
 		log.info("added embeddedFirstDataDBPage");
 		
-		firstDataDataset = new InternalDataset();
+		firstDataDataset = new ExternalDataset();
 		firstDataDataset.setId("FirstDataset");
 		
 		firstDataConnection = new Connection();
