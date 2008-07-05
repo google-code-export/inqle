@@ -88,7 +88,7 @@ public class DatabaseWizard extends Wizard {
 				persister.createNewDBConnection(connection);
 				parentPart.fireUpdate(parentPart);
 			} else if (this.mode == DatabaseWizardAction.MODE_EDIT) {
-				persister.persist(connection, persister.getMetarepositoryModel());
+				persister.persist(connection);
 				databasePart.fireUpdatePart();
 			}
 		}

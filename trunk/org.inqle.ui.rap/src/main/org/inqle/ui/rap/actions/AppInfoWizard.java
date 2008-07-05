@@ -257,8 +257,8 @@ public class AppInfoWizard extends Wizard {
 			int status = connector.tryToCreateSDBStore();
 			log.info("Created data store for first dataset " + firstDataDataset + ": Status=" + status);
 			Persister persister = Persister.getInstance();
-			persister.persist(firstDataConnection, persister.getMetarepositoryModel());
-			persister.persist(firstDataDataset, persister.getMetarepositoryModel());
+			persister.persist(firstDataConnection);
+			persister.persist(firstDataDataset);
 		} catch (Exception e) {
 			log.error("Error creating/storing first dataset", e);
 		}
