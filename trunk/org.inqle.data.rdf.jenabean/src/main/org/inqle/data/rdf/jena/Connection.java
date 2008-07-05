@@ -1,11 +1,12 @@
 package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
-import thewebsemantic.RdfProperty;
 
 @Namespace(RDF.INQLE)
+@TargetDataset(Persister.METAREPOSITORY_DATASET)
 public class Connection extends JenaAssemblerObject {
 	
 	private String dbClass = null;	

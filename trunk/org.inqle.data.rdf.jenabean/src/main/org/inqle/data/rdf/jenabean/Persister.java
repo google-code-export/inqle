@@ -57,11 +57,14 @@ public class Persister {
 	public static final String FILENAME_APPINFO = "assets/_private/AppInfo.ttl";
 	public static final String TEMP_DIRECTORY = "assets/temp/";
 	public static final Class<?>[] MODEL_CLASSES = {ExternalDataset.class, Datafile.class};
-	private static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
+	public static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
+	public static final String METAREPOSITORY_DATASET = "org.inqle.datasets.metaRepository";
+
 	private static final String CACHE_MODEL_ATTRIBUTE = "cacheInMemory";
 	
 	private AppInfo appInfo = null;
-	private OntModel metarepositoryModel = null;
+//	private OntModel metarepositoryModel = null;
+	private Model metarepositoryModel = null;
 	//private OntModel logModel = null;
 	private static Logger log = Logger.getLogger(Persister.class);
 	public static int persisterId = 0;
@@ -171,11 +174,26 @@ public class Persister {
 	 * Get the Jena model containing the AppInfo object
 	 * @return
 	 */
-	private static OntModel getAppInfoModel() {
-		OntModel appInfoModel = null;
+//	private static OntModel getAppInfoModel() {
+//		OntModel appInfoModel = null;
+//		try {
+//			appInfoModel = ModelFactory.createOntologyModel();
+//			appInfoModel.add(FileManager.get().loadModel( getAppInfoFilePath() ));
+//		} catch (Exception e) {
+//			log.error("Error getting Model for AppInfo:", e);
+//		}
+//		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
+//		return appInfoModel;
+//	}
+	
+	/**
+	 * Get the Jena model containing the AppInfo object
+	 * @return
+	 */
+	private static Model getAppInfoModel() {
+		Model appInfoModel = null;
 		try {
-			appInfoModel = ModelFactory.createOntologyModel();
-			appInfoModel.add(FileManager.get().loadModel( getAppInfoFilePath() ));
+			appInfoModel = FileManager.get().loadModel( getAppInfoFilePath() );
 		} catch (Exception e) {
 			log.error("Error getting Model for AppInfo:", e);
 		}
@@ -287,6 +305,9 @@ public class Persister {
 	 * @return the model, or null if no model found in the metarepository
 	 */
 	public Model getInternalModel(String modelRoleId) {
+		if (modelRoleId.equals(METAREPOSITORY_DATASET)) {
+			return getMetarepositoryModel();
+		}
 		InternalDataset internalDataset = getInternalDatasets().get(modelRoleId);
 		
 		if (internalDataset != null) {
@@ -437,13 +458,13 @@ public class Persister {
 	 * @param namedModelUri
 	 * @return
 	 */
-	public OntModel getOntModel(String namedModelId) {
-		NamedModel namedModel = getNamedModel(namedModelId);
-		if (namedModel != null) {
-			return getOntModel(namedModel);
-		}
-		return null;
-	}
+//	public OntModel getOntModel(String namedModelId) {
+//		NamedModel namedModel = getNamedModel(namedModelId);
+//		if (namedModel != null) {
+//			return getOntModel(namedModel);
+//		}
+//		return null;
+//	}
 
 	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
@@ -452,47 +473,48 @@ public class Persister {
 	 * @return
 	 * TODO Untested
 	 */
-	public OntModel getOntModel(NamedModel namedModel) {
-		OntModel repositoryOntModel = getMetarepositoryModel();
-		//if the model being requested is not in the Repositories model, retrieve that specially
-		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
-			return repositoryOntModel;
-		}
-		
-		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
-		OntModel ontModel = null;
-		if (namedModel instanceof Dataset) {
-			Dataset rdbModel = (Dataset)namedModel;
-			RDF2Bean reader = new RDF2Bean(repositoryOntModel);
-			Connection dbConnectionInfo;
-			try {
-				dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
-			} catch (NotFoundException e) {
-				log.error("Unable to load Connection info " + rdbModel.getConnectionId());
-				e.printStackTrace();
-				return null;
-			}
-			DBConnector connector = new DBConnector(dbConnectionInfo);
-//			ontModel = connector.getOntModel(namedModel.getModelName());
-			ontModel = connector.getMemoryOntModel(namedModel.getId());
-			
-			/*if null, create a new model
-			if (model == null) {
-				log.debug("Creating Dataset '" + namedModel.getModelName() + "'...");
-				model = createDBModel(dbConnectionInfo, namedModel.getModelName());
-			}
-			*/
-			
-			//close
-			//connector.close();
-			
-		} else if (namedModel instanceof Datafile){
-			ontModel = ModelFactory.createOntologyModel();
-			ontModel.add(getModelFromFile(((Datafile)namedModel).getFileUrl()));
-		}
-		
-		return ontModel;
-	}
+	@Deprecated
+//	public OntModel getOntModel(NamedModel namedModel) {
+//		OntModel repositoryOntModel = getMetarepositoryModel();
+//		//if the model being requested is not in the Repositories model, retrieve that specially
+//		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
+//			return repositoryOntModel;
+//		}
+//		
+//		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
+//		OntModel ontModel = null;
+//		if (namedModel instanceof Dataset) {
+//			Dataset rdbModel = (Dataset)namedModel;
+//			RDF2Bean reader = new RDF2Bean(repositoryOntModel);
+//			Connection dbConnectionInfo;
+//			try {
+//				dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
+//			} catch (NotFoundException e) {
+//				log.error("Unable to load Connection info " + rdbModel.getConnectionId());
+//				e.printStackTrace();
+//				return null;
+//			}
+//			DBConnector connector = new DBConnector(dbConnectionInfo);
+////			ontModel = connector.getOntModel(namedModel.getModelName());
+//			ontModel = connector.getMemoryOntModel(namedModel.getId());
+//			
+//			/*if null, create a new model
+//			if (model == null) {
+//				log.debug("Creating Dataset '" + namedModel.getModelName() + "'...");
+//				model = createDBModel(dbConnectionInfo, namedModel.getModelName());
+//			}
+//			*/
+//			
+//			//close
+//			//connector.close();
+//			
+//		} else if (namedModel instanceof Datafile){
+//			ontModel = ModelFactory.createOntologyModel();
+//			ontModel.add(getModelFromFile(((Datafile)namedModel).getFileUrl()));
+//		}
+//		
+//		return ontModel;
+//	}
 	
 	/**
 	 * Does this server already have a dataset of the provided ID?
@@ -513,7 +535,26 @@ public class Persister {
 	 * *** INTERNAL MODEL METHODS
 	 * ********************************************************************* */
 	
-	public OntModel getMetarepositoryModel() {
+//	public OntModel getMetarepositoryModel() {
+//		if (metarepositoryModel != null) {
+//			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
+//			return this.metarepositoryModel;
+//		}
+//		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
+//		Dataset metarepositoryRDBModel = getAppInfo().getMetarepositoryDataset();
+//		Connection metarepositoryConnection = getAppInfo().getDefaultInternalConnection();
+//		
+//		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
+//		DBConnector connector = new DBConnector(metarepositoryConnection);
+//		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
+//		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
+//
+//		//this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getModelName());
+//		this.metarepositoryModel = connector.getMemoryOntModel(metarepositoryRDBModel.getId());
+//		return this.metarepositoryModel;
+//	}
+	
+	public Model getMetarepositoryModel() {
 		if (metarepositoryModel != null) {
 			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
 			return this.metarepositoryModel;
@@ -527,8 +568,8 @@ public class Persister {
 		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
 		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
 
-		//this.metarepositoryModel = connector.getOntModel(repositoryNamedModel.getModelName());
-		this.metarepositoryModel = connector.getMemoryOntModel(metarepositoryRDBModel.getId());
+		//worked: this.metarepositoryModel = connector.getMemoryOntModel(metarepositoryRDBModel.getId());
+		this.metarepositoryModel = connector.getModel(metarepositoryRDBModel.getId());
 		return this.metarepositoryModel;
 	}
 	
@@ -560,9 +601,10 @@ public class Persister {
 		//TODO: when deleting works, remove the below " || status == DBConnector.STORE_IS_BLANK"
 		if (status == DBConnector.STORE_CREATED || status == DBConnector.STORE_IS_BLANK) {
 			//log.info("Persisting new connectioninfo ... \n" + JenabeanWriter.toString(connectionInfo) + "\n...to the repository model...");
-			OntModel metarepositoryOntModel = getMetarepositoryModel();
+			//worked: OntModel metarepositoryOntModel = getMetarepositoryModel();
 			//log.info("BEFORE: Repository model has " + metarepositoryOntModel.size() + " statements");
-			persist(connection, metarepositoryOntModel, true);
+			//worked: persist(connection, metarepositoryOntModel, true);
+			persist(connection);
 			//log.info("AFTER: Repository model has " + metarepositoryOntModel.size() + " statements");
 			//metarepositoryModel.commit();
 		}
@@ -583,9 +625,9 @@ public class Persister {
 	 * TODO add support fo any other NamedModel subclasses e.g. UrlModel
 	 */
 	public NamedModel getNamedModel(String namedModelId) {
-		OntModel metarepositoryModel = getMetarepositoryModel();
+		//OntModel metarepositoryModel = getMetarepositoryModel();
 		for (Class<?> clazz: MODEL_CLASSES) {
-			NamedModel namedModel = (NamedModel)reconstitute(clazz, namedModelId, metarepositoryModel, true);
+			NamedModel namedModel = (NamedModel)reconstitute(clazz, namedModelId, getMetarepositoryModel(), true);
 			if (namedModel != null) {
 				return namedModel;
 			}
@@ -613,17 +655,34 @@ public class Persister {
 		 * indicated internal dataset.  If not, do nothing.
 		 */
 		public void persist(Object persistableObj) {
-			Class<? extends Object> persistableClass = persistableObj.getClass();
-			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
-			if (targetDataset == null) {
-				log.warn("Unable to persist object " + persistableObj + ".  Perhaps the class definition for class " + persistableClass.getCanonicalName() + " needs to have the TargetDataset annotation.");
+			String targetDatasetRoleId = getDatasetRoleId(persistableObj);
+			if (targetDatasetRoleId==null) {
+				log.warn("Unable to persist object " + persistableObj + ".  It has no TargetDataset annotation.");
 				return;
 			}
-			String targetDatasetRoleId = targetDataset.value();
 			Model targetModel = getInternalModel(targetDatasetRoleId);
 			persist(persistableObj, targetModel);
 		}
 	
+		public static String getDatasetRoleId(Object persistableObject) {
+			Class<? extends Object> persistableClass = persistableObject.getClass();
+			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
+			if (targetDataset == null) {
+				log.warn("Unable to retrieve dataset role id for " + persistableObject + ".  Perhaps the class definition for class " + persistableClass.getCanonicalName() + " needs to have the TargetDataset annotation.");
+				return null;
+			}
+			return targetDataset.value();
+		}
+		
+		public static String getDatasetRoleId(Class<?> persistableClass) {
+			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
+			if (targetDataset == null) {
+				log.warn("Unable to retrieve dataset role id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDataset annotation.");
+				return null;
+			}
+			return targetDataset.value();
+		}
+		
 	/**
 	 * Persist a Object object to an SDB store as RDF
 	 * @param persistableObj the object implementing Persistable_legacy interface
@@ -697,12 +756,11 @@ public class Persister {
 	 * If not annotation is present, return null
 	 */
 	public Object reconstitute(Class<?> persistedClass, String objectId, boolean reconstituteMembers) {
-		TargetDataset targetDataset = persistedClass.getAnnotation(TargetDataset.class);
-		if (targetDataset == null) {
-			log.warn("Unable to reconstitute object of ID " + objectId + " from its target dataset, as no TargetDataset annotation is present in its class definition.");
+		String targetDatasetRoleId = getDatasetRoleId(persistedClass);
+		if (targetDatasetRoleId==null) {
+			log.warn("Unable to reconsitute object of ID " + objectId + ".  Its class " + persistedClass + " has no TargetDataset annotation.");
 			return null;
 		}
-		String targetDatasetRoleId = targetDataset.value();
 		Model targetModel = getInternalModel(targetDatasetRoleId);
 		return Persister.reconstitute(persistedClass, objectId, targetModel, reconstituteMembers);
 	}
@@ -740,8 +798,8 @@ public class Persister {
 	
 	public List<NamedModel> listNamedModels() {
 		List<NamedModel> namedModels = new ArrayList<NamedModel>();
-		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(Dataset.class));
-		namedModels.addAll((Collection<? extends NamedModel>) reconstituteAll(Datafile.class));
+		namedModels.addAll((Collection<ExternalDataset>) reconstituteAll(ExternalDataset.class));
+		namedModels.addAll((Collection<Datafile>) reconstituteAll(Datafile.class));
 		return namedModels;
 	}
 	
@@ -844,6 +902,23 @@ public class Persister {
 			return fileToDelete.delete();
 		}
 		return false;
+	}
+	
+	/**
+	 * Delete the Resource from the model, plus all references to it
+	 * 
+	 * @param nodeUri the URI of the Object object to be removed
+	 * @param model the Jena Model containing the object to remove
+	 */
+	public void remove(Object objectToDelete) {
+		String targetDatasetRoleId = getDatasetRoleId(objectToDelete);
+		if (targetDatasetRoleId==null) {
+			log.warn("Unable to delete object " + objectToDelete + ".  Its class has no TargetDataset annotation.");
+			return;
+		}
+		Model model = getInternalModel(targetDatasetRoleId);
+		Bean2RDF deleter = new Bean2RDF(model);
+		deleter.delete(objectToDelete);
 	}
 	
 	/**
