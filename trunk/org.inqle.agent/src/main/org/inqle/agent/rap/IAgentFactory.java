@@ -40,7 +40,6 @@ public interface IAgentFactory extends INamedAndDescribed {
 	/**
 	 * Create a wizard, without a agent model bean yet set.
 	 * @param model
-	 * @param persister
 	 * @param shell
 	 * @return
 	 */
@@ -51,8 +50,7 @@ public interface IAgentFactory extends INamedAndDescribed {
 	/**
 	 * Create a wizard, using a replica of the base agent as the 
 	 * model bean
-	 * @param metarepositoryModel
-	 * @param persister
+	 * @param model
 	 * @param shell
 	 * @return
 	 */

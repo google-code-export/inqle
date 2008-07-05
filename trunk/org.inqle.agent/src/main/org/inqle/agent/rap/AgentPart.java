@@ -122,11 +122,7 @@ public class AgentPart extends PartType {
 		
 		//for each item in resultTable, add a ModelPart
 		childParts = new ArrayList<CustomizedAgentPart>();
-//		for (QuerySolution row: resultTable.getResultList()) {
-//			Literal idLiteral = row.getLiteral("id");
-//			log.debug("Reconstituting Agent of class " + agent.getClass() + ": " + idLiteral.getLexicalForm());
-//		IAgent childAgent = (IAgent)Persister.reconstitute(agent.getClass(), idLiteral.getLexicalForm(), persister.getMetarepositoryModel(), true);
-		
+
 		for (IAgent childAgent: AgentLister.listCustomAgents(agent)) {
 			IAgentFactory childAgentFactory = agentFactory.cloneFactory(childAgent);
 			CustomizedAgentPart part = new CustomizedAgentPart(childAgentFactory);

@@ -5,6 +5,7 @@ package org.inqle.agent;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
@@ -24,6 +25,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Apr 24, 2008
  */
+@TargetDataset(IAgent.AGENT_DATASET)
 @Namespace(RDF.INQLE)
 public abstract class AAgent extends UniqueJenabean implements IAgent {
 

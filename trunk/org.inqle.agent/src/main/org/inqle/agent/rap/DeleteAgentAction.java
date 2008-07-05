@@ -52,7 +52,7 @@ public class DeleteAgentAction extends Action {
 		}
 		if (confirmDelete) {
 			Persister persister = Persister.getInstance();
-			Persister.remove(agentToDelete, persister.getMetarepositoryModel());
+			persister.remove(agentToDelete);
 			IPartType parentPart = agentPart.getParent();
 			parentPart.fireUpdate(parentPart);
 		}
