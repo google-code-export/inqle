@@ -367,7 +367,8 @@ public class Persister {
 				InternalDataset internalDataset = new InternalDataset();
 				internalDataset.setDatasetRole(datasetRoleId);
 				internalDataset.setConnectionId(defaultInternalConnection.getId());
-				log.info("Created new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
+				persist(internalDataset);
+				log.info("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
 				internalDatasets.put(datasetRoleId, internalDataset);
 				
 				//create the underlying model in the SDB database
