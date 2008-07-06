@@ -39,7 +39,7 @@ public class DatabasePart extends PartType {
 		" SELECT ?datasetId \n " +
 		" { \n " +
 		" GRAPH ?g { \n " +
-		" ?datasetUri a inqle:Dataset \n " +
+		" ?datasetUri a inqle:ExternalDataset \n " +
 		" . ?datasetUri inqle:id ?datasetId \n " +
 		" . ?datasetUri inqle:connectionId \"" + connection.getId() + "\"^^xsd:string \n" +
 		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
