@@ -8,14 +8,21 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
+import org.inqle.agent.IAgent;
+import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+
+import thewebsemantic.Namespace;
 
 /**
  * @author David Donohue
  * Apr 25, 2008
  */
+@TargetDataset(IAgent.AGENT_DATASET)
+@Namespace(RDF.INQLE)
 public class JUnitTestRunnerAgent extends AAgent {
 
 	private IJUnitTest[] testsToRun;
