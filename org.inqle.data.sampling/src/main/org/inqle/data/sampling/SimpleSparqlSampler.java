@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 
 import thewebsemantic.Namespace;
@@ -33,6 +34,7 @@ import thewebsemantic.Namespace;
  * 
  * TODO add elements which define how to render the UI elements, for manual execution mode
  */
+@TargetDataset(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public class SimpleSparqlSampler extends ASparqlSampler {
 
