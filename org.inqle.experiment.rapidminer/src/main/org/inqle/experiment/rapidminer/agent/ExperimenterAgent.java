@@ -16,6 +16,7 @@ import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
 
+@TargetDataset(IAgent.AGENT_DATASET)
 @Namespace(RDF.INQLE)
 public class ExperimenterAgent extends AAgent {
 
