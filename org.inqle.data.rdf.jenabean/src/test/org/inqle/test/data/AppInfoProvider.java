@@ -58,7 +58,7 @@ public class AppInfoProvider {
 		//appInfo.setServerBaseUri("http://inqle.org/ns/TestServerUri");
 		appInfo.setServerBaseUrl("http://inqle.org/TestServerUrl");
 		appInfo.setMetarepositoryDataset(repositoryModel);
-		appInfo.setDefaultInternalConnection(connection);
+		appInfo.setInternalConnection(connection);
 		OntModel m = ModelFactory.createOntologyModel();
 		Bean2RDF writer = new Bean2RDF(m);
 		writer.save(appInfo);

@@ -68,11 +68,10 @@ public class QueryCriteria {
 	 * @param aModel
 	 */
 	public void addNamedModel(NamedModel namedModel) {
-		assert(namedModel != null);
+		log.info("QueryCriteria.addModel(" + namedModel + ")");
 		Persister persister = Persister.getInstance();
 		namedModels.add(namedModel);
 		Model model = persister.getModel(namedModel);
-		assert(model != null);
 		log.debug("In QueryCriteria, adding model of size " + model.size());
 		models.add(model);
 		dataSource.addNamedModel(namedModel.getId(), model);

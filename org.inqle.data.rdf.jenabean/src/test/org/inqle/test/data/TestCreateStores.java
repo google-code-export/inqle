@@ -61,7 +61,7 @@ public class TestCreateStores {
 		//create the repository model
 		log.info("Creating Connection to metarepository of id=" + metarepositoryDataset.getConnectionId());
 		//Connection repositoryConnection = persister.getConnection(metarepositoryDataset.getConnectionId());
-		Connection repositoryConnection = appInfo.getDefaultInternalConnection();
+		Connection repositoryConnection = appInfo.getInternalConnection();
 		
 		DBConnector repositoryConnector = new DBConnector(repositoryConnection);
 		//first delete
@@ -106,7 +106,7 @@ public class TestCreateStores {
 	@Test
 	public void createTestConnection() {
 		AppInfo appInfo = AppInfoProvider.getAppInfo();
-		Connection metarepositoryConnection = appInfo.getDefaultInternalConnection();
+		Connection metarepositoryConnection = appInfo.getInternalConnection();
 		Persister persister = Persister.getInstance(appInfo);
 		Connection dataConnection = new Connection();
 		dataConnection.setDbClass(metarepositoryConnection.getDbClass());

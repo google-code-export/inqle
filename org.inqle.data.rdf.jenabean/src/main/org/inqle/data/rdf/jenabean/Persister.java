@@ -353,8 +353,9 @@ public class Persister {
 			//get all internal dataset extensions
 			List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
 			
-			//find or create the Dataset for each.
-			Connection defaultInternalConnection = getAppInfo().getDefaultInternalConnection();
+			//find or create the Dataset for each.  Store models in cachedModels, where signalled to do so
+			cachedModels = new HashMap<String, Model>();
+			Connection defaultInternalConnection = getAppInfo().getInternalConnection();
 			for (IExtensionSpec datasetExtension: datasetExtensions) {
 				String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 				String cacheModelString = datasetExtension.getAttribute(CACHE_MODEL_ATTRIBUTE);
@@ -391,26 +392,28 @@ public class Persister {
 	 */
 	public Model getModel(NamedModel namedModel) {
 		assert(namedModel != null);
-		Model repositoryModel = getMetarepositoryModel();
+		//Model repositoryModel = getMetarepositoryModel();
 		
 		//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): get new model");
 		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
 		Model model = null;
 		if (namedModel instanceof InternalDataset) {
-		//if the model being requested is not in the Repositories model, retrieve that specially
-//		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
-//			return repositoryModel;
-//		}
-			if (getCachedModels().containsKey(namedModel.getId())) {
+			InternalDataset internalDataset = (InternalDataset)namedModel;
+			//if the model being requested is the Metarepository, return this special model
+			if (internalDataset.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
+				return getMetarepositoryModel();
+			}
+			
+			if (getCachedModels() != null && getCachedModels().containsKey(internalDataset.getDatasetRole())) {
 				return getCachedModels().get(namedModel.getId());
 			}
 			InternalDataset dataset = (InternalDataset)namedModel;
-			RDF2Bean reader = new RDF2Bean(repositoryModel);
+			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
 			Connection dbConnectionInfo;
 			try {
 				dbConnectionInfo = (Connection)reader.load(Connection.class, dataset.getConnectionId());
 			} catch (NotFoundException e) {
-				log.error("Unable to load Connection for Internal Dataset: " + getConnection(dataset.getConnectionId()).getId());
+				log.error("Unable to load Connection for Internal Dataset: " + dataset.getConnectionId());
 				return null;
 			}
 			DBConnector connector = new DBConnector(dbConnectionInfo);
@@ -418,7 +421,7 @@ public class Persister {
 			
 		} else if (namedModel instanceof ExternalDataset) {
 			ExternalDataset dataset = (ExternalDataset)namedModel;
-			RDF2Bean reader = new RDF2Bean(repositoryModel);
+			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
 			Connection dbConnectionInfo;
 			try {
 				//dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
@@ -570,7 +573,7 @@ public class Persister {
 		}
 		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
 		Dataset metarepositoryRDBModel = getAppInfo().getMetarepositoryDataset();
-		Connection metarepositoryConnection = getAppInfo().getDefaultInternalConnection();
+		Connection metarepositoryConnection = getAppInfo().getInternalConnection();
 		
 		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
 		DBConnector connector = new DBConnector(metarepositoryConnection);
