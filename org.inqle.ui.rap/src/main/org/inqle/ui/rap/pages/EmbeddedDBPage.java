@@ -16,6 +16,8 @@ public class EmbeddedDBPage extends WizardPage {
 	private Text dbNameText;
 	private Text dbLoginText;
 	private Text dbPasswordText;
+	private String defaultDBName;
+	private String defaultUserName;
 
 	public EmbeddedDBPage(String pageName, String pageDescription) {
 		this(pageName, pageName, null);
@@ -35,12 +37,18 @@ public class EmbeddedDBPage extends WizardPage {
 		
 		new Label(composite, SWT.NONE).setText("Database Name");
 		dbNameText =  new Text(composite, SWT.BORDER);
+		if (defaultDBName != null) {
+			dbNameText.setText(defaultDBName);
+		}
 		dbNameText.setToolTipText("The database name may only contain letters, numerals, and underscores _");
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		dbNameText.setLayoutData(gridData);
 		
 		new Label(composite, SWT.NONE).setText("Database Login");
 		dbLoginText =  new Text(composite, SWT.BORDER);
+		if (defaultUserName != null) {
+			dbLoginText.setText(defaultUserName);
+		}
 		dbLoginText.setToolTipText("This is the username which INQLE will use to connect to the embedded database.  If you later wish to administer this H2 database, you must remember this username.");
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		dbLoginText.setLayoutData(gridData);
@@ -64,5 +72,13 @@ public class EmbeddedDBPage extends WizardPage {
 	
 	public String getDbPassword() {
 		return dbPasswordText.getText();
+	}
+
+	public void setDefaultDBName(String defaultDBName) {
+		this.defaultDBName = defaultDBName;
+	}
+
+	public void setDefaultUserName(String defaultUserName) {
+		this.defaultUserName = defaultUserName;
 	}
 }

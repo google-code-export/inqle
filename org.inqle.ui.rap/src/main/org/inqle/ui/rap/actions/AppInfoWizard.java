@@ -39,6 +39,13 @@ public class AppInfoWizard extends Wizard {
 	private static final String H2_DB_CLASS = "org.h2.Driver";
 
 	private static final String H2_DB_TYPE = "H2";
+
+	private static final String DEFAULT_METAREPOSITORY_ID = "Metarepository";
+	private static final String DEFAULT_FIRSTDATA_DATASET_ID = "data1";
+	private static final String DEFAULT_INTERNAL_DB_NAME = "inqle";
+	private static final String DEFAULT_INTERNAL_DB_USER_NAME = "inqle";
+	private static final String DEFAULT_FIRSTDATA_DB_NAME = "data1";
+	private static final String DEFAULT_FIRSTDATA_DB_USER_NAME = "inqle";
 	
 	private AppInfo appInfo = new AppInfo();
 	private Shell shell;
@@ -77,6 +84,8 @@ public class AppInfoWizard extends Wizard {
 		log.info("added embeddedOrExternalMetarepositoryDBPage");
 		
 		embeddedMetarepositoryDBPage = new EmbeddedDBPage("Internal INQLE Database", "Specify connection info for the embedded H2 database, which will contain internal INQLE information.");
+		embeddedMetarepositoryDBPage.setDefaultDBName(DEFAULT_INTERNAL_DB_NAME);
+		embeddedMetarepositoryDBPage.setDefaultUserName(DEFAULT_INTERNAL_DB_USER_NAME);
 		addPage(embeddedMetarepositoryDBPage);
 		log.info("added embeddedMetarepositoryDBPage");
 		
@@ -84,9 +93,9 @@ public class AppInfoWizard extends Wizard {
 		if (metarepositoryDataset == null) {
 			metarepositoryDataset = new InternalDataset();
 			//metarepositoryDataset.setModelName("Metarepository");
-			metarepositoryDataset.setId("Metarepository");
+			metarepositoryDataset.setId(DEFAULT_METAREPOSITORY_ID);
 		}
-		metarepositoryConnection = appInfo.getDefaultInternalConnection();
+		metarepositoryConnection = appInfo.getInternalConnection();
 		if (metarepositoryConnection == null) {
 			metarepositoryConnection = new Connection();
 			metarepositoryConnection.setRandomId();
@@ -116,11 +125,13 @@ public class AppInfoWizard extends Wizard {
 		log.info("added embeddedOrExternalFirstDataDBPage");
 		
 		embeddedFirstDataDBPage = new EmbeddedDBPage("Database for storing your data", "Specify connection info for the embedded database, in which to store your data.");
+		embeddedFirstDataDBPage.setDefaultDBName(DEFAULT_FIRSTDATA_DB_NAME);
+		embeddedFirstDataDBPage.setDefaultUserName(DEFAULT_FIRSTDATA_DB_USER_NAME);
 		addPage(embeddedFirstDataDBPage);
 		log.info("added embeddedFirstDataDBPage");
 		
 		firstDataDataset = new ExternalDataset();
-		firstDataDataset.setId("FirstDataset");
+		firstDataDataset.setId(DEFAULT_FIRSTDATA_DATASET_ID);
 		
 		firstDataConnection = new Connection();
 		firstDataConnection.setRandomId();
@@ -137,7 +148,7 @@ public class AppInfoWizard extends Wizard {
 		firstDataDatasetPage = new SingleTextPage(
 				firstDataDataset, 
 				"id", 
-				"Enter a unique name for your first dataset, e.g. dataset1", 
+				"Enter a unique name for your first dataset, e.g. " + DEFAULT_FIRSTDATA_DATASET_ID, 
 				null
 		);
 		addPage(firstDataDatasetPage);
@@ -228,7 +239,7 @@ public class AppInfoWizard extends Wizard {
 		}
 		metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
 		appInfo.setMetarepositoryDataset(metarepositoryDataset);
-		appInfo.setDefaultInternalConnection(metarepositoryConnection);
+		appInfo.setInternalConnection(metarepositoryConnection);
 		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);
