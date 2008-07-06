@@ -25,8 +25,6 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Apr 24, 2008
  */
-@TargetDataset(IAgent.AGENT_DATASET)
-@Namespace(RDF.INQLE)
 public abstract class AAgent extends UniqueJenabean implements IAgent {
 
 	public static final int CYCLE_CONTINUOUSLY = -1;
