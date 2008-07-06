@@ -4,6 +4,8 @@
 package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.RDF;
+import thewebsemantic.Namespace;
 
 /**
  * A Dataset, which contains external (minable) data
@@ -11,6 +13,7 @@ import org.inqle.data.rdf.jenabean.Persister;
  * Jul 2, 2008
  */
 @TargetDataset(Persister.METAREPOSITORY_DATASET)
+@Namespace(RDF.INQLE)
 public class ExternalDataset extends Dataset {
 
 	public ExternalDataset createClone() {

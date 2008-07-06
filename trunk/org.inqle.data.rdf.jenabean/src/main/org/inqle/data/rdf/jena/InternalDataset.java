@@ -3,7 +3,10 @@
  */
 package org.inqle.data.rdf.jena;
 
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
+
+import thewebsemantic.Namespace;
 
 /**
  * A Dataset, which contains internal INQLE data
@@ -11,6 +14,7 @@ import org.inqle.data.rdf.jenabean.Persister;
  * Jul 2, 2008
  */
 @TargetDataset(Persister.METAREPOSITORY_DATASET)
+@Namespace(RDF.INQLE)
 public class InternalDataset extends Dataset {
 
 	private String datasetRole;
