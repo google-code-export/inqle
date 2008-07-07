@@ -250,10 +250,10 @@ public class Persister {
 	 * @param dbModelName
 	 * @return
 	 */
-	public Model createDBModel(Dataset rdbModel) {
-		Connection connection = getConnection(rdbModel.getConnectionId());
+	public Model createDBModel(Dataset dataset) {
+		Connection connection = getConnection(dataset.getConnectionId());
 		//String dbModelName = rdbModel.getModelName();
-		String dbModelName = rdbModel.getId();
+		String dbModelName = dataset.getId();
 		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
 		DBConnector dbConnector = new DBConnector(connection);
 		//DBConnection dbConnection = dbConnector.getJenaConnection();
@@ -277,7 +277,7 @@ public class Persister {
 		Model model = dbConnector.getModel(dbModelName);
 		
 		//store the Dataset object
-		persist(rdbModel, getMetarepositoryModel());
+		persist(dataset, getMetarepositoryModel());
 		return model;
 	}
 	
