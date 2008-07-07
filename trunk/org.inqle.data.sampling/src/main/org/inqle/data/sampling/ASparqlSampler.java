@@ -72,7 +72,7 @@ public abstract class ASparqlSampler extends ASampler {
 		log.debug("dataColumnsToUse=" + dataColumnsToUse);
 //		String sparql = generateSparql(modelsToUse, persister);
 		String sparql = generateSparql(dataColumnsToUse);
-		log.debug("sparql=" + sparql);
+		log.info("Generated sparql for sampling:" + sparql);
 		DataTable resultDataTable = doQuery(modelsToUse, dataColumnsToUse, sparql);
 		return resultDataTable;
 	}

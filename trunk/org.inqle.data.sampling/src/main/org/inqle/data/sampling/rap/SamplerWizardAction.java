@@ -59,7 +59,6 @@ public class SamplerWizardAction extends Action {
 			//if (mode == MODE_RUN) {
 				//wizard = new SamplerRunnerWizard(sampler, window.getShell());
 			if (mode == MODE_OPEN) {
-				Persister persister = Persister.getInstance();
 				log.trace("Opening wizard...");
 				wizard = samplerFactory.createWizardForReplica(null, window.getShell());
 				wizard.setPart(samplerPart);
