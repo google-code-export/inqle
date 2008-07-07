@@ -56,7 +56,8 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	@RdfProperty(RDF.NAME_PREDICATE)
 	public String getName() {
 		if (name == null) {
-			return this.getClass().getName();
+			//return this.getClass().getName();
+			return getId();
 		}
 		return name;
 	}
@@ -73,7 +74,7 @@ public abstract class BasicJenabean implements IBasicJenabean {
 	public String toString() {
 		String s = getClass().toString() + " {\n";
 		s += "[name=" + name + "]\n";
-		s += "[description=" + description + "]\n";
+		s += "[id=" + getId() + "]\n";
 		s += "}";
 		return s;
 	}
