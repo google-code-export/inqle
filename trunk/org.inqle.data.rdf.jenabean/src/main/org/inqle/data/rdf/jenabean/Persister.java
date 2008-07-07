@@ -410,14 +410,18 @@ public class Persister {
 			}
 			InternalDataset dataset = (InternalDataset)namedModel;
 			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
-			Connection dbConnectionInfo;
-			try {
-				dbConnectionInfo = (Connection)reader.load(Connection.class, dataset.getConnectionId());
-			} catch (NotFoundException e) {
-				log.error("Unable to load Connection for Internal Dataset: " + dataset.getConnectionId());
-				return null;
+			Connection theConnection;
+			if (dataset.getConnectionId().equals(getAppInfo().getInternalConnection().getId())) {
+				theConnection = getAppInfo().getInternalConnection();
+			} else {
+				try {
+					theConnection = (Connection)reader.load(Connection.class, dataset.getConnectionId());
+				} catch (NotFoundException e) {
+					log.error("Unable to load Connection for Internal Dataset: " + dataset.getConnectionId());
+					return null;
+				}
 			}
-			DBConnector connector = new DBConnector(dbConnectionInfo);
+			DBConnector connector = new DBConnector(theConnection);
 			model = connector.getModel(namedModel.getId());
 			
 		} else if (namedModel instanceof ExternalDataset) {
@@ -673,6 +677,7 @@ public class Persister {
 				log.warn("Unable to persist object " + persistableObj + ".  It has no TargetDataset annotation.");
 				return;
 			}
+			log.info("Persisting to dataset of role:" + targetDatasetRoleId + "\npersistableObj=" + JenabeanWriter.toString(persistableObj));
 			Model targetModel = getInternalModel(targetDatasetRoleId);
 			persist(persistableObj, targetModel);
 		}
@@ -817,13 +822,18 @@ public class Persister {
 	}
 	
 	/**
-	 * Retrieve a Collection of jenabeans from the metarepository
-	 * @param clazz
-	 * @param model
-	 * @return
+	 * Retrieve a Collection of jenabeans from the appropriate internal dataset,
+	 * as specified in the TargetDataset annotation of the persistableClass
+	 * @param persistableClass the class to reconstitute
+	 * @return a Collection of objects of that class, or null if the class does not have a 
+	 * TargetDataset defined
 	 */
-	public Collection<?> reconstituteAll(Class<?> clazz) {
-		return reconstituteAll(clazz, getMetarepositoryModel());
+	public Collection<?> reconstituteAll(Class<?> persistableClass) {
+		String datasetRoleId = getDatasetRoleId(persistableClass);
+		if (datasetRoleId == null) {
+			return null;
+		}
+		return reconstituteAll(persistableClass, getInternalModel(datasetRoleId));
 	}
 	
 	/**
