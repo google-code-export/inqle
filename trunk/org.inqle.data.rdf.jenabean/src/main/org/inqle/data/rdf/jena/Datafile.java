@@ -1,6 +1,7 @@
 package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
@@ -13,8 +14,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Jan 9, 2008
  */
-//@Namespace(NS)
-//public class Datafile extends NamedModel {
+@TargetDataset(Persister.METAREPOSITORY_DATASET)
 @Namespace(RDF.INQLE)
 public class Datafile extends NamedModel {
 
