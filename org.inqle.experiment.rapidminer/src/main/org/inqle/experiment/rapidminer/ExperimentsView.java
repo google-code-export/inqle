@@ -36,13 +36,14 @@ public class ExperimentsView extends SparqlView {
 		
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"SELECT ?id ?creationDate ?name ?experimentSubject ?experimentAttributes ?experimentLabel ?correlation ?root_mean_squared_error\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
 			"?uri inqle:id ?id\n" +
 			". ?uri inqle:creationDate ?creationDate\n" +
-			". OPTIONAL { ?uri inqle:name ?name }\n" +
+			". OPTIONAL { ?uri dc:name ?name }\n" +
 			". OPTIONAL { ?uri inqle:experimentSubjectArc ?experimentSubjectArc \n" +
 			"  . ?experimentSubjectArc inqle:stringRepresentation ?experimentSubject }\n" +
 			". OPTIONAL { ?uri inqle:experimentLabelArc ?experimentLabelArc \n" +
@@ -61,5 +62,10 @@ public class ExperimentsView extends SparqlView {
 	@Override
 	public List<String> getPropertyNames() {
 		return Arrays.asList(PROPERTY_NAMES);
+	}
+
+	@Override
+	public String getDatasetRole() {
+		return ExperimentResult.EXPERIMENTS_DATASET;
 	}
 }
