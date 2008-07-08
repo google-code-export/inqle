@@ -6,11 +6,9 @@ import org.inqle.data.rdf.jenabean.Persister;
 import thewebsemantic.Namespace;
 
 /**
- * from http://jena.sourceforge.net/assembler/assembler-howto.html
- * class ja:Datafile subClassOf ja:NamedModel
- * domainOf ja:directory maxCardinality 1
- * domainOf ja:fileEncoding maxCardinality 1
- * domainOf ja:mapName maxCardinality 1
+ * originally used Jena Assembler (JA) language
+ * http://jena.sourceforge.net/assembler/assembler-howto.html
+ * but revamped to not use JA.
  * @author David Donohue
  * Jan 9, 2008
  */
