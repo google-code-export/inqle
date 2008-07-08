@@ -4,8 +4,10 @@
 package org.inqle.experiment.rapidminer;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.inqle.core.util.JavaHasher;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
@@ -29,6 +31,13 @@ import com.rapidminer.operator.performance.PerformanceVector;
 public class ExperimentResult extends UniqueJenabean {
 
 	public static final String EXPERIMENTS_DATASET = "org.inqle.datasets.experiments";
+	
+	private static Logger log = Logger.getLogger(ExperimentResult.class);
+	
+	public ExperimentResult() {
+		setCreationDate(new Date());
+		log.info("Created ExperimentResult and set creationDate to " + getCreationDate());
+	}
 	
 	@Override
 	@Id

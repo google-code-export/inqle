@@ -45,8 +45,10 @@ Bundle-ClassPath: bin/main/,
  lib/joone-engine.jar,
  lib/rapidminer.jar
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
+ org.inqle.data.rdf.jenabean,
  org.inqle.ui.rap
 Bundle-RegisterBuddy: org.inqle.core.extensions,
+ org.inqle.data.rdf.jenabean,
  org.inqle.ui.rap
 Bundle-Activator: org.inqle.experiment.rapidminer.activator.Activator
 Eclipse-LazyStart: true
