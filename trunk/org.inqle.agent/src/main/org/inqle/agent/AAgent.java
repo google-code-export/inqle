@@ -9,6 +9,7 @@ import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
+import thewebsemantic.RdfProperty;
 
 /**
  * Abstract base class for creating agents.  New agent classes
@@ -81,6 +82,14 @@ public abstract class AAgent extends UniqueJenabean implements IAgent {
 
 	public void setStoppingPoint(int numberOfCycles) {
 		this.stoppingPoint = numberOfCycles;
+	}
+	
+	@RdfProperty(RDF.NAME_PREDICATE)
+	public String getName() {
+		if (name == null) {
+			return this.getClass().getName();
+		}
+		return name;
 	}
 	
 //	public Persister getPersister() {

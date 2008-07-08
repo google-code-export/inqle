@@ -36,8 +36,10 @@ Import-Package: com.hp.hpl.jena.query,
 Bundle-ClassPath: bin/main/,
  .
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
+ org.inqle.data.rdf.jenabean,
  org.inqle.ui.rap
 Bundle-RegisterBuddy: org.inqle.core.extensions,
+ org.inqle.data.rdf.jenabean,
  org.inqle.ui.rap
 Eclipse-LazyStart: true
 Export-Package: org.inqle.agent,
