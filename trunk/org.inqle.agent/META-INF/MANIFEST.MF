@@ -43,4 +43,7 @@ Bundle-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.ui.rap
 Eclipse-LazyStart: true
 Export-Package: org.inqle.agent,
- org.inqle.agent.rap
+ org.inqle.agent.rap,
+ org.inqle.testing
+Eclipse-BuddyPolicy: registered
+Bundle-BuddyPolicy: registered

@@ -87,7 +87,11 @@ public abstract class AAgent extends UniqueJenabean implements IAgent {
 	@RdfProperty(RDF.NAME_PREDICATE)
 	public String getName() {
 		if (name == null) {
-			return this.getClass().getName();
+			int lastDot = this.getClass().getName().lastIndexOf ('.') + 1;
+	    if (lastDot > 0) {
+	      return this.getClass().getName().substring (lastDot);
+	    }
+	    return this.getClass().getName();
 		}
 		return name;
 	}

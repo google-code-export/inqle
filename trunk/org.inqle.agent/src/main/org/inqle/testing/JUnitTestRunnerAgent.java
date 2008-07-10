@@ -14,6 +14,7 @@ import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 import thewebsemantic.Namespace;
 
@@ -64,21 +65,25 @@ public class JUnitTestRunnerAgent extends AAgent {
 		
 		IJUnitTest[] testsToRun =	selectTestsToRun();
 
-		
-		log.info("Running these tests: " + getTestsToRun());
 		//run each test
 		for (IJUnitTest junitTest: testsToRun) {
 			if (getMode() != RUNNING) {
 				break;
 			}
-			
+			log.info("JUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNIT\nRunning JUnit test of class: " + junitTest.getJUnitTestClass() + " and name: " + junitTest.getName() + "...");
 			Result result = JUnitCore.runClasses(junitTest.getJUnitTestClass());
 			
 			testingResults.add(result);
-			log.info("JUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNITJUNIT\nRan JUnit test: " + junitTest + ".  Results=\n");
+			
+			log.info("...finished running JUnit test " + junitTest.getJUnitTestClass() + "\nResults=");
 			log.info("getRunCount()=" + result.getRunCount());
 			log.info("getRunTime()=" + result.getRunTime());
 			log.info("getFailureCount()=" + result.getFailureCount());
+			int cnt = 0;
+			for (Failure failure: result.getFailures()) {
+				cnt++;
+				log.info("\n\nFailure #" + cnt + ":\n" + failure + "\nStack Trace:\n" + failure.getTrace());
+			}
 		}
 		
 		setStopped();
@@ -93,12 +98,12 @@ public class JUnitTestRunnerAgent extends AAgent {
 	}
 
 	private IJUnitTest[] selectTestsToRun() {
-		if (getTestsToRun() != null) {
-			return getTestsToRun();
+		if (getTestsToRun() == null) {
+			List<IJUnitTest> listOfTests = JUnitTestLister.listJUnitTests();
+			IJUnitTest[] testArray = {};
+			setTestsToRun(listOfTests.toArray(testArray));
 		}
-		List<IJUnitTest> listOfTests = JUnitTestLister.listJUnitTests();
-		IJUnitTest[] testArray = {};
-		return listOfTests.toArray(testArray);
+		return getTestsToRun();
 	}
 
 }
