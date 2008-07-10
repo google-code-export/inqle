@@ -39,6 +39,8 @@ public class InqleInfo {
 	public static final String TEMP_FOLDER = "assets/temp/";
 
 	public static final String ASSETS_FOLDER = "assets";
+
+	private static final int SERVER_PORT = 7070;
 	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
@@ -58,5 +60,9 @@ public class InqleInfo {
 
 	public static String getAssetsDirectory() {
 		return System.getProperty(INQLE_HOME) + ASSETS_FOLDER + "/";
+	}
+
+	public static int getServerPort() {
+		return SERVER_PORT;
 	}
 }
