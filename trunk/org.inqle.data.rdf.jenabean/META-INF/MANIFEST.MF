@@ -3,7 +3,7 @@ Eclipse-LazyStart: true
 Bundle-ManifestVersion: 2
 Bundle-Name: INQLE Jena and Jenabean Plug-in
 Bundle-SymbolicName: org.inqle.data.rdf.jenabean;singleton:=true
-Bundle-Version: 0.1
+Bundle-Version: 1.0.0
 Bundle-ClassPath: .,
  src/,
  lib/antlr-2.7.5.jar,
