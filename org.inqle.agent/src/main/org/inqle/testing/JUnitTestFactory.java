@@ -16,6 +16,7 @@ public class JUnitTestFactory {
 		Class<?> junitTestClass = null;
 		try {
 			junitTestClass = Class.forName(junitTestClassStr);
+			log.info("Found JUnit class:" + junitTestClass.getName());
 		} catch (Exception e) {
 			log.error("Unable to add JUnit test plugin named " + extensionSpec.getAttribute(InqleInfo.NAME_ATTRIBUTE), e);
 		}

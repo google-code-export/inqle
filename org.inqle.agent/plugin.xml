@@ -36,6 +36,7 @@
          point="org.inqle.testing.IJUnitTest">
 		<junit-test
            class="org.inqle.test.data.TestJenabean"
+           name="Example JUnit Test (Test Jenabean)"
            weight="1000"/>
   </extension>
 </plugin>
