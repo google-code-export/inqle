@@ -18,6 +18,13 @@
            description="contains mappings from namespace abbreviations to their ful URIs">
 					 cacheInMemory="true"
 			</dataset>
+			
+			<dataset
+           id="org.inqle.datasets.mapping"
+           weight="3000"
+           description="contains DataMapping and related objects, which map CSV values to RDF attributes">
+					 cacheInMemory="false"
+			</dataset>
    </extension>
 
 </plugin>
