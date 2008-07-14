@@ -1,9 +1,9 @@
 package org.inqle.data.rdf.jenabean;
 
-import java.net.URI;
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.TargetDataset;
 
 import thewebsemantic.Namespace;
 
@@ -12,7 +12,6 @@ import thewebsemantic.Namespace;
  * headers in a CSV file) to the collection of DataMappings which map to the table.
  * 
  * A TableMapping object maps to the header line from a CSV file.  
- * It also contains the URI of the subclass of inqle:Data that represents this table. 
  * It contains 1 or more DataMappings, each specifying how to map the data from a single column.
  * 
  * @author David Donohue
@@ -20,6 +19,7 @@ import thewebsemantic.Namespace;
  * 
  * TODO extend a base class, which does not have name & description fields
  */
+@TargetDataset(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class TableMapping extends GlobalJenabean {
 
@@ -30,21 +30,21 @@ public class TableMapping extends GlobalJenabean {
 	 * location where some info si stored.
 	 * TODO consider remove this
 	 */
-	private String mappedDataSubclassId;
+	//private String mappedDataSubclassId;
 	
 	/**
 	 * ID of the dataset where resides the subclass of inqle:Data which represents the table.
 	 * This seems to be of local usefulness only?
 	 * TODO consider remove this
 	 */
-	private String mappedDataSubclassDatasetId;
+	//private String mappedDataSubclassDatasetId;
 	
 	private Collection<DataMapping> dataMappings;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
 		s += "[mappedText=" + mappedText + "]\n";
-		s += "[mappedDataSubclassId=" + mappedDataSubclassId + "]\n";
+		//s += "[mappedDataSubclassId=" + mappedDataSubclassId + "]\n";
 		//TODO ensure these mappings are sorted reproducibly each time they are iterated.
 		for(DataMapping dataMapping: getDataMappings()) {
 			s += "[dataMapping=" + dataMapping + "]\n";
@@ -81,20 +81,20 @@ public class TableMapping extends GlobalJenabean {
 		this.dataMappings = dataMappings;
 	}
 
-	public String getMappedDataSubclassId() {
-		return mappedDataSubclassId;
-	}
+//	public String getMappedDataSubclassId() {
+//		return mappedDataSubclassId;
+//	}
 
-	public void setMappedDataSubclassId(String mappedDataSubclassId) {
-		this.mappedDataSubclassId = mappedDataSubclassId;
-	}
-
-	public String getMappedDataSubclassDatasetId() {
-		return mappedDataSubclassDatasetId;
-	}
-
-	public void setMappedDataSubclassDatasetId(String mappedDataSubclassDatasetId) {
-		this.mappedDataSubclassDatasetId = mappedDataSubclassDatasetId;
-	}	
+//	public void setMappedDataSubclassId(String mappedDataSubclassId) {
+//		this.mappedDataSubclassId = mappedDataSubclassId;
+//	}
+//
+//	public String getMappedDataSubclassDatasetId() {
+//		return mappedDataSubclassDatasetId;
+//	}
+//
+//	public void setMappedDataSubclassDatasetId(String mappedDataSubclassDatasetId) {
+//		this.mappedDataSubclassDatasetId = mappedDataSubclassDatasetId;
+//	}	
 
 }

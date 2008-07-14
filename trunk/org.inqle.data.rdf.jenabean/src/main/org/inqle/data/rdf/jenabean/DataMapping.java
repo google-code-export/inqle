@@ -3,6 +3,7 @@ package org.inqle.data.rdf.jenabean;
 import java.net.URI;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.TargetDataset;
 
 import thewebsemantic.Namespace;
 
@@ -34,9 +35,11 @@ import thewebsemantic.Namespace;
  * 
  * TODO extend a base class, which does not have name & description fields
  */
+@TargetDataset(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 
+	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datasets.mapping";
 	private String mappedText;
 	private URI mappedPredicate;
 	private URI uriOfMappedNativeClass;
