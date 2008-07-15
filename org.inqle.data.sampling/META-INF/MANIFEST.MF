@@ -28,7 +28,9 @@ Import-Package: com.hp.hpl.jena.query,
  org.junit.runners,
  org.osgi.framework;version="1.4.0",
  org.osgi.service.component;version="1.0.0",
- org.xml.sax
+ org.xml.sax,
+ thewebsemantic,
+ thewebsemantic.binding
 Require-Bundle: org.inqle.core,
  org.inqle.data.rdf.jenabean,
  org.inqle.core.extensions,
