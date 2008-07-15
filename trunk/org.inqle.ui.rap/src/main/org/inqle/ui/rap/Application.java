@@ -3,12 +3,8 @@ package org.inqle.ui.rap;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.rwt.lifecycle.IEntryPoint;
 import org.eclipse.swt.widgets.Display;
-//import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.actions.AppInfoWizardAction;
 
 /**
  * This class controls all aspects of the application's execution
