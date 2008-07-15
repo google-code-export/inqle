@@ -56,7 +56,7 @@ public class AppInfoProvider {
 		//create the AppInfo object
 		AppInfo appInfo = new AppInfo();
 		//appInfo.setServerBaseUri("http://inqle.org/ns/TestServerUri");
-		appInfo.setServerBaseUrl("http://inqle.org/TestServerUrl");
+		//appInfo.setServerBaseUrl("http://inqle.org/TestServerUrl");
 		appInfo.setMetarepositoryDataset(repositoryModel);
 		appInfo.setInternalConnection(connection);
 		OntModel m = ModelFactory.createOntologyModel();

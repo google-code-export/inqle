@@ -3,6 +3,7 @@ package org.inqle.data.rdf;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.InternalDataset;
+import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
@@ -20,31 +21,24 @@ public class AppInfo extends UniqueJenabean {
 	
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
-	private String serverId;
-	private String serverBaseUrl;
+	//private String serverId;
+//	private String serverBaseUrl;
 	private InternalDataset metarepositoryDataset;
 	private Connection internalConnection;
+	private Site site;
 	
 	@Id
 	public String getId() {
 		return APPINFO_INSTANCE_ID;
 	}
 	
-	public String getServerId() {
-		return serverId;
-	}
-	
-	public void setServerId(String serverId) {
-		this.serverId = serverId;
-	}
-	
-	public String getServerBaseUrl() {
-		return this.serverBaseUrl;
-	}
-	
-	public void setServerBaseUrl(String serverBaseUrl) {
-		this.serverBaseUrl = serverBaseUrl;
-	}
+//	public String getServerBaseUrl() {
+//		return this.serverBaseUrl;
+//	}
+//	
+//	public void setServerBaseUrl(String serverBaseUrl) {
+//		this.serverBaseUrl = serverBaseUrl;
+//	}
 
 	public InternalDataset getMetarepositoryDataset() {
 		return metarepositoryDataset;
@@ -63,9 +57,10 @@ public class AppInfo extends UniqueJenabean {
 //	}
 	
 	public void clone(AppInfo objectToBeCloned) {
-		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
+//		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
 		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
 		setInternalConnection(objectToBeCloned.getInternalConnection());
+		setSite(objectToBeCloned.getSite());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -93,6 +88,14 @@ public class AppInfo extends UniqueJenabean {
 
 	public void setInternalConnection(Connection internalConnection) {
 		this.internalConnection = internalConnection;
+	}
+
+	public Site getSite() {
+		return site;
+	}
+
+	public void setSite(Site site) {
+		this.site = site;
 	}
 
 }
