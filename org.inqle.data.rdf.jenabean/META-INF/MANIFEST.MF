@@ -21,8 +21,8 @@ Bundle-ClassPath: .,
  lib/xml-apis.jar,
  bin/main/,
  bin/test/,
- lib/jenabean-0.0.6.jar,
- lib/lucene-core-2.3.1.jar
+ lib/lucene-core-2.3.1.jar,
+ lib/jenabean-0.0.7.jar
 Bundle-Vendor: INQLING, LLC
 Export-Package: com.hp.hpl.jena,
  com.hp.hpl.jena.assembler,
