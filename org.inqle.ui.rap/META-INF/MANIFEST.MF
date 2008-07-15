@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.rap.ui,
  org.eclipse.rap.core.databinding.beans,
  org.eclipse.rap.jface.databinding,
  org.inqle.core,
- org.eclipse.rwt.widgets.upload
+ org.eclipse.rwt.widgets.upload,
+ org.inqle.http.lookup
 Import-Package: javax.servlet;version="2.4.0",
  javax.servlet.http;version="2.4.0",
  org.apache.log4j,

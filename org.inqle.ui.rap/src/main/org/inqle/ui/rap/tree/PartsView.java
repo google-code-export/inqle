@@ -25,6 +25,7 @@ import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.actions.AppInfoWizardAction;
 import org.inqle.ui.rap.actions.RefreshPartAction;
 import org.inqle.ui.rap.tree.parts.AllParts;
+import org.inqle.http.lookup.Requestor;
 
 /**
  * View with a tree viewer. This class is contributed through the plugin.xml.
@@ -153,6 +154,10 @@ public class PartsView extends ViewPart implements IMenuListener {
 		while (persister.getAppInfo() == null) {
 			AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(getSite().getWorkbenchWindow());
 			appInfoWizardAction.run();
+			if (persister.getAppInfo() != null) {
+				log.info("Registering Site with central INQLE server...");
+				log.info("Success? " + Requestor.registerObject(persister.getAppInfo().getSite()));
+			}
 		}
 		
 		this.parent = parent;

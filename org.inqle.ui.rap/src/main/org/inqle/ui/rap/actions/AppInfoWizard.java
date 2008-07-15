@@ -3,7 +3,10 @@
  */
 package org.inqle.ui.rap.actions;
 
+import java.net.InetAddress;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -16,9 +19,11 @@ import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.EmbeddedDBPage;
 import org.inqle.ui.rap.pages.RadiosPage;
+import org.inqle.ui.rap.pages.ServerInfoPage;
 import org.inqle.ui.rap.pages.SingleTextPage;
 
 /**
@@ -64,6 +69,7 @@ public class AppInfoWizard extends Wizard {
 	private EmbeddedDBPage embeddedFirstDataDBPage;
 	private ConnectionPage firstDataConnectionPage;
 	private SingleTextPage firstDataDatasetPage;
+	private ServerInfoPage serverInfoPage;
 	
 	public AppInfoWizard(Shell parentShell) {
 		this.shell = parentShell;
@@ -77,6 +83,9 @@ public class AppInfoWizard extends Wizard {
 //		siteUrlPage.setLabelText("Enter base URL of this INQLE server");
 //		addPage(siteUrlPage);
 		//Persister persister = Persister.getInstance();
+		serverInfoPage = new ServerInfoPage();
+		addPage(serverInfoPage);
+		log.info("added serverInfoPage");
 		
 		embeddedOrExternalMetarepositoryDBPage = new RadiosPage("We will create the internal database used by your INQLE server.", "Select whether to use an embedded database to use for the internal database.");
 		embeddedOrExternalMetarepositoryDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
@@ -157,7 +166,7 @@ public class AppInfoWizard extends Wizard {
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		log.info("getNextPage(" + page + ")");
+		log.trace("getNextPage(" + page + ")");
 		if (page == embeddedOrExternalMetarepositoryDBPage) {
 			if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
 				return embeddedMetarepositoryDBPage;
@@ -215,7 +224,16 @@ public class AppInfoWizard extends Wizard {
 				if (metarepositoryConnectionPage.getDbClass().length()==0) return false;
 			}
 			
-			
+			//Server Info form
+			if (serverInfoPage.getSiteName()==null || serverInfoPage.getSiteName().length()==0) return false;
+			if (serverInfoPage.getOwnerEmail()==null) return false;
+      
+			//Do a regular expression confirmation of the owner email:
+			//Set the email pattern string
+      Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+      Matcher m = p.matcher(serverInfoPage.getOwnerEmail());
+      if(! m.matches()) return false;
+      
 		} catch (Exception e) {
 			log.error("Error validating setup wizard", e);
 			return false;
@@ -229,6 +247,12 @@ public class AppInfoWizard extends Wizard {
 	public boolean performFinish() {
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
+		
+		Site site = new Site();
+		site.setRandomId();
+		site.setOwnerEmail(serverInfoPage.getOwnerEmail());
+		site.setName(serverInfoPage.getSiteName());
+		appInfo.setSite(site);
 		
 		if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
 			metarepositoryConnection.setDbURL(H2_DB_URL_BASE + embeddedMetarepositoryDBPage.getDbName());

@@ -3,8 +3,6 @@ package org.inqle.ui.rap;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.actions.AppInfoWizardAction;
 import org.inqle.ui.rap.tree.PartsView;
 
 /**
