@@ -32,7 +32,7 @@ public class InqleInfo {
 	public static final String ID_ATTRIBUTE = "id";
 	public static final String DESCRIPTION_ATTRIBUTE = "description";
 	
-	public static final String INQLE_VERSION = "0.0.9";
+	public static final String INQLE_VERSION = "0.1.3";
 
 	public static final String PROJECT_WEBSITE = "http://code.google.com/p/inqle/";
 
@@ -41,6 +41,9 @@ public class InqleInfo {
 	public static final String ASSETS_FOLDER = "assets";
 
 	private static final int SERVER_PORT = 7070;
+
+	//TODO use this:public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org/register";
+	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost/register";
 	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
@@ -65,4 +68,10 @@ public class InqleInfo {
 	public static int getServerPort() {
 		return SERVER_PORT;
 	}
+
+	public static final String SITE_ID_PARAM = "site";
+
+	public static final String REGISTER_RDF_PARAM = "rdf";
+
+	public static final String INQLE_VERSION_PARAM = "ver";
 }
