@@ -2,11 +2,9 @@ package org.inqle.data.rdf.jena.sdb;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
@@ -14,11 +12,9 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.util.Converter;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.ArcStep;
 import org.inqle.data.rdf.jenabean.ArcSet;
-import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.ArcStep;
 
-import thewebsemantic.RDF2Bean;
 import thewebsemantic.TypeWrapper;
 
 import com.hp.hpl.jena.query.Dataset;
@@ -27,10 +23,7 @@ import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sdb.SDB;
 
 /**
@@ -285,7 +278,8 @@ SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
 	 */
 	public static String getSparqlJenabeanId(Class<?> clazz, ArcSet arcSet) {
 		TypeWrapper classWrapper = TypeWrapper.wrap(clazz);
-		String classBaseUri = classWrapper.inspect();
+		//String classBaseUri = classWrapper.inspect();
+		String classBaseUri = classWrapper.typeUri();
 		String classUri = classBaseUri + clazz.getCanonicalName();
 		String idPredicate = classBaseUri + RDF.JENABEAN_ID_ATTRIBUTE;
 		String sparql = "PREFIX ja: <" + RDF.JA + ">\n"; 

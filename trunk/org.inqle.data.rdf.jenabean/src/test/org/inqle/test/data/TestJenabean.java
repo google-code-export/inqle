@@ -1,12 +1,18 @@
 package org.inqle.test.data;
 
+import static org.junit.Assert.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.junit.Test;
+import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Bean2RDF;
+import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -103,5 +109,37 @@ public class TestJenabean {
 			e.printStackTrace();
 		}
 		System.out.println("Loaded beanWithArraysReloaded:" + JenabeanWriter.toString(beanWithArraysReloaded));
+	}
+	
+	@Test
+	public void testUriField() {
+		BeanWithUri beanWithUri = new BeanWithUri();
+		beanWithUri.setId("1234");
+		URI aUri = null;
+		try {
+			aUri = new URI(RDF.INQLE + "uriField");
+		} catch (URISyntaxException e) {
+			System.out.println("Error in testing code: URISyntaxException creating URI" + e);
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		beanWithUri.setUriField(aUri);
+		
+		//save the beanWithUri
+		Model memoryModel = ModelFactory.createDefaultModel();
+		
+		Bean2RDF writer = new Bean2RDF(memoryModel);
+		writer.save(beanWithUri);
+		System.out.println("Saved beanWithUri:" + JenabeanWriter.toString(beanWithUri));
+	
+		RDF2Bean reader = new RDF2Bean(memoryModel);
+		try {
+			BeanWithUri reconstitutedBeanWithUri = (BeanWithUri)reader.load(BeanWithUri.class, "1234");
+			System.out.println("Loaded beanWithUri:" + JenabeanWriter.toString(reconstitutedBeanWithUri));
+		} catch (NotFoundException e) {
+			System.out.println("Error reconstituting BeanWithUri");
+			e.printStackTrace();
+			assertTrue(false);
+		}
 	}
 }

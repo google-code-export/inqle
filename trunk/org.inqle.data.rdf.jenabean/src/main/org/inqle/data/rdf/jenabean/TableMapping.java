@@ -59,7 +59,7 @@ public class TableMapping extends GlobalJenabean {
 		super.clone(objectToBeCloned);
 	}
 	
-	public IBasicJenabean createClone() {
+	public TableMapping createClone() {
 		TableMapping dataMapping = new TableMapping();
 		dataMapping.clone(this);
 		return dataMapping;
