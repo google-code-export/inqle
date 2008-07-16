@@ -10,6 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.RdfTable;
+import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jenabean.DataMapping;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.util.HttpParameterParser;
 
 public class LookupServlet extends HttpServlet {
@@ -18,6 +24,8 @@ public class LookupServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = -4242876578599704824L;
+
+	private static final int COUNT_SEARCH_RESULTS = 10;
 
 	private static Logger log = Logger.getLogger(LookupServlet.class);
 
@@ -47,14 +55,44 @@ public class LookupServlet extends HttpServlet {
 		}
 		
 		//every request needs a siteId
-		String siteId = HttpParameterParser.getParam(request, InqleInfo.SITE_ID_PARAM);
+		String siteId = HttpParameterParser.getParam(request, InqleInfo.PARAM_SITE_ID);
 		if (siteId == null || siteId.length()==0) {
-			respondIrregularity(HttpURLConnection.HTTP_BAD_REQUEST, "Irregularity: received no value for request parameter:" + InqleInfo.SITE_ID_PARAM);
+			respondIrregularity(HttpURLConnection.HTTP_BAD_REQUEST, "Irregularity: received no value for request parameter:" + InqleInfo.PARAM_SITE_ID);
 			return;
 		}
 		
+		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
+		if (searchTermForRdfClass != null) {
+			Persister persister = Persister.getInstance();
+			QueryCriteria queryCriteria = new QueryCriteria();
+			queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+			//todo add model which contains classes and their labels & detail fields
+			queryCriteria.setQuery(getSparqlSearchRdfClasses(searchTermForRdfClass, COUNT_SEARCH_RESULTS, 1));
+			RdfTable matchingClasses = Queryer.selectRdfTable(queryCriteria);
+		}
 	}
 	
+	private String getSparqlSearchRdfClasses(String searchRdfClass, int limit, int offset) {
+		String sparql = 
+			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+			"PREFIX dc: <" + RDF.DC + ">\n" + 
+			"PREFIX pf: <" + RDF.PF + ">\n" + 
+			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+			"SELECT ?classUri ?classLabel ?classDescription ?score \n" +
+			"{\n" +
+			"GRAPH ?g {\n" +
+			"?classUri a owl:Class\n" +
+			". OPTIONAL { ?classUri dc:title ?className }\n" +
+			". OPTIONAL { ?classUri rdfs:detail ?classDescription } \n" +
+			". (?stringLiteral ?score ) pf:textMatch '*" + searchRdfClass + "*' \n" +
+			". ?classUri ?p ?stringLiteral \n" +
+			"} } ORDER BY DESC(?score) \n" +
+			"LIMIT " + limit + " OFFSET " + offset;
+		return sparql;
+	}
+
 	private void respondIrregularity(int status, String message) {
 		log.info("Received valid RDF but no statements.");
 		response.setStatus(status);
