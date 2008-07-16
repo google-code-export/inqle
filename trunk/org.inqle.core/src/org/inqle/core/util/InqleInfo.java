@@ -69,9 +69,11 @@ public class InqleInfo {
 		return SERVER_PORT;
 	}
 
-	public static final String SITE_ID_PARAM = "site";
+	public static final String PARAM_SITE_ID = "site";
 
-	public static final String REGISTER_RDF_PARAM = "rdf";
+	public static final String PARAM_REGISTER_RDF = "rdf";
 
-	public static final String INQLE_VERSION_PARAM = "ver";
+	public static final String PARAM_INQLE_VERSION = "ver";
+
+	public static final String PARAM_SEARCH_RDF_CLASS = "searchClass";
 }
