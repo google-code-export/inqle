@@ -50,7 +50,7 @@ public class Requestor {
 	 */
 	public static boolean registerObject(Object object, Writer outWriter) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(InqleInfo.REGISTER_RDF_PARAM, JenabeanWriter.toString(object));
+		params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.toString(object));
 		return registerData(params, outWriter);
 	}
 	
@@ -67,8 +67,8 @@ public class Requestor {
 	public static boolean postData(String urlStr, Map<String, String> params, Writer outWriter) {
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
-		params.put(InqleInfo.SITE_ID_PARAM, persister.getAppInfo().getSite().getId());
-		params.put(InqleInfo.INQLE_VERSION_PARAM, InqleInfo.getInqleVersion());
+		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
+		params.put(InqleInfo.PARAM_INQLE_VERSION, InqleInfo.getInqleVersion());
 		
 		URL url;
 		boolean success = true;
