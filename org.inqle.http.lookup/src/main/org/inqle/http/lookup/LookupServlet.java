@@ -94,7 +94,7 @@ public class LookupServlet extends HttpServlet {
 	}
 
 	private void respondIrregularity(int status, String message) {
-		log.info("Received valid RDF but no statements.");
+		log.info(message);
 		response.setStatus(status);
 		out.println(message);
 	}
