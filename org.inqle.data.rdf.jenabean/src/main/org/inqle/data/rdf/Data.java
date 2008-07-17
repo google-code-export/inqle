@@ -17,6 +17,8 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class Data {
 
+	public static final String OWL_CLASS_DATASET_ROLE_ID = "org.inqle.datasets.owlClass";
+
 	
 
 }
