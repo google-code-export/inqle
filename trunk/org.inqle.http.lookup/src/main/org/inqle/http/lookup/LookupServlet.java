@@ -13,6 +13,7 @@ import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
+import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.DataMapping;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -66,9 +67,10 @@ public class LookupServlet extends HttpServlet {
 			Persister persister = Persister.getInstance();
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
-			//todo add model which contains classes and their labels & detail fields
+			//todo add model which contains classes and their labels & comment fields
 			queryCriteria.setQuery(getSparqlSearchRdfClasses(searchTermForRdfClass, COUNT_SEARCH_RESULTS, 1));
 			RdfTable matchingClasses = Queryer.selectRdfTable(queryCriteria);
+			log.info("Queried and got these matching results:\n" + RdfTableWriter.dataTableToString(matchingClasses));
 		}
 	}
 	
@@ -80,12 +82,12 @@ public class LookupServlet extends HttpServlet {
 			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX pf: <" + RDF.PF + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?classUri ?classLabel ?classDescription ?score \n" +
+			"SELECT ?classUri ?classLabel ?classComment ?score \n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
 			"?classUri a owl:Class\n" +
-			". OPTIONAL { ?classUri dc:title ?className }\n" +
-			". OPTIONAL { ?classUri rdfs:detail ?classDescription } \n" +
+			". OPTIONAL { ?classUri rdfs:classLabel ?classLabel }\n" +
+			". OPTIONAL { ?classUri rdfs:comment ?classComment } \n" +
 			". (?stringLiteral ?score ) pf:textMatch '*" + searchRdfClass + "*' \n" +
 			". ?classUri ?p ?stringLiteral \n" +
 			"} } ORDER BY DESC(?score) \n" +
