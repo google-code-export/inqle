@@ -333,11 +333,11 @@ public class Persister {
 	}
 	
 	public IndexBuilderModel getIndexBuilder(String datasetRoleId) {
-		return indexBuilders.get(datasetRoleId);
+		return getIndexBuilders().get(datasetRoleId);
 	}
 	
 	public IndexLARQ getIndex(String datasetRoleId) {
-		IndexBuilderModel indexBuilder = indexBuilders.get(datasetRoleId);
+		IndexBuilderModel indexBuilder = getIndexBuilders().get(datasetRoleId);
 		if (indexBuilder == null) {
 			return null;
 		}
@@ -428,6 +428,21 @@ public class Persister {
 		return internalDatasets;
 	}
 
+	public Map<String, Model> getCachedModels() {
+		if (cachedModels == null) {
+			getInternalDatasets();
+		}
+		return cachedModels;
+	}
+
+	public Map<String, IndexBuilderModel> getIndexBuilders() {
+		if (indexBuilders == null) {
+			//assume we are starting up, and the internal models and datasets must be created
+			getInternalDatasets();
+		}
+		return indexBuilders;
+	}
+	
 	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
 	 * @param namedModel
@@ -1019,13 +1034,6 @@ public class Persister {
 	public static boolean resourceExists(String uri, Model model) {
 		Resource resource = ResourceFactory.createResource(uri);
 		return model.containsResource(resource);
-	}
-
-	public Map<String, Model> getCachedModels() {
-		if (cachedModels == null) {
-			getInternalDatasets();
-		}
-		return cachedModels;
 	}
 	
 	/* *********************************************************************
