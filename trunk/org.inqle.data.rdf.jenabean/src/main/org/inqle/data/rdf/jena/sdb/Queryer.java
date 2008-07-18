@@ -23,6 +23,7 @@ import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.sdb.SDB;
 
@@ -93,6 +94,10 @@ GRAPH ?g {
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
 		qe.getContext().set(SDB.unionDefaultGraph, true) ;
 		
+		if (queryCriteria.getTextIndex() != null) {
+			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
+		}
+		
 		//Do the query
 		ResultSet resultSet;
 		//SDB.getContext().set(SDB.unionDefaultGraph, true);
@@ -139,6 +144,10 @@ GRAPH ?g {
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
 		qe.getContext().set(SDB.unionDefaultGraph, true) ;
 		
+		if (queryCriteria.getTextIndex() != null) {
+			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
+		}
+		
 		//Do the query
 		ResultSet resultSet;
 		//SDB.getContext().set(SDB.unionDefaultGraph, true);
@@ -181,6 +190,10 @@ GRAPH ?g {
 		
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
 		qe.getContext().set(SDB.unionDefaultGraph, true) ;
+		
+		if (queryCriteria.getTextIndex() != null) {
+			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
+		}
 		
 		//Do the query
 		ResultSet resultSet;

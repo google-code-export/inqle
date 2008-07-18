@@ -12,6 +12,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 import com.hp.hpl.jena.query.DataSource;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.DatasetFactory;
+import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.sdb.Store;
 
@@ -41,6 +42,7 @@ public class QueryCriteria {
 	private List<NamedModel> namedModels = new ArrayList<NamedModel>();
 	private DataSource dataSource = null;
 	private String query = "";
+	private IndexLARQ textIndex = null;
 	
 	//private Persister persister = null;
 	
@@ -154,6 +156,14 @@ public class QueryCriteria {
 			throw new RuntimeException("QueryCriteria has had " + models.size() + " models added to it.  Should have 1 model added to it if getModel() is to be called.");
 		}
 		return (Model) models.get(0);
+	}
+
+	public IndexLARQ getTextIndex() {
+		return textIndex;
+	}
+
+	public void setTextIndex(IndexLARQ textIndex) {
+		this.textIndex = textIndex;
 	}
 	
 	/*

@@ -30,7 +30,8 @@
            id="org.inqle.datasets.owlClass"
            weight="4000"
            description="contains OWL classes, used as subjects of data">
-					 cacheInMemory="false"
+					 cacheInMemory="true"
+					 textIndexType="subject"
 			</dataset>
    </extension>
 
