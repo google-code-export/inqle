@@ -88,8 +88,10 @@ public class LookupServlet extends HttpServlet {
 			"?classUri a owl:Class\n" +
 			". OPTIONAL { ?classUri rdfs:classLabel ?classLabel }\n" +
 			". OPTIONAL { ?classUri rdfs:comment ?classComment } \n" +
-			". (?stringLiteral ?score ) pf:textMatch '*" + searchRdfClass + "*' \n" +
-			". ?classUri ?p ?stringLiteral \n" +
+//			Use these if you switch back to Class IndexBuilderString
+//			". (?stringLiteral ?score ) pf:textMatch '" + searchRdfClass + "' \n" +
+//			". ?classUri ?p ?stringLiteral \n" +
+			". (?classUri ?score ) pf:textMatch '" + searchRdfClass + "' \n" +
 			"} } ORDER BY DESC(?score) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
