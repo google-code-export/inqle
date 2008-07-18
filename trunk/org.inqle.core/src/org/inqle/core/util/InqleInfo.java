@@ -44,6 +44,7 @@ public class InqleInfo {
 
 	//TODO use this:public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org/register";
 	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost/register";
+	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://localhost/lookup";
 	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
