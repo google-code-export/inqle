@@ -31,6 +31,11 @@ import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.query.larq.IndexBuilder;
+import com.hp.hpl.jena.query.larq.IndexBuilderModel;
+import com.hp.hpl.jena.query.larq.IndexBuilderString;
+import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
+import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -60,7 +65,10 @@ public class Persister {
 	public static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
 	public static final String METAREPOSITORY_DATASET = "org.inqle.datasets.metaRepository";
 
-	private static final String CACHE_MODEL_ATTRIBUTE = "cacheInMemory";
+	private static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
+	private static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
+	private static final Object TEXT_INDEX_TYPE_SUBJECT = "subject";
+	private static final Object TEXT_INDEX_TYPE_LITERAL = "literal";
 	
 	private AppInfo appInfo = null;
 //	private OntModel metarepositoryModel = null;
@@ -71,6 +79,7 @@ public class Persister {
 	
 	private Map<String, Model> cachedModels = null;
 	private Map<String, InternalDataset> internalDatasets = null;
+	private Map<String, IndexBuilderModel> indexBuilders;
 	
 	/* *********************************************************************
 	 * *** FACTORY METHODS
@@ -322,6 +331,19 @@ public class Persister {
 		}
 		return getInternalDatasets().get(datasetRoleId);
 	}
+	
+	public IndexBuilderModel getIndexBuilder(String datasetRoleId) {
+		return indexBuilders.get(datasetRoleId);
+	}
+	
+	public IndexLARQ getIndex(String datasetRoleId) {
+		IndexBuilderModel indexBuilder = indexBuilders.get(datasetRoleId);
+		if (indexBuilder == null) {
+			return null;
+		}
+		return indexBuilder.getIndex();
+	}
+	
 	/**
 	 * Get the map of internal datasets.  If this does not exist yet (i.e. on first execution
 	 * of this method) then create it.  To create it, first load what exists in the Metarepository.
@@ -358,8 +380,11 @@ public class Persister {
 			Connection defaultInternalConnection = getAppInfo().getInternalConnection();
 			for (IExtensionSpec datasetExtension: datasetExtensions) {
 				String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-				String cacheModelString = datasetExtension.getAttribute(CACHE_MODEL_ATTRIBUTE);
+				String cacheModelString = datasetExtension.getAttribute(ATTRIBUTE_CACHE_MODEL);
 				boolean cacheModel = Boolean.getBoolean(cacheModelString);
+				
+				String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
+				
 				if (internalDatasets.containsKey(datasetRoleId)) {
 					continue;
 				}
@@ -377,6 +402,23 @@ public class Persister {
 				if (cacheModel) {
 					log.info("Caching model for role " + datasetRoleId);
 					cachedModels.put(datasetRoleId, internalModel);
+				}
+				
+				//if directed to do so, build & store an index for this Model
+				if (textIndexType != null) {
+					textIndexType = textIndexType.toLowerCase();
+					IndexBuilderModel larqBuilder = null;
+					if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+						larqBuilder = new IndexBuilderSubject();
+					} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+						larqBuilder = new IndexBuilderString() ;
+					}
+					if (larqBuilder != null) {
+						larqBuilder.indexStatements(internalModel.listStatements()) ;
+						internalModel.register(larqBuilder);
+						//save this larqBuilder
+						indexBuilders.put(datasetRoleId, larqBuilder);
+					}
 				}
 				log.info("assembled list of internal datasets:" + internalDatasets);
 			}

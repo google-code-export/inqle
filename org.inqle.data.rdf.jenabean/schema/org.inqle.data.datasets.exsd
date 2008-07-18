@@ -69,10 +69,22 @@
             </annotation>
          </attribute>
          
-         <attribute name="description" type="string" use="required">
+          <attribute name="cacheInMemory" type="string" default="false">
             <annotation>
                <documentation>
-                  describes the use of the dataset
+                  if true, the data in this dataset will be cached in memory.
+                  Set to true for smaller dataset with frequent need for lookups
+                  Default = false
+               </documentation>
+            </annotation>
+         </attribute>
+         
+         <attribute name="textIndexType" type="string">
+            <annotation>
+               <documentation>
+                  the type of text index, if any.  Allowed values include 'subject' (index text by subject,
+                  more compact) or 'literal' (index text by literal)
+                  cacheInMemory should probably be set to 'true' if you are using this attribute
                </documentation>
             </annotation>
          </attribute>

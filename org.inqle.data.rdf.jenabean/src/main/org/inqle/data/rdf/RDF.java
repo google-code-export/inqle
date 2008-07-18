@@ -24,8 +24,10 @@ public class RDF {
 	public static final String JENABEAN_ID_ATTRIBUTE = "id";
 	public static final String UNKNOWN_SUBJECT = INQLE + "unknownSubject";
 	
-	public static final String DESCRIPTION_PREDICATE = RDFS + "detail";
-	public static final String NAME_PREDICATE = DC + "name";
+	public static final String DESCRIPTION_PREDICATE = RDFS + "comment";
+	//public static final String NAME_PREDICATE = DC + "name";
+	public static final String NAME_PREDICATE = RDFS + "label";
+	public static final String FOAF = "http://xmlns.com/foaf/0.1/";
 	
 	
 	/**
