@@ -47,7 +47,7 @@
                   the ID of the dataset role, e.g. org.inqle.datasets.ns
                   Java classes which are intended to be stored in this dataset
                   should have the annotation pointing to this ID, e.g.
-                  @TargetDataset("org.inqle.datasets.ns")
+                  @TargetDataset(&quot;org.inqle.datasets.ns&quot;)
                </documentation>
             </annotation>
          </attribute>
@@ -58,8 +58,14 @@
                </documentation>
             </annotation>
          </attribute>
-         
-         <attribute name="cacheInMemory" type="string" default="false">
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  a description
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="cacheInMemory" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
                   if true, the data in this dataset will be cached in memory.
@@ -68,23 +74,12 @@
                </documentation>
             </annotation>
          </attribute>
-         
-          <attribute name="cacheInMemory" type="string" default="false">
-            <annotation>
-               <documentation>
-                  if true, the data in this dataset will be cached in memory.
-                  Set to true for smaller dataset with frequent need for lookups
-                  Default = false
-               </documentation>
-            </annotation>
-         </attribute>
-         
          <attribute name="textIndexType" type="string">
             <annotation>
                <documentation>
-                  the type of text index, if any.  Allowed values include 'subject' (index text by subject,
-                  more compact) or 'literal' (index text by literal)
-                  cacheInMemory should probably be set to 'true' if you are using this attribute
+                  the type of text index, if any.  Allowed values include &apos;subject&apos; (index text by subject,
+                  more compact) or &apos;literal&apos; (index text by literal)
+                  cacheInMemory should probably be set to &apos;true&apos; if you are using this attribute
                </documentation>
             </annotation>
          </attribute>
