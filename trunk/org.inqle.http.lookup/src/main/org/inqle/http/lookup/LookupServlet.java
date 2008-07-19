@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
@@ -18,6 +19,8 @@ import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.DataMapping;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.util.HttpParameterParser;
+
+import com.hp.hpl.jena.query.larq.IndexLARQ;
 
 public class LookupServlet extends HttpServlet {
 
@@ -66,7 +69,10 @@ public class LookupServlet extends HttpServlet {
 		if (searchTermForRdfClass != null) {
 			Persister persister = Persister.getInstance();
 			QueryCriteria queryCriteria = new QueryCriteria();
-			queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+			queryCriteria.addNamedModel(persister.getInternalDataset(Data.OWL_CLASS_DATASET_ROLE_ID));
+			IndexLARQ textIndex =  persister.getIndex(Data.OWL_CLASS_DATASET_ROLE_ID);
+			log.info("Adding text index " + textIndex);
+			queryCriteria.setTextIndex(textIndex);
 			//todo add model which contains classes and their labels & comment fields
 			queryCriteria.setQuery(getSparqlSearchRdfClasses(searchTermForRdfClass, COUNT_SEARCH_RESULTS, 1));
 			RdfTable matchingClasses = Queryer.selectRdfTable(queryCriteria);
@@ -83,15 +89,16 @@ public class LookupServlet extends HttpServlet {
 			"PREFIX pf: <" + RDF.PF + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"SELECT ?classUri ?classLabel ?classComment ?score \n" +
+//			"SELECT ?classUri ?score \n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			"?classUri a owl:Class\n" +
-			". OPTIONAL { ?classUri rdfs:classLabel ?classLabel }\n" +
+			//"?classUri a owl:Class \n" +
+			"OPTIONAL { ?classUri rdfs:label ?classLabel }\n" +
 			". OPTIONAL { ?classUri rdfs:comment ?classComment } \n" +
 //			Use these if you switch back to Class IndexBuilderString
 //			". (?stringLiteral ?score ) pf:textMatch '" + searchRdfClass + "' \n" +
 //			". ?classUri ?p ?stringLiteral \n" +
-			". (?classUri ?score ) pf:textMatch '" + searchRdfClass + "' \n" +
+			". (?classUri ?score ) pf:textMatch '+" + searchRdfClass + "' \n" +
 			"} } ORDER BY DESC(?score) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
