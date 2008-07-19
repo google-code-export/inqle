@@ -29,9 +29,9 @@
 			<dataset
            id="org.inqle.datasets.owlClass"
            weight="4000"
-           description="contains OWL classes, used as subjects of data">
+           description="contains OWL classes, used as subjects of data"
 					 cacheInMemory="true"
-					 textIndexType="subject"
+					 textIndexType="subject">
 			</dataset>
    </extension>
 

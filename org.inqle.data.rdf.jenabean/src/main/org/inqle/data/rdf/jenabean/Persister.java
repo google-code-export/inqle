@@ -337,10 +337,15 @@ public class Persister {
 	}
 	
 	public IndexLARQ getIndex(String datasetRoleId) {
-		IndexBuilderModel indexBuilder = getIndexBuilders().get(datasetRoleId);
+		Map<String, IndexBuilderModel> idxBuilders = getIndexBuilders();
+		if (idxBuilders==null) {
+			return null;
+		}
+		IndexBuilderModel indexBuilder = idxBuilders.get(datasetRoleId);
 		if (indexBuilder == null) {
 			return null;
 		}
+		
 		return indexBuilder.getIndex();
 	}
 	
@@ -357,73 +362,58 @@ public class Persister {
 	 * this info.  This would allow new plugins to be found and their datasets to be created
 	 */
 	private Map<String, InternalDataset> getInternalDatasets() {
-		if (internalDatasets == null) {
-			internalDatasets = new HashMap<String, InternalDataset>();
-			//load all saved InternalDatasets
-			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
-			Collection<InternalDataset> savedInternalDatasets = new ArrayList<InternalDataset>();
-			savedInternalDatasets = reader.load(InternalDataset.class);
-			if (savedInternalDatasets == null || savedInternalDatasets.size()==0) {
-				log.warn("Unable to load InternalDataset objects.  Perhaps they do not yet exist.");
-			} else {
-				//add each to the internalDatasets in-memory Map
-				for (InternalDataset savedInternalDataset: savedInternalDatasets) {
-					internalDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
-				}
-			}
-			
-			//get all internal dataset extensions
-			List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
-			
-			//find or create the Dataset for each.  Store models in cachedModels, where signalled to do so
-			cachedModels = new HashMap<String, Model>();
-			Connection defaultInternalConnection = getAppInfo().getInternalConnection();
-			for (IExtensionSpec datasetExtension: datasetExtensions) {
-				String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-				String cacheModelString = datasetExtension.getAttribute(ATTRIBUTE_CACHE_MODEL);
-				boolean cacheModel = Boolean.getBoolean(cacheModelString);
-				
-				String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
-				
-				if (internalDatasets.containsKey(datasetRoleId)) {
-					continue;
-				}
-				//create the Dataset
-				InternalDataset internalDataset = new InternalDataset();
-				internalDataset.setDatasetRole(datasetRoleId);
-				internalDataset.setConnectionId(defaultInternalConnection.getId());
-				persist(internalDataset);
-				log.info("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
-				internalDatasets.put(datasetRoleId, internalDataset);
-				
-				//create the underlying model in the SDB database
-				Model internalModel = createDBModel(defaultInternalConnection, internalDataset.getId());
-				log.info("Created new Model for role " + datasetRoleId + " of size " + internalModel.size());
-				if (cacheModel) {
-					log.info("Caching model for role " + datasetRoleId);
-					cachedModels.put(datasetRoleId, internalModel);
-				}
-				
-				//if directed to do so, build & store an index for this Model
-				if (textIndexType != null) {
-					textIndexType = textIndexType.toLowerCase();
-					IndexBuilderModel larqBuilder = null;
-					if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
-						larqBuilder = new IndexBuilderSubject();
-					} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
-						larqBuilder = new IndexBuilderString() ;
-					}
-					if (larqBuilder != null) {
-						larqBuilder.indexStatements(internalModel.listStatements()) ;
-						internalModel.register(larqBuilder);
-						//save this larqBuilder
-						indexBuilders.put(datasetRoleId, larqBuilder);
-					}
-				}
-				log.info("assembled list of internal datasets:" + internalDatasets);
-			}
-			//for any that do not exist, create them.
+		if (internalDatasets != null) {
+			return internalDatasets;
 		}
+		
+		internalDatasets = new HashMap<String, InternalDataset>();
+		//load all saved InternalDatasets
+		RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
+		Collection<InternalDataset> savedInternalDatasets = new ArrayList<InternalDataset>();
+		savedInternalDatasets = reader.load(InternalDataset.class);
+		if (savedInternalDatasets == null || savedInternalDatasets.size()==0) {
+			log.warn("Unable to load InternalDataset objects.  Perhaps they do not yet exist.");
+		} else {
+			//add each to the internalDatasets in-memory Map
+			for (InternalDataset savedInternalDataset: savedInternalDatasets) {
+				internalDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
+			}
+		}
+		
+		//get all internal dataset extensions
+		List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
+		
+		//find or create the Dataset for each.  Store models in cachedModels, where signalled to do so
+		cachedModels = new HashMap<String, Model>();
+		Connection defaultInternalConnection = getAppInfo().getInternalConnection();
+		for (IExtensionSpec datasetExtension: datasetExtensions) {
+			
+			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String cacheModelString = datasetExtension.getAttribute(ATTRIBUTE_CACHE_MODEL);
+			boolean cacheModel = Boolean.getBoolean(cacheModelString);
+			
+			if (internalDatasets.containsKey(datasetRoleId)) {
+				continue;
+			}
+			//create the Dataset
+			InternalDataset internalDataset = new InternalDataset();
+			internalDataset.setDatasetRole(datasetRoleId);
+			internalDataset.setConnectionId(defaultInternalConnection.getId());
+			persist(internalDataset);
+			log.info("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
+			internalDatasets.put(datasetRoleId, internalDataset);
+			
+			//create the underlying model in the SDB database
+			Model internalModel = createDBModel(defaultInternalConnection, internalDataset.getId());
+			log.info("Created new Model for role " + datasetRoleId + " of size " + internalModel.size());
+			if (cacheModel) {
+				log.info("Caching model for role " + datasetRoleId);
+				cachedModels.put(datasetRoleId, internalModel);
+			}
+		}
+		
+		//having created the Datasets and Models, make sure any text indexes have been created
+		getIndexBuilders();
 		
 		return internalDatasets;
 	}
@@ -436,13 +426,41 @@ public class Persister {
 	}
 
 	public Map<String, IndexBuilderModel> getIndexBuilders() {
-		if (indexBuilders == null) {
-			//assume we are starting up, and the internal models and datasets must be created
-			getInternalDatasets();
+		if (indexBuilders != null) {
+			return indexBuilders;
 		}
+		
+		indexBuilders = new HashMap<String, IndexBuilderModel>();
+		//loop thru extensions, and create each index
+		List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
+		for (IExtensionSpec datasetExtension: datasetExtensions) {
+			log.info("datasetExtension=" + datasetExtension);
+			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
+			log.info("datasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
+			//if directed to do so, build & store an index for this Model
+			if (textIndexType != null) {
+				textIndexType = textIndexType.toLowerCase();
+				IndexBuilderModel larqBuilder = null;
+				Model internalModel = getInternalModel(datasetRoleId);
+				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+					larqBuilder = new IndexBuilderSubject();
+				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+					larqBuilder = new IndexBuilderString() ;
+				}
+				if (larqBuilder != null) {
+					log.info("Indexing into Index for role " + datasetRoleId + "...");
+					larqBuilder.indexStatements(internalModel.listStatements()) ;
+					log.info("Registering Index for role " + datasetRoleId + "...");
+					internalModel.register(larqBuilder);
+					//save this larqBuilder
+					indexBuilders.put(datasetRoleId, larqBuilder);
+				}
+			}
+		}
+		log.info("assembled list of index builders:" + indexBuilders);
 		return indexBuilders;
 	}
-	
 	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
 	 * @param namedModel
