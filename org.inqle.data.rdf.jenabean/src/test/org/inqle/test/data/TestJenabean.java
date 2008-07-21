@@ -117,7 +117,7 @@ public class TestJenabean {
 		beanWithUri.setId("1234");
 		URI aUri = null;
 		try {
-			aUri = new URI(RDF.INQLE + "uriField");
+			aUri = new URI(RDF.FOAF + "Person");
 		} catch (URISyntaxException e) {
 			System.out.println("Error in testing code: URISyntaxException creating URI" + e);
 			e.printStackTrace();
