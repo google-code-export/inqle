@@ -19,10 +19,14 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.w3c.dom.Document;
 
 /**
  * @author David Donohue
@@ -57,6 +61,7 @@ public class Requestor {
 	public static boolean registerData(Map<String, String> params, Writer outWriter) {
 		return postData(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, outWriter);
 	}
+	
 	/**
 	* Reads data from the data reader and posts it to a server via POST request.
 	* @param url - The server's address
@@ -135,6 +140,76 @@ public class Requestor {
 		return success;
 	}
 
+	/**
+	* Reads data from the data reader and posts it to a server via POST request.
+	* @param url - The server's address
+	* @param params - the Map of key-value pairs to send as request variables
+	* @param output - writes the server's response to output
+	* @throws Exception
+	*/
+	public static Document retrieveXml(String urlStr, Map<String, String> params) {
+		Document document = null;
+		//add siteId to the params
+		Persister persister = Persister.getInstance();
+		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
+		params.put(InqleInfo.PARAM_INQLE_VERSION, InqleInfo.getInqleVersion());
+		
+		URL url;
+		
+		try {
+			url = new URL(urlStr);
+		} catch (MalformedURLException e) {
+			log.error("Malformed URL: '" + urlStr + "'.  Not sending HTTP request", e);
+			return null;
+		}
+		HttpURLConnection urlc = null;
+		try {
+			urlc = (HttpURLConnection) url.openConnection();
+			try {
+				urlc.setRequestMethod("POST");
+			} catch (ProtocolException e) {
+				log.error("Should never happen: HttpURLConnection does not support POST?", e);
+				return null;
+			}
+			
+			urlc.setDoOutput(true);
+			urlc.setDoInput(true);
+			urlc.setUseCaches(false);
+			urlc.setAllowUserInteraction(false);
+			//urlc.setRequestProperty("Content-type", "text/xml; charset=" + "UTF-8");
+			urlc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			
+			if (params != null && params.size() > 0) {
+				String requestParams = "";
+				for (String key: params.keySet()) {
+					if (requestParams.length() > 0) requestParams += "&";
+					String value = URLEncoder.encode(String.valueOf(params.get(key)), "UTF-8");
+					requestParams += key + "=" + value;
+				}
+				urlc.setRequestProperty("Content-Length", String.valueOf(requestParams.length()));
+				log.info("Sending request params of length: " + requestParams.length());
+				OutputStreamWriter outStream = new OutputStreamWriter(new BufferedOutputStream(urlc.getOutputStream()));
+				outStream.write(requestParams);
+				outStream.close();
+				log.info("added request params:\n" + requestParams);
+			}
+			
+			InputStream in = urlc.getInputStream();
+			DocumentBuilder builder =
+	       DocumentBuilderFactory.newInstance().newDocumentBuilder();
+	    document = builder.parse(in);
+		} catch (IOException e) {
+			log.error("Connection error; Unable to connect to server at " + url, e);
+		} catch (Exception e) {
+			log.error("Error parsing XML from InputStream from URL " + url + " for parameters: " + params, e);
+		} finally {
+			if (urlc != null) {
+				urlc.disconnect();
+			}
+		}
+		return document;
+	}
+	
 	/**
 	* Pipes everything from the reader to the writer via a buffer
 	*/
