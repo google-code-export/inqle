@@ -152,11 +152,15 @@ public class PartsView extends ViewPart implements IMenuListener {
 		//if AppInfo not yet set up, show the setup wizard
 		Persister persister = Persister.getInstance();
 		while (persister.getAppInfo() == null) {
-			AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(getSite().getWorkbenchWindow());
-			appInfoWizardAction.run();
-			if (persister.getAppInfo() != null) {
-				log.info("Registering Site with central INQLE server...");
-				log.info("Success? " + Requestor.registerObject(persister.getAppInfo().getSite()));
+			try {
+				AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(getSite().getWorkbenchWindow());
+				appInfoWizardAction.run();
+				if (persister.getAppInfo() != null) {
+					log.info("Registering Site with central INQLE server...");
+					log.info("Success? " + Requestor.registerObject(persister.getAppInfo().getSite()));
+				}
+			} catch (Exception e) {
+				log.error("Error running setup wizard", e);
 			}
 		}
 		
