@@ -17,10 +17,15 @@ import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.DataMapping;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.util.HttpParameterParser;
 
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
+import com.hp.hpl.jena.rdf.model.Model;
 
 public class LookupServlet extends HttpServlet {
 
@@ -39,13 +44,11 @@ public class LookupServlet extends HttpServlet {
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
-		log.info("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReceived Get request: " + request);
 		doWork(request, response);
 	}
 	
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
-		log.info("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRReceived Post request: " + request);
 		doWork(request, response);
 	}
 
@@ -71,12 +74,16 @@ public class LookupServlet extends HttpServlet {
 			QueryCriteria queryCriteria = new QueryCriteria();
 			queryCriteria.addNamedModel(persister.getInternalDataset(Data.OWL_CLASS_DATASET_ROLE_ID));
 			IndexLARQ textIndex =  persister.getIndex(Data.OWL_CLASS_DATASET_ROLE_ID);
-			log.info("Adding text index " + textIndex);
 			queryCriteria.setTextIndex(textIndex);
-			//todo add model which contains classes and their labels & comment fields
 			queryCriteria.setQuery(getSparqlSearchRdfClasses(searchTermForRdfClass, COUNT_SEARCH_RESULTS, 1));
-			RdfTable matchingClasses = Queryer.selectRdfTable(queryCriteria);
-			log.info("Queried and got these matching results:\n" + RdfTableWriter.dataTableToString(matchingClasses));
+			String matchingClassesXml = Queryer.selectXml(queryCriteria);
+			log.info("Queried and got these matching results:\n" + matchingClassesXml);
+			
+//			Model matchingClassesModel = Queryer.selectRdf(queryCriteria);
+//			log.info("Queried and got these matching RDF results:\n" + JenabeanWriter.modelToString(matchingClassesModel));
+//			RdfTable matchingClasses = Queryer.selectRdfTable(queryCriteria);
+//			log.info("Queried and got these matching results:\n" + RdfTableWriter.dataTableToString(matchingClasses));
+			respondOK(matchingClassesXml);
 		}
 	}
 	
@@ -92,18 +99,21 @@ public class LookupServlet extends HttpServlet {
 //			"SELECT ?classUri ?score \n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			//"?classUri a owl:Class \n" +
-			"OPTIONAL { ?classUri rdfs:label ?classLabel }\n" +
+			"(?classUri ?score) pf:textMatch '+" + searchRdfClass + "' \n" +
+			". ?classUri a owl:Class \n" +
+			". OPTIONAL { ?classUri rdfs:label ?classLabel }\n" +
 			". OPTIONAL { ?classUri rdfs:comment ?classComment } \n" +
-//			Use these if you switch back to Class IndexBuilderString
-//			". (?stringLiteral ?score ) pf:textMatch '" + searchRdfClass + "' \n" +
-//			". ?classUri ?p ?stringLiteral \n" +
-			". (?classUri ?score ) pf:textMatch '+" + searchRdfClass + "' \n" +
 			"} } ORDER BY DESC(?score) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
 	}
 
+	private void respondOK(String message) {
+		log.info(message);
+		response.setStatus(HttpURLConnection.HTTP_OK);
+		out.println(message);
+	}
+	
 	private void respondIrregularity(int status, String message) {
 		log.info(message);
 		response.setStatus(status);
