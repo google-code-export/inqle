@@ -6,6 +6,7 @@ import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.ui.rap.Part;
 import org.inqle.ui.rap.actions.DeleteModelAction;
+import org.inqle.ui.rap.actions.FileDataImporterAction;
 import org.inqle.ui.rap.actions.LoadCsvFileAction;
 import org.inqle.ui.rap.actions.LoadRdfFileAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
@@ -50,6 +51,9 @@ public class ModelPart extends Part {
 		
 		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
 		manager.add(loadCsvFileAction);
+		
+		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from a File...", this, workbenchWindow);
+		manager.add(fileDataImporterAction);
 		
 		//Delete action
 		DeleteModelAction deleteDatabaseAction = new DeleteModelAction("Delete", this, workbenchWindow);
