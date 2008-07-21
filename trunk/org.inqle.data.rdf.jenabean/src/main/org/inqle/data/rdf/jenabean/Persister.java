@@ -345,7 +345,8 @@ public class Persister {
 		if (indexBuilder == null) {
 			return null;
 		}
-		
+		indexBuilder.flushWriter();
+		log.info("Retrieved & flushed IndexBuilder:" + indexBuilder);
 		return indexBuilder.getIndex();
 	}
 	
@@ -400,12 +401,12 @@ public class Persister {
 			internalDataset.setDatasetRole(datasetRoleId);
 			internalDataset.setConnectionId(defaultInternalConnection.getId());
 			persist(internalDataset);
-			log.info("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
+			log.trace("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
 			internalDatasets.put(datasetRoleId, internalDataset);
 			
 			//create the underlying model in the SDB database
 			Model internalModel = createDBModel(defaultInternalConnection, internalDataset.getId());
-			log.info("Created new Model for role " + datasetRoleId + " of size " + internalModel.size());
+			log.trace("Created new Model for role " + datasetRoleId + " of size " + internalModel.size());
 			if (cacheModel) {
 				log.info("Caching model for role " + datasetRoleId);
 				cachedModels.put(datasetRoleId, internalModel);
@@ -434,10 +435,10 @@ public class Persister {
 		//loop thru extensions, and create each index
 		List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
 		for (IExtensionSpec datasetExtension: datasetExtensions) {
-			log.info("datasetExtension=" + datasetExtension);
+			log.trace("datasetExtension=" + datasetExtension);
 			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
-			log.info("datasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
+			log.trace("datasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
 				textIndexType = textIndexType.toLowerCase();
@@ -451,8 +452,9 @@ public class Persister {
 				if (larqBuilder != null) {
 					log.info("Indexing into Index for role " + datasetRoleId + "...");
 					larqBuilder.indexStatements(internalModel.listStatements()) ;
-					log.info("Registering Index for role " + datasetRoleId + "...");
-					internalModel.register(larqBuilder);
+					//this does not work because listener does not listen across JVMs:
+//					log.info("Registering Index for role " + datasetRoleId + "...");
+//					internalModel.register(larqBuilder);
 					//save this larqBuilder
 					indexBuilders.put(datasetRoleId, larqBuilder);
 				}

@@ -23,8 +23,11 @@ import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sdb.SDB;
 
 /**
@@ -43,26 +46,120 @@ import com.hp.hpl.jena.sdb.SDB;
 	static Logger log = Logger.getLogger(Queryer.class);
 	
 	/**
-	 * Query an ARQ dataset.  Generally SPARQL queries sent to this method should reference
-	 * graphs lest the query be issued against only the default graph,
-	 * (which might mean no graph at all is queried).
-	 * 
-	 * Example query:
-	 * SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
-{
-GRAPH ?g {
-?uri a <http://jena.hpl.hp.com/2005/11/Assembler#Connection> .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbType> ?dbType .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbClass> ?dbDriver .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbURL> ?dbUrl .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbUser> ?dbUser .
-?uri <http://inqle.org/ns/1.0/inqle.rdf#creationTime> ?creationDate
-} }
+	 * Query an ARQ dataset.
 
 	 * @param queryCriteria the QueryCriteria object containing all info about the query
-	 * @return an Rdftable object
-	 * 
-	 * TODO verify that this is doing SDB queries & not slower ARQ
+	 * @return an ResultSet object
+	 */
+	public static String selectXml(QueryCriteria queryCriteria) {
+		Query query;
+		try {
+			query = QueryFactory.create(queryCriteria.getQuery());
+		} catch (Exception e) {
+			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
+			return null;
+		}
+		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
+		Dataset dataset = queryCriteria.getDataset();
+		
+		//log info about the dataset
+//		Iterator<?> datasetNamesI = dataset.listNames();
+//		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
+//		while (datasetNamesI.hasNext()) {
+//			log.debug((String)datasetNamesI.next());
+//		}
+		
+//		Iterator<?> dsNames = dataset.listNames();
+//		while (dsNames.hasNext()) {
+//			log.debug("Querying model '" + (String)dsNames.next() + "'.");
+//		}
+		
+		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
+		
+		if (queryCriteria.getTextIndex() != null) {
+			log.info("setDefaultIndex...");
+			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
+		}
+		
+		qe.getContext().set(SDB.unionDefaultGraph, true) ;
+		
+
+		//Do the query
+		ResultSet resultSet = null;
+		//SDB.getContext().set(SDB.unionDefaultGraph, true);
+		String resultXml = null;
+		try {
+			resultSet = qe.execSelect() ;
+			resultXml = ResultSetFormatter.asXMLString(resultSet);
+		} catch (Exception e) {
+			log.error("Error performing query " + query, e);
+		} finally { 
+			qe.close(); 
+		}
+		
+		return resultXml;
+	}
+	
+	/**
+	 * Query an ARQ dataset.
+
+	 * @param queryCriteria the QueryCriteria object containing all info about the query
+	 * @return an ResultSet object
+	 */
+	public static Model selectRdf(QueryCriteria queryCriteria) {
+		Query query;
+		try {
+			query = QueryFactory.create(queryCriteria.getQuery());
+		} catch (Exception e) {
+			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
+			return null;
+		}
+		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
+		Dataset dataset = queryCriteria.getDataset();
+		
+		//log info about the dataset
+//		Iterator<?> datasetNamesI = dataset.listNames();
+//		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
+//		while (datasetNamesI.hasNext()) {
+//			log.debug((String)datasetNamesI.next());
+//		}
+		
+//		Iterator<?> dsNames = dataset.listNames();
+//		while (dsNames.hasNext()) {
+//			log.debug("Querying model '" + (String)dsNames.next() + "'.");
+//		}
+		
+		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
+		
+		if (queryCriteria.getTextIndex() != null) {
+			log.info("setDefaultIndex...");
+			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
+		}
+		
+		qe.getContext().set(SDB.unionDefaultGraph, true) ;
+		
+
+		//Do the query
+		ResultSet resultSet = null;
+		//SDB.getContext().set(SDB.unionDefaultGraph, true);
+		Model resultModel = ModelFactory.createDefaultModel();
+		try {
+			resultSet = qe.execSelect() ;
+			ResultSetFormatter.asRDF(resultModel, resultSet);
+		} catch (Exception e) {
+			log.error("Error performing query " + query, e);
+		} finally { 
+			qe.close(); 
+		}
+		
+		return resultModel;
+	}
+	
+	/**
+	 * Query an ARQ dataset.
+
+	 * @param queryCriteria the QueryCriteria object containing all info about the query
+	 * @return an RdfTable object
 	 */
 	public static RdfTable selectRdfTable(QueryCriteria queryCriteria) {
 		Query query;
@@ -92,18 +189,22 @@ GRAPH ?g {
 		}
 		
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
-		qe.getContext().set(SDB.unionDefaultGraph, true) ;
 		
 		if (queryCriteria.getTextIndex() != null) {
+			log.info("setDefaultIndex...");
 			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
 		}
+		
+		qe.getContext().set(SDB.unionDefaultGraph, true) ;
+		
+		
 		
 		//Do the query
 		ResultSet resultSet;
 		//SDB.getContext().set(SDB.unionDefaultGraph, true);
 		try {
 			resultSet = qe.execSelect() ;
-			log.debug("Got results? " + resultSet.hasNext() + "; Has these vars: " + resultSet.getResultVars());
+//			log.debug("Got results? " + resultSet.hasNext() + "; Has these vars: " + resultSet.getResultVars());
 			//this sets resultSet.hasNext() to false: ResultSetFormatter.out(resultSet) ;
 			resultTable = Converter.resultSetToRdfTable(resultSet);
 			resultTable.setQueryCriteria(queryCriteria);
