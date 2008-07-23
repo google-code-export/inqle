@@ -66,7 +66,9 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 
 	private SearchBox searchBox;
 
-	private Button enterNewClass;
+	private Button enterNewClassButton;
+
+	private String uriFieldName = "URI";
 
 //	private Table table;
 	
@@ -95,9 +97,9 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		searchBox = new SearchBox(selfComposite, SWT.NONE, "Find a subject", "Search");
 		searchBox.addSelectionListener(this);
 		
-		enterNewClass = new Button(selfComposite, SWT.RADIO);
-		enterNewClass.setText("Enter a new subject");
-		enterNewClass.addSelectionListener(this);
+		enterNewClassButton = new Button(selfComposite, SWT.RADIO);
+		enterNewClassButton.setText("Enter a new subject");
+		enterNewClassButton.addSelectionListener(this);
 		
 		table = new Table(selfComposite, SWT.NONE);
 		
@@ -176,12 +178,12 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
-		if (clickedObject.equals(enterNewClass)) {
+		if (clickedObject.equals(enterNewClassButton)) {
 			log.info("Clicked radio button");
 			table.deselectAll();
 		} else if (clickedObject.equals(table)) {
-			log.info("Clicked table row #" + table.getSelectionIndex());
-			enterNewClass.setSelection(false);
+			log.info("Clicked table row=" + getSubjectUri());
+			enterNewClassButton.setSelection(false);
 		} else {
 			log.info("Clicked search button");
 			//do the search
@@ -215,16 +217,16 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		}
 	}
 	
-	/**
-	 * Create in the provided OntModel, 
-	 * the RDF statements that represent the selected subject
-	 * @param ontModel
-	 * @return
-	 */
-	public Individual getIndividual(OntModel ontModel) {
-		Resource resource = ontModel.createResource(getSubjectUri());
-		Individual selectedIndividual = ontModel.createIndividual(resource);
-	}
+//	/**
+//	 * Create in the provided OntModel, 
+//	 * the RDF statements that represent the selected subject
+//	 * @param ontModel
+//	 * @return
+//	 */
+//	public Individual getIndividual(OntModel ontModel) {
+//		Resource resource = ontModel.createResource(getSubjectUri());
+//		Individual selectedIndividual = ontModel.createIndividual(resource);
+//	}
 
 	private String getSubjectUri() {
 		TableItem[] selectedItems = table.getSelection();
@@ -233,6 +235,20 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		}
 		TableItem selectedItem = selectedItems[0];
 		Map<String, String> selectedItemVals = (Map<String, String>)selectedItem.getData();
+		log.info("getting val for " + uriFieldName + "...");
+		return selectedItemVals.get(uriFieldName);
+	}
+
+	/**
+	 * the name of the column which contains the URI of the selected row
+	 * @return
+	 */
+	public String getUriFieldName() {
+		return uriFieldName;
+	}
+
+	public void setUriFieldName(String uriFieldName) {
+		this.uriFieldName = uriFieldName;
 	}
 
 }
