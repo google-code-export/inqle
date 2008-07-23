@@ -77,4 +77,8 @@ public class InqleInfo {
 	public static final String PARAM_INQLE_VERSION = "ver";
 
 	public static final String PARAM_SEARCH_RDF_CLASS = "searchClass";
+
+	public static final String PARAM_SEARCH_START_INDEX = "start";
+
+	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
 }
