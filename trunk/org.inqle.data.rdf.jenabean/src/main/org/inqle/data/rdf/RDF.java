@@ -2,6 +2,9 @@ package org.inqle.data.rdf;
 
 import java.net.URI;
 
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+
 public class RDF {
 
 	public static final String RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -28,6 +31,9 @@ public class RDF {
 	//public static final String NAME_PREDICATE = DC + "name";
 	public static final String NAME_PREDICATE = RDFS + "label";
 	public static final String FOAF = "http://xmlns.com/foaf/0.1/";
+	public static final Property LABEL_PROPERTY = ResourceFactory.createProperty(NAME_PREDICATE);
+	public static final Property COMMENT_PROPERTY = ResourceFactory.createProperty(DESCRIPTION_PREDICATE);
+	public static final String DATA_SUBJECT = INQLE + "DataSubject";
 	
 	
 	/**
