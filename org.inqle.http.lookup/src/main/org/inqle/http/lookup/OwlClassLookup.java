@@ -40,8 +40,8 @@ public class OwlClassLookup {
 	public static String lookup(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(Data.OWL_CLASS_DATASET_ROLE_ID));
-		IndexLARQ textIndex =  persister.getIndex(Data.OWL_CLASS_DATASET_ROLE_ID);
+		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_SUBJECT_DATASET_ROLE_ID));
+		IndexLARQ textIndex =  persister.getIndex(Data.DATA_SUBJECT_DATASET_ROLE_ID);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
 		log.info("Searched index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
