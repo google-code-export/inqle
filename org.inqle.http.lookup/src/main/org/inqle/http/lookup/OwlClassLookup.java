@@ -25,13 +25,13 @@ public class OwlClassLookup {
 				"PREFIX dc: <" + RDF.DC + ">\n" + 
 				"PREFIX pf: <" + RDF.PF + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT ?Class_URI ?Label ?Comment ?Score \n" +
+				"SELECT ?URI ?Label ?Comment ?Score \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				"(?Class_URI ?Score) pf:textMatch ( '" + searchRdfClass + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-				". ?Class_URI a owl:Class \n" +
-				". OPTIONAL { ?Class_URI rdfs:label ?Label }\n" +
-				". OPTIONAL { ?Class_URI rdfs:comment ?Comment } \n" +
+				"(?URI ?Score) pf:textMatch ( '" + searchRdfClass + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+				". ?URI a owl:Class \n" +
+				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
+				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 				"} } ORDER BY DESC(?Score) \n" +
 				"LIMIT " + limit + " OFFSET " + offset;
 			return sparql;
