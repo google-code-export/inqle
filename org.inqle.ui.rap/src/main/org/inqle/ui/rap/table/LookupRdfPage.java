@@ -9,6 +9,7 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,16 +23,24 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.Data;
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.Requestor;
+import org.inqle.ui.rap.CreateOwlClassAction;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
+import org.inqle.ui.rap.widgets.ResourceDialog;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
 
 import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
@@ -97,7 +106,7 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		searchBox = new SearchBox(selfComposite, SWT.NONE, "Find a subject", "Search");
 		searchBox.addSelectionListener(this);
 		
-		enterNewClassButton = new Button(selfComposite, SWT.RADIO);
+		enterNewClassButton = new Button(selfComposite, SWT.PUSH);
 		enterNewClassButton.setText("Enter a new subject");
 		enterNewClassButton.addSelectionListener(this);
 		
@@ -179,11 +188,20 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
 		if (clickedObject.equals(enterNewClassButton)) {
-			log.info("Clicked radio button");
+			log.info("Clicked 'new resource' button");
 			table.deselectAll();
+//			OntModel ontModel = ModelFactory.createOntologyModel();
+//			OntClass ontClass = ontModel.createClass(RDF.DATA_SUBJECT);
+//			ResourceDialog resourceDialog = new ResourceDialog(selfComposite.getShell(), ontClass);
+//			resourceDialog.open();
+//			if (resourceDialog.getReturnCode() == Window.OK) {
+//				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
+//			}
+			Persister persister = Persister.getInstance();
+			CreateOwlClassAction createOwlClassAction = new CreateOwlClassAction(selfComposite.getShell(), persister.getInternalModel(Data.DATA_SUBJECT_DATASET_ROLE_ID), RDF.DATA_SUBJECT);
 		} else if (clickedObject.equals(table)) {
 			log.info("Clicked table row=" + getSubjectUri());
-			enterNewClassButton.setSelection(false);
+//			enterNewClassButton.setSelection(false);
 		} else {
 			log.info("Clicked search button");
 			//do the search
