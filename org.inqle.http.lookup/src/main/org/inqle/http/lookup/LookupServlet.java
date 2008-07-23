@@ -3,6 +3,7 @@ package org.inqle.http.lookup;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.Data;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.RdfTableWriter;
@@ -35,6 +35,8 @@ public class LookupServlet extends HttpServlet {
 	private static final long serialVersionUID = -4242876578599704824L;
 
 	private static final int COUNT_SEARCH_RESULTS = 10;
+
+	private static final int MAX_COUNT_RESULTS = 100;
 
 	private static Logger log = Logger.getLogger(LookupServlet.class);
 
@@ -68,46 +70,32 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 		
+		String startIndexString = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_START_INDEX);
+		int startIndex = 0;
+		try {
+			startIndex = Integer.parseInt(startIndexString);
+		} catch (NumberFormatException e) {
+			//leave default
+		}
+		
+		String countResultsString = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_COUNT_RESULTS);
+		int countResults = COUNT_SEARCH_RESULTS;
+		try {
+			countResults = Integer.parseInt(countResultsString);
+		} catch (NumberFormatException e) {
+			//leave default
+		}
+		if (countResults > MAX_COUNT_RESULTS) {
+			countResults = COUNT_SEARCH_RESULTS;
+		}
 		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
 		if (searchTermForRdfClass != null) {
-			Persister persister = Persister.getInstance();
-			QueryCriteria queryCriteria = new QueryCriteria();
-			queryCriteria.addNamedModel(persister.getInternalDataset(Data.OWL_CLASS_DATASET_ROLE_ID));
-			IndexLARQ textIndex =  persister.getIndex(Data.OWL_CLASS_DATASET_ROLE_ID);
-			queryCriteria.setTextIndex(textIndex);
-			queryCriteria.setQuery(getSparqlSearchRdfClasses(searchTermForRdfClass, COUNT_SEARCH_RESULTS, 1));
-			String matchingClassesXml = Queryer.selectXml(queryCriteria);
-			log.info("Queried and got these matching results:\n" + matchingClassesXml);
 			
-//			Model matchingClassesModel = Queryer.selectRdf(queryCriteria);
-//			log.info("Queried and got these matching RDF results:\n" + JenabeanWriter.modelToString(matchingClassesModel));
-//			RdfTable matchingClasses = Queryer.selectRdfTable(queryCriteria);
-//			log.info("Queried and got these matching results:\n" + RdfTableWriter.dataTableToString(matchingClasses));
+			String matchingClassesXml = OwlClassLookup.lookup(searchTermForRdfClass, countResults, startIndex);
 			respondOK(matchingClassesXml);
 		}
 	}
 	
-	private String getSparqlSearchRdfClasses(String searchRdfClass, int limit, int offset) {
-		String sparql = 
-			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
-			"PREFIX owl: <" + RDF.OWL + ">\n" + 
-			"PREFIX dc: <" + RDF.DC + ">\n" + 
-			"PREFIX pf: <" + RDF.PF + ">\n" + 
-			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?classUri ?classLabel ?classComment ?score \n" +
-//			"SELECT ?classUri ?score \n" +
-			"{\n" +
-			"GRAPH ?g {\n" +
-			"(?classUri ?score) pf:textMatch '+" + searchRdfClass + "' \n" +
-			". ?classUri a owl:Class \n" +
-			". OPTIONAL { ?classUri rdfs:label ?classLabel }\n" +
-			". OPTIONAL { ?classUri rdfs:comment ?classComment } \n" +
-			"} } ORDER BY DESC(?score) \n" +
-			"LIMIT " + limit + " OFFSET " + offset;
-		return sparql;
-	}
-
 	private void respondOK(String message) {
 		log.info(message);
 		response.setStatus(HttpURLConnection.HTTP_OK);
