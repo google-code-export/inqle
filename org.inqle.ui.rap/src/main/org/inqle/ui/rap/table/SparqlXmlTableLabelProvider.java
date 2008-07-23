@@ -60,8 +60,8 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 		return xmlDocument;
 	}
 
-	public void setXmlDocument(Document xmlDocument) {
-		this.xmlDocument = xmlDocument;
+	public void setXmlDocument(Document xmlDoc) {
+		this.xmlDocument = xmlDoc;
 		NodeList headers = xmlDocument.getElementsByTagName("head");
 		Element header = (Element)headers.item(0);
 		NodeList variables = header.getElementsByTagName("variable");
@@ -78,6 +78,7 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 		NodeList rows = resultsElement.getElementsByTagName("result");
 		
 		for (int j=0; j<rows.getLength(); j++) {
+			HashMap<String, String> valueMap = new HashMap<String, String>();
 			Element rowElement = (Element)rows.item(j);
 			NodeList bindingNodes = rowElement.getElementsByTagName("binding");
 			for (int k=0; k<bindingNodes.getLength(); k++) {
@@ -85,10 +86,9 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 				String varName = cellElement.getAttribute("name");
 				String elementValue = cellElement.getTextContent();
 				log.info("Row=" + j + ", Col=" + k + " Adding:" + varName + "=" + elementValue);
-				HashMap<String, String> valueMap = new HashMap<String, String>();
 				valueMap.put(varName, elementValue);
-				rowElements.add(valueMap);
 			}
+			rowElements.add(valueMap);
 		}
 	}
 

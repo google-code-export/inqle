@@ -60,7 +60,7 @@ public class FileDataImporterWizard extends DynaWizard {
 
 	@Override
 	public void addPages() {
-		lookupRdfPage = new LookupRdfPage("Type of Subject", null);
+		lookupRdfPage = new LookupRdfPage("Type of Subject", "Find and select the type of subject that this data is about.", null);
 		addPage(lookupRdfPage);
 		
 		loadFilePage = new LoadFilePage("Specify the delimited text file to load.");
@@ -93,12 +93,11 @@ public class FileDataImporterWizard extends DynaWizard {
 	public boolean canFinish() {
 		//TODO test that prefix & subjectclass are URIs
 		try {
-			
+			return false;
 		} catch (Exception e) {
 			log.error("Error validating wizard", e);
 			return false;
 		}
-		return true;
 	}
 	
 	@Override

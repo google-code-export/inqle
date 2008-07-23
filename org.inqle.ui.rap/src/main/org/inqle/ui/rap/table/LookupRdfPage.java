@@ -13,19 +13,27 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
+import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
 
+import com.hp.hpl.jena.ontology.Individual;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -46,11 +54,19 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 
 	private static final Logger log = Logger.getLogger(LookupRdfPage.class);
 
+	private static final int COLUMN_WIDTH = 120;
+
 //	protected TableViewer tableViewer;
 
 	private Document xmlDocument;
 
-	private Text searchText;
+//	private Text searchText;
+
+	private Table table;
+
+	private SearchBox searchBox;
+
+	private Button enterNewClass;
 
 //	private Table table;
 	
@@ -61,8 +77,9 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	 * @param title the title of this page
 	 * @param titleImage
 	 */
-	public LookupRdfPage(String title, ImageDescriptor titleImage) {
+	public LookupRdfPage(String title, String description, ImageDescriptor titleImage) {
 		super(title, titleImage);
+		setMessage(description);
 	}
 
 	/**
@@ -70,14 +87,25 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	 */
 	@Override
 	public void addElements() {
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		GridLayout gl = new GridLayout(1, true);
+		selfComposite.setLayout(gl);
 		
-		new Label(selfComposite, SWT.NONE).setText("Search for a subject");
-		searchText = new Text(selfComposite, SWT.BORDER);
-		searchText.setLayoutData(gridData);
-		Button searchButton = new Button(selfComposite, SWT.PUSH | SWT.BORDER);
-		searchButton.setText("Search");
-		searchButton.addSelectionListener(this);
+//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		
+		searchBox = new SearchBox(selfComposite, SWT.NONE, "Find a subject", "Search");
+		searchBox.addSelectionListener(this);
+		
+		enterNewClass = new Button(selfComposite, SWT.RADIO);
+		enterNewClass.setText("Enter a new subject");
+		enterNewClass.addSelectionListener(this);
+		
+		table = new Table(selfComposite, SWT.NONE);
+		
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		table.addSelectionListener(this);
 //		composite.setLayout (new GridLayout(2, false));
 //		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}
@@ -89,32 +117,32 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	 * 
 	 */
 	public void refreshTableData() {
-//		if (table != null) {
-//			table.clearAll();
-//		}
+		if (table != null) {
+//			table.dispose();
+			table.clearAll();
+			table.removeAll();
+		}
 
-		log.info("Showing table...");
-		Table table = new Table(selfComposite, SWT.NONE);
-		
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		log.info("Refreshing table...");
 
 		SparqlXmlTableLabelProvider labelProvider = new SparqlXmlTableLabelProvider();
 		labelProvider.setXmlDocument(xmlDocument);
 		
 		//add columns
-		for (String propertyName: labelProvider.getHeaderVariables()) {
-			TableColumn column = new TableColumn(table,SWT.LEFT);
-			column.setText(propertyName);
-			column.setResizable(true);
-			column.setWidth(200);
-			
-			//column.pack();
-			log.debug("Added column: " + propertyName);
+		if (table.getColumns().length == 0)  {
+			for (String propertyName: labelProvider.getHeaderVariables()) {
+				TableColumn column = new TableColumn(table,SWT.LEFT);
+				propertyName = propertyName.replace("_", " ");
+				column.setText(propertyName);
+				column.setResizable(true);
+				column.setWidth(COLUMN_WIDTH);
+				
+				//column.pack();
+				log.debug("Added column: " + propertyName);
+			}
+		} else {
+			log.info("Skip adding columns");
 		}
-		
 		TableViewer tableViewer = new TableViewer(table);
 		
 		ObservableListContentProvider olContentProvider = new ObservableListContentProvider();
@@ -139,7 +167,7 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	}
 	
 	public String getSearchTextValue() {
-		return searchText.getText();
+		return searchBox.getSearchText();
 	}
 
 	public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -147,34 +175,64 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	}
 
 	public void widgetSelected(SelectionEvent selectionEvent) {
-		//do the search
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
-		
-		log.info("posting data to " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
-		
-		Document document = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-		if (document == null) {
-			log.warn("Received NULL from the Central INQLE Server.  Perhaps your internet connection is down.");
+		Object clickedObject = selectionEvent.getSource();
+		if (clickedObject.equals(enterNewClass)) {
+			log.info("Clicked radio button");
+			table.deselectAll();
+		} else if (clickedObject.equals(table)) {
+			log.info("Clicked table row #" + table.getSelectionIndex());
+			enterNewClass.setSelection(false);
+		} else {
+			log.info("Clicked search button");
+			//do the search
+			Map<String, String> params = new HashMap<String, String>();
+			params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
+			
+			log.info("posting data to " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+			
+			Document document = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+			if (document == null) {
+				log.warn("Received NULL from the Central INQLE Server.  Perhaps your internet connection is down.");
+			}
+			
+			// XERCES 1 or 2 additionnal classes.
+			OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
+			of.setIndent(1);
+			of.setIndenting(true);
+			of.setDoctype(null,"users.dtd");
+			XMLSerializer serializer = new XMLSerializer(System.out,of);
+			log.info("Received Document object:");
+			// As a DOM Serializer
+			try {
+				serializer.asDOMSerializer();
+				serializer.serialize( document.getDocumentElement() );
+			} catch (IOException e) {
+				log.warn("Unable to serialize received XML Document");
+			}
+			
+			setXmlDocument(document);
+			refreshTableData();
 		}
-		
-		// XERCES 1 or 2 additionnal classes.
-		OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
-		of.setIndent(1);
-		of.setIndenting(true);
-		of.setDoctype(null,"users.dtd");
-		XMLSerializer serializer = new XMLSerializer(System.out,of);
-		log.info("Received Document object:");
-		// As a DOM Serializer
-		try {
-			serializer.asDOMSerializer();
-			serializer.serialize( document.getDocumentElement() );
-		} catch (IOException e) {
-			log.warn("Unable to serialize received XML Document");
+	}
+	
+	/**
+	 * Create in the provided OntModel, 
+	 * the RDF statements that represent the selected subject
+	 * @param ontModel
+	 * @return
+	 */
+	public Individual getIndividual(OntModel ontModel) {
+		Resource resource = ontModel.createResource(getSubjectUri());
+		Individual selectedIndividual = ontModel.createIndividual(resource);
+	}
+
+	private String getSubjectUri() {
+		TableItem[] selectedItems = table.getSelection();
+		if (selectedItems == null || selectedItems.length < 1) {
+			return null;
 		}
-		
-		setXmlDocument(document);
-		refreshTableData();
+		TableItem selectedItem = selectedItems[0];
+		Map<String, String> selectedItemVals = (Map<String, String>)selectedItem.getData();
 	}
 
 }
