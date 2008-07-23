@@ -10,6 +10,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -42,9 +43,10 @@ public class SingleTextPage extends BeanWizardPage {
 
 	@Override
 	public void addElements() {
-		Composite composite = selfComposite;
-		new Label (composite, SWT.NONE).setText(labelText);	
-		Text text = new Text(composite, SWT.BORDER);
+		GridLayout gl = new GridLayout(2, false);
+		selfComposite.setLayout(gl);
+		new Label (selfComposite, SWT.NONE).setText(labelText);	
+		Text text = new Text(selfComposite, SWT.BORDER);
     GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
     text.setLayoutData(gridData);
 		

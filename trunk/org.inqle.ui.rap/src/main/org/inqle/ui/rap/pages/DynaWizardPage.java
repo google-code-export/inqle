@@ -51,8 +51,8 @@ public abstract class DynaWizardPage extends WizardPage {
 	public void createControl(Composite parent) {
 //		this.parentComposite = parent;
 		selfComposite = new Composite(parent, SWT.NONE);
-		GridLayout gl = new GridLayout(2, false);
-		selfComposite.setLayout(gl);
+//		GridLayout gl = new GridLayout(2, false);
+//		selfComposite.setLayout(gl);
 		
 		//add any form elements
 		//addElements(selfComposite);
