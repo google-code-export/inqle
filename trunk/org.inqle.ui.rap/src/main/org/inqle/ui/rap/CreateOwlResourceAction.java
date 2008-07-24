@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -22,6 +23,7 @@ import org.inqle.ui.rap.widgets.ResourceDialog;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.query.larq.IndexBuilderModel;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
@@ -30,7 +32,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * action then sets the new Resource as a subclass of owlClassUri.  
  * It then adds any new statements to the model.
  */
-public class CreateOwlClassAction extends Action {
+public class CreateOwlResourceAction extends Action {
 	
 //	private final IWorkbenchWindow window;
 	//private int instanceNum = 0;
@@ -43,22 +45,42 @@ public class CreateOwlClassAction extends Action {
 	private Model newStatements;
 
 	private Shell shell;
+
+	private IndexBuilderModel textIndexBuilder;
 	
-	private static final Logger log = Logger.getLogger(CreateOwlClassAction.class);
+	private static final Logger log = Logger.getLogger(CreateOwlResourceAction.class);
 	
-	public CreateOwlClassAction(Shell shell, Model model, String owlClassUri) {
-		log.trace("Create CreateOwlClassAction");
+	/**
+	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
+	 * owlClassUri.  Import into the internal dataset of the specified role.
+	 * This constructor supports updating the LARQ text index, if applicable.
+	 * @param shell
+	 * @param internalDatasetRoleId
+	 * @param owlClassUri
+	 */
+	public CreateOwlResourceAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
+		log.trace("Create CreateOwlResourceAction");
+		this.shell = shell;
+		Persister persister = Persister.getInstance();
+		this.model = persister.getInternalModel(internalDatasetRoleId);
+		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
+		this.owlClassUri = owlClassUri;
+	}
+	
+	/**
+	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
+	 * owlClassUri.  Import into the internal dataset of the specified role/
+	 * This constructor does not support updating the LARQ text index.  However, it can
+	 * be used for importing into an external dataset
+	 * @param shell
+	 * @param internalDatasetRoleId
+	 * @param owlClassUri
+	 */
+	public CreateOwlResourceAction(Shell shell, Model model, String owlClassUri) {
+		log.trace("Create CreateOwlResourceAction");
 		this.shell = shell;
 		this.model = model;
 		this.owlClassUri = owlClassUri;
-//		this.viewId = viewId;
-//    setText(label);
-    // The id is used to refer to the action in a menu or toolbar
-//		setId(ICommandIds.CMD_OPEN);
-    // Associate the action with a pre-defined command, to allow key bindings.
-//		setActionDefinitionId(ICommandIds.CMD_OPEN);
-		//setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.inqle.ui.rap", "/icons/sample2.gif"));
-//		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(pluginId, "/" + iconPath));
 	}
 	
 	public void run() {
@@ -68,15 +90,24 @@ public class CreateOwlClassAction extends Action {
 			ResourceDialog resourceDialog = new ResourceDialog(shell, ontClass);
 			resourceDialog.open();
 			if (resourceDialog.getReturnCode() == Window.OK) {
-				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
+				log.info("Created new <" + owlClassUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
 				newStatements = ontModel.difference(model);
 				log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatements));
-				model.add(newStatements);
+//				model.add(newStatements);
+				Persister persister = Persister.getInstance();
 				
+				if (textIndexBuilder != null) {
+					model.register(textIndexBuilder);
+				}
+				model.begin();
+				model.add(newStatements);
+				model.commit();
+				if (textIndexBuilder != null) {
+					model.unregister(textIndexBuilder);
+				}
 				//send the new statements to the central INQLE server
 				Map<String, String> params = new HashMap<String, String>();
-				params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(model));
-				Persister persister = Persister.getInstance();
+				params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(newStatements));
 				params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
 				log.info("posting data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");
 				boolean success = Requestor.postData(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, new PrintWriter(System.out));

@@ -29,7 +29,7 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.CreateOwlClassAction;
+import org.inqle.ui.rap.CreateOwlResourceAction;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.ResourceDialog;
@@ -198,7 +198,11 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 //				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
 //			}
 			Persister persister = Persister.getInstance();
-			CreateOwlClassAction createOwlClassAction = new CreateOwlClassAction(selfComposite.getShell(), persister.getInternalModel(Data.DATA_SUBJECT_DATASET_ROLE_ID), RDF.DATA_SUBJECT);
+			CreateOwlResourceAction createOwlResourceAction = new CreateOwlResourceAction(
+					selfComposite.getShell(), 
+					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
+					RDF.DATA_SUBJECT);
+			createOwlResourceAction.run();
 		} else if (clickedObject.equals(table)) {
 			log.info("Clicked table row=" + getSubjectUri());
 //			enterNewClassButton.setSelection(false);

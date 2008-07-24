@@ -36,14 +36,16 @@ public class ResourceDialog extends Dialog {
 		private Text labelText;
 		private Text uriText;
 		private Text commentText;
+		
 		/**
 		 * @param parentShell
-		 * @param ontClass upon saving the data, it will be created as a new instance of this ontClass
+		 * @param ontClass upon saving this data, it will be created as a new instance of this ontClass
 		 */
 		public ResourceDialog(Shell parentShell, OntClass ontClass) {
         super(parentShell);
         this.ontClass = ontClass;
     }
+		
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
         messageLabel = new Label(container, SWT.NONE);
@@ -80,9 +82,11 @@ public class ResourceDialog extends Dialog {
         createButton(parent, IDialogConstants.CANCEL_ID,
             "Cancel", false);
     }
+    
     protected Point getInitialSize() {
         return new Point(500, 375);
     }
+    
     protected void okPressed() {
     	if (! validate()) {
     		return;
