@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.Data;
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.RdfTableWriter;
@@ -91,7 +92,7 @@ public class LookupServlet extends HttpServlet {
 		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
 		if (searchTermForRdfClass != null) {
 			
-			String matchingClassesXml = OwlClassLookup.lookup(searchTermForRdfClass, countResults, startIndex);
+			String matchingClassesXml = OwlInstanceLookup.lookup(searchTermForRdfClass, RDF.DATA_SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			respondOK(matchingClassesXml);
 		}
 	}
