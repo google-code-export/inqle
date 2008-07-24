@@ -210,7 +210,7 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 			log.info("Clicked search button");
 			//do the search
 			Map<String, String> params = new HashMap<String, String>();
-			params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
+			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			
 			log.info("posting data to " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			
