@@ -33,9 +33,12 @@ public class ResourceDialog extends Dialog {
     //private Button saveButton;
 		private OntClass ontClass;
 		private Label messageLabel;
-		private Text labelText;
-		private Text uriText;
-		private Text commentText;
+//		private Text labelText;
+//		private Text uriText;
+//		private Text commentText;
+		private TextField uriTextField;
+		private TextField labelTextField;
+		private TextField commentTextField;
 		
 		/**
 		 * @param parentShell
@@ -50,28 +53,64 @@ public class ResourceDialog extends Dialog {
         Composite container = (Composite) super.createDialogArea(parent);
         messageLabel = new Label(container, SWT.NONE);
         Composite formComposite = new Composite(container, SWT.NONE);
-        GridLayout formLayout = new GridLayout(2, false);
+        GridLayout formLayout = new GridLayout(1, true);
         formComposite.setLayout(formLayout);
         GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
         formComposite.setLayoutData(gridData);
         
-        Label uriLabel = new Label(formComposite, SWT.NONE);
-        uriLabel.setText("Enter the URI");
-        uriText = new Text(formComposite, SWT.BORDER);
-        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-        uriText.setLayoutData(gridData);
+//        Label uriLabel = new Label(formComposite, SWT.NONE);
+//        uriLabel.setText("Enter the URI");
+//        uriText = new Text(formComposite, SWT.BORDER);
+//        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//        uriText.setLayoutData(gridData);
+        uriTextField = new TextField(
+        		formComposite,
+        		"Enter the URI",
+        		"Enter the Universal Resource Identifier (URI) of this\n<" + ontClass.getURI() + ">" +
+        				"\nA URI is typically configured like a web address.\nFor example, http://mypersonaluri.org/MyObject" +
+        				"\nWhere possible, use a URI which has already beed defined elsewhere.",
+        		9,
+        		null,
+        		SWT.NONE,
+        		SWT.BORDER,
+        		null
+        );
         
-        Label labelLabel = new Label(formComposite, SWT.NONE);
-        labelLabel.setText("Label (name, usually 1 or 2 words)");
-        labelText = new Text(formComposite, SWT.BORDER);
-        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-        labelText.setLayoutData(gridData);
+//        Label labelLabel = new Label(formComposite, SWT.NONE);
+//        labelLabel.setText("Label (name, usually 1 or 2 words)");
+//        labelText = new Text(formComposite, SWT.BORDER);
+//        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//        labelText.setLayoutData(gridData);
         
-        Label commentLabel = new Label(formComposite, SWT.NONE);
-        commentLabel.setText("Comment (description)");
-        commentText = new Text(formComposite, SWT.MULTI | SWT.BORDER);
-        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-        commentText.setLayoutData(gridData);
+        labelTextField = new TextField(
+        		formComposite,
+        		"Name (Label)",
+        		"Enter a common name of this <" + ontClass.getURI() + ">" +
+        				"\nFor example, enter 'Zimbabwe' (to represent the thing)\nor 'Weather Station' (to represent the class of things)\nor 'temperature in Celcius' (to represent the attribute')" +
+        				"\nWhere possible, use the most common name.",
+        		10,
+        		null,
+        		SWT.NONE,
+        		SWT.BORDER,
+        		null
+        );
+        
+//        Label commentLabel = new Label(formComposite, SWT.NONE);
+//        commentLabel.setText("Comment (description)");
+//        commentText = new Text(formComposite, SWT.MULTI | SWT.BORDER);
+//        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//        commentText.setLayoutData(gridData);
+        
+        commentTextField = new TextField(
+        		formComposite,
+        		"Description (Comment)",
+        		"Enter a description about this <" + ontClass.getURI() + ">",
+        		0,
+        		null,
+        		SWT.NONE,
+        		SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.WRAP,
+        		null
+        );
         
         return container;
     }
@@ -84,7 +123,7 @@ public class ResourceDialog extends Dialog {
     }
     
     protected Point getInitialSize() {
-        return new Point(500, 375);
+        return new Point(500, 450);
     }
     
     protected void okPressed() {
@@ -120,15 +159,15 @@ public class ResourceDialog extends Dialog {
 		}
 		
 		private String getUri() {
-			return uriText.getText();
+			return uriTextField.getTextValue();
 		}
 		
 		private String getLabel() {
-			return labelText.getText();
+			return labelTextField.getTextValue();
 		}
 		
 		private String getComment() {
-			return commentText.getText();
+			return commentTextField.getTextValue();
 		}
 }
 
