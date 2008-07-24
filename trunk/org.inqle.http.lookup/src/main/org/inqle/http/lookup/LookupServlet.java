@@ -89,7 +89,7 @@ public class LookupServlet extends HttpServlet {
 		if (countResults > MAX_COUNT_RESULTS) {
 			countResults = COUNT_SEARCH_RESULTS;
 		}
-		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
+		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_DATA_SUBJECT);
 		if (searchTermForRdfClass != null) {
 			
 			String matchingClassesXml = OwlInstanceLookup.lookup(searchTermForRdfClass, RDF.DATA_SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
