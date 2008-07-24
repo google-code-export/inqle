@@ -32,7 +32,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * action then sets the new Resource as a subclass of owlClassUri.  
  * It then adds any new statements to the model.
  */
-public class CreateOwlResourceAction extends Action {
+public class CreateOwlInstanceAction extends Action {
 	
 //	private final IWorkbenchWindow window;
 	//private int instanceNum = 0;
@@ -48,7 +48,7 @@ public class CreateOwlResourceAction extends Action {
 
 	private IndexBuilderModel textIndexBuilder;
 	
-	private static final Logger log = Logger.getLogger(CreateOwlResourceAction.class);
+	private static final Logger log = Logger.getLogger(CreateOwlInstanceAction.class);
 	
 	/**
 	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
@@ -58,8 +58,8 @@ public class CreateOwlResourceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri
 	 */
-	public CreateOwlResourceAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
-		log.trace("Create CreateOwlResourceAction");
+	public CreateOwlInstanceAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
+		log.trace("Create CreateOwlInstanceAction");
 		this.shell = shell;
 		Persister persister = Persister.getInstance();
 		this.model = persister.getInternalModel(internalDatasetRoleId);
@@ -76,8 +76,8 @@ public class CreateOwlResourceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri
 	 */
-	public CreateOwlResourceAction(Shell shell, Model model, String owlClassUri) {
-		log.trace("Create CreateOwlResourceAction");
+	public CreateOwlInstanceAction(Shell shell, Model model, String owlClassUri) {
+		log.trace("Create CreateOwlInstanceAction");
 		this.shell = shell;
 		this.model = model;
 		this.owlClassUri = owlClassUri;

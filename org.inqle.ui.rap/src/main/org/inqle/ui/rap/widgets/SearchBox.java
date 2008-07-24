@@ -16,12 +16,14 @@ public class SearchBox extends Composite {
 	private Text searchText;
 	private Button searchButton;
 	private Label label;
-	private String toolTipText;
-	private Layout formLayout;
 
 	private static final Logger log = Logger.getLogger(SearchBox.class);
 	
-	public SearchBox(Composite parent, int style, String labelText, String searchButtonText) {
+	public SearchBox(Composite parent, int style, String labelString, String searchButtonText) {
+		this(parent, style, labelString, searchButtonText, null, null);
+	}
+	
+	public SearchBox(Composite parent, int style, String labelString, String searchButtonText, String toolTipString, Layout formLayout) {
 		super(parent, style);
 		//Composite composite = new Composite(parent, style);
 		Composite composite = this;
@@ -34,13 +36,12 @@ public class SearchBox extends Composite {
 		
 		//create the controls
 		label = new Label(composite, SWT.NONE);
-		label.setText(labelText);
+		label.setText(labelString);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		searchText = new Text(composite, SWT.BORDER);
 		searchText.setLayoutData(gridData);
-		log.info("Size=" + searchText.getSize());
-		if (toolTipText != null) {
-			searchText.setToolTipText(toolTipText);
+		if (toolTipString != null) {
+			searchText.setToolTipText(toolTipString);
 		}
 		searchButton = new Button(composite, SWT.PUSH | SWT.BORDER);
 		searchButton.setText(searchButtonText);
@@ -56,21 +57,5 @@ public class SearchBox extends Composite {
 
 	public void addSelectionListener(SelectionListener selectionListener) {
 		searchButton.addSelectionListener(selectionListener);
-	}
-
-	public String getToolTipText() {
-		return toolTipText;
-	}
-
-	public void setToolTipText(String toolTipText) {
-		this.toolTipText = toolTipText;
-	}
-
-	public Layout getFormLayout() {
-		return formLayout;
-	}
-
-	public void setFormLayout(Layout formLayout) {
-		this.formLayout = formLayout;
 	}
 }
