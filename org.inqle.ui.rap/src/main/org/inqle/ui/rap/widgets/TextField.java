@@ -33,11 +33,12 @@ public class TextField extends Composite {
 			} else {
 				formLayout = new GridLayout(2, false);
 			}
-			
 		}
 		composite.setLayout(formLayout);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		composite.setLayoutData(gridData);
+		GridData gridData;
+//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+//		composite.setLayoutData(gridData);
 		
 		//create the controls
 		Label label = new Label(composite, SWT.NONE);
@@ -65,39 +66,39 @@ public class TextField extends Composite {
 			spacer.setVisible(false);
 		}
 		
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		text = new Text(composite, textStyle);
 		text.setLayoutData(gridData);
 		if (toolTipString != null) {
 			text.setToolTipText(toolTipString);
 		}
-		text.setSize(300, 300);
 		
-		//in next row, skip the label column
-		new Label(composite, SWT.NONE);
-		//...and skip the spacer column, if present
-		if (spacerSize > 0) {
+		if (descriptionString != null && descriptionString.length() > 0) {
+			//in next row, skip the label column
 			new Label(composite, SWT.NONE);
-		}
-		
-		//add the description
-		descriptionLabel = new Label(composite, SWT.WRAP);
-		descriptionLabel.setText(descriptionString);
-		Font currentFont = descriptionLabel.getFont();
-		String fontName = null;
-		int fontHeight = 12;
-		//int fontStyle;
-		FontData[] fontData = currentFont.getFontData();
-			
-		for (FontData fontDataItem: fontData) {
-			if (fontDataItem.getName() != null) {
-				fontName = fontDataItem.getName();
+			//...and skip the spacer column, if present
+			if (spacerSize > 0) {
+				new Label(composite, SWT.NONE);
 			}
-			fontHeight = fontDataItem.getHeight();
-			//fontStyle = fontDataItem.getStyle();
+			
+			//add the description
+			descriptionLabel = new Label(composite, SWT.WRAP);
+			descriptionLabel.setText(descriptionString);
+			Font currentFont = descriptionLabel.getFont();
+			String fontName = null;
+			int fontHeight = 12;
+			FontData[] fontData = currentFont.getFontData();
+				
+			for (FontData fontDataItem: fontData) {
+				if (fontDataItem.getName() != null) {
+					fontName = fontDataItem.getName();
+				}
+				fontHeight = fontDataItem.getHeight();
+			}
+			Font font = Graphics.getFont(fontName, fontHeight, SWT.ITALIC);
+			descriptionLabel.setFont(font);
 		}
-		Font font = Graphics.getFont(fontName, fontHeight, SWT.ITALIC);
-		descriptionLabel.setFont(font);
 	}
 	
 	public String getTextValue() {

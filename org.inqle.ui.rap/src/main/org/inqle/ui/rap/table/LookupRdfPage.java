@@ -79,6 +79,12 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 
 	private String uriFieldName = "URI";
 
+	private Button selectCreatedClassButton;
+
+	private String createdUri;
+
+	private Label selectNewSubjectLabel;
+
 //	private Table table;
 	
 	/**
@@ -105,11 +111,7 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		
 		searchBox = new SearchBox(selfComposite, SWT.NONE, "Find a subject", "Search");
 		searchBox.addSelectionListener(this);
-		
-		enterNewClassButton = new Button(selfComposite, SWT.PUSH);
-		enterNewClassButton.setText("Enter a new subject");
-		enterNewClassButton.addSelectionListener(this);
-		
+		new Label(selfComposite, SWT.NONE).setText("Choose an existing subject from this table...");
 		table = new Table(selfComposite, SWT.NONE);
 		
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -117,6 +119,18 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		table.addSelectionListener(this);
+		
+		new Label(selfComposite, SWT.NONE).setText("...or create/register a new subject...");
+		enterNewClassButton = new Button(selfComposite, SWT.PUSH);
+		enterNewClassButton.setText("Enter a new subject");
+		enterNewClassButton.addSelectionListener(this);
+		
+		selectNewSubjectLabel = new Label(selfComposite, SWT.NONE);
+		selectNewSubjectLabel.setText("...or choose this subject you just created...");
+		selectNewSubjectLabel.setVisible(false);
+		selectCreatedClassButton = new Button(selfComposite, SWT.RADIO);
+		selectCreatedClassButton.setVisible(false);
+		selectCreatedClassButton.addSelectionListener(this);
 //		composite.setLayout (new GridLayout(2, false));
 //		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 	}
@@ -203,9 +217,17 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 					RDF.DATA_SUBJECT);
 			createOwlInstanceAction.run();
+			this.createdUri = createOwlInstanceAction.getNewUri();
+			selectCreatedClassButton.setText(createdUri);
+			selectCreatedClassButton.setSelection(true);
+			selectNewSubjectLabel.setVisible(true);
+			selectCreatedClassButton.setVisible(true);
 		} else if (clickedObject.equals(table)) {
-			log.info("Clicked table row=" + getSubjectUri());
-//			enterNewClassButton.setSelection(false);
+			selectCreatedClassButton.setSelection(false);
+			log.info("Clicked table row.  getSubjectUri()=" + getSubjectUri());
+		} else if (clickedObject.equals(selectCreatedClassButton)) {
+			table.deselectAll();
+			log.info("Clicked radio button.  getSubjectUri()=" + getSubjectUri());
 		} else {
 			log.info("Clicked search button");
 			//do the search
@@ -251,6 +273,9 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 //	}
 
 	private String getSubjectUri() {
+		if (createdUri != null && selectCreatedClassButton.getSelection()) {
+			return createdUri;
+		}
 		TableItem[] selectedItems = table.getSelection();
 		if (selectedItems == null || selectedItems.length < 1) {
 			return null;
@@ -258,7 +283,11 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 		TableItem selectedItem = selectedItems[0];
 		Map<String, String> selectedItemVals = (Map<String, String>)selectedItem.getData();
 		log.info("getting val for " + uriFieldName + "...");
-		return selectedItemVals.get(uriFieldName);
+		String val = selectedItemVals.get(uriFieldName);
+		if (val != null) {
+			val = val.trim();
+		}
+		return val;
 	}
 
 	/**

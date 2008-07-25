@@ -60,11 +60,16 @@ public class FileDataImporterWizard extends DynaWizard {
 
 	@Override
 	public void addPages() {
+		loadFilePage = new LoadFilePage("Specify the delimited text file to load.");
+		addPage(loadFilePage);
+		
+		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
+		addPage(csvDisplayPage);
+		
 		lookupRdfPage = new LookupRdfPage("Type of Subject", "Find and select the type of subject that this data is about.", null);
 		addPage(lookupRdfPage);
 		
-		loadFilePage = new LoadFilePage("Specify the delimited text file to load.");
-		addPage(loadFilePage);
+		
 		
 		
 		

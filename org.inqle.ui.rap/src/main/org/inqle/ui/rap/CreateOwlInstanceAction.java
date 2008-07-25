@@ -47,6 +47,8 @@ public class CreateOwlInstanceAction extends Action {
 	private Shell shell;
 
 	private IndexBuilderModel textIndexBuilder;
+
+	private String newUri;
 	
 	private static final Logger log = Logger.getLogger(CreateOwlInstanceAction.class);
 	
@@ -91,6 +93,7 @@ public class CreateOwlInstanceAction extends Action {
 			resourceDialog.open();
 			if (resourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new <" + owlClassUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
+				this.newUri = resourceDialog.getUri();
 				newStatements = ontModel.difference(model);
 				log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatements));
 //				model.add(newStatements);
@@ -120,5 +123,9 @@ public class CreateOwlInstanceAction extends Action {
 
 	public Model getNewStatements() {
 		return newStatements;
+	}
+
+	public String getNewUri() {
+		return newUri;
 	}
 }
