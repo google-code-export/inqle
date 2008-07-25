@@ -111,7 +111,9 @@ public class ResourceDialog extends Dialog {
         		SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.WRAP,
         		null
         );
-        
+//        commentTextField.setSize(new Point(500, 500));
+//        gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+//        commentTextField.setLayoutData(gridData);
         return container;
     }
     
@@ -154,19 +156,19 @@ public class ResourceDialog extends Dialog {
 			return true;
 		}
 		
-		private void setMessage(String string) {
+		public void setMessage(String string) {
 			messageLabel.setText(string);
 		}
 		
-		private String getUri() {
+		public String getUri() {
 			return uriTextField.getTextValue();
 		}
 		
-		private String getLabel() {
+		public String getLabel() {
 			return labelTextField.getTextValue();
 		}
 		
-		private String getComment() {
+		public String getComment() {
 			return commentTextField.getTextValue();
 		}
 }
