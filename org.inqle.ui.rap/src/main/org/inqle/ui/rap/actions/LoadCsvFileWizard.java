@@ -42,7 +42,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class LoadCsvFileWizard extends DynaWizard {
+public class LoadCsvFileWizard extends DynaWizard implements ICsvImporterWizard {
 
 	public LoadCsvFileWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);

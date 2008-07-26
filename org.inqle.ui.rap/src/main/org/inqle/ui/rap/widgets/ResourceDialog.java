@@ -39,6 +39,7 @@ public class ResourceDialog extends Dialog {
 		private TextField uriTextField;
 		private TextField labelTextField;
 		private TextField commentTextField;
+		private String messageString;
 		
 		/**
 		 * @param parentShell
@@ -51,7 +52,10 @@ public class ResourceDialog extends Dialog {
 		
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
-        messageLabel = new Label(container, SWT.NONE);
+        messageLabel = new Label(container, SWT.WRAP);
+        if (messageString != null) {
+        	messageLabel.setText(messageString);
+        }
         Composite formComposite = new Composite(container, SWT.NONE);
         GridLayout formLayout = new GridLayout(1, true);
         formComposite.setLayout(formLayout);
@@ -156,8 +160,8 @@ public class ResourceDialog extends Dialog {
 			return true;
 		}
 		
-		public void setMessage(String string) {
-			messageLabel.setText(string);
+		public void setMessage(String messageString) {
+			this.messageString = messageString;
 		}
 		
 		public String getUri() {
