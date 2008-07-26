@@ -31,6 +31,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.CsvPredicatesPage;
+import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
 import org.inqle.ui.rap.pages.CsvSubjectPage;
 import org.inqle.ui.rap.table.LookupRdfPage;
@@ -43,7 +44,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class FileDataImporterWizard extends DynaWizard {
+public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWizard {
 
 	public FileDataImporterWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
@@ -56,11 +57,26 @@ public class FileDataImporterWizard extends DynaWizard {
 	
 	private LoadFilePage loadFilePage;
 	private LookupRdfPage lookupRdfPage;
+	private CsvImporter csvImporter;
 	
 
 	@Override
 	public void addPages() {
+		InfoPage firstPage = new InfoPage(
+				"Import Data From Text File",
+				"",
+				"This wizard assists you in importing data from a delimited text " +
+				"file such as comma-separated values files, which can be generated from your spreadsheet program." +
+				"\n\nThis wizard seeks to capture the most accurate and comprehensive data possible from your" +
+				"data file.  Toward this, it will ask you for information about the data file as a whole, " +
+				"as well as about each of row of data within the file."
+		);
+		addPage(firstPage);
+		
 		loadFilePage = new LoadFilePage("Specify the delimited text file to load.");
+		loadFilePage.setDescription("This wizard is capable of importing many different formats of " +
+				"delimited text files.  In general, you could save your spreadsheet of data as " +
+				"'Comma-Separated Values (CSV)' and then import the CSV file here.");
 		addPage(loadFilePage);
 		
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
@@ -113,6 +129,30 @@ public class FileDataImporterWizard extends DynaWizard {
 		}
 	}
 
+	public CsvImporter getCsvImporter() {
+		if (csvImporter == null) {
+			log.info("RRRRRRRRRRefreshing csvImporter in LoadCsvFileWizard");
+			refreshCsvImporter();
+		}
+		return csvImporter;
+	}
+
+	public void refreshCsvImporter() {
+		if (loadFilePage.getUploadedFile() == null) {
+			log.error("loadFilePage.getUploadedFile()=null");
+			return;
+		}
+		try {
+			log.info("Get uploaded file...");
+			File uploadedFile = loadFilePage.getUploadedFile();
+			log.info("Got file " + uploadedFile + ".  Retrieve CSV importer...");
+			//csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
+			csvImporter = new CsvImporter(uploadedFile);
+		} catch (Exception e) {
+			log.error("Unable to get uploaded file: " + loadFilePage.getUploadedFile());
+			//leave as null
+		}
+	}
 
 
 }

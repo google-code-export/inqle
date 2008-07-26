@@ -11,13 +11,12 @@ import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.inqle.ui.rap.actions.LoadCsvFileWizard;
+import org.inqle.ui.rap.actions.ICsvImporterWizard;
 import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.table.CsvTableLabelProvider;
 
@@ -59,13 +58,13 @@ public class CsvDisplayPage extends DynaWizardPage {
 	public void refreshTableData() {
 		log.info("CsvDisplayPage.refreshTableData()...");
 		table.clearAll();
-		if (getWizard() == null || (!(getWizard() instanceof LoadCsvFileWizard))) {
-			log.info("getWizard()=" + getWizard() + "; it is null or not a LoadCsvFileWizard");
+		if (getWizard() == null || (!(getWizard() instanceof ICsvImporterWizard))) {
+			log.info("getWizard()=" + getWizard() + "; it is null or not a ICsvImporterWizard");
 			return;
 		}
-		log.info("getWizard()= a LoadCsvFileWizard");
+		log.info("getWizard()= a ICsvImporterWizard");
 		
-		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
+		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
 		log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		loadCsvFileWizard.refreshCsvImporter();
 		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
