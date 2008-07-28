@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Text;
 public class TextField extends Composite {
 
 	private Text text;
-	private Label descriptionLabel;
+	private Text descriptionText;
 	
 	private static final Logger log = Logger.getLogger(TextField.class);
 	
@@ -83,9 +83,9 @@ public class TextField extends Composite {
 			}
 			
 			//add the description
-			descriptionLabel = new Label(composite, SWT.WRAP);
-			descriptionLabel.setText(descriptionString);
-			Font currentFont = descriptionLabel.getFont();
+			descriptionText = new Text(composite, SWT.WRAP | SWT.READ_ONLY);
+			descriptionText.setText(descriptionString);
+			Font currentFont = descriptionText.getFont();
 			String fontName = null;
 			int fontHeight = 12;
 			FontData[] fontData = currentFont.getFontData();
@@ -97,7 +97,7 @@ public class TextField extends Composite {
 				fontHeight = fontDataItem.getHeight();
 			}
 			Font font = Graphics.getFont(fontName, fontHeight, SWT.ITALIC);
-			descriptionLabel.setFont(font);
+			descriptionText.setFont(font);
 		}
 	}
 	

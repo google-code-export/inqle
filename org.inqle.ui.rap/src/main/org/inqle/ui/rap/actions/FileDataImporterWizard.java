@@ -64,12 +64,36 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	public void addPages() {
 		InfoPage firstPage = new InfoPage(
 				"Import Data From Text File",
-				"",
-				"This wizard assists you in importing data from a delimited text " +
-				"file such as comma-separated values files, which can be generated from your spreadsheet program." +
-				"\n\nThis wizard seeks to capture the most accurate and comprehensive data possible from your" +
-				"data file.  Toward this, it will ask you for information about the data file as a whole, " +
-				"as well as about each of row of data within the file."
+				"This wizard assists you in importing data from a delimited text file such as " +
+				"comma-separated values files (CSV).",
+				"Before using this wizard, you should acquire your data into a delimited text \n" +
+				"format, such as CSV.  You can generate such a file from your spreadsheet program.\n\n" +
+				
+				"This wizard captures 2 types of information about your data file:\n" +
+				"  * information about the data file as a whole\n" +
+				"    e.g. 'All rows of data in this file concern this city.'\n " +
+				"  * information about each of row of data within the file.\n" +
+				"    e.g. 'Each row of data contains a distinct Weather data measurement.'\n\n" +
+				
+				"The data is imported into your database in a format called semantic or \n" +
+				"Resource Description Framework (RDF) data.  This means that data is imported as \n" +
+				"objects.  \n" +
+				"  * Each data object has a unique identifier, called a Uniform Resource Identifier (URI).\n" +
+				"    URIs look a lot like web addresses (URLs)\n" +
+				"    e.g. the person David Donohue is represented by this URI:\n" +
+				"    'http://daviddonohue.com/DD'\n" +
+				"  * Each data object has a type (or class), which itself has a URI.\n" +
+				"    e.g. David Donohue is of type Person, and the type Person has this URI\n" +
+				"    http://xmlns.com/foaf/0.1/Person \n" +
+				"  * Data objects have Attributes, which are also identified by a URI.\n" +
+				"    Attributes have values- either literal values like '42' or other data\n" +
+				"    objects, like 'http://daviddonohue.com/DD'." +
+				"    For example, the Person type has an attribute\n" +
+				"    http://xmlns.com/foaf/0.1/interest \n" +
+				"    The value of this attribute is a website which interests the person.\n\n" +
+				
+				"" +
+				""
 		);
 		addPage(firstPage);
 		
