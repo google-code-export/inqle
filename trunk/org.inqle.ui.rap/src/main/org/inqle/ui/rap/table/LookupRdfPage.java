@@ -32,7 +32,7 @@ import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateOwlInstanceAction;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
-import org.inqle.ui.rap.widgets.ResourceDialog;
+import org.inqle.ui.rap.widgets.AResourceDialog;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
 
@@ -206,7 +206,7 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 			table.deselectAll();
 //			OntModel ontModel = ModelFactory.createOntologyModel();
 //			OntClass ontClass = ontModel.createClass(RDF.DATA_SUBJECT);
-//			ResourceDialog resourceDialog = new ResourceDialog(selfComposite.getShell(), ontClass);
+//			AResourceDialog resourceDialog = new AResourceDialog(selfComposite.getShell(), ontClass);
 //			resourceDialog.open();
 //			if (resourceDialog.getReturnCode() == Window.OK) {
 //				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));

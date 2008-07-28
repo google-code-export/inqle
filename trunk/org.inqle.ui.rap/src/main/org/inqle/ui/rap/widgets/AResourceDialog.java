@@ -3,15 +3,12 @@ package org.inqle.ui.rap.widgets;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.deferred.SetModel;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.RDF;
@@ -29,32 +26,34 @@ import com.hp.hpl.jena.ontology.OntClass;
  * @author David Donohue
  * Jul 23, 2008
  */
-public class ResourceDialog extends Dialog {
+public abstract class AResourceDialog extends Dialog {
     //private Button saveButton;
-		private OntClass ontClass;
-		private Label messageLabel;
+		protected OntClass ontClass;
+		protected Text messageText;
 //		private Text labelText;
 //		private Text uriText;
 //		private Text commentText;
-		private TextField uriTextField;
-		private TextField labelTextField;
-		private TextField commentTextField;
+		protected TextField uriTextField;
+		protected TextField labelTextField;
+		protected TextField commentTextField;
 		private String messageString;
 		
 		/**
 		 * @param parentShell
 		 * @param ontClass upon saving this data, it will be created as a new instance of this ontClass
 		 */
-		public ResourceDialog(Shell parentShell, OntClass ontClass) {
+		public AResourceDialog(Shell parentShell, OntClass ontClass) {
         super(parentShell);
         this.ontClass = ontClass;
     }
 		
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite) super.createDialogArea(parent);
-        messageLabel = new Label(container, SWT.WRAP);
-        if (messageString != null) {
-        	messageLabel.setText(messageString);
+        Shell shell = parent.getShell();
+        shell.setText(getTitle());
+        messageText = new Text(container, SWT.WRAP | SWT.READ_ONLY);
+        if (getMessage() != null) {
+        	messageText.setText(getMessage());
         }
         Composite formComposite = new Composite(container, SWT.NONE);
         GridLayout formLayout = new GridLayout(1, true);
@@ -69,11 +68,9 @@ public class ResourceDialog extends Dialog {
 //        uriText.setLayoutData(gridData);
         uriTextField = new TextField(
         		formComposite,
-        		"Enter the URI",
-        		"Enter the Universal Resource Identifier (URI) of this\n<" + ontClass.getURI() + ">" +
-        				"\nA URI is typically configured like a web address.\nFor example, http://mypersonaluri.org/MyObject" +
-        				"\nWhere possible, use a URI which has already beed defined elsewhere.",
-        		9,
+        		getUriLabel(),
+        		getUriDetail(),
+        		0,
         		null,
         		SWT.NONE,
         		SWT.BORDER,
@@ -88,11 +85,9 @@ public class ResourceDialog extends Dialog {
         
         labelTextField = new TextField(
         		formComposite,
-        		"Name (Label)",
-        		"Enter a common name of this <" + ontClass.getURI() + ">" +
-        				"\nFor example, enter 'Zimbabwe' (to represent the thing)\nor 'Weather Station' (to represent the class of things)\nor 'temperature in Celcius' (to represent the attribute')" +
-        				"\nWhere possible, use the most common name.",
-        		10,
+        		getNameLabel(),
+        		getNameDetail(),
+        		0,
         		null,
         		SWT.NONE,
         		SWT.BORDER,
@@ -107,8 +102,8 @@ public class ResourceDialog extends Dialog {
         
         commentTextField = new TextField(
         		formComposite,
-        		"Description (Comment)",
-        		"Enter a description about this <" + ontClass.getURI() + ">",
+        		getDescriptionLabel(),
+        		getDescriptionDetail(),
         		0,
         		null,
         		SWT.NONE,
@@ -121,7 +116,23 @@ public class ResourceDialog extends Dialog {
         return container;
     }
     
-    protected void createButtonsForButtonBar(Composite parent) {
+    public abstract String getTitle();
+    
+    public abstract String getMessage();
+    
+    public abstract String getUriLabel();
+    
+    public abstract String getUriDetail();
+    
+    public abstract String getNameLabel();
+    
+    public abstract String getNameDetail();
+    
+    public abstract String getDescriptionLabel();
+    
+    public abstract String getDescriptionDetail();
+
+		protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, IDialogConstants.OK_ID,
             "Save", true);
         createButton(parent, IDialogConstants.CANCEL_ID,
@@ -150,11 +161,11 @@ public class ResourceDialog extends Dialog {
 				return false;
 			}
 			if (getLabel()==null || getLabel().length() < 2) {
-				setMessage("Please enter a label.");
+				setMessage("Please enter a name.");
 				return false;
 			}
 			if (getComment()==null || getComment().length() < 2) {
-				setMessage("Please enter a comment.");
+				setMessage("Please enter a description.");
 				return false;
 			}
 			return true;

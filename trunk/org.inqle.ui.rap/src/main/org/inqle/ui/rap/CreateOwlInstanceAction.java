@@ -19,7 +19,8 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.widgets.ResourceDialog;
+import org.inqle.ui.rap.widgets.AResourceDialog;
+import org.inqle.ui.rap.widgets.SubclassDialog;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -28,7 +29,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
- * This action opens the ResourceDialog.  If user submits a new Resource, this 
+ * This action opens the AResourceDialog.  If user submits a new Resource, this 
  * action then sets the new Resource as a subclass of owlClassUri.  
  * It then adds any new statements to the model.
  */
@@ -89,17 +90,17 @@ public class CreateOwlInstanceAction extends Action {
 		try {
 			OntModel ontModel = ModelFactory.createOntologyModel();
 			OntClass ontClass = ontModel.createClass(owlClassUri);
-			ResourceDialog resourceDialog = new ResourceDialog(shell, ontClass);
-			resourceDialog.setMessage("Enter information about your new concept.\n" +
+			SubclassDialog aResourceDialog = new SubclassDialog(shell, ontClass);
+			aResourceDialog.setMessage("Enter information about your new concept.\n" +
 					"Each concept is identified by a unique identifier called a URI, \n" +
 					"plus a common name and a description.  If possible, use existing URI concepts. \n " +
 					"Avoid 'reinventing the wheel' and entering a concept that already exists.  \n" +
 					"Hint: if your concept is pretty basic, like 'cities' or 'people', chances are\n" +
 					"it has already been defined elsewhere.\n");
-			resourceDialog.open();
-			if (resourceDialog.getReturnCode() == Window.OK) {
+			aResourceDialog.open();
+			if (aResourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new <" + owlClassUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
-				this.newUri = resourceDialog.getUri();
+				this.newUri = aResourceDialog.getUri();
 				newStatements = ontModel.difference(model);
 				log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatements));
 //				model.add(newStatements);
@@ -123,7 +124,7 @@ public class CreateOwlInstanceAction extends Action {
 				log.info("...success? " + success);
 			}
 		}	catch (Exception e) {
-			log.error("Error running ResourceDialog:" + e.getMessage());
+			log.error("Error running AResourceDialog:" + e.getMessage());
 		}
 	}
 
