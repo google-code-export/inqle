@@ -6,20 +6,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.Data;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.widgets.AResourceDialog;
 import org.inqle.ui.rap.widgets.SubclassDialog;
 
 import com.hp.hpl.jena.ontology.OntClass;
