@@ -91,12 +91,12 @@ public class CreateOwlInstanceAction extends Action {
 			OntModel ontModel = ModelFactory.createOntologyModel();
 			OntClass ontClass = ontModel.createClass(owlClassUri);
 			SubclassDialog aResourceDialog = new SubclassDialog(shell, ontClass);
-			aResourceDialog.setMessage("Enter information about your new concept.\n" +
-					"Each concept is identified by a unique identifier called a URI, \n" +
-					"plus a common name and a description.  If possible, use existing URI concepts. \n " +
-					"Avoid 'reinventing the wheel' and entering a concept that already exists.  \n" +
-					"Hint: if your concept is pretty basic, like 'cities' or 'people', chances are\n" +
-					"it has already been defined elsewhere.\n");
+//			aResourceDialog.setMessage("Enter information about your new concept.\n" +
+//					"Each concept is identified by a unique identifier called a URI, \n" +
+//					"plus a common name and a description.  If possible, use existing URI concepts. \n " +
+//					"Avoid 'reinventing the wheel' and entering a concept that already exists.  \n" +
+//					"Hint: if your concept is pretty basic, like 'cities' or 'people', chances are\n" +
+//					"it has already been defined elsewhere.\n");
 			aResourceDialog.open();
 			if (aResourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new <" + owlClassUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
@@ -124,7 +124,7 @@ public class CreateOwlInstanceAction extends Action {
 				log.info("...success? " + success);
 			}
 		}	catch (Exception e) {
-			log.error("Error running AResourceDialog:" + e.getMessage());
+			log.error("Error running AResourceDialog", e);
 		}
 	}
 
