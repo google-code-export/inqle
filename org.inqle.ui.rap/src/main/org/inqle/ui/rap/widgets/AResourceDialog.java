@@ -1,6 +1,7 @@
 package org.inqle.ui.rap.widgets;
 
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -33,87 +34,85 @@ public abstract class AResourceDialog extends Dialog {
 //		private Text labelText;
 //		private Text uriText;
 //		private Text commentText;
-		protected TextField uriTextField;
-		protected TextField labelTextField;
-		protected TextField commentTextField;
-		private String messageString;
+		protected TextFieldShower uriTextField;
+		protected TextFieldShower labelTextField;
+		protected TextFieldShower commentTextField;
+//		private String messageString;
+		
+		private static Logger log = Logger.getLogger(AResourceDialog.class);
 		
 		/**
 		 * @param parentShell
 		 * @param ontClass upon saving this data, it will be created as a new instance of this ontClass
 		 */
 		public AResourceDialog(Shell parentShell, OntClass ontClass) {
-        super(parentShell);
-        this.ontClass = ontClass;
+      super(parentShell);
+      this.ontClass = ontClass;
     }
 		
     protected Control createDialogArea(Composite parent) {
-        Composite container = (Composite) super.createDialogArea(parent);
-        Shell shell = parent.getShell();
-        shell.setText(getTitle());
-        messageText = new Text(container, SWT.WRAP | SWT.READ_ONLY);
-        if (getMessage() != null) {
-        	messageText.setText(getMessage());
-        }
-        Composite formComposite = new Composite(container, SWT.NONE);
-        GridLayout formLayout = new GridLayout(1, true);
-        formComposite.setLayout(formLayout);
-        GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-        formComposite.setLayoutData(gridData);
-        
+      Composite container = (Composite) super.createDialogArea(parent);
+      
+      try {
+				Shell shell = parent.getShell();
+				shell.setText(getTitle());
+				messageText = new Text(container, SWT.WRAP | SWT.READ_ONLY);
+				if (getMessage() != null) {
+					messageText.setText(getMessage());
+				}
+				Composite formComposite = new Composite(container, SWT.NONE);
+				GridLayout formLayout = new GridLayout(2, false);
+				formComposite.setLayout(formLayout);
+				GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+				formComposite.setLayoutData(gridData);
+				
 //        Label uriLabel = new Label(formComposite, SWT.NONE);
 //        uriLabel.setText("Enter the URI");
 //        uriText = new Text(formComposite, SWT.BORDER);
 //        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 //        uriText.setLayoutData(gridData);
-        uriTextField = new TextField(
-        		formComposite,
-        		getUriLabel(),
-        		getUriDetail(),
-        		0,
-        		null,
-        		SWT.NONE,
-        		SWT.BORDER,
-        		null
-        );
-        
+				uriTextField = new TextFieldShower(
+						formComposite,
+						getUriLabel(),
+						getUriDetail(),
+						null,
+						SWT.BORDER
+				);
+				
 //        Label labelLabel = new Label(formComposite, SWT.NONE);
 //        labelLabel.setText("Label (name, usually 1 or 2 words)");
 //        labelText = new Text(formComposite, SWT.BORDER);
 //        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 //        labelText.setLayoutData(gridData);
-        
-        labelTextField = new TextField(
-        		formComposite,
-        		getNameLabel(),
-        		getNameDetail(),
-        		0,
-        		null,
-        		SWT.NONE,
-        		SWT.BORDER,
-        		null
-        );
-        
+				
+				labelTextField = new TextFieldShower(
+						formComposite,
+						getNameLabel(),
+						getNameDetail(),
+						null,
+						SWT.BORDER
+				);
+				
 //        Label commentLabel = new Label(formComposite, SWT.NONE);
 //        commentLabel.setText("Comment (description)");
 //        commentText = new Text(formComposite, SWT.MULTI | SWT.BORDER);
 //        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 //        commentText.setLayoutData(gridData);
-        
-        commentTextField = new TextField(
-        		formComposite,
-        		getDescriptionLabel(),
-        		getDescriptionDetail(),
-        		0,
-        		null,
-        		SWT.NONE,
-        		SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.WRAP,
-        		null
-        );
+				
+				commentTextField = new TextFieldShower(
+						formComposite,
+						getDescriptionLabel(),
+						getDescriptionDetail(),
+						null,
+						SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.WRAP
+				);
+			} catch (Exception e) {
+				log.error("Error running AResourceDialog.createDialogArea()", e);
+			}
 //        commentTextField.setSize(new Point(500, 500));
 //        gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 //        commentTextField.setLayoutData(gridData);
-        return container;
+      return container;
     }
     
     public abstract String getTitle();
@@ -172,7 +171,9 @@ public abstract class AResourceDialog extends Dialog {
 		}
 		
 		public void setMessage(String messageString) {
-			this.messageString = messageString;
+			if (messageText != null) {
+				messageText.setText(messageString);
+			}
 		}
 		
 		public String getUri() {

@@ -28,23 +28,23 @@ public class SubclassDialog extends AResourceDialog {
 		
 		@Override
 		public String getMessage() {
-			return "As you fill in the form below, you are creating a new subclass of this Semantic class:\n" +
+			return "As you fill in the form below, you are registering a new type of " + ontClass.getLocalName() + ".\n" +
+					"That is, you are registering a new subclass of this Semantic class:\n" +
 					"URI: " + ontClass.getURI()+ "\n" +
 					"Name: " + ontClass.getLocalName()+ "\n" +
-					"Description: " + ontClass.getComment("EN")+ "\n" +
-					"Upon registering this type, your INQLE server will be able to import and work with data objects " +
-					"of this type.  We recommend that you find and use existing RDF classes for your data type.  " +
-					"Where necessary, you may add a new type.";
+					"Description: " + ontClass.getComment("EN")+ "\n\n" +
+					"Upon registering this type, your INQLE server will be able to import and work with data objects \n" +
+					"of this type.  We recommend that you find and use existing RDF classes for your data type.";
 		}
 
 		@Override
 		public String getUriLabel() {
-			return "URI of " + ontClass.getLocalName();
+			return "Type URI";
 		}
 		
 		@Override
 		public String getUriDetail() {
-			return "Enter the Universal Resource Identifier (URI) of this type of " + ontClass.getLocalName() + "\n" +
+			return "Enter the Universal Resource Identifier (URI) of this type of\n" + ontClass.getLocalName() + "\n" +
 					"Example: http://my-institution-name.org/EmotionalState";
 		}
 		
@@ -55,7 +55,8 @@ public class SubclassDialog extends AResourceDialog {
 		
 		@Override
 		public String getNameDetail() {
-			return "Enter a common name of this type.  We recommend you capitalize the name and use the singular form.\n" +
+			return "Enter a common name for this type.  We recommend you capitalize \n" +
+					"the name and use the singular form.\n" +
 					"Example: Emotional State";
 		}
 		
@@ -67,7 +68,8 @@ public class SubclassDialog extends AResourceDialog {
 		@Override
 		public String getDescriptionDetail() {
 			return "Enter a description about this " + ontClass.getLocalName() + "\n" +
-					"We recommend you include synonyms of your concept, such that it is easier to find when searching for it.";
+					"We recommend you include synonyms of your concept, such that it is \n" +
+					"easier to find when searching for it.";
 		}
 
 }
