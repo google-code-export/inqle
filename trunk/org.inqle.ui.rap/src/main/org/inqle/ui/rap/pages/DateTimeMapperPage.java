@@ -9,9 +9,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.inqle.ui.rap.widgets.TextField;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
+import org.inqle.ui.rap.actions.ICsvImporterWizard;
+import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.widgets.TextFieldShower;
 
 public class DateTimeMapperPage extends DynaWizardPage implements SelectionListener {
@@ -19,6 +23,7 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 	private Button selectGlobalDateTime;
 	private Button selectRowDateTime;
 	private TextFieldShower globalDateTextShower;
+	private List dateColumnList;
 	private static Logger log = Logger.getLogger(DateTimeMapperPage.class);
 
 	public DateTimeMapperPage(String title, ImageDescriptor titleImage) {
@@ -38,16 +43,46 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		globalDateTextShower = new TextFieldShower(
 				selfComposite,
 				"Enter the date and time for all data",
-				"Example: 2009-01-20 13:00:00",
+				"Example: 2009-01-20 13:00:00\n" +
+						"(Use military time, with hours from 00 to 23)",
 				null,
-				SWT.BORDER
+				SWT.BORDER | SWT.SINGLE
 		);
 		
 		selectRowDateTime = new Button(selfComposite, SWT.RADIO);
 		selectRowDateTime.setText("Different rows of data have different dates and/or times.");
 		selectRowDateTime.addSelectionListener(this);
+		
+		new Label (selfComposite, SWT.NONE).setText("Date Column");
+		dateColumnList = new List(selfComposite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+		dateColumnList.setLayoutData(gridData);
 	}
 
+	@Override
+	public void onEnterPageFromPrevious() {
+		log.info("Entering DateTimeMapperPage...");
+		refreshTableData();
+	}
+	
+	public void refreshTableData() {
+		try {
+			log.info("get csvImporter...");
+			CsvImporter csvImporter = getCsvImporter();
+			log.info("csvImporter retrieved");
+			
+			String[][] data = csvImporter.getRawData();
+			//log.info("data= " + data);
+			String[] headers = data[csvImporter.getHeaderIndex()];
+			dateColumnList.removeAll();
+			dateColumnList.setItems(headers);
+			
+		} catch (Exception e) {
+			log.error("Error refreshing table data", e);
+		}
+		
+	}
+	
 	public void widgetDefaultSelected(SelectionEvent arg0) {
 	}
 
@@ -56,11 +91,13 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		if (clickedObject.equals(selectGlobalDateTime)) {
 			selectRowDateTime.setSelection(false);
 			globalDateTextShower.setEnabled(true);
+			dateColumnList.setEnabled(false);
 		}
 		
 		if (clickedObject.equals(selectRowDateTime)) {
 			selectGlobalDateTime.setSelection(false);
 			globalDateTextShower.setEnabled(false);
+			dateColumnList.setEnabled(true);
 		}
 		
 	}
@@ -85,5 +122,28 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 			return null;
 		}
 		return globalDate;
+	}
+	
+	public int getRowDateColumnIndex() {
+		if (! selectRowDateTime.getSelection()) {
+			return -1;
+		}
+		return dateColumnList.getSelectionIndex();
+	}
+	
+	private CsvImporter getCsvImporter() {
+		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
+		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
+		return loadCsvFileWizard.getCsvImporter();
+	}
+	
+	public boolean validate() {
+		if (getRowDateColumnIndex() >= 0) {
+			return true;
+		}
+		if (getGlobalDateTime() != null) {
+			return true;
+		}
+		return false;
 	}
 }

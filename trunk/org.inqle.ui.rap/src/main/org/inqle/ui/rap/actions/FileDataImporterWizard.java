@@ -4,39 +4,16 @@
 package org.inqle.ui.rap.actions;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.PopupDialog;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.rwt.RWT;
-import org.eclipse.rwt.widgets.Upload;
-import org.eclipse.rwt.widgets.UploadAdapter;
-import org.eclipse.rwt.widgets.UploadEvent;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.load.Loader;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
-import org.inqle.ui.rap.pages.CsvPredicatesPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
-import org.inqle.ui.rap.pages.CsvSubjectPage;
 import org.inqle.ui.rap.table.LookupRdfPage;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
 

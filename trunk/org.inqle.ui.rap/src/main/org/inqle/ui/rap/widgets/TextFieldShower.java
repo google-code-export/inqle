@@ -41,7 +41,8 @@ public class TextFieldShower {
 		Label label = new Label(composite, SWT.NONE);
 		label.setText(labelString);
 
-		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+//		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		text = new Text(composite, textStyle);
 		text.setLayoutData(gridData);
 		if (toolTipString != null) {
