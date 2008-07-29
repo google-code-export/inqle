@@ -31,6 +31,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.CsvPredicatesPage;
+import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
 import org.inqle.ui.rap.pages.CsvSubjectPage;
@@ -105,6 +106,13 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
 		addPage(csvDisplayPage);
+		
+		DateTimeMapperPage measurementDateTimeMapperPage = new DateTimeMapperPage(
+				"Specify Date & Time of the Data",
+				null);
+		measurementDateTimeMapperPage.setDescription("All data pertains to a particular date and time.  " +
+				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
+		addPage(measurementDateTimeMapperPage);
 		
 		lookupRdfPage = new LookupRdfPage("Type of Subject", "Find and select the type of subject that this data is about.", null);
 		addPage(lookupRdfPage);
