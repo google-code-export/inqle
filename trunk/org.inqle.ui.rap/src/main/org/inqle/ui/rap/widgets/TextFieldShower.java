@@ -79,4 +79,7 @@ public class TextFieldShower {
 		text.setText(textValue);
 	}
 
+	public void setEnabled(boolean enabled) {
+		text.setEnabled(enabled);
+	}
 }
