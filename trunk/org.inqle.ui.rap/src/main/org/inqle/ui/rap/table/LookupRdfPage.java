@@ -1,8 +1,14 @@
 package org.inqle.ui.rap.table;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.observable.list.WritableList;
@@ -28,12 +34,14 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.http.lookup.OwlInstanceLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateOwlInstanceAction;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.AResourceDialog;
 import org.inqle.ui.rap.widgets.SearchBox;
+import org.inqle.ui.rap.xml.SparqlXmlMerger;
 import org.w3c.dom.Document;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -234,14 +242,31 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			
-			log.info("posting data to " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+			Document localDocument = null;
 			
-			Document document = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-			if (document == null) {
-				log.warn("Received NULL from the Central INQLE Server.  Perhaps your internet connection is down.");
+			String localResultXml = OwlInstanceLookup.lookup(getSearchTextValue(), getSubjectUri(), Data.DATA_SUBJECT_DATASET_ROLE_ID, 0, 10);
+			InputStream in = new ByteArrayInputStream(localResultXml.getBytes());
+			DocumentBuilder builder;
+			try {
+				builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				localDocument = builder.parse(in);
+			} catch (Exception e) {
+				log.error("Unable to build/parse XML from local SPARQL query", e);
+			}
+	    
+			log.info("Posting data to " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+			
+			if (localDocument != null) {
+	    	SparqlXmlMerger.merge(localDocument, remoteDocument);
+	    } else if (remoteDocument != null) {
+	    	localDocument = remoteDocument;
+	    }
+			if (localDocument == null) {
+				log.warn("Received NULL from the local INQLE server and from Central INQLE Server.  Perhaps your internet connection is down.");
 			}
 			
-			// XERCES 1 or 2 additionnal classes.
+			// XERCES 1 or 2 additional classes.
 			OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
 			of.setIndent(1);
 			of.setIndenting(true);
@@ -251,12 +276,12 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 			// As a DOM Serializer
 			try {
 				serializer.asDOMSerializer();
-				serializer.serialize( document.getDocumentElement() );
+				serializer.serialize( remoteDocument.getDocumentElement() );
 			} catch (IOException e) {
 				log.warn("Unable to serialize received XML Document");
 			}
 			
-			setXmlDocument(document);
+			setXmlDocument(localDocument);
 			refreshTableData();
 		}
 	}
