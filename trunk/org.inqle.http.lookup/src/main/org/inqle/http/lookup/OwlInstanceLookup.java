@@ -1,15 +1,11 @@
 package org.inqle.http.lookup;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 
-import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 
 public class OwlInstanceLookup {
