@@ -2,8 +2,11 @@ package org.inqle.ui.rap.widgets;
 
 
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.data.rdf.RDF;
 
+import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
  
 /**
  * Upon clicking "Save" and validating the form, the new Individual created here will be 
@@ -70,6 +73,19 @@ public class SubclassDialog extends AResourceDialog {
 			return "Enter a description about this " + ontClass.getLocalName() + "\n" +
 					"We recommend you include synonyms of your concept, such that it is \n" +
 					"easier to find when searching for it.";
+		}
+		
+		@Override
+		/**
+		 * Creates a new subclass of the OntClass ontClass,
+		 * and adds label & comment properties
+		 */
+		protected void createRdf() {
+			OntModel ontModel = (OntModel)ontClass.getModel();
+			OntClass newSubclass = ontModel.createClass(getUri());
+			newSubclass.setSuperClass(ontClass);
+    	newSubclass.addProperty(RDF.LABEL_PROPERTY, getLabel());
+    	newSubclass.addProperty(RDF.COMMENT_PROPERTY, getComment());
 		}
 
 }

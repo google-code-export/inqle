@@ -52,7 +52,7 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 		Map<String, String> row = (Map<String, String>) cell.getElement();
 		String columnName = headerVariables.get(cell.getColumnIndex());
 		String cellValue = row.get(columnName);
-		log.info("Update cell for column #" + cell.getColumnIndex() + ":" + columnName + "=" + cellValue);
+//		log.info("Update cell for column #" + cell.getColumnIndex() + ":" + columnName + "=" + cellValue);
 		cell.setText(cellValue);
 	}
 
@@ -85,7 +85,7 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 				Element cellElement = (Element)bindingNodes.item(k);
 				String varName = cellElement.getAttribute("name");
 				String elementValue = cellElement.getTextContent();
-				log.info("Row=" + j + ", Col=" + k + " Adding:" + varName + "=" + elementValue);
+//				log.info("Row=" + j + ", Col=" + k + " Adding:" + varName + "=" + elementValue);
 				valueMap.put(varName, elementValue);
 			}
 			rowElements.add(valueMap);

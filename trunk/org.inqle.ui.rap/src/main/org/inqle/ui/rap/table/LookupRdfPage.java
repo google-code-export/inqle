@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.core.util.XmlDocumentSerializer;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
@@ -244,7 +245,13 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 			
 			Document localDocument = null;
 			
-			String localResultXml = OwlInstanceLookup.lookup(getSearchTextValue(), getSubjectUri(), Data.DATA_SUBJECT_DATASET_ROLE_ID, 0, 10);
+			String localResultXml = OwlInstanceLookup.lookup(
+					getSearchTextValue(), 
+					RDF.DATA_SUBJECT, 
+					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
+					10, 
+					0);
+			log.info("Retrieved this result set from LOCAL query:\n" + localResultXml);
 			InputStream in = new ByteArrayInputStream(localResultXml.getBytes());
 			DocumentBuilder builder;
 			try {
@@ -254,34 +261,47 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 				log.error("Unable to build/parse XML from local SPARQL query", e);
 			}
 	    
-			log.info("Posting data to " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 			
-			if (localDocument != null) {
-	    	SparqlXmlMerger.merge(localDocument, remoteDocument);
+			// XERCES 1 or 2 additional classes.
+//			OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
+//			of.setIndent(1);
+//			of.setIndenting(true);
+////			of.setDoctype(null,"users.dtd");
+//			XMLSerializer serializer = new XMLSerializer(System.out,of);
+//			log.info("Received Document object:");
+//			// As a DOM Serializer
+//			try {
+//				serializer.asDOMSerializer();
+//				serializer.serialize( remoteDocument.getDocumentElement() );
+//			} catch (IOException e) {
+//				log.warn("Unable to serialize received XML Document");
+//			}
+			
+			log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteDocument));
+			
+			Document mergedDocument = null;
+			if (localDocument != null && remoteDocument != null) {
+				log.info("merging...");
+				mergedDocument = SparqlXmlMerger.merge(localDocument, remoteDocument);
+	    	try {
+					log.info("Merged 2 documents into:\n" + XmlDocumentSerializer.xmlToString(mergedDocument));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	    } else if (remoteDocument != null) {
-	    	localDocument = remoteDocument;
+	    	mergedDocument = remoteDocument;
+	    } else {
+	    	 mergedDocument = localDocument;
 	    }
 			if (localDocument == null) {
-				log.warn("Received NULL from the local INQLE server and from Central INQLE Server.  Perhaps your internet connection is down.");
+				log.warn("Received NULL from the local INQLE server and from Central INQLE Server.  " +
+						"Perhaps your internet connection is down.");
 			}
 			
-			// XERCES 1 or 2 additional classes.
-			OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
-			of.setIndent(1);
-			of.setIndenting(true);
-			of.setDoctype(null,"users.dtd");
-			XMLSerializer serializer = new XMLSerializer(System.out,of);
-			log.info("Received Document object:");
-			// As a DOM Serializer
-			try {
-				serializer.asDOMSerializer();
-				serializer.serialize( remoteDocument.getDocumentElement() );
-			} catch (IOException e) {
-				log.warn("Unable to serialize received XML Document");
-			}
-			
-			setXmlDocument(localDocument);
+			setXmlDocument(mergedDocument);
 			refreshTableData();
 		}
 	}
