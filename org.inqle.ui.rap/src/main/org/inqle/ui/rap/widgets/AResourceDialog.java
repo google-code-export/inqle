@@ -146,14 +146,23 @@ public abstract class AResourceDialog extends Dialog {
     	if (! validate()) {
     		return;
     	}
-    	//create the RDF Individual, adding the label and comment
-    	Individual individual = ontClass.createIndividual(getUri());
-    	individual.addProperty(RDF.LABEL_PROPERTY, getLabel());
-    	individual.addProperty(RDF.COMMENT_PROPERTY, getComment());
+    	
+    	createRdf();
+    	
     	super.okPressed();
     }
     
-		
+		/**
+		 * Default implementation creates a new individual of the OntClass ontClass,
+		 * and adds label & comment properties
+		 */
+		protected void createRdf() {
+			//create the RDF Individual, adding the label and comment
+    	Individual individual = ontClass.createIndividual(getUri());
+    	individual.addProperty(RDF.LABEL_PROPERTY, getLabel());
+    	individual.addProperty(RDF.COMMENT_PROPERTY, getComment());
+		}
+
 		private boolean validate() {
 			if (! UriMapper.isUri(getUri())) {
 				setMessage(getUri() + " is not a valid URI.");
