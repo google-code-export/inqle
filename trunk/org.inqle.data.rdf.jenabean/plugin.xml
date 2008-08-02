@@ -33,6 +33,14 @@
 					 cacheInMemory="true"
 					 textIndexType="subject">
 			</dataset>
+			
+			<dataset
+           id="org.inqle.datasets.dataProperty"
+           weight="5000"
+           description="contains RDF properties used for INQLE data, including their rdfs:label and rdfs:comment."
+					 cacheInMemory="true"
+					 textIndexType="subject">
+			</dataset>
    </extension>
 
 </plugin>

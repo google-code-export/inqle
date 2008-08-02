@@ -18,7 +18,5 @@ import thewebsemantic.Namespace;
 public class Data {
 
 	public static final String DATA_SUBJECT_DATASET_ROLE_ID = "org.inqle.datasets.dataSubject";
-
-	
-
+	public static final String DATA_PROPERTY_DATASET_ROLE_ID = "org.inqle.datasets.dataProperty";
 }

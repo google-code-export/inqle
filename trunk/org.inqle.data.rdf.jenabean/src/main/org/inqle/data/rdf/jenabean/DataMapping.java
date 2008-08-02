@@ -17,20 +17,23 @@ import thewebsemantic.Namespace;
  * A DataMapping object can specify that a value should populate an RDF attribute, which
  * is in any of 4 types of locations
  * (1) an anonymous object of a native class, like foaf:Person
- * In this case, the attribute mapsOwlClass is populated with the URI of the class
+ * In this case, the attribute mapsSubjectClass is populated with the URI of the class
  * (2) an specific object of a native class, like foaf:Person#David_Donohue
- * In this case, the attribute mapsOwlClass is populated with the URI of the class,
- * The attribute mapsOwlObject is populated with the URI of the object
+ * In this case, the attribute mapsSubjectClass is populated with the URI of the class,
+ * The attribute mapsSubjectInstance is populated with the URI of the object
  * (3) An anonymous object of a subclass of inqle:Data, which has inqle:subject = an anonymous
  * object of a native class.
- * In this case, the attribute mapsDataAboutOwlClass is populated with the URI of the native class, 
+ * In this case, the attribute mapsDataAboutSubjectClass is populated with the URI of the native class, 
  * which the inqle:Data object is about.
  * (4) An anonymous object of a subclass of inqle:Data, which has inqle:subject a specific object
  * of a native class.
- * In this case, the attribute mapsDataAboutOwlClass is populated with the URI of the native class, 
+ * In this case, the attribute mapsDataAboutSubjectClass is populated with the URI of the native class, 
  * which the inqle:Data object is about.
- * The attribute mapsDataAboutOwlObject is populated with the URI of the object of class specified by 
- * mapsDataAboutOwlClass.
+ * The attribute mapsDataAboutSubjectInstance is populated with the URI of the object of class specified by 
+ * mapsDataAboutSubjectClass.
+ * 
+ * In any case, the attribute mapsValue is populated with the literal value of the mapped object.
+ * This is only populated in cases where the subject is global across the entire table
  * 
  * @author David Donohue
  * Jul 12, 2008
@@ -42,32 +45,34 @@ import thewebsemantic.Namespace;
 public class DataMapping extends GlobalJenabean {
 
 	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datasets.mapping";
-	private String mapsText;
+	private String mapsHeader;
 	private Resource mapsPredicate;
-	private Resource mapsOwlClass;
-	private Resource mapsOwlObject;
-	private Resource mapsDataAboutOwlClass;
-	private Resource mapsDataAboutOwlObject;
+	private Resource mapsSubjectClass;
+	private Resource mapsSubjectInstance;
+	private Resource mapsDataAboutSubjectClass;
+	private Resource mapsDataAboutSubjectInstance;
+	private Object mapsValue;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
-		s += "[mapsText=" + mapsText + "]\n";
+		s += "[mapsHeader=" + mapsHeader + "]\n";
 		s += "[mapsPredicate=" + mapsPredicate + "]\n";
-		s += "[mapsOwlClass=" + mapsOwlClass + "]\n";
-		s += "[mapsOwlObject=" + mapsOwlObject + "]\n";
-		s += "[mapsDataAboutOwlClass=" + mapsDataAboutOwlClass + "]\n";
-		s += "[mapsDataAboutOwlObject=" + mapsDataAboutOwlObject + "]\n";
+		s += "[mapsSubjectClass=" + mapsSubjectClass + "]\n";
+		s += "[mapsSubjectInstance=" + mapsSubjectInstance + "]\n";
+		s += "[mapsDataAboutSubjectClass=" + mapsDataAboutSubjectClass + "]\n";
+		s += "[mapsDataAboutSubjectInstance=" + mapsDataAboutSubjectInstance + "]\n";
+		s += "[mapsValue=" + mapsValue + "]\n";
 		s += "}";
 		return s;
 	}
 
 	public void clone(DataMapping objectToBeCloned) {
-		setMapsText(objectToBeCloned.getMapsText());
+		setMapsHeader(objectToBeCloned.getMapsHeader());
 		setMapsPredicate(objectToBeCloned.getMapsPredicate());
-		setMapsOwlClass(objectToBeCloned.getMapsOwlClass());
-		setMapsOwlObject(objectToBeCloned.getMapsOwlObject());
-		setMapsDataAboutOwlClass(objectToBeCloned.getMapsDataAboutOwlClass());
-		setMapsDataAboutOwlObject(objectToBeCloned.getMapsDataAboutOwlObject());
+		setMapsSubjectClass(objectToBeCloned.getMapsSubjectClass());
+		setMapsSubjectInstance(objectToBeCloned.getMapsSubjectInstance());
+		setMapsDataAboutSubjectClass(objectToBeCloned.getMapsDataAboutSubjectClass());
+		setMapsDataAboutSubjectInstance(objectToBeCloned.getMapsDataAboutSubjectInstance());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -77,12 +82,12 @@ public class DataMapping extends GlobalJenabean {
 		return dataMapping;
 	}
 
-	public String getMapsText() {
-		return mapsText;
+	public String getMapsHeader() {
+		return mapsHeader;
 	}
 
-	public void setMapsText(String mapsText) {
-		this.mapsText = mapsText;
+	public void setMapsHeader(String mapsText) {
+		this.mapsHeader = mapsText;
 	}
 
 	public Resource getMapsPredicate() {
@@ -93,36 +98,44 @@ public class DataMapping extends GlobalJenabean {
 		this.mapsPredicate = mapsPredicate;
 	}
 
-	public Resource getMapsOwlClass() {
-		return mapsOwlClass;
+	public Resource getMapsSubjectClass() {
+		return mapsSubjectClass;
 	}
 
-	public void setMapsOwlClass(Resource mapsOwlClass) {
-		this.mapsOwlClass = mapsOwlClass;
+	public void setMapsSubjectClass(Resource mapsSubjectClass) {
+		this.mapsSubjectClass = mapsSubjectClass;
 	}
 
-	public Resource getMapsOwlObject() {
-		return mapsOwlObject;
+	public Resource getMapsSubjectInstance() {
+		return mapsSubjectInstance;
 	}
 
-	public void setMapsOwlObject(Resource mapsOwlObject) {
-		this.mapsOwlObject = mapsOwlObject;
+	public void setMapsSubjectInstance(Resource mapsSubjectInstance) {
+		this.mapsSubjectInstance = mapsSubjectInstance;
 	}
 
-	public Resource getMapsDataAboutOwlClass() {
-		return mapsDataAboutOwlClass;
+	public Resource getMapsDataAboutSubjectClass() {
+		return mapsDataAboutSubjectClass;
 	}
 
-	public void setMapsDataAboutOwlClass(Resource mapsDataAboutOwlClass) {
-		this.mapsDataAboutOwlClass = mapsDataAboutOwlClass;
+	public void setMapsDataAboutSubjectClass(Resource mapsDataAboutSubjectClass) {
+		this.mapsDataAboutSubjectClass = mapsDataAboutSubjectClass;
 	}
 
-	public Resource getMapsDataAboutOwlObject() {
-		return mapsDataAboutOwlObject;
+	public Resource getMapsDataAboutSubjectInstance() {
+		return mapsDataAboutSubjectInstance;
 	}
 
-	public void setMapsDataAboutOwlObject(Resource mapsDataAboutOwlObject) {
-		this.mapsDataAboutOwlObject = mapsDataAboutOwlObject;
+	public void setMapsDataAboutSubjectInstance(Resource mapsDataAboutSubjectInstance) {
+		this.mapsDataAboutSubjectInstance = mapsDataAboutSubjectInstance;
+	}
+
+	public Object getMapsValue() {
+		return mapsValue;
+	}
+
+	public void setMapsValue(Object mapsValue) {
+		this.mapsValue = mapsValue;
 	}
 
 	
