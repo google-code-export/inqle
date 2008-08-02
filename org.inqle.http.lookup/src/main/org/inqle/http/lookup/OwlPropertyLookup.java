@@ -1,7 +1,5 @@
 package org.inqle.http.lookup;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
@@ -9,9 +7,6 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.DataMapping;
 import org.inqle.data.rdf.jenabean.Persister;
-
-import com.hp.hpl.jena.query.larq.HitLARQ;
-import com.hp.hpl.jena.query.larq.IndexLARQ;
 
 /**
  * This class gets 2 kinds of properties:
@@ -25,30 +20,29 @@ import com.hp.hpl.jena.query.larq.IndexLARQ;
 public class OwlPropertyLookup {
 
 	private static final Logger log = Logger.getLogger(OwlPropertyLookup.class);
-	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 	
 	/**
-	 * Generates SPARQL, to find all properties of all instances of all subclasses of inqle:Data, which have the
-	 * provided nativeOwlClassUri as a inqle:subject
+	 * Generates SPARQL, to find all properties of all instances of all subclasses of inqle:Data, 
+	 * which have the provided subjectClassUri as an inqle:subject
 	 * That is, this finds properties of data rows having a particular inqle:subject.
-	 * @param nativeOwlClassUri
+	 * @param subjectClassUri
 	 * @param limit
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlFindDataInstanceProperties(String nativeOwlClassUri, int limit, int offset) {
+	public static String getSparqlFindDataPropertiesAboutSubject(String subjectClassUri, int limit, int offset) {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
 				"PREFIX owl: <" + RDF.OWL + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT DISTINCT ?URI ?Label ?Comment ?ClassURI \n" +
+				"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				". ?ClassURI rdfs:subClassOf inqle:Data \n" +
-				". ?ClassURI inqle:subject <" + nativeOwlClassUri + "> \n" +
-				". ?InstanceURI a ?ClassURI \n" +
-				". ?InstanceURI ?URI ?propertyValue \n" +
+				"?InstanceURI a inqle:DataMapping \n" +
+				". ?InstanceURI inqle:mapsDataAboutSubjectClass <" + subjectClassUri + "> \n" +
+				". ?InstanceURI inqle:mapsPredicate ?Property_URI \n" +
+				". ?InstanceURI inqle:mapsHeader ?Column_Header \n" +
 				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 				"} } ORDER BY ASC(?Label) \n" +
@@ -57,30 +51,26 @@ public class OwlPropertyLookup {
 		}
 	
 	/**
-	 * Generates SPARQL, to find all properties of all subclasses of inqle:Data, which have the
-	 * provided nativeOwlClassUri as a inqle:subject.
-	 * That is, this finds properties of data tables or of their rows, having the specified inqle:subject.
-	 * @param nativeOwlClassUri
+	 * Generates SPARQL, to find all properties that have been mapped to the provided OWL class.
+	 * That is, this finds properties of DataSubjects.
+	 * @param subjectClassUri
 	 * @param limit
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlFindDataSubclassProperties(String nativeOwlClassUri, int limit, int offset) {
+	public static String getSparqlFindSubjectProperties(String subjectClassUri, int limit, int offset) {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
 				"PREFIX owl: <" + RDF.OWL + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT DISTINCT ?URI ?Label ?Comment ?ClassURI \n" +
+				"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				". ?ClassURI rdfs:subClassOf inqle:Data \n" +
-				". ?ClassURI inqle:subject <" + nativeOwlClassUri + "> \n" +
-				". { { ?ClassURI ?URI ?propertyValue } \n" +
-				"UNION\n" +
-				". { ?InstanceURI a ?ClassURI \n" +
-				". ?InstanceURI ?URI ?propertyValue } \n" +
-				"} \n" +
+				"?InstanceURI a inqle:DataMapping \n" +
+				". ?InstanceURI inqle:mapsSubjectClass <" + subjectClassUri + "> \n" +
+				". ?InstanceURI inqle:mapsPredicate ?Property_URI \n" +
+				". ?InstanceURI inqle:mapsHeader ?Column_Header \n" +
 				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 				"} } ORDER BY ASC(?Label) \n" +
@@ -88,71 +78,52 @@ public class OwlPropertyLookup {
 			return sparql;
 		}
 	
+	
 	/**
-	 * Generates SPARQL, to find all properties of all subclasses of inqle:Data, which have the
-	 * provided nativeOwlClassUri as a inqle:subject.
-	 * That is, this finds properties of data tables, having the specified inqle:subject.
-	 * @param nativeOwlClassUri
+	 * Generates SPARQL, to find all mapped properties of all subclasses of inqle:Data, which have the
+	 * provided subjectClassUri as a inqle:subject.
+	 * @param subjectClassUri
 	 * @param limit
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlFindInqleDataProperties(String nativeOwlClassUri, int limit, int offset) {
-			String sparql = 
-				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
-				"PREFIX owl: <" + RDF.OWL + ">\n" + 
-				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT DISTINCT ?URI ?Label ?Comment ?SubjectURI \n" +
-				"{\n" +
-				"GRAPH ?g {\n" +
-				". ?ClassURI rdfs:subClassOf inqle:Data \n" +
-				". ?ClassURI inqle:subject <" + nativeOwlClassUri + "> \n" +
-				". ?ClassURI ?URI ?propertyValue \n" +
-				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
-				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
-				"} } ORDER BY ASC(?Label) \n" +
-				"LIMIT " + limit + " OFFSET " + offset;
-			return sparql;
-		}
+	public static String getSparqlFindAllProperties(String subjectClassUri, int limit, int offset) {
+		String sparql = 
+			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+			"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
+			"{\n" +
+			"GRAPH ?g {\n" +
+			"?InstanceURI a inqle:DataMapping  \n" +
+			". { ?InstanceURI inqle:mapsDataAboutSubjectClass <" + subjectClassUri + "> \n" +
+			"    UNION \n" +
+			"    ?InstanceURI inqle:mapsSubjectClass <" + subjectClassUri + "> } \n" +
+			". ?InstanceURI inqle:mapsPredicate ?Property_URI \n" +
+			". ?InstanceURI inqle:mapsHeader ?Column_Header \n" +
+			". OPTIONAL { ?URI rdfs:label ?Label }\n" +
+			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+			"} } ORDER BY ASC(?Label) \n" +
+			"LIMIT " + limit + " OFFSET " + offset;
+		return sparql;
+	}
 	
 	/**
-	 * Generates SPARQL, to find all properties of all instances of the specified OWL class
-	 * E.g., this finds properties of a particular inqle:DataSubject
-	 * @param nativeOwlClassUri
-	 * @param limit
-	 * @param offset
-	 * @return
-	 */
-	public static String getSparqlFindOwlClassProperties(String nativeOwlClassUri, int limit, int offset) {
-			String sparql = 
-				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
-				"SELECT DISTINCT ?Property_URI ?Label ?Comment ?SubjectURI \n" +
-				"{\n" +
-				"GRAPH ?g {\n" +
-				" ?InstanceURI a <" + nativeOwlClassUri + "> \n" +
-				". ?InstanceURI ?Property_URI ?value \n" +
-				". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
-				". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
-				"} } ORDER BY ASC(?Label) \n" +
-				"LIMIT " + limit + " OFFSET " + offset;
-			return sparql;
-		}
-	
-	/**
-	 * Lookup any properties of data tables or of their rows, having an inqle:subject of the owlClassUri
-	 * @param owlClassUri the URI of the class 
+	 * Lookup any properties of either of the following:
+	 *  * mapped subject classes, of the subjectClassUri
+	 *  * mapped data tables or of their rows, having an inqle:subject of the subjectClassUri
+	 * @param subjectClassUri the URI of the class 
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupInqleDataProperties(String owlClassUri, int countSearchResults, int offset) {
+	public static String lookupDataPropertiesAboutSubject(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_SUBJECT_DATASET_ROLE_ID));
+		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
-		String sparql = getSparqlFindInqleDataProperties(owlClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindSubjectProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
@@ -160,18 +131,37 @@ public class OwlPropertyLookup {
 	}
 	
 	/**
-	 * Lookup any properties of native OWL classes
-	 * @param searchTermForRdfClass the user-entered query term
-	 * @param owlClassUri the URI of the class 
+	 * Lookup any properties of mapped subject classes of URI subjectClassUri
+	 * @param subjectClassUri the URI of the class 
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupNativeOwlProperties(String owlClassUri, int countSearchResults, int offset) {
+	public static String lookupSubjectProperties(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_SUBJECT_DATASET_ROLE_ID));
-		String sparql = getSparqlFindOwlClassProperties(owlClassUri, countSearchResults, offset);
+		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
+		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		String sparql = getSparqlFindAllProperties(subjectClassUri, countSearchResults, offset);
+		log.info("Querying w/ this sparql:\n" + sparql);
+		queryCriteria.setQuery(sparql);
+		String resultXml = Queryer.selectXml(queryCriteria);
+		return resultXml;
+	}
+	
+	/**
+	 * Lookup any properties of data tables or of their rows, having an inqle:subject of the subjectClassUri
+	 * @param subjectClassUri the URI of the class 
+	 * @param countSearchResults
+	 * @param offset
+	 * @return
+	 */
+	public static String lookupAllDataProperties(String subjectClassUri, int countSearchResults, int offset) {
+		Persister persister = Persister.getInstance();
+		QueryCriteria queryCriteria = new QueryCriteria();
+		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
+		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		String sparql = getSparqlFindAllProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
