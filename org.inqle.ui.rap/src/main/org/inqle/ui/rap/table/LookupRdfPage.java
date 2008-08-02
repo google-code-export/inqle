@@ -1,59 +1,40 @@
 package org.inqle.ui.rap.table;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.XmlDocumentSerializer;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.http.lookup.OwlInstanceLookup;
+import org.inqle.http.lookup.OwlSubclassLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateOwlInstanceAction;
-import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
-import org.inqle.ui.rap.widgets.AResourceDialog;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.inqle.ui.rap.xml.SparqlXmlMerger;
 import org.w3c.dom.Document;
-
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.AnonId;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 /**
  * This generates a wizard page which has a table of data, for display only.  
@@ -245,7 +226,7 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 			
 			Document localDocument = null;
 			
-			String localResultXml = OwlInstanceLookup.lookup(
+			String localResultXml = OwlSubclassLookup.lookup(
 					getSearchTextValue(), 
 					RDF.DATA_SUBJECT, 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
