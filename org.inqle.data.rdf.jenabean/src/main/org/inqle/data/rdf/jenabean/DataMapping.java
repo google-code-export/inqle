@@ -19,14 +19,14 @@ import thewebsemantic.Namespace;
  * (2) an specific object of a native class, like foaf:Person#David_Donohue
  * In this case, the attribute uriOfMappedNativeClass is populated with the URI of the class,
  * The attribute uriOfMappedNativeObject is populated with the URI of the object
- * (3) An anonymous object of a subclass of inqle:Data, which inqle:isAbout an anonymous
+ * (3) An anonymous object of a subclass of inqle:Data, which has inqle:subject = an anonymous
  * object of a native class.
  * In this case, the attribute uriOfWrappedClass is populated with the URI of the native class, 
- * which the inqle:Data object isAbout.
- * (4) An anonymous object of a subclass of inqle:Data, which inqle:isAbout a specific object
+ * which the inqle:Data object is about.
+ * (4) An anonymous object of a subclass of inqle:Data, which has inqle:subject a specific object
  * of a native class.
  * In this case, the attribute uriOfWrappedClass is populated with the URI of the native class, 
- * which the inqle:Data object isAbout.
+ * which the inqle:Data object is about.
  * The attribute uriOfWrappedObject is populated with the URI of the object of class specified by 
  * uriOfWrappedClass.
  * 
