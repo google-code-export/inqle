@@ -11,25 +11,21 @@ import org.inqle.data.rdf.jenabean.Persister;
 import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 
-public class OwlInstanceLookup {
+public class OwlSubclassLookup {
 
-	private static final Logger log = Logger.getLogger(OwlInstanceLookup.class);
+	private static final Logger log = Logger.getLogger(OwlSubclassLookup.class);
 	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 	
-	public static String getSparqlSearchRdfClasses(String searchRdfClass, String owlClassUri, int limit, int offset) {
+	public static String getSparqlSearchRdfClasses(String searchTerm, String owlClassUri, int limit, int offset) {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
-				"PREFIX owl: <" + RDF.OWL + ">\n" + 
-				"PREFIX dc: <" + RDF.DC + ">\n" + 
 				"PREFIX pf: <" + RDF.PF + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 				"SELECT ?URI ?Label ?Comment ?Score \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				"(?URI ?Score) pf:textMatch ( '" + searchRdfClass + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-				//". ?URI a owl:Class \n" +
-//				". ?URI a <" + owlClassUri + "> \n" +
+				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
 				". ?URI rdfs:subClassOf <" + owlClassUri + "> \n" +
 				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
