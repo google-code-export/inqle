@@ -17,9 +17,9 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.DataMapping;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.http.lookup.util.HttpParameterParser;
 
 import com.hp.hpl.jena.query.ResultSet;
