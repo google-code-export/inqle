@@ -1,9 +1,10 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.data.rdf.jenabean.mapping;
 
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
 
 import thewebsemantic.Namespace;
 
