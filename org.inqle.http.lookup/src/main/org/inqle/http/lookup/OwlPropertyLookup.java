@@ -37,6 +37,8 @@ public class OwlPropertyLookup {
 				"PREFIX owl: <" + RDF.OWL + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 				"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
+				//datatype(?value) as ?Data_Type
+				//". OPTIONAL { ?URI inqle:mapsValue ?value } \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
 				"?InstanceURI a inqle:DataMapping \n" +
