@@ -26,29 +26,15 @@ public class TableMapping extends GlobalJenabean {
 
 	private String mappedText;
 	
-	/**
-	 * ID of the subclass of inqle:Data which represents the table.  Needed because the subclass will be the only
-	 * location where some info si stored.
-	 * TODO consider remove this
-	 */
-	//private String mappedDataSubclassId;
-	
-	/**
-	 * ID of the dataset where resides the subclass of inqle:Data which represents the table.
-	 * This seems to be of local usefulness only?
-	 * TODO consider remove this
-	 */
-	//private String mappedDataSubclassDatasetId;
-	
-	private Collection<DataMapping> dataMappings;
+	private Collection<SubjectMapping> subjectMappings;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
 		s += "[mappedText=" + mappedText + "]\n";
 		//s += "[mappedDataSubclassId=" + mappedDataSubclassId + "]\n";
 		//TODO ensure these mappings are sorted reproducibly each time they are iterated.
-		for(DataMapping dataMapping: getDataMappings()) {
-			s += "[dataMapping=" + dataMapping + "]\n";
+		for(SubjectMapping subjectMapping: getSubjectMappings()) {
+			s += "[subjectMapping=" + subjectMapping + "]\n";
 		}
 		s += "}";
 		return s;
@@ -56,7 +42,7 @@ public class TableMapping extends GlobalJenabean {
 
 	public void clone(TableMapping objectToBeCloned) {
 		setMappedText(objectToBeCloned.getMappedText());
-		setDataMappings(objectToBeCloned.getDataMappings());
+		setSubjectMappings(objectToBeCloned.getSubjectMappings());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -74,12 +60,12 @@ public class TableMapping extends GlobalJenabean {
 		this.mappedText = mappedText;
 	}
 
-	public Collection<DataMapping> getDataMappings() {
-		return dataMappings;
+	public Collection<SubjectMapping> getSubjectMappings() {
+		return subjectMappings;
 	}
 
-	public void setDataMappings(Collection<DataMapping> dataMappings) {
-		this.dataMappings = dataMappings;
+	public void setSubjectMappings(Collection<SubjectMapping> subjectMappings) {
+		this.subjectMappings = subjectMappings;
 	}
 
 //	public String getMappedDataSubclassId() {

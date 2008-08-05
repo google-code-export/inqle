@@ -12,29 +12,20 @@ import thewebsemantic.Namespace;
 
 /**
  * This class is used for importing Data.  It maps terms (like headers in a CSV file) to 
- * the respective class or data class.  A DataMapping is used to import all values from a single
+ * the respective RDF property.  
+ * A DataMapping can be used to import all values from a single
  * column in a CSV file.
  * 
- * A DataMapping object can specify that a value should populate an RDF attribute, which
- * is in any of 4 types of locations
- * (1) an anonymous object of a native class, like foaf:Person
- * In this case, the attribute mapsSubjectClass is populated with the URI of the class
- * (2) an specific object of a native class, like foaf:Person#David_Donohue
- * In this case, the attribute mapsSubjectClass is populated with the URI of the class,
- * The attribute mapsSubjectInstance is populated with the URI of the object
- * (3) An anonymous object of a subclass of inqle:Data, which has inqle:subject = an anonymous
- * object of a native class.
- * In this case, the attribute mapsDataAboutSubjectClass is populated with the URI of the native class, 
- * which the inqle:Data object is about.
- * (4) An anonymous object of a subclass of inqle:Data, which has inqle:subject a specific object
- * of a native class.
- * In this case, the attribute mapsDataAboutSubjectClass is populated with the URI of the native class, 
- * which the inqle:Data object is about.
- * The attribute mapsDataAboutSubjectInstance is populated with the URI of the object of class specified by 
- * mapsDataAboutSubjectClass.
+ * For attribute mapsSubjectType, a DataMapping object can have 1 of these values:
+ *  * inqle:DataSubject
+ *    The DataMapping maps to the native subject instance, 
+ *  * inqle:Data
+ *    The DataMapping maps to an inqle:Data instance, which is about the native subject instance
+ *    
+ * The attribute mapsValue is is only populated in cases where the subject has a global 
+ * value for all rows of the table.  In this case, it contains the literal value of the 
+ * mapped object.
  * 
- * In any case, the attribute mapsValue is populated with the literal value of the mapped object.
- * This is only populated in cases where the subject is global across the entire table
  * 
  * @author David Donohue
  * Jul 12, 2008
@@ -48,20 +39,23 @@ public class DataMapping extends GlobalJenabean {
 	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datasets.mapping";
 	private String mapsHeader;
 	private Resource mapsPredicate;
-	private Resource mapsSubjectClass;
-	private Resource mapsSubjectInstance;
-	private Resource mapsDataAboutSubjectClass;
-	private Resource mapsDataAboutSubjectInstance;
+	private Resource mapsSubjectType;
+	
+//	private Resource mapsSubjectClass;
+//	private Resource mapsSubjectInstance;
+//	private Resource mapsDataAboutSubjectClass;
+//	private Resource mapsDataAboutSubjectInstance;
 	private Object mapsValue;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
 		s += "[mapsHeader=" + mapsHeader + "]\n";
-		s += "[mapsPredicate=" + mapsPredicate + "]\n";
-		s += "[mapsSubjectClass=" + mapsSubjectClass + "]\n";
-		s += "[mapsSubjectInstance=" + mapsSubjectInstance + "]\n";
-		s += "[mapsDataAboutSubjectClass=" + mapsDataAboutSubjectClass + "]\n";
-		s += "[mapsDataAboutSubjectInstance=" + mapsDataAboutSubjectInstance + "]\n";
+		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
+		s += "[mapsSubjectType=" + mapsSubjectType.toString() + "]\n";
+//		s += "[mapsSubjectClass=" + mapsSubjectClass + "]\n";
+//		s += "[mapsSubjectInstance=" + mapsSubjectInstance + "]\n";
+//		s += "[mapsDataAboutSubjectClass=" + mapsDataAboutSubjectClass + "]\n";
+//		s += "[mapsDataAboutSubjectInstance=" + mapsDataAboutSubjectInstance + "]\n";
 		s += "[mapsValue=" + mapsValue + "]\n";
 		s += "}";
 		return s;
@@ -70,10 +64,12 @@ public class DataMapping extends GlobalJenabean {
 	public void clone(DataMapping objectToBeCloned) {
 		setMapsHeader(objectToBeCloned.getMapsHeader());
 		setMapsPredicate(objectToBeCloned.getMapsPredicate());
-		setMapsSubjectClass(objectToBeCloned.getMapsSubjectClass());
-		setMapsSubjectInstance(objectToBeCloned.getMapsSubjectInstance());
-		setMapsDataAboutSubjectClass(objectToBeCloned.getMapsDataAboutSubjectClass());
-		setMapsDataAboutSubjectInstance(objectToBeCloned.getMapsDataAboutSubjectInstance());
+		setMapsSubjectType(objectToBeCloned.getMapsSubjectType());
+		setMapsValue(objectToBeCloned.getMapsValue());
+//		setMapsSubjectClass(objectToBeCloned.getMapsSubjectClass());
+//		setMapsSubjectInstance(objectToBeCloned.getMapsSubjectInstance());
+//		setMapsDataAboutSubjectClass(objectToBeCloned.getMapsDataAboutSubjectClass());
+//		setMapsDataAboutSubjectInstance(objectToBeCloned.getMapsDataAboutSubjectInstance());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -99,37 +95,37 @@ public class DataMapping extends GlobalJenabean {
 		this.mapsPredicate = mapsPredicate;
 	}
 
-	public Resource getMapsSubjectClass() {
-		return mapsSubjectClass;
-	}
-
-	public void setMapsSubjectClass(Resource mapsSubjectClass) {
-		this.mapsSubjectClass = mapsSubjectClass;
-	}
-
-	public Resource getMapsSubjectInstance() {
-		return mapsSubjectInstance;
-	}
-
-	public void setMapsSubjectInstance(Resource mapsSubjectInstance) {
-		this.mapsSubjectInstance = mapsSubjectInstance;
-	}
-
-	public Resource getMapsDataAboutSubjectClass() {
-		return mapsDataAboutSubjectClass;
-	}
-
-	public void setMapsDataAboutSubjectClass(Resource mapsDataAboutSubjectClass) {
-		this.mapsDataAboutSubjectClass = mapsDataAboutSubjectClass;
-	}
-
-	public Resource getMapsDataAboutSubjectInstance() {
-		return mapsDataAboutSubjectInstance;
-	}
-
-	public void setMapsDataAboutSubjectInstance(Resource mapsDataAboutSubjectInstance) {
-		this.mapsDataAboutSubjectInstance = mapsDataAboutSubjectInstance;
-	}
+//	public Resource getMapsSubjectClass() {
+//		return mapsSubjectClass;
+//	}
+//
+//	public void setMapsSubjectClass(Resource mapsSubjectClass) {
+//		this.mapsSubjectClass = mapsSubjectClass;
+//	}
+//
+//	public Resource getMapsSubjectInstance() {
+//		return mapsSubjectInstance;
+//	}
+//
+//	public void setMapsSubjectInstance(Resource mapsSubjectInstance) {
+//		this.mapsSubjectInstance = mapsSubjectInstance;
+//	}
+//
+//	public Resource getMapsDataAboutSubjectClass() {
+//		return mapsDataAboutSubjectClass;
+//	}
+//
+//	public void setMapsDataAboutSubjectClass(Resource mapsDataAboutSubjectClass) {
+//		this.mapsDataAboutSubjectClass = mapsDataAboutSubjectClass;
+//	}
+//
+//	public Resource getMapsDataAboutSubjectInstance() {
+//		return mapsDataAboutSubjectInstance;
+//	}
+//
+//	public void setMapsDataAboutSubjectInstance(Resource mapsDataAboutSubjectInstance) {
+//		this.mapsDataAboutSubjectInstance = mapsDataAboutSubjectInstance;
+//	}
 
 	public Object getMapsValue() {
 		return mapsValue;
@@ -137,6 +133,14 @@ public class DataMapping extends GlobalJenabean {
 
 	public void setMapsValue(Object mapsValue) {
 		this.mapsValue = mapsValue;
+	}
+
+	public Resource getMapsSubjectType() {
+		return mapsSubjectType;
+	}
+
+	public void setMapsSubjectType(Resource mapsSubjectType) {
+		this.mapsSubjectType = mapsSubjectType;
 	}
 
 	
