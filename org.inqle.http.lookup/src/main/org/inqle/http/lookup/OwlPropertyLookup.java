@@ -41,12 +41,14 @@ public class OwlPropertyLookup {
 				//". OPTIONAL { ?URI inqle:mapsValue ?value } \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				"?InstanceURI a inqle:DataMapping \n" +
-				". ?InstanceURI inqle:mapsDataAboutSubjectClass <" + subjectClassUri + "> \n" +
-				". ?InstanceURI inqle:mapsPredicate ?Property_URI \n" +
-				". ?InstanceURI inqle:mapsHeader ?Column_Header \n" +
-				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
-				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+				"?SubjectMappingURI a inqle:SubjectMapping \n" +
+				". ?SubjectMappingUri inqle:subjectClass <" + subjectClassUri + "> \n" +
+				". ?SubjectMappingUri inqle:dataMappings ?DataMappingUri \n" +
+				". ?DataMappingUri inqle:mapsPredicate ?Property_URI \n" +
+				". ?DataMappingUri inqle:mapsHeader ?Column_Header \n" +
+				". ?DataMappingUri inqle:mapsSubjectType inqle:Data \n" +
+				". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
+				". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 				"} } ORDER BY ASC(?Label) \n" +
 				"LIMIT " + limit + " OFFSET " + offset;
 			return sparql;
@@ -61,23 +63,27 @@ public class OwlPropertyLookup {
 	 * @return
 	 */
 	public static String getSparqlFindSubjectProperties(String subjectClassUri, int limit, int offset) {
-			String sparql = 
-				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
-				"PREFIX owl: <" + RDF.OWL + ">\n" + 
-				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
-				"{\n" +
-				"GRAPH ?g {\n" +
-				"?InstanceURI a inqle:DataMapping \n" +
-				". ?InstanceURI inqle:mapsSubjectClass <" + subjectClassUri + "> \n" +
-				". ?InstanceURI inqle:mapsPredicate ?Property_URI \n" +
-				". ?InstanceURI inqle:mapsHeader ?Column_Header \n" +
-				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
-				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
-				"} } ORDER BY ASC(?Label) \n" +
-				"LIMIT " + limit + " OFFSET " + offset;
-			return sparql;
+		String sparql = 
+			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+			"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
+			//datatype(?value) as ?Data_Type
+			//". OPTIONAL { ?URI inqle:mapsValue ?value } \n" +
+			"{\n" +
+			"GRAPH ?g {\n" +
+			"?SubjectMappingURI a inqle:SubjectMapping \n" +
+			". ?SubjectMappingUri inqle:subjectClass <" + subjectClassUri + "> \n" +
+			". ?SubjectMappingUri inqle:dataMappings ?DataMappingUri \n" +
+			". ?DataMappingUri inqle:mapsPredicate ?Property_URI \n" +
+			". ?DataMappingUri inqle:mapsHeader ?Column_Header \n" +
+			". ?DataMappingUri inqle:mapsSubjectType inqle:DataSubject \n" +
+			". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
+			". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
+			"} } ORDER BY ASC(?Label) \n" +
+			"LIMIT " + limit + " OFFSET " + offset;
+		return sparql;
 		}
 	
 	
@@ -96,16 +102,17 @@ public class OwlPropertyLookup {
 			"PREFIX owl: <" + RDF.OWL + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
+			//datatype(?value) as ?Data_Type
+			//". OPTIONAL { ?URI inqle:mapsValue ?value } \n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			"?InstanceURI a inqle:DataMapping  \n" +
-			". { ?InstanceURI inqle:mapsDataAboutSubjectClass <" + subjectClassUri + "> \n" +
-			"    UNION \n" +
-			"    ?InstanceURI inqle:mapsSubjectClass <" + subjectClassUri + "> } \n" +
-			". ?InstanceURI inqle:mapsPredicate ?Property_URI \n" +
-			". ?InstanceURI inqle:mapsHeader ?Column_Header \n" +
-			". OPTIONAL { ?URI rdfs:label ?Label }\n" +
-			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+			"?SubjectMappingURI a inqle:SubjectMapping \n" +
+			". ?SubjectMappingUri inqle:subjectClass <" + subjectClassUri + "> \n" +
+			". ?SubjectMappingUri inqle:dataMappings ?DataMappingUri \n" +
+			". ?DataMappingUri inqle:mapsPredicate ?Property_URI \n" +
+			". ?DataMappingUri inqle:mapsHeader ?Column_Header \n" +
+			". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
+			". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 			"} } ORDER BY ASC(?Label) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
