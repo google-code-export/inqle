@@ -16,6 +16,7 @@ public class TextField extends Composite {
 
 	private Text text;
 	private Text descriptionText;
+	private Label label;
 	
 	private static final Logger log = Logger.getLogger(TextField.class);
 	
@@ -41,7 +42,7 @@ public class TextField extends Composite {
 //		composite.setLayoutData(gridData);
 		
 		//create the controls
-		Label label = new Label(composite, SWT.NONE);
+		label = new Label(composite, SWT.NONE);
 //		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 //		label.setLayoutData(gridData);
 		//add left padding, if desired (right padding gets removed)
@@ -107,6 +108,12 @@ public class TextField extends Composite {
 	
 	public void setTextValue(String textValue) {
 		text.setText(textValue);
+	}
+	
+	public void setEnabled(boolean enabled) {
+		label.setEnabled(enabled);
+		text.setEnabled(enabled);
+		descriptionText.setEnabled(enabled);
 	}
 
 }

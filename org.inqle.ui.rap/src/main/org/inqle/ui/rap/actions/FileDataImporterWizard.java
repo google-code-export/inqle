@@ -36,6 +36,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	private LoadFilePage loadFilePage;
 	private LookupRdfPage lookupRdfPage;
 	private CsvImporter csvImporter;
+	private SubjectInfoPage subjectInfoPage;
 	
 
 	@Override
@@ -93,6 +94,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		
 		lookupRdfPage = new LookupRdfPage("Type of Subject", "Find and select the type of subject that this data is about.", null);
 		addPage(lookupRdfPage);
+		
+		subjectInfoPage = new SubjectInfoPage();
+		addPage(subjectInfoPage);
 		
 		
 		
