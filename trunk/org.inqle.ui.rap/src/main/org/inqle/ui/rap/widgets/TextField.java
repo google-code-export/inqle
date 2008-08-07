@@ -37,9 +37,9 @@ public class TextField extends Composite {
 		}
 		composite.setLayout(formLayout);
 		GridData gridData;
-//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-//		composite.setLayoutData(gridData);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		composite.setLayoutData(gridData);
 		
 		//create the controls
 		label = new Label(composite, SWT.NONE);
@@ -67,8 +67,8 @@ public class TextField extends Composite {
 			spacer.setVisible(false);
 		}
 		
-//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		text = new Text(composite, textStyle);
 		text.setLayoutData(gridData);
 		if (toolTipString != null) {
@@ -116,4 +116,9 @@ public class TextField extends Composite {
 		descriptionText.setEnabled(enabled);
 	}
 
+	public void setVisible(boolean visible) {
+		label.setVisible(visible);
+		text.setVisible(visible);
+		descriptionText.setVisible(visible);
+	}
 }
