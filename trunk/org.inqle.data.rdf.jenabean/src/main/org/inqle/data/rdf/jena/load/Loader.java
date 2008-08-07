@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +35,13 @@ public class Loader {
 	}
 	
 	public boolean loadString(String string, String defaultUri, String lang) {
-		byte bytes[] = string.getBytes();
+		byte bytes[];
+		try {
+			bytes = string.getBytes("UTF8");
+		} catch (UnsupportedEncodingException e) {
+			log.warn("Unable to read bytes as UTF8");
+			bytes = string.getBytes();
+		}
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 		return loadStream(byteArrayInputStream, defaultUri, lang);
 	}
