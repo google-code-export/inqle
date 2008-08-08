@@ -1,8 +1,6 @@
 package org.inqle.ui.rap.actions;
 
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -19,9 +17,9 @@ import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextField;
 
-public class SubjectInfoPage extends DynaWizardPage implements SelectionListener {
+public class SubjectUriPage extends DynaWizardPage implements SelectionListener {
 
-	private static final Logger log = Logger.getLogger(SubjectInfoPage.class);
+	private static final Logger log = Logger.getLogger(SubjectUriPage.class);
 	
 	private static final String DEFAULT_TITLE = "Identify the Subjects";
 	private static final String DEFAULT_DESCRIPTION = "Please identify the instances.";
@@ -34,7 +32,7 @@ public class SubjectInfoPage extends DynaWizardPage implements SelectionListener
 		URI_TYPE_RANDOM_UUID,
 		URI_TYPE_COLUMN_VALUE
 	};
-	private static java.util.List<String> SUBJECT_URI_CREATION_METHOD_LIST = Arrays.asList(SUBJECT_URI_CREATION_METHODS);
+//	private static java.util.List<String> SUBJECT_URI_CREATION_METHOD_LIST = Arrays.asList(SUBJECT_URI_CREATION_METHODS);
 	private Button selectPertainsToAllRows;
 	private Button selectPertainsToSomeRows;
 	private TextField instanceUriField;
@@ -46,11 +44,11 @@ public class SubjectInfoPage extends DynaWizardPage implements SelectionListener
 
 	private Label uriSuffixColumnLabel;
 	
-	public SubjectInfoPage() {
+	public SubjectUriPage() {
 		this(DEFAULT_TITLE, null, DEFAULT_DESCRIPTION);
 	}
 			
-	public SubjectInfoPage(String title, ImageDescriptor titleImage, String description) {
+	public SubjectUriPage(String title, ImageDescriptor titleImage, String description) {
 		super(title, titleImage);
 		// TODO Auto-generated constructor stub
 		setDescription(description);
