@@ -81,4 +81,6 @@ public class InqleInfo {
 	public static final String PARAM_SEARCH_START_INDEX = "start";
 
 	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
+
+	public static final String PARAM_PROPERTIES_OF_SUBJECT = "propertiesOfSubject";
 }
