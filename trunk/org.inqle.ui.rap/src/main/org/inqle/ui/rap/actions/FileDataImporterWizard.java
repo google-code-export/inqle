@@ -13,7 +13,7 @@ import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
-import org.inqle.ui.rap.table.LookupRdfPage;
+import org.inqle.ui.rap.table.SubjectClassPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -34,9 +34,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	Composite composite;
 	
 	private LoadFilePage loadFilePage;
-	private LookupRdfPage lookupRdfPage;
+	private SubjectClassPage subjectClassPage;
 	private CsvImporter csvImporter;
-	private SubjectInfoPage subjectInfoPage;
+	private SubjectUriPage subjectUriPage;
 	
 
 	@Override
@@ -92,11 +92,11 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
 		addPage(measurementDateTimeMapperPage);
 		
-		lookupRdfPage = new LookupRdfPage("Type of Subject", "Find and select the type of subject that this data is about.", null);
-		addPage(lookupRdfPage);
+		subjectClassPage = new SubjectClassPage();
+		addPage(subjectClassPage);
 		
-		subjectInfoPage = new SubjectInfoPage();
-		addPage(subjectInfoPage);
+		subjectUriPage = new SubjectUriPage();
+		addPage(subjectUriPage);
 		
 		
 		

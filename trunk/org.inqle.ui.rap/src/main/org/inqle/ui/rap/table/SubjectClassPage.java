@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,21 +36,19 @@ import org.inqle.ui.rap.xml.SparqlXmlMerger;
 import org.w3c.dom.Document;
 
 /**
- * This generates a wizard page which has a table of data, for display only.  
- * The data in the table is represented by a RdfTable object,
- * which contains the result of a SPARQL query.
+ * This page permits the user to search for an RDF subject class, and to specify a new RDF subject class.
  * 
  * @author David Donohue
  * Feb 20, 2008
  */
-public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
+public class SubjectClassPage extends DynaWizardPage implements SelectionListener{
 	
 	/**
 	 * the class of items in the table's List field.
 	 */
 	protected Class<?> tableBeanClass = Map.class;
 
-	private static final Logger log = Logger.getLogger(LookupRdfPage.class);
+	private static final Logger log = Logger.getLogger(SubjectClassPage.class);
 
 	private static final int COLUMN_WIDTH = 120;
 
@@ -75,6 +72,8 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 
 	private Label selectNewSubjectLabel;
 
+	private static String TITLE = "Type of Subject";
+	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
 //	private Table table;
 	
 	/**
@@ -84,9 +83,9 @@ public class LookupRdfPage extends DynaWizardPage implements SelectionListener{
 	 * @param title the title of this page
 	 * @param titleImage
 	 */
-	public LookupRdfPage(String title, String description, ImageDescriptor titleImage) {
-		super(title, titleImage);
-		setMessage(description);
+	public SubjectClassPage() {
+		super(TITLE, null);
+		setMessage(DESCRIPTION);
 	}
 
 	/**
