@@ -101,7 +101,7 @@ public class OwlPropertyLookup {
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
 			"PREFIX owl: <" + RDF.OWL + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
+			"SELECT DISTINCT ?Property_URI ?Subject_Type ?Column_Header ?Label ?Comment \n" +
 			//datatype(?value) as ?Data_Type
 			//". OPTIONAL { ?URI inqle:mapsValue ?value } \n" +
 			"{\n" +
@@ -111,6 +111,7 @@ public class OwlPropertyLookup {
 			". ?SubjectMappingUri inqle:dataMappings ?DataMappingUri \n" +
 			". ?DataMappingUri inqle:mapsPredicate ?Property_URI \n" +
 			". ?DataMappingUri inqle:mapsHeader ?Column_Header \n" +
+			". ?DataMappingUri inqle:mapsSubjectType ?Subject_Type \n" +
 			". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
 			". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 			"} } ORDER BY ASC(?Label) \n" +

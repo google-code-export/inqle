@@ -89,11 +89,20 @@ public class LookupServlet extends HttpServlet {
 		if (countResults > MAX_COUNT_RESULTS) {
 			countResults = COUNT_SEARCH_RESULTS;
 		}
+		
+		//lookup Class URI
 		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_DATA_SUBJECT);
 		if (searchTermForRdfClass != null) {
 			
 			String matchingClassesXml = OwlSubclassLookup.lookup(searchTermForRdfClass, RDF.DATA_SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			respondOK(matchingClassesXml);
+		}
+		
+		String propertiesForClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_PROPERTIES_OF_SUBJECT);
+		if (searchTermForRdfClass != null) {
+			
+			String matchingPropertiesXml = OwlPropertyLookup.lookupAllDataProperties(propertiesForClass, countResults, startIndex);
+			respondOK(matchingPropertiesXml);
 		}
 	}
 	
