@@ -6,10 +6,10 @@
     * It is software, which runs on a server, and can mine your data, discovering correlations that might exist therein.
 
   * Can a computer really do scientific research?
-    * Not yet.  Current versions of INQLE cannot do scientific research either.  Rather, INQLE is a _data mining_ tool.  It finds statistical correlations that exist between different attributes of a common subject.  Future versions of INQLE will address most of the steps of a complete prospective research study.
+    * Not yet.  Current versions of INQLE cannot do scientific research either.  Rather, INQLE is a _data mining_ tool.  It finds statistical correlations that exist between different things.  Future versions of INQLE will automate or simplify most of the steps of doing a complete prospective research study.
 
   * How could INQLE help me?
-    * Humans are notoriously flawed at making objective conclusions and sound decisions.  Present company excluded, of course.  In any case where you would like to predict some outcome (like say "how rested am I today") you could import into INQLE any & all variables which might impact that outcome, plus a measure of that outcome.  Then, fire up INQLE and see which variables show the strongest association.
+    * Humans are notoriously flawed at making objective conclusions and sound decisions.  Present company excluded, of course.  INQLE assists in discovering previously unknown correlations.  Once you identify something you would like to predict, (like say "my child's emotional state") you could import into INQLE any & all variables which might impact that outcome (like # of hours slept, foods eaten) plus a measure of that outcome.  Then, fire up INQLE and see which variables show the strongest association.
 
   * How does INQLE fit into traditional research?
     * INQLE assists in the generation of a hypothesis.  As INQLE finds correlations that exist, it can discover previously unknown associations.  Such associations might be spurious, trivial, or already known.  They might also be true discoveries.  In this case, the correlation might or might not represent things that are causally related.  It would be the job of traditional research to test any hypothesis and to determine causality.
