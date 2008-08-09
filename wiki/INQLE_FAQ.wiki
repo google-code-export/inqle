@@ -6,17 +6,16 @@
     * It is software, which runs on a server, and can mine your data, discovering correlations that might exist therein.
 
   * Can a computer really do scientific research?
-    * Not yet.  Current versions of INQLE cannot do scientific research either.  Rather, INQLE is a _data mining_ tool.  It finds statistical correlations that exist between different attributes of a common subject.  
+    * Not yet.  Current versions of INQLE cannot do scientific research either.  Rather, INQLE is a _data mining_ tool.  It finds statistical correlations that exist between different attributes of a common subject.  Future versions of INQLE will address most of the steps of a complete prospective research study.
 
   * How could INQLE help me?
-    * Humans are notoriously flawed at making sound decisions.  Present company excluded, of course.  In any case where you would like to predict some outcome (like say "how rested am I today") you could import into INQLE any & all variables which might impact your state of restfulness for a bunch of days.  Plus import the associated restfulness score for those days.  Then, fire up INQLE and see which variables show the strongest association.
+    * Humans are notoriously flawed at making objective conclusions and sound decisions.  Present company excluded, of course.  In any case where you would like to predict some outcome (like say "how rested am I today") you could import into INQLE any & all variables which might impact that outcome, plus a measure of that outcome.  Then, fire up INQLE and see which variables show the strongest association.
 
   * How does INQLE fit into traditional research?
-    * INQLE assists in the generation of a hypothesis.  As INQLE finds correlations that exist, it can discover previously unknown associations.  Such associations might be spurious, trivial, 
-already known.  They might also be true correlations.  In this case, the correlation might or might not represent things that are causally related.  It would be the job of traditional research to test any hypothesis.
+    * INQLE assists in the generation of a hypothesis.  As INQLE finds correlations that exist, it can discover previously unknown associations.  Such associations might be spurious, trivial, or already known.  They might also be true discoveries.  In this case, the correlation might or might not represent things that are causally related.  It would be the job of traditional research to test any hypothesis and to determine causality.
 
   * Will INQLE ever be able to do traditional research?
-    * Yes!  Just as we have modeled the process of data mining by creating the concepts of Samplers, Learning Cyles, and Experimenter Agents, we intend to model traditional research by programmatically creating the concepts of Cohorts, Data Gatherers, and Study Question.
+    * Yes!  Just as we have modeled the process of data mining by creating the concepts of Samplers, Learning Cycles, and Experimenter Agents, we intend to model traditional research by programmatically creating the concepts of Cohorts, Data Gatherers, and Study Question.
 
   * What does INQLE stand for?
     * Intelligent Network of Querying and Learning Engines
