@@ -25,6 +25,9 @@ public class SearchBox extends Composite {
 	
 	public SearchBox(Composite parent, int style, String labelString, String searchButtonText, String toolTipString, Layout formLayout) {
 		super(parent, style);
+		
+		parent.getShell().setDefaultButton(searchButton);
+		
 		//Composite composite = new Composite(parent, style);
 		Composite composite = this;
 		if (formLayout == null) {

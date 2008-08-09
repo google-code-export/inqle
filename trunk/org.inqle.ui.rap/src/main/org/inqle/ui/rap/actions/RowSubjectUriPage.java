@@ -17,9 +17,9 @@ import org.inqle.ui.rap.csv.CsvImporter;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextField;
 
-public class SubjectUriPage extends DynaWizardPage implements SelectionListener {
+public class RowSubjectUriPage extends DynaWizardPage implements SelectionListener {
 
-	private static final Logger log = Logger.getLogger(SubjectUriPage.class);
+	private static final Logger log = Logger.getLogger(RowSubjectUriPage.class);
 	
 	private static final String DEFAULT_TITLE = "Identify the Subjects";
 	private static final String DEFAULT_DESCRIPTION = "Please identify the instances.";
@@ -44,11 +44,11 @@ public class SubjectUriPage extends DynaWizardPage implements SelectionListener 
 
 	private Label uriSuffixColumnLabel;
 	
-	public SubjectUriPage() {
+	public RowSubjectUriPage() {
 		this(DEFAULT_TITLE, null, DEFAULT_DESCRIPTION);
 	}
 			
-	public SubjectUriPage(String title, ImageDescriptor titleImage, String description) {
+	public RowSubjectUriPage(String title, ImageDescriptor titleImage, String description) {
 		super(title, titleImage);
 		// TODO Auto-generated constructor stub
 		setDescription(description);

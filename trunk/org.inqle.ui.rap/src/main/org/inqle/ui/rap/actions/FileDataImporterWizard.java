@@ -4,15 +4,19 @@
 package org.inqle.ui.rap.actions;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.pages.AddSubjectPage;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
+import org.inqle.ui.rap.pages.RadiosPage;
 import org.inqle.ui.rap.table.SubjectClassPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -26,8 +30,6 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 
 	public FileDataImporterWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
-		log.info("CCCCCCCCCCCCCreating new FileDataImporterWizard");
-		// TODO Auto-generated constructor stub
 	}
 
 	static Logger log = Logger.getLogger(FileDataImporterWizard.class);
@@ -36,9 +38,17 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	private LoadFilePage loadFilePage;
 	private SubjectClassPage subjectClassPage;
 	private CsvImporter csvImporter;
-	private SubjectUriPage subjectUriPage;
 	
-
+	private FirstAddSubjectPage firstAddSubjectPage;
+	
+	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
+	//a new page of its type.
+	private List<ASubjectClassPage> subjectClassPages = new ArrayList<ASubjectClassPage>();
+	private List<ASubjectUriPage> subjectUriPages = new ArrayList<ASubjectUriPage>();
+	private List<ASubjectPropertyValuesPage> subjectPropertyValuesPages = new ArrayList<ASubjectPropertyValuesPage>();;
+	private List<ASubjectPropertyMappingsPage> subjectPropertyMappingsPages = new ArrayList<ASubjectPropertyMappingsPage>();;
+	private List<AddSubjectPage> addSubjectPages = new ArrayList<AddSubjectPage>();
+	
 	@Override
 	public void addPages() {
 		InfoPage firstPage = new InfoPage(
@@ -92,13 +102,16 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
 		addPage(measurementDateTimeMapperPage);
 		
-		subjectClassPage = new SubjectClassPage();
-		addPage(subjectClassPage);
+		firstAddSubjectPage = new FirstAddSubjectPage();
 		
-		subjectUriPage = new SubjectUriPage();
-		addPage(subjectUriPage);
+//		subjectClassPage = new SubjectClassPage();
+//		addPage(subjectClassPage);
+//		
+//		rowSubjectUriPage = new RowSubjectUriPage();
+//		addPage(rowSubjectUriPage);
 		
-		
+//		subjectPropertyValuesPage = new SubjectPropertyValuesPage();
+//		addPage(subjectPropertyValuesPage);
 		
 		
 		
@@ -167,5 +180,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		}
 	}
 
+	public void addSubjectPages() {
+		SubjectClassPage subjectClassPage2 = new SubjectClassPage();
+		addPage(subjectClassPage2);
+	}
 
 }
