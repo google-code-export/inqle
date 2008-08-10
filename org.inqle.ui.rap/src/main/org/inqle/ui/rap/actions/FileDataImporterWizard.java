@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.pages.AddSubjectOrFinishPage;
 import org.inqle.ui.rap.pages.AddSubjectPage;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
@@ -36,18 +38,17 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	Composite composite;
 	
 	private LoadFilePage loadFilePage;
-	private SubjectClassPage subjectClassPage;
 	private CsvImporter csvImporter;
 	
-	private FirstAddSubjectPage firstAddSubjectPage;
+	private AddSubjectPage addSubjectPage;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
-	private List<ASubjectClassPage> subjectClassPages = new ArrayList<ASubjectClassPage>();
-	private List<ASubjectUriPage> subjectUriPages = new ArrayList<ASubjectUriPage>();
-	private List<ASubjectPropertyValuesPage> subjectPropertyValuesPages = new ArrayList<ASubjectPropertyValuesPage>();;
-	private List<ASubjectPropertyMappingsPage> subjectPropertyMappingsPages = new ArrayList<ASubjectPropertyMappingsPage>();;
-	private List<AddSubjectPage> addSubjectPages = new ArrayList<AddSubjectPage>();
+//	private List<ASubjectClassPage> subjectClassPages = new ArrayList<ASubjectClassPage>();
+//	private List<ASubjectUriPage> subjectUriPages = new ArrayList<ASubjectUriPage>();
+//	private List<ASubjectPropertyValuesPage> subjectPropertyValuesPages = new ArrayList<ASubjectPropertyValuesPage>();;
+//	private List<ASubjectPropertyMappingsPage> subjectPropertyMappingsPages = new ArrayList<ASubjectPropertyMappingsPage>();;
+//	private List<AddSubjectPage> addSubjectPages = new ArrayList<AddSubjectPage>();
 	
 	@Override
 	public void addPages() {
@@ -102,7 +103,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
 		addPage(measurementDateTimeMapperPage);
 		
-		firstAddSubjectPage = new FirstAddSubjectPage();
+		addSubjectPage = new AddSubjectPage();
+		addPage(addSubjectPage);
 		
 //		subjectClassPage = new SubjectClassPage();
 //		addPage(subjectClassPage);
@@ -138,13 +140,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	
 	@Override
 	public boolean canFinish() {
-		//TODO test that prefix & subjectclass are URIs
-		try {
-			return false;
-		} catch (Exception e) {
-			log.error("Error validating wizard", e);
-			return false;
-		}
+		return false;
 	}
 	
 	@Override
@@ -180,9 +176,50 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		}
 	}
 
-	public void addSubjectPages() {
-		SubjectClassPage subjectClassPage2 = new SubjectClassPage();
-		addPage(subjectClassPage2);
+	public AddSubjectOrFinishPage getLastAddSubjectOrFinishPage() {
+		//loop back thru the wizard, and get the first instance of AddSubjectPage which is not the very first
+		IWizardPage[] wizardPages = getPages();
+		for (int i=wizardPages.length; i>0; i--) {
+			IWizardPage page = wizardPages[i];
+			if (page instanceof AddSubjectOrFinishPage) {
+				return (AddSubjectOrFinishPage)page;
+			}
+		}
+		return null;
+	}
+	
+//	public void disableLastAddSubjectPage() {
+//		AddSubjectPage lastAddSubjectPage = getLastAddSubjectPage();
+//		if (lastAddSubjectPage != null) {
+//			lastAddSubjectPage.disableForm();
+//		}
+//	}
+	
+	public void addTableSubjectPages() {
+		TableSubjectClassPage subjectClassPage = new TableSubjectClassPage();
+		addPage(subjectClassPage);
+		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
+		addPage(subjectUriPage);
+		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
+		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
+		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
+		addPage(addSubjectOrFinishPage);
+	}
+
+	public void addRowSubjectPages() {
+		RowSubjectClassPage subjectClassPage = new RowSubjectClassPage();
+		addPage(subjectClassPage);
+		RowSubjectUriPage subjectUriPage = new RowSubjectUriPage();
+		addPage(subjectUriPage);
+		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
+		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
+		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
+		addPage(addSubjectOrFinishPage);
+		
 	}
 
 }
