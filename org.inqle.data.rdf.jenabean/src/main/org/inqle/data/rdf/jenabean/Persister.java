@@ -25,6 +25,7 @@ import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.util.DatafileUtil;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
@@ -80,6 +81,7 @@ public class Persister {
 	private Map<String, Model> cachedModels = null;
 	private Map<String, InternalDataset> internalDatasets = null;
 	private Map<String, IndexBuilderModel> indexBuilders;
+	private IndexLARQ schemaFilesSubjectIndex;
 	
 	/* *********************************************************************
 	 * *** FACTORY METHODS
@@ -447,7 +449,7 @@ public class Persister {
 				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 					larqBuilder = new IndexBuilderSubject();
 				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
-					larqBuilder = new IndexBuilderString() ;
+					larqBuilder = new IndexBuilderString();
 				}
 				if (larqBuilder != null) {
 					log.info("Indexing into Index for role " + datasetRoleId + "...");
@@ -463,6 +465,28 @@ public class Persister {
 		log.info("assembled list of index builders:" + indexBuilders);
 		return indexBuilders;
 	}
+	
+	/**
+	 * Return an index containing all RDF data files in the Schema files area
+	 * @return the index
+	 * 
+	 * TODO consider storing this as a file
+	 * TODO consider not saving in memory
+	 * TODO 
+	 */
+	public IndexLARQ getSchemaFilesSubjectIndex() {
+		if (schemaFilesSubjectIndex != null) {
+			return schemaFilesSubjectIndex;
+		}
+		Model schemaFilesModel = DatafileUtil.getModel(InqleInfo.getRdfSchemaFilesDirectory());
+		IndexBuilderModel larqBuilder = new IndexBuilderSubject();
+		log.info("Persister.getSchemaFilesSubjectIndex(): indexing model of " + schemaFilesModel.size() + " statements...");
+		larqBuilder.indexStatements(schemaFilesModel.listStatements());
+		log.info("...done");
+		schemaFilesSubjectIndex = larqBuilder.getIndex();
+		return schemaFilesSubjectIndex;
+	}
+	
 	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
 	 * @param namedModel
@@ -537,7 +561,7 @@ public class Persister {
 	 * @param filePath the file path or URL
 	 * @return the resulting Model
 	 */
-	private static Model getModelFromFile(String filePath) {
+	public static Model getModelFromFile(String filePath) {
 		try {
 			Model model = FileManager.get().loadModel( filePath );
 			return model;
