@@ -27,7 +27,6 @@ public class InfoPage extends WizardPage {
 		super(pageName, pageName, null);
 		setDescription(description);
 		this.detail = detail;
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +40,6 @@ public class InfoPage extends WizardPage {
 		Text detailText = new Text(composite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		detailText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		detailText.setText(detail);
-		log.info("Set detail=" + detail);
 		setControl(composite);
 	}
 

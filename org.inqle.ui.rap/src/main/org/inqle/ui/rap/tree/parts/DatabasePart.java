@@ -85,14 +85,14 @@ public class DatabasePart extends PartType {
 		AppInfo appInfo = persister.getAppInfo();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(getSparqlToFindChildDatasets());
-		log.info("SPARQL=" + getSparqlToFindChildDatasets());
+		log.trace("SPARQL=" + getSparqlToFindChildDatasets());
 		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
 		//RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
 		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
-		log.info("datasetIds=" + datasetIds);
+		log.trace("datasetIds=" + datasetIds);
 //		DBConnector dbConnector = new DBConnector(getConnection());
 //		List<Dataset> datasets = dbConnector.getDatasets();
-//		log.info("datasets=" + datasets);
+//		log.trace("datasets=" + datasets);
 		
 		//for each item in resultTable, add a ModelPart
 		modelParts = new ArrayList<ModelPart>();

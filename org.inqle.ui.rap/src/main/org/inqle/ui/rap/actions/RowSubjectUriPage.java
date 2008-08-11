@@ -52,18 +52,17 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 
 	@Override
 	public void addElements() {
+		log.info("RowSubjectUriPage.addElements()...");
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
 		GridData gridData;
 		
 		namingMethodLabel = new Label(selfComposite, SWT.NONE);
 		namingMethodLabel.setText("Select the naming method for generating the URI for each row");
-		namingMethodLabel.setVisible(false);
 		
 		subjectUriCreationMethodList = new List(selfComposite, SWT.SINGLE | SWT.BORDER);
 		subjectUriCreationMethodList.setItems(SUBJECT_URI_CREATION_METHODS);
 		subjectUriCreationMethodList.select(0);
-		subjectUriCreationMethodList.setVisible(false);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		subjectUriCreationMethodList.setLayoutData(gridData);
 		subjectUriCreationMethodList.addSelectionListener(this);
@@ -89,25 +88,31 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		uriSuffixColumnList.setLayoutData(gridData);
 		uriSuffixColumnList.setVisible(false);
+//		log.info("uriSuffixColumnList null?" + (uriSuffixColumnList==null));
+		refreshTableData();
 	}
 
 	@Override
 	public void onEnterPageFromPrevious() {
-		log.info("Entering RowSubjectUriPage...");
+//		log.info("Entering RowSubjectUriPage...");
 		refreshTableData();
 	}
 	
 	public void refreshTableData() {
 		try {
-			log.info("get csvImporter...");
+//			log.info("Refreshing uriSuffixColumnList...");
+			if (uriSuffixColumnList==null) {
+//				log.info("uriSuffixColumnList is null.");
+				return;
+			}
 			CsvImporter csvImporter = getCsvImporter();
-			log.info("csvImporter retrieved");
 			
 			String[][] data = csvImporter.getRawData();
 			//log.info("data= " + data);
 			String[] headers = data[csvImporter.getHeaderIndex()];
 			uriSuffixColumnList.removeAll();
 			uriSuffixColumnList.setItems(headers);
+//			log.info("Set headers list to:" + Arrays.asList(headers));
 		} catch (Exception e) {
 			log.error("Error refreshing table data", e);
 		}

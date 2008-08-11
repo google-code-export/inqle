@@ -49,7 +49,6 @@ public class TableSubjectUriPage extends DynaWizardPage {
 		GridData gridData;
 		
 		instanceUriField = new TextField(selfComposite, "Enter URI of this instance", "Enter a URI that represents the thing");
-		instanceUriField.setVisible(false);
 		
 		gl = new GridLayout(2, true);
 		Composite uriCreationArea = new Composite(selfComposite, SWT.NONE);
@@ -64,9 +63,7 @@ public class TableSubjectUriPage extends DynaWizardPage {
 	
 	public void refreshTableData() {
 		try {
-			log.info("get csvImporter...");
 			CsvImporter csvImporter = getCsvImporter();
-			log.info("csvImporter retrieved");
 			
 			String[][] data = csvImporter.getRawData();
 			//log.info("data= " + data);
