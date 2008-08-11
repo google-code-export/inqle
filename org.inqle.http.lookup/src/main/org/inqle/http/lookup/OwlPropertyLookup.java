@@ -1,10 +1,12 @@
 package org.inqle.http.lookup;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 
@@ -133,6 +135,7 @@ public class OwlPropertyLookup {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindSubjectProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
@@ -152,6 +155,7 @@ public class OwlPropertyLookup {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindAllProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
@@ -171,6 +175,7 @@ public class OwlPropertyLookup {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindAllProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
