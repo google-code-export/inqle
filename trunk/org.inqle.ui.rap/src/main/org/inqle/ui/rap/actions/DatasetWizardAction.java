@@ -35,7 +35,7 @@ public class DatasetWizardAction extends Action {
 		this.menuText = menuText;
 		this.databasePart = databasePart;
 		this.window = window;
-		log.info("Created DatasetWizardAction");
+		log.trace("Created DatasetWizardAction");
 		//this.persister = persister;
 	}
 	
@@ -56,10 +56,10 @@ public class DatasetWizardAction extends Action {
 	public void runWithEvent(Event event) {
 		try {
 			DatasetWizard wizard = new DatasetWizard(mode, dataset, databasePart);
-			log.info("Created DatasetWizard");
+			log.trace("Created DatasetWizard");
 			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 			dialog.open();
-			log.info("Opened WizardDialog");
+			log.trace("Opened WizardDialog");
 		} catch (Exception e) {
 			log.error("Error running DatasetWizard", e);
 		}

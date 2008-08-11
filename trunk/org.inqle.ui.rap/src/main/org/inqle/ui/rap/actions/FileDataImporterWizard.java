@@ -191,6 +191,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 //		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
+		getContainer().updateButtons();
 	}
 
 	public void addRowSubjectPages() {
@@ -204,12 +205,14 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 //		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
+		getContainer().updateButtons();
 		
 	}
 
 	public void addDoImportPage() {
 //		DoImportPage doImportPage = new DoImportPage();
 //		addPage(doImportPage);
+		getContainer().updateButtons();
 	}
 
 }

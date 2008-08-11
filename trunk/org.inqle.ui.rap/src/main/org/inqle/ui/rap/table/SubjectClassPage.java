@@ -200,7 +200,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 //			if (resourceDialog.getReturnCode() == Window.OK) {
 //				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
 //			}
-			Persister persister = Persister.getInstance();
+
 			CreateOwlInstanceAction createOwlInstanceAction = new CreateOwlInstanceAction(
 					selfComposite.getShell(), 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
@@ -223,24 +223,46 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			
-			Document localDocument = null;
+			Document localDataSubjectDocument = null;
+
 			
-			String localResultXml = OwlSubclassLookup.lookup(
+			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
+			String localDataSubjectXml = OwlSubclassLookup.lookupSubclasses(
 					getSearchTextValue(), 
-					RDF.DATA_SUBJECT, 
+					null, 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 					10, 
 					0);
-			log.info("Retrieved this result set from LOCAL query:\n" + localResultXml);
-			InputStream in = new ByteArrayInputStream(localResultXml.getBytes());
-			DocumentBuilder builder;
+			log.info("Retrieved this result set from LOCAL query:\n" + localDataSubjectXml);
+			InputStream in = new ByteArrayInputStream(localDataSubjectXml.getBytes());
 			try {
-				builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-				localDocument = builder.parse(in);
+				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				localDataSubjectDocument = builder.parse(in);
 			} catch (Exception e) {
 				log.error("Unable to build/parse XML from local SPARQL query", e);
 			}
 	    
+			
+			Document localRdfClassDocument = null;
+		
+		//this looks up all RDF classes
+		String localRdfClassXml = OwlSubclassLookup.lookupSubclassesInSchemaFiles(
+				getSearchTextValue(), 
+				null, 
+				10, 
+				0);
+		log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
+		InputStream in2 = new ByteArrayInputStream(localRdfClassXml.getBytes());
+		try {
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			localRdfClassDocument = builder.parse(in2);
+		} catch (Exception e) {
+			log.error("Unable to build/parse XML from local SPARQL query", e);
+		}
+		
+		Document localDocument = SparqlXmlMerger.merge(localDataSubjectDocument, localRdfClassDocument);
+		log.info("Merged data subjects with classes from RDF Schema files.");
+		
 			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 			

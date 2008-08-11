@@ -1,6 +1,7 @@
 package org.inqle.ui.rap.xml;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.XmlDocumentSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,35 +22,12 @@ public class SparqlXmlMerger {
 	 * @param addDocument
 	 * @return
 	 */
-	public static Document merge(Document originalDocument, Document addDocument) {
-		//get <results> tag from the original set of results
-//		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder documentBuilder = null;
-//		Document newDocument = null;
-//		try {
-//			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-//		} catch (ParserConfigurationException e) {
-//			//should not happen
-//			log.error("Should not happen: error creating DocumentBuilder", e);
-//			return null;
-//		}
-//		
-//		try {
-//			newDocument = documentBuilder.newDocument();
-//			
-//			Element root = (Element)originalDocument.getDocumentElement().cloneNode(false);
-//			newDocument.adoptNode(root);
-//			newDocument.appendChild(root);
-//			Element head = (Element)originalDocument.getElementsByTagName("head").item(0).cloneNode(true);
-//			newDocument.adoptNode(head);
-//			root.appendChild(head);
-//			Element resultsElement = newDocument.createElement("results");
-//			root.appendChild(resultsElement);
-//			
-//			Element originalResultsElement = (Element)newDocument.getElementsByTagName("results").item(0);
-//		} catch (Exception e) {
-//			log.error("Error merging XML documents", e);
-//		}
+	public static Document merge(Document originalDocument, Document addDocument) {		
+		if (addDocument == null) return originalDocument;
+		if (originalDocument == null) return addDocument;
+		
+		log.info("Merging XML Documents: FIRST\n" + XmlDocumentSerializer.xmlToString(originalDocument));
+		log.info("Merging XML Documents: SECOND\n" + XmlDocumentSerializer.xmlToString(addDocument));
 		
 		Document doc = originalDocument;
 		try {
@@ -81,12 +59,13 @@ public class SparqlXmlMerger {
 		} catch (Exception e) {
 			log.error("Error merging XML documents", e);
 		}
+		log.info("Returning this MERGED document\n" + XmlDocumentSerializer.xmlToString(doc));
 		return doc;
 		
 	}
 	
 	/**
-	 * Returns true is 
+	 * Returns true if a node is not present in the parentElement
 	 * @param externalNode to be tested for redundancy
 	 * @param parentElement the element to test for already existing identical child nodes
 	 * @return
