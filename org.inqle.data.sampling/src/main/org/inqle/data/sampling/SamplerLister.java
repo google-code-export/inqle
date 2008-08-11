@@ -17,9 +17,9 @@ public class SamplerLister {
 	public static List<ISampler> listCustomSamplers(ISampler baseSampler) {
 		Persister persister = Persister.getInstance();
 		Class<?> samplerClass = baseSampler.getClass();
-		log.info("listing customized Samplers for base sampler of class=" + samplerClass + "\n" + baseSampler);
+		log.trace("listing customized Samplers for base sampler of class=" + samplerClass + "\n" + baseSampler);
 		Collection<?> samplerObjCollection = persister.reconstituteAll(samplerClass);
-		log.info("Reconstituted these:" + samplerObjCollection);
+		log.trace("Reconstituted these:" + samplerObjCollection);
 		//remove the base (uncustomized) sampler if it is present, and add true custom samplers to the List
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		for (Object samplerObj: samplerObjCollection) {
@@ -29,10 +29,10 @@ public class SamplerLister {
 			}
 			//if the current sampler has already been added, skip it
 			if (samplers != null && samplers.contains(sampler)) {
-				log.info("Sampler already added; skipping it: " + sampler);
+				log.trace("Sampler already added; skipping it: " + sampler);
 				continue;
 			}
-			log.info("Adding Sampler of id=" + sampler.getId() + "\n" + sampler);
+			log.trace("Adding Sampler of id=" + sampler.getId() + "\n" + sampler);
 			samplers.add(sampler);
 		}
 		//List<?> samplerObjList = new ArrayList<Object>(samplerObjCollection);
