@@ -4,8 +4,6 @@
 package org.inqle.ui.rap.actions;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -18,8 +16,8 @@ import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
-import org.inqle.ui.rap.pages.RadiosPage;
-import org.inqle.ui.rap.table.SubjectClassPage;
+import org.inqle.ui.rap.table.RowSubjectClassPage;
+import org.inqle.ui.rap.table.TableSubjectClassPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -106,19 +104,6 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addSubjectPage = new AddSubjectPage();
 		addPage(addSubjectPage);
 		
-//		subjectClassPage = new SubjectClassPage();
-//		addPage(subjectClassPage);
-//		
-//		rowSubjectUriPage = new RowSubjectUriPage();
-//		addPage(rowSubjectUriPage);
-		
-//		subjectPropertyValuesPage = new SubjectPropertyValuesPage();
-//		addPage(subjectPropertyValuesPage);
-		
-		
-		
-		//TODO add a page to capture any other descriptive info, e.g. 
-		//e.g. info describing the subjects
 	}
 	
 	/* (non-Javadoc)
@@ -200,10 +185,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addPage(subjectClassPage);
 		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
 		addPage(subjectUriPage);
-		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
-		addPage(propertyValuesPage);
-		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
-		addPage(propertyMappingsPage);
+//		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
+//		addPage(propertyValuesPage);
+//		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
+//		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 	}
@@ -213,13 +198,18 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addPage(subjectClassPage);
 		RowSubjectUriPage subjectUriPage = new RowSubjectUriPage();
 		addPage(subjectUriPage);
-		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
-		addPage(propertyValuesPage);
-		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
-		addPage(propertyMappingsPage);
+//		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
+//		addPage(propertyValuesPage);
+//		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
+//		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 		
+	}
+
+	public void addDoImportPage() {
+//		DoImportPage doImportPage = new DoImportPage();
+//		addPage(doImportPage);
 	}
 
 }
