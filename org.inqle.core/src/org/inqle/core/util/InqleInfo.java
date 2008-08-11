@@ -46,6 +46,26 @@ public class InqleInfo {
 	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost/register";
 	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://localhost/lookup";
 	
+	public static final String PARAM_SITE_ID = "site";
+
+	public static final String PARAM_REGISTER_RDF = "rdf";
+
+	public static final String PARAM_INQLE_VERSION = "ver";
+
+	public static final String PARAM_SEARCH_DATA_SUBJECT = "searchDataSubject";
+
+	public static final String PARAM_SEARCH_RDF_CLASS = "searchRdfClass";
+	
+	public static final String PARAM_SEARCH_START_INDEX = "start";
+
+	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
+
+	public static final String PARAM_PROPERTIES_OF_SUBJECT = "propertiesOfSubject";
+
+	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
+
+	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
+	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
 	}
@@ -70,17 +90,11 @@ public class InqleInfo {
 		return SERVER_PORT;
 	}
 
-	public static final String PARAM_SITE_ID = "site";
-
-	public static final String PARAM_REGISTER_RDF = "rdf";
-
-	public static final String PARAM_INQLE_VERSION = "ver";
-
-	public static final String PARAM_SEARCH_DATA_SUBJECT = "searchDataSubject";
-
-	public static final String PARAM_SEARCH_START_INDEX = "start";
-
-	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
-
-	public static final String PARAM_PROPERTIES_OF_SUBJECT = "propertiesOfSubject";
+	public static String getRdfSchemaFilesDirectory() {
+		return System.getProperty(INQLE_HOME) + RDF_SCHEMAS_FOLDER + "/";
+	}
+	
+	public static String getRdfDataFilesDirectory() {
+		return System.getProperty(INQLE_HOME) + RDF_DATA_FOLDER + "/";
+	}
 }
