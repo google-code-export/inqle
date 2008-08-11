@@ -3,9 +3,11 @@ package org.inqle.http.lookup;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.query.larq.HitLARQ;
@@ -16,7 +18,16 @@ public class OwlSubclassLookup {
 	private static final Logger log = Logger.getLogger(OwlSubclassLookup.class);
 	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 	
-	public static String getSparqlSearchRdfClasses(String searchTerm, String owlClassUri, int limit, int offset) {
+	/**
+	 * Generate SPARQL for finding subclasses of owlClassUri,
+	 * matching the searchTerm.  If owlClassUri is null, search all classes
+	 * @param searchTerm
+	 * @param owlClassUri
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public static String getSparqlSearchRdfSubclasses(String searchTerm, String owlClassUri, int limit, int offset) {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -26,8 +37,11 @@ public class OwlSubclassLookup {
 				"{\n" +
 				"GRAPH ?g {\n" +
 				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-				". ?URI rdfs:subClassOf <" + owlClassUri + "> \n" +
-				". OPTIONAL { ?URI rdfs:label ?Label }\n" +
+				". ?URI rdf:type rdfs:Class \n";
+				if (owlClassUri != null) {
+					sparql += ". ?URI rdfs:subClassOf <" + owlClassUri + "> \n";
+				}
+				sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 				"} } ORDER BY DESC(?Score) \n" +
 				"LIMIT " + limit + " OFFSET " + offset;
@@ -37,18 +51,18 @@ public class OwlSubclassLookup {
 	/**
 	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
 	 * @param searchTermForRdfClass the user-entered query term
-	 * @param owlClassUri the URI of the class 
+	 * @param owlClassUri the URI of the superclass 
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
 	 */
-	public static String lookup(String searchTermForRdfClass, String owlClassUri, String internalDatasetRoleId, int countSearchResults, int offset) {
+	public static String lookupSubclasses(String searchTermForRdfClass, String owlClassUri, String internalDatasetRoleId, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(persister.getInternalDataset(internalDatasetRoleId));
 		IndexLARQ textIndex =  persister.getIndex(internalDatasetRoleId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("Searched index for '" + searchTermForRdfClass + "'...");
+		log.info("Searched " + internalDatasetRoleId + " index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -56,7 +70,7 @@ public class OwlSubclassLookup {
 		if (textIndex != null) {
 			queryCriteria.setTextIndex(textIndex);
 		}
-		String sparql = getSparqlSearchRdfClasses(searchTermForRdfClass, owlClassUri, countSearchResults, offset);
+		String sparql = getSparqlSearchRdfSubclasses(searchTermForRdfClass, owlClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
@@ -64,4 +78,34 @@ public class OwlSubclassLookup {
 		return matchingClassesXml;
 	}
 
+	/**
+	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
+	 * @param searchTermForRdfClass the user-entered query term
+	 * @param owlClassUri the URI of the superclass 
+	 * @param countSearchResults
+	 * @param offset
+	 * @return
+	 */
+	public static String lookupSubclassesInSchemaFiles(String searchTermForRdfClass, String owlClassUri, int countSearchResults, int offset) {
+		Persister persister = Persister.getInstance();
+		QueryCriteria queryCriteria = new QueryCriteria();
+		//add any internal RDF schemas
+		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
+		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
+		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
+		log.info("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
+		while(searchResultI.hasNext()) {
+			HitLARQ hit = (HitLARQ)searchResultI.next();
+			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
+		}
+		if (textIndex != null) {
+			queryCriteria.setTextIndex(textIndex);
+		}
+		String sparql = getSparqlSearchRdfSubclasses(searchTermForRdfClass, owlClassUri, countSearchResults, offset);
+		log.info("Querying w/ this sparql:\n" + sparql);
+		queryCriteria.setQuery(sparql);
+		String matchingClassesXml = Queryer.selectXml(queryCriteria);
+		//log.info("Queried and got these matching results:\n" + matchingClassesXml);
+		return matchingClassesXml;
+	}
 }
