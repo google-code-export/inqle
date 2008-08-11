@@ -8,7 +8,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
@@ -33,9 +32,6 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		URI_TYPE_COLUMN_VALUE
 	};
 //	private static java.util.List<String> SUBJECT_URI_CREATION_METHOD_LIST = Arrays.asList(SUBJECT_URI_CREATION_METHODS);
-	private Button selectPertainsToAllRows;
-	private Button selectPertainsToSomeRows;
-	private TextField instanceUriField;
 	private List subjectUriCreationMethodList;
 	private TextField instanceUriPrefixField;
 	private Label namingMethodLabel;
@@ -59,18 +55,6 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
 		GridData gridData;
-		
-		selectPertainsToAllRows = new Button(selfComposite, SWT.RADIO);
-		selectPertainsToAllRows.setText("A particular instance pertains to all rows");
-		selectPertainsToAllRows.addSelectionListener(this);
-		
-		instanceUriField = new TextField(selfComposite, "Enter URI of this instance", "Enter a URI that represents the thing");
-		instanceUriField.setVisible(false);
-		
-		selectPertainsToSomeRows = new Button(selfComposite, SWT.RADIO);
-		selectPertainsToSomeRows.setText("Each row might have a different instance");
-		selectPertainsToSomeRows.addSelectionListener(this);
-//		selectPertainsToSomeRows.setSelection(true);
 		
 		namingMethodLabel = new Label(selfComposite, SWT.NONE);
 		namingMethodLabel.setText("Select the naming method for generating the URI for each row");
@@ -109,7 +93,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 
 	@Override
 	public void onEnterPageFromPrevious() {
-		log.info("Entering DateTimeMapperPage...");
+		log.info("Entering RowSubjectUriPage...");
 		refreshTableData();
 	}
 	
@@ -134,64 +118,35 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	}
 
 	public void widgetSelected(SelectionEvent selectionEvent) {
-		Object clickedObject = selectionEvent.getSource();
-		if (clickedObject.equals(selectPertainsToAllRows)) {
-			selectPertainsToSomeRows.setSelection(false);
-			instanceUriField.setVisible(true);
-			namingMethodLabel.setVisible(false);
-			subjectUriCreationMethodList.setVisible(false);
-//			instanceUriPrefixField.setVisible(false);
-			
-		}
+//		Object clickedObject = selectionEvent.getSource();
 		
-		if (clickedObject.equals(selectPertainsToSomeRows)) {
-			selectPertainsToAllRows.setSelection(false);
-			instanceUriField.setVisible(false);
-			namingMethodLabel.setVisible(true);
-			subjectUriCreationMethodList.setVisible(true);
-//			instanceUriPrefixField.setVisible(true);
-		}
-		
-		if (! selectPertainsToSomeRows.getSelection()) { 
+		if (getSubjectCreationMethod().equals(URI_TYPE_INQLE_GENERATED)) {
 			instanceUriPrefixField.setVisible(false);
+		} else {
+			instanceUriPrefixField.setVisible(true);
+		}
+		
+		if (getSubjectCreationMethod().equals(URI_TYPE_COLUMN_VALUE)) {
+			uriSuffixColumnLabel.setVisible(true);
+			uriSuffixColumnList.setVisible(true);
+		} else {
 			uriSuffixColumnLabel.setVisible(false);
 			uriSuffixColumnList.setVisible(false);
-		} else {
-			if (getSubjectCreationMethod().equals(URI_TYPE_INQLE_GENERATED)) {
-				instanceUriPrefixField.setVisible(false);
-			} else {
-				instanceUriPrefixField.setVisible(true);
-			}
-			
-			if (getSubjectCreationMethod().equals(URI_TYPE_COLUMN_VALUE)) {
-				uriSuffixColumnLabel.setVisible(true);
-				uriSuffixColumnList.setVisible(true);
-			} else {
-				uriSuffixColumnLabel.setVisible(false);
-				uriSuffixColumnList.setVisible(false);
-			}
 		}
-	}
-	
-	public String getInstanceUri() {
-		if (selectPertainsToAllRows.getSelection()) {
-			return instanceUriField.getTextValue();
-		}
-		return null;
 	}
 	
 	public String getInstancePrefixUri() {
-		if (selectPertainsToSomeRows.getSelection()) {
+//		if (selectPertainsToSomeRows.getSelection()) {
 			return instanceUriPrefixField.getTextValue();
-		}
-		return null;
+//		}
+//		return null;
 	}
 	
 	public boolean isValid() {
-		if (UriMapper.isUri(getInstanceUri())) {
-			return true;
-		}
-		if (selectPertainsToSomeRows.getSelection()) {
+//		if (UriMapper.isUri(getInstanceUri())) {
+//			return true;
+//		}
+//		if (selectPertainsToSomeRows.getSelection()) {
 			if (getSubjectCreationMethod().equals(URI_TYPE_INQLE_GENERATED)) {
 				return true;
 			} else {
@@ -199,7 +154,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 					return true;
 				}
 			}
-		}
+//		}
 		return false;
 	}
 	

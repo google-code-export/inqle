@@ -41,7 +41,7 @@ import org.w3c.dom.Document;
  * @author David Donohue
  * Feb 20, 2008
  */
-public class SubjectClassPage extends DynaWizardPage implements SelectionListener{
+public abstract class SubjectClassPage extends DynaWizardPage implements SelectionListener{
 	
 	/**
 	 * the class of items in the table's List field.
@@ -72,8 +72,8 @@ public class SubjectClassPage extends DynaWizardPage implements SelectionListene
 
 	private Label selectNewSubjectLabel;
 
-	private static String TITLE = "Type of Subject";
-	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
+//	private static String TITLE = "Type of Subject";
+//	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
 //	private Table table;
 	
 	/**
@@ -83,9 +83,9 @@ public class SubjectClassPage extends DynaWizardPage implements SelectionListene
 	 * @param title the title of this page
 	 * @param titleImage
 	 */
-	public SubjectClassPage() {
-		super(TITLE, null);
-		setMessage(DESCRIPTION);
+	public SubjectClassPage(String title, String description) {
+		super(title, null);
+		setMessage(description);
 	}
 
 	/**
@@ -243,21 +243,6 @@ public class SubjectClassPage extends DynaWizardPage implements SelectionListene
 	    
 			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-			
-			// XERCES 1 or 2 additional classes.
-//			OutputFormat of = new OutputFormat("XML","ISO-8859-1",true);
-//			of.setIndent(1);
-//			of.setIndenting(true);
-////			of.setDoctype(null,"users.dtd");
-//			XMLSerializer serializer = new XMLSerializer(System.out,of);
-//			log.info("Received Document object:");
-//			// As a DOM Serializer
-//			try {
-//				serializer.asDOMSerializer();
-//				serializer.serialize( remoteDocument.getDocumentElement() );
-//			} catch (IOException e) {
-//				log.warn("Unable to serialize received XML Document");
-//			}
 			
 			log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteDocument));
 			

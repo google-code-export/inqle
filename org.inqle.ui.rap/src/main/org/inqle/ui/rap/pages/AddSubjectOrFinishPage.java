@@ -21,7 +21,7 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 	public void addElements() {
 		super.addElements();
 		
-		finishWizardButton = new Button (selfComposite, SWT.RADIO);
+		finishWizardButton = new Button (selfComposite, SWT.PUSH);
 		finishWizardButton.setText(FINISH_WIZARD_TEXT);
 		finishWizardButton.addSelectionListener(this);
 		
@@ -33,18 +33,21 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 	@Override
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
-		if (clickedObject.equals(newTableSubjectButton)) {
-			newRowSubjectButton.setSelection(false);
-			finishWizardButton.setSelection(false);
-		}
-		if (clickedObject.equals(newRowSubjectButton)) {
-			newTableSubjectButton.setSelection(false);
-			finishWizardButton.setSelection(false);
-		}
+//		if (clickedObject.equals(newTableSubjectButton)) {
+//			newRowSubjectButton.setSelection(false);
+//			finishWizardButton.setSelection(false);
+//		}
+//		if (clickedObject.equals(newRowSubjectButton)) {
+//			newTableSubjectButton.setSelection(false);
+//			finishWizardButton.setSelection(false);
+//		}
 		if (clickedObject.equals(finishWizardButton)) {
-			newTableSubjectButton.setSelection(false);
-			newRowSubjectButton.setSelection(false);
+//			newTableSubjectButton.setSelection(false);
+//			newRowSubjectButton.setSelection(false);
+			disableForm();
+			getFileDataImporterWizard().addDoImportPage();
 		}
+		super.widgetSelected(selectionEvent);
 	}
 
 	public void disableForm() {

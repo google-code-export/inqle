@@ -32,12 +32,12 @@ public class AddSubjectPage extends DynaWizardPage implements SelectionListener 
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
 
-		newTableSubjectButton = new Button (selfComposite, SWT.RADIO);
+		newTableSubjectButton = new Button (selfComposite, SWT.PUSH);
 		newTableSubjectButton.setText(TABLE_SUBJECT_BUTTON_TEXT);
 		newTableSubjectButton.setSelection(true);
 		newTableSubjectButton.addSelectionListener(this);
 		
-		newRowSubjectButton = new Button (selfComposite, SWT.RADIO);
+		newRowSubjectButton = new Button (selfComposite, SWT.PUSH);
 		newRowSubjectButton.setText(ROW_SUBJECT_BUTTON_TEXT);
 		newRowSubjectButton.addSelectionListener(this);
 		
@@ -49,25 +49,29 @@ public class AddSubjectPage extends DynaWizardPage implements SelectionListener 
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
 		if (clickedObject.equals(newTableSubjectButton)) {
-			newRowSubjectButton.setSelection(false);
+			disableForm();
+			getFileDataImporterWizard().addTableSubjectPages();
+//			newRowSubjectButton.setSelection(false);
 		}
 		if (clickedObject.equals(newRowSubjectButton)) {
-			newTableSubjectButton.setSelection(false);
+			disableForm();
+			getFileDataImporterWizard().addRowSubjectPages();
+//			newTableSubjectButton.setSelection(false);
 		}
 	}
 
-	@Override
-	public boolean onNextPage() {
-		if (newTableSubjectButton.getSelection()) {
-			disableForm();
-			getFileDataImporterWizard().addTableSubjectPages();
-		}
-		if (newRowSubjectButton.getSelection()) {
-			disableForm();
-			getFileDataImporterWizard().addRowSubjectPages();
-		}
-		return super.onNextPage();
-	}
+//	@Override
+//	public boolean onNextPage() {
+//		if (newTableSubjectButton.getSelection()) {
+//			disableForm();
+//			getFileDataImporterWizard().addTableSubjectPages();
+//		}
+//		if (newRowSubjectButton.getSelection()) {
+//			disableForm();
+//			getFileDataImporterWizard().addRowSubjectPages();
+//		}
+//		return super.onNextPage();
+//	}
 	
 	protected FileDataImporterWizard getFileDataImporterWizard() {
 		IWizard wizard = getWizard();
