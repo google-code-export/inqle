@@ -70,7 +70,7 @@ public class QueryCriteria {
 	 * @param aModel
 	 */
 	public void addNamedModel(NamedModel namedModel) {
-		log.info("QueryCriteria.addModel(" + namedModel + ")");
+		log.trace("QueryCriteria.addModel(" + namedModel + ")");
 		Persister persister = Persister.getInstance();
 		namedModels.add(namedModel);
 		Model model = persister.getModel(namedModel);

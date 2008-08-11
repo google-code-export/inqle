@@ -77,7 +77,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
 		
 		if (queryCriteria.getTextIndex() != null) {
-			log.info("setDefaultIndex...");
+			log.trace("setDefaultIndex...");
 			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
 		}
 		
@@ -132,7 +132,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
 		
 		if (queryCriteria.getTextIndex() != null) {
-			log.info("setDefaultIndex...");
+			log.trace("setDefaultIndex...");
 			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
 		}
 		
@@ -191,7 +191,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
 		
 		if (queryCriteria.getTextIndex() != null) {
-			log.info("setDefaultIndex...");
+			log.trace("setDefaultIndex...");
 			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
 		}
 		
@@ -300,10 +300,10 @@ import com.hp.hpl.jena.sdb.SDB;
 		ResultSet resultSet;
 		try {
 			resultSet = qe.execSelect() ;
-			log.info("Got results? " + resultSet.hasNext() + "; Has these vars: " + resultSet.getResultVars());
+			log.trace("Got results? " + resultSet.hasNext() + "; Has these vars: " + resultSet.getResultVars());
 			//this sets resultSet.hasNext() to false: ResultSetFormatter.out(resultSet) ;
 			resultList = Converter.resultSetToSimpleList(resultSet, varName);
-			log.info("Retrieved simple List w/ " + resultList.size() + " results");
+			log.trace("Retrieved simple List w/ " + resultList.size() + " results");
 		} catch (Exception e) {
 			log.error("Error performing query " + query, e);
 		} finally { 
