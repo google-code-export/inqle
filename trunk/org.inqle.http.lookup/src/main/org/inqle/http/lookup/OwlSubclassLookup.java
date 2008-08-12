@@ -56,7 +56,12 @@ public class OwlSubclassLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupSubclasses(String searchTermForRdfClass, String owlClassUri, String internalDatasetRoleId, int countSearchResults, int offset) {
+	public static String lookupSubclasses(
+			String searchTermForRdfClass, 
+			String owlClassUri, 
+			String internalDatasetRoleId, 
+			int countSearchResults, 
+			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(persister.getInternalDataset(internalDatasetRoleId));
