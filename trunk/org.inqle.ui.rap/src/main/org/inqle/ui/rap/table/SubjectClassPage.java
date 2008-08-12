@@ -33,6 +33,7 @@ import org.inqle.ui.rap.CreateOwlInstanceAction;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.inqle.ui.rap.xml.SparqlXmlMerger;
+import org.inqle.ui.rap.xml.XmlDocumentUtil;
 import org.w3c.dom.Document;
 
 /**
@@ -51,6 +52,9 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	private static final Logger log = Logger.getLogger(SubjectClassPage.class);
 
 	private static final int COLUMN_WIDTH = 120;
+
+	//must exceed this count of search results, or a 2nd remote query is done
+	private static final int THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP = 0;
 
 //	protected TableViewer tableViewer;
 
@@ -219,13 +223,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			log.info("Clicked radio button.  getSubjectUri()=" + getSubjectUri());
 		} else {
 			log.info("Clicked search button");
-			//do the search
-			Map<String, String> params = new HashMap<String, String>();
-			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
-			
-			Document localDataSubjectDocument = null;
 
-			
 			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
 			String localDataSubjectXml = OwlSubclassLookup.lookupSubclasses(
 					getSearchTextValue(), 
@@ -234,59 +232,40 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 					10, 
 					0);
 			log.info("Retrieved this result set from LOCAL query:\n" + localDataSubjectXml);
-			InputStream in = new ByteArrayInputStream(localDataSubjectXml.getBytes());
-			try {
-				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-				localDataSubjectDocument = builder.parse(in);
-			} catch (Exception e) {
-				log.error("Unable to build/parse XML from local SPARQL query", e);
-			}
-	    
+			Document localDataSubjectDocument = XmlDocumentUtil.getDocument(localDataSubjectXml);;
+
+			//this looks up all RDF classes
+			String localRdfClassXml = OwlSubclassLookup.lookupSubclassesInSchemaFiles(
+					getSearchTextValue(), 
+					null, 
+					10, 
+					0);
+			log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
+			Document localRdfClassDocument = XmlDocumentUtil.getDocument(localRdfClassXml);
 			
-			Document localRdfClassDocument = null;
-		
-		//this looks up all RDF classes
-		String localRdfClassXml = OwlSubclassLookup.lookupSubclassesInSchemaFiles(
-				getSearchTextValue(), 
-				null, 
-				10, 
-				0);
-		log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
-		InputStream in2 = new ByteArrayInputStream(localRdfClassXml.getBytes());
-		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			localRdfClassDocument = builder.parse(in2);
-		} catch (Exception e) {
-			log.error("Unable to build/parse XML from local SPARQL query", e);
-		}
-		
-		Document localDocument = SparqlXmlMerger.merge(localDataSubjectDocument, localRdfClassDocument);
-		log.info("Merged data subjects with classes from RDF Schema files.");
-		
+			Document localDocument = SparqlXmlMerger.merge(localDataSubjectDocument, localRdfClassDocument);
+			log.info("Merged data subjects with classes from RDF Schema files.");
+			
 			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+		//do the search
+			Map<String, String> params = new HashMap<String, String>();
+			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-			
 			log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteDocument));
 			
-			Document mergedDocument = null;
-			if (localDocument != null && remoteDocument != null) {
-				log.info("merging...");
-				mergedDocument = SparqlXmlMerger.merge(localDocument, remoteDocument);
-	    	try {
-					log.info("Merged 2 documents into:\n" + XmlDocumentSerializer.xmlToString(mergedDocument));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	    } else if (remoteDocument != null) {
-	    	mergedDocument = remoteDocument;
-	    } else {
-	    	 mergedDocument = localDocument;
-	    }
-			if (localDocument == null) {
-				log.warn("Received NULL from the local INQLE server and from Central INQLE Server.  " +
-						"Perhaps your internet connection is down.");
+			Document mergedDocument = SparqlXmlMerger.merge(localDocument, remoteDocument);
+			log.info("Merged 2 documents into:\n" + XmlDocumentSerializer.xmlToString(mergedDocument));
+			
+			//if insufficient results, do an additional query of the remote RDF Schema datafiles
+			if (SparqlXmlMerger.countResults(mergedDocument) <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
+				log.info("Doing remote RDF classes lookup...");
+				params = new HashMap<String, String>();
+				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
+				Document remoteRdfClassesDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+				log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteRdfClassesDocument));
+				mergedDocument = SparqlXmlMerger.merge(mergedDocument, remoteRdfClassesDocument);
 			}
+			
 			
 			setXmlDocument(mergedDocument);
 			refreshTableData();

@@ -81,4 +81,9 @@ public class SparqlXmlMerger {
 		}
 		return true;
 	}
+
+	public static int countResults(Document document) {
+		NodeList results = document.getElementsByTagName("result");
+		return results.getLength();
+	}
 }
