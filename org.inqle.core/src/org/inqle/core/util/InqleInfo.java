@@ -56,6 +56,8 @@ public class InqleInfo {
 
 	public static final String PARAM_SEARCH_RDF_CLASS = "searchRdfClass";
 	
+//	public static final String PARAM_SEARCH_ALL_DATA_CLASSES = "searchAllDataClasses";
+	
 	public static final String PARAM_SEARCH_START_INDEX = "start";
 
 	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
