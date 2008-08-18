@@ -31,15 +31,19 @@ public class OwlSubclassLookup {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+				"PREFIX owl: <" + RDF.OWL + ">\n" + 
 				"PREFIX pf: <" + RDF.PF + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT ?URI ?Label ?Comment ?Score \n" +
+				"SELECT DISTINCT ?URI ?Label ?Comment \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-				". ?URI rdf:type rdfs:Class \n";
+				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n";
+//				". ?URI rdf:type rdfs:Class \n";
 				if (owlClassUri != null) {
 					sparql += ". ?URI rdfs:subClassOf <" + owlClassUri + "> \n";
+				} else {
+//					sparql += ". ?URI rdf:type rdfs:Class \n";
+					sparql += ". ?URI rdfs:subClassOf rdfs:Class \n";
 				}
 				sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
@@ -48,6 +52,29 @@ public class OwlSubclassLookup {
 			return sparql;
 		}
 
+	
+	public static String getSparqlSearchSkosSubjects(String searchTerm, int limit, int offset) {
+		String sparql = 
+			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+			"PREFIX pf: <" + RDF.PF + ">\n" + 
+			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+			"PREFIX skos: <" + RDF.SKOS + ">\n" +
+			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
+			"{ GRAPH ?g {\n" +
+			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+		". FILTER ( isURI(?URI) ) \n";	
+		sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
+				". FILTER ( ! bound(?superProperty) ) \n";	
+		sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
+			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
+			"} } ORDER BY DESC(?Score) \n" +
+			"LIMIT " + limit + " OFFSET " + offset;
+		return sparql;
+	}
+	
 	/**
 	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
 	 * @param searchTermForRdfClass the user-entered query term
@@ -91,11 +118,12 @@ public class OwlSubclassLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupSubclassesInSchemaFiles(String searchTermForRdfClass, String owlClassUri, int countSearchResults, int offset) {
+	public static String lookupSubclassesInSchemaFiles(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		//add any internal RDF schemas
-		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
+//		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
+		log.info("Get/Create index of Model...");
 		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
 		log.info("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
@@ -106,7 +134,11 @@ public class OwlSubclassLookup {
 		if (textIndex != null) {
 			queryCriteria.setTextIndex(textIndex);
 		}
-		String sparql = getSparqlSearchRdfSubclasses(searchTermForRdfClass, owlClassUri, countSearchResults, offset);
+		
+		log.info("Get/Create OntModel...");
+		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
+		
+		String sparql = getSparqlSearchSkosSubjects(searchTermForRdfClass, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
