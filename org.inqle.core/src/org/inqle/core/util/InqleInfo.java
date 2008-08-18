@@ -67,6 +67,8 @@ public class InqleInfo {
 	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
 
 	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
+
+	public static final String DEFAULT_NAMED_MODEL_NAME = "org.inqle.models.defaultNamedModel";
 	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
