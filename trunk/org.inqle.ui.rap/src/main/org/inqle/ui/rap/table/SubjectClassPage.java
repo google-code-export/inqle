@@ -24,16 +24,16 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.XmlDocumentSerializer;
+import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.util.SparqlXmlMerger;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.OwlSubclassLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateOwlInstanceAction;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.SearchBox;
-import org.inqle.ui.rap.xml.SparqlXmlMerger;
-import org.inqle.ui.rap.xml.XmlDocumentUtil;
 import org.w3c.dom.Document;
 
 /**
@@ -237,7 +237,6 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//this looks up all RDF classes
 			String localRdfClassXml = OwlSubclassLookup.lookupSubclassesInSchemaFiles(
 					getSearchTextValue(), 
-					null, 
 					10, 
 					0);
 			log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
@@ -283,7 +282,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 //		Individual selectedIndividual = ontModel.createIndividual(resource);
 //	}
 
-	private String getSubjectUri() {
+	public String getSubjectUri() {
 		if (createdUri != null && selectCreatedClassButton.getSelection()) {
 			return createdUri;
 		}

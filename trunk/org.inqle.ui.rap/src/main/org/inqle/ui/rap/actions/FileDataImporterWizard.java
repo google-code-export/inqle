@@ -16,7 +16,9 @@ import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
+import org.inqle.ui.rap.pages.SubjectPropertyValuesPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
+import org.inqle.ui.rap.table.SubjectClassPage;
 import org.inqle.ui.rap.table.TableSubjectClassPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -185,8 +187,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addPage(subjectClassPage);
 		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
 		addPage(subjectUriPage);
-//		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
-//		addPage(propertyValuesPage);
+		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
 //		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
 //		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
@@ -199,8 +201,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addPage(subjectClassPage);
 		RowSubjectUriPage subjectUriPage = new RowSubjectUriPage();
 		addPage(subjectUriPage);
-//		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
-//		addPage(propertyValuesPage);
+		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
 //		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
 //		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
@@ -213,6 +215,24 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 //		DoImportPage doImportPage = new DoImportPage();
 //		addPage(doImportPage);
 		getContainer().updateButtons();
+	}
+
+	/**
+	 * Get the subject class URI of the most recent SubjectClassPage, preceding the one passed 
+	 * as an argument
+	 * @param pageAfterSubjectClassPage
+	 * @return
+	 */
+	public String getSubjectClassUri(IWizardPage pageAfterSubjectClassPage) {
+		IWizardPage thePage = pageAfterSubjectClassPage;
+		while (thePage.getPreviousPage() != null) {
+			thePage = thePage.getPreviousPage();
+			if (thePage instanceof SubjectClassPage) {
+				SubjectClassPage subjectClassPage = (SubjectClassPage)thePage;
+				return subjectClassPage.getSubjectUri();
+			}
+		}
+		return null;
 	}
 
 }
