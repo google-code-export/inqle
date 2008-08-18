@@ -45,13 +45,7 @@ import com.hp.hpl.jena.sdb.SDB;
 	
 	static Logger log = Logger.getLogger(Queryer.class);
 	
-	/**
-	 * Query an ARQ dataset.
-
-	 * @param queryCriteria the QueryCriteria object containing all info about the query
-	 * @return an ResultSet object
-	 */
-	public static String selectXml(QueryCriteria queryCriteria) {
+	private static QueryExecution getQueryExecution(QueryCriteria queryCriteria) {
 		Query query;
 		try {
 			query = QueryFactory.create(queryCriteria.getQuery());
@@ -60,7 +54,6 @@ import com.hp.hpl.jena.sdb.SDB;
 			return null;
 		}
 		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-		Dataset dataset = queryCriteria.getDataset();
 		
 		//log info about the dataset
 //		Iterator<?> datasetNamesI = dataset.listNames();
@@ -73,16 +66,30 @@ import com.hp.hpl.jena.sdb.SDB;
 //		while (dsNames.hasNext()) {
 //			log.debug("Querying model '" + (String)dsNames.next() + "'.");
 //		}
-		
-		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
+		QueryExecution qe = null;
+		if (queryCriteria.getSingleModel() != null) {
+			qe = QueryExecutionFactory.create(query, queryCriteria.getSingleModel()) ;
+		} else {
+			qe = QueryExecutionFactory.create(query, queryCriteria.getDataset()) ;
+		}
 		
 		if (queryCriteria.getTextIndex() != null) {
 			log.trace("setDefaultIndex...");
 			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
 		}
 		
-		qe.getContext().set(SDB.unionDefaultGraph, true) ;
-		
+		qe.getContext().set(SDB.unionDefaultGraph, true);
+		return qe;
+	}
+	
+	/**
+	 * Query an ARQ dataset.
+
+	 * @param queryCriteria the QueryCriteria object containing all info about the query
+	 * @return an ResultSet object
+	 */
+	public static String selectXml(QueryCriteria queryCriteria) {
+		QueryExecution qe = getQueryExecution(queryCriteria);
 
 		//Do the query
 		ResultSet resultSet = null;
@@ -92,7 +99,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			resultSet = qe.execSelect() ;
 			resultXml = ResultSetFormatter.asXMLString(resultSet);
 		} catch (Exception e) {
-			log.error("Error performing query " + query, e);
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			qe.close(); 
 		}
@@ -106,39 +113,34 @@ import com.hp.hpl.jena.sdb.SDB;
 	 * @param queryCriteria the QueryCriteria object containing all info about the query
 	 * @return an ResultSet object
 	 */
-	public static Model selectRdf(QueryCriteria queryCriteria) {
-		Query query;
-		try {
-			query = QueryFactory.create(queryCriteria.getQuery());
-		} catch (Exception e) {
-			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
-			return null;
-		}
-		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-		Dataset dataset = queryCriteria.getDataset();
-		
-		//log info about the dataset
-//		Iterator<?> datasetNamesI = dataset.listNames();
-//		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
-//		while (datasetNamesI.hasNext()) {
-//			log.debug((String)datasetNamesI.next());
-//		}
-		
-//		Iterator<?> dsNames = dataset.listNames();
-//		while (dsNames.hasNext()) {
-//			log.debug("Querying model '" + (String)dsNames.next() + "'.");
-//		}
-		
-		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
-		
-		if (queryCriteria.getTextIndex() != null) {
-			log.trace("setDefaultIndex...");
-			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
-		}
-		
-		qe.getContext().set(SDB.unionDefaultGraph, true) ;
-		
+	public static String selectText(QueryCriteria queryCriteria) {
+		QueryExecution qe = getQueryExecution(queryCriteria);
 
+		//Do the query
+		ResultSet resultSet = null;
+		//SDB.getContext().set(SDB.unionDefaultGraph, true);
+		String resultText = null;
+		try {
+			resultSet = qe.execSelect() ;
+			resultText = ResultSetFormatter.asText(resultSet);
+		} catch (Exception e) {
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
+		} finally { 
+			qe.close(); 
+		}
+		
+		return resultText;
+	}
+
+	/**
+	 * Query a dataset and return results as RDF
+
+	 * @param queryCriteria the QueryCriteria object containing all info about the query
+	 * @return an ResultSet object
+	 */
+	public static Model selectRdf(QueryCriteria queryCriteria) {
+		QueryExecution qe = getQueryExecution(queryCriteria);
+		
 		//Do the query
 		ResultSet resultSet = null;
 		//SDB.getContext().set(SDB.unionDefaultGraph, true);
@@ -147,7 +149,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			resultSet = qe.execSelect() ;
 			ResultSetFormatter.asRDF(resultModel, resultSet);
 		} catch (Exception e) {
-			log.error("Error performing query " + query, e);
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			qe.close(); 
 		}
@@ -162,42 +164,43 @@ import com.hp.hpl.jena.sdb.SDB;
 	 * @return an RdfTable object
 	 */
 	public static RdfTable selectRdfTable(QueryCriteria queryCriteria) {
-		Query query;
+//		Query query;
 		RdfTable resultTable = new RdfTable();
 		resultTable.setQueryCriteria(queryCriteria);
-		assert(queryCriteria.getQuery() != null);
-		try {
-			query = QueryFactory.create(queryCriteria.getQuery());
-		} catch (Exception e) {
-			resultTable.setError(e);
-			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
-			return resultTable;
-		}
-		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-		Dataset dataset = queryCriteria.getDataset();
-		
-		//log info about the dataset
-		Iterator<?> datasetNamesI = dataset.listNames();
-		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
-		while (datasetNamesI.hasNext()) {
-			log.debug((String)datasetNamesI.next());
-		}
-		
-		Iterator<?> dsNames = dataset.listNames();
-		while (dsNames.hasNext()) {
-			log.debug("Querying model '" + (String)dsNames.next() + "'.");
-		}
-		
-		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
-		
-		if (queryCriteria.getTextIndex() != null) {
-			log.trace("setDefaultIndex...");
-			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
-		}
-		
-		qe.getContext().set(SDB.unionDefaultGraph, true) ;
-		
-		
+//		assert(queryCriteria.getQuery() != null);
+//		try {
+//			query = QueryFactory.create(queryCriteria.getQuery());
+//		} catch (Exception e) {
+//			resultTable.setError(e);
+//			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
+//			return resultTable;
+//		}
+//		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
+//		Dataset dataset = queryCriteria.getDataset();
+//		
+//		//log info about the dataset
+//		Iterator<?> datasetNamesI = dataset.listNames();
+//		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
+//		while (datasetNamesI.hasNext()) {
+//			log.debug((String)datasetNamesI.next());
+//		}
+//		
+//		Iterator<?> dsNames = dataset.listNames();
+//		while (dsNames.hasNext()) {
+//			log.debug("Querying model '" + (String)dsNames.next() + "'.");
+//		}
+//		
+//		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
+//		
+//		if (queryCriteria.getTextIndex() != null) {
+//			log.trace("setDefaultIndex...");
+//			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
+//		}
+//		
+//		qe.getContext().set(SDB.unionDefaultGraph, true) ;
+//		
+//		
+		QueryExecution qe = getQueryExecution(queryCriteria);
 		
 		//Do the query
 		ResultSet resultSet;
@@ -210,7 +213,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			resultTable.setQueryCriteria(queryCriteria);
 			log.debug("Retrieved RdfTable w/ " + resultTable.getResultList().size() + " results");
 		} catch (Exception e) {
-			log.error("Error performing query " + query, e);
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
 			resultTable.setError(e);
 		} finally { 
 			qe.close(); 
@@ -226,28 +229,7 @@ import com.hp.hpl.jena.sdb.SDB;
 	public static List<String> selectUriList(QueryCriteria queryCriteria) {
 		Query query;
 		List<String> resultList = new ArrayList<String>();
-		try {
-			query = QueryFactory.create(queryCriteria.getQuery());
-		} catch (Exception e) {
-			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
-			return resultList;
-		}
-		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-		Dataset dataset = queryCriteria.getDataset();
-		
-		//log info about the dataset
-		Iterator<?> datasetNamesI = dataset.listNames();
-		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
-		while (datasetNamesI.hasNext()) {
-			log.debug((String)datasetNamesI.next());
-		}
-		
-		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
-		qe.getContext().set(SDB.unionDefaultGraph, true) ;
-		
-		if (queryCriteria.getTextIndex() != null) {
-			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
-		}
+		QueryExecution qe = getQueryExecution(queryCriteria);
 		
 		//Do the query
 		ResultSet resultSet;
@@ -259,7 +241,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			resultList = Converter.resultSetToUriList(resultSet);
 			log.debug("Retrieved URI List w/ " + resultList.size() + " results");
 		} catch (Exception e) {
-			log.error("Error performing query " + query, e);
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			qe.close(); 
 		}
@@ -273,28 +255,7 @@ import com.hp.hpl.jena.sdb.SDB;
 	public static List<String> selectSimpleList(QueryCriteria queryCriteria, String varName) {
 		Query query;
 		List<String> resultList = new ArrayList<String>();
-		try {
-			query = QueryFactory.create(queryCriteria.getQuery());
-		} catch (Exception e) {
-			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
-			return resultList;
-		}
-		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-		Dataset dataset = queryCriteria.getDataset();
-		
-		//log info about the dataset
-		Iterator<?> datasetNamesI = dataset.listNames();
-		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
-		while (datasetNamesI.hasNext()) {
-			log.debug((String)datasetNamesI.next());
-		}
-		
-		QueryExecution qe = QueryExecutionFactory.create(query, dataset) ;
-		qe.getContext().set(SDB.unionDefaultGraph, true) ;
-		
-		if (queryCriteria.getTextIndex() != null) {
-			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
-		}
+		QueryExecution qe = getQueryExecution(queryCriteria);
 		
 		//Do the query
 		ResultSet resultSet;
@@ -305,66 +266,12 @@ import com.hp.hpl.jena.sdb.SDB;
 			resultList = Converter.resultSetToSimpleList(resultSet, varName);
 			log.trace("Retrieved simple List w/ " + resultList.size() + " results");
 		} catch (Exception e) {
-			log.error("Error performing query " + query, e);
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			qe.close(); 
 		}
 		
 		return resultList;
-	}
-	
-	/**
-	 * Query an SDB or ARQmodel.  SPARQL queries sent to this method should 
-	 * not reference graph names.  Rather, the sole model is the default model.
-	 * 
-	 * Example query:
-SELECT ?uri ?dbType ?dbDriver ?dbUrl ?dbUser ?creationDate
-{
-?uri a <http://jena.hpl.hp.com/2005/11/Assembler#Connection> .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbType> ?dbType .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbClass> ?dbDriver .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbURL> ?dbUrl .
-?uri <http://jena.hpl.hp.com/2005/11/Assembler#dbUser> ?dbUser .
-?uri <http://inqle.org/ns/1.0/inqle.rdf#creationTime> ?creationDate
-}
-
-	 * @param queryCriteria the QueryCriteria object containing all info about
-	 * Should contain a single model
-	 * @return an Rdftable object
-	 * 
-	 * @deprecated
-	 */
-	public static RdfTable selectFromSingleModel(QueryCriteria queryCriteria) {
-		Query query;
-		try {
-			query = QueryFactory.create(queryCriteria.getQuery());
-		} catch (Exception e) {
-			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
-			return null;
-		}
-		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-		Model model = queryCriteria.getModel();
-		
-		QueryExecution qe = QueryExecutionFactory.create(query, model) ;
-		RdfTable rdfTable = new RdfTable();
-		
-		ResultSet resultSet;
-		try {
-			resultSet = qe.execSelect() ;
-			//ResultSetFormatter.out(qryResults) ;
-			rdfTable = Converter.resultSetToRdfTable(resultSet);
-			log.debug("Retrieved RdfTable w/ " + rdfTable.getResultList().size() + " results");
-		} catch (Exception e) {
-			log.error("Error performing query " + query, e);
-		} finally { 
-			qe.close(); 
-		}
-		rdfTable.setQueryCriteria(queryCriteria);
-		
-		//close the models in the QueryCriteria object
-		//queryCriteria.close();
-		
-		return rdfTable;
 	}
 	
 	/**

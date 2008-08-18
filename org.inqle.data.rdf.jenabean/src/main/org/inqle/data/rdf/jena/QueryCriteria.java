@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.query.DataSource;
@@ -43,6 +44,8 @@ public class QueryCriteria {
 	private DataSource dataSource = null;
 	private String query = "";
 	private IndexLARQ textIndex = null;
+
+	private Model singleModel;
 	
 	//private Persister persister = null;
 	
@@ -75,13 +78,34 @@ public class QueryCriteria {
 		namedModels.add(namedModel);
 		Model model = persister.getModel(namedModel);
 		log.debug("In QueryCriteria, adding model of size " + model.size());
+//		models.add(model);
+//		dataSource.addNamedModel(namedModel.getId(), model);
+		addModel(namedModel.getId(), model);
+	}
+	
+	public void addModel(String id, Model model) {
 		models.add(model);
-		dataSource.addNamedModel(namedModel.getId(), model);
+		dataSource.addNamedModel(id, model);
 	}
 	
 	/**
+	 * This method sets the model as the default model.  Beware, this can foul up
+	 * SPARQL queries which assume named graphs
+	 * @param model
+	 */
+	public void setDefaultModel(Model model) {
+		models.add(model);
+		dataSource.setDefaultModel(model);
+	}
+	
+	public void setSingleModel(Model model) {
+		this.singleModel = model;
+//		dataSource.addNamedModel(InqleInfo.DEFAULT_NAMED_MODEL_NAME, model);
+	}
+
+	/**
 	 * Add a List of NamedModel to be queried
-	 * @param models
+	 * @param namedModelIds
 	 */
 	public void addNamedModelIds(Collection<String> namedModelIds) {
 		if (namedModelIds == null) return;
@@ -94,7 +118,7 @@ public class QueryCriteria {
 	
 	/**
 	 * Add a List of AModels to query
-	 * @param models
+	 * @param addNamedModels
 	 */
 	public void addNamedModels(List<NamedModel> addNamedModels) {
 		for (NamedModel aNamedModel: addNamedModels) {
@@ -164,6 +188,10 @@ public class QueryCriteria {
 
 	public void setTextIndex(IndexLARQ textIndex) {
 		this.textIndex = textIndex;
+	}
+
+	public Model getSingleModel() {
+		return singleModel;
 	}
 	
 	/*

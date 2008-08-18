@@ -82,6 +82,7 @@ public class Persister {
 	private Map<String, InternalDataset> internalDatasets = null;
 	private Map<String, IndexBuilderModel> indexBuilders;
 	private IndexLARQ schemaFilesSubjectIndex;
+	private OntModel schemaFilesOntModel;
 	
 	/* *********************************************************************
 	 * *** FACTORY METHODS
@@ -472,7 +473,7 @@ public class Persister {
 	 * 
 	 * TODO consider storing this as a file
 	 * TODO consider not saving in memory
-	 * TODO 
+	 * TODO consider index the OntModel instead (adds extraneous statements?)
 	 */
 	public IndexLARQ getSchemaFilesSubjectIndex() {
 		if (schemaFilesSubjectIndex != null) {
@@ -487,6 +488,17 @@ public class Persister {
 		return schemaFilesSubjectIndex;
 	}
 	
+	/**
+	 * retrieves the OntModel (stored in memory) which contains the RDF Schema files
+	 * @return
+	 */
+	public OntModel getSchemaFilesOntModel() {
+		if (schemaFilesOntModel == null) {
+			schemaFilesOntModel = DatafileUtil.getOntModel(InqleInfo.getRdfSchemaFilesDirectory());
+		}
+		return schemaFilesOntModel;
+	}
+
 	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
 	 * @param namedModel

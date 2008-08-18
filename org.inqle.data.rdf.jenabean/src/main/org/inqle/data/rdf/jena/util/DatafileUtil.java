@@ -2,6 +2,7 @@ package org.inqle.data.rdf.jena.util;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -15,6 +16,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * Aug 11, 2008
  */
 public class DatafileUtil {
+
+	private static Logger log = Logger.getLogger(DatafileUtil.class);
 
 	/**
 	 * Adds all files present in the specified folder path to the 
@@ -68,6 +71,7 @@ public class DatafileUtil {
 			if (file.isDirectory()) {
 				addModel(model, file.getAbsolutePath());
 			} else {
+				log.info("Getting model: " + file.getAbsolutePath());
 				model.add(Persister.getModelFromFile(file.getAbsolutePath()));
 			}
 		}

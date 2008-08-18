@@ -13,6 +13,7 @@ public class RDF {
 	public static final String OWL = "http://www.w3.org/2002/07/owl#";
 	public static final String DC = "http://purl.org/dc/elements/1.1/";
 	public static final String GEO = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+	public static final String SKOS = "http://www.w3.org/2004/02/skos/core#";
 	public static final String TYPE = RDF + "type";
 	public static final String JA = "http://jena.hpl.hp.com/2005/11/Assembler#";
 	public static final String PF = "http://jena.hpl.hp.com/ARQ/property#";
@@ -35,6 +36,7 @@ public class RDF {
 	public static final Property COMMENT_PROPERTY = ResourceFactory.createProperty(DESCRIPTION_PREDICATE);
 	public static final String DATA_SUBJECT = INQLE + "DataSubject";
 	public static final String HAS_SUBJECT = INQLE + "subject";
+	
 	
 	
 	/**
