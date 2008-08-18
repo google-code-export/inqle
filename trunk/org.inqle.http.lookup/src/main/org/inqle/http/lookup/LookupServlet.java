@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.Data;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.util.HttpParameterParser;
 
 public class LookupServlet extends HttpServlet {
@@ -29,6 +30,12 @@ public class LookupServlet extends HttpServlet {
 	private HttpServletResponse response;
 
 	private PrintWriter out;
+	
+	@Override
+	public void init() {
+		//initialize the Persister
+		Persister.getInstance();
+	}
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {

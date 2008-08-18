@@ -195,8 +195,13 @@ public class Requestor {
 			}
 			
 			InputStream in = urlc.getInputStream();
-			DocumentBuilder builder =
-	       DocumentBuilderFactory.newInstance().newDocumentBuilder();
+//			works:
+//			DocumentBuilder builder =
+//	       DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setNamespaceAware(true); // never forget this!
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			
 	    document = builder.parse(in);
 		} catch (IOException e) {
 			log.error("Connection error; Unable to connect to server at " + url, e);
