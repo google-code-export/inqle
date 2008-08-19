@@ -35,9 +35,10 @@ public class SparqlXmlUtil {
 			return addDocument;
 		}
 		
-		log.info("Merging XML Documents: FIRST\n" + XmlDocumentSerializer.xmlToString(originalDocument));
-		log.info("Merging XML Documents: SECOND\n" + XmlDocumentSerializer.xmlToString(addDocument));
-		
+//		log.info("Merging XML Documents: FIRST\n" + XmlDocumentSerializer.xmlToString(originalDocument));
+//		log.info("Merging XML Documents: SECOND\n" + XmlDocumentSerializer.xmlToString(addDocument));
+		log.info("Merging XML Documents: FIRST\n" );
+		log.info("Merging XML Documents: SECOND\n");
 		Document doc = originalDocument;
 		try {
 			log.info("1: originalDocument==null?" + (originalDocument==null));
@@ -70,6 +71,7 @@ public class SparqlXmlUtil {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			log.error("Error merging XML documents", e);
 		}
 		log.info("Returning this MERGED document\n" + XmlDocumentSerializer.xmlToString(doc));
