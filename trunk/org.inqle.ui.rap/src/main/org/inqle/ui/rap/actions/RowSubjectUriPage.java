@@ -106,10 +106,10 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 				return;
 			}
 			CsvImporter csvImporter = getCsvImporter();
-			
-			String[][] data = csvImporter.getRawData();
-			//log.info("data= " + data);
-			String[] headers = data[csvImporter.getHeaderIndex()];
+//			String[][] data = csvImporter.getRawData();
+//			//log.info("data= " + data);
+//			String[] headers = data[csvImporter.getHeaderIndex()];
+			String[] headers = csvImporter.getHeaders();
 			uriSuffixColumnList.removeAll();
 			uriSuffixColumnList.setItems(headers);
 //			log.info("Set headers list to:" + Arrays.asList(headers));
