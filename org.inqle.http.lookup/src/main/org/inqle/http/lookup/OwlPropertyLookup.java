@@ -22,11 +22,15 @@ import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 public class OwlPropertyLookup {
 
 	private static final Logger log = Logger.getLogger(OwlPropertyLookup.class);
-	
+	public static final Object QUERY_HEADER_URI = "Property_URI";
+	public static final Object QUERY_HEADER_LABEL = "Label";
+	public static final Object QUERY_HEADER_COMMENT = "Comment";
 	/**
-	 * Generates SPARQL, to find all properties of all instances of all subclasses of inqle:Data, 
+	 * Generates SPARQL, to find all properties of all instances of all 
+	 * subclasses of inqle:Data, 
 	 * which have the provided subjectClassUri as an inqle:subject
-	 * That is, this finds properties of data rows having a particular inqle:subject.
+	 * That is, this finds properties of data rows having a particular 
+	 * inqle:subject.
 	 * @param subjectClassUri
 	 * @param limit
 	 * @param offset
@@ -38,7 +42,7 @@ public class OwlPropertyLookup {
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
 				"PREFIX owl: <" + RDF.OWL + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-				"SELECT DISTINCT ?Property_URI ?Column_Header ?Label ?Comment \n" +
+				"SELECT DISTINCT ?" + QUERY_HEADER_URI + " ?Column_Header ?" + QUERY_HEADER_LABEL + " ?" + QUERY_HEADER_COMMENT + " \n" +
 				//datatype(?value) as ?Data_Type
 				//". OPTIONAL { ?URI inqle:mapsValue ?value } \n" +
 				"{\n" +
@@ -57,7 +61,8 @@ public class OwlPropertyLookup {
 		}
 	
 	/**
-	 * Generates SPARQL, to find all properties that have been mapped to the provided OWL class.
+	 * Generates SPARQL, to find all properties that have been mapped to 
+	 * the provided OWL class.
 	 * That is, this finds properties of DataSubjects.
 	 * @param subjectClassUri
 	 * @param limit
@@ -136,7 +141,7 @@ public class OwlPropertyLookup {
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
-		String sparql = getSparqlFindSubjectProperties(subjectClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindDataPropertiesAboutSubject(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
@@ -156,7 +161,7 @@ public class OwlPropertyLookup {
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
-		String sparql = getSparqlFindAllProperties(subjectClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindSubjectProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
