@@ -27,7 +27,10 @@ import org.inqle.core.util.XmlDocumentSerializer;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.util.SparqlXmlMerger;
+import org.inqle.data.rdf.jena.uri.NamespaceMapping;
+import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.data.rdf.jena.uri.UriMapping;
+import org.inqle.data.rdf.jena.util.SparqlXmlUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.OwlSubclassLookup;
 import org.inqle.http.lookup.Requestor;
@@ -242,7 +245,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
 			Document localRdfClassDocument = XmlDocumentUtil.getDocument(localRdfClassXml);
 			
-			Document localDocument = SparqlXmlMerger.merge(localDataSubjectDocument, localRdfClassDocument);
+			Document localDocument = SparqlXmlUtil.merge(localDataSubjectDocument, localRdfClassDocument);
 			log.info("Merged data subjects with classes from RDF Schema files.");
 			
 			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
@@ -252,17 +255,17 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 			log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteDocument));
 			
-			Document mergedDocument = SparqlXmlMerger.merge(localDocument, remoteDocument);
+			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
 			log.info("Merged 2 documents into:\n" + XmlDocumentSerializer.xmlToString(mergedDocument));
 			
 			//if insufficient results, do an additional query of the remote RDF Schema datafiles
-			if (SparqlXmlMerger.countResults(mergedDocument) <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
+			if (SparqlXmlUtil.countResults(mergedDocument) <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
 				log.info("Doing remote RDF classes lookup...");
 				params = new HashMap<String, String>();
 				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
 				Document remoteRdfClassesDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 				log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteRdfClassesDocument));
-				mergedDocument = SparqlXmlMerger.merge(mergedDocument, remoteRdfClassesDocument);
+				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
 			}
 			
 			
@@ -298,6 +301,15 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			val = val.trim();
 		}
 		return val;
+	}
+	
+	@Override
+	public boolean onNextPage() {
+		String subjUri = getSubjectUri();
+		if (subjUri == null || (! UriMapper.isUri(subjUri))) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

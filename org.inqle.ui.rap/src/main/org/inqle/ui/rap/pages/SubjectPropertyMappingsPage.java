@@ -12,24 +12,26 @@ import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.jena.util.SparqlXmlUtil;
 import org.inqle.http.lookup.OwlPropertyLookup;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
+import org.inqle.ui.rap.actions.ICsvImporterWizard;
+import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.widgets.DropdownFieldShower;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
-import org.inqle.ui.rap.widgets.TextFieldShower;
 import org.w3c.dom.Document;
 
-public abstract class SubjectPropertyValuesPage extends DynaWizardPage {
+public abstract class SubjectPropertyMappingsPage extends DynaWizardPage {
 
-	private static Logger log = Logger.getLogger(SubjectPropertyValuesPage.class);
-	
+	private static Logger log = Logger.getLogger(SubjectPropertyMappingsPage.class);
+
 	private String subjectClassUri;
 
-	private List<TextFieldShower> textFields;
+	private List<DropdownFieldShower> textMappings;
 	
-	public SubjectPropertyValuesPage(String title, String description) {
+	public SubjectPropertyMappingsPage(String title, String description) {
 		super(title, null);
 		setDescription(description);
 	}
 	
-	public SubjectPropertyValuesPage(String title, ImageDescriptor titleImage) {
+	public SubjectPropertyMappingsPage(String title, ImageDescriptor titleImage) {
 		super(title, titleImage);
 	}
 
@@ -41,7 +43,7 @@ public abstract class SubjectPropertyValuesPage extends DynaWizardPage {
 	
 	@Override
 	public void onEnterPageFromPrevious() {
-		log.info("Entering SubjectPropertyValuesPage...");
+		log.info("Entering SubjectPropertyMappingsPage...");
 		String currentSubjectClassUri = getSubjectUri();
 		if (subjectClassUri.equals(currentSubjectClassUri)) {
 			return;
@@ -67,26 +69,34 @@ public abstract class SubjectPropertyValuesPage extends DynaWizardPage {
 	}
 
 	protected void makePropertyFormElements(List<Map<String, String>> rowValues) {
-		textFields = new ArrayList<TextFieldShower>();
+		textMappings = new ArrayList<DropdownFieldShower>();
+		CsvImporter csvImporter = getCsvImporter();
+		String[] headers = csvImporter.getHeaders();
 		for (Map<String, String> row: rowValues) {
 			String uri = row.get(OwlPropertyLookup.QUERY_HEADER_URI);
 			String label = row.get(OwlPropertyLookup.QUERY_HEADER_LABEL);
 			String comment = row.get(OwlPropertyLookup.QUERY_HEADER_COMMENT);
-			TextFieldShower textFieldShower = new TextFieldShower(
+			DropdownFieldShower dropdownFieldShower = new DropdownFieldShower(
 					selfComposite,
+					headers,
 					label,
 					comment,
 					null,
 					SWT.BORDER
 			);
-			textFieldShower.setFieldUri(uri);
-			textFields.add(textFieldShower);
+			dropdownFieldShower.setFieldUri(uri);
+			textMappings.add(dropdownFieldShower);
 		}
+	}
+	
+	private CsvImporter getCsvImporter() {
+		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
+		return loadCsvFileWizard.getCsvImporter();
 	}
 
 	public IDataFieldShower[] getDataFields() {
 		IDataFieldShower[] dataFieldShowerArray = {};
-		return textFields.toArray(dataFieldShowerArray);
+		return textMappings.toArray(dataFieldShowerArray);
 	}
 
 }

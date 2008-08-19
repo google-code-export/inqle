@@ -466,4 +466,9 @@ public class CsvImporter {
 			log.error("Error saving file " + file, e);
 		}
 	}
+	
+	public String[] getHeaders() {
+		String[][] data = getRawData();
+		return data[getHeaderIndex()];
+	}
 }

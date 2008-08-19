@@ -8,33 +8,34 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
-public class TextFieldShower implements IDataFieldShower {
+public class DropdownFieldShower implements IDataFieldShower {
 
-	private Text text;
+	private List list;
 	private Text descriptionText;
 	private String fieldUri;
-	private static final Logger log = Logger.getLogger(TextFieldShower.class);
+	private static final Logger log = Logger.getLogger(DropdownFieldShower.class);
 	
 	/**
-	 * Adds a text field to an existing composite.  Expects that composite to have a 2 column GridLayout.
-	 * A text field consists of 
+	 * Adds a dropdown select field to an existing composite.  Expects that composite to have a 2 column GridLayout.
+	 * A dropdown select field consists of 
 	 *  * a label
-	 *  * a text input widget
-	 *  * optionally a tool tip text (on mouseover)
+	 *  * a select box widget
+	 *  * optionally a tool tip list (on mouseover)
 	 *  * optionally below this, a description field
 	 * @param composite
 	 * @param labelString
 	 * @param descriptionString
 	 * @param toolTipString
-	 * @param textStyle
+	 * @param listStyle
 	 */
-	public TextFieldShower(Composite composite, String labelString, String descriptionString, String toolTipString, int textStyle) {
+	public DropdownFieldShower(Composite composite, String[] options, String labelString, String descriptionString, String toolTipString, int listStyle) {
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -45,11 +46,12 @@ public class TextFieldShower implements IDataFieldShower {
 
 //		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		text = new Text(composite, textStyle);
-		text.setLayoutData(gridData);
+		list = new List(composite, listStyle);
+		list.setLayoutData(gridData);
 		if (toolTipString != null) {
-			text.setToolTipText(toolTipString);
+			list.setToolTipText(toolTipString);
 		}
+		list.setItems(options);
 		
 		if (descriptionString != null && descriptionString.length() > 0) {
 			//in next row, skip the label column
@@ -74,16 +76,20 @@ public class TextFieldShower implements IDataFieldShower {
 		}
 	}
 	
-	public String getTextValue() {
-		return text.getText();
+	public int getSelectedIndex() {
+		return list.getSelectionIndex();
 	}
 	
-	public void setTextValue(String textValue) {
-		text.setText(textValue);
+	public String getSelectedValue() {
+		return list.getItem(list.getSelectionIndex());
+	}
+	
+	public void setSelectedIndex(int selectedIndex) {
+		list.setSelection(selectedIndex);
 	}
 
 	public void setEnabled(boolean enabled) {
-		text.setEnabled(enabled);
+		list.setEnabled(enabled);
 	}
 
 	/**
@@ -98,16 +104,4 @@ public class TextFieldShower implements IDataFieldShower {
 		this.fieldUri = fieldUri;
 	}
 	
-	/**
-	 * Return the provided value, as a literal
-	 * TODO return appropriate data type, according to a value in the query
-	 * @return
-	 */
-	public RDFNode getRDFNodeValue() {
-		if (getTextValue() == null) {
-			return null;
-		}
-		Literal literalValue = ResourceFactory.createTypedLiteral(getTextValue());
-		return literalValue;
-	}
 }

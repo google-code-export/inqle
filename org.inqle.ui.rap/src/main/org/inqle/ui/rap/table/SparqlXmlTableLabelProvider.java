@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
+import org.inqle.data.rdf.jena.util.SparqlXmlUtil;
 import org.inqle.ui.rap.csv.CsvImporter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -72,24 +73,26 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 			headerVariables.add(variableStr);
 		}
 		
-		rowElements = new ArrayList<Map<String, String>>();
-		NodeList results = xmlDocument.getElementsByTagName("results");
-		Element resultsElement = (Element)results.item(0);
-		NodeList rows = resultsElement.getElementsByTagName("result");
+//		rowElements = new ArrayList<Map<String, String>>();
+//		NodeList results = xmlDocument.getElementsByTagName("results");
+//		Element resultsElement = (Element)results.item(0);
+//		NodeList rows = resultsElement.getElementsByTagName("result");
+//		
+//		for (int j=0; j<rows.getLength(); j++) {
+//			HashMap<String, String> valueMap = new HashMap<String, String>();
+//			Element rowElement = (Element)rows.item(j);
+//			NodeList bindingNodes = rowElement.getElementsByTagName("binding");
+//			for (int k=0; k<bindingNodes.getLength(); k++) {
+//				Element cellElement = (Element)bindingNodes.item(k);
+//				String varName = cellElement.getAttribute("name");
+//				String elementValue = cellElement.getTextContent();
+////				log.info("Row=" + j + ", Col=" + k + " Adding:" + varName + "=" + elementValue);
+//				valueMap.put(varName, elementValue);
+//			}
+//			rowElements.add(valueMap);
+//		}
 		
-		for (int j=0; j<rows.getLength(); j++) {
-			HashMap<String, String> valueMap = new HashMap<String, String>();
-			Element rowElement = (Element)rows.item(j);
-			NodeList bindingNodes = rowElement.getElementsByTagName("binding");
-			for (int k=0; k<bindingNodes.getLength(); k++) {
-				Element cellElement = (Element)bindingNodes.item(k);
-				String varName = cellElement.getAttribute("name");
-				String elementValue = cellElement.getTextContent();
-//				log.info("Row=" + j + ", Col=" + k + " Adding:" + varName + "=" + elementValue);
-				valueMap.put(varName, elementValue);
-			}
-			rowElements.add(valueMap);
-		}
+		rowElements = SparqlXmlUtil.getRowValues(xmlDoc);
 	}
 
 	public ArrayList<String> getHeaderVariables() {

@@ -16,7 +16,11 @@ import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
+import org.inqle.ui.rap.pages.RowSubjectPropertyMappingsPage;
+import org.inqle.ui.rap.pages.RowSubjectPropertyValuesPage;
 import org.inqle.ui.rap.pages.SubjectPropertyValuesPage;
+import org.inqle.ui.rap.pages.TableSubjectPropertyMappingsPage;
+import org.inqle.ui.rap.pages.TableSubjectPropertyValuesPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
 import org.inqle.ui.rap.table.SubjectClassPage;
 import org.inqle.ui.rap.table.TableSubjectClassPage;
@@ -34,7 +38,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		super(saveToModel, shell);
 	}
 
-	static Logger log = Logger.getLogger(FileDataImporterWizard.class);
+	private static Logger log = Logger.getLogger(FileDataImporterWizard.class);
 	Composite composite;
 	
 	private LoadFilePage loadFilePage;
@@ -189,8 +193,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addPage(subjectUriPage);
 		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
 		addPage(propertyValuesPage);
-//		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
-//		addPage(propertyMappingsPage);
+		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 		getContainer().updateButtons();
@@ -203,8 +207,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		addPage(subjectUriPage);
 		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
 		addPage(propertyValuesPage);
-//		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
-//		addPage(propertyMappingsPage);
+		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 		getContainer().updateButtons();

@@ -20,7 +20,8 @@ Import-Package: javax.servlet;version="2.4.0",
  javax.xml.parsers,
  org.w3c.dom,
  org.xml.sax.ext,
- org.xml.sax.helpers
+ org.xml.sax.helpers,
+ com.hp.hpl.jena.rdf.model
 Eclipse-RegisterBuddy: org.inqle.core.extensions
 Bundle-RegisterBuddy: org.inqle.core.extensions
 Export-Package: org.inqle.ui.rap,
