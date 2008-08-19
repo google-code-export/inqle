@@ -158,7 +158,7 @@ public class Persister {
 		AppInfo loadedAppInfo = null;
 		try {
 			loadedAppInfo = (AppInfo)reader.load(AppInfo.class, AppInfo.APPINFO_INSTANCE_ID);
-			log.info("Retrieved appInfo:" + JenabeanWriter.toString(loadedAppInfo));
+			log.trace("Retrieved appInfo:" + JenabeanWriter.toString(loadedAppInfo));
 		} catch (NotFoundException e) {
 			log.warn("AppInfo not available.");
 		}
@@ -349,7 +349,7 @@ public class Persister {
 			return null;
 		}
 		indexBuilder.flushWriter();
-		log.info("Retrieved & flushed IndexBuilder:" + indexBuilder);
+		log.trace("Retrieved & flushed IndexBuilder:" + indexBuilder);
 		return indexBuilder.getIndex();
 	}
 	
@@ -463,7 +463,7 @@ public class Persister {
 				}
 			}
 		}
-		log.info("assembled list of index builders:" + indexBuilders);
+		log.trace("assembled list of index builders:" + indexBuilders);
 		return indexBuilders;
 	}
 	
@@ -481,9 +481,9 @@ public class Persister {
 		}
 		Model schemaFilesModel = DatafileUtil.getModel(InqleInfo.getRdfSchemaFilesDirectory());
 		IndexBuilderModel larqBuilder = new IndexBuilderSubject();
-		log.info("Persister.getSchemaFilesSubjectIndex(): indexing model of " + schemaFilesModel.size() + " statements...");
+		log.trace("Persister.getSchemaFilesSubjectIndex(): indexing model of " + schemaFilesModel.size() + " statements...");
 		larqBuilder.indexStatements(schemaFilesModel.listStatements());
-		log.info("...done");
+		log.trace("...done");
 		schemaFilesSubjectIndex = larqBuilder.getIndex();
 		return schemaFilesSubjectIndex;
 	}
