@@ -1,7 +1,6 @@
 package org.inqle.core.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -13,6 +12,11 @@ public class XmlDocumentSerializer {
 
 	private static Logger log = Logger.getLogger(XmlDocumentSerializer.class);
 	
+	/**
+	 * TODO use UTF8?
+	 * @param doc
+	 * @return
+	 */
 	public static String xmlToString(Document doc) {
 		String xmlString = null;
 		OutputFormat outputFormat = new OutputFormat("XML","ISO-8859-1",true);
@@ -25,9 +29,14 @@ public class XmlDocumentSerializer {
 			serializer.asDOMSerializer();
 			serializer.serialize( doc.getDocumentElement() );
 			xmlString = new String(outputStream.toByteArray());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Unable to serialize received XML Document", e);
-			return null;
+		} finally {
+			try {
+				outputStream.close();
+			} catch (Exception e) {
+				//do not close if unable to do so
+			}
 		}
 		return xmlString;
 	}
