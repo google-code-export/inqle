@@ -52,7 +52,14 @@ public class OwlSubclassLookup {
 			return sparql;
 		}
 
-	
+	/**
+	 * This is hardcoded to query on the default graph (model) only
+	 * TODO handle named graphs for this query
+	 * @param searchTerm
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
 	public static String getSparqlSearchSkosSubjects(String searchTerm, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
@@ -62,7 +69,8 @@ public class OwlSubclassLookup {
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"PREFIX skos: <" + RDF.SKOS + ">\n" +
 			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
-			"{ GRAPH ?g {\n" +
+			"WHERE {" +
+//			"{ GRAPH ?g {\n" +
 			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
 		". FILTER ( isURI(?URI) ) \n";	
 		sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
@@ -70,7 +78,7 @@ public class OwlSubclassLookup {
 		sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
-			"} } ORDER BY DESC(?Score) \n" +
+			"} ORDER BY DESC(?Score) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
 	}
