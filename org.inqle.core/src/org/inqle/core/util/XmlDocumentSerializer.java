@@ -17,6 +17,7 @@ public class XmlDocumentSerializer {
 	 * @param doc
 	 * @return
 	 */
+	@Deprecated
 	public static String xmlToString(Document doc) {
 		String xmlString = null;
 		OutputFormat outputFormat = new OutputFormat("XML","ISO-8859-1",true);
