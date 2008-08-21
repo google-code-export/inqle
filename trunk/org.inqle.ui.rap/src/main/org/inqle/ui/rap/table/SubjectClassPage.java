@@ -295,11 +295,12 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		}
 		TableItem selectedItem = selectedItems[0];
 		Map<String, String> selectedItemVals = (Map<String, String>)selectedItem.getData();
-		log.info("getting val for " + uriFieldName + "...");
+		
 		String val = selectedItemVals.get(uriFieldName);
 		if (val != null) {
 			val = val.trim();
 		}
+		log.info("getting val for " + uriFieldName + " = " + val);
 		return val;
 	}
 	

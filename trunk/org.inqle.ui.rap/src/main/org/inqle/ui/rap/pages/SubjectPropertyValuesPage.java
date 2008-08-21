@@ -43,7 +43,7 @@ public abstract class SubjectPropertyValuesPage extends DynaWizardPage {
 	public void onEnterPageFromPrevious() {
 		log.info("Entering SubjectPropertyValuesPage...");
 		String currentSubjectClassUri = getSubjectUri();
-		if (subjectClassUri.equals(currentSubjectClassUri)) {
+		if (currentSubjectClassUri.equals(subjectClassUri)) {
 			return;
 		}
 		subjectClassUri = currentSubjectClassUri;
