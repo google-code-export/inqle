@@ -87,9 +87,9 @@ public class LookupServlet extends HttpServlet {
 		if (searchTermForDataSubjectClass != null) {
 			
 //			//this looks up only sublcasses of DataSubject
-//			String matchingClassesXml = OwlSubclassLookup.lookupSubclasses(searchTermForDataSubjectClass, RDF.DATA_SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+//			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, RDF.DATA_SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			//this looks up all RDF classes
-			String matchingClassesXml = OwlSubclassLookup.lookupSubclasses(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 
 			respondOK(matchingClassesXml);
 			return;
@@ -99,7 +99,7 @@ public class LookupServlet extends HttpServlet {
 		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
 		if (searchTermForRdfClass != null) {
 			
-			String matchingClassesXml = OwlSubclassLookup.lookupSubclasses(searchTermForRdfClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForRdfClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			respondOK(matchingClassesXml);
 			return;
 		}
@@ -107,7 +107,7 @@ public class LookupServlet extends HttpServlet {
 		String propertiesForClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_PROPERTIES_OF_SUBJECT);
 		if (searchTermForRdfClass != null) {
 			
-			String matchingPropertiesXml = OwlPropertyLookup.lookupAllDataProperties(propertiesForClass, countResults, startIndex);
+			String matchingPropertiesXml = PropertyLookup.lookupAllDataProperties(propertiesForClass, countResults, startIndex);
 			respondOK(matchingPropertiesXml);
 			return;
 		}

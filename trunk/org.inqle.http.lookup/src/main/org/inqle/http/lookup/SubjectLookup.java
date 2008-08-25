@@ -13,9 +13,9 @@ import org.inqle.data.rdf.jenabean.Persister;
 import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 
-public class OwlSubclassLookup {
+public class SubjectLookup {
 
-	private static final Logger log = Logger.getLogger(OwlSubclassLookup.class);
+	private static final Logger log = Logger.getLogger(SubjectLookup.class);
 	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 	
 	/**
