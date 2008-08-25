@@ -1,12 +1,7 @@
 package org.inqle.ui.rap.table;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.observable.list.WritableList;
@@ -24,17 +19,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.SparqlXmlUtil;
-import org.inqle.core.util.XmlDocumentSerializer;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 import org.inqle.data.rdf.jena.uri.UriMapper;
-import org.inqle.data.rdf.jena.uri.UriMapping;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.http.lookup.OwlSubclassLookup;
+import org.inqle.http.lookup.LookupInfo;
+import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.CreateOwlInstanceAction;
+import org.inqle.ui.rap.CreateSubclassAction;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
@@ -202,18 +194,18 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			table.deselectAll();
 //			OntModel ontModel = ModelFactory.createOntologyModel();
 //			OntClass ontClass = ontModel.createClass(RDF.DATA_SUBJECT);
-//			AResourceDialog resourceDialog = new AResourceDialog(selfComposite.getShell(), ontClass);
+//			AOntResourceDialog resourceDialog = new AOntResourceDialog(selfComposite.getShell(), ontClass);
 //			resourceDialog.open();
 //			if (resourceDialog.getReturnCode() == Window.OK) {
 //				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
 //			}
 
-			CreateOwlInstanceAction createOwlInstanceAction = new CreateOwlInstanceAction(
+			CreateSubclassAction createSubclassAction = new CreateSubclassAction(
 					selfComposite.getShell(), 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 					RDF.DATA_SUBJECT);
-			createOwlInstanceAction.run();
-			this.createdUri = createOwlInstanceAction.getNewUri();
+			createSubclassAction.run();
+			this.createdUri = createSubclassAction.getNewUri();
 			selectCreatedClassButton.setText(createdUri);
 			selectCreatedClassButton.setSelection(true);
 			selectNewSubjectLabel.setVisible(true);
@@ -228,7 +220,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			log.info("Clicked search button");
 
 			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
-			String localDataSubjectXml = OwlSubclassLookup.lookupSubclasses(
+			String localDataSubjectXml = SubjectLookup.lookupSubclasses(
 					getSearchTextValue(), 
 					null, 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
@@ -238,7 +230,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Document localDataSubjectDocument = XmlDocumentUtil.getDocument(localDataSubjectXml);;
 
 			//this looks up all RDF classes
-			String localRdfClassXml = OwlSubclassLookup.lookupSubclassesInSchemaFiles(
+			String localRdfClassXml = SubjectLookup.lookupSubclassesInSchemaFiles(
 					getSearchTextValue(), 
 					10, 
 					0);
@@ -252,21 +244,27 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		//do the search
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
-			Document remoteDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-			log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteDocument));
+			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+			log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
 			
 			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
-			log.info("Merged 2 documents into:\n" + XmlDocumentSerializer.xmlToString(mergedDocument));
+			log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
 			
 			//if insufficient results, do an additional query of the remote RDF Schema datafiles
 			if (SparqlXmlUtil.countResults(mergedDocument) <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
 				log.info("Doing remote RDF classes lookup...");
 				params = new HashMap<String, String>();
 				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
-				Document remoteRdfClassesDocument = Requestor.retrieveXml(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-				log.info("Received Document object:\n" + XmlDocumentSerializer.xmlToString(remoteRdfClassesDocument));
+				Document remoteRdfClassesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+				log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
 				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
 			}
+			
+			//lookup subject info from UMBEL subject service
+			params = new HashMap<String, String>();
+			params.put(LookupInfo.UMBEL_MODE_PARAM, LookupInfo.UMBEL_MODE_ALL);
+			params.put(LookupInfo.UMBEL_SEARCH_PARAM, getSearchTextValue());
+			Document umbelSearchDocument = Requestor.retrieveXmlViaGet(LookupInfo.UMBEL_SUBJECT_URL, params);
 			
 			
 			setXmlDocument(mergedDocument);

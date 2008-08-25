@@ -17,6 +17,7 @@ import org.inqle.data.rdf.jena.uri.UriMapper;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntResource;
  
 /**
  * This dialog is intended to be used anywhere in the app, to create new resources 
@@ -27,9 +28,8 @@ import com.hp.hpl.jena.ontology.OntClass;
  * @author David Donohue
  * Jul 23, 2008
  */
-public abstract class AResourceDialog extends Dialog {
-    //private Button saveButton;
-		protected OntClass ontClass;
+public abstract class AOntResourceDialog extends Dialog {
+
 		protected Text messageText;
 //		private Text labelText;
 //		private Text uriText;
@@ -39,16 +39,23 @@ public abstract class AResourceDialog extends Dialog {
 		protected TextFieldShower commentTextField;
 //		private String messageString;
 		
-		private static Logger log = Logger.getLogger(AResourceDialog.class);
+		private static Logger log = Logger.getLogger(AOntResourceDialog.class);
 		
 		/**
 		 * @param parentShell
 		 * @param ontClass upon saving this data, it will be created as a new instance of this ontClass
 		 */
-		public AResourceDialog(Shell parentShell, OntClass ontClass) {
-      super(parentShell);
-      this.ontClass = ontClass;
-    }
+//		public AOntResourceDialog(Shell parentShell, OntClass ontClass) {
+//      super(parentShell);
+//      this.ontClass = ontClass;
+//    }
+		
+		/**
+		 * ontClass is the super class, to be used for creating this OntResource
+		 */
+		protected AOntResourceDialog(Shell parentShell) {
+			super(parentShell);
+		}
 		
     protected Control createDialogArea(Composite parent) {
       Composite container = (Composite) super.createDialogArea(parent);
@@ -107,7 +114,7 @@ public abstract class AResourceDialog extends Dialog {
 						SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.WRAP
 				);
 			} catch (Exception e) {
-				log.error("Error running AResourceDialog.createDialogArea()", e);
+				log.error("Error running AOntResourceDialog.createDialogArea()", e);
 			}
 //        commentTextField.setSize(new Point(500, 500));
 //        gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -156,13 +163,24 @@ public abstract class AResourceDialog extends Dialog {
 		 * Default implementation creates a new individual of the OntClass ontClass,
 		 * and adds label & comment properties
 		 */
-		protected void createRdf() {
-			//create the RDF Individual, adding the label and comment
-    	Individual individual = ontClass.createIndividual(getUri());
-    	individual.addProperty(RDF.LABEL_PROPERTY, getLabel());
-    	individual.addProperty(RDF.COMMENT_PROPERTY, getComment());
+		protected OntResource createRdf() {
+			//create the RDF OntResource
+//    	Individual individual = ontClass.createIndividual(getUri());
+    	OntResource ontResource = createOntResource();
+    	
+    	//add the label and comment
+    	ontResource.addProperty(RDF.LABEL_PROPERTY, getLabel());
+    	ontResource.addProperty(RDF.COMMENT_PROPERTY, getComment());
+    	return ontResource;
 		}
 
+		/**
+		 * Create the OntResource, to be decorated with the label and comment.
+		 * Will likely need to use the method getUri() to retrieve the URI of the OntResource.
+		 * @return
+		 */
+    protected abstract OntResource createOntResource();
+    
 		private boolean validate() {
 			if (! UriMapper.isUri(getUri())) {
 				setMessage(getUri() + " is not a valid URI.");

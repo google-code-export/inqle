@@ -21,11 +21,11 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
- * This action opens the AResourceDialog.  If user submits a new Resource, this 
+ * This action opens the AOntResourceDialog.  If user submits a new Resource, this 
  * action then sets the new Resource as a subclass of owlClassUri.  
  * It then adds any new statements to the model.
  */
-public class CreateOwlInstanceAction extends Action {
+public class CreateSubclassAction extends Action {
 	
 //	private final IWorkbenchWindow window;
 	//private int instanceNum = 0;
@@ -43,7 +43,7 @@ public class CreateOwlInstanceAction extends Action {
 
 	private String newUri;
 	
-	private static final Logger log = Logger.getLogger(CreateOwlInstanceAction.class);
+	private static final Logger log = Logger.getLogger(CreateSubclassAction.class);
 	
 	/**
 	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
@@ -53,8 +53,8 @@ public class CreateOwlInstanceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri
 	 */
-	public CreateOwlInstanceAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
-		log.trace("Create CreateOwlInstanceAction");
+	public CreateSubclassAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
+		log.trace("Create CreateSubclassAction");
 		this.shell = shell;
 		Persister persister = Persister.getInstance();
 		this.model = persister.getInternalModel(internalDatasetRoleId);
@@ -71,8 +71,8 @@ public class CreateOwlInstanceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri
 	 */
-	public CreateOwlInstanceAction(Shell shell, Model model, String owlClassUri) {
-		log.trace("Create CreateOwlInstanceAction");
+	public CreateSubclassAction(Shell shell, Model model, String owlClassUri) {
+		log.trace("Create CreateSubclassAction");
 		this.shell = shell;
 		this.model = model;
 		this.owlClassUri = owlClassUri;
@@ -112,11 +112,11 @@ public class CreateOwlInstanceAction extends Action {
 				params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(newStatements));
 				params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
 				log.info("posting data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");
-				boolean success = Requestor.postData(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, new PrintWriter(System.out));
+				boolean success = Requestor.sendPost(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, new PrintWriter(System.out));
 				log.info("...success? " + success);
 			}
 		}	catch (Exception e) {
-			log.error("Error running AResourceDialog", e);
+			log.error("Error running AOntResourceDialog", e);
 		}
 	}
 

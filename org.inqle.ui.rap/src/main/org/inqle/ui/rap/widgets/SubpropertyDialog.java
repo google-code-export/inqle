@@ -2,11 +2,9 @@ package org.inqle.ui.rap.widgets;
 
 
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.RDF;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
  
 /**
@@ -15,44 +13,44 @@ import com.hp.hpl.jena.ontology.OntResource;
  * @author David Donohue
  * Jul 23, 2008
  */
-public class SubclassDialog extends AOntResourceDialog {
+public class SubpropertyDialog extends AOntResourceDialog {
 
-	protected OntClass ontClass;
-	
+		private OntProperty superProperty;
+
 		/**
 		 * @param parentShell
 		 * @param ontClass upon saving this data, it will be created as a new instance of this ontClass
 		 */
-		public SubclassDialog(Shell parentShell, OntClass ontClass) {
+		public SubpropertyDialog(Shell parentShell, OntProperty superProperty) {
         super(parentShell);
-        this.ontClass = ontClass;
+        this.superProperty = superProperty;
     }
 
 		@Override
 		public String getTitle() {
-			return "Register a subclass of " + ontClass.getLocalName();
+			return "Register a new property";
 		}
 		
 		@Override
 		public String getMessage() {
-			return "As you fill in the form below, you are registering a new type of " + ontClass.getLocalName() + ".\n" +
-					"That is, you are registering a new subclass of this Semantic class:\n" +
-					"URI: " + ontClass.getURI()+ "\n" +
-					"Name: " + ontClass.getLocalName()+ "\n" +
-					"Description: " + ontClass.getComment("EN")+ "\n\n" +
-					"Upon registering this type, your INQLE server will be able to import and work with data objects \n" +
+			return "As you fill in the form below, you are registering a new type of property.\n" +
+					"Specifically, you are registering a new subclass of this Semantic class:\n" +
+					"URI: " + superProperty.getURI()+ "\n" +
+					"Name: " + superProperty.getLocalName()+ "\n" +
+					"Description: " + superProperty.getComment("EN")+ "\n\n" +
+					"Upon registering this type of property, your INQLE server will be able to import and work with data objects \n" +
 					"of this type.";
 		}
 
 		@Override
 		public String getUriLabel() {
-			return "Type URI";
+			return "Property URI";
 		}
 		
 		@Override
 		public String getUriDetail() {
-			return "Enter the Universal Resource Identifier (URI) of this type of\n" + ontClass.getLocalName() + "\n" +
-					"Example: http://my-institution-name.org/EmotionalState";
+			return "Enter the Universal Resource Identifier (URI) of this property.\n" +
+					"Example: http://my-institution-name.org/hasEmotionalState";
 		}
 		
 		@Override
@@ -62,7 +60,7 @@ public class SubclassDialog extends AOntResourceDialog {
 		
 		@Override
 		public String getNameDetail() {
-			return "Enter a common name for this type.  We recommend you capitalize \n" +
+			return "Enter a common name for this property.  We recommend you capitalize \n" +
 					"the name and use the singular form.\n" +
 					"Example: Emotional State";
 		}
@@ -74,7 +72,7 @@ public class SubclassDialog extends AOntResourceDialog {
 		
 		@Override
 		public String getDescriptionDetail() {
-			return "Enter a description about this " + ontClass.getLocalName() + "\n" +
+			return "Enter a description about this " + superProperty.getLocalName() + "\n" +
 					"We recommend you include synonyms of your concept, such that it is \n" +
 					"easier to find when searching for it.";
 		}
@@ -85,11 +83,9 @@ public class SubclassDialog extends AOntResourceDialog {
 		 * and adds label & comment properties
 		 */
 		protected OntResource createOntResource() {
-			OntModel ontModel = (OntModel)ontClass.getModel();
-			OntClass newSubclass = ontModel.createClass(getUri());
-			newSubclass.setSuperClass(ontClass);
-    	return newSubclass;
+			OntModel ontModel = (OntModel)superProperty.getModel();
+			OntProperty newSubproperty = ontModel.createOntProperty(getUri());
+			newSubproperty.setSuperProperty(superProperty);
+    	return newSubproperty;
 		}
-
 }
-
