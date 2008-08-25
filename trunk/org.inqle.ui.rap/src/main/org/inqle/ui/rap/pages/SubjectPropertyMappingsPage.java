@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
-import org.inqle.http.lookup.OwlPropertyLookup;
+import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvImporterWizard;
 import org.inqle.ui.rap.csv.CsvImporter;
@@ -49,7 +49,7 @@ public abstract class SubjectPropertyMappingsPage extends DynaWizardPage {
 			return;
 		}
 		subjectClassUri = currentSubjectClassUri;
-		String propertiesXml = OwlPropertyLookup.lookupAllDataProperties(
+		String propertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				10, 
 				0);
@@ -73,9 +73,9 @@ public abstract class SubjectPropertyMappingsPage extends DynaWizardPage {
 		CsvImporter csvImporter = getCsvImporter();
 		String[] headers = csvImporter.getHeaders();
 		for (Map<String, String> row: rowValues) {
-			String uri = row.get(OwlPropertyLookup.QUERY_HEADER_URI);
-			String label = row.get(OwlPropertyLookup.QUERY_HEADER_LABEL);
-			String comment = row.get(OwlPropertyLookup.QUERY_HEADER_COMMENT);
+			String uri = row.get(PropertyLookup.QUERY_HEADER_URI);
+			String label = row.get(PropertyLookup.QUERY_HEADER_LABEL);
+			String comment = row.get(PropertyLookup.QUERY_HEADER_COMMENT);
 			DropdownFieldShower dropdownFieldShower = new DropdownFieldShower(
 					selfComposite,
 					headers,
