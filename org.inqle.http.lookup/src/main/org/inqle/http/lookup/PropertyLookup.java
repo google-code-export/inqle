@@ -19,9 +19,9 @@ import org.inqle.data.rdf.jenabean.mapping.DataMapping;
  * @author David Donohue
  * Aug 1, 2008
  */
-public class OwlPropertyLookup {
+public class PropertyLookup {
 
-	private static final Logger log = Logger.getLogger(OwlPropertyLookup.class);
+	private static final Logger log = Logger.getLogger(PropertyLookup.class);
 	public static final Object QUERY_HEADER_URI = "Property_URI";
 	public static final Object QUERY_HEADER_LABEL = "Label";
 	public static final Object QUERY_HEADER_COMMENT = "Comment";

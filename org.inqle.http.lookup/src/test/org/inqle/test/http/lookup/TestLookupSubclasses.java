@@ -27,6 +27,7 @@ public class TestLookupSubclasses {
 	private static final String SCHEMA_FILES_DIRECTORY = "C:/workspace/InqleCentralServerFeature/dist_root/assets/rdf/schemas";
 	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 
+	private final String CLASS_URI = "http://www.geonames.org/ontology#P";
 	@Test
 	public void querySchemaFilesForSubclasses() {
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -49,12 +50,16 @@ public class TestLookupSubclasses {
 		schemaModel.setStrictMode(true);
 		queryCriteria.setSingleModel(schemaModel);
 		
-//		String sparql = OwlSubclassLookup.getSparqlSearchRdfSubclasses(SEARCH_TERM, null, 10, 0);
-		String sparql = getSparqlSearchRdfSubclasses(SEARCH_TERM, null, 10, 0);
+		String sparql = OwlSubclassLookup.getSparqlSearchRdfSubclasses(SEARCH_TERM, null, 10, 0);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesText = Queryer.selectText(queryCriteria);
 		log.info("matchingClassesXml=" + matchingClassesText);
+	}
+	
+	@Test
+	public void queryMappingsForProperties() {
+		
 	}
 
 	private IndexLARQ getSchemaFilesSubjectIndex() {
@@ -102,41 +107,8 @@ public class TestLookupSubclasses {
 		return model;
 	}
 	
-	public static String getSparqlSearchRdfSubclasses(String searchTerm, String owlClassUri, int limit, int offset) {
-		String sparql = 
-			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
-			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
-			"PREFIX owl: <" + RDF.OWL + ">\n" + 
-			"PREFIX pf: <" + RDF.PF + ">\n" + 
-			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"PREFIX skos: <" + RDF.SKOS + ">\n" +
-			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
-//			"{ GRAPH ?g {\n" +
-			"WHERE {\n" +
-//			"?URI rdf:type skos:ConceptScheme \n";
-//			"?URI rdfs:subPropertyOf rdfs:label \n";
-			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-		". FILTER ( isURI(?URI) ) \n";	
-		if (owlClassUri != null) {
-				sparql += ". ?URI rdfs:subClassOf <" + owlClassUri + "> \n";
-			} else {
-//				sparql += ". ?URI rdf:type rdfs:Class \n";
-				sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
-//				". ?type a rdf:Property }\n" +
-				". FILTER ( ! bound(?superProperty) ) \n";
-//				sparql += ". ?someInstance a ?URI \n";
-			}
-			
-		sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
-//		sparql += ". OPTIONAL { ?URI skos:prefLabel ?Label }\n" +
-//		sparql += ". OPTIONAL { ?URI ?labelProperty ?Label \n" +
-//				"    . ?labelProperty rdfs:subPropertyOf rdfs:label }\n" +
-//		sparql += ". ?URI rdfs:label ?Label \n" +
-			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
-			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
-//			"} } ORDER BY DESC(?Score) \n" +
-			"}";
-//			"LIMIT " + limit + " OFFSET " + offset;
-		return sparql;
+	@Test
+	public void queryMapping() {
+		CLASS_URI
 	}
 }

@@ -59,7 +59,15 @@ public class Requestor {
 	}
 	
 	public static boolean registerData(Map<String, String> params, Writer outWriter) {
-		return postData(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, outWriter);
+		return sendPost(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, outWriter);
+	}
+	
+	public static boolean sendPost(String urlStr, Map<String, String> params, Writer outWriter) {
+		return sendData(urlStr, "POST", params, outWriter);
+	}
+	
+	public static boolean sendGet(String urlStr, Map<String, String> params, Writer outWriter) {
+		return sendData(urlStr, "GET", params, outWriter);
 	}
 	
 	/**
@@ -69,7 +77,7 @@ public class Requestor {
 	* @param output - writes the server's response to output
 	* @throws Exception
 	*/
-	public static boolean postData(String urlStr, Map<String, String> params, Writer outWriter) {
+	public static boolean sendData(String urlStr, String method, Map<String, String> params, Writer outWriter) {
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
 		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
@@ -88,7 +96,7 @@ public class Requestor {
 		try {
 			urlc = (HttpURLConnection) url.openConnection();
 			try {
-				urlc.setRequestMethod("POST");
+				urlc.setRequestMethod(method);
 			} catch (ProtocolException e) {
 				log.error("Should never happen: HttpURLConnection does not support POST?", e);
 				return false;
@@ -140,14 +148,21 @@ public class Requestor {
 		return success;
 	}
 
+	public static Document retrieveXmlViaPost(String urlStr, Map<String, String> params) {
+		return retrieveXml(urlStr, params, "POST");
+	}
+	
+	public static Document retrieveXmlViaGet(String urlStr, Map<String, String> params) {
+		return retrieveXml(urlStr, params, "GET");
+	}
+	
 	/**
 	* Reads data from the data reader and posts it to a server via POST request.
 	* @param url - The server's address
 	* @param params - the Map of key-value pairs to send as request variables
-	* @param output - writes the server's response to output
 	* @throws Exception
 	*/
-	public static Document retrieveXml(String urlStr, Map<String, String> params) {
+	public static Document retrieveXml(String urlStr, Map<String, String> params, String method) {
 		Document document = null;
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
@@ -166,9 +181,9 @@ public class Requestor {
 		try {
 			urlc = (HttpURLConnection) url.openConnection();
 			try {
-				urlc.setRequestMethod("POST");
+				urlc.setRequestMethod(method);
 			} catch (ProtocolException e) {
-				log.error("Should never happen: HttpURLConnection does not support POST?", e);
+				log.error("HttpURLConnection does not support method: " + method, e);
 				return null;
 			}
 			
@@ -187,7 +202,7 @@ public class Requestor {
 					requestParams += key + "=" + value;
 				}
 				urlc.setRequestProperty("Content-Length", String.valueOf(requestParams.length()));
-				log.info("Sending request params of length: " + requestParams.length());
+				log.trace("Sending request params of length: " + requestParams.length());
 				OutputStreamWriter outStream = new OutputStreamWriter(new BufferedOutputStream(urlc.getOutputStream()));
 				outStream.write(requestParams);
 				outStream.close();
