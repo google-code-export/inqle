@@ -68,4 +68,8 @@ public class XmlDocumentUtil {
 		}
 		return xmlString;
 	}
+
+	public static String xmlToString(Document document) {
+		return xmlToString(document.getDocumentElement());
+	}
 }
