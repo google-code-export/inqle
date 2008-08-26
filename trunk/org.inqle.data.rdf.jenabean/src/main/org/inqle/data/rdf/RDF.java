@@ -36,8 +36,7 @@ public class RDF {
 	public static final Property COMMENT_PROPERTY = ResourceFactory.createProperty(DESCRIPTION_PREDICATE);
 	public static final String DATA_SUBJECT = INQLE + "DataSubject";
 	public static final String HAS_SUBJECT = INQLE + "subject";
-	
-	
+	public static String DATA_PROPERTY = INQLE + "DataProperty";
 	
 	/**
 	 * This method is intended to be called in cases where the URI fragment 
