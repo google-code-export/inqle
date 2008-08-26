@@ -14,6 +14,7 @@ import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.widgets.AOntResourceDialog;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.query.larq.IndexBuilderModel;
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -35,6 +36,8 @@ public abstract class ACreateOntResourceAction extends Action {
 	protected Shell shell;
 
 	protected String parentResourceUri;
+
+	private OntResource ontResource;
 	
 	private static final Logger log = Logger.getLogger(ACreateOntResourceAction.class);
 	
@@ -73,12 +76,13 @@ public abstract class ACreateOntResourceAction extends Action {
 	
 	/**
 	 * Implementations should create an OntModel and the proper type of OntResource.
-	 * Use this instance of the propert OntResource type to generate the proper
+	 * Use this instance of the property OntResource type to generate the proper
 	 * AOntResourceDialog.  Open this dialog, then if return code is OK, call registerNewRdf()
 	 */
 	public abstract void run();
 
 	protected void registerNewRdf(OntModel ontModel, AOntResourceDialog aResourceDialog) {
+		this.ontResource = aResourceDialog.getOntResource();
 		this.newUri = aResourceDialog.getUri();
 		newStatements = ontModel.difference(model);
 		log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatements));
@@ -108,5 +112,9 @@ public abstract class ACreateOntResourceAction extends Action {
 
 	public String getNewUri() {
 		return newUri;
+	}
+	
+	public OntResource getOntResource() {
+		return ontResource;
 	}
 }

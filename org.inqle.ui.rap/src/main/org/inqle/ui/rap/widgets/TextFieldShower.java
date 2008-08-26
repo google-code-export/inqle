@@ -34,7 +34,12 @@ public class TextFieldShower implements IDataFieldShower {
 	 * @param toolTipString
 	 * @param textStyle
 	 */
-	public TextFieldShower(Composite composite, String labelString, String descriptionString, String toolTipString, int textStyle) {
+	public TextFieldShower(
+			Composite composite, 
+			String labelString, 
+			String descriptionString, 
+			String toolTipString, 
+			int textStyle) {
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);

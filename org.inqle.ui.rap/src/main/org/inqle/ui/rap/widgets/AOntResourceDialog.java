@@ -38,6 +38,7 @@ public abstract class AOntResourceDialog extends Dialog {
 		protected TextFieldShower labelTextField;
 		protected TextFieldShower commentTextField;
 //		private String messageString;
+		private OntResource ontResource;
 		
 		private static Logger log = Logger.getLogger(AOntResourceDialog.class);
 		
@@ -154,7 +155,7 @@ public abstract class AOntResourceDialog extends Dialog {
     		return;
     	}
     	
-    	createRdf();
+    	this.ontResource = createRdf();
     	
     	super.okPressed();
     }
@@ -213,6 +214,10 @@ public abstract class AOntResourceDialog extends Dialog {
 		
 		public String getComment() {
 			return commentTextField.getTextValue();
+		}
+
+		public OntResource getOntResource() {
+			return ontResource;
 		}
 }
 
