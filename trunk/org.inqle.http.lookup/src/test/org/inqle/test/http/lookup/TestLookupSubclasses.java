@@ -4,10 +4,9 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.http.lookup.OwlSubclassLookup;
+import org.inqle.http.lookup.SubjectLookup;
 import org.junit.Test;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -50,7 +49,7 @@ public class TestLookupSubclasses {
 		schemaModel.setStrictMode(true);
 		queryCriteria.setSingleModel(schemaModel);
 		
-		String sparql = OwlSubclassLookup.getSparqlSearchRdfSubclasses(SEARCH_TERM, null, 10, 0);
+		String sparql = SubjectLookup.getSparqlSearchRdfSubclasses(SEARCH_TERM, null, 10, 0);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesText = Queryer.selectText(queryCriteria);
@@ -107,8 +106,8 @@ public class TestLookupSubclasses {
 		return model;
 	}
 	
-	@Test
-	public void queryMapping() {
-		CLASS_URI
-	}
+//	@Test
+//	public void queryMapping() {
+//		CLASS_URI
+//	}
 }
