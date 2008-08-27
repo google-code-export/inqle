@@ -36,7 +36,7 @@ public class PropertyLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlFindDataPropertiesAboutSubject(String subjectClassUri, int limit, int offset) {
+	public static String getSparqlFindMappedDataPropertiesAboutSubject(String subjectClassUri, int limit, int offset) {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -69,7 +69,7 @@ public class PropertyLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlFindSubjectProperties(String subjectClassUri, int limit, int offset) {
+	public static String getSparqlFindMappedSubjectProperties(String subjectClassUri, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -102,7 +102,7 @@ public class PropertyLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlFindAllProperties(String subjectClassUri, int limit, int offset) {
+	public static String getSparqlFindAllMappedProperties(String subjectClassUri, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -126,6 +126,103 @@ public class PropertyLookup {
 		return sparql;
 	}
 	
+	
+	/**
+	 * Generate SPARQL for finding properties of inqle:Data class, which themselves have inqle:subject of
+	 * the provided RDF class URI
+	 * @param searchTerm
+	 * @param subjectClassUri the URI of the subject class, which the 
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * 
+	 * TODO standardize nomenclature: inqle:Data and inqle:Subject, and use "Data" and "Subject" in method names
+	 */
+	public static String getSparqlFindDataProperties(String searchTerm, String subjectClassUri, int limit, int offset) {
+			String sparql = 
+				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+				"PREFIX owl: <" + RDF.OWL + ">\n" + 
+				"PREFIX pf: <" + RDF.PF + ">\n" + 
+				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+				"SELECT DISTINCT ?Property_URI ?Label ?Comment \n" +
+				"{\n" +
+				"GRAPH ?g {\n" +
+						"?Property_URI rdfs:subPropertyOf inqle:DataProperty . \n" +
+						"?Property_URI rdfs:domain ?DataSubjectAnonClass . \n" +
+						"?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n";
+				sparql += ". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
+				". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
+				"} } ORDER BY ASC(?Label) \n" +
+				"LIMIT " + limit + " OFFSET " + offset;
+			return sparql;
+		}
+	
+	/**
+	 * Generate SPARQL for finding properties of inqle:Subject class
+	 * @param searchTerm
+	 * @param subjectClassUri the URI of the subject class, which the 
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * 
+	 * TODO standardize nomenclature: inqle:Data and inqle:Subject, and use "Data" and "Subject" in method names
+	 * TODO add inqle:SubjectProperty and inqle:DataProperty to the RDF class.
+	 */
+	public static String getSparqlFindSubjectProperties(String searchTerm, String subjectClassUri, int limit, int offset) {
+			String sparql = 
+				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+				"PREFIX owl: <" + RDF.OWL + ">\n" + 
+				"PREFIX pf: <" + RDF.PF + ">\n" + 
+				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+				"SELECT DISTINCT ?Property_URI ?Label ?Comment \n" +
+				"{\n" +
+				"GRAPH ?g {\n" +
+						"?Property_URI rdfs:subPropertyOf inqle:SubjectProperty . \n" +
+						"?Property_URI rdfs:domain <" + subjectClassUri + "> \n";
+				sparql += ". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
+				". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
+				"} } ORDER BY ASC(?Label) \n" +
+				"LIMIT " + limit + " OFFSET " + offset;
+			return sparql;
+		}
+	
+	/**
+	 * Generate SPARQL for finding properties of inqle:Data class, which themselves have inqle:subject of
+	 * the provided RDF class URI
+	 * @param searchTerm
+	 * @param subjectClassUri the URI of the subject class, which the 
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * 
+	 * TODO standardize nomenclature: inqle:Data and inqle:Subject, and use "Data" and "Subject" in method names
+	 */
+	public static String getSparqlFindDataAndSubjectProperties(String subjectClassUri, int limit, int offset) {
+			String sparql = 
+				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+				"PREFIX owl: <" + RDF.OWL + ">\n" + 
+				"PREFIX pf: <" + RDF.PF + ">\n" + 
+				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+				"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
+				"{ GRAPH ?g { {\n" +
+						"?Property_URI rdfs:subPropertyOf inqle:DataProperty \n" +
+						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
+						". ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
+						". ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
+					"} UNION {" +
+						"?Property_URI rdfs:subPropertyOf inqle:SubjectProperty \n" +
+						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
+						". ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
+						". OPTIONAL { ?Property_URI rdfs:label ?Label } \n" +
+						". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
+				"} } } ORDER BY ASC(?Label) \n" +
+				"LIMIT " + limit + " OFFSET " + offset;
+			return sparql;
+		}
+	
 	/**
 	 * Lookup any properties of either of the following:
 	 *  * mapped subject classes, of the subjectClassUri
@@ -141,7 +238,7 @@ public class PropertyLookup {
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
-		String sparql = getSparqlFindDataPropertiesAboutSubject(subjectClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindMappedDataPropertiesAboutSubject(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
@@ -161,7 +258,7 @@ public class PropertyLookup {
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
-		String sparql = getSparqlFindSubjectProperties(subjectClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindMappedSubjectProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
@@ -179,9 +276,10 @@ public class PropertyLookup {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
-		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
-		String sparql = getSparqlFindAllProperties(subjectClassUri, countSearchResults, offset);
+//		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindDataAndSubjectProperties(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
