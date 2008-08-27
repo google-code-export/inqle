@@ -61,9 +61,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		gl = new GridLayout(3, false);
 		formComposite.setLayout(gl);
 		
-		new Label(selfComposite, SWT.NONE).setText("Create/register a new property...");
+		new Label(formComposite, SWT.NONE).setText("Create/register a new property...");
 		enterNewPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewPropertyButton.setText("Enter a new subject");
+		enterNewPropertyButton.setText("Enter a new property");
 		enterNewPropertyButton.addSelectionListener(this);
 	}
 	
