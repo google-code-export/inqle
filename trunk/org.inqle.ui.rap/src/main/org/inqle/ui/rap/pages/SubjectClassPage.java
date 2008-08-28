@@ -1,4 +1,4 @@
-package org.inqle.ui.rap.table;
+package org.inqle.ui.rap.pages;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ import org.inqle.http.lookup.LookupInfo;
 import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateSubclassAction;
-import org.inqle.ui.rap.pages.DynaWizardPage;
+import org.inqle.ui.rap.table.SparqlXmlTableLabelProvider;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
 
@@ -241,7 +241,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			log.info("Merged data subjects with classes from RDF Schema files.");
 			
 			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
-		//do the search
+			//do the search
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);

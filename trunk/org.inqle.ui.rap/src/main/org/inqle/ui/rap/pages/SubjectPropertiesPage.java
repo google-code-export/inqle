@@ -1,6 +1,7 @@
 package org.inqle.ui.rap.pages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +14,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.http.lookup.PropertyLookup;
+import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateSubclassAction;
 import org.inqle.ui.rap.CreateSubpropertyAction;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
@@ -99,12 +102,40 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		subjectClassUri = currentSubjectClassUri;
 		enterNewDataPropertyButtonLabel.setText(getEnterNewDataPropertyButtonLabel());
 		enterNewSubjectPropertyButtonLabel.setText(getEnterNewSubjectPropertyButtonLabel());
-		String propertiesXml = PropertyLookup.lookupAllDataProperties(
+		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				10, 
 				0);
-		Document propertiesDocument = XmlDocumentUtil.getDocument(propertiesXml);
-		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(propertiesDocument);
+		Document dataAndSubjectPropertiesDocument = XmlDocumentUtil.getDocument(dataAndSubjectPropertiesXml);
+		
+		String otherSubjectPropertiesXml = PropertyLookup.lookupPropertiesInSchemaFiles(
+				subjectClassUri, 
+				10, 
+				0);
+		Document otherSubjectPropertiesDocument = XmlDocumentUtil.getDocument(otherSubjectPropertiesXml);
+		
+		Document allLocalPropertiesDocument = SparqlXmlUtil.merge(dataAndSubjectPropertiesDocument, otherSubjectPropertiesDocument);
+		
+		
+		
+		log.info("Looking up remote Data & Subject properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+		//do the search
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(InqleInfo.PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT, subjectClassUri);
+		Document remoteDataAndSubjectPropertiesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
+		
+		log.info("Looking up in remote schema files properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+		//do the search
+		params = new HashMap<String, String>();
+		params.put(InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES, subjectClassUri);
+		Document remotePropertiesFromSchemaFilesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
+		
+		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
+		
+		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
+		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(allPropertiesDocument);
 		
 		makePropertyFormElements(rowValues);
 	}
