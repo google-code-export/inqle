@@ -18,11 +18,11 @@ import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyValuesPage;
+import org.inqle.ui.rap.pages.SubjectClassPage;
 import org.inqle.ui.rap.pages.SubjectPropertyValuesPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyValuesPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
-import org.inqle.ui.rap.table.SubjectClassPage;
 import org.inqle.ui.rap.table.TableSubjectClassPage;
 
 import com.hp.hpl.jena.rdf.model.Model;

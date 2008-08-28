@@ -1,5 +1,7 @@
 package org.inqle.ui.rap.table;
 
+import org.inqle.ui.rap.pages.SubjectClassPage;
+
 
 /**
  * This page permits the user to search for an RDF subject class, and to specify a new RDF subject class.
