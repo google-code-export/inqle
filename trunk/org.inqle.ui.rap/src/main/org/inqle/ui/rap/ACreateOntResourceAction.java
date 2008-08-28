@@ -27,7 +27,7 @@ public abstract class ACreateOntResourceAction extends Action {
 	
 	protected Model model;
 
-	protected Model newStatements;
+	protected Model newStatementsModel;
 
 	private IndexBuilderModel textIndexBuilder;
 
@@ -81,33 +81,36 @@ public abstract class ACreateOntResourceAction extends Action {
 	 */
 	public abstract void run();
 
-	protected void registerNewRdf(OntModel ontModel, AOntResourceDialog aResourceDialog) {
-		this.ontResource = aResourceDialog.getOntResource();
-		this.newUri = aResourceDialog.getUri();
-		newStatements = ontModel.difference(model);
-		log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatements));
+//	protected void registerNewRdf(OntModel ontModel, AOntResourceDialog aResourceDialog) {
+	protected void registerNewRdf(OntModel ontModel, OntResource ontResource) {
+//		this.ontResource = aResourceDialog.getOntResource();
+//		this.newUri = aResourceDialog.getUri();
+		this.ontResource = ontResource;
+		this.newUri = ontResource.getURI();
+		newStatementsModel = ontModel.difference(model);
+		log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatementsModel));
 		Persister persister = Persister.getInstance();
 		
 		if (textIndexBuilder != null) {
 			model.register(textIndexBuilder);
 		}
 		model.begin();
-		model.add(newStatements);
+		model.add(newStatementsModel);
 		model.commit();
 		if (textIndexBuilder != null) {
 			model.unregister(textIndexBuilder);
 		}
 		//send the new statements to the central INQLE server
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(newStatements));
+		params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(newStatementsModel));
 		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
 		log.info("posting data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");
 		boolean success = Requestor.sendPost(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, new PrintWriter(System.out));
 		log.info("...success? " + success);
 	}
 
-	public Model getNewStatements() {
-		return newStatements;
+	public Model getNewStatementsModel() {
+		return newStatementsModel;
 	}
 
 	public String getNewUri() {

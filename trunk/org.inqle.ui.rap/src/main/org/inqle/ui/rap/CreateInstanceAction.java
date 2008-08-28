@@ -55,7 +55,7 @@ public class CreateInstanceAction extends ACreateOntResourceAction {
 			aResourceDialog.open();
 			if (aResourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new instance of <" + parentResourceUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
-				registerNewRdf(ontModel, aResourceDialog);
+				registerNewRdf(ontModel, aResourceDialog.getOntResource());
 			}
 		}	catch (Exception e) {
 			log.error("Error running InstanceDialog", e);
