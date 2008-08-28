@@ -62,7 +62,9 @@ public class InqleInfo {
 
 	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
 
-	public static final String PARAM_PROPERTIES_OF_SUBJECT = "propertiesOfSubject";
+	public static final String PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT = "dsPropertiesOfSubject";
+	
+	public static final String PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES = "propertiesOfSubjectFromSchema";
 
 	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
 
