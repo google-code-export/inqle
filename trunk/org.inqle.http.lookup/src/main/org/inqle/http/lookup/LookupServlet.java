@@ -104,10 +104,24 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 		
-		String propertiesForClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_PROPERTIES_OF_SUBJECT);
-		if (searchTermForRdfClass != null) {
+		String dataAndSubjectPropertiesForClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT);
+		if (dataAndSubjectPropertiesForClass != null) {
 			
-			String matchingPropertiesXml = PropertyLookup.lookupAllDataProperties(propertiesForClass, countResults, startIndex);
+			String matchingPropertiesXml = PropertyLookup.lookupAllDataProperties(
+					dataAndSubjectPropertiesForClass, 
+					countResults, 
+					startIndex);
+			respondOK(matchingPropertiesXml);
+			return;
+		}
+		
+		String propertiesForClassFromSchemaFiles = HttpParameterParser.getParam(request, InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES);
+		if (propertiesForClassFromSchemaFiles != null) {
+			
+			String matchingPropertiesXml = PropertyLookup.lookupPropertiesInSchemaFiles(
+					propertiesForClassFromSchemaFiles, 
+					countResults, 
+					startIndex);
 			respondOK(matchingPropertiesXml);
 			return;
 		}
