@@ -27,7 +27,14 @@ import org.inqle.ui.rap.widgets.DropdownFieldShower;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
 import org.w3c.dom.Document;
 
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public abstract class SubjectPropertiesPage extends DynaWizardPage implements SelectionListener {
 
@@ -37,11 +44,15 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	protected Composite formComposite;
 
-	protected Button enterNewPropertyButton;
-
+	protected Button enterNewDataPropertyButton;
+	protected Button enterNewSubjectPropertyButton;
+	
 	protected String[] headers;
 	
 	protected List<IDataFieldShower> dataFieldShowers;
+
+	protected Label enterNewDataPropertyButtonLabel;
+	protected Label enterNewSubjectPropertyButtonLabel;
 	
 	public SubjectPropertiesPage(String title, String description) {
 		super(title, null);
@@ -61,10 +72,21 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		gl = new GridLayout(3, false);
 		formComposite.setLayout(gl);
 		
-		new Label(formComposite, SWT.NONE).setText("Create/register a new property...");
-		enterNewPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewPropertyButton.setText("Enter a new property");
-		enterNewPropertyButton.addSelectionListener(this);
+		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
+		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
+		enterNewDataPropertyButton.addSelectionListener(this);
+		new Label(formComposite, SWT.NONE).setText(
+				"These are properties that are measured, about the subject.  These DO change with time.  " +
+				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
+		
+		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
+		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
+		enterNewSubjectPropertyButton.addSelectionListener(this);
+		new Label(formComposite, SWT.NONE).setText(
+				"These are properties that identify the subject and generally do NOT change with time.  " +
+				"Examples: 'has ticker symbol', 'has country code'");
 	}
 	
 	@Override
@@ -75,6 +97,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			return;
 		}
 		subjectClassUri = currentSubjectClassUri;
+		enterNewDataPropertyButtonLabel.setText(getEnterNewDataPropertyButtonLabel());
+		enterNewSubjectPropertyButtonLabel.setText(getEnterNewSubjectPropertyButtonLabel());
 		String propertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				10, 
@@ -83,6 +107,14 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(propertiesDocument);
 		
 		makePropertyFormElements(rowValues);
+	}
+
+	private String getEnterNewSubjectPropertyButtonLabel() {
+		return "Create/register a new property of <" + subjectClassUri + ">";
+	}
+	
+	private String getEnterNewDataPropertyButtonLabel() {
+		return "Create/register a new property of data measurements about <" + subjectClassUri + ">";
 	}
 
 	/**
@@ -122,17 +154,49 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
-		if (clickedObject.equals(enterNewPropertyButton)) {
-			log.info("Clicked 'new property' button");
+		if (clickedObject.equals(enterNewDataPropertyButton)) {			
+			log.info("Clicked 'new data property' button");
 			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
 					selfComposite.getShell(), 
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
 					RDF.DATA_PROPERTY);
+			
+			//add the domain class
+			OntModel ontModel = ModelFactory.createOntologyModel();
+			OntClass domainSubject = ontModel.createClass();
+			Resource subjectResource = ResourceFactory.createResource(getSubjectUri());
+			Property subjectProperty = ResourceFactory.createProperty(RDF.HAS_SUBJECT);
+			domainSubject.addProperty(subjectProperty, subjectResource);
+			createSubpropertyAction.setDomainClass(domainSubject);
+			
+			createSubpropertyAction.run();
+			OntResource newProperty = createSubpropertyAction.getOntResource();
+			addPropertyFormItem(newProperty.getURI(), newProperty.getLabel("EN"), newProperty.getComment("EN"));
+		}
+		
+		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			
+			log.info("Clicked 'new subject property' button");
+			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
+					selfComposite.getShell(), 
+					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
+					RDF.SUBJECT_PROPERTY);
+			
+			//add the domain class
+			OntModel ontModel = ModelFactory.createOntologyModel();
+			OntClass domainSubject = ontModel.createClass(getSubjectUri());
+			createSubpropertyAction.setDomainClass(domainSubject);
+			
 			createSubpropertyAction.run();
 			OntResource newProperty = createSubpropertyAction.getOntResource();
 			addPropertyFormItem(newProperty.getURI(), newProperty.getLabel("EN"), newProperty.getComment("EN"));
 		}
 	}
 
+	/**
+	 * add the new property to the form
+	 * @param uri
+	 * @param label
+	 * @param comment
+	 */
 	protected abstract void addPropertyFormItem(String uri, String label, String comment);
 }

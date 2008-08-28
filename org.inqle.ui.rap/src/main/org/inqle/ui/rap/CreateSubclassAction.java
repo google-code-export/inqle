@@ -55,7 +55,7 @@ public class CreateSubclassAction extends ACreateOntResourceAction {
 			aResourceDialog.open();
 			if (aResourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new subclass of <" + parentResourceUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
-				registerNewRdf(ontModel, aResourceDialog);
+				registerNewRdf(ontModel, aResourceDialog.getOntResource());
 			}
 		}	catch (Exception e) {
 			log.error("Error running SubclassDialog", e);

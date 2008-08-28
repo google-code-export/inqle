@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.widgets.SubpropertyDialog;
 
+import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -24,6 +25,7 @@ public class CreateSubpropertyAction extends ACreateOntResourceAction {
 
 	
 	private static final Logger log = Logger.getLogger(CreateSubpropertyAction.class);
+	private OntClass domainClass;
 	
 	/**
 	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
@@ -54,16 +56,29 @@ public class CreateSubpropertyAction extends ACreateOntResourceAction {
 	
 	public void run() {
 		try {
-			OntModel ontModel = ModelFactory.createOntologyModel();
-			OntProperty ontProperty = ontModel.createOntProperty(parentResourceUri);
-			SubpropertyDialog aResourceDialog = new SubpropertyDialog(shell, ontProperty);
+			OntModel ontModel = null;
+			if (domainClass == null) {
+				ontModel = ModelFactory.createOntologyModel();
+			} else {
+				ontModel = domainClass.getOntModel();
+			}
+			OntProperty superOntProperty = ontModel.createOntProperty(parentResourceUri);
+			SubpropertyDialog aResourceDialog = new SubpropertyDialog(shell, superOntProperty);
 			aResourceDialog.open();
 			if (aResourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new subproperty of <" + parentResourceUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
-				registerNewRdf(ontModel, aResourceDialog);
+				OntProperty ontProperty = (OntProperty)aResourceDialog.getOntResource();
+				if (domainClass != null) {
+					ontProperty.addDomain(domainClass);
+				}
+				registerNewRdf(ontModel, ontProperty);
 			}
 		}	catch (Exception e) {
 			log.error("Error running SubpropertyDialog", e);
 		}
+	}
+
+	public void setDomainClass(OntClass domainSubject) {
+		this.domainClass = domainSubject;
 	}
 }
