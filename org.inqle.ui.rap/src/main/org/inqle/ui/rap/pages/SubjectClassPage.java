@@ -136,7 +136,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			table.removeAll();
 		}
 
-		log.info("Refreshing table...");
+		//log.info("Refreshing table...");
 
 		SparqlXmlTableLabelProvider labelProvider = new SparqlXmlTableLabelProvider();
 		labelProvider.setXmlDocument(xmlDocument);
@@ -154,7 +154,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 				log.debug("Added column: " + propertyName);
 			}
 		} else {
-			log.info("Skip adding columns");
+			//log.info("Skip adding columns");
 		}
 		TableViewer tableViewer = new TableViewer(table);
 		
@@ -190,7 +190,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
 		if (clickedObject.equals(enterNewClassButton)) {
-			log.info("Clicked 'new resource' button");
+			//log.info("Clicked 'new resource' button");
 			table.deselectAll();
 //			OntModel ontModel = ModelFactory.createOntologyModel();
 //			OntClass ontClass = ontModel.createClass(RDF.DATA_SUBJECT);
@@ -212,12 +212,12 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			selectCreatedClassButton.setVisible(true);
 		} else if (clickedObject.equals(table)) {
 			selectCreatedClassButton.setSelection(false);
-			log.info("Clicked table row.  getSubjectUri()=" + getSubjectUri());
+			//log.info("Clicked table row.  getSubjectUri()=" + getSubjectUri());
 		} else if (clickedObject.equals(selectCreatedClassButton)) {
 			table.deselectAll();
-			log.info("Clicked radio button.  getSubjectUri()=" + getSubjectUri());
+			//log.info("Clicked radio button.  getSubjectUri()=" + getSubjectUri());
 		} else {
-			log.info("Clicked search button");
+			//log.info("Clicked search button");
 
 			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
 			String localDataSubjectXml = SubjectLookup.lookupSubclasses(
@@ -226,7 +226,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 					10, 
 					0);
-			log.info("Retrieved this result set from LOCAL query:\n" + localDataSubjectXml);
+			//log.info("Retrieved this result set from LOCAL query:\n" + localDataSubjectXml);
 			Document localDataSubjectDocument = XmlDocumentUtil.getDocument(localDataSubjectXml);;
 
 			//this looks up all RDF classes
@@ -234,29 +234,29 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 					getSearchTextValue(), 
 					10, 
 					0);
-			log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
+			//log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
 			Document localRdfClassDocument = XmlDocumentUtil.getDocument(localRdfClassXml);
 			
 			Document localDocument = SparqlXmlUtil.merge(localDataSubjectDocument, localRdfClassDocument);
-			log.info("Merged data subjects with classes from RDF Schema files.");
+			//log.info("Merged data subjects with classes from RDF Schema files.");
 			
-			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+			//log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			//do the search
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-			log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
+			//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
 			
 			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
-			log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
+			//log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
 			
 			//if insufficient results, do an additional query of the remote RDF Schema datafiles
 			if (SparqlXmlUtil.countResults(mergedDocument) <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
-				log.info("Doing remote RDF classes lookup...");
+				//log.info("Doing remote RDF classes lookup...");
 				params = new HashMap<String, String>();
 				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
 				Document remoteRdfClassesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-				log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
+				//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
 				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
 			}
 			
@@ -298,7 +298,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		if (val != null) {
 			val = val.trim();
 		}
-		log.info("getting val for " + uriFieldName + " = " + val);
+		//log.info("getting val for " + uriFieldName + " = " + val);
 		return val;
 	}
 	

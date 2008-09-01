@@ -11,7 +11,7 @@ import org.inqle.ui.rap.widgets.TextFieldShower;
  * @author David Donohue
  * Aug 18, 2008
  */
-public class TableSubjectPropertyMappingsPage extends SubjectPropertyValuesPage {
+public class TableSubjectPropertyMappingsPage extends SubjectPropertyMappingsPage {
 
 	private static final String DEFAULT_TITLE = "Property Values for Each Row";
 	private static final String DEFAULT_DESCRIPTION = "Specify which column in your file should populate applicable properties.";
