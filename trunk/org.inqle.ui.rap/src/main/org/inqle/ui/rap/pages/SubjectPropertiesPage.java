@@ -10,6 +10,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -21,18 +22,15 @@ import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.CreateSubclassAction;
 import org.inqle.ui.rap.CreateSubpropertyAction;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvImporterWizard;
 import org.inqle.ui.rap.csv.CsvImporter;
-import org.inqle.ui.rap.widgets.DropdownFieldShower;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
 import org.w3c.dom.Document;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -68,55 +66,64 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	@Override
 	public void addElements() {
+		log.info("SubjectPropertiesPage.addElements...");
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
 		
 		formComposite = new Composite(selfComposite, SWT.NONE);
-		gl = new GridLayout(3, false);
+		gl = new GridLayout(2, false);
 		formComposite.setLayout(gl);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		formComposite.setLayoutData(gridData);
 		
-		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.NONE);
-		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
+		enterNewDataPropertyButtonLabel = new Label(selfComposite, SWT.NONE);
+		enterNewDataPropertyButton = new Button(selfComposite, SWT.PUSH);
 		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
 		enterNewDataPropertyButton.addSelectionListener(this);
-		new Label(formComposite, SWT.NONE).setText(
+		new Label(selfComposite, SWT.NONE).setText(
 				"These are properties that are measured, about the subject.  These DO change with time.  " +
 				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
 		
-		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
-		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
+		enterNewSubjectPropertyButtonLabel = new Label(selfComposite, SWT.NONE);
+		enterNewSubjectPropertyButton = new Button(selfComposite, SWT.PUSH);
 		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
 		enterNewSubjectPropertyButton.addSelectionListener(this);
-		new Label(formComposite, SWT.NONE).setText(
+		new Label(selfComposite, SWT.NONE).setText(
 				"These are properties that identify the subject and generally do NOT change with time.  " +
 				"Examples: 'has ticker symbol', 'has country code'");
+		onEnterPageFromPrevious();
 	}
 	
 	@Override
 	public void onEnterPageFromPrevious() {
-		log.info("Entering SubjectPropertyMappingsPage...");
+		log.info("Entering SubjectPropertiesPage...Control created?" + this.isCurrentPage());
+		if (enterNewDataPropertyButtonLabel==null || enterNewSubjectPropertyButtonLabel == null) {
+			log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
+			return;
+		}
 		String currentSubjectClassUri = getSubjectUri();
-		if (subjectClassUri == null || subjectClassUri.equals(currentSubjectClassUri)) {
+		log.info("currentSubjectClassUri=" + currentSubjectClassUri);
+		if (currentSubjectClassUri == null || currentSubjectClassUri.equals(subjectClassUri)) {
 			return;
 		}
 		subjectClassUri = currentSubjectClassUri;
 		enterNewDataPropertyButtonLabel.setText(getEnterNewDataPropertyButtonLabel());
 		enterNewSubjectPropertyButtonLabel.setText(getEnterNewSubjectPropertyButtonLabel());
+		
+		log.info("lookup properties from 4 places...");
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				10, 
 				0);
 		Document dataAndSubjectPropertiesDocument = XmlDocumentUtil.getDocument(dataAndSubjectPropertiesXml);
-		
+		log.info("dataAndSubjectPropertiesXml=" + dataAndSubjectPropertiesXml);
 		String otherSubjectPropertiesXml = PropertyLookup.lookupPropertiesInSchemaFiles(
 				subjectClassUri, 
 				10, 
 				0);
 		Document otherSubjectPropertiesDocument = XmlDocumentUtil.getDocument(otherSubjectPropertiesXml);
-		
+		log.info("otherSubjectPropertiesDocument=" + otherSubjectPropertiesDocument);
 		Document allLocalPropertiesDocument = SparqlXmlUtil.merge(dataAndSubjectPropertiesDocument, otherSubjectPropertiesDocument);
-		
-		
 		
 		log.info("Looking up remote Data & Subject properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 		//do the search
@@ -130,7 +137,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		params = new HashMap<String, String>();
 		params.put(InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES, subjectClassUri);
 		Document remotePropertiesFromSchemaFilesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
+		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remotePropertiesFromSchemaFilesDocument));
 		
 		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
 		
