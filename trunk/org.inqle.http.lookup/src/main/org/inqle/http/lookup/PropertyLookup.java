@@ -239,18 +239,20 @@ public class PropertyLookup {
 				"PREFIX pf: <" + RDF.PF + ">\n" + 
 				"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 				"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
-				"{ GRAPH ?g { {\n" +
-						"?Property_URI rdfs:subPropertyOf inqle:DataProperty \n" +
-						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
-						". ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
-						". ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
-					"} UNION {" +
-						"?Property_URI rdfs:subPropertyOf inqle:SubjectProperty \n" +
-						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
-						". ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
-						". OPTIONAL { ?Property_URI rdfs:label ?Label } \n" +
-						". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
-				"} } } ORDER BY ASC(?Label) \n" +
+				"{ GRAPH ?g {\n" +
+						"{ ?Property_URI rdfs:subPropertyOf inqle:DataProperty \n" +
+//						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
+						"  . LET(?Property_Type := str(inqle:DataProperty)) \n" +
+						"  . ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
+						"  . ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
+					"} UNION {\n" +
+						"  ?Property_URI rdfs:subPropertyOf inqle:SubjectProperty \n" +
+//						"  . ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
+						"  . LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
+						"  . ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
+						"  . OPTIONAL { ?Property_URI rdfs:label ?Label } \n" +
+						"  . OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
+				"} } } ORDER BY ASC(?Property_Type) \n" +
 				"LIMIT " + limit + " OFFSET " + offset;
 			return sparql;
 		}
