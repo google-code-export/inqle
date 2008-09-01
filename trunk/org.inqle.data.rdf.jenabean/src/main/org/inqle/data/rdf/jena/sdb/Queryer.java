@@ -24,6 +24,7 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -48,7 +49,7 @@ import com.hp.hpl.jena.sdb.SDB;
 	private static QueryExecution getQueryExecution(QueryCriteria queryCriteria) {
 		Query query;
 		try {
-			query = QueryFactory.create(queryCriteria.getQuery());
+			query = QueryFactory.create(queryCriteria.getQuery(), RDF.INQLE, Syntax.syntaxARQ);
 		} catch (Exception e) {
 			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
 			return null;
