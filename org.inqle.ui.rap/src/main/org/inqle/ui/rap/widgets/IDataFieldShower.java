@@ -1,6 +1,5 @@
 package org.inqle.ui.rap.widgets;
 
-import com.hp.hpl.jena.rdf.model.RDFNode;
 
 public interface IDataFieldShower {
 	
@@ -14,4 +13,5 @@ public interface IDataFieldShower {
 
 	public void setFieldUri(String fieldUri);
 	
+	public void remove();
 }

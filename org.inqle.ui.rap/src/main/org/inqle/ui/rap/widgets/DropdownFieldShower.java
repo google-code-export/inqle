@@ -22,6 +22,13 @@ public class DropdownFieldShower implements IDataFieldShower {
 	private String fieldUri;
 	private static final Logger log = Logger.getLogger(DropdownFieldShower.class);
 	
+	public DropdownFieldShower (
+			Composite composite, 
+			String[] options, 
+			String labelString, 
+			String descriptionString) {
+		this(composite, options, labelString, descriptionString, null, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+	}
 	/**
 	 * Adds a dropdown select field to an existing composite.  Expects that composite to have a 2 column GridLayout.
 	 * A dropdown select field consists of 
@@ -35,7 +42,13 @@ public class DropdownFieldShower implements IDataFieldShower {
 	 * @param toolTipString
 	 * @param listStyle
 	 */
-	public DropdownFieldShower(Composite composite, String[] options, String labelString, String descriptionString, String toolTipString, int listStyle) {
+	public DropdownFieldShower(
+			Composite composite, 
+			String[] options, 
+			String labelString, 
+			String descriptionString, 
+			String toolTipString, 
+			int listStyle) {
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -102,6 +115,10 @@ public class DropdownFieldShower implements IDataFieldShower {
 
 	public void setFieldUri(String fieldUri) {
 		this.fieldUri = fieldUri;
+	}
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

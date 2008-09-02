@@ -19,6 +19,8 @@ public class TextFieldShower implements IDataFieldShower {
 	private Text text;
 	private Text descriptionText;
 	private String fieldUri;
+	private Label label;
+	private Label spacerLabel;
 	private static final Logger log = Logger.getLogger(TextFieldShower.class);
 	
 	/**
@@ -45,7 +47,7 @@ public class TextFieldShower implements IDataFieldShower {
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		
 		//create the controls
-		Label label = new Label(composite, SWT.NONE);
+		label = new Label(composite, SWT.NONE);
 		label.setText(labelString);
 
 //		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -58,7 +60,7 @@ public class TextFieldShower implements IDataFieldShower {
 		
 		if (descriptionString != null && descriptionString.length() > 0) {
 			//in next row, skip the label column
-			new Label(composite, SWT.NONE);
+			spacerLabel = new Label(composite, SWT.NONE);
 			
 			//add the description
 			descriptionText = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
@@ -114,5 +116,14 @@ public class TextFieldShower implements IDataFieldShower {
 		}
 		Literal literalValue = ResourceFactory.createTypedLiteral(getTextValue());
 		return literalValue;
+	}
+
+	public void remove() {
+		label.dispose();
+		text.dispose();
+		if (spacerLabel != null) {
+			spacerLabel.dispose();
+			descriptionText.dispose();
+		}
 	}
 }
