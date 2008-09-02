@@ -101,11 +101,17 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
 			return;
 		}
+		
+//		formComposite.dispose();
+//		formComposite.redraw();
+		
 		String currentSubjectClassUri = getSubjectUri();
 		log.info("currentSubjectClassUri=" + currentSubjectClassUri);
 		if (currentSubjectClassUri == null || currentSubjectClassUri.equals(subjectClassUri)) {
 			return;
 		}
+		removePropertyFormElements();
+		
 		subjectClassUri = currentSubjectClassUri;
 		enterNewDataPropertyButtonLabel.setText(getEnterNewDataPropertyButtonLabel());
 		enterNewSubjectPropertyButtonLabel.setText(getEnterNewSubjectPropertyButtonLabel());
@@ -140,8 +146,10 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remotePropertiesFromSchemaFilesDocument));
 		
 		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
-		
+				
 		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
+		log.info("Merged all results into:\n" + XmlDocumentUtil.xmlToString(allPropertiesDocument));
+
 		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(allPropertiesDocument);
 		
 		makePropertyFormElements(rowValues);
@@ -176,6 +184,15 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		}
 	}
 
+	protected void removePropertyFormElements() {
+		if (dataFieldShowers == null) {
+			return;
+		}
+		for (IDataFieldShower dataFieldShower: dataFieldShowers) {
+			dataFieldShower.remove();
+		}
+	}
+	
 	public IDataFieldShower[] getDataFields() {
 		IDataFieldShower[] dataFieldShowerArray = {};
 		return dataFieldShowers.toArray(dataFieldShowerArray);

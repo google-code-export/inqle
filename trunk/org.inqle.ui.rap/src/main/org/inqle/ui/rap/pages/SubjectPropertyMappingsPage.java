@@ -17,9 +17,7 @@ public abstract class SubjectPropertyMappingsPage extends SubjectPropertiesPage 
 			formComposite,
 			headers,
 			label,
-			comment,
-			null,
-			SWT.BORDER
+			comment
 		);
 		dropdownFieldShower.setFieldUri(uri);
 		dataFieldShowers.add(dropdownFieldShower);
