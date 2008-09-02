@@ -245,6 +245,8 @@ public class PropertyLookup {
 						"  . LET(?Property_Type := str(inqle:DataProperty)) \n" +
 						"  . ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
 						"  . ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
+						"  . OPTIONAL { ?Property_URI rdfs:label ?Label } \n" +
+						"  . OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 					"} UNION {\n" +
 						"  ?Property_URI rdfs:subPropertyOf inqle:SubjectProperty \n" +
 //						"  . ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
