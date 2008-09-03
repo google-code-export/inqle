@@ -8,8 +8,12 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -54,6 +58,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	protected Label enterNewDataPropertyButtonLabel;
 	protected Label enterNewSubjectPropertyButtonLabel;
+
+	private ScrolledComposite scrolledComposite;
 	
 	public SubjectPropertiesPage(String title, String description) {
 		super(title, null);
@@ -65,38 +71,58 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	}
 
 	@Override
-	public void addElements() {
-		log.info("SubjectPropertiesPage.addElements...");
-		GridLayout gl = new GridLayout(1, true);
-		selfComposite.setLayout(gl);
+//	public void addElements() {
+	public void createControl(Composite parent) {
+		log.info("SubjectPropertiesPage.createControl...");
 		
-		formComposite = new Composite(selfComposite, SWT.NONE);
+		scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.BORDER);
+		GridLayout gl = new GridLayout(1, true);
+		scrolledComposite.setLayout(gl);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		scrolledComposite.setLayoutData(gridData);
+//		formComposite = new Composite(formComposite, SWT.NONE);
+		formComposite = new Composite(scrolledComposite, SWT.NONE);
+		
+		scrolledComposite.setContent(formComposite);
+		
 		gl = new GridLayout(2, false);
 		formComposite.setLayout(gl);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		formComposite.setLayoutData(gridData);
 		
-		enterNewDataPropertyButtonLabel = new Label(selfComposite, SWT.NONE);
-		enterNewDataPropertyButton = new Button(selfComposite, SWT.PUSH);
+		scrolledComposite.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				Rectangle r = scrolledComposite.getClientArea();
+				scrolledComposite.setMinSize(formComposite.computeSize(r.width, SWT.DEFAULT));
+			}
+		});
+
+		
+		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
 		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
 		enterNewDataPropertyButton.addSelectionListener(this);
-		new Label(selfComposite, SWT.NONE).setText(
+		new Label(formComposite, SWT.NONE).setText(
 				"These are properties that are measured, about the subject.  These DO change with time.  " +
 				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
 		
-		enterNewSubjectPropertyButtonLabel = new Label(selfComposite, SWT.NONE);
-		enterNewSubjectPropertyButton = new Button(selfComposite, SWT.PUSH);
+		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
 		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
 		enterNewSubjectPropertyButton.addSelectionListener(this);
-		new Label(selfComposite, SWT.NONE).setText(
+		new Label(formComposite, SWT.NONE).setText(
 				"These are properties that identify the subject and generally do NOT change with time.  " +
 				"Examples: 'has ticker symbol', 'has country code'");
+		
+		setControl(scrolledComposite);
 		onEnterPageFromPrevious();
 	}
 	
 	@Override
 	public void onEnterPageFromPrevious() {
-		log.info("Entering SubjectPropertiesPage...Control created?" + this.isCurrentPage());
+		log.info("Entering SubjectPropertiesPage");
 		if (enterNewDataPropertyButtonLabel==null || enterNewSubjectPropertyButtonLabel == null) {
 			log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
 			return;
@@ -153,8 +179,16 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(allPropertiesDocument);
 		
 		makePropertyFormElements(rowValues);
+		
+		scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		formComposite.layout();
+//		scrolledComposite.pack(true);
 	}
 
+	public void addElements() {
+		//do nothing; this was handled by createControl()
+	}
+	
 	private String getEnterNewSubjectPropertyButtonLabel() {
 		return "Create/register a new property of <" + subjectClassUri + ">";
 	}
@@ -212,7 +246,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		if (clickedObject.equals(enterNewDataPropertyButton)) {			
 			log.info("Clicked 'new data property' button");
 			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
-					selfComposite.getShell(), 
+					formComposite.getShell(), 
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
 					RDF.DATA_PROPERTY);
 			
@@ -232,7 +266,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			
 			log.info("Clicked 'new subject property' button");
 			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
-					selfComposite.getShell(), 
+					formComposite.getShell(), 
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
 					RDF.SUBJECT_PROPERTY);
 			
