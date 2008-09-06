@@ -75,7 +75,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	public void createControl(Composite parent) {
 		log.info("SubjectPropertiesPage.createControl...");
 		
-		scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.BORDER);
+		scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
 		GridLayout gl = new GridLayout(1, true);
 		scrolledComposite.setLayout(gl);
 		scrolledComposite.setExpandHorizontal(true);
@@ -94,24 +94,30 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		
 		scrolledComposite.addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
-				Rectangle r = scrolledComposite.getClientArea();
-				scrolledComposite.setMinSize(formComposite.computeSize(r.width, SWT.DEFAULT));
+//				Rectangle r = scrolledComposite.getClientArea();
+//				scrolledComposite.setMinSize(formComposite.computeSize(r.width, SWT.DEFAULT));
+				scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
 
 		
-		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		
 		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
 		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
+		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewDataPropertyButton.addSelectionListener(this);
-		new Label(formComposite, SWT.NONE).setText(
-				"These are properties that are measured, about the subject.  These DO change with time.  " +
+		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.WRAP);
+		new Label(formComposite, SWT.NONE);
+		new Label(formComposite, SWT.WRAP).setText(
+				"These are properties that are measured, about the subject.  These values DO change with time.  " +
 				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
 		
-		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
 		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
 		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
+		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewSubjectPropertyButton.addSelectionListener(this);
+		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		new Label(formComposite, SWT.NONE);
 		new Label(formComposite, SWT.NONE).setText(
 				"These are properties that identify the subject and generally do NOT change with time.  " +
 				"Examples: 'has ticker symbol', 'has country code'");
