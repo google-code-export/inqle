@@ -18,8 +18,6 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public abstract class AAgentWizard extends DynaWizard implements IAgentWizard {
 
-	//protected IBasicJenabean bean;
-
 	public AAgentWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
 	}
