@@ -9,30 +9,13 @@ Require-Bundle: org.inqle.core,
  org.eclipse.rap.jface,
  org.inqle.ui.rap,
  org.inqle.data.rdf.jenabean
-Import-Package: com.hp.hpl.jena.query,
- com.hp.hpl.jena.rdf.model,
- com.hp.hpl.jena.util,
- junit.framework,
+Import-Package: com.hp.hpl.jena.rdf.model,
  org.apache.log4j,
- org.eclipse.core.commands.common,
- org.eclipse.core.databinding.conversion,
- org.eclipse.core.runtime,
- org.eclipse.jface,
  org.eclipse.jface.action,
- org.eclipse.jface.resource,
- org.eclipse.jface.util,
  org.eclipse.jface.wizard,
- org.eclipse.rwt.lifecycle,
- org.eclipse.swt,
- org.eclipse.swt.graphics,
  org.eclipse.swt.widgets,
  org.eclipse.ui,
- org.junit,
- org.junit.runner,
- org.junit.runners,
- org.osgi.framework;version="1.4.0",
- org.osgi.service.component;version="1.0.0",
- org.xml.sax
+ org.junit.runner
 Bundle-ClassPath: bin/main/,
  .
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
@@ -41,8 +24,8 @@ Eclipse-RegisterBuddy: org.inqle.core.extensions,
 Bundle-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.data.rdf.jenabean,
  org.inqle.ui.rap
-Eclipse-LazyStart: true
 Export-Package: org.inqle.agent,
+ org.inqle.agent.images,
  org.inqle.agent.rap,
  org.inqle.testing
 Eclipse-BuddyPolicy: registered
