@@ -9,7 +9,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.data.rdf.jenabean.mapping.TableMapping;
+import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.pages.AddSubjectOrFinishPage;
 import org.inqle.ui.rap.pages.AddSubjectPage;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
@@ -19,7 +20,6 @@ import org.inqle.ui.rap.pages.LoadFilePage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyValuesPage;
 import org.inqle.ui.rap.pages.SubjectClassPage;
-import org.inqle.ui.rap.pages.SubjectPropertyValuesPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyValuesPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
@@ -32,7 +32,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWizard {
+public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWizard {
 
 	public FileDataImporterWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
@@ -42,7 +42,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	Composite composite;
 	
 	private LoadFilePage loadFilePage;
-	private CsvImporter csvImporter;
+	private CsvReader csvImporter;
 	
 	private AddSubjectPage addSubjectPage;
 	
@@ -131,6 +131,14 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	
 	@Override
 	public boolean canFinish() {
+		IWizardPage[] pages = getPages();
+		if (pages.length < 1) {
+			return false;
+		}
+		IWizardPage lastPage = pages[pages.length - 1];
+		if (lastPage instanceof SaveMappingLoadDataPage) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -142,15 +150,15 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 		}
 	}
 
-	public CsvImporter getCsvImporter() {
+	public CsvReader getCsvReader() {
 		if (csvImporter == null) {
-			log.info("RRRRRRRRRRefreshing csvImporter in LoadCsvFileWizard");
-			refreshCsvImporter();
+//			log.info("RRRRRRRRRRefreshing csvImporter in LoadCsvFileWizard");
+			refreshCsvReader();
 		}
 		return csvImporter;
 	}
 
-	public void refreshCsvImporter() {
+	public void refreshCsvReader() {
 		if (loadFilePage.getUploadedFile() == null) {
 			log.error("loadFilePage.getUploadedFile()=null");
 			return;
@@ -159,8 +167,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 			log.info("Get uploaded file...");
 			File uploadedFile = loadFilePage.getUploadedFile();
 			log.info("Got file " + uploadedFile + ".  Retrieve CSV importer...");
-			//csvImporter = new CsvImporter(new FileInputStream(uploadedFile));
-			csvImporter = new CsvImporter(uploadedFile);
+			//csvImporter = new CsvReader(new FileInputStream(uploadedFile));
+			csvImporter = new CsvReader(uploadedFile);
 		} catch (Exception e) {
 			log.error("Unable to get uploaded file: " + loadFilePage.getUploadedFile());
 			//leave as null
@@ -216,8 +224,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 	}
 
 	public void addDoImportPage() {
-//		DoImportPage doImportPage = new DoImportPage();
-//		addPage(doImportPage);
+		SaveMappingLoadDataPage doImportPage = new SaveMappingLoadDataPage();
+		addPage(doImportPage);
 		getContainer().updateButtons();
 	}
 
@@ -237,6 +245,14 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvImporterWi
 			}
 		}
 		return null;
+	}
+	
+	public TableMapping getTableMapping() {
+		TableMapping tableMapping = new TableMapping();
+//		String mappedText = getCsvReader().get
+//		tableMapping.setMappedText();
+		
+		return tableMapping;
 	}
 
 }

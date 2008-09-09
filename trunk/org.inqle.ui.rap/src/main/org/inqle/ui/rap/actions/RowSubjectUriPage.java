@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.jena.uri.UriMapper;
-import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextField;
 
@@ -105,7 +105,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 //				log.info("uriSuffixColumnList is null.");
 				return;
 			}
-			CsvImporter csvImporter = getCsvImporter();
+			CsvReader csvImporter = getCsvReader();
 //			String[][] data = csvImporter.getRawData();
 //			//log.info("data= " + data);
 //			String[] headers = data[csvImporter.getHeaderIndex()];
@@ -178,9 +178,9 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		return uriSuffixColumnList.getSelectionIndex();
 	}
 	
-	private CsvImporter getCsvImporter() {
-		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
+	private CsvReader getCsvReader() {
+		ICsvReaderWizard loadCsvFileWizard = (ICsvReaderWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
-		return loadCsvFileWizard.getCsvImporter();
+		return loadCsvFileWizard.getCsvReader();
 	}
 }

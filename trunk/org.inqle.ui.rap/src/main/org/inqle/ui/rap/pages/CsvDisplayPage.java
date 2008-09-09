@@ -16,8 +16,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.inqle.ui.rap.actions.ICsvImporterWizard;
-import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.actions.ICsvReaderWizard;
+import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.table.CsvTableLabelProvider;
 
 /**
@@ -58,20 +58,20 @@ public class CsvDisplayPage extends DynaWizardPage {
 	public void refreshTableData() {
 		log.info("CsvDisplayPage.refreshTableData()...");
 		table.clearAll();
-		if (getWizard() == null || (!(getWizard() instanceof ICsvImporterWizard))) {
-			log.info("getWizard()=" + getWizard() + "; it is null or not a ICsvImporterWizard");
+		if (getWizard() == null || (!(getWizard() instanceof ICsvReaderWizard))) {
+			log.info("getWizard()=" + getWizard() + "; it is null or not a ICsvReaderWizard");
 			return;
 		}
-		log.info("getWizard()= a ICsvImporterWizard");
+		log.info("getWizard()= a ICsvReaderWizard");
 		
-		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
-		log.info("loadCsvFileWizard=" + loadCsvFileWizard);
-		loadCsvFileWizard.refreshCsvImporter();
-		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
-		log.info("csvImporter retrieved");
-		String[][] data = csvImporter.getRawData();
+		ICsvReaderWizard csvReaderWizard = (ICsvReaderWizard)getWizard();
+		log.info("loadCsvFileWizard=" + csvReaderWizard);
+		csvReaderWizard.refreshCsvReader();
+		CsvReader csvReader = csvReaderWizard.getCsvReader();
+		log.info("csvReader retrieved");
+		String[][] data = csvReader.getRawData();
 		log.info("data= " + data);
-		String[] headers = data[csvImporter.getHeaderIndex()];
+		String[] headers = data[csvReader.getHeaderIndex()];
 		
 		try {
 			//Generate the table showing the data
@@ -104,12 +104,12 @@ public class CsvDisplayPage extends DynaWizardPage {
 			tableViewer.setLabelProvider(labelProvider);
 			
 			int numToDisplay = 20;
-			int numAvailable = data.length - (csvImporter.getHeaderIndex() + 1);
+			int numAvailable = data.length - (csvReader.getHeaderIndex() + 1);
 			if (numAvailable < numToDisplay) {
 				numToDisplay = numAvailable;
 			}
 			String[][] dataToDisplay = new String[numToDisplay][];
-			System.arraycopy( data, csvImporter.getHeaderIndex() + 1, dataToDisplay, 0, numToDisplay );
+			System.arraycopy( data, csvReader.getHeaderIndex() + 1, dataToDisplay, 0, numToDisplay );
 			
 			WritableList writableListInput = new WritableList(Arrays.asList(dataToDisplay), String[].class);
 			//log.debug("getRows():" + getRows());

@@ -58,9 +58,9 @@ public class CsvPredicatesPage extends DynaWizardPage {
 		log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		CsvImporter csvImporter = loadCsvFileWizard.getCsvImporter();
 		log.info("csvImporter retrieved");
-		String[][] data = csvImporter.getRawData();
+		String[][] data = csvImporter.getCsvReader().getRawData();
 		log.info("data= " + data);
-		String[] headers = data[csvImporter.getHeaderIndex()];
+		String[] headers = data[csvImporter.getCsvReader().getHeaderIndex()];
 		
 		//set the page layout
 		//Composite parentComposite = selfComposite.getParent();
