@@ -13,7 +13,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,8 +27,8 @@ import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateSubpropertyAction;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
-import org.inqle.ui.rap.actions.ICsvImporterWizard;
-import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.actions.ICsvReaderWizard;
+import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
 import org.w3c.dom.Document;
 
@@ -214,7 +213,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	protected void makePropertyFormElements(List<Map<String, String>> rowValues) {
 		dataFieldShowers = new ArrayList<IDataFieldShower>();
-		CsvImporter csvImporter = getCsvImporter();
+		CsvReader csvImporter = getCsvReader();
 		headers = csvImporter.getHeaders();
 		for (Map<String, String> row: rowValues) {
 			String uri = row.get(PropertyLookup.QUERY_HEADER_URI);
@@ -238,9 +237,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		return dataFieldShowers.toArray(dataFieldShowerArray);
 	}
 	
-	private CsvImporter getCsvImporter() {
-		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
-		return loadCsvFileWizard.getCsvImporter();
+	private CsvReader getCsvReader() {
+		ICsvReaderWizard loadCsvFileWizard = (ICsvReaderWizard)getWizard();
+		return loadCsvFileWizard.getCsvReader();
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent arg0) {

@@ -29,6 +29,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.CsvPredicatesPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
@@ -41,8 +42,11 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
+ * 
+ * Now using FileDataImporterWizard
  */
-public class LoadCsvFileWizard extends DynaWizard implements ICsvImporterWizard {
+@Deprecated
+public class LoadCsvFileWizard extends DynaWizard implements ICsvReaderWizard {
 
 	public LoadCsvFileWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
@@ -95,37 +99,35 @@ public class LoadCsvFileWizard extends DynaWizard implements ICsvImporterWizard 
 	 */
 	@Override
 	public boolean performFinish() {
-		//Get the CsvImporter
-		CsvImporter importer = getCsvImporter();
 		
 		//show the "importing..." dialog
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Loading Data...", "Loading from file " + importer.getFile().getName() + "..." );
+		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Loading Data...", "Loading from file " + csvImporter.getCsvReader().getFile().getName() + "..." );
 		popup.open();
 		
 		//prepare the CsvImporter...
-		importer.setIdType(csvSubjectPage.getIdTypeIndex());
-		importer.setSubjectIndex(csvSubjectPage.getSubjectColumnIndex());
-		importer.setSubjectPrefix(csvSubjectPage.getSubjectPrefix());
-		importer.setSubjectClassUri(csvSubjectPage.getSubjectClassUri());
-		importer.setColumnPredicateUris(csvPredicatesPage.getPredicateUris());
+		csvImporter.setIdType(csvSubjectPage.getIdTypeIndex());
+		csvImporter.setSubjectIndex(csvSubjectPage.getSubjectColumnIndex());
+		csvImporter.setSubjectPrefix(csvSubjectPage.getSubjectPrefix());
+		csvImporter.setSubjectClassUri(csvSubjectPage.getSubjectClassUri());
+		csvImporter.setColumnPredicateUris(csvPredicatesPage.getPredicateUris());
 		
 		//do the import
-		boolean success = importer.saveStatements(saveToModel);
+		boolean success = csvImporter.saveStatements(saveToModel);
 		
 		//close the "importing..." dialog
     popup.close();
     
     //show success
     if (success) {
-    	if (importer.getCountSavedStatements() == 0) {
-    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + importer.getFile().getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
+    	if (csvImporter.getCountSavedStatements() == 0) {
+    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + csvImporter.getCsvReader().getFile().getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
     	} else {
-    		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + importer.getCountSavedStatements() + " statements, " + importer.getCountSavedRows() + " rows, from file " + importer.getFile().getName()); 
+    		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + csvImporter.getCountSavedStatements() + " statements, " + csvImporter.getCountSavedRows() + " rows, from file " + csvImporter.getCsvReader().getFile().getName()); 
     	}
     } else {
-    	String errorMessage = "Unable to load data from file " + importer.getFile().getName();
-    	if (importer.getError() != null) {
-    		errorMessage +=  "\nError=" + importer.getError().getMessage();
+    	String errorMessage = "Unable to load data from file " + csvImporter.getCsvReader().getFile().getName();
+    	if (csvImporter.getError() != null) {
+    		errorMessage +=  "\nError=" + csvImporter.getError().getMessage();
     	}
     	MessageDialog.openError(getShell(), "Error loading data", errorMessage);
     }
@@ -138,15 +140,15 @@ public class LoadCsvFileWizard extends DynaWizard implements ICsvImporterWizard 
 	}
 
 
-	public CsvImporter getCsvImporter() {
+	public CsvReader getCsvReader() {
 		if (csvImporter == null) {
 			log.info("RRRRRRRRRRefreshing csvImporter in LoadCsvFileWizard");
-			refreshCsvImporter();
+			refreshCsvReader();
 		}
-		return csvImporter;
+		return csvImporter.getCsvReader();
 	}
 
-	public void refreshCsvImporter() {
+	public void refreshCsvReader() {
 		if (loadFilePage.getUploadedFile() == null) {
 			log.error("loadFilePage.getUploadedFile()=null");
 			return;
@@ -208,6 +210,7 @@ public class LoadCsvFileWizard extends DynaWizard implements ICsvImporterWizard 
 		}
 	}
 
-
-
+	public CsvImporter getCsvImporter() {
+		return csvImporter;
+	}
 }

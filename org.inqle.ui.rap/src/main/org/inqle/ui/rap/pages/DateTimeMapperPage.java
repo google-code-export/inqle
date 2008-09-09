@@ -14,8 +14,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.inqle.ui.rap.actions.ICsvImporterWizard;
-import org.inqle.ui.rap.csv.CsvImporter;
+import org.inqle.ui.rap.actions.ICsvReaderWizard;
+import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.widgets.TextFieldShower;
 
 public class DateTimeMapperPage extends DynaWizardPage implements SelectionListener {
@@ -68,7 +68,7 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 	public void refreshTableData() {
 		try {
 			log.info("get csvImporter...");
-			CsvImporter csvImporter = getCsvImporter();
+			CsvReader csvImporter = getCsvReader();
 			log.info("csvImporter retrieved");
 			
 			String[][] data = csvImporter.getRawData();
@@ -131,10 +131,10 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		return dateColumnList.getSelectionIndex();
 	}
 	
-	private CsvImporter getCsvImporter() {
-		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
+	private CsvReader getCsvReader() {
+		ICsvReaderWizard csvReaderWizard = (ICsvReaderWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
-		return loadCsvFileWizard.getCsvImporter();
+		return csvReaderWizard.getCsvReader();
 	}
 	
 	public boolean validate() {

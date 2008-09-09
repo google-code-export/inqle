@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.ui.rap.actions.ICsvImporterWizard;
 import org.inqle.ui.rap.actions.LoadCsvFileWizard;
 import org.inqle.ui.rap.csv.CsvImporter;
 
@@ -55,9 +54,9 @@ public class CsvSubjectPage extends DynaWizardPage {
 			CsvImporter csvImporter = getCsvImporter();
 			log.info("csvImporter retrieved");
 			
-			String[][] data = csvImporter.getRawData();
+			String[][] data = csvImporter.getCsvReader().getRawData();
 			//log.info("data= " + data);
-			String[] headers = data[csvImporter.getHeaderIndex()];
+			String[] headers = data[csvImporter.getCsvReader().getHeaderIndex()];
 			idTypeList.deselectAll();
 			idTypeList.setSelection(csvImporter.getIdType());
 			
@@ -175,7 +174,7 @@ public class CsvSubjectPage extends DynaWizardPage {
 	}
 
 	private CsvImporter getCsvImporter() {
-		ICsvImporterWizard loadCsvFileWizard = (ICsvImporterWizard)getWizard();
+		LoadCsvFileWizard loadCsvFileWizard = (LoadCsvFileWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		return loadCsvFileWizard.getCsvImporter();
 	}
