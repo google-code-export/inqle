@@ -14,10 +14,10 @@ import thewebsemantic.Namespace;
  * A DataMapping can be used to import all values from a single
  * column in a CSV file.
  * 
- * For attribute mapsSubjectType, a DataMapping object can have 1 of these values:
- *  * inqle:DataSubject
+ * For attribute mapsPropertyType, a DataMapping object can have 1 of these values:
+ *  * inqle:SubjectProperty
  *    The DataMapping maps to the native subject instance, 
- *  * inqle:Data
+ *  * inqle:DataProperty
  *    The DataMapping maps to an inqle:Data instance, which is about the native subject instance
  *    
  * The attribute mapsValue is is only populated in cases where the subject has a global 
@@ -33,26 +33,19 @@ import thewebsemantic.Namespace;
 @TargetDataset(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
-
-	public static final URI MAPPING_TYPE_DATA = URI.create(RDF.DATA);
-	public static final URI MAPPING_TYPE_SUBJECT = URI.create(RDF.SUBJECT);
 	
 	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datasets.mapping";
 	private String mapsHeader;
 	private URI mapsPredicate;
-	private URI mapsSubjectType;
+	private URI mapsPropertyType;
 	
-//	private URI mapsSubjectClass;
-//	private URI mapsSubjectInstance;
-//	private URI mapsDataAboutSubjectClass;
-//	private URI mapsDataAboutSubjectInstance;
 	private Object mapsValue;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
 		s += "[mapsHeader=" + mapsHeader + "]\n";
 		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
-		s += "[mapsSubjectType=" + mapsSubjectType.toString() + "]\n";
+		s += "[mapsPropertyType=" + mapsPropertyType.toString() + "]\n";
 		s += "[mapsValue=" + mapsValue + "]\n";
 		s += "}";
 		return s;
@@ -61,7 +54,7 @@ public class DataMapping extends GlobalJenabean {
 	public void clone(DataMapping objectToBeCloned) {
 		setMapsHeader(objectToBeCloned.getMapsHeader());
 		setMapsPredicate(objectToBeCloned.getMapsPredicate());
-		setMapsSubjectType(objectToBeCloned.getMapsSubjectType());
+		setMapsPropertyType(objectToBeCloned.getMapsPropertyType());
 		setMapsValue(objectToBeCloned.getMapsValue());
 		super.clone(objectToBeCloned);
 	}
@@ -96,12 +89,12 @@ public class DataMapping extends GlobalJenabean {
 		this.mapsValue = mapsValue;
 	}
 
-	public URI getMapsSubjectType() {
-		return mapsSubjectType;
+	public URI getMapsPropertyType() {
+		return mapsPropertyType;
 	}
 
-	public void setMapsSubjectType(URI mapsSubjectType) {
-		this.mapsSubjectType = mapsSubjectType;
+	public void setMapsPropertyType(URI mapsPropertyType) {
+		this.mapsPropertyType = mapsPropertyType;
 	}
 
 }
