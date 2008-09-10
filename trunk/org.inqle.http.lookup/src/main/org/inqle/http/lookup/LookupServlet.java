@@ -87,7 +87,7 @@ public class LookupServlet extends HttpServlet {
 		if (searchTermForDataSubjectClass != null) {
 			
 //			//this looks up only sublcasses of DataSubject
-//			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, RDF.DATA_SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+//			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, RDF.SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			//this looks up all RDF classes
 			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 
