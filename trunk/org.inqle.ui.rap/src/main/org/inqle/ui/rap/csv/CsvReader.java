@@ -8,30 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVStrategy;
 import org.apache.commons.csv.writer.CSVConfig;
 import org.apache.commons.csv.writer.CSVConfigGuesser;
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
-
-import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
  * Reads a CSV file, captures header, column, and row info.
@@ -45,6 +27,8 @@ import com.hp.hpl.jena.rdf.model.Statement;
  */
 public class CsvReader {
 	
+	private static final String PREFERRED_HEADER_DELIMITER = ", ";
+
 	private CSVParser csvParser;
 	
 	private static Logger log = Logger.getLogger(CsvReader.class);
@@ -53,13 +37,6 @@ public class CsvReader {
 	 * By default, the header is the first row
 	 */
 	private int headerIndex = 0;
-	
-	/**
-	 * the string to append before the value in the subject column.
-	 * Default to UNKNOWN_SUBJECT
-	 */
-	private String subjectClassUri = RDF.UNKNOWN_SUBJECT;
-	private String subjectPrefix = subjectClassUri + "/";
 	
 	private String[][] rawData;
 	private File file;
@@ -204,5 +181,16 @@ public class CsvReader {
 	public String[] getHeaders() {
 		String[][] data = getRawData();
 		return data[getHeaderIndex()];
+	}
+
+	public String getHeaderString() {
+		String str = "";
+		int i = 0;
+		for (String header: getHeaders()) {
+			str += PREFERRED_HEADER_DELIMITER;
+			str += header;
+			i++;
+		}
+		return str;
 	}
 }

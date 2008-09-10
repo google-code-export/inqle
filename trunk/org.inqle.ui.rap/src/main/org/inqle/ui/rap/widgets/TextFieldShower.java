@@ -81,7 +81,7 @@ public class TextFieldShower implements IDataFieldShower {
 		}
 	}
 	
-	public String getTextValue() {
+	public String getValue() {
 		return text.getText();
 	}
 	
@@ -111,10 +111,10 @@ public class TextFieldShower implements IDataFieldShower {
 	 * @return
 	 */
 	public RDFNode getRDFNodeValue() {
-		if (getTextValue() == null) {
+		if (getValue() == null) {
 			return null;
 		}
-		Literal literalValue = ResourceFactory.createTypedLiteral(getTextValue());
+		Literal literalValue = ResourceFactory.createTypedLiteral(getValue());
 		return literalValue;
 	}
 

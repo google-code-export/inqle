@@ -4,11 +4,14 @@
 package org.inqle.ui.rap.actions;
 
 import java.io.File;
+import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.data.rdf.jenabean.mapping.DataMapping;
+import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.pages.AddSubjectOrFinishPage;
@@ -24,6 +27,7 @@ import org.inqle.ui.rap.pages.TableSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyValuesPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
 import org.inqle.ui.rap.table.TableSubjectClassPage;
+import org.inqle.ui.rap.widgets.IDataFieldShower;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -45,6 +49,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private CsvReader csvImporter;
 	
 	private AddSubjectPage addSubjectPage;
+	private SaveMappingLoadDataPage saveMappingLoadDataPage;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -223,9 +228,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		
 	}
 
-	public void addDoImportPage() {
-		SaveMappingLoadDataPage doImportPage = new SaveMappingLoadDataPage();
-		addPage(doImportPage);
+	public void addSaveMappingLoadDataPage() {
+		saveMappingLoadDataPage = new SaveMappingLoadDataPage();
+		addPage(saveMappingLoadDataPage);
 		getContainer().updateButtons();
 	}
 
@@ -249,9 +254,88 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	
 	public TableMapping getTableMapping() {
 		TableMapping tableMapping = new TableMapping();
-//		String mappedText = getCsvReader().get
-//		tableMapping.setMappedText();
-		
+		String headerString = getCsvReader().getHeaderString();
+		tableMapping.setMappedText(headerString);
+		tableMapping.setName(saveMappingLoadDataPage.getTableMappingName());
+		tableMapping.setDescription(saveMappingLoadDataPage.getTableMappingDescription());
+		for (int i=0; i<getPages().length; ) {
+			IWizardPage page = getPages()[i];
+			
+			if (page instanceof TableSubjectClassPage) {
+				TableSubjectClassPage subjectClassPage = (TableSubjectClassPage)page;
+				i++;
+				TableSubjectUriPage subjectUriPage = (TableSubjectUriPage)getPages()[i];
+				i++;
+				TableSubjectPropertyValuesPage propertyValuesPage = (TableSubjectPropertyValuesPage)getPages()[i];
+				i++;
+				TableSubjectPropertyMappingsPage propertyMappingsPage = (TableSubjectPropertyMappingsPage)getPages()[i];
+				String subjectClass = subjectClassPage.getSubjectUri();
+				String subjectUri = subjectUriPage.getInstanceUri();
+				SubjectMapping subjectMapping = new SubjectMapping();
+				subjectMapping.setSubjectClass(URI.create(subjectClass));
+				subjectMapping.setSubjectInstance(URI.create(subjectUri));
+				
+				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
+					if (shower.getValue()==null) continue;
+					//Create a DataMapping for each property
+					DataMapping dataMapping = new DataMapping();
+					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					dataMapping.setMapsValue(shower.getValue());
+					subjectMapping.addDataMapping(dataMapping);
+				}
+				
+				for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
+					if (shower.getValue()==null) continue;
+					//Create a DataMapping for each property
+					DataMapping dataMapping = new DataMapping();
+					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					dataMapping.setMapsHeader(shower.getValue());
+					subjectMapping.addDataMapping(dataMapping);
+				}
+				
+				tableMapping.addSubjectMapping(subjectMapping);
+			}
+
+			if (page instanceof RowSubjectClassPage) {
+				RowSubjectClassPage subjectClassPage = (RowSubjectClassPage)page;
+				i++;
+				RowSubjectUriPage subjectUriPage = (RowSubjectUriPage)getPages()[i];
+				i++;
+				RowSubjectPropertyValuesPage propertyValuesPage = (RowSubjectPropertyValuesPage)getPages()[i];
+				i++;
+				RowSubjectPropertyMappingsPage propertyMappingsPage = (RowSubjectPropertyMappingsPage)getPages()[i];
+				String subjectClass = subjectClassPage.getSubjectUri();
+				String subjectUriPrefix = subjectUriPage.getInstancePrefixUri();
+				int subjectUriType = subjectUriPage.getSubjectCreationMethodIndex();
+				String subjectHeader = subjectUriPage.getUriSuffixColumnHeader();
+				SubjectMapping subjectMapping = new SubjectMapping();
+				subjectMapping.setSubjectClass(URI.create(subjectClass));
+				subjectMapping.setSubjectUriPrefix(URI.create(subjectUriPrefix));
+				subjectMapping.setSubjectUriType(subjectUriType);
+				subjectMapping.setSubjectHeader(subjectHeader);
+				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
+					if (shower.getValue()==null) continue;
+					//Create a DataMapping for each property
+					DataMapping dataMapping = new DataMapping();
+					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					dataMapping.setMapsValue(shower.getValue());
+					subjectMapping.addDataMapping(dataMapping);
+				}
+				
+				for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
+					if (shower.getValue()==null) continue;
+					//Create a DataMapping for each property
+					DataMapping dataMapping = new DataMapping();
+					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					dataMapping.setMapsHeader(shower.getValue());
+					subjectMapping.addDataMapping(dataMapping);
+				}
+				
+				tableMapping.addSubjectMapping(subjectMapping);
+			}
+
+			i++;
+		}
 		return tableMapping;
 	}
 

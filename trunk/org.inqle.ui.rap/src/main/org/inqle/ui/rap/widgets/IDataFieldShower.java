@@ -13,5 +13,7 @@ public interface IDataFieldShower {
 
 	public void setFieldUri(String fieldUri);
 	
+	public String getValue();
+	
 	public void remove();
 }
