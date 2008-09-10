@@ -1,11 +1,11 @@
 package org.inqle.data.rdf.jenabean.mapping;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
-
-import com.hp.hpl.jena.rdf.model.Resource;
 
 /**
  * Maps data to a RDFS class.  This mapping is used for importing data
@@ -33,17 +33,18 @@ import com.hp.hpl.jena.rdf.model.Resource;
  */
 public class SubjectMapping extends GlobalJenabean {
 
-	public static final String[] URI_TYPES = {
-		"INQLE Generated (always safe)",
-		"Your prefix + Random UUID (always safe)",
-		"Your prefix + Value from specified column (gets converted into a URI-safe format)"
-	};
+//	public static final String[] URI_TYPES = {
+//		"INQLE Generated (always safe)",
+//		"Your prefix + Random UUID (always safe)",
+//		"Your prefix + Value from specified column (gets converted into a URI-safe format)"
+//	};
 	
-	private Collection<DataMapping> dataMappings;
-	private Resource subjectClass;
-	private Resource subjectInstance;
-	private Resource subjectUriPrefix;
+	private List<DataMapping> dataMappings = new ArrayList<DataMapping>();
+	private URI subjectClass;
+	private URI subjectInstance;
+	private URI subjectUriPrefix;
 	private String subjectHeader;
+	private int subjectUriType;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
@@ -70,35 +71,40 @@ public class SubjectMapping extends GlobalJenabean {
 		return subjectMapping;
 	}
 
+	public void addDataMapping(DataMapping dataMapping) {
+		dataMappings.add(dataMapping);
+	}
+	
 	public Collection<DataMapping> getDataMappings() {
 		return dataMappings;
 	}
 
 	public void setDataMappings(Collection<DataMapping> dataMappings) {
-		this.dataMappings = dataMappings;
+		this.dataMappings = new ArrayList<DataMapping>();
+		this.dataMappings.addAll(dataMappings);
 	}
 
-	public Resource getSubjectClass() {
+	public URI getSubjectClass() {
 		return subjectClass;
 	}
 
-	public void setSubjectClass(Resource subjectClass) {
+	public void setSubjectClass(URI subjectClass) {
 		this.subjectClass = subjectClass;
 	}
 
-	public Resource getSubjectInstance() {
+	public URI getSubjectInstance() {
 		return subjectInstance;
 	}
 
-	public void setSubjectInstance(Resource subjectInstance) {
+	public void setSubjectInstance(URI subjectInstance) {
 		this.subjectInstance = subjectInstance;
 	}
 
-	public Resource getSubjectUriPrefix() {
+	public URI getSubjectUriPrefix() {
 		return subjectUriPrefix;
 	}
 
-	public void setSubjectUriPrefix(Resource subjectUriPrefix) {
+	public void setSubjectUriPrefix(URI subjectUriPrefix) {
 		this.subjectUriPrefix = subjectUriPrefix;
 	}
 
@@ -108,6 +114,14 @@ public class SubjectMapping extends GlobalJenabean {
 
 	public void setSubjectHeader(String subjectHeader) {
 		this.subjectHeader = subjectHeader;
+	}
+
+	public int getSubjectUriType() {
+		return subjectUriType;
+	}
+
+	public void setSubjectUriType(int subjectUriType) {
+		this.subjectUriType = subjectUriType;
 	}
 
 }

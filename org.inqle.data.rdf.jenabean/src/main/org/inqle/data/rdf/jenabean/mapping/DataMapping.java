@@ -6,8 +6,6 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import thewebsemantic.Namespace;
 
 /**
@@ -36,15 +34,18 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 
+	public static final URI MAPPING_TYPE_DATA = URI.create(RDF.DATA);
+	public static final URI MAPPING_TYPE_SUBJECT = URI.create(RDF.SUBJECT);
+	
 	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datasets.mapping";
 	private String mapsHeader;
-	private Resource mapsPredicate;
-	private Resource mapsSubjectType;
+	private URI mapsPredicate;
+	private URI mapsSubjectType;
 	
-//	private Resource mapsSubjectClass;
-//	private Resource mapsSubjectInstance;
-//	private Resource mapsDataAboutSubjectClass;
-//	private Resource mapsDataAboutSubjectInstance;
+//	private URI mapsSubjectClass;
+//	private URI mapsSubjectInstance;
+//	private URI mapsDataAboutSubjectClass;
+//	private URI mapsDataAboutSubjectInstance;
 	private Object mapsValue;
 	
 	public String getStringRepresentation() {
@@ -52,10 +53,6 @@ public class DataMapping extends GlobalJenabean {
 		s += "[mapsHeader=" + mapsHeader + "]\n";
 		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
 		s += "[mapsSubjectType=" + mapsSubjectType.toString() + "]\n";
-//		s += "[mapsSubjectClass=" + mapsSubjectClass + "]\n";
-//		s += "[mapsSubjectInstance=" + mapsSubjectInstance + "]\n";
-//		s += "[mapsDataAboutSubjectClass=" + mapsDataAboutSubjectClass + "]\n";
-//		s += "[mapsDataAboutSubjectInstance=" + mapsDataAboutSubjectInstance + "]\n";
 		s += "[mapsValue=" + mapsValue + "]\n";
 		s += "}";
 		return s;
@@ -66,10 +63,6 @@ public class DataMapping extends GlobalJenabean {
 		setMapsPredicate(objectToBeCloned.getMapsPredicate());
 		setMapsSubjectType(objectToBeCloned.getMapsSubjectType());
 		setMapsValue(objectToBeCloned.getMapsValue());
-//		setMapsSubjectClass(objectToBeCloned.getMapsSubjectClass());
-//		setMapsSubjectInstance(objectToBeCloned.getMapsSubjectInstance());
-//		setMapsDataAboutSubjectClass(objectToBeCloned.getMapsDataAboutSubjectClass());
-//		setMapsDataAboutSubjectInstance(objectToBeCloned.getMapsDataAboutSubjectInstance());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -87,45 +80,13 @@ public class DataMapping extends GlobalJenabean {
 		this.mapsHeader = mapsText;
 	}
 
-	public Resource getMapsPredicate() {
+	public URI getMapsPredicate() {
 		return mapsPredicate;
 	}
 
-	public void setMapsPredicate(Resource mapsPredicate) {
+	public void setMapsPredicate(URI mapsPredicate) {
 		this.mapsPredicate = mapsPredicate;
 	}
-
-//	public Resource getMapsSubjectClass() {
-//		return mapsSubjectClass;
-//	}
-//
-//	public void setMapsSubjectClass(Resource mapsSubjectClass) {
-//		this.mapsSubjectClass = mapsSubjectClass;
-//	}
-//
-//	public Resource getMapsSubjectInstance() {
-//		return mapsSubjectInstance;
-//	}
-//
-//	public void setMapsSubjectInstance(Resource mapsSubjectInstance) {
-//		this.mapsSubjectInstance = mapsSubjectInstance;
-//	}
-//
-//	public Resource getMapsDataAboutSubjectClass() {
-//		return mapsDataAboutSubjectClass;
-//	}
-//
-//	public void setMapsDataAboutSubjectClass(Resource mapsDataAboutSubjectClass) {
-//		this.mapsDataAboutSubjectClass = mapsDataAboutSubjectClass;
-//	}
-//
-//	public Resource getMapsDataAboutSubjectInstance() {
-//		return mapsDataAboutSubjectInstance;
-//	}
-//
-//	public void setMapsDataAboutSubjectInstance(Resource mapsDataAboutSubjectInstance) {
-//		this.mapsDataAboutSubjectInstance = mapsDataAboutSubjectInstance;
-//	}
 
 	public Object getMapsValue() {
 		return mapsValue;
@@ -135,14 +96,12 @@ public class DataMapping extends GlobalJenabean {
 		this.mapsValue = mapsValue;
 	}
 
-	public Resource getMapsSubjectType() {
+	public URI getMapsSubjectType() {
 		return mapsSubjectType;
 	}
 
-	public void setMapsSubjectType(Resource mapsSubjectType) {
+	public void setMapsSubjectType(URI mapsSubjectType) {
 		this.mapsSubjectType = mapsSubjectType;
 	}
-
-	
 
 }
