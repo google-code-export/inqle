@@ -1,6 +1,8 @@
 package org.inqle.data.rdf.jenabean.mapping;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
@@ -26,7 +28,7 @@ public class TableMapping extends GlobalJenabean {
 
 	private String mappedText;
 	
-	private Collection<SubjectMapping> subjectMappings;
+	private List<SubjectMapping> subjectMappings = new ArrayList();
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
@@ -65,7 +67,12 @@ public class TableMapping extends GlobalJenabean {
 	}
 
 	public void setSubjectMappings(Collection<SubjectMapping> subjectMappings) {
-		this.subjectMappings = subjectMappings;
+		this.subjectMappings = new ArrayList<SubjectMapping>();
+		this.subjectMappings.addAll(subjectMappings);
+	}
+	
+	public void addSubjectMapping(SubjectMapping subjectMapping) {
+		subjectMappings.add(subjectMapping);
 	}
 
 //	public String getMappedDataSubclassId() {
