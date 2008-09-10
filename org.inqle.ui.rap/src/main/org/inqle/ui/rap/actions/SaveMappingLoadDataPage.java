@@ -11,8 +11,7 @@ public class SaveMappingLoadDataPage extends DynaWizardPage {
 	private Text nameText;
 	private Text descriptionText;
 
-	public SaveMappingLoadDataPage(String title,
-			ImageDescriptor titleImage) {
+	public SaveMappingLoadDataPage(String title, ImageDescriptor titleImage) {
 		super(title, titleImage);
 		// TODO Auto-generated constructor stub
 	}

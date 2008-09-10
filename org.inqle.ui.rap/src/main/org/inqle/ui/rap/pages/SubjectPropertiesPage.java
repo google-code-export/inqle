@@ -23,6 +23,7 @@ import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.CreateSubpropertyAction;
@@ -219,7 +220,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			String uri = row.get(PropertyLookup.QUERY_HEADER_URI);
 			String label = row.get(PropertyLookup.QUERY_HEADER_LABEL);
 			String comment = row.get(PropertyLookup.QUERY_HEADER_COMMENT);
-			addPropertyFormItem(uri, label, comment);
+			String subjectType = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_TYPE);
+			addPropertyFormItem(uri, label, comment, subjectType);
 		}
 	}
 
@@ -265,7 +267,10 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			
 			createSubpropertyAction.run();
 			OntResource newProperty = createSubpropertyAction.getOntResource();
-			addPropertyFormItem(newProperty.getURI(), newProperty.getLabel("EN"), newProperty.getComment("EN"));
+			addPropertyFormItem(newProperty.getURI(), 
+					newProperty.getLabel("EN"), 
+					newProperty.getComment("EN"),
+					RDF.DATA_PROPERTY);
 		}
 		
 		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			
@@ -282,7 +287,10 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			
 			createSubpropertyAction.run();
 			OntResource newProperty = createSubpropertyAction.getOntResource();
-			addPropertyFormItem(newProperty.getURI(), newProperty.getLabel("EN"), newProperty.getComment("EN"));
+			addPropertyFormItem(newProperty.getURI(), 
+					newProperty.getLabel("EN"), 
+					newProperty.getComment("EN"),
+					RDF.SUBJECT_PROPERTY);
 		}
 	}
 
@@ -292,5 +300,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	 * @param label
 	 * @param comment
 	 */
-	protected abstract void addPropertyFormItem(String uri, String label, String comment);
+	protected abstract void addPropertyFormItem(
+			String uri, 
+			String label, 
+			String comment,
+			String propertyTypeUri);
 }

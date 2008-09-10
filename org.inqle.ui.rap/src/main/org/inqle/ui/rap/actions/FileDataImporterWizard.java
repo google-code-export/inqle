@@ -281,6 +281,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 					DataMapping dataMapping = new DataMapping();
 					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
 					dataMapping.setMapsValue(shower.getValue());
+					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
 					subjectMapping.addDataMapping(dataMapping);
 				}
 				
@@ -290,6 +291,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 					DataMapping dataMapping = new DataMapping();
 					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
 					dataMapping.setMapsHeader(shower.getValue());
+					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
 					subjectMapping.addDataMapping(dataMapping);
 				}
 				
@@ -318,6 +320,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
 					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
 					dataMapping.setMapsValue(shower.getValue());
 					subjectMapping.addDataMapping(dataMapping);
 				}
@@ -327,6 +330,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
 					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
 					dataMapping.setMapsHeader(shower.getValue());
 					subjectMapping.addDataMapping(dataMapping);
 				}

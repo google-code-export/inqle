@@ -1,5 +1,7 @@
 package org.inqle.ui.rap.widgets;
 
+import java.net.URI;
+
 import org.apache.log4j.Logger;
 import org.eclipse.rwt.graphics.Graphics;
 import org.eclipse.swt.SWT;
@@ -21,6 +23,7 @@ public class TextFieldShower implements IDataFieldShower {
 	private String fieldUri;
 	private Label label;
 	private Label spacerLabel;
+	private String fieldSubjectType;
 	private static final Logger log = Logger.getLogger(TextFieldShower.class);
 	
 	/**
@@ -125,5 +128,12 @@ public class TextFieldShower implements IDataFieldShower {
 			spacerLabel.dispose();
 			descriptionText.dispose();
 		}
+	}
+	
+	public String getFieldPropertyType() {
+		return fieldSubjectType;
+	}
+	public void setFieldSubjectType(String fieldSubjectType) {
+		this.fieldSubjectType = fieldSubjectType;
 	}
 }
