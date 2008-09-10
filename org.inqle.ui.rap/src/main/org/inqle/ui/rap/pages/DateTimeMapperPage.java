@@ -104,7 +104,7 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 
 	public String getGlobalDateTimeString() {
 		if (selectGlobalDateTime.getSelection()) {
-			return globalDateTextShower.getTextValue();
+			return globalDateTextShower.getValue();
 		}
 		return null;
 	}

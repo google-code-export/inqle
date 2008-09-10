@@ -45,7 +45,7 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 //			newTableSubjectButton.setSelection(false);
 //			newRowSubjectButton.setSelection(false);
 			disableForm();
-			getFileDataImporterWizard().addDoImportPage();
+			getFileDataImporterWizard().addSaveMappingLoadDataPage();
 		}
 		super.widgetSelected(selectionEvent);
 	}

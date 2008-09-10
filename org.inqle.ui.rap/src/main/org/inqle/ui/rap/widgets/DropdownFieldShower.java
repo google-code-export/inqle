@@ -1,5 +1,8 @@
 package org.inqle.ui.rap.widgets;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 import org.eclipse.rwt.graphics.Graphics;
 import org.eclipse.swt.SWT;
@@ -49,6 +52,9 @@ public class DropdownFieldShower implements IDataFieldShower {
 			String descriptionString, 
 			String toolTipString, 
 			int listStyle) {
+		java.util.List<String> allOptions = new ArrayList<String>();
+		allOptions.add("");
+		allOptions.addAll(Arrays.asList(options));
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -64,7 +70,8 @@ public class DropdownFieldShower implements IDataFieldShower {
 		if (toolTipString != null) {
 			list.setToolTipText(toolTipString);
 		}
-		list.setItems(options);
+		String[] nullStr = {};
+		list.setItems(allOptions.toArray(nullStr));
 		
 		if (descriptionString != null && descriptionString.length() > 0) {
 			//in next row, skip the label column
@@ -93,8 +100,13 @@ public class DropdownFieldShower implements IDataFieldShower {
 		return list.getSelectionIndex();
 	}
 	
-	public String getSelectedValue() {
-		return list.getItem(list.getSelectionIndex());
+	public String getValue() {
+		if (list == null) return null;
+		String val = list.getItem(list.getSelectionIndex());
+		if (val == null || val.length()==0) {
+			return null;
+		}
+		return val;
 	}
 	
 	public void setSelectedIndex(int selectedIndex) {

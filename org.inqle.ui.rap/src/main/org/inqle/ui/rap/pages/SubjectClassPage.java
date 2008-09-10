@@ -193,17 +193,17 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Clicked 'new resource' button");
 			table.deselectAll();
 //			OntModel ontModel = ModelFactory.createOntologyModel();
-//			OntClass ontClass = ontModel.createClass(RDF.DATA_SUBJECT);
+//			OntClass ontClass = ontModel.createClass(RDF.SUBJECT);
 //			AOntResourceDialog resourceDialog = new AOntResourceDialog(selfComposite.getShell(), ontClass);
 //			resourceDialog.open();
 //			if (resourceDialog.getReturnCode() == Window.OK) {
-//				log.info("Created new <" + RDF.DATA_SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
+//				log.info("Created new <" + RDF.SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
 //			}
 
 			CreateSubclassAction createSubclassAction = new CreateSubclassAction(
 					selfComposite.getShell(), 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
-					RDF.DATA_SUBJECT);
+					RDF.SUBJECT);
 			createSubclassAction.run();
 			this.createdUri = createSubclassAction.getNewUri();
 			selectCreatedClassButton.setText(createdUri);

@@ -205,15 +205,15 @@ public abstract class AOntResourceDialog extends Dialog {
 		}
 		
 		public String getUri() {
-			return uriTextField.getTextValue();
+			return uriTextField.getValue();
 		}
 		
 		public String getLabel() {
-			return labelTextField.getTextValue();
+			return labelTextField.getValue();
 		}
 		
 		public String getComment() {
-			return commentTextField.getTextValue();
+			return commentTextField.getValue();
 		}
 
 		public OntResource getOntResource() {
