@@ -25,6 +25,7 @@ public class PropertyLookup {
 	public static final Object QUERY_HEADER_URI = "Property_URI";
 	public static final Object QUERY_HEADER_LABEL = "Label";
 	public static final Object QUERY_HEADER_COMMENT = "Comment";
+	public static final Object QUERY_HEADER_PROPERTY_TYPE = "Property_Type";
 	/**
 	 * Generates SPARQL, to find all properties of all instances of all 
 	 * subclasses of inqle:Data, 
