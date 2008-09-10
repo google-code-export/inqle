@@ -1,5 +1,6 @@
 package org.inqle.ui.rap.widgets;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,6 +24,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 	private List list;
 	private Text descriptionText;
 	private String fieldUri;
+	private String fieldSubjectType;
 	private static final Logger log = Logger.getLogger(DropdownFieldShower.class);
 	
 	public DropdownFieldShower (
@@ -129,8 +131,15 @@ public class DropdownFieldShower implements IDataFieldShower {
 		this.fieldUri = fieldUri;
 	}
 	public void remove() {
-		// TODO Auto-generated method stub
+		list.removeAll();
+		list.dispose();
+		descriptionText.dispose();
 		
 	}
-	
+	public String getFieldPropertyType() {
+		return fieldSubjectType;
+	}
+	public void setFieldSubjectType(String fieldSubjectType) {
+		this.fieldSubjectType = fieldSubjectType;
+	}
 }

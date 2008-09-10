@@ -12,7 +12,7 @@ public abstract class SubjectPropertyMappingsPage extends SubjectPropertiesPage 
 		super(title, description);
 	}
 
-	protected void addPropertyFormItem(String uri, String label, String comment) {
+	protected void addPropertyFormItem(String uri, String label, String comment, String propertyTypeUri) {
 		DropdownFieldShower dropdownFieldShower = new DropdownFieldShower(
 			formComposite,
 			headers,
@@ -20,6 +20,7 @@ public abstract class SubjectPropertyMappingsPage extends SubjectPropertiesPage 
 			comment
 		);
 		dropdownFieldShower.setFieldUri(uri);
+		dropdownFieldShower.setFieldSubjectType(propertyTypeUri);
 		dataFieldShowers.add(dropdownFieldShower);
 	}
 }
