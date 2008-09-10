@@ -28,7 +28,7 @@ public class TableMapping extends GlobalJenabean {
 
 	private String mappedText;
 	
-	private List<SubjectMapping> subjectMappings = new ArrayList();
+	private List<SubjectMapping> subjectMappings = new ArrayList<SubjectMapping>();
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
