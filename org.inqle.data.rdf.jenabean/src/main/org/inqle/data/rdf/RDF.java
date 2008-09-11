@@ -1,6 +1,7 @@
 package org.inqle.data.rdf;
 
 import java.net.URI;
+import java.util.UUID;
 
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
@@ -37,6 +38,7 @@ public class RDF {
 	public static final String DATA = INQLE + "Data";
 	public static final String SUBJECT = INQLE + "Subject";
 	public static final String HAS_SUBJECT = INQLE + "subject";
+	public static final String HAS_DATA = INQLE + "data";
 	public static final String DATA_PROPERTY = INQLE + "DataProperty";
 	public static final String SUBJECT_PROPERTY = INQLE + "SubjectProperty";
 	
@@ -76,5 +78,9 @@ public class RDF {
 	public static String getPrefixClause(String prefix, String uri) {
 		String str = "PREFIX " + prefix.trim() + ": <" + uri.trim() + ">\n";
 		return str;
+	}
+
+	public static String randomInstanceUri(String baseUri) {
+		return baseUri + "/" + UUID.randomUUID().toString();
 	}
 }
