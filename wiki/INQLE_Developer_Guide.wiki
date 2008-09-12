@@ -1,9 +1,14 @@
-#summary Describes how to develop for INQLE
+#summary Describes how to contribute code to INQLE
+#labels Featured
 
 ==Developing INQLE Plugins==
 The easiest way to develop code for INQLE is to provide 1 or more plugins for INQLE.  The different types of plugins that you can create for INQLE are described under Plugins_for_INQLE.  We suggest you start with this type of contribution, before trying to develop code for INQLE core.
 
-To develop INQLE plugins, you must package your code as an Eclipse Equinox jar file.  A jar file is much like a zip file, with a few rules.  Your jar file must have a folder called META-INF, and this folder must have a file called MANIFEST.MF.  Additionally, you must provide a plugin.xml file in the root of your jar file.  plugin.xml specifies the plugins you are providing.  Each plugin is represented by a single jar file.  Each jar file has a single MANIFEST.MF file and a single plugins.xml.  Each MANIFEST.MF file specifies multiple settings for your plugin.  Each plugin.xml file may contribute 1 or more plugins for 1 or more plugin types.  Additionally, plugin.xml may define new plugin types as well.
+To develop INQLE plugins, you must package your code in a folder or a jar file, and place it in your INQLE plugins folder.  On startup, INQLE will recognize your plugin and use it!
+
+If your plugin contains Java code, you will need to set up a development environment, which can make use of the Java code within INQLE.  We recommend you use [http://eclipse.org Eclipse].
+
+Your jar file must have a folder called META-INF, and this folder must have a file called MANIFEST.MF.  Additionally, you must provide a plugin.xml file in the root of your jar file.  plugin.xml specifies the plugins you are providing.  Each plugin is represented by a single jar file.  Each jar file has a single MANIFEST.MF file and a single plugins.xml.  Each MANIFEST.MF file specifies multiple settings for your plugin.  Each plugin.xml file may contribute 1 or more plugins for 1 or more plugin types.  Additionally, plugin.xml may define new plugin types as well.
 
 ==Developing on the INQLE Core==
 Writing code for core INQLE requires expertise in ~2 or more of these areas:
