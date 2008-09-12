@@ -2,13 +2,41 @@
 #labels Featured
 
 ==Developing INQLE Plugins==
-The easiest way to develop code for INQLE is to provide 1 or more plugins for INQLE.  The different types of plugins that you can create for INQLE are described under Plugins_for_INQLE.  We suggest you start with this type of contribution, before trying to develop code for INQLE core.
+The easiest way to contribute to INQLE is to provide a plugin for INQLE.  The different types of plugins that you can create for INQLE are described under Plugins_for_INQLE.  
 
-To develop INQLE plugins, you must package your code in a folder or a jar file, and place it in your INQLE plugins folder.  On startup, INQLE will recognize your plugin and use it!
+To develop INQLE plugins, you must package your files or code in a folder or a jar file, and place it in your INQLE "plugins" folder.  On startup, INQLE will recognize your plugin and use it!
 
-If your plugin contains Java code, you will need to set up a development environment, which can make use of the Java code within INQLE.  We recommend you use [http://eclipse.org Eclipse].
+All plugin folders must contain these 2 things.
+  # a file called plugin.xml, which describes all extensions and extension points that it contributes.  A plugin folder may contribute multiple extensions and/or extension points.
+  # a folder called META-INF, which contains a file called MANIFEST.MF.  MANIFEST.MF contains information about your plugin.
 
-Your jar file must have a folder called META-INF, and this folder must have a file called MANIFEST.MF.  Additionally, you must provide a plugin.xml file in the root of your jar file.  plugin.xml specifies the plugins you are providing.  Each plugin is represented by a single jar file.  Each jar file has a single MANIFEST.MF file and a single plugins.xml.  Each MANIFEST.MF file specifies multiple settings for your plugin.  Each plugin.xml file may contribute 1 or more plugins for 1 or more plugin types.  Additionally, plugin.xml may define new plugin types as well.
+So a at a minimum, a plugin might look like this
+my_plugin
+ |-plugins.xml
+ |-META_INF
+    |-MANIFEST.MF
+
+If your plugin contains Java code (most plugins do), you will need to set up a development environment, which can make use of the Java code within INQLE.  We recommend you use [http://eclipse.org Eclipse].
+
+If you intend to contribute to the INQLE user interface (most plugins do), then you will need to configure your Eclipse to use the Eclipse RAP target platform.  [http://www.eclipse.org/rap/gettingstarted.php This is described here.]
+
+To create your plugin in Eclipse, go to
+File -> New -> Project... -> Plug-In Project
+Name your project something like "org.myorg.myapp.myname".  You can keep the other settings default: 
+  * Make sure that "This plug-in is targeted to run with - Eclipse" version 3.3 or higher.
+  * If your plugin will need code to run at startup and shutdown, then you will need an activator.
+  * "This plug-in will make contributions to the UI" should be deselected.
+  * Rich Client Application: yes
+
+You will need to add the INQLE jar files (and any other third party bundles you need) to your Eclipse target platform, so that these files are available when you compile your Java code.  
+In Eclipse, go to 
+Window -> Preferences -> Plug-in Developement -> Target Platform
+Click Add... 
+Select File System, then Next.
+Click Add... and navigate to the INQLE plugins folder on your hard drive.  Select this folder and and click OK.  Now the inqle Java classes will be available to your projects.
+
+You will need to add the appropriate jar files to your project.
+Within Eclipse, open your MANIFEST.MF file and go to the dependencies tab.  Here you can add any bundle which is available to Eclipse.  You can add other bundle
 
 ==Developing on the INQLE Core==
 Writing code for core INQLE requires expertise in ~2 or more of these areas:
