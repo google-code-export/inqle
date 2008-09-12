@@ -11,10 +11,12 @@ All plugin folders must contain these 2 things.
   # a folder called META-INF, which contains a file called MANIFEST.MF.  MANIFEST.MF contains information about your plugin.
 
 So a at a minimum, a plugin might look like this
+{{{
 my_plugin
  |-plugins.xml
  |-META_INF
     |-MANIFEST.MF
+}}}
 
 If your plugin contains Java code (most plugins do), you will need to set up a development environment, which can make use of the Java code within INQLE.  We recommend you use [http://eclipse.org Eclipse].
 
@@ -35,8 +37,12 @@ Click Add...
 Select File System, then Next.
 Click Add... and navigate to the INQLE plugins folder on your hard drive.  Select this folder and and click OK.  Now the inqle Java classes will be available to your projects.
 
-You will need to add the appropriate jar files to your project.
-Within Eclipse, open your MANIFEST.MF file and go to the dependencies tab.  Here you can add any bundle which is available to Eclipse.  You can add other bundle
+You will need to add the appropriate bundles to your project.
+Within your Eclipse plug-in project, open your MANIFEST.MF file and go to the dependencies tab.  Here you can add any bundle which is available to Eclipse.  You can add other bundle.
+
+When you are ready to export your project, right click it in Eclipse and select 
+Export... -> Plug-in Development -> Deployable Plug-ins and Fragments
+and save to your inqle plugins folder.
 
 ==Developing on the INQLE Core==
 Writing code for core INQLE requires expertise in ~2 or more of these areas:
@@ -44,13 +50,12 @@ Writing code for core INQLE requires expertise in ~2 or more of these areas:
   * Equinox OSGi
   * Eclipse RCP or RAP
   * Jena RDF
-
+Please contact me (David Donohue) if you are ready to do this.
 
 ===Getting INQLE Source Code===
-We develop INQLE core using the Eclipse Integrated Development Envirement (IDE).
 To work on the INQLE core code, you must check out all INQLE bundles from the INQLE Subversion repository.  Each bundle should appear in your Eclipse IDE as a "Plug-In Project".  
 
-[http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].  You must also set up your Eclipse IDE to use the RAP 1.1 target platform or above.  
+[http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].  You must also set up your Eclipse IDE to use the RAP 1.1 or above as the target platform.  
 
 ===Building and Deploying INQLE===
 We deploy INQLE, by right clicking the InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
