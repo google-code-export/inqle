@@ -11,3 +11,4 @@ INQLE provides the following extension types
 || 
 ||Part Types || [Building_Part_Type_Plugins org.inqle.ui.rap.IPartType] || Part Types are types of things which can appear in the application's left navigation window.  Your part type will appear listed and navigable, just as Samplers, Learnng Cycles, and Agents. ||
 || Views || org.eclipse.ui.views || Views are an Eclipse concept.  They are a way to provide a page or form or report, which can be rendered in INQLE's user interface.  A View that you provide in this way will show up in the main menu, under the "Window" menu option. ||
+|| Internal Datasets || org.inqle.data.datasets || When you create an extension of this type, you are defining an internal dataset that you would like to use within INQLE.  INQLE will ensure this dataset is created upon startup.  Your plugin code can then store objects/data in this dataset, query it, etc. ||
