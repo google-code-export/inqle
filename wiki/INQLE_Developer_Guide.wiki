@@ -2,7 +2,7 @@
 #labels Featured
 
 ==Developing INQLE Plugins==
-The easiest way to contribute to INQLE is to provide a plugin for INQLE.  A plugin contains 1 or more extensions or extension types.  See Plugins_for_INQLE for the type of extensions you can contribute.  [http://www.informit.com/articles/article.aspx?p=370626&seqNum=5 Here is a discussion on Eclipse Equinox extensions and extension points.]
+The easiest way to contribute to INQLE is to provide a plugin for INQLE.  A plugin contains 1 or more extensions or extension types.  See [Plugins_for_INQLE] for the type of extensions you can contribute.  [http://www.informit.com/articles/article.aspx?p=370626&seqNum=5 Here is a discussion on Eclipse Equinox extensions and extension points.]
 
 To develop INQLE plugins, you must package your files or code in a folder or a jar file, and place it in your INQLE "plugins" folder.  On startup, INQLE will recognize your plugin and use it!
 
