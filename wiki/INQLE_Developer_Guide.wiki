@@ -2,7 +2,7 @@
 #labels Featured
 
 ==Developing INQLE Plugins==
-The easiest way to contribute to INQLE is to provide a plugin for INQLE.  The different types of plugins that you can create for INQLE are described under Plugins_for_INQLE.  
+The easiest way to contribute to INQLE is to provide a plugin for INQLE.  A plugin contains 1 or more extensions or extension types.  See Plugins_for_INQLE for the type of extensions you can contribute.  
 
 To develop INQLE plugins, you must package your files or code in a folder or a jar file, and place it in your INQLE "plugins" folder.  On startup, INQLE will recognize your plugin and use it!
 
@@ -58,4 +58,4 @@ To work on the INQLE core code, you must check out all INQLE bundles from the IN
 [http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].  You must also set up your Eclipse IDE to use the RAP 1.1 or above as the target platform.  
 
 ===Building and Deploying INQLE===
-We deploy INQLE, by right clicking the InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
+We deploy INQLE, by right clicking the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
