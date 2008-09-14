@@ -19,6 +19,7 @@ my_plugin
 }}}
 
 If your plugin contains Java code (most plugins do), you will need to set up a development environment, which can make use of the Java code within INQLE.  We recommend you use [http://eclipse.org Eclipse].
+[http://inqle.com/downloads/ The INQLE javadoc is provided for download here.]
 
 If you intend to contribute to the INQLE user interface (most plugins do), then you will need to configure your Eclipse to use the Eclipse RAP target platform.  [http://www.eclipse.org/rap/gettingstarted.php This is described here.]
 
