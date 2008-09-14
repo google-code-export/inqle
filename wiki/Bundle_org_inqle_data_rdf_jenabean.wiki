@@ -103,7 +103,7 @@ BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId)
 }}}
 
 ===2. SPARQL Querying===
-The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datamodels, of type FileDatamodel and/or DBDatamodel. Thus multiple RDF files and/or databases can be queried simultaneously.
+The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datasets, represented in a relational database and/or by a RDF data file. 
 
 *Usage:*
 Simply create a QueryCriteria object, add as many Datamodel objects as desired, add the SPARQL query, and call querySelect method
