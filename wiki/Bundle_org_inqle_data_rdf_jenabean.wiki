@@ -2,32 +2,39 @@
 
 Bundle *org.inqle.data.rdf.jenabean* is a packet of code, comprising part of INQLE's code base (see [INQLE_Architecture INQLE Architecture]).
 This bundle enables INQLE to work with semantic, RDF, data.
-It contains 2 toolkits for working with RDF data
+
+This bundle contains 2 toolkits for working with RDF data
   * [http://jena.sourceforge.net/ Jena Semantic Web Framework], maintained by [http://www.hpl.hp.com/ HP Labs] since 2000.  This framework facilitates many, many operations using RDF.  Most notably, it allows INQLE to do SPARQL Queries on RDF Databases and to bulk load RDF data from a file
   * [http://code.google.com/p/jenabean/ Jenabean] for persisting Java objects to an RDF store and reconstituting them back from the RDF object store.  We term this ability to store Java objects as RDF *Object-RDF Persistence*.
 
 = Details =
 
 ===1. Object - RDF Persistance (ORDFP)===
-Object-RDF Persistance means that Java objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [http://en.wikipedia.org/wiki/JavaBeans|Javabean standard] (class must implement Serializable, have no argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
+Object-RDF Persistance means that Java objects can be stored in an RDF database and later recreated from the database. Any object which adheres to the [http://en.wikipedia.org/wiki/JavaBeans|Javabean standard] (class must implement Serializable, have no-argument constructor, use get and set methods), can be easily persisted (stored) to the INQLE database or retrieved therefrom.
 
-Note that Jenabean (and this INQLE bundle) supports persisting javabeans which contain lists, serializable objects, other nested javabeans, primitives.
+Note that Jenabean (and this INQLE bundle) supports persisting javabeans which contain fields of any of these types:
+  * String
+  * java.util.Date
+  * java.net.URI
+  * Java primitives (int, boolean, etc.)
+  * Serializable objects
+  * other nested Jenabeans
+  * Collection of the above
+  * array of the above
 
-Examples of IPersistable which contributors might wish to create include:
-ContentPacket - to contain blog posts, discussion thread, etc. for a Content Management System plugin
+Examples of Persistable objects which contributors might wish to create include:
+BlogPost - to contain blog posts, discussion thread, etc. for a Content Management System plugin
 LaboratoryReport - to contain a set of laboratory data, from a medical study
 
-This bundle specifies these persistable classes. They map to the corresponding [http://jena.sourceforge.net/assembler/assembler-howto.html Jena Assembler] RDF class:
-  *FileModel* - contains info about a single RDF database stored in a file
-  *RDBModel* - contains information about a single RDF database stored in a relational database: its name, and its Connection
-  *Connection* - contains database connection info.
-  *AppInfo* - to contain application-specific configuration, including administrative account info, the location of the Metarepository Datamodel (i.e., the data model which contains all other Datamodel and Connection objects)
+This bundle specifies a number of Jenabeans classes, that it uses to store and retrieve datasets as Jena Models.  It also contains the AppInfo class.  AppInfo contains configuration for an INQLE server., including administrative account info, the location of the Metarepository dataset (i.e., the data model which contains infor and location of all other Dataset and Connection objects).
 
-Example of how to create, store, and load an persistable object:
+See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to create and work with Jenabeans.
 
+Example of how to create, store, and load an persistable object in INQLE:
 
-*(1) See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to best structure your class to be persisted.* Here is an example
+*(1) Create your Jenabean class.
 {{{
+@TargetDataset("org.myorg.myapp.blogPosts")
 @Namespace(RDF.INQLE)
 public class BlogPost {
 
@@ -58,7 +65,16 @@ public class BlogPost {
 
 }}}
 
-*(2) Create instance of this class.* Each persistable javabean must have a unique ID, which must be a valid URI:
+*(2) To your plugin's plugin.xml file, declare the dataset to which you want these objects to be saved.*  You can opt to save them to other datasets, but by default they will be saved to this dataset.
+{{{
+<dataset
+           id="org.myorg.myapp.blogPosts"
+           weight="1000"
+           description="contains blog posts.">
+					 cacheInMemory="false"
+			</dataset>
+}}}
+*(3) In your Java code, create instance of this class.* Each persistable javabean must have a unique ID, which must be a valid URI:
 {{{
 BlogPost blogPost = new BlogPost();
 String blogPostId = UUID.randomUUID().toString();
@@ -66,32 +82,24 @@ blogPost.setId(blogPostId);
 
 }}}
 
-*(3) Add data to this object:*
+*(4) Add data to this object:*
 {{{
 blogPost.setTitle("This is title of first blog post");
 blogPost.setBody("Here is the body of the first blog post.");
 }}}
 
-*(4) Persist this object:*
+*(5) Persist this object:*
 {{{
-//retrieve appInfo from HttpSession cache or from file or wherever
-AppInfo appInfo = session.getAttribute("appInfo");
+//get Persister singleton object
+Persister persister = Persister.getInstance();
 
-//retrieve URI of the blog's datamodel from session cache or wherever
-String blogModelId = (String)session.getAttribute("blogModel");
+//save the blog post to its target Dataset, of role "org.myorg.myapp.blogPosts"
+persister.persist(blogPost);
 
-//create new persister, passing it the AppInfo object
-Persister persister = new Persister(appInfo);
-
-//Get a Jena Model object
-Model blogModel = persister.getDatamodel(blogModelUri);
-
-//persist
-persister.persist(blogPost, blogModel);
 }}}
-*(5) Later retrieve this object:*
+*(6) Later retrieve this object.*
 {{{
-BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId, blogModel, true);
+BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId);
 }}}
 
 ===2. SPARQL Querying===
@@ -100,7 +108,7 @@ The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emergin
 *Usage:*
 Simply create a QueryCriteria object, add as many Datamodel objects as desired, add the SPARQL query, and call querySelect method
 {{{
-QueryCriteria queryCriteria = new QueryCriteria(appInfo);
+QueryCriteria queryCriteria = new QueryCriteria();
 queryCriteria.addNamedModel(namedModel1);
 queryCriteria.addNamedModel(namedModel2);
 queryCriteria.setQuery(mySparql);
