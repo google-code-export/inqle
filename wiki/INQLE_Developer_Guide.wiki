@@ -18,6 +18,7 @@ my_plugin
     |-MANIFEST.MF
 }}}
 
+===Developing INQLE Java Plugins===
 If your plugin contains Java code (most plugins do), you will need to set up a development environment, which can make use of the Java code within INQLE.  We recommend you use [http://eclipse.org Eclipse].
 [http://inqle.com/downloads/ The INQLE javadoc is provided for download here.]
 
@@ -39,7 +40,7 @@ Select File System, then Next.
 Click Add... and navigate to the INQLE plugins folder on your hard drive.  Select this folder and and click OK.  Now the inqle Java classes will be available to your projects.
 
 You will need to add the appropriate bundles to your project.
-Within your Eclipse plug-in project, open your MANIFEST.MF file and go to the dependencies tab.  Here you can add any bundle which is available to Eclipse.  You can add other bundle.
+Within your Eclipse plug-in project, open your MANIFEST.MF file and go to the dependencies tab.  Here you can add any bundle which is available to Eclipse.  You can add other, 3rd party, bundles here as well.
 
 When you are ready to export your project, right click it in Eclipse and select 
 Export... -> Plug-in Development -> Deployable Plug-ins and Fragments
@@ -52,6 +53,9 @@ Writing code for core INQLE requires expertise in ~2 or more of these areas:
   * Eclipse RCP or RAP
   * Jena RDF
 Please contact me (David Donohue) if you are ready to do this.
+
+===Scenerios and Use Cases for Developing INQLE Plugins===
+See [Scenarios_and_Use_Cases Scenarios and Use Cases] for some example ideas of what a contributor might want to build and how she would do it.
 
 ===Getting INQLE Source Code===
 To work on the INQLE core code, you must check out all INQLE bundles from the INQLE Subversion repository.  Each bundle should appear in your Eclipse IDE as a "Plug-In Project".  
