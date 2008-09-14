@@ -32,7 +32,6 @@ import thewebsemantic.NotFoundException;
 import thewebsemantic.RDF2Bean;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.query.larq.IndexBuilder;
 import com.hp.hpl.jena.query.larq.IndexBuilderModel;
 import com.hp.hpl.jena.query.larq.IndexBuilderString;
 import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
@@ -46,16 +45,17 @@ import com.hp.hpl.jena.util.FileUtils;
 
 
 /**
- * This class interfaces with the application's RDF model, 
- * to store and retrieve Object objects
+ * This class is of central importance to inqle.  It facilitates the following operations:
+ * <ul><li>Storing Jenabean objects to a dataset, or retrieving them from a dataset</li>
+ * <li>Creating new datasets</li>
+ * <li>Retrieving the AppInfo object, where application-specific configuration info is stored</li>
+ * </ul>
  * 
- * Each instance of Persister might have 1 or more open connections to the database.  
- * When finished with an instance of persister, you should call the 
- * <code>close()</code> method.
+ * You can create a persister like this
+ * <code>Persister persister = Persister.getInstance()</code>
  * @author David Donohue
  * December 5, 2007
- * 
- * TODO reorganize into fewer public methods, which handle closing models.
+
  */
 public class Persister {
 	
