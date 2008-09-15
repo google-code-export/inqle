@@ -2,6 +2,7 @@ package org.inqle.data.rdf.jenabean.mapping;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,11 +10,11 @@ import org.inqle.data.rdf.jenabean.GlobalJenabean;
 
 /**
  * Maps data to a RDFS class.  This mapping is used for importing data
- * into INQLE as RDF.  Each SubjectMapping represents a single subclass of inqle:DataSubject.
+ * into INQLE as RDF.  Each SubjectMapping can generate a single instance of inqle:Data and an 
+ * associated instance of inqle:Subject.
  * 
- * The subjectClass should contain either:
- *  * the RDF URI of the (native) RDFS class of the object to which the DataMappings should map, or
- *  * the RDF URI of the inqle:subject of the inqle:Data object, to which the DataMappings shoulr map
+ * SubjectMappings may have a subjectInstance, in which case the mapping points to a single instance.
+ * Alternatively, SubjectMappings will point to a new instance for each row of the data table.
  * 
  * subjectInstance is populated with the URI of the instance of this subject class,
  * in cases where this subject mapping represents a object, to which
@@ -21,8 +22,7 @@ import org.inqle.data.rdf.jenabean.GlobalJenabean;
  * When subjectInstance is null, then rows have different subjects.
  * In this case, one of these methods will be used to generate the subject
  * URI:
- *  * When subjectUriPrefix is null, INQLE will generate a unique URI,
- *    using prefix inqle:DataSubject
+ *  * When subjectUriPrefix is null, INQLE will generate a unique URI
  *  * When subjectUriPrefix is populated and subjectHeader is null,
  *    a random UUID will be appended onto the provided subjectUriPrefix.
  *  * When subjectUriPrefix and subjectHeader are both populated,
@@ -33,11 +33,16 @@ import org.inqle.data.rdf.jenabean.GlobalJenabean;
  */
 public class SubjectMapping extends GlobalJenabean {
 
-//	public static final String[] URI_TYPES = {
-//		"INQLE Generated (always safe)",
-//		"Your prefix + Random UUID (always safe)",
-//		"Your prefix + Value from specified column (gets converted into a URI-safe format)"
-//	};
+	public static final String URI_TYPE_INQLE_GENERATED = "INQLE-generated";
+	public static final String URI_TYPE_RANDOM_UUID = "URI prefix + random ID";
+	public static final String URI_TYPE_COLUMN_VALUE = "URI prefix + value from specified column";
+	
+	public static final String[] SUBJECT_URI_CREATION_METHODS = {
+		URI_TYPE_INQLE_GENERATED,
+		URI_TYPE_RANDOM_UUID,
+		URI_TYPE_COLUMN_VALUE
+	};
+	public static java.util.List<String> SUBJECT_URI_CREATION_METHOD_LIST = Arrays.asList(SUBJECT_URI_CREATION_METHODS);
 	
 	private List<DataMapping> dataMappings = new ArrayList<DataMapping>();
 	private URI subjectClass;
@@ -45,6 +50,7 @@ public class SubjectMapping extends GlobalJenabean {
 	private URI subjectUriPrefix;
 	private String subjectHeader;
 	private int subjectUriType;
+	
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
@@ -122,6 +128,10 @@ public class SubjectMapping extends GlobalJenabean {
 
 	public void setSubjectUriType(int subjectUriType) {
 		this.subjectUriType = subjectUriType;
+	}
+	
+	public static int getSubjectUriCreationIndex(String label) {
+		return SUBJECT_URI_CREATION_METHOD_LIST.indexOf(label);
 	}
 
 }
