@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.util.TypeConverter;
 import org.inqle.data.rdf.jenabean.mapping.*;
 import org.inqle.ui.rap.csv.CsvReader;
 
@@ -12,6 +13,7 @@ import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
@@ -22,6 +24,7 @@ public class FileDataImporter {
 	private OntModel ontModel;
 
 	private OntClass dataSuperClass;
+	private OntClass tableDataClass;
 	private static Logger log = Logger.getLogger(FileDataImporter.class);
 	public FileDataImporter(CsvReader csvReader, TableMapping tableMapping, OntModel ontModel) {
 		this.csvReader = csvReader;
@@ -33,7 +36,7 @@ public class FileDataImporter {
 	
 	public void doImport() {
 		ontModel.begin();
-		OntClass tableDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
+		tableDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
 		tableDataClass.setSuperClass(dataSuperClass);
 		
 		//TODO add date and other top level data (place, investigator)
@@ -42,11 +45,10 @@ public class FileDataImporter {
 			//if the subject mapping identifies an individual, import values into this instance
 			if (subjectMapping.getSubjectInstance() != null) {
 				//import the SubjectMappings which represent specific individuals
-				Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
-				importInstanceSubjectMapping(subjectMapping, dataInstance);
+				importInstanceSubjectMapping(subjectMapping);
 			} else {
 				//import the SubjectMappings which represent 1 row per individual
-				importRowSubjectMapping(subjectMapping, ontModel, tableDataClass);
+				importRowSubjectMapping(subjectMapping);
 			}
 		}
 		
@@ -61,7 +63,7 @@ public class FileDataImporter {
 	 * @param ontModel
 	 * @param dataSuperClass
 	 */
-	private void importRowSubjectMapping(SubjectMapping subjectMapping, OntModel ontModel, OntClass dataSuperClass) {
+	private void importRowSubjectMapping(SubjectMapping subjectMapping) {
 		String[][] rows = csvReader.getRawData();
 		OntClass subjectClass = ontModel.createClass(subjectMapping.getSubjectClass().toString());
 		for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
@@ -71,21 +73,9 @@ public class FileDataImporter {
 			Individual rowSubjectInstance = ontModel.createIndividual(rowSubjectInstanceUri, subjectClass);
 			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
 			rowDataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), rowSubjectInstance);
+			importStaticValues(subjectMapping, rowSubjectInstance, rowDataInstance);
 			importRowValues(subjectMapping, row, rowSubjectInstance, rowDataInstance);
 		}
-	}
-
-	private String generateDataInstanceUri(SubjectMapping subjectMapping, String[] row) {
-		String uriPrefix = subjectMapping.getSubjectUriPrefix().toString();
-		if (uriPrefix==null || subjectMapping.getSubjectUriType()==SubjectMapping.getSubjectUriCreationIndex(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
-			uriPrefix = RDF.SUBJECT + "/"; 
-		}
-		String uriSuffix = UUID.randomUUID().toString();
-		if (subjectMapping.getSubjectUriType()==SubjectMapping.getSubjectUriCreationIndex(SubjectMapping.URI_TYPE_COLUMN_VALUE)) {
-			int subjectSuffixColumnIndex = csvReader.getColumnIndex(subjectMapping.getSubjectHeader());
-			uriSuffix = row[subjectSuffixColumnIndex];
-		}
-		return uriPrefix + uriSuffix;
 	}
 
 	/**
@@ -93,7 +83,8 @@ public class FileDataImporter {
 	 * 
 	 * TODO add date info to each tableClass or rowInstance
 	 */
-	private void importInstanceSubjectMapping(SubjectMapping subjectMapping, Individual dataInstance) {
+	private void importInstanceSubjectMapping(SubjectMapping subjectMapping) {
+		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 		String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
 		Individual subjectInstance = ontModel.createIndividual(
 				subjectInstanceUri,
@@ -123,24 +114,21 @@ public class FileDataImporter {
 	private void importRowValues(SubjectMapping subjectMapping, String[] row,
 			Individual subjectInstance, Individual dataInstance) {
 		for (DataMapping dataMapping: subjectMapping.getDataMappings()) {
-			if (dataMapping.getMapsHeader() == null) {
-				
+			if (dataMapping.getMapsHeader() == null) continue;
+			
+			String mappedHeader = dataMapping.getMapsHeader();
+			int columnIndex = csvReader.getColumnIndex(mappedHeader);
+			if (columnIndex < 0) {
+				log.warn("Header '" + mappedHeader + "' not found in the data file.  Skipping import of this DataMapping.");
+				continue;
+			}
+			String value = row[columnIndex];
+			if (URI.create(RDF.SUBJECT_PROPERTY).equals(dataMapping.getMapsPropertyType())) {
+				importValue(subjectInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
 			} else {
-				String mappedHeader = dataMapping.getMapsHeader();
-				int columnIndex = csvReader.getColumnIndex(mappedHeader);
-				if (columnIndex < 0) {
-					log.warn("Header '" + mappedHeader + "' not found in the data file.  Skipping import of this DataMapping.");
-					continue;
-				}
-				String value = row[columnIndex];
-				if (URI.create(RDF.SUBJECT_PROPERTY).equals(dataMapping.getMapsPropertyType())) {
-					importValue(subjectInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
-				} else {
-					importValue(dataInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
-				}
+				importValue(dataInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
 			}
 		}
-		
 	}
 
 	/**
@@ -175,16 +163,26 @@ public class FileDataImporter {
 			log.warn("Unable to import value '" + dataMapping.getMapsValue() + "' for individual " + individual + ". The property is null.");
 		}
 		Property property = ontModel.createProperty(dataMapping.getMapsPredicate().toString());
-		Object value = dataMapping.getMapsValue();
+		String value = dataMapping.getMapsValue();
 		importValue(individual, property, value);
 	}
 
-	private void importValue(OntResource individual, Property property,
-			Object value) {
-		
-		
-		individual.addLiteral(property, value);
-		
+	private void importValue(OntResource individual, Property property, String value) {
+		Literal literal = TypeConverter.parseLiteral(value);
+		individual.addLiteral(property, literal);
+	}
+	
+	private String generateDataInstanceUri(SubjectMapping subjectMapping, String[] row) {
+		String uriPrefix = subjectMapping.getSubjectUriPrefix().toString();
+		if (uriPrefix==null || subjectMapping.getSubjectUriType()==SubjectMapping.getSubjectUriCreationIndex(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
+			uriPrefix = RDF.SUBJECT + "/"; 
+		}
+		String uriSuffix = UUID.randomUUID().toString();
+		if (subjectMapping.getSubjectUriType()==SubjectMapping.getSubjectUriCreationIndex(SubjectMapping.URI_TYPE_COLUMN_VALUE)) {
+			int subjectSuffixColumnIndex = csvReader.getColumnIndex(subjectMapping.getSubjectHeader());
+			uriSuffix = row[subjectSuffixColumnIndex];
+		}
+		return uriPrefix + uriSuffix;
 	}
 	
 }
