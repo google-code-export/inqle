@@ -1,6 +1,8 @@
 package org.inqle.ui.rap.actions;
 
 
+import java.util.Arrays;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -12,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextField;
@@ -22,16 +25,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	
 	private static final String DEFAULT_TITLE = "Identify the Subjects";
 	private static final String DEFAULT_DESCRIPTION = "Please identify the instances.";
-	private static final String URI_TYPE_INQLE_GENERATED = "INQLE-generated";
-	private static final String URI_TYPE_RANDOM_UUID = "URI prefix + random ID";
-	private static final String URI_TYPE_COLUMN_VALUE = "URI prefix + value from specified column";
 	
-	private static final String[] SUBJECT_URI_CREATION_METHODS = {
-		URI_TYPE_INQLE_GENERATED,
-		URI_TYPE_RANDOM_UUID,
-		URI_TYPE_COLUMN_VALUE
-	};
-//	private static java.util.List<String> SUBJECT_URI_CREATION_METHOD_LIST = Arrays.asList(SUBJECT_URI_CREATION_METHODS);
 	private List subjectUriCreationMethodList;
 	private TextField instanceUriPrefixField;
 	private Label namingMethodLabel;
@@ -63,7 +57,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		namingMethodLabel.setText("Select the naming method for generating the URI for each row");
 		
 		subjectUriCreationMethodList = new List(selfComposite, SWT.SINGLE | SWT.BORDER);
-		subjectUriCreationMethodList.setItems(SUBJECT_URI_CREATION_METHODS);
+		subjectUriCreationMethodList.setItems(SubjectMapping.SUBJECT_URI_CREATION_METHODS);
 		subjectUriCreationMethodList.select(0);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		subjectUriCreationMethodList.setLayoutData(gridData);
@@ -127,13 +121,13 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	public void widgetSelected(SelectionEvent selectionEvent) {
 //		Object clickedObject = selectionEvent.getSource();
 		
-		if (getSubjectCreationMethod().equals(URI_TYPE_INQLE_GENERATED)) {
+		if (getSubjectCreationMethod().equals(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
 			instanceUriPrefixField.setVisible(false);
 		} else {
 			instanceUriPrefixField.setVisible(true);
 		}
 		
-		if (getSubjectCreationMethod().equals(URI_TYPE_COLUMN_VALUE)) {
+		if (getSubjectCreationMethod().equals(SubjectMapping.URI_TYPE_COLUMN_VALUE)) {
 			uriSuffixColumnLabel.setVisible(true);
 			uriSuffixColumnList.setVisible(true);
 		} else {
@@ -154,7 +148,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 //			return true;
 //		}
 //		if (selectPertainsToSomeRows.getSelection()) {
-			if (getSubjectCreationMethod().equals(URI_TYPE_INQLE_GENERATED)) {
+			if (getSubjectCreationMethod().equals(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
 				return true;
 			} else {
 				if (UriMapper.isUri(getInstancePrefixUri())) {
@@ -173,7 +167,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		if (getSubjectCreationMethodIndex() < 0) {
 			return null;
 		}
-		return SUBJECT_URI_CREATION_METHODS[getSubjectCreationMethodIndex()];
+		return SubjectMapping.SUBJECT_URI_CREATION_METHODS[getSubjectCreationMethodIndex()];
 	}
 	
 	public int getUriSuffixColumnIndex() {

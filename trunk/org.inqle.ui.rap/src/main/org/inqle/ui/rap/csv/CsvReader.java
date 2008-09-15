@@ -193,4 +193,15 @@ public class CsvReader {
 		}
 		return str;
 	}
+	
+	public int getColumnIndex(String header) {
+		int i=0;
+		for (String colHeader: getHeaders()) {
+			if (colHeader == null) continue;
+			if (colHeader.toLowerCase().trim().equals(header)) return i;
+			i++;
+		}
+		//no match
+		return -1;
+	}
 }
