@@ -39,7 +39,7 @@ public class DataMapping extends GlobalJenabean {
 	private URI mapsPredicate;
 	private URI mapsPropertyType;
 	
-	private Object mapsValue;
+	private String mapsValue;
 	
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
@@ -81,11 +81,11 @@ public class DataMapping extends GlobalJenabean {
 		this.mapsPredicate = mapsPredicate;
 	}
 
-	public Object getMapsValue() {
+	public String getMapsValue() {
 		return mapsValue;
 	}
 
-	public void setMapsValue(Object mapsValue) {
+	public void setMapsValue(String mapsValue) {
 		this.mapsValue = mapsValue;
 	}
 

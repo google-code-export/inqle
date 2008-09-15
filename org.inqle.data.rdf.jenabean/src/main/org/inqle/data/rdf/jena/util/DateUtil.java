@@ -19,12 +19,12 @@ public class DateUtil {
 		SimpleDateFormat dateFormat = new SimpleDateFormat();
 		for (String dateMask: DATE_FORMATS_TO_TRY) {
 			dateFormat.applyPattern(dateMask);
-			Date parsedDate;
+			Date parsedDate = null;
 			try {
 				parsedDate = dateFormat.parse(putativeDateString);
-			} catch (ParseException e) {
-				continue;
-			}
+			} catch (ParseException e) {}
+			if (parsedDate==null) continue;
+			
 			Calendar calendarVal = Calendar.getInstance();
 			calendarVal.setTime(parsedDate);
 			xsdDate = new XSDDateTime(calendarVal);
