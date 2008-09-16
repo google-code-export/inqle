@@ -104,7 +104,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		
 		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
 		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
-		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
+//		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewDataPropertyButton.addSelectionListener(this);
 		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.WRAP);
 		new Label(formComposite, SWT.NONE);
@@ -114,7 +114,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		
 		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
 		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
-		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
+//		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewSubjectPropertyButton.addSelectionListener(this);
 		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
 		new Label(formComposite, SWT.NONE);

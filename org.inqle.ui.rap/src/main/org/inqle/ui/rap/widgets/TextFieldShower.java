@@ -62,15 +62,17 @@ public class TextFieldShower implements IDataFieldShower {
 		}
 		
 		if (descriptionString != null && descriptionString.length() > 0) {
+			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			//in next row, skip the label column
 			spacerLabel = new Label(composite, SWT.NONE);
 			
 			//add the description
 			descriptionText = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
 			descriptionText.setText(descriptionString);
+			descriptionText.setLayoutData(gridData);
 			Font currentFont = descriptionText.getFont();
 			String fontName = null;
-			int fontHeight = 12;
+			int fontHeight = 10;
 			FontData[] fontData = currentFont.getFontData();
 				
 			for (FontData fontDataItem: fontData) {
