@@ -1,5 +1,6 @@
 package org.inqle.ui.rap.pages;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -11,6 +12,8 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 	private static final String PAGE_DESCRIPTION = null;
 	private static final String FINISH_WIZARD_TEXT = "Finished adding subjects.  Ready to finish wizard and import the data.";
 
+	private static Logger log = Logger.getLogger(AddSubjectOrFinishPage.class);
+	
 	public AddSubjectOrFinishPage() {
 		super(PAGE_TITLE, PAGE_DESCRIPTION);
 	}
@@ -45,9 +48,12 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 //			newTableSubjectButton.setSelection(false);
 //			newRowSubjectButton.setSelection(false);
 			disableForm();
+			log.info("AddSubjectOrFinishPage: add last page...");
 			getFileDataImporterWizard().addSaveMappingLoadDataPage();
+			log.info("AddSubjectOrFinishPage: added last page.");
+		} else {
+			super.widgetSelected(selectionEvent);
 		}
-		super.widgetSelected(selectionEvent);
 	}
 
 	public void disableForm() {

@@ -7,13 +7,18 @@ import java.io.File;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.csv.CsvReader;
+import org.inqle.ui.rap.file.FileDataImporter;
 import org.inqle.ui.rap.pages.AddSubjectOrFinishPage;
 import org.inqle.ui.rap.pages.AddSubjectPage;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
@@ -29,7 +34,9 @@ import org.inqle.ui.rap.table.RowSubjectClassPage;
 import org.inqle.ui.rap.table.TableSubjectClassPage;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 /**
  * @author David Donohue
@@ -46,7 +53,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	Composite composite;
 	
 	private LoadFilePage loadFilePage;
-	private CsvReader csvImporter;
+	private CsvReader csvReader;
 	
 	private AddSubjectPage addSubjectPage;
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
@@ -124,8 +131,20 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	public boolean performFinish() {
 		
 		//show the "importing..." dialog
-//		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Loading Data...", "Loading from file " + importer.getFile().getName() + "..." );
-//		popup.open();
+		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
+		popup.open();
+		TableMapping tableMapping = getTableMapping();
+		Persister persister = Persister.getInstance();
+		persister.persist(tableMapping);
+		popup.close();
+		
+		popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Importing Data", "Importing your data..." );
+		popup.open();
+		OntModel ontModel = ModelFactory.createOntologyModel();
+		log.info("Importing these data..." + JenabeanWriter.modelToString(ontModel));
+		FileDataImporter importer = new FileDataImporter(csvReader, tableMapping, ontModel);
+		importer.doImport();
+		popup.close();
 		
 		return true;
 	}
@@ -142,7 +161,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		}
 		IWizardPage lastPage = pages[pages.length - 1];
 		if (lastPage instanceof SaveMappingLoadDataPage) {
-			return true;
+			return ((SaveMappingLoadDataPage)lastPage).isComplete();
 		}
 		return false;
 	}
@@ -156,11 +175,11 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	}
 
 	public CsvReader getCsvReader() {
-		if (csvImporter == null) {
-//			log.info("RRRRRRRRRRefreshing csvImporter in LoadCsvFileWizard");
+		if (csvReader == null) {
+//			log.info("RRRRRRRRRRefreshing csvReader in LoadCsvFileWizard");
 			refreshCsvReader();
 		}
-		return csvImporter;
+		return csvReader;
 	}
 
 	public void refreshCsvReader() {
@@ -172,8 +191,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			log.info("Get uploaded file...");
 			File uploadedFile = loadFilePage.getUploadedFile();
 			log.info("Got file " + uploadedFile + ".  Retrieve CSV importer...");
-			//csvImporter = new CsvReader(new FileInputStream(uploadedFile));
-			csvImporter = new CsvReader(uploadedFile);
+			//csvReader = new CsvReader(new FileInputStream(uploadedFile));
+			csvReader = new CsvReader(uploadedFile);
 		} catch (Exception e) {
 			log.error("Unable to get uploaded file: " + loadFilePage.getUploadedFile());
 			//leave as null
@@ -229,9 +248,16 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	}
 
 	public void addSaveMappingLoadDataPage() {
+		log.info("Adding saveMappingLoadDataPage...");
 		saveMappingLoadDataPage = new SaveMappingLoadDataPage();
 		addPage(saveMappingLoadDataPage);
-		getContainer().updateButtons();
+		log.info("Added saveMappingLoadDataPage.  Refreshing buttons...");
+		try {
+			getContainer().updateButtons();
+		} catch (RuntimeException e) {
+			log.error("error calling getContainer().updateButtons()", e);
+		}
+		log.info("Finished addSaveMappingLoadDataPage()");
 	}
 
 	/**

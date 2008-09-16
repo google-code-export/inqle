@@ -49,7 +49,7 @@ public class SubpropertyDialog extends AOntResourceDialog {
 		
 		@Override
 		public String getUriDetail() {
-			return "Enter the Universal Resource Identifier (URI) of this property.\n" +
+			return "Enter the Universal Resource Identifier (URI) of this property.  " +
 					"Example: http://my-institution-name.org/hasEmotionalState";
 		}
 		
@@ -60,8 +60,8 @@ public class SubpropertyDialog extends AOntResourceDialog {
 		
 		@Override
 		public String getNameDetail() {
-			return "Enter a common name for this property.  We recommend you capitalize \n" +
-					"the name and use the singular form.\n" +
+			return "Enter a common name for this property.  We recommend you capitalize " +
+					"the name and use the singular form. " +
 					"Example: Emotional State";
 		}
 		
@@ -72,8 +72,8 @@ public class SubpropertyDialog extends AOntResourceDialog {
 		
 		@Override
 		public String getDescriptionDetail() {
-			return "Enter a description about this " + superProperty.getLocalName() + "\n" +
-					"We recommend you include synonyms of your concept, such that it is \n" +
+			return "Enter a description about this " + superProperty.getLocalName() +
+					"We recommend you include synonyms of your concept, such that it is " +
 					"easier to find when searching for it.";
 		}
 		
