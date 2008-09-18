@@ -187,7 +187,7 @@ public class CsvReader {
 		String str = "";
 		int i = 0;
 		for (String header: getHeaders()) {
-			str += PREFERRED_HEADER_DELIMITER;
+			if (i > 0) str += PREFERRED_HEADER_DELIMITER;
 			str += header;
 			i++;
 		}

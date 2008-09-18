@@ -1,6 +1,5 @@
 package org.inqle.ui.rap.widgets;
 
-import java.net.URI;
 
 
 public interface IDataFieldShower {
@@ -20,4 +19,6 @@ public interface IDataFieldShower {
 	public void remove();
 
 	public String getFieldPropertyType();
+	
+	public void  setFieldPropertyType(String fieldPropertyType);
 }

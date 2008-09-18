@@ -218,10 +218,15 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		headers = csvImporter.getHeaders();
 		for (Map<String, String> row: rowValues) {
 			String uri = row.get(PropertyLookup.QUERY_HEADER_URI);
+			if (uri != null) uri=uri.trim();
 			String label = row.get(PropertyLookup.QUERY_HEADER_LABEL);
+			if (label != null) label=label.trim();
 			String comment = row.get(PropertyLookup.QUERY_HEADER_COMMENT);
-			String subjectType = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_TYPE);
-			addPropertyFormItem(uri, label, comment, subjectType);
+			if (comment != null) comment=comment.trim();
+			String propertyType = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_TYPE);
+			if (propertyType != null) propertyType=propertyType.trim();
+			log.info("Creating form element w/\nuri=" + uri + "\nlabel=" + label + "\ncomment=" + comment + "\npropertyType=" + propertyType);
+			addPropertyFormItem(uri, label, comment, propertyType);
 		}
 	}
 

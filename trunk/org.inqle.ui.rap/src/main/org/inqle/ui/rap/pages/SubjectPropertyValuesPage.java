@@ -21,7 +21,7 @@ public abstract class SubjectPropertyValuesPage extends SubjectPropertiesPage {
 			SWT.BORDER
 		);
 		textFieldShower.setFieldUri(uri);
-		textFieldShower.setFieldSubjectType(subjectTypeUri);
+		textFieldShower.setFieldPropertyType(subjectTypeUri);
 		dataFieldShowers.add(textFieldShower);
 	}
 
