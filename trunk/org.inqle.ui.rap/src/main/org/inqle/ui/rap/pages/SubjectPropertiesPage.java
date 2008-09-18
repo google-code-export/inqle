@@ -186,9 +186,13 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		
 		makePropertyFormElements(rowValues);
 		
+		refreshScrolledComposite();
+//		scrolledComposite.pack(true);
+	}
+
+	private void refreshScrolledComposite() {
 		scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		formComposite.layout();
-//		scrolledComposite.pack(true);
 	}
 
 	public void addElements() {
@@ -296,6 +300,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 					newProperty.getLabel("EN"), 
 					newProperty.getComment("EN"),
 					RDF.SUBJECT_PROPERTY);
+			refreshScrolledComposite();
 		}
 	}
 
