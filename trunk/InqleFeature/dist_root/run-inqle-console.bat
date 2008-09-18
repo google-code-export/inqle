@@ -1,1 +1,1 @@
-eclipse -console
+eclipse -console -consolelog -debug -dev
