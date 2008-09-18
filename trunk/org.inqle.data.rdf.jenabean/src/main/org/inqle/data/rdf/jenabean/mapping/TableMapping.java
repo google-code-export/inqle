@@ -7,6 +7,8 @@ import java.util.List;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -24,23 +26,24 @@ import thewebsemantic.Namespace;
  */
 @TargetDataset(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
-public class TableMapping extends GlobalJenabean {
-
+//public class TableMapping extends GlobalJenabean {
+public class TableMapping extends UniqueJenabean {
+	
 	private String mappedText;
 	
 	private List<SubjectMapping> subjectMappings = new ArrayList<SubjectMapping>();
 	
-	public String getStringRepresentation() {
-		String s = getClass().toString() + " {\n";
-		s += "[mappedText=" + mappedText + "]\n";
-		//s += "[mappedDataSubclassId=" + mappedDataSubclassId + "]\n";
-		//TODO ensure these mappings are sorted reproducibly each time they are iterated.
-		for(SubjectMapping subjectMapping: getSubjectMappings()) {
-			s += "[subjectMapping=" + subjectMapping + "]\n";
-		}
-		s += "}";
-		return s;
-	}
+//	public String getStringRepresentation() {
+//		String s = getClass().toString() + " {\n";
+//		s += "[mappedText=" + mappedText + "]\n";
+//		//s += "[mappedDataSubclassId=" + mappedDataSubclassId + "]\n";
+//		//TODO ensure these mappings are sorted reproducibly each time they are iterated.
+//		for(SubjectMapping subjectMapping: getSubjectMappings()) {
+//			s += "[subjectMapping=" + subjectMapping + "]\n";
+//		}
+//		s += "}";
+//		return s;
+//	}
 
 	public void clone(TableMapping objectToBeCloned) {
 		setMappedText(objectToBeCloned.getMappedText());
@@ -73,6 +76,17 @@ public class TableMapping extends GlobalJenabean {
 	
 	public void addSubjectMapping(SubjectMapping subjectMapping) {
 		subjectMappings.add(subjectMapping);
+	}
+
+	public void replicate(TableMapping objectToBeReplicated) {
+		clone(objectToBeReplicated);
+		setId(objectToBeReplicated.getId());
+	}
+	
+	public TableMapping createReplica() {
+		TableMapping dataMapping = new TableMapping();
+		dataMapping.replicate(this);
+		return dataMapping;
 	}
 
 //	public String getMappedDataSubclassId() {
