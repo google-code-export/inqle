@@ -23,7 +23,7 @@ public class TextFieldShower implements IDataFieldShower {
 	private String fieldUri;
 	private Label label;
 	private Label spacerLabel;
-	private String fieldSubjectType;
+	private String fieldPropertyType;
 	private static final Logger log = Logger.getLogger(TextFieldShower.class);
 	
 	/**
@@ -107,7 +107,12 @@ public class TextFieldShower implements IDataFieldShower {
 	}
 
 	public void setFieldUri(String fieldUri) {
-		this.fieldUri = fieldUri;
+		if (fieldUri != null) {
+			this.fieldUri = fieldUri.trim();
+		} else {
+			this.fieldUri = fieldUri;
+		}
+		
 	}
 	
 	/**
@@ -133,9 +138,14 @@ public class TextFieldShower implements IDataFieldShower {
 	}
 	
 	public String getFieldPropertyType() {
-		return fieldSubjectType;
+		return fieldPropertyType;
 	}
-	public void setFieldSubjectType(String fieldSubjectType) {
-		this.fieldSubjectType = fieldSubjectType;
+	public void setFieldPropertyType(String fieldPropertyType) {
+		if (fieldPropertyType != null) {
+			this.fieldPropertyType = fieldPropertyType.trim();
+		} else {
+			this.fieldPropertyType = fieldPropertyType;
+		}
+		this.fieldPropertyType = fieldPropertyType;
 	}
 }

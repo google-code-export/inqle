@@ -35,7 +35,7 @@ public class FileDataImporter {
 	}
 	
 	public void doImport() {
-		ontModel.begin();
+//		ontModel.begin();
 		tableDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
 		tableDataClass.setSuperClass(dataSuperClass);
 		
@@ -54,7 +54,7 @@ public class FileDataImporter {
 		
 		
 		//next loop thru each row and create subject, add values from mapping and from appropriate column
-		ontModel.commit();
+//		ontModel.commit();
 	}
 
 	/**

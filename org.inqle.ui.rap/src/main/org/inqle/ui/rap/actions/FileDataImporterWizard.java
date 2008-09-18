@@ -131,21 +131,38 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	public boolean performFinish() {
 		
 		//show the "importing..." dialog
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
-		popup.open();
-		TableMapping tableMapping = getTableMapping();
-		Persister persister = Persister.getInstance();
-		persister.persist(tableMapping);
-		popup.close();
+		PopupDialog popup;
+		TableMapping tableMapping = null;
+		try {
+			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
+			popup.open();
+			tableMapping = getTableMapping();
+			Persister persister = Persister.getInstance();
+			persister.persist(tableMapping);
+			popup.close();
+		} catch (RuntimeException e) {
+			log.error("Error saving mapping", e);
+		}
 		
-		popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Importing Data", "Importing your data..." );
-		popup.open();
 		OntModel ontModel = ModelFactory.createOntologyModel();
-		log.info("Importing these data..." + JenabeanWriter.modelToString(ontModel));
-		FileDataImporter importer = new FileDataImporter(csvReader, tableMapping, ontModel);
-		importer.doImport();
-		popup.close();
 		
+		try {
+			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Importing Data", "Importing your data..." );
+			popup.open();
+			log.info("Importing data...");
+			FileDataImporter importer = new FileDataImporter(csvReader, tableMapping, ontModel);
+			importer.doImport();
+			log.info("Data for import=\n" + JenabeanWriter.modelToString(ontModel));
+			popup.close();
+		} catch (RuntimeException e) {
+			log.error("Error importing data from file", e);
+		}
+		
+		log.info("Saving to model of " + saveToModel.size() + " statements...");
+		saveToModel.begin();
+		saveToModel.add(ontModel);
+		saveToModel.commit();
+		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
 		return true;
 	}
 
@@ -305,9 +322,15 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 					if (shower.getValue()==null) continue;
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
-					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					try {
+						log.info("Value shower.getFieldUri()=" + shower.getFieldUri());
+						log.info("Value shower.getValue()=" + shower.getValue());
+						dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+						dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
+					} catch (RuntimeException e) {
+						log.error("Error adding property values to DataMapping", e);
+					}
 					dataMapping.setMapsValue(shower.getValue());
-					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
 					subjectMapping.addDataMapping(dataMapping);
 				}
 				
@@ -315,9 +338,15 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 					if (shower.getValue()==null) continue;
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
-					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+					try {
+						log.info("Mapping shower.getFieldUri()=" + shower.getFieldUri());
+						log.info("Mapping shower.getValue()=" + shower.getValue());
+						dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+						dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
+					} catch (RuntimeException e) {
+						log.error("Error adding property mappings to DataMapping", e);
+					}
 					dataMapping.setMapsHeader(shower.getValue());
-					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
 					subjectMapping.addDataMapping(dataMapping);
 				}
 				

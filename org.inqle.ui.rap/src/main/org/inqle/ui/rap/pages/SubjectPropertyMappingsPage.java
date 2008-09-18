@@ -20,7 +20,7 @@ public abstract class SubjectPropertyMappingsPage extends SubjectPropertiesPage 
 			comment
 		);
 		dropdownFieldShower.setFieldUri(uri);
-		dropdownFieldShower.setFieldSubjectType(propertyTypeUri);
+		dropdownFieldShower.setFieldPropertyType(propertyTypeUri);
 		dataFieldShowers.add(dropdownFieldShower);
 	}
 }

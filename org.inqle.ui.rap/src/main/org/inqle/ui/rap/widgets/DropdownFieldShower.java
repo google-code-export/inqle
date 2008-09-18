@@ -24,7 +24,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 	private List list;
 	private Text descriptionText;
 	private String fieldUri;
-	private String fieldSubjectType;
+	private String fieldPropertyType;
 	private static final Logger log = Logger.getLogger(DropdownFieldShower.class);
 	
 	public DropdownFieldShower (
@@ -106,7 +106,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 	}
 	
 	public String getValue() {
-		if (list == null) return null;
+		if (list == null || list.getSelectionIndex()<0) return null;
 		String val = list.getItem(list.getSelectionIndex());
 		if (val == null || val.length()==0) {
 			return null;
@@ -131,18 +131,29 @@ public class DropdownFieldShower implements IDataFieldShower {
 	}
 
 	public void setFieldUri(String fieldUri) {
-		this.fieldUri = fieldUri;
+		if (fieldUri != null) {
+			this.fieldUri = fieldUri.trim();
+		} else {
+			this.fieldUri = fieldUri;
+		}
 	}
+	
 	public void remove() {
 		list.removeAll();
 		list.dispose();
 		descriptionText.dispose();
-		
 	}
+	
 	public String getFieldPropertyType() {
-		return fieldSubjectType;
+		return fieldPropertyType;
 	}
-	public void setFieldSubjectType(String fieldSubjectType) {
-		this.fieldSubjectType = fieldSubjectType;
+	
+	public void setFieldPropertyType(String fieldPropertyType) {
+		if (fieldPropertyType != null) {
+			this.fieldPropertyType = fieldPropertyType.trim();
+		} else {
+			this.fieldPropertyType = fieldPropertyType;
+		}
+		this.fieldPropertyType = fieldPropertyType;
 	}
 }
