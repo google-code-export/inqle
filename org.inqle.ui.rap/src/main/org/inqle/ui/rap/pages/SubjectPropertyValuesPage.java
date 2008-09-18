@@ -12,7 +12,7 @@ public abstract class SubjectPropertyValuesPage extends SubjectPropertiesPage {
 
 	private static Logger log = Logger.getLogger(SubjectPropertyValuesPage.class);
 
-	protected void addPropertyFormItem(String uri, String label, String comment, String subjectTypeUri) {
+	protected void addPropertyFormItem(String uri, String label, String comment, String propertyTypeUri) {
 		TextFieldShower textFieldShower = new TextFieldShower(
 			formComposite,
 			label,
@@ -21,7 +21,7 @@ public abstract class SubjectPropertyValuesPage extends SubjectPropertiesPage {
 			SWT.BORDER
 		);
 		textFieldShower.setFieldUri(uri);
-		textFieldShower.setFieldPropertyType(subjectTypeUri);
+		textFieldShower.setFieldPropertyType(propertyTypeUri);
 		dataFieldShowers.add(textFieldShower);
 	}
 
