@@ -1,4 +1,4 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;

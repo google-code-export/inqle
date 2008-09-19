@@ -170,8 +170,10 @@ public abstract class AOntResourceDialog extends Dialog {
     	OntResource ontResource = createOntResource();
     	
     	//add the label and comment
-    	ontResource.addProperty(RDF.LABEL_PROPERTY, getLabel());
-    	ontResource.addProperty(RDF.COMMENT_PROPERTY, getComment());
+//    	ontResource.addProperty(RDF.LABEL_PROPERTY, getLabel());
+//    	ontResource.addProperty(RDF.COMMENT_PROPERTY, getComment());
+    	ontResource.addLabel(getLabel(), "EN");
+    	ontResource.addComment(getComment(), "EN");
     	return ontResource;
 		}
 

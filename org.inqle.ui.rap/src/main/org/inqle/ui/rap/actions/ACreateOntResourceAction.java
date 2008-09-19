@@ -1,4 +1,4 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.actions;
 
 import java.io.PrintWriter;
 import java.util.HashMap;

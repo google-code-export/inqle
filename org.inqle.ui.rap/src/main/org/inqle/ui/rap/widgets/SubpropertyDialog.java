@@ -86,6 +86,8 @@ public class SubpropertyDialog extends AOntResourceDialog {
 			OntModel ontModel = (OntModel)superProperty.getModel();
 			OntProperty newSubproperty = ontModel.createOntProperty(getUri());
 			newSubproperty.setSuperProperty(superProperty);
+			newSubproperty.addLabel(getLabel(), "EN");
+			newSubproperty.addComment(getComment(), "EN");
     	return newSubproperty;
 		}
 }

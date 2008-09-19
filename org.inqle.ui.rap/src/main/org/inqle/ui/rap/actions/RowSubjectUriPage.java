@@ -175,6 +175,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	}
 	
 	public String getUriSuffixColumnHeader() {
+		if (getUriSuffixColumnIndex() < 0) return null;
 		return headers[getUriSuffixColumnIndex()];
 	}
 	

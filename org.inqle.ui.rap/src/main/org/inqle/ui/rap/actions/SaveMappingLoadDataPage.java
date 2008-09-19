@@ -82,6 +82,7 @@ public class SaveMappingLoadDataPage extends DynaWizardPage {
 		return descriptionTextField.getValue();
 	}
 	
+	@Deprecated
 	public boolean isComplete() {
 		boolean complete = false;
 		if (getTableMappingName()!=null && 

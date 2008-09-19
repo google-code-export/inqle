@@ -1,4 +1,4 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
