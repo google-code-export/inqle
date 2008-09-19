@@ -26,7 +26,7 @@ import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.http.lookup.LookupInfo;
 import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.CreateSubclassAction;
+import org.inqle.ui.rap.actions.CreateSubclassAction;
 import org.inqle.ui.rap.table.SparqlXmlTableLabelProvider;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;

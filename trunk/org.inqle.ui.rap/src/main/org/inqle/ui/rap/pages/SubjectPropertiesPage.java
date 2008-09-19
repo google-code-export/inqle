@@ -26,7 +26,7 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.ui.rap.CreateSubpropertyAction;
+import org.inqle.ui.rap.actions.CreateSubpropertyAction;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
@@ -276,10 +276,17 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			
 			createSubpropertyAction.run();
 			OntResource newProperty = createSubpropertyAction.getOntResource();
+			log.info("Adding form item for: uri=" + newProperty.getURI() + 
+					"label=" + newProperty.getLabel("EN") +
+					"description=" + newProperty.getComment("EN"));
 			addPropertyFormItem(newProperty.getURI(), 
 					newProperty.getLabel("EN"), 
 					newProperty.getComment("EN"),
 					RDF.DATA_PROPERTY);
+//			formComposite.layout();
+//			formComposite.pack(true);
+//			formComposite.redraw();
+			refreshScrolledComposite();
 		}
 		
 		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			

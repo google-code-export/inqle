@@ -178,7 +178,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		}
 		IWizardPage lastPage = pages[pages.length - 1];
 		if (lastPage instanceof SaveMappingLoadDataPage) {
-			return ((SaveMappingLoadDataPage)lastPage).isComplete();
+//			return ((SaveMappingLoadDataPage)lastPage).isComplete();
+			return true;
 		}
 		return false;
 	}

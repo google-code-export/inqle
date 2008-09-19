@@ -22,6 +22,9 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
+import org.inqle.ui.rap.actions.AboutAction;
+import org.inqle.ui.rap.actions.NewBrowserAction;
+import org.inqle.ui.rap.actions.OpenViewAction;
 
 /**
  * An action bar advisor is responsible for creating, adding, and disposing of the

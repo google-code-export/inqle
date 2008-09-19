@@ -1,4 +1,4 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
@@ -7,6 +7,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.inqle.ui.rap.ICommandIds;
 
 /**
  * When run, this action will open another instance of a view.

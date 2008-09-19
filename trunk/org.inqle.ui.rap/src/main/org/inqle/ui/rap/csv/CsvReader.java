@@ -195,10 +195,12 @@ public class CsvReader {
 	}
 	
 	public int getColumnIndex(String header) {
+		if (header==null) return -1;
+		String normalizedHeader = header.toLowerCase().trim();
 		int i=0;
 		for (String colHeader: getHeaders()) {
 			if (colHeader == null) continue;
-			if (colHeader.toLowerCase().trim().equals(header)) return i;
+			if (colHeader.toLowerCase().trim().equals(normalizedHeader)) return i;
 			i++;
 		}
 		//no match
