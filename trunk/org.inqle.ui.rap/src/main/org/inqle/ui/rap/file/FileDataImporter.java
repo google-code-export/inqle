@@ -34,11 +34,18 @@ public class FileDataImporter {
 		dataSuperClass = ontModel.createClass(RDF.DATA);
 	}
 	
+	/**
+	 * Do the import
+	 * 
+	 * TODO consider having table data have a subject.  THis would be the "primary subject" for the table.
+	 */
 	public void doImport() {
 //		ontModel.begin();
 		tableDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
 		tableDataClass.setSuperClass(dataSuperClass);
 		
+		//import the static mappings at the table level (especially the date, if has a single date)
+		importStaticValues(tableMapping, null, tableDataClass);
 		//TODO add date and other top level data (place, investigator)
 		
 		for (SubjectMapping subjectMapping: tableMapping.getSubjectMappings()) {
@@ -58,6 +65,48 @@ public class FileDataImporter {
 	}
 
 	/**
+	 * do all data import for a single subject instance
+	 * 
+	 * TODO add date info to each tableClass or rowInstance
+	 */
+	private void importInstanceSubjectMapping(SubjectMapping subjectMapping) {
+		//create a data (class) representing the subject's data at the table level
+		OntClass subjectDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
+		subjectDataClass.setSuperClass(tableDataClass);
+		
+//		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
+		String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
+		Individual subjectInstance = ontModel.createIndividual(
+				subjectInstanceUri,
+				ResourceFactory.createResource(subjectMapping.getSubjectClass().toString()));
+		subjectDataClass.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), subjectInstance);
+		//import static values to the subject or the subjectDataClass
+		importStaticValues(subjectMapping, subjectInstance, subjectDataClass);
+		
+		String[][] rows = csvReader.getRawData();
+//		OntClass subjectClass = ontModel.createClass(subjectMapping.getSubjectClass().toString());
+		for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
+			//for each row, create a inqle:Data, an inqle:Subject, and add mapped values to each
+			String[] row = rows[i];
+			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), subjectDataClass);	
+			importRowValues(subjectMapping, row, subjectInstance, rowDataInstance);
+		}
+		
+//	dataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), subjectInstance);
+////subjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), dataInstance);
+//
+//importStaticValues(subjectMapping, subjectInstance, dataInstance);
+//
+////loop thru each row and add values from appropriate column to appropriate individual
+//String[][] rows = csvReader.getRawData();
+//for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
+//	String[] row = rows[i];
+//	importRowValues(subjectMapping, row, subjectInstance, dataInstance);
+//}
+		
+	}
+	
+	/**
 	 * import a SubjectMapping which specifyies creating new instance of inqle:Data and inqle:Subject for each row
 	 * @param subjectMapping
 	 * @param ontModel
@@ -71,37 +120,13 @@ public class FileDataImporter {
 			String[] row = rows[i];
 			String rowSubjectInstanceUri = generateDataInstanceUri(subjectMapping, row);
 			Individual rowSubjectInstance = ontModel.createIndividual(rowSubjectInstanceUri, subjectClass);
-			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
+			//wrong? Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
+			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 			rowDataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), rowSubjectInstance);
 			importStaticValues(subjectMapping, rowSubjectInstance, rowDataInstance);
 			importRowValues(subjectMapping, row, rowSubjectInstance, rowDataInstance);
 		}
-	}
-
-	/**
-	 * do all data import for a single subject instance
-	 * 
-	 * TODO add date info to each tableClass or rowInstance
-	 */
-	private void importInstanceSubjectMapping(SubjectMapping subjectMapping) {
-		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
-		String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
-		Individual subjectInstance = ontModel.createIndividual(
-				subjectInstanceUri,
-				ResourceFactory.createResource(subjectMapping.getSubjectClass().toString()));
-		dataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), subjectInstance);
-//		subjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), dataInstance);
-	
-		importStaticValues(subjectMapping, subjectInstance, dataInstance);
-		
-		//loop thru each row and add values from appropriate column to appropriate individual
-		String[][] rows = csvReader.getRawData();
-		for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
-			String[] row = rows[i];
-			importRowValues(subjectMapping, row, subjectInstance, dataInstance);
-		}
-	}
-	
+	}	
 	
 	/**
 	 * To a given instance of inqle:Data or the associated instance of inqle:Subject,
@@ -114,7 +139,7 @@ public class FileDataImporter {
 	private void importRowValues(SubjectMapping subjectMapping, String[] row,
 			Individual subjectInstance, Individual dataInstance) {
 		for (DataMapping dataMapping: subjectMapping.getDataMappings()) {
-			if (dataMapping.getMapsHeader() == null) continue;
+			if (dataMapping.getMapsHeader() == null || dataMapping.getMapsHeader().toString().trim().length()==0) continue;
 			
 			String mappedHeader = dataMapping.getMapsHeader();
 			int columnIndex = csvReader.getColumnIndex(mappedHeader);
@@ -137,7 +162,7 @@ public class FileDataImporter {
 	 * @param subjectInstance
 	 * @param dataInstance
 	 */
-	private void importStaticValues(SubjectMapping subjectMapping, Individual subjectInstance, Individual dataInstance) {
+	private void importStaticValues(SubjectMapping subjectMapping, Individual subjectInstance, OntResource dataInstance) {
 		for (DataMapping dataMapping: subjectMapping.getDataMappings()) {
 			if (dataMapping.getMapsValue() == null || dataMapping.getMapsValue().toString().trim().length()==0) {
 				continue;

@@ -146,4 +146,9 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		}
 		return false;
 	}
+
+	public String getRowDateColumnHeader() {
+		if (getRowDateColumnIndex()<0) return null;
+		return dateColumnList.getItem(getRowDateColumnIndex());
+	}
 }

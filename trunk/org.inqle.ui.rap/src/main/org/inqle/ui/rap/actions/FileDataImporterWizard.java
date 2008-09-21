@@ -12,6 +12,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
@@ -57,6 +58,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	
 	private AddSubjectPage addSubjectPage;
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
+	private DateTimeMapperPage dateTimeMapperPage;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -112,12 +114,12 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
 		addPage(csvDisplayPage);
 		
-		DateTimeMapperPage measurementDateTimeMapperPage = new DateTimeMapperPage(
+		dateTimeMapperPage = new DateTimeMapperPage(
 				"Specify Date & Time of the Data",
 				null);
-		measurementDateTimeMapperPage.setDescription("All data pertains to a particular date and time.  " +
+		dateTimeMapperPage.setDescription("All data pertains to a particular date and time.  " +
 				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
-		addPage(measurementDateTimeMapperPage);
+		addPage(dateTimeMapperPage);
 		
 		addSubjectPage = new AddSubjectPage();
 		addPage(addSubjectPage);
@@ -298,6 +300,19 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	
 	public TableMapping getTableMapping() {
 		TableMapping tableMapping = new TableMapping();
+		
+		DataMapping dateTimeDataMapping = new DataMapping();
+		dateTimeDataMapping.setMapsPredicate(URI.create(RDF.DATE_PROPERTY));
+		dateTimeDataMapping.setMapsPropertyType(URI.create(RDF.DATA_PROPERTY));
+		String globalDateTime = dateTimeMapperPage.getGlobalDateTimeString();
+		String dateTimeHeader = dateTimeMapperPage.getRowDateColumnHeader();
+		if (globalDateTime!=null && globalDateTime.length()>0) {
+			dateTimeDataMapping.setMapsValue(globalDateTime);
+			tableMapping.addDataMapping(dateTimeDataMapping);
+		} else if (dateTimeHeader!=null && dateTimeHeader.length()>0) {
+			dateTimeDataMapping.setMapsHeader(dateTimeHeader);
+		}
+		
 		String headerString = getCsvReader().getHeaderString();
 		tableMapping.setMappedText(headerString);
 		tableMapping.setName(saveMappingLoadDataPage.getTableMappingName());
@@ -306,6 +321,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			IWizardPage page = getPages()[i];
 			
 			if (page instanceof TableSubjectClassPage) {
+				SubjectMapping subjectMapping = new SubjectMapping();
+				
 				TableSubjectClassPage subjectClassPage = (TableSubjectClassPage)page;
 				i++;
 				TableSubjectUriPage subjectUriPage = (TableSubjectUriPage)getPages()[i];
@@ -315,12 +332,18 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				TableSubjectPropertyMappingsPage propertyMappingsPage = (TableSubjectPropertyMappingsPage)getPages()[i];
 				String subjectClass = subjectClassPage.getSubjectUri();
 				String subjectUri = subjectUriPage.getInstanceUri();
-				SubjectMapping subjectMapping = new SubjectMapping();
+				if (subjectUri != null) {
+					subjectMapping.setSubjectInstance(URI.create(subjectUri));
+				}
+				
+				if (dateTimeDataMapping.getMapsHeader() != null) {
+					subjectMapping.addDataMapping(dateTimeDataMapping);
+				}
+				
 				subjectMapping.setSubjectClass(URI.create(subjectClass));
-				subjectMapping.setSubjectInstance(URI.create(subjectUri));
 				
 				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
-					if (shower.getValue()==null) continue;
+					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
 					try {
@@ -336,7 +359,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				}
 				
 				for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
-					if (shower.getValue()==null) continue;
+					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
 					try {
@@ -372,7 +395,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				subjectMapping.setSubjectUriType(subjectUriType);
 				subjectMapping.setSubjectHeader(subjectHeader);
 				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
-					if (shower.getValue()==null) continue;
+					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
 					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
@@ -382,7 +405,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				}
 				
 				for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
-					if (shower.getValue()==null) continue;
+					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
 					//Create a DataMapping for each property
 					DataMapping dataMapping = new DataMapping();
 					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
