@@ -27,7 +27,7 @@ import thewebsemantic.Namespace;
 @TargetDataset(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 //public class TableMapping extends GlobalJenabean {
-public class TableMapping extends UniqueJenabean {
+public class TableMapping extends SubjectMapping {
 	
 	private String mappedText;
 	
