@@ -41,6 +41,7 @@ public class RDF {
 	public static final String HAS_DATA = INQLE + "data";
 	public static final String DATA_PROPERTY = INQLE + "DataProperty";
 	public static final String SUBJECT_PROPERTY = INQLE + "SubjectProperty";
+	public static final String DATE_PROPERTY = INQLE + "date";
 	
 	/**
 	 * This method is intended to be called in cases where the URI fragment 

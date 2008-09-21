@@ -5,8 +5,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
+
+import thewebsemantic.Id;
+import thewebsemantic.Namespace;
 
 /**
  * Maps data to a RDFS class.  This mapping is used for importing data
@@ -31,7 +38,8 @@ import org.inqle.data.rdf.jenabean.GlobalJenabean;
  * @author David Donohue
  * Aug 4, 2008
  */
-public class SubjectMapping extends GlobalJenabean {
+@Namespace(RDF.INQLE)
+public class SubjectMapping extends UniqueJenabean {
 
 	public static final String URI_TYPE_INQLE_GENERATED = "INQLE-generated";
 	public static final String URI_TYPE_RANDOM_UUID = "URI prefix + random ID";
@@ -51,18 +59,26 @@ public class SubjectMapping extends GlobalJenabean {
 	private String subjectHeader;
 	private int subjectUriType;
 	
-	
-	public String getStringRepresentation() {
-		String s = getClass().toString() + " {\n";
-		s += "[subjectClass=" + subjectClass.toString() + "]\n";
-		s += "[subjectInstance=" + subjectInstance.toString() + "]\n";
-		//TODO ensure these mappings are sorted reproducibly each time they are iterated.
-		for(DataMapping dataMapping: getDataMappings()) {
-			s += "[dataMapping=" + dataMapping + "]\n";
+	@Override
+	@Id
+	public String getId() {
+		if (id == null) {
+			id = UUID.randomUUID().toString();
 		}
-		s += "}";
-		return s;
+		return id;
 	}
+	
+//	public String getStringRepresentation() {
+//		String s = getClass().toString() + " {\n";
+//		s += "[subjectClass=" + subjectClass.toString() + "]\n";
+//		s += "[subjectInstance=" + subjectInstance.toString() + "]\n";
+//		//TODO ensure these mappings are sorted reproducibly each time they are iterated.
+//		for(DataMapping dataMapping: getDataMappings()) {
+//			s += "[dataMapping=" + dataMapping + "]\n";
+//		}
+//		s += "}";
+//		return s;
+//	}
 
 	public void clone(SubjectMapping objectToBeCloned) {
 		setSubjectClass(objectToBeCloned.getSubjectClass());
@@ -132,6 +148,17 @@ public class SubjectMapping extends GlobalJenabean {
 	
 	public static int getSubjectUriCreationIndex(String label) {
 		return SUBJECT_URI_CREATION_METHOD_LIST.indexOf(label);
+	}
+
+	public void replicate(SubjectMapping objectToBeReplicated) {
+		clone(objectToBeReplicated);
+		setId(objectToBeReplicated.getId());
+	}
+	
+	public SubjectMapping createReplica() {
+		SubjectMapping subjectMapping = new SubjectMapping();
+		subjectMapping.replicate(this);
+		return subjectMapping;
 	}
 
 }
