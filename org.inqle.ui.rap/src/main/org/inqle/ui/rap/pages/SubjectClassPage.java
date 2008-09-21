@@ -264,7 +264,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			params = new HashMap<String, String>();
 			params.put(LookupInfo.UMBEL_MODE_PARAM, LookupInfo.UMBEL_MODE_ALL);
 			params.put(LookupInfo.UMBEL_SEARCH_PARAM, getSearchTextValue());
-			Document umbelSearchDocument = Requestor.retrieveXmlViaGet(LookupInfo.UMBEL_SUBJECT_URL, params);
+//			Document umbelSearchDocument = Requestor.retrieveXmlViaGet(LookupInfo.UMBEL_SUBJECT_URL, params);
 			
 			
 			setXmlDocument(mergedDocument);

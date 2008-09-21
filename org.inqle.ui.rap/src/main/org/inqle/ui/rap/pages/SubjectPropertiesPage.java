@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
@@ -56,8 +57,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	
 	protected List<IDataFieldShower> dataFieldShowers;
 
-	protected Label enterNewDataPropertyButtonLabel;
-	protected Label enterNewSubjectPropertyButtonLabel;
+	protected Text enterNewDataPropertyButtonExplanation;
+	protected Text enterNewSubjectPropertyButtonExplanation;
 
 	private ScrolledComposite scrolledComposite;
 	
@@ -106,9 +107,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
 //		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewDataPropertyButton.addSelectionListener(this);
-		enterNewDataPropertyButtonLabel = new Label(formComposite, SWT.WRAP);
+		enterNewDataPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
 		new Label(formComposite, SWT.NONE);
-		new Label(formComposite, SWT.WRAP).setText(
+		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
 				"These are properties that are measured, about the subject.  These values DO change with time.  " +
 				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
 		
@@ -116,9 +117,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
 //		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewSubjectPropertyButton.addSelectionListener(this);
-		enterNewSubjectPropertyButtonLabel = new Label(formComposite, SWT.NONE);
+		enterNewSubjectPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
 		new Label(formComposite, SWT.NONE);
-		new Label(formComposite, SWT.NONE).setText(
+		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
 				"These are properties that identify the subject and generally do NOT change with time.  " +
 				"Examples: 'has ticker symbol', 'has country code'");
 		
@@ -129,7 +130,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	@Override
 	public void onEnterPageFromPrevious() {
 		log.info("Entering SubjectPropertiesPage");
-		if (enterNewDataPropertyButtonLabel==null || enterNewSubjectPropertyButtonLabel == null) {
+		if (enterNewDataPropertyButtonExplanation==null || enterNewSubjectPropertyButtonExplanation == null) {
 			log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
 			return;
 		}
@@ -145,8 +146,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		removePropertyFormElements();
 		
 		subjectClassUri = currentSubjectClassUri;
-		enterNewDataPropertyButtonLabel.setText(getEnterNewDataPropertyButtonLabel());
-		enterNewSubjectPropertyButtonLabel.setText(getEnterNewSubjectPropertyButtonLabel());
+		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
+		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
 		
 		log.info("lookup properties from 4 places...");
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
