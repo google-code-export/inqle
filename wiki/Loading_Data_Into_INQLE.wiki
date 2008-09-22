@@ -1,4 +1,4 @@
-#summary How to load dat into INQLE
+#summary How to load data into INQLE
 
 == Introduction ==
 
@@ -10,3 +10,5 @@ INQLE can import data from a number of sources.
 Most data seems to be stored in spreadsheets.  Spreadsheets are great for collecting and working with a set of data, but within a spreadsheet, there is little semantic info such as the identities of the things represented or the relationships between them.  So to import data from a spreadsheet, you must take care to convert it properly to RDF.  It takes some attention, but the rewards will make it well worth your while!
 
 To facilitate importing data into INQLE, we provide a File Data Importer Wizard.  This wizard walks you through the steps of capturing data that is explicitly stored in a spreadsheet, as well as implicit data, about the spreadsheet, that does not appear in the spreadsheet.
+
+(more coming)
