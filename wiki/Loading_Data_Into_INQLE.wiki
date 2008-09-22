@@ -1,0 +1,22 @@
+#summary How to load dat into INQLE
+
+= Introduction =
+
+INQLE works with semantic, [http://www.w3.org/TR/REC-rdf-syntax/ RDF data].  This permits INQLE to recognize the relationships of the data, and to select a random sampling of learnable data.  So INQLE requires data to be imported as RDF.
+
+INQLE can import data from a number of sources.
+
+= 1. Import from Comma-Separated (CSV) or other Delimited Text File =
+Most data seems to be stored in spreadsheets.  Spreadsheets are great for collecting and working with a set of data, but within a spreadsheet, there is little semantic info identities of the things represented or the relationships between them.  So to import data from a spreadsheet, you must convert it to RDF.
+
+To facilitate importing data into IQNLE, we provide a File Data Importer Wizard.  This wizard walks you through the steps of capturing data that is explicitly stored in a spreadsheet, as well as implicit data, about the spreadsheet, that does not appear in the spreadsheet.
+
+
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
