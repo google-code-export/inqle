@@ -1,15 +1,17 @@
-package org.inqle.ui.rap.actions;
+package org.inqle.ui.rap.pages;
 
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
-import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextField;
 
 /**
@@ -18,7 +20,7 @@ import org.inqle.ui.rap.widgets.TextField;
  * @author David Donohue
  * Aug 9, 2008
  */
-public class TableSubjectUriPage extends DynaWizardPage {
+public class TableSubjectUriPage extends DynaWizardPage implements SelectionListener {
 
 	private static final Logger log = Logger.getLogger(TableSubjectUriPage.class);
 	
@@ -26,6 +28,10 @@ public class TableSubjectUriPage extends DynaWizardPage {
 	private static final String DEFAULT_DESCRIPTION = "Please identify the instances.";
 
 	private TextField instanceUriField;
+
+	private Button selectUnknownUriButton;
+
+	private Button selectKnownUriButton;
 	
 	public TableSubjectUriPage() {
 		this(DEFAULT_TITLE, null, DEFAULT_DESCRIPTION);
@@ -41,8 +47,17 @@ public class TableSubjectUriPage extends DynaWizardPage {
 	public void addElements() {
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
+		selectUnknownUriButton = new Button(selfComposite, SWT.PUSH);
+		selectUnknownUriButton.setText("Unknown: You can add other identifying info later.");
+		selectUnknownUriButton.setSelection(true);
+		selectUnknownUriButton.addSelectionListener(this);
+		
+		selectKnownUriButton = new Button(selfComposite, SWT.PUSH);
+		selectUnknownUriButton.setText("Known: Enter the URI below.");
+		selectKnownUriButton.addSelectionListener(this);
 		
 		instanceUriField = new TextField(selfComposite, "Enter URI of this instance", "Enter a URI that represents the thing");
+		instanceUriField.setEnabled(false);
 		
 		gl = new GridLayout(2, true);
 		Composite uriCreationArea = new Composite(selfComposite, SWT.NONE);
@@ -67,6 +82,9 @@ public class TableSubjectUriPage extends DynaWizardPage {
 	}
 	
 	public String getInstanceUri() {
+		if (isSubjectUriUnknown()) {
+			return null;
+		}
 		return instanceUriField.getTextValue();
 	}
 	
@@ -82,5 +100,20 @@ public class TableSubjectUriPage extends DynaWizardPage {
 		ICsvReaderWizard loadCsvFileWizard = (ICsvReaderWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		return loadCsvFileWizard.getCsvReader();
+	}
+
+	public void widgetSelected(SelectionEvent event) {
+		Object source = event.getSource();
+		if (source.equals(selectUnknownUriButton)) {
+			selectKnownUriButton.setSelection(false);
+			instanceUriField.setEnabled(false);
+		} else if (source.equals(selectKnownUriButton)) {
+			selectUnknownUriButton.setSelection(false);
+			instanceUriField.setEnabled(true);
+		}
+	}
+	
+	public boolean isSubjectUriUnknown() {
+		return selectUnknownUriButton.getSelection();
 	}
 }

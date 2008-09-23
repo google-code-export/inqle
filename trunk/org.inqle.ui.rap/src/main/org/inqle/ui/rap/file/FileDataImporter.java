@@ -50,7 +50,7 @@ public class FileDataImporter {
 		
 		for (SubjectMapping subjectMapping: tableMapping.getSubjectMappings()) {
 			//if the subject mapping identifies an individual, import values into this instance
-			if (subjectMapping.getSubjectInstance() != null) {
+			if (subjectMapping.isInstanceMapping()) {
 				//import the SubjectMappings which represent specific individuals
 				importInstanceSubjectMapping(subjectMapping);
 			} else {
@@ -75,10 +75,16 @@ public class FileDataImporter {
 		subjectDataClass.setSuperClass(tableDataClass);
 		
 //		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
-		String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
-		Individual subjectInstance = ontModel.createIndividual(
-				subjectInstanceUri,
-				ResourceFactory.createResource(subjectMapping.getSubjectClass().toString()));
+		Individual subjectInstance;
+		if (subjectMapping.getSubjectInstance()==null) {
+			String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
+			subjectInstance = ontModel.createIndividual(
+					subjectInstanceUri,
+					ResourceFactory.createResource(subjectMapping.getSubjectClass().toString()));
+		} else {
+			subjectInstance = ontModel.createIndividual(
+					ResourceFactory.createResource(subjectMapping.getSubjectClass().toString()));
+		}
 		subjectDataClass.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), subjectInstance);
 		//import static values to the subject or the subjectDataClass
 		importStaticValues(subjectMapping, subjectInstance, subjectDataClass);
@@ -119,7 +125,13 @@ public class FileDataImporter {
 			//for each row, create a inqle:Data, an inqle:Subject, and add mapped values to each
 			String[] row = rows[i];
 			String rowSubjectInstanceUri = generateDataInstanceUri(subjectMapping, row);
-			Individual rowSubjectInstance = ontModel.createIndividual(rowSubjectInstanceUri, subjectClass);
+			Individual rowSubjectInstance;
+			if (rowSubjectInstanceUri==null) {
+				rowSubjectInstance = ontModel.createIndividual(subjectClass);
+			} else {
+				rowSubjectInstance = ontModel.createIndividual(rowSubjectInstanceUri, subjectClass);
+			}
+			
 			//wrong? Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
 			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 			rowDataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), rowSubjectInstance);
@@ -198,6 +210,9 @@ public class FileDataImporter {
 	}
 	
 	private String generateDataInstanceUri(SubjectMapping subjectMapping, String[] row) {
+		if (subjectMapping.getSubjectUriType()==SubjectMapping.getSubjectUriCreationIndex(SubjectMapping.URI_TYPE_UNKNOWN)) {
+			return null;
+		}
 		String uriPrefix = subjectMapping.getSubjectUriPrefix().toString();
 		if (uriPrefix==null || subjectMapping.getSubjectUriType()==SubjectMapping.getSubjectUriCreationIndex(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
 			uriPrefix = RDF.SUBJECT + "/"; 
