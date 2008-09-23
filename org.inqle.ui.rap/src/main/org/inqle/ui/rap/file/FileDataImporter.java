@@ -76,7 +76,7 @@ public class FileDataImporter {
 		
 //		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 		Individual subjectInstance;
-		if (subjectMapping.getSubjectInstance()==null) {
+		if (subjectMapping.getSubjectInstance()!=null) {
 			String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
 			subjectInstance = ontModel.createIndividual(
 					subjectInstanceUri,
