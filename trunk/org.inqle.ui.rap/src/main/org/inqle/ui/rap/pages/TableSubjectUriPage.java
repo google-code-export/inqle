@@ -47,13 +47,13 @@ public class TableSubjectUriPage extends DynaWizardPage implements SelectionList
 	public void addElements() {
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
-		selectUnknownUriButton = new Button(selfComposite, SWT.PUSH);
+		selectUnknownUriButton = new Button(selfComposite, SWT.RADIO);
 		selectUnknownUriButton.setText("Unknown: You can add other identifying info later.");
 		selectUnknownUriButton.setSelection(true);
 		selectUnknownUriButton.addSelectionListener(this);
 		
-		selectKnownUriButton = new Button(selfComposite, SWT.PUSH);
-		selectUnknownUriButton.setText("Known: Enter the URI below.");
+		selectKnownUriButton = new Button(selfComposite, SWT.RADIO);
+		selectKnownUriButton.setText("Known: Enter the URI below.");
 		selectKnownUriButton.addSelectionListener(this);
 		
 		instanceUriField = new TextField(selfComposite, "Enter URI of this instance", "Enter a URI that represents the thing");
