@@ -41,11 +41,13 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class SubjectMapping extends UniqueJenabean {
 
+	public static final String URI_TYPE_UNKNOWN = "Unknown (blank)";
 	public static final String URI_TYPE_INQLE_GENERATED = "INQLE-generated";
 	public static final String URI_TYPE_RANDOM_UUID = "URI prefix + random ID";
 	public static final String URI_TYPE_COLUMN_VALUE = "URI prefix + value from specified column";
 	
 	public static final String[] SUBJECT_URI_CREATION_METHODS = {
+		URI_TYPE_UNKNOWN,
 		URI_TYPE_INQLE_GENERATED,
 		URI_TYPE_RANDOM_UUID,
 		URI_TYPE_COLUMN_VALUE
@@ -58,6 +60,7 @@ public class SubjectMapping extends UniqueJenabean {
 	private URI subjectUriPrefix;
 	private String subjectHeader;
 	private int subjectUriType;
+	private boolean instanceMapping;
 	
 	@Override
 	@Id
@@ -159,6 +162,14 @@ public class SubjectMapping extends UniqueJenabean {
 		SubjectMapping subjectMapping = new SubjectMapping();
 		subjectMapping.replicate(this);
 		return subjectMapping;
+	}
+
+	public boolean isInstanceMapping() {
+		return instanceMapping;
+	}
+
+	public void setInstanceMapping(boolean instanceMapping) {
+		this.instanceMapping = instanceMapping;
 	}
 
 }
