@@ -1,4 +1,4 @@
-package org.inqle.ui.rap.actions;
+package org.inqle.ui.rap.pages;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
-import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextFieldShower;
 
 public class SaveMappingLoadDataPage extends DynaWizardPage {

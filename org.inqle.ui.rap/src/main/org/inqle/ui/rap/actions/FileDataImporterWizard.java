@@ -28,9 +28,12 @@ import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyValuesPage;
+import org.inqle.ui.rap.pages.RowSubjectUriPage;
+import org.inqle.ui.rap.pages.SaveMappingLoadDataPage;
 import org.inqle.ui.rap.pages.SubjectClassPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.TableSubjectPropertyValuesPage;
+import org.inqle.ui.rap.pages.TableSubjectUriPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
 import org.inqle.ui.rap.table.TableSubjectClassPage;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
@@ -322,6 +325,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			
 			if (page instanceof TableSubjectClassPage) {
 				SubjectMapping subjectMapping = new SubjectMapping();
+				subjectMapping.setInstanceMapping(true);
 				
 				TableSubjectClassPage subjectClassPage = (TableSubjectClassPage)page;
 				i++;
@@ -332,6 +336,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				TableSubjectPropertyMappingsPage propertyMappingsPage = (TableSubjectPropertyMappingsPage)getPages()[i];
 				String subjectClass = subjectClassPage.getSubjectUri();
 				String subjectUri = subjectUriPage.getInstanceUri();
+				
 				if (subjectUri != null) {
 					subjectMapping.setSubjectInstance(URI.create(subjectUri));
 				}
@@ -378,6 +383,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			}
 
 			if (page instanceof RowSubjectClassPage) {
+				SubjectMapping subjectMapping = new SubjectMapping();
+				subjectMapping.setInstanceMapping(false);
+				
 				RowSubjectClassPage subjectClassPage = (RowSubjectClassPage)page;
 				i++;
 				RowSubjectUriPage subjectUriPage = (RowSubjectUriPage)getPages()[i];
@@ -389,11 +397,12 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				String subjectUriPrefix = subjectUriPage.getInstancePrefixUri();
 				int subjectUriType = subjectUriPage.getSubjectCreationMethodIndex();
 				String subjectHeader = subjectUriPage.getUriSuffixColumnHeader();
-				SubjectMapping subjectMapping = new SubjectMapping();
+				
 				subjectMapping.setSubjectClass(URI.create(subjectClass));
 				subjectMapping.setSubjectUriPrefix(URI.create(subjectUriPrefix));
 				subjectMapping.setSubjectUriType(subjectUriType);
 				subjectMapping.setSubjectHeader(subjectHeader);
+				
 				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
 					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
 					//Create a DataMapping for each property

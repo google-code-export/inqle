@@ -1,7 +1,5 @@
-package org.inqle.ui.rap.actions;
+package org.inqle.ui.rap.pages;
 
-
-import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -15,8 +13,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
+import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
-import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.widgets.TextField;
 
 public class RowSubjectUriPage extends DynaWizardPage implements SelectionListener {
