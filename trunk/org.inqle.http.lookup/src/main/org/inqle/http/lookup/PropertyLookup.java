@@ -217,6 +217,7 @@ public class PropertyLookup {
 					"{ ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
 					"} UNION { \n" +
 					"?Property_URI rdfs:domain <" + RDF.SUBJECT + "> } \n" +
+					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
 					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
 					". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 			"} ORDER BY ASC(?Label) \n" +
