@@ -54,7 +54,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		namingMethodLabel = new Label(selfComposite, SWT.NONE);
 		namingMethodLabel.setText("Select the naming method for generating the URI for each row");
 		
-		subjectUriCreationMethodList = new List(selfComposite, SWT.SINGLE | SWT.BORDER);
+		subjectUriCreationMethodList = new List(selfComposite, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
 		subjectUriCreationMethodList.setItems(SubjectMapping.SUBJECT_URI_CREATION_METHODS);
 		subjectUriCreationMethodList.select(0);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);

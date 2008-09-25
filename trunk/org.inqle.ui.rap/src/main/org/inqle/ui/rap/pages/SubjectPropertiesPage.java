@@ -24,7 +24,6 @@ import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.actions.CreateSubpropertyAction;
@@ -74,7 +73,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	@Override
 //	public void addElements() {
 	public void createControl(Composite parent) {
-		log.info("SubjectPropertiesPage.createControl...");
+		//log.info("SubjectPropertiesPage.createControl...");
 		
 		scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
 		GridLayout gl = new GridLayout(1, true);
@@ -129,9 +128,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	
 	@Override
 	public void onEnterPageFromPrevious() {
-		log.info("Entering SubjectPropertiesPage");
+		//log.info("Entering SubjectPropertiesPage");
 		if (enterNewDataPropertyButtonExplanation==null || enterNewSubjectPropertyButtonExplanation == null) {
-			log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
+			//log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
 			return;
 		}
 		
@@ -139,7 +138,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 //		formComposite.redraw();
 		
 		String currentSubjectClassUri = getSubjectUri();
-		log.info("currentSubjectClassUri=" + currentSubjectClassUri);
+		//log.info("currentSubjectClassUri=" + currentSubjectClassUri);
 		if (currentSubjectClassUri == null || currentSubjectClassUri.equals(subjectClassUri)) {
 			return;
 		}
@@ -149,27 +148,27 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
 		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
 		
-		log.info("lookup properties from 4 places...");
+		log.trace("lookup properties from 4 places...");
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				10, 
 				0);
 		Document dataAndSubjectPropertiesDocument = XmlDocumentUtil.getDocument(dataAndSubjectPropertiesXml);
-		log.info("dataAndSubjectPropertiesXml=" + dataAndSubjectPropertiesXml);
+		log.trace("dataAndSubjectPropertiesXml=" + dataAndSubjectPropertiesXml);
 		String otherSubjectPropertiesXml = PropertyLookup.lookupPropertiesInSchemaFiles(
 				subjectClassUri, 
 				10, 
 				0);
 		Document otherSubjectPropertiesDocument = XmlDocumentUtil.getDocument(otherSubjectPropertiesXml);
-		log.info("otherSubjectPropertiesDocument=" + otherSubjectPropertiesDocument);
+		log.trace("otherSubjectPropertiesDocument=" + otherSubjectPropertiesDocument);
 		Document allLocalPropertiesDocument = SparqlXmlUtil.merge(dataAndSubjectPropertiesDocument, otherSubjectPropertiesDocument);
 		
-		log.info("Looking up remote Data & Subject properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+		log.trace("Looking up remote Data & Subject properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 		//do the search
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(InqleInfo.PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT, subjectClassUri);
 		Document remoteDataAndSubjectPropertiesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
+		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
 		
 		log.info("Looking up in remote schema files properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 		//do the search
@@ -181,7 +180,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
 				
 		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
-		log.info("Merged all results into:\n" + XmlDocumentUtil.xmlToString(allPropertiesDocument));
+//		log.info("Merged all results into:\n" + XmlDocumentUtil.xmlToString(allPropertiesDocument));
 
 		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(allPropertiesDocument);
 		
@@ -230,7 +229,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			if (comment != null) comment=comment.trim();
 			String propertyType = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_TYPE);
 			if (propertyType != null) propertyType=propertyType.trim();
-			log.info("Creating form element w/\nuri=" + uri + "\nlabel=" + label + "\ncomment=" + comment + "\npropertyType=" + propertyType);
+			//log.info("Creating form element w/\nuri=" + uri + "\nlabel=" + label + "\ncomment=" + comment + "\npropertyType=" + propertyType);
 			addPropertyFormItem(uri, label, comment, propertyType);
 		}
 	}
@@ -261,7 +260,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
 		if (clickedObject.equals(enterNewDataPropertyButton)) {			
-			log.info("Clicked 'new data property' button");
+			//log.info("Clicked 'new data property' button");
 			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
 					formComposite.getShell(), 
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
@@ -277,9 +276,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			
 			createSubpropertyAction.run();
 			OntResource newProperty = createSubpropertyAction.getOntResource();
-			log.info("Adding form item for: uri=" + newProperty.getURI() + 
-					"label=" + newProperty.getLabel("EN") +
-					"description=" + newProperty.getComment("EN"));
+//			log.trace("Adding form item for: uri=" + newProperty.getURI() + 
+//					"label=" + newProperty.getLabel("EN") +
+//					"description=" + newProperty.getComment("EN"));
 			addPropertyFormItem(newProperty.getURI(), 
 					newProperty.getLabel("EN"), 
 					newProperty.getComment("EN"),

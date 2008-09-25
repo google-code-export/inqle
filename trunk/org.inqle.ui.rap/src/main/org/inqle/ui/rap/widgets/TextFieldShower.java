@@ -48,7 +48,8 @@ public class TextFieldShower implements IDataFieldShower {
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		
+		if (labelString==null) labelString="";
+		if (descriptionString==null) descriptionString="";
 		//create the controls
 		label = new Label(composite, SWT.NONE);
 		label.setText(labelString);
