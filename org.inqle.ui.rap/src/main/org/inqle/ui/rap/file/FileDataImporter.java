@@ -159,11 +159,16 @@ public class FileDataImporter {
 				log.warn("Header '" + mappedHeader + "' not found in the data file.  Skipping import of this DataMapping.");
 				continue;
 			}
-			String value = row[columnIndex];
-			if (URI.create(RDF.SUBJECT_PROPERTY).equals(dataMapping.getMapsPropertyType())) {
-				importValue(subjectInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
-			} else {
-				importValue(dataInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
+			try {
+				String value = row[columnIndex];
+				if (URI.create(RDF.SUBJECT_PROPERTY).equals(dataMapping.getMapsPropertyType())) {
+					importValue(subjectInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
+				} else {
+					importValue(dataInstance, ResourceFactory.createProperty(dataMapping.getMapsPredicate().toString()), value);
+				}
+			} catch (RuntimeException e) {
+				//missing column or whatnot
+				log.error("Skipping import of value for column #" + columnIndex + "for row: " + row, e);
 			}
 		}
 	}

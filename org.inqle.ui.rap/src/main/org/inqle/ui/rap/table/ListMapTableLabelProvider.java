@@ -33,18 +33,18 @@ import com.hp.hpl.jena.query.QuerySolution;
  * @author David Donohue
  * Mar 11, 2008
  */
-public class SparqlXmlTableLabelProvider extends CellLabelProvider {
+public class ListMapTableLabelProvider extends CellLabelProvider {
 
 //	protected int rowNumColumnIndex = -1;
 
 
 	private Document xmlDocument;
 
-	private ArrayList<String> headerVariables;
+	private List<String> headerVariables;
 
 	private List<SortedMap<String, String>> rowElements;
 	
-	public static final Logger log = Logger.getLogger(SparqlXmlTableLabelProvider.class);
+	public static final Logger log = Logger.getLogger(ListMapTableLabelProvider.class);
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.CellLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
@@ -62,46 +62,22 @@ public class SparqlXmlTableLabelProvider extends CellLabelProvider {
 		return xmlDocument;
 	}
 
-	public void setXmlDocument(Document xmlDoc) {
-		this.xmlDocument = xmlDoc;
-		NodeList headers = xmlDocument.getElementsByTagName("head");
-		Element header = (Element)headers.item(0);
-		NodeList variables = header.getElementsByTagName("variable");
-		headerVariables = new ArrayList<String>();
-		for (int i=0; i<variables.getLength(); i++) {
-			Element variableNode = (Element)variables.item(i);
-			String variableStr = variableNode.getAttribute("name");
-			headerVariables.add(variableStr);
-		}
+	
+	public void setRowElements(List<SortedMap<String, String>> sortedMap) {
 		
-//		rowElements = new ArrayList<Map<String, String>>();
-//		NodeList results = xmlDocument.getElementsByTagName("results");
-//		Element resultsElement = (Element)results.item(0);
-//		NodeList rows = resultsElement.getElementsByTagName("result");
-//		
-//		for (int j=0; j<rows.getLength(); j++) {
-//			HashMap<String, String> valueMap = new HashMap<String, String>();
-//			Element rowElement = (Element)rows.item(j);
-//			NodeList bindingNodes = rowElement.getElementsByTagName("binding");
-//			for (int k=0; k<bindingNodes.getLength(); k++) {
-//				Element cellElement = (Element)bindingNodes.item(k);
-//				String varName = cellElement.getAttribute("name");
-//				String elementValue = cellElement.getTextContent();
-////				log.info("Row=" + j + ", Col=" + k + " Adding:" + varName + "=" + elementValue);
-//				valueMap.put(varName, elementValue);
-//			}
-//			rowElements.add(valueMap);
-//		}
-		
-		rowElements = SparqlXmlUtil.getRowValues(xmlDoc);
+		rowElements = sortedMap;
 	}
 
-	public ArrayList<String> getHeaderVariables() {
+	public List<String> getHeaderVariables() {
 		return headerVariables;
 	}
 
 	public List<SortedMap<String, String>> getRowElements() {
 		return rowElements;
+	}
+
+	public void setHeaderVariables(List<String> headerVariables) {
+		this.headerVariables = headerVariables;
 	}
 
 }

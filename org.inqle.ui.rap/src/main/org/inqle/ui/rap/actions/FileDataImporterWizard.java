@@ -142,6 +142,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
 			popup.open();
 			tableMapping = getTableMapping();
+			log.info("Saving new TableMapping:\n" + JenabeanWriter.toString(tableMapping));
 			Persister persister = Persister.getInstance();
 			persister.persist(tableMapping);
 			popup.close();
