@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
@@ -23,6 +25,12 @@ public class SparqlXmlUtil {
 	 * Note that it assumes that the 2 Documents 
 	 * have identical structure in terms of variables
 	 * (columns) present.
+	 * 
+	 * Note that this method only works for deduplicating 2 XML docs generated 
+	 * locally.  It fails to identify duplicate records between 2 documents 
+	 * from different origin (1 from lookup service and 1 from local query).
+	 * Instead, convert to a List<SortedMap<String, String>> using getRows method, 
+	 * then use ListMapUtil to merge.
 	 * @param originalDocument
 	 * @param addDocument
 	 * @return
@@ -31,7 +39,7 @@ public class SparqlXmlUtil {
 		//log.info("SparqlXmlUtil.merge()...");
 		Document doc = null;
 		try {
-			doc = originalDocument;
+			doc = (Document)originalDocument.cloneNode(true);
 			//log.info("doc initialized to null...");
 //			originalDocument.setStrictErrorChecking(false);
 	//		addDocument.setStrictErrorChecking(false);
@@ -70,16 +78,24 @@ public class SparqlXmlUtil {
 			NodeList resultsNL = (NodeList)resultsObj;
 			//log.info("3...");
 			Element resultsElement = (Element)resultsNL.item(0);
+			
+			Object mergedResultsObj = doc.getElementsByTagName("results");
+			//log.info("2...");
+			NodeList mergedResultsNL = (NodeList)mergedResultsObj;
+			//log.info("3...");
+			Element mergedResultsElement = (Element)mergedResultsNL.item(0);
+			
 			//log.info("4...");
 			NodeList addRows = addDocument.getElementsByTagName("result");
-			//log.info("5...");
+//			log.info("addRows=NodeList of length:" + addRows.getLength());
 			//get list of <result> tags from the 2nd set of results, to be added
 //			NodeList addResults = addDocument.getElementsByTagName("results");
 //			Element addResultsElement = (Element)addResults.item(0);
 //			NodeList addRows = addResultsElement.getElementsByTagName("result");
-			for (int i=0; i<addRows.getLength(); i++) {
-				//log.info("i=" + i);
-				Node addRowNode = addRows.item(i);
+			int addRowsCount = addRows.getLength();
+			for (int resultCount=0; resultCount<addRowsCount; resultCount++) {
+//				log.info("resultCount=" + resultCount);
+				Node addRowNode = addRows.item(resultCount).cloneNode(true);
 //				Node newAddRowNode = addRowNode.cloneNode(true);
 				//log.info("Adding this node:" + addRowNode.getNodeName() + "=" + addRowNode.getTextContent());
 				//originalResultsElement.insertBefore(newAddRowElement, null);
@@ -87,9 +103,9 @@ public class SparqlXmlUtil {
 //				doc.importNode(addRowNode, true);
 				
 				//
-				if (isNewNode(addRowNode, resultsElement)) {
+				if (isNewResultNode(addRowNode, resultsElement)) {
 					doc.adoptNode(addRowNode);
-					resultsElement.appendChild(addRowNode);
+					mergedResultsElement.appendChild(addRowNode);
 				}
 			}
 		} catch (Exception e) {
@@ -107,15 +123,24 @@ public class SparqlXmlUtil {
 	 * @param parentElement the element to test for already existing identical child nodes
 	 * @return
 	 */
-	private static boolean isNewNode(Node externalNode, Element parentElement) {
-		NodeList nodeList = parentElement.getChildNodes();
-		for (int i=0; i < nodeList.getLength(); i++) {
-			Node existingNode = nodeList.item(i);
+	private static boolean isNewResultNode(Node externalNode, Element parentElement) {
+		externalNode.normalize();
+//		log.info("IS NODE UNIQUE?" + XmlDocumentUtil.xmlToString((Element)externalNode));
+		//parentElement.normalize();
+//		NodeList nodeList = parentElement.getChildNodes();
+		NodeList nodeList = parentElement.getElementsByTagName("result");
+		for (int nodeCount=0; nodeCount < nodeList.getLength(); nodeCount++) {
+			Node existingNode = nodeList.item(nodeCount);
+			//log.info("Test existing node #" +nodeCount + ": " + existingNode.getNodeName() + "=" + existingNode.getTextContent());
+			existingNode.normalize();
+//			log.info("Test existing node #" +nodeCount + ": " + XmlDocumentUtil.xmlToString((Element)existingNode));
 			if (externalNode.isEqualNode(existingNode)) {
-				//log.info("Node is equivalent to an existing one: " + externalNode.getNodeName() + "=" + externalNode.getTextContent());
+//				log.info("NODE is equivalent to an existing one: " + externalNode.getNodeName() + "=" + externalNode.getTextContent());
+//				log.info("NO. It is equivalent to an existing one.");
 				return false;
 			}
 		}
+//		log.info("YES. It is unique.");
 		return true;
 	}
 
@@ -137,14 +162,14 @@ public class SparqlXmlUtil {
 	 * @param sparqlDocument
 	 * @return
 	 */
-	public static List<Map<String, String>> getRowValues(Document sparqlDocument) {
-		ArrayList<Map<String, String>> rowElements = new ArrayList<Map<String, String>>();
+	public static List<SortedMap<String, String>> getRowValues(Document sparqlDocument) {
+		ArrayList<SortedMap<String, String>> rowElements = new ArrayList<SortedMap<String, String>>();
 		NodeList results = sparqlDocument.getElementsByTagName("results");
 		Element resultsElement = (Element)results.item(0);
 		NodeList rows = resultsElement.getElementsByTagName("result");
 		
 		for (int j=0; j<rows.getLength(); j++) {
-			HashMap<String, String> valueMap = new HashMap<String, String>();
+			SortedMap<String, String> valueMap = new TreeMap<String, String>();
 			Element rowElement = (Element)rows.item(j);
 			NodeList bindingNodes = rowElement.getElementsByTagName("binding");
 			for (int k=0; k<bindingNodes.getLength(); k++) {
@@ -159,4 +184,16 @@ public class SparqlXmlUtil {
 		return rowElements;
 	}
 	
+	public static List<String> getHeaderVariables(Document xmlDocument) {
+		NodeList headers = xmlDocument.getElementsByTagName("head");
+		Element header = (Element)headers.item(0);
+		NodeList variables = header.getElementsByTagName("variable");
+		List<String> headerVariables = new ArrayList<String>();
+		for (int i=0; i<variables.getLength(); i++) {
+			Element variableNode = (Element)variables.item(i);
+			String variableStr = variableNode.getAttribute("name");
+			headerVariables.add(variableStr);
+		}
+		return headerVariables;
+	}
 }
