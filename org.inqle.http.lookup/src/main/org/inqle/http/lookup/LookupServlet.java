@@ -128,13 +128,13 @@ public class LookupServlet extends HttpServlet {
 	}
 	
 	private void respondOK(String message) {
-		log.info(message);
+//		log.info(message);
 		response.setStatus(HttpURLConnection.HTTP_OK);
 		out.println(message);
 	}
 	
 	private void respondIrregularity(int status, String message) {
-		log.info(message);
+//		log.info(message);
 		response.setStatus(status);
 		out.println(message);
 	}

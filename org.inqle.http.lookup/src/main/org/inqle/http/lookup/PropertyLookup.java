@@ -10,6 +10,8 @@ import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 
+import com.hp.hpl.jena.ontology.OntModel;
+
 /**
  * This class gets 2 kinds of properties:
  *  * properties of a particular OWL class
@@ -139,8 +141,6 @@ public class PropertyLookup {
 	 * @param limit
 	 * @param offset
 	 * @return the SQPRQL string
-	 * 
-	 * TODO standardize nomenclature: inqle:Data and inqle:Subject, and use "Data" and "Subject" in method names
 	 */
 	public static String getSparqlFindDataProperties(String subjectClassUri, int limit, int offset) {
 			String sparql = 
@@ -211,12 +211,15 @@ public class PropertyLookup {
 			"PREFIX pf: <" + RDF.PF + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
-			"{\n" +
-			"GRAPH ?g {\n" +
-					"?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
+//			"{\n" +
+//			"GRAPH ?g {\n" +
+			"WHERE {" +
+					"{ ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
+					"} UNION { \n" +
+					"?Property_URI rdfs:domain <" + RDF.SUBJECT + "> } \n" +
 					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
 					". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
-			"} } ORDER BY ASC(?Label) \n" +
+			"} ORDER BY ASC(?Label) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
 	}
@@ -276,7 +279,7 @@ public class PropertyLookup {
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindMappedDataPropertiesAboutSubject(subjectClassUri, countSearchResults, offset);
-		log.info("Querying w/ this sparql:\n" + sparql);
+//		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
 		return resultXml;
@@ -296,7 +299,7 @@ public class PropertyLookup {
 		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindMappedSubjectProperties(subjectClassUri, countSearchResults, offset);
-		log.info("Querying w/ this sparql:\n" + sparql);
+//		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
 		return resultXml;
@@ -317,7 +320,7 @@ public class PropertyLookup {
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindDataAndSubjectProperties(subjectClassUri, countSearchResults, offset);
-		log.info("Querying w/ this sparql:\n" + sparql);
+//		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
 		return resultXml;
@@ -335,7 +338,9 @@ public class PropertyLookup {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		
 		log.info("Get/Create OntModel...");
-		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
+		OntModel theModel = persister.getSchemaFilesOntModel();
+		log.info("querying model w/ " + theModel.size() + " statements.");
+		queryCriteria.setSingleModel(theModel);
 		
 //		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
