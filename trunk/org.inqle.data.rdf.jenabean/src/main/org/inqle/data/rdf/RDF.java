@@ -19,7 +19,7 @@ public class RDF {
 	public static final String JA = "http://jena.hpl.hp.com/2005/11/Assembler#";
 	public static final String PF = "http://jena.hpl.hp.com/ARQ/property#";
 	public static final String FRESNEL = "http://www.w3.org/2004/09/fresnel#";
-	public static final String INQLE = "http://inqle.org/ns/v1/";
+	public static final String INQLE = "http://inqle.org/ns/";
 	
 	public static final String SDB = "http://jena.hpl.hp.com/2007/sdb#";	
 	public static final String THEWEBSEMANTIC = "http://thewebsemantic.com/";
