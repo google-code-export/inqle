@@ -1,7 +1,10 @@
 package org.inqle.ui.rap.pages;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.observable.list.WritableList;
@@ -18,6 +21,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.core.util.ListMapUtil;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
@@ -27,6 +31,7 @@ import org.inqle.http.lookup.LookupInfo;
 import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.actions.CreateSubclassAction;
+import org.inqle.ui.rap.table.ListMapTableLabelProvider;
 import org.inqle.ui.rap.table.SparqlXmlTableLabelProvider;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
@@ -53,7 +58,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 
 //	protected TableViewer tableViewer;
 
-	private Document xmlDocument;
+//	private Document xmlDocument;
 
 //	private Text searchText;
 
@@ -70,6 +75,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	private String createdUri;
 
 	private Label selectNewSubjectLabel;
+
+	private List<SortedMap<String, String>> dataRecords;
+
+	private List<String> headerVariables;
 
 //	private static String TITLE = "Type of Subject";
 //	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
@@ -138,8 +147,11 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 
 		//log.info("Refreshing table...");
 
-		SparqlXmlTableLabelProvider labelProvider = new SparqlXmlTableLabelProvider();
-		labelProvider.setXmlDocument(xmlDocument);
+//		SparqlXmlTableLabelProvider labelProvider = new SparqlXmlTableLabelProvider();
+//		labelProvider.setXmlDocument(xmlDocument);
+		ListMapTableLabelProvider labelProvider = new ListMapTableLabelProvider();
+		labelProvider.setRowElements(dataRecords);
+		labelProvider.setHeaderVariables(headerVariables);
 		
 		//add columns
 		if (table.getColumns().length == 0)  {
@@ -174,10 +186,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	 * Set the rows of data in the table.  The class of items should be set in the setRowItemClass() method
 	 * @param beans
 	 */
-	public void setXmlDocument(Document xmlDocument) {
-		//this.rdfTable = rdfTable;
-		this.xmlDocument = xmlDocument;
-	}
+//	public void setXmlDocument(Document xmlDocument) {
+//		//this.rdfTable = rdfTable;
+//		this.xmlDocument = xmlDocument;
+//	}
 	
 	public String getSearchTextValue() {
 		return searchBox.getSearchText();
@@ -238,7 +250,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Document localRdfClassDocument = XmlDocumentUtil.getDocument(localRdfClassXml);
 			
 			Document localDocument = SparqlXmlUtil.merge(localDataSubjectDocument, localRdfClassDocument);
-			//log.info("Merged data subjects with classes from RDF Schema files.");
+			List<SortedMap<String, String>> localRecords = SparqlXmlUtil.getRowValues(localDocument);
+			
+			//read the header variables from the merged local document
+			headerVariables = SparqlXmlUtil.getHeaderVariables(localDocument);
 			
 			//log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			//do the search
@@ -246,28 +261,37 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
 			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 			//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
+			List<SortedMap<String, String>> remoteRecords = SparqlXmlUtil.getRowValues(localDocument);
 			
-			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
+			
+		//DO THIS WHEN READY: lookup subject info from UMBEL subject service
+//		params = new HashMap<String, String>();
+//		params.put(LookupInfo.UMBEL_MODE_PARAM, LookupInfo.UMBEL_MODE_ALL);
+//		params.put(LookupInfo.UMBEL_SEARCH_PARAM, getSearchTextValue());
+//		Document umbelSearchDocument = Requestor.retrieveXmlViaGet(LookupInfo.UMBEL_SUBJECT_URL, params);
+
+			
+			List<SortedMap<String, String>> interimRecords = ListMapUtil.merge(localRecords, remoteRecords);
+//			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
 			//log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
 			
 			//if insufficient results, do an additional query of the remote RDF Schema datafiles
-			if (SparqlXmlUtil.countResults(mergedDocument) <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
+		  if (interimRecords.size() <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
 				//log.info("Doing remote RDF classes lookup...");
 				params = new HashMap<String, String>();
 				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
 				Document remoteRdfClassesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 				//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
-				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
-			}
+//				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
+				List<SortedMap<String, String>> remoteRdfClassesRecords = SparqlXmlUtil.getRowValues(remoteRdfClassesDocument);
+				dataRecords = ListMapUtil.merge(interimRecords, remoteRdfClassesRecords);
+		  } else {
+		  	dataRecords = interimRecords;
+		  }			
 			
-			//lookup subject info from UMBEL subject service
-			params = new HashMap<String, String>();
-			params.put(LookupInfo.UMBEL_MODE_PARAM, LookupInfo.UMBEL_MODE_ALL);
-			params.put(LookupInfo.UMBEL_SEARCH_PARAM, getSearchTextValue());
-//			Document umbelSearchDocument = Requestor.retrieveXmlViaGet(LookupInfo.UMBEL_SUBJECT_URL, params);
+//			setXmlDocument(mergedDocument);
+//			List<SortedMap<String, String>> records = SparqlXmlUtil.getRowValues(mergedDocument);
 			
-			
-			setXmlDocument(mergedDocument);
 			refreshTableData();
 		}
 	}
@@ -322,5 +346,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	public void setUriFieldName(String uriFieldName) {
 		this.uriFieldName = uriFieldName;
 	}
+
+	public List<SortedMap<String, String>> getSortedMap() {
+		return dataRecords;
+	}
+
 
 }

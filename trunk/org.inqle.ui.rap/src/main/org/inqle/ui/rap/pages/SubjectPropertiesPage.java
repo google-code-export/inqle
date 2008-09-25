@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.core.util.ListMapUtil;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
@@ -170,19 +172,24 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		Document remoteDataAndSubjectPropertiesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
 		
-		log.info("Looking up in remote schema files properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+		log.trace("Looking up in remote schema files properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 		//do the search
 		params = new HashMap<String, String>();
 		params.put(InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES, subjectClassUri);
 		Document remotePropertiesFromSchemaFilesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-		log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remotePropertiesFromSchemaFilesDocument));
+		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(remotePropertiesFromSchemaFilesDocument));
 		
 		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
 				
-		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
+//		log.info("Merging all LOCAL results:\n" + XmlDocumentUtil.xmlToString(allLocalPropertiesDocument));
+		List<SortedMap<String, String>> localRowValues = SparqlXmlUtil.getRowValues(allLocalPropertiesDocument);
+		
+//		log.info("...with all REMOTE results:\n" + XmlDocumentUtil.xmlToString(allRemotePropertiesDocument));
+		List<SortedMap<String, String>> remoteRowValues = SparqlXmlUtil.getRowValues(allRemotePropertiesDocument);
+//		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
 //		log.info("Merged all results into:\n" + XmlDocumentUtil.xmlToString(allPropertiesDocument));
 
-		List<Map<String, String>> rowValues = SparqlXmlUtil.getRowValues(allPropertiesDocument);
+		List<SortedMap<String, String>> rowValues = ListMapUtil.merge(localRowValues, remoteRowValues);
 		
 		makePropertyFormElements(rowValues);
 		
@@ -216,7 +223,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		return wizard.getSubjectClassUri(this);
 	}
 
-	protected void makePropertyFormElements(List<Map<String, String>> rowValues) {
+	protected void makePropertyFormElements(List<SortedMap<String, String>> rowValues) {
 		dataFieldShowers = new ArrayList<IDataFieldShower>();
 		CsvReader csvImporter = getCsvReader();
 		headers = csvImporter.getHeaders();
@@ -290,7 +297,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		}
 		
 		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			
-			log.info("Clicked 'new subject property' button");
+//			log.info("Clicked 'new subject property' button");
 			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
 					formComposite.getShell(), 
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
