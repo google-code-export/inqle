@@ -14,8 +14,7 @@ Below are the milestones, past and future, for project INQLE
 
 ==Version 0.1==
 First release with basic functionality for local data.
-
-(in process, expected to be released in June 2008)
+(released in June 2008)
   * Eclipse RAP-based user interface, in Equinox OSGi container
   * Management of Jena-based RDF databases
   * Single sampling algorithm: !SimpleSparqlSampler, which extracts example set, in which each row has common set of predicates
@@ -25,6 +24,12 @@ First release with basic functionality for local data.
   * Extensible, runnable agent plugin type, including agent for running 
   * support for customization of LearningCycle and/or its components
   * viewing history of experiment results
+  * embedded H2 database, for simplified installation
+
+==Version 0.1.5==
+(expected early October, 2008)
+  * New data importer, which captures both explicit and implicit data from spreadsheets, and enables the user to search existing stores of subjects and properties.
+  * The Central INQLE Server provides a registry for sharing the subjects and properties that other inqle servers have used, permitting standardization and cross-linking of data.
 
 ==Version 0.2==
 Enhanced connectivity to data.
