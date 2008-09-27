@@ -19,14 +19,17 @@ Next start the wizard, right click a dataset in your INQLE Administrator, and se
 
 
 Next, click *Browse* and find your CSV file, and click *Open*.  Click *Upload*.
+
 [http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/upload_file.gif]
 
 
 Click *Next*.  You should see the first few rows of your CSV data. 
+
 [http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/view_data.gif]
 
 
 Click *Next*.  
+
 [http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/specify_date.gif]
 
 Here you can specify date information about your data.  If your CSV all pertains to a single date or time, then you can select that all data being imported has the same date and time, and enter this date (and optionally time).
