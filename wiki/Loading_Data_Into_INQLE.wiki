@@ -37,8 +37,7 @@ Alternatively, if each row of data pertains to a different date, then specify be
 
 ----
 
-Click *Next*.  The remaining steps of the wizard will specify the type and identity of the _subjects_ of your data, plus the _attributes_ of those subjects.  For each subject we fist specify if the table represents a single individual or if instead each row of data pertains to a different individual.
+Click *Next*.  The remaining steps of the wizard will specify the type and identity of the _subjects_ of your data, plus the _attributes_ of those subjects.  For each subject we first specify if the table represents a single individual or if instead each row of data pertains to a different individual.
 
-First, we must determine if you will identify a single individual subject, or if instead each r
 
 (more coming)
