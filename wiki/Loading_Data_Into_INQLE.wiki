@@ -17,21 +17,23 @@ and select to save your spreadsheet as Comma-Seperated Values (CSV) or delimited
 Next start the wizard, right click a dataset in your INQLE Administrator, and select Load data from a file".
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/menu_import_file_data.gif]
 
-Next, click "Browse" and find your CSV file, and click "Open".  Click "Upload".
+
+Next, click *Browse* and find your CSV file, and click *Open*.  Click *Upload*.
 [http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/upload_file.gif]
 
-Click "Next >".  
+
+Click *Next*.  You should see the first few rows of your CSV data. 
 [http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/view_data.gif]
-You should see the first few rows of your CSV data.
 
 
-Click "Next >".  
+Click *Next*.  
 [http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/specify_date.gif]
+
 Here you can specify date information about your data.  If your CSV all pertains to a single date or time, then you can select that all data being imported has the same date and time, and enter this date (and optionally time).
 Alternatively, if each row of data pertains to a different date, then specify below which column contains this date information.
 
-Click "Next".  
+Click *Next*.  The remaining steps of the wizard will specify the type and identity of the _subjects_ of your data, plus the _attributes_ of those subjects.  For each subject we fist specify if the table represents a single individual or if instead each row of data pertains to a different individual.
 
-Now you must identify what type of subject you 
+First, we must determine if you will identify a single individual subject, or if instead each r
 
 (more coming)
