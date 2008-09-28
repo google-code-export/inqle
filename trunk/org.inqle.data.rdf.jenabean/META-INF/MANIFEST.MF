@@ -320,7 +320,8 @@ Export-Package: EDU.oswego.cs.dl.util.concurrent,
  thewebsemantic,
  thewebsemantic.binding,
  vocabularies
-Require-Bundle: org.inqle.db.h2,
+Require-Bundle: org.inqle.db,
+ org.inqle.db.h2,
  org.inqle.core,
  org.inqle.core.extensions
 Import-Package: org.apache.commons.logging,
