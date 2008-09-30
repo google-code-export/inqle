@@ -1,7 +1,9 @@
 package org.inqle.data.rdf;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
@@ -26,6 +28,7 @@ public class AppInfo extends UniqueJenabean {
 	private InternalDataset metarepositoryDataset;
 	private Connection internalConnection;
 	private Site site;
+	private Collection<UserAccount> adminAccounts = new ArrayList<UserAccount>();
 	
 	@Id
 	public String getId() {
@@ -96,6 +99,18 @@ public class AppInfo extends UniqueJenabean {
 
 	public void setSite(Site site) {
 		this.site = site;
+	}
+
+	public void addAdminAccount(UserAccount adminAccount) {
+		adminAccounts.add(adminAccount);
+	}
+	
+	public Collection<UserAccount> getAdminAccounts() {
+		return adminAccounts;
+	}
+
+	public void setAdminAccounts(Collection<UserAccount> adminAccounts) {
+		this.adminAccounts = adminAccounts;
 	}
 
 }

@@ -157,7 +157,7 @@ public class Persister {
 		RDF2Bean reader = new RDF2Bean(getAppInfoModel());
 		AppInfo loadedAppInfo = null;
 		try {
-			loadedAppInfo = (AppInfo)reader.load(AppInfo.class, AppInfo.APPINFO_INSTANCE_ID);
+			loadedAppInfo = (AppInfo)reader.loadDeep(AppInfo.class, AppInfo.APPINFO_INSTANCE_ID);
 			log.trace("Retrieved appInfo:" + JenabeanWriter.toString(loadedAppInfo));
 		} catch (NotFoundException e) {
 			log.warn("AppInfo not available.");
@@ -365,7 +365,7 @@ public class Persister {
 	 * TODO include a refresh persister method, which sets internalDatasets to null and therefore will reload
 	 * this info.  This would allow new plugins to be found and their datasets to be created
 	 */
-	private Map<String, InternalDataset> getInternalDatasets() {
+	public Map<String, InternalDataset> getInternalDatasets() {
 		if (internalDatasets != null) {
 			return internalDatasets;
 		}
@@ -441,15 +441,21 @@ public class Persister {
 			log.trace("datasetExtension=" + datasetExtension);
 			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
-			log.trace("datasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
+			
+			log.info("DDDDDDDDDDDDDDDDDDDDdatasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
+				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetRoleId;
 				textIndexType = textIndexType.toLowerCase();
 				IndexBuilderModel larqBuilder = null;
+				
 				Model internalModel = getInternalModel(datasetRoleId);
+				log.info("got internalmodel for " + datasetRoleId + ".  Is null?" + (internalModel==null));
 				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+//					larqBuilder = new IndexBuilderSubject(indexFilePath);
 					larqBuilder = new IndexBuilderSubject();
 				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+//					larqBuilder = new IndexBuilderString(indexFilePath);
 					larqBuilder = new IndexBuilderString();
 				}
 				if (larqBuilder != null) {
@@ -862,6 +868,7 @@ public class Persister {
 		converter.save(persistableObj);
 		//the statements to add
 		
+		log.info("Saving model as file:" + JenabeanWriter.modelToString(persistableAsModel));
 		persistableAsModel.setNsPrefix("inqle", RDF.INQLE);
 		persistableAsModel.setNsPrefix("xsd", RDF.XSD);
 		FileOutputStream fos = null;
