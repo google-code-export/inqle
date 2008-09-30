@@ -13,8 +13,9 @@ Below are the milestones, past and future, for project INQLE
 = Releases =
 
 ==Version 0.1==
-First release with basic functionality for local data.
-(released in June 2008)
+(released in June 2008)  
+
+First release, with basic functionality for local data.
   * Eclipse RAP-based user interface, in Equinox OSGi container
   * Management of Jena-based RDF databases
   * Single sampling algorithm: !SimpleSparqlSampler, which extracts example set, in which each row has common set of predicates
@@ -28,11 +29,27 @@ First release with basic functionality for local data.
 
 ==Version 0.1.5==
 (expected early October, 2008)
+
+Improved usability, without need to enter URIs.
   * New data importer, which captures both explicit and implicit data from spreadsheets, and enables the user to search existing stores of subjects and properties.
   * The Central INQLE Server provides a registry for sharing the subjects and properties that other inqle servers have used, permitting standardization and cross-linking of data.
+  * User name + password required to access the server
 
 ==Version 0.2==
-Enhanced connectivity to data.
+(expected end of 2008)
 
+Enhanced connectivity to data.
+  * Sampling algorithm which caters to data imported via the File Data Importer.
+  * Support for multiple user accounts
+  * Use of SPARQL endpoints as INQLE datasets
+  * INQLE servers are SPARQL endpoints
+  * Usability fixes
+
+==Version 0.3==
+(expected end of March, 2009)
+
+Expanded Reach
   * Sampling algorithms which combine local with remote data
-  * More to come...
+  * Survey module: user creates/reuses survey questions, adds participant emails, specifies parameters such as frequency and duration of mailings, and starts the survey.
+
+==More to come...==
