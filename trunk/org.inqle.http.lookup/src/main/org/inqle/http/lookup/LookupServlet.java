@@ -99,7 +99,8 @@ public class LookupServlet extends HttpServlet {
 		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
 		if (searchTermForRdfClass != null) {
 			
-			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForRdfClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			//String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForRdfClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaFiles(searchTermForRdfClass, countResults, startIndex);
 			respondOK(matchingClassesXml);
 			return;
 		}

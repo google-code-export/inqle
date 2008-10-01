@@ -131,23 +131,23 @@ public class SubjectLookup {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
-		log.trace("Get/Create index of Model...");
+		log.info("Get/Create index of Model...");
 		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.trace("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
+		log.info("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
-			log.trace("Found result: " + hit.getNode() + "; score=" + hit.getScore());
+			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
 		}
 		if (textIndex != null) {
 			queryCriteria.setTextIndex(textIndex);
 		}
 		
-		log.trace("Get/Create OntModel...");
+		log.info("Get/Create OntModel...");
 		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
 		
 		String sparql = getSparqlSearchSkosSubjects(searchTermForRdfClass, countSearchResults, offset);
-		log.trace("Querying w/ this sparql:\n" + sparql);
+		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
 		//log.info("Queried and got these matching results:\n" + matchingClassesXml);
