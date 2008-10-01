@@ -3,22 +3,26 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 
 public class AppInfoWizardAction extends Action {
 	
 	private IWorkbenchWindow window;
 
+	private Shell shell;
+
 	private static Logger log = Logger.getLogger(AppInfoWizardAction.class);
-	public AppInfoWizardAction(IWorkbenchWindow window) { 
-		this.window = window;
+	public AppInfoWizardAction(Shell shell) { 
+		//this.window = window;
+		this.shell = shell;
 	}
 	
 	@Override
 	public void run() {
 		try {
-			AppInfoWizard wizard = new AppInfoWizard(window.getShell());
-			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
+			AppInfoWizard wizard = new AppInfoWizard(shell);
+			WizardDialog dialog = new WizardDialog(shell, wizard);
 			dialog.open();
 		} catch (Exception e) {
 			log.error("Error running the AppInfoWizard", e);

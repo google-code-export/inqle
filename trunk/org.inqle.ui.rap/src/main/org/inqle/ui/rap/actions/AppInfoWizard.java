@@ -3,7 +3,6 @@
  */
 package org.inqle.ui.rap.actions;
 
-import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,9 +16,9 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
+import org.inqle.data.rdf.jenabean.UserAccount;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.EmbeddedDBPage;
 import org.inqle.ui.rap.pages.RadiosPage;
@@ -70,6 +69,8 @@ public class AppInfoWizard extends Wizard {
 	private ConnectionPage firstDataConnectionPage;
 	private SingleTextPage firstDataDatasetPage;
 	private ServerInfoPage serverInfoPage;
+
+	private UserAccountPage userAccountPage;
 	
 	public AppInfoWizard(Shell parentShell) {
 		this.shell = parentShell;
@@ -85,18 +86,21 @@ public class AppInfoWizard extends Wizard {
 		//Persister persister = Persister.getInstance();
 		serverInfoPage = new ServerInfoPage();
 		addPage(serverInfoPage);
-		log.info("added serverInfoPage");
+//		log.info("added serverInfoPage");
+		
+		userAccountPage = new UserAccountPage();
+		addPage(userAccountPage);
 		
 		embeddedOrExternalMetarepositoryDBPage = new RadiosPage("We will create the internal database used by your INQLE server.", "Select whether to use an embedded database to use for the internal database.");
 		embeddedOrExternalMetarepositoryDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
 		addPage(embeddedOrExternalMetarepositoryDBPage);
-		log.info("added embeddedOrExternalMetarepositoryDBPage");
+//		log.info("added embeddedOrExternalMetarepositoryDBPage");
 		
 		embeddedMetarepositoryDBPage = new EmbeddedDBPage("Internal INQLE Database", "Specify connection info for the embedded H2 database, which will contain internal INQLE information.");
 		embeddedMetarepositoryDBPage.setDefaultDBName(DEFAULT_INTERNAL_DB_NAME);
 		embeddedMetarepositoryDBPage.setDefaultUserName(DEFAULT_INTERNAL_DB_USER_NAME);
 		addPage(embeddedMetarepositoryDBPage);
-		log.info("added embeddedMetarepositoryDBPage");
+//		log.info("added embeddedMetarepositoryDBPage");
 		
 		metarepositoryDataset = appInfo.getMetarepositoryDataset();
 		if (metarepositoryDataset == null) {
@@ -224,6 +228,8 @@ public class AppInfoWizard extends Wizard {
 				if (metarepositoryConnectionPage.getDbClass().length()==0) return false;
 			}
 			
+			if (! userAccountPage.canFlipToNextPage()) return false;
+			
 			//Server Info form
 			if (serverInfoPage.getSiteName()==null || serverInfoPage.getSiteName().length()==0) return false;
 			if (serverInfoPage.getOwnerEmail()==null) return false;
@@ -264,7 +270,13 @@ public class AppInfoWizard extends Wizard {
 		metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
 		appInfo.setMetarepositoryDataset(metarepositoryDataset);
 		appInfo.setInternalConnection(metarepositoryConnection);
-		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
+		
+		UserAccount adminAccount = new UserAccount();
+		adminAccount.setUserName(userAccountPage.getUserName());
+		adminAccount.setPassword(userAccountPage.getPassword());
+		appInfo.addAdminAccount(adminAccount);
+		
+//		log.info("Persisting new AppInfo to " + Persister.getAppInfoFilePath() + "\n" + JenabeanWriter.toString(appInfo));
 		try {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);
 //			Persister persister = Persister.getInstance();
