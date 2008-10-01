@@ -10,6 +10,10 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.rwt.RWT;
+import org.eclipse.rwt.service.ISessionStore;
+import org.eclipse.rwt.service.SessionStoreEvent;
+import org.eclipse.rwt.service.SessionStoreListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -149,20 +153,40 @@ public class PartsView extends ViewPart implements IMenuListener {
      * it.
      */
 	public void createPartControl(Composite parent) {
-		//if AppInfo not yet set up, show the setup wizard
+		//ensure the persister has been initialized
+		log.info("PartsView.createPartControl...");
 		Persister persister = Persister.getInstance();
-		while (persister.getAppInfo() == null) {
-			try {
-				AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(getSite().getWorkbenchWindow());
-				appInfoWizardAction.run();
-				if (persister.getAppInfo() != null) {
-					log.info("Registering Site with central INQLE server...");
-					log.info("Success? " + Requestor.registerObject(persister.getAppInfo().getSite()));
-				}
-			} catch (Exception e) {
-				log.error("Error running setup wizard", e);
-			}
-		}
+		persister.getAppInfo();
+//		//if AppInfo not yet set up, show the setup wizard
+//		Persister persister = Persister.getInstance();
+//		while (persister.getAppInfo() == null) {
+//			try {
+//				AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(getSite().getWorkbenchWindow());
+//				appInfoWizardAction.run();
+//				if (persister.getAppInfo() != null) {
+//					log.info("Registering Site with central INQLE server...");
+//					log.info("Success? " + Requestor.registerObject(persister.getAppInfo().getSite()));
+//				}
+//			} catch (Exception e) {
+//				log.error("Error running setup wizard", e);
+//			}
+//		}
+		
+		
+//		IMPLEMENT LOGIN HERE?
+//		ISessionStore sessionStore = RWT.getSessionStore();
+//		final String sessionId = sessionStore.getId();
+//		log.info("New RAP session ID=" + sessionId);
+//
+//
+//		sessionStore.addSessionStoreListener(new SessionStoreListener() {
+//		  public void beforeDestroy(final SessionStoreEvent event){
+//		    System.out.println("Session destroyed: " + sessionId);
+//		  }
+//		});
+		
+		
+		
 		
 		this.parent = parent;
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);

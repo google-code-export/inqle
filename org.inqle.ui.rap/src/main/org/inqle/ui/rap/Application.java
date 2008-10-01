@@ -1,10 +1,13 @@
 package org.inqle.ui.rap;
 
-import org.eclipse.core.runtime.Platform;
+import org.apache.log4j.Logger;
 import org.eclipse.rwt.lifecycle.IEntryPoint;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.http.lookup.Requestor;
+import org.inqle.ui.rap.actions.AppInfoWizardAction;
+import org.inqle.ui.rap.actions.LoginAction;
 
 /**
  * This class controls all aspects of the application's execution
@@ -12,21 +15,48 @@ import org.inqle.core.util.InqleInfo;
  */
 public class Application implements IEntryPoint {
 
+	private static final int ALLOWED_NUMBER_OF_LOGIN_ATTEMPTS = 5;
+	private Logger log = Logger.getLogger(Application.class);
+	
 	public int createUI() {
-		String inqleHome = Platform.getInstallLocation().getURL().getPath();
-		System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
-		System.setProperty("java.io.tmpdir", inqleHome + InqleInfo.TEMP_FOLDER);
-				
+//		String inqleHome = Platform.getInstallLocation().getURL().getPath();
+//		System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
+//		System.setProperty("java.io.tmpdir", inqleHome + InqleInfo.TEMP_FOLDER);
+		
 		Display display = PlatformUI.createDisplay();
-		PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
-		return PlatformUI.RETURN_OK;
+		
+		//if no AppInfo, run the setup wizard
+		Persister persister = Persister.getInstance();
+		while (persister.getAppInfo() == null) {
+			try {
+				AppInfoWizardAction appInfoWizardAction = new AppInfoWizardAction(display.getActiveShell());
+				appInfoWizardAction.run();
+				if (persister.getAppInfo() != null) {
+					log.info("Registering Site with central INQLE server...");
+					log.info("Success? " + Requestor.registerObject(persister.getAppInfo().getSite()));
+				}
+			} catch (Exception e) {
+				log.error("Error running setup wizard", e);
+			}
+		}
+		
+		//display login dialog until logged in.
+		boolean loggedIn = false;
+		int numberOfAttempts = 0;
+		while (loggedIn == false && numberOfAttempts < ALLOWED_NUMBER_OF_LOGIN_ATTEMPTS) {
+			LoginAction loginAction = new LoginAction(display.getActiveShell());
+			loginAction.run();
+			loggedIn = loginAction.wasLoginSuccessful();
+			numberOfAttempts++;
+		}
+		
+		if (loggedIn) {
+			//initialize the Persister
+//			PersisterInitializer.initialize();
+			PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
+			return PlatformUI.RETURN_OK;
+		} else {
+			return PlatformUI.RETURN_EMERGENCY_CLOSE;
+		}
 	}
-
-//	public Display createUI() {
-//		
-//		System.setProperty("INQLE.HOME", Platform.getInstallLocation().getURL().getPath());
-//		Display display = PlatformUI.createDisplay();
-//		PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
-//		return display;
-//	}
 }
