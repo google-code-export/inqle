@@ -67,11 +67,18 @@ public class InqleInfo {
 	
 	public static final String PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES = "propertiesOfSubjectFromSchema";
 
-	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
+//	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
+//	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
 
-	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
+	private static final String RDF_SCHEMAS_FOLDER = "schemas";
+	private static final String RDF_DATA_FOLDER = "data";
 
+	
 	public static final String DEFAULT_NAMED_MODEL_NAME = "org.inqle.models.defaultNamedModel";
+
+	public static final String INDEXES_FOLDER = "indexes";
+
+	private static final String RDF_FOLDER = "rdf";
 	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
@@ -97,11 +104,15 @@ public class InqleInfo {
 //		return SERVER_PORT;
 //	}
 
+	public static String getRdfDirectory() {
+		return getAssetsDirectory() + RDF_FOLDER + "/";
+	}
+	
 	public static String getRdfSchemaFilesDirectory() {
-		return System.getProperty(INQLE_HOME) + RDF_SCHEMAS_FOLDER + "/";
+		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_SCHEMAS_FOLDER + "/";
 	}
 	
 	public static String getRdfDataFilesDirectory() {
-		return System.getProperty(INQLE_HOME) + RDF_DATA_FOLDER + "/";
+		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_DATA_FOLDER + "/";
 	}
 }
