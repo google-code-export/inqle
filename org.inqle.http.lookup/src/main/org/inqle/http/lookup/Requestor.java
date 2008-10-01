@@ -137,7 +137,7 @@ public class Requestor {
 					in.close();
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Connection error; Unable to connect to server at " + url, e);
 			success = false;
 		} finally {
