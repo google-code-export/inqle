@@ -7,6 +7,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UserAccount;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
