@@ -40,8 +40,7 @@ public class InqleInfo {
 
 	public static final String ASSETS_FOLDER = "assets";
 
-//	private static final int SERVER_PORT = 7070;
-	private static final int CENTRAL_INQLE_SERVER_PORT = 47500;
+//	private static final int CENTRAL_INQLE_SERVER_PORT = 7700;
 
 	//TODO use this:public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org/register";
 	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org:7700/register";
