@@ -13,10 +13,11 @@ import org.inqle.ui.rap.actions.DatasetWizardAction;
 
 public class ModelPart extends Part {
 
-	private static final String ICON_PATH = "org/inqle/ui/rap/images/table.gif";
-	private ExternalDataset dataset;
+	private static final String ICON_PATH_EXTERNAL_DATASET = "org/inqle/ui/rap/images/table.gif";
+	private static final String ICON_PATH_ONTOLOGY_DATASET = "org/inqle/ui/rap/images/ontology.gif";
+	private Dataset dataset;
 	
-	public ModelPart(ExternalDataset dataset) {
+	public ModelPart(Dataset dataset) {
 		this.dataset = dataset;
 		//this.persister = persister;
 	}
@@ -31,9 +32,15 @@ public class ModelPart extends Part {
 	
 	@Override
 	public String getIconPath() {
-		return ICON_PATH;
+//		if (dataset instanceof ExternalDataset) {
+			return ICON_PATH_EXTERNAL_DATASET;
+//		} else if (dataset instanceof OntologyDataset) {
+//			return ICON_PATH_ONTOLOGY_DATASET;
+//		} else {
+//			return null;
+//		}
 	}
-	public ExternalDataset getDataset() {
+	public Dataset getDataset() {
 		return this.dataset;
 	}
 	
@@ -49,10 +56,11 @@ public class ModelPart extends Part {
 		LoadRdfFileAction loadRdfFileAction = new LoadRdfFileAction("Load data from RDF File...", this, workbenchWindow);
 		manager.add(loadRdfFileAction);
 		
-		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
-		manager.add(loadCsvFileAction);
+//		Legacy CSV loader
+//		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
+//		manager.add(loadCsvFileAction);
 		
-		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from a File...", this, workbenchWindow);
+		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from a file...", this, workbenchWindow);
 		manager.add(fileDataImporterAction);
 		
 		//Delete action

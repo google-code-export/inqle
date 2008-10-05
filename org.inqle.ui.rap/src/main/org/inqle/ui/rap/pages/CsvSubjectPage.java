@@ -28,6 +28,7 @@ import org.inqle.ui.rap.csv.CsvImporter;
  * @author David Donohue
  * Jun 4, 2008
  */
+@Deprecated
 public class CsvSubjectPage extends DynaWizardPage {
 	
 	private static Logger log = Logger.getLogger(CsvSubjectPage.class);

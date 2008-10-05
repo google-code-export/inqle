@@ -26,7 +26,7 @@ public class DatasetWizardAction extends Action {
 	private int mode = MODE_NEW;
 	//private ModelPart modelPart = null;
 	private DatabasePart databasePart;
-	private ExternalDataset dataset;
+	private Dataset dataset;
 	
 	private static final Logger log = Logger.getLogger(DatasetWizardAction.class);
 	
@@ -53,23 +53,38 @@ public class DatasetWizardAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
-		try {
-			DatasetWizard wizard = new DatasetWizard(mode, dataset, databasePart);
-			log.trace("Created DatasetWizard");
-			WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
-			dialog.open();
-			log.trace("Opened WizardDialog");
-		} catch (Exception e) {
-			log.error("Error running DatasetWizard", e);
-		}
+	public void run() {
+		if (dataset instanceof ExternalDataset) {
+			ExternalDataset externalDataset = (ExternalDataset)dataset;
+			try {
+				DatasetWizard wizard = new DatasetWizard(mode, externalDataset, databasePart);
+				log.trace("Created DatasetWizard");
+				WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
+				dialog.open();
+				log.trace("Opened WizardDialog");
+			} catch (Exception e) {
+				log.error("Error running DatasetWizard", e);
+			}
+		} 
+//		else if (dataset instanceof OntologyDataset) {
+//			OntologyDataset ontologyDataset = (OntologyDataset)dataset;
+//			try {
+//				OntologyDatasetWizard wizard = new OntologyDatasetWizard(mode, ontologyDataset, databasePart);
+//				log.trace("Created OntologyDatasetWizard");
+//				WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
+//				dialog.open();
+//				log.trace("Opened OntologyDatasetWizard");
+//			} catch (Exception e) {
+//				log.error("Error running OntologyDatasetWizard", e);
+//			}
+//		}
 	}
 
 	public Dataset getDataset() {
 		return dataset;
 	}
 
-	public void setDataset(ExternalDataset dataset) {
+	public void setDataset(Dataset dataset) {
 		this.dataset = dataset;
 	}
 }

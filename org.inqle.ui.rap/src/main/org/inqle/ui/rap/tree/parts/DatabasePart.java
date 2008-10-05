@@ -49,6 +49,23 @@ public class DatabasePart extends PartType {
 		return sparql;
 	}
 	
+//	private String getSparqlToFindChildOntologyDatasets() {
+//		//Literal literal = ResourceFactory.createTypedLiteral(connection.getId());
+//		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
+//		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
+//		" SELECT ?datasetId \n " +
+//		" { \n " +
+//		" GRAPH ?g { \n " +
+//		" ?datasetUri a inqle:OntologyDataset \n " +
+//		" . ?datasetUri inqle:id ?datasetId \n " +
+//		" . ?datasetUri inqle:connectionId \"" + connection.getId() + "\"^^xsd:string \n" +
+//		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
+//		//" . ?datasetUri inqle:connectionId ?anyConnectionId" +
+//		//" . ?datasetUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
+//		" } }\n";
+//		return sparql;
+//	}
+	
 	public DatabasePart(Connection connection) {
 		this.connection = connection;
 		//this.persister = persister;
@@ -107,6 +124,24 @@ public class DatabasePart extends PartType {
 			modelParts.add(modelPart);
 		}
 		
+		//add ontology datasets
+//		queryCriteria = new QueryCriteria();
+//		queryCriteria.setQuery(getSparqlToFindChildOntologyDatasets());
+//		log.trace("SPARQL=" + getSparqlToFindChildOntologyDatasets());
+//		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
+//		//RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+//		datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
+//		log.trace("ontology datasetIds=" + datasetIds);
+//		
+//		for (String datasetId: datasetIds) {
+//			OntologyDataset dataset = (OntologyDataset)persister.reconstitute(OntologyDataset.class, datasetId, false);
+//			dataset.setConnectionId(this.connection.getId());
+//			ModelPart modelPart = new ModelPart(dataset);
+//			modelPart.setParent(this);
+//			//modelPart.setPersister(this.persister);
+//			modelParts.add(modelPart);
+//		}
+		
 		this.childrenIntialized = true;
 	}
 	
@@ -116,6 +151,11 @@ public class DatabasePart extends PartType {
 		DatasetWizardAction newModelWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
 		newModelWizardAction.setDataset(getNewDataset());
 		manager.add(newModelWizardAction);
+		
+		//"Add an ontology dataset" action
+//		DatasetWizardAction newOntologyDatasetWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add an ontology dataset...", this, workbenchWindow);
+//		newOntologyDatasetWizardAction.setDataset(getNewOntologyDataset());
+//		manager.add(newOntologyDatasetWizardAction);
 		
 		//"Edit this database" action
 		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow);
@@ -137,6 +177,12 @@ public class DatabasePart extends PartType {
 		newDataset.setConnectionId(this.getConnection().getId());
 		return newDataset.createClone();
 	}
+	
+//	private OntologyDataset getNewOntologyDataset() {
+//		OntologyDataset newDataset = new OntologyDataset();
+//		newDataset.setConnectionId(this.getConnection().getId());
+//		return newDataset.createClone();
+//	}
 
 	public Connection getConnection() {
 		return this.connection;

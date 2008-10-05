@@ -203,7 +203,7 @@ public class LoadRdfFileWizard extends DynaWizard {
 	public void importFile(File file) {
 		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + file.getName() + "..." );
 		popup.open();
-		log.info("Rendered popup");
+//		log.info("Rendered popup");
     Loader loader = new Loader(saveToModel);
     boolean success = loader.load(file, defaultUri);
     popup.close();

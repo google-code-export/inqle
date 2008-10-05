@@ -20,6 +20,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Feb 8, 2008
  */
+@Deprecated
 public class LoadCsvFileAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
