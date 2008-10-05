@@ -83,6 +83,7 @@ public class Persister {
 	private Map<String, IndexBuilderModel> indexBuilders;
 	private IndexLARQ schemaFilesSubjectIndex;
 	private OntModel schemaFilesOntModel;
+	public static final String EXTENSION_POINT_DATASET_FUNCTIONS = "org.inqle.data.datasetFunctions";
 	
 	/* *********************************************************************
 	 * *** FACTORY METHODS
@@ -335,8 +336,14 @@ public class Persister {
 		return getInternalDatasets().get(datasetRoleId);
 	}
 	
-	public IndexBuilderModel getIndexBuilder(String datasetRoleId) {
-		return getIndexBuilders().get(datasetRoleId);
+	/**
+	 * Get the IndexBuilder for the key.
+	 * @param indexBuilderKey either the id of the InternalDataset role 
+	 * or the ExternalDataset function
+	 * @return
+	 */
+	public IndexBuilderModel getIndexBuilder(String indexBuilderKey) {
+		return getIndexBuilders().get(indexBuilderKey);
 	}
 	
 	public IndexLARQ getIndex(String datasetRoleId) {
@@ -453,22 +460,71 @@ public class Persister {
 				log.info("got internalmodel for " + datasetRoleId + ".  Is null?" + (internalModel==null));
 				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 //					larqBuilder = new IndexBuilderSubject(indexFilePath);
-					larqBuilder = new IndexBuilderSubject();
+					larqBuilder = new IndexBuilderSubject(indexFilePath);
 				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
 //					larqBuilder = new IndexBuilderString(indexFilePath);
-					larqBuilder = new IndexBuilderString();
+					larqBuilder = new IndexBuilderString(indexFilePath);
 				}
 				if (larqBuilder != null) {
-					log.info("Indexing into Index for role " + datasetRoleId + "...");
-					larqBuilder.indexStatements(internalModel.listStatements()) ;
+					log.info("Retrieving Index for role " + datasetRoleId + "...");
+//					larqBuilder.indexStatements(internalModel.listStatements()) ;
 					//this does not work because listener does not listen across JVMs:
 //					log.info("Registering Index for role " + datasetRoleId + "...");
 //					internalModel.register(larqBuilder);
 					//save this larqBuilder
+					if (larqBuilder.getIndex() == null) {
+						log.warn("No text index exists for dataset role " + datasetRoleId);
+					}
 					indexBuilders.put(datasetRoleId, larqBuilder);
 				}
 			}
 		}
+		
+		//add any external dataset functions which are supposed to be indexed
+		List<IExtensionSpec> datasetFunctionExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET_FUNCTIONS);
+		for (IExtensionSpec datasetFunctionExtension: datasetFunctionExtensions) {
+			log.trace("datasetExtension=" + datasetFunctionExtension);
+			String datasetFunctionId = datasetFunctionExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String textIndexType = datasetFunctionExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
+			
+			log.info("FFFFFFFFFFFFFFFFFFdatasetFunctionId=" + datasetFunctionId + "; textIndexType=" + textIndexType);
+			//if directed to do so, build & store an index for this Model
+			if (textIndexType != null) {
+				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetFunctionId;
+				textIndexType = textIndexType.toLowerCase();
+				IndexBuilderModel larqBuilder = null;
+				
+				Model internalModel = getInternalModel(datasetFunctionId);
+				log.info("got internalmodel for " + datasetFunctionId + ".  Is null?" + (internalModel==null));
+				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+//					larqBuilder = new IndexBuilderSubject(indexFilePath);
+					larqBuilder = new IndexBuilderSubject(indexFilePath);
+				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+//					larqBuilder = new IndexBuilderString(indexFilePath);
+					larqBuilder = new IndexBuilderString(indexFilePath);
+				}
+				//if this dataset function is a type to be indexed and if it has an index, load it.
+				if (larqBuilder != null) {
+					log.info("Retrieving index for function " + datasetFunctionId + "...");
+//					larqBuilder.indexStatements(internalModel.listStatements()) ;
+					//this does not work because listener does not listen across JVMs:
+//					log.info("Registering Index for role " + datasetRoleId + "...");
+//					internalModel.register(larqBuilder);
+					//save this larqBuilder
+					if (larqBuilder.getIndex() == null) {
+						log.warn("No text index exists for dataset function " + datasetFunctionId);
+					}
+					indexBuilders.put(datasetFunctionId, larqBuilder);
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
 		log.trace("assembled list of index builders:" + indexBuilders);
 		return indexBuilders;
 	}
@@ -505,6 +561,26 @@ public class Persister {
 		return schemaFilesOntModel;
 	}
 
+	/**
+	 * Given a Dataset, retrieves a Model which has
+	 * had its text indexers registered
+	 * @param indexableDataset
+	 * @return
+	 */
+	public Model getIndexableModel(Dataset indexableDataset) {
+		Model model = getModel(indexableDataset);
+		if (indexableDataset instanceof ExternalDataset) {
+			ExternalDataset externalDataset = (ExternalDataset)indexableDataset;
+			Collection<String> functions = externalDataset.getDatasetFunctions();
+			if (functions != null) {
+				for (String function: functions) {
+					IndexBuilderModel builder = getIndexBuilder(function);
+					model.register(builder);
+				}
+			}
+		}
+		return model;
+	}
 	/**
 	 * Given an instance of a NamedModel, retrieve the Jena model
 	 * @param namedModel
@@ -609,7 +685,7 @@ public class Persister {
 	 * @return
 	 * TODO Untested
 	 */
-	@Deprecated
+//	@Deprecated
 //	public OntModel getOntModel(NamedModel namedModel) {
 //		OntModel repositoryOntModel = getMetarepositoryModel();
 //		//if the model being requested is not in the Repositories model, retrieve that specially
@@ -822,11 +898,10 @@ public class Persister {
 		
 	/**
 	 * Persist a Object object to an SDB store as RDF
-	 * @param persistableObj the object implementing Persistable_legacy interface
+	 * @param persistableObj the Jenabean object
 	 * @param model the Jena model into which to persist
 	 * @param persistMembers if true, all Object members (and their members, recursively)
 	 * will be persisted.  If false, they will not.
-	 * TODO verify this works as described above
 	 */
 	public void persist(Object persistableObj, Model model, boolean persistMembers) {
 		log.trace("Persister.persist():" + JenabeanWriter.toString(persistableObj));

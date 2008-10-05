@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -19,6 +20,24 @@ public class DatafileUtil {
 
 	private static Logger log = Logger.getLogger(DatafileUtil.class);
 
+	/**
+	 * Imports all files present in the specified folder path to the 
+	 * provided Model.
+	 * Adds any files in any subfolders as well.
+	 * @param folderPath
+	 */
+	public static void importDatafiles(Model model, String folderPath, String defaultUri) {
+		File folder = new File(folderPath);
+		for (File file: folder.listFiles()) {
+			if (file.isDirectory()) {
+				importDatafiles(model, file.getAbsolutePath(), defaultUri);
+			} else {
+				Loader loader = new Loader(model);
+				loader.loadFile(file.getAbsolutePath(), defaultUri);
+			}
+		}
+	}
+	
 	/**
 	 * Adds all files present in the specified folder path to the 
 	 * provided QueryCriteria.
