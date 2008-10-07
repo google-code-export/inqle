@@ -3,6 +3,7 @@
  */
 package org.inqle.data.rdf.jena;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.inqle.data.rdf.jenabean.Persister;
@@ -18,7 +19,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class ExternalDataset extends Dataset {
 
-	private Collection<String> datasetFunctions;
+	private Collection<String> datasetFunctions = new ArrayList<String>();
 	
 	public ExternalDataset createClone() {
 		ExternalDataset newObj = new ExternalDataset();
@@ -40,5 +41,19 @@ public class ExternalDataset extends Dataset {
 		this.datasetFunctions = datasetFunctions;
 	}
 	
+	public void addDatasetFunction(String datasetFunction) {
+		datasetFunctions.add(datasetFunction);
+	}
+	
+	public void clone(ExternalDataset objectToBeCloned) {
+		super.clone(objectToBeCloned);
+		//setConnection(objectToBeCloned.getConnection());
+		setDatasetFunctions(objectToBeCloned.getDatasetFunctions());
+	}
+	
+	public void replicate(ExternalDataset objectToClone) {
+		clone(objectToClone);
+		setId(objectToClone.getId());
+	}
 	
 }

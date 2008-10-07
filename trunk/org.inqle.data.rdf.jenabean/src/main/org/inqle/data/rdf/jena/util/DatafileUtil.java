@@ -15,6 +15,9 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * Adds Datafiles to a 
  * @author David Donohue
  * Aug 11, 2008
+ * 
+ * Works fine but does not scale to large RDF schema files, thus deprecated
+ * in favor of ExternalDatasets of function EXTENSION_DATASET_FUNCTION_SCHEMAS
  */
 public class DatafileUtil {
 

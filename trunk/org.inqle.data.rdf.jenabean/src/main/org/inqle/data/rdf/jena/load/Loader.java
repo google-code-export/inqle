@@ -125,6 +125,7 @@ public class Loader {
   		model = model.read(in, defaultUri, lang);
   		success = true;
   	} catch (Exception e) {
+//  		log.error("Unable to read stream using " + lang + " format.", e);
   		log.info("Unable to read stream using " + lang + " format.");
   	}
   	return success;

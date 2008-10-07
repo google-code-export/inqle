@@ -66,6 +66,9 @@ public class Persister {
 	public static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
 	public static final String METAREPOSITORY_DATASET = "org.inqle.datasets.metaRepository";
 
+	public static final String EXTENSION_DATASET_FUNCTION_DATA = "org.inqle.datasetFunctions.data";
+	public static final String EXTENSION_DATASET_FUNCTION_SCHEMAS = "org.inqle.datasetFunctions.schemas";
+	
 	private static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
 	private static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
 	private static final Object TEXT_INDEX_TYPE_SUBJECT = "subject";
@@ -346,12 +349,12 @@ public class Persister {
 		return getIndexBuilders().get(indexBuilderKey);
 	}
 	
-	public IndexLARQ getIndex(String datasetRoleId) {
+	public IndexLARQ getIndex(String indexId) {
 		Map<String, IndexBuilderModel> idxBuilders = getIndexBuilders();
 		if (idxBuilders==null) {
 			return null;
 		}
-		IndexBuilderModel indexBuilder = idxBuilders.get(datasetRoleId);
+		IndexBuilderModel indexBuilder = idxBuilders.get(indexId);
 		if (indexBuilder == null) {
 			return null;
 		}
@@ -537,29 +540,29 @@ public class Persister {
 	 * TODO consider not saving in memory
 	 * TODO consider index the OntModel instead (adds extraneous statements?)
 	 */
-	public IndexLARQ getSchemaFilesSubjectIndex() {
-		if (schemaFilesSubjectIndex != null) {
-			return schemaFilesSubjectIndex;
-		}
-		Model schemaFilesModel = DatafileUtil.getModel(InqleInfo.getRdfSchemaFilesDirectory());
-		IndexBuilderModel larqBuilder = new IndexBuilderSubject();
-		log.trace("Persister.getSchemaFilesSubjectIndex(): indexing model of " + schemaFilesModel.size() + " statements...");
-		larqBuilder.indexStatements(schemaFilesModel.listStatements());
-		log.trace("...done");
-		schemaFilesSubjectIndex = larqBuilder.getIndex();
-		return schemaFilesSubjectIndex;
-	}
+//	public IndexLARQ getSchemaFilesSubjectIndex() {
+//		if (schemaFilesSubjectIndex != null) {
+//			return schemaFilesSubjectIndex;
+//		}
+//		Model schemaFilesModel = DatafileUtil.getModel(InqleInfo.getRdfSchemaFilesDirectory());
+//		IndexBuilderModel larqBuilder = new IndexBuilderSubject();
+//		log.trace("Persister.getSchemaFilesSubjectIndex(): indexing model of " + schemaFilesModel.size() + " statements...");
+//		larqBuilder.indexStatements(schemaFilesModel.listStatements());
+//		log.trace("...done");
+//		schemaFilesSubjectIndex = larqBuilder.getIndex();
+//		return schemaFilesSubjectIndex;
+//	}
 	
 	/**
 	 * retrieves the OntModel (stored in memory) which contains the RDF Schema files
 	 * @return
 	 */
-	public OntModel getSchemaFilesOntModel() {
-		if (schemaFilesOntModel == null) {
-			schemaFilesOntModel = DatafileUtil.getOntModel(InqleInfo.getRdfSchemaFilesDirectory());
-		}
-		return schemaFilesOntModel;
-	}
+//	public OntModel getSchemaFilesOntModel() {
+//		if (schemaFilesOntModel == null) {
+//			schemaFilesOntModel = DatafileUtil.getOntModel(InqleInfo.getRdfSchemaFilesDirectory());
+//		}
+//		return schemaFilesOntModel;
+//	}
 
 	/**
 	 * Given a Dataset, retrieves a Model which has
@@ -568,6 +571,7 @@ public class Persister {
 	 * @return
 	 */
 	public Model getIndexableModel(Dataset indexableDataset) {
+		log.info("PPPPPPPPPPPPPPersister.getIndexableModel(Dataset of ID=" + indexableDataset.getId() + ")...");
 		Model model = getModel(indexableDataset);
 		if (indexableDataset instanceof ExternalDataset) {
 			ExternalDataset externalDataset = (ExternalDataset)indexableDataset;
@@ -575,6 +579,7 @@ public class Persister {
 			if (functions != null) {
 				for (String function: functions) {
 					IndexBuilderModel builder = getIndexBuilder(function);
+					log.info("Registering index builder: " + builder + " for function:" + function);
 					model.register(builder);
 				}
 			}
@@ -735,9 +740,13 @@ public class Persister {
 	 */
 	public boolean datasetExists(String datasetId) {
 		boolean hasDatasetId = false;
-		Object existingDataset = reconstitute(Dataset.class, datasetId, getMetarepositoryModel(), false);
-		if (existingDataset != null) {
-			hasDatasetId = true;
+		try {
+			Object existingDataset = reconstitute(Dataset.class, datasetId, getMetarepositoryModel(), false);
+			if (existingDataset != null) {
+				hasDatasetId = true;
+			}
+		} catch (RuntimeException e) {
+			//not found, leave as false
 		}
 		
 		return hasDatasetId;
