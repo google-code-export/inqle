@@ -100,15 +100,15 @@ public class SubjectLookup {
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"PREFIX skos: <" + RDF.SKOS + ">\n" +
 			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
-//			"WHERE {" +
 			"{ GRAPH ?g {\n" +
 			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-		". FILTER ( isURI(?URI) ) \n";	
-//		FIX THIS: sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
-//				". FILTER ( ! bound(?superProperty) ) \n";	
-		sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
-			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+			". FILTER ( isURI(?URI) ) \n" +	
+			". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
+			". FILTER ( ! bound(?superProperty) ) \n" +	
+			". OPTIONAL { ?URI skos:prefLabel ?Label }\n" +
+			". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
+			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 			"} } ORDER BY DESC(?Score) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
@@ -206,7 +206,7 @@ public class SubjectLookup {
 		if (textIndex==null) return null;
 		
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
+		log.info("Searched Schema Datasets index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -222,7 +222,7 @@ public class SubjectLookup {
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
-		//log.info("Queried and got these matching results:\n" + matchingClassesXml);
+		log.info("Queried Schema Datasets and got these matching results:\n" + matchingClassesXml);
 		return matchingClassesXml;
 	}
 }
