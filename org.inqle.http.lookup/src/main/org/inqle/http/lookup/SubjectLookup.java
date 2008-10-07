@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.QueryCriteriaFactory;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -60,7 +61,37 @@ public class SubjectLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlSearchSkosSubjects(String searchTerm, int limit, int offset) {
+//	public static String getSparqlSearchSchemaModelForSubjects(String searchTerm, int limit, int offset) {
+//		String sparql = 
+//			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+//			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+//			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+//			"PREFIX pf: <" + RDF.PF + ">\n" + 
+//			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+//			"PREFIX skos: <" + RDF.SKOS + ">\n" +
+//			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
+//			"WHERE {" +
+////			"{ GRAPH ?g {\n" +
+//			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+//		". FILTER ( isURI(?URI) ) \n";	
+//		sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
+//				". FILTER ( ! bound(?superProperty) ) \n";	
+//		sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
+//			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+//			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
+//			"} ORDER BY DESC(?Score) \n" +
+//			"LIMIT " + limit + " OFFSET " + offset;
+//		return sparql;
+//	}
+	
+	/**
+	 * Query the scheman datasets for subjects
+	 * @param searchTerm
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public static String getSparqlSearchSchemaDatasetsForSubjects(String searchTerm, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -69,16 +100,16 @@ public class SubjectLookup {
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"PREFIX skos: <" + RDF.SKOS + ">\n" +
 			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
-			"WHERE {" +
-//			"{ GRAPH ?g {\n" +
+//			"WHERE {" +
+			"{ GRAPH ?g {\n" +
 			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
 		". FILTER ( isURI(?URI) ) \n";	
-		sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
-				". FILTER ( ! bound(?superProperty) ) \n";	
+//		FIX THIS: sparql += ". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
+//				". FILTER ( ! bound(?superProperty) ) \n";	
 		sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
 			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
-			"} ORDER BY DESC(?Score) \n" +
+			"} } ORDER BY DESC(?Score) \n" +
 			"LIMIT " + limit + " OFFSET " + offset;
 		return sparql;
 	}
@@ -126,13 +157,54 @@ public class SubjectLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupSubclassesInSchemaFiles(String searchTermForRdfClass, int countSearchResults, int offset) {
+//	public static String lookupSubclassesInSchemaFiles(String searchTermForRdfClass, int countSearchResults, int offset) {
+//		Persister persister = Persister.getInstance();
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		//add any internal RDF schemas
+////		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
+//		log.info("Get/Create index of Model...");
+//		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
+//		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
+//		log.info("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
+//		while(searchResultI.hasNext()) {
+//			HitLARQ hit = (HitLARQ)searchResultI.next();
+//			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
+//		}
+//		if (textIndex != null) {
+//			queryCriteria.setTextIndex(textIndex);
+//		}
+//		
+//		log.info("Get/Create OntModel...");
+//		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
+//		
+//		String sparql = getSparqlSearchSchemaModelForSubjects(searchTermForRdfClass, countSearchResults, offset);
+//		log.info("Querying w/ this sparql:\n" + sparql);
+//		queryCriteria.setQuery(sparql);
+//		String matchingClassesXml = Queryer.selectXml(queryCriteria);
+//		//log.info("Queried and got these matching results:\n" + matchingClassesXml);
+//		return matchingClassesXml;
+//	}
+	
+	
+	/**
+	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
+	 * @param searchTermForRdfClass the user-entered query term
+	 * @param owlClassUri the URI of the superclass 
+	 * @param countSearchResults
+	 * @param offset
+	 * @return
+	 */
+	public static String lookupSubclassesInSchemaDatasets(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = new QueryCriteria();
+//		QueryCriteria queryCriteria = new QueryCriteria();
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.info("Get/Create index of Model...");
-		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
+//		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
+		IndexLARQ textIndex =  persister.getIndex(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		if (textIndex==null) return null;
+		
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
 		log.info("Searched SchemaFiles index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
@@ -144,9 +216,9 @@ public class SubjectLookup {
 		}
 		
 		log.info("Get/Create OntModel...");
-		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
+//		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
 		
-		String sparql = getSparqlSearchSkosSubjects(searchTermForRdfClass, countSearchResults, offset);
+		String sparql = getSparqlSearchSchemaDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);

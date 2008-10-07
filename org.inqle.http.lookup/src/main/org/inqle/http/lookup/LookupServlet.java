@@ -100,7 +100,7 @@ public class LookupServlet extends HttpServlet {
 		if (searchTermForRdfClass != null) {
 			
 			//String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForRdfClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
-			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaFiles(searchTermForRdfClass, countResults, startIndex);
+			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaDatasets(searchTermForRdfClass, countResults, startIndex);
 			respondOK(matchingClassesXml);
 			return;
 		}
@@ -119,7 +119,7 @@ public class LookupServlet extends HttpServlet {
 		String propertiesForClassFromSchemaFiles = HttpParameterParser.getParam(request, InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES);
 		if (propertiesForClassFromSchemaFiles != null) {
 			
-			String matchingPropertiesXml = PropertyLookup.lookupPropertiesInSchemaFiles(
+			String matchingPropertiesXml = PropertyLookup.lookupPropertiesInSchemaDatasets(
 					propertiesForClassFromSchemaFiles, 
 					countResults, 
 					startIndex);
