@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="org.inqle.data.datasets" name="Dataset Role" schema="schema/org.inqle.data.datasets.exsd"/>
+   <extension-point id="org.inqle.data.datasets" name="Internal Dataset Role" schema="schema/org.inqle.data.datasets.exsd"/>
+   <extension-point id="org.inqle.data.datasetFunctions" name="External Dataset Function" schema="schema/org.inqle.data.datasetFunctions.exsd"/>
    <extension
          point="org.inqle.data.datasets">
       
@@ -43,4 +44,23 @@
 			</dataset>
    </extension>
 
+
+	<extension
+         point="org.inqle.data.datasetFunctions">
+      
+      <datasetFunction
+           id="org.inqle.datasetFunctions.data"
+           name="General Data"
+           weight="1000"
+           description="General purpose data, usable for learning experiments."
+					 checkedByDefault="true">
+			</datasetFunction>
+			<datasetFunction
+           id="org.inqle.datasetFunctions.schemas"
+           name="Schemas, Ontologies"
+           weight="2000"
+           textIndexType="subject"
+           description="RDFS or OWL ontology, containing semantic types and properties for classifying General Data to be imported.">
+			</datasetFunction>
+	</extension>
 </plugin>

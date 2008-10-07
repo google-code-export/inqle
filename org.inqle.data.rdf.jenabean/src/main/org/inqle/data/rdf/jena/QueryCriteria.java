@@ -49,7 +49,7 @@ public class QueryCriteria {
 	
 	//private Persister persister = null;
 	
-	static Logger log = Logger.getLogger(QueryCriteria.class);
+	private static Logger log = Logger.getLogger(QueryCriteria.class);
 	
 	//public QueryCriteria(Persister persister) {
 	public QueryCriteria() {
