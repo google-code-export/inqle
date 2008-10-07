@@ -42,7 +42,7 @@ public class ListMapTableLabelProvider extends CellLabelProvider {
 
 	private List<String> headerVariables;
 
-	private List<SortedMap<String, String>> rowElements;
+	private List<SortedMap<String, String>> rowElements = new ArrayList<SortedMap<String, String>>();
 	
 	public static final Logger log = Logger.getLogger(ListMapTableLabelProvider.class);
 
@@ -64,8 +64,11 @@ public class ListMapTableLabelProvider extends CellLabelProvider {
 
 	
 	public void setRowElements(List<SortedMap<String, String>> sortedMap) {
-		
-		rowElements = sortedMap;
+		if (sortedMap == null) {
+			rowElements = new ArrayList<SortedMap<String, String>>();
+		} else {
+			rowElements = sortedMap;
+		}
 	}
 
 	public List<String> getHeaderVariables() {

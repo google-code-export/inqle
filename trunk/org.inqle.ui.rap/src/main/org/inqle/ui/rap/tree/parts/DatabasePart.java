@@ -12,6 +12,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
@@ -33,7 +34,6 @@ public class DatabasePart extends PartType {
 	private List<String> modelNames = new ArrayList<String>();
 		
 	private String getSparqlToFindChildDatasets() {
-		//Literal literal = ResourceFactory.createTypedLiteral(connection.getId());
 		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
 		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
 		" SELECT ?datasetId \n " +
@@ -48,23 +48,6 @@ public class DatabasePart extends PartType {
 		" } }\n";
 		return sparql;
 	}
-	
-//	private String getSparqlToFindChildOntologyDatasets() {
-//		//Literal literal = ResourceFactory.createTypedLiteral(connection.getId());
-//		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
-//		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
-//		" SELECT ?datasetId \n " +
-//		" { \n " +
-//		" GRAPH ?g { \n " +
-//		" ?datasetUri a inqle:OntologyDataset \n " +
-//		" . ?datasetUri inqle:id ?datasetId \n " +
-//		" . ?datasetUri inqle:connectionId \"" + connection.getId() + "\"^^xsd:string \n" +
-//		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
-//		//" . ?datasetUri inqle:connectionId ?anyConnectionId" +
-//		//" . ?datasetUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
-//		" } }\n";
-//		return sparql;
-//	}
 	
 	public DatabasePart(Connection connection) {
 		this.connection = connection;
@@ -97,7 +80,7 @@ public class DatabasePart extends PartType {
 	
 	public void initChildren() {
 		
-		//query for all Dataset children
+		//query for all ExternalDataset children
 		Persister persister = Persister.getInstance();
 		AppInfo appInfo = persister.getAppInfo();
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -116,8 +99,9 @@ public class DatabasePart extends PartType {
 		//for (QuerySolution row: resultTable.getResultList()) {
 //			Literal modelId = row.getLiteral("modelId");
 		for (String datasetId: datasetIds) {
-			ExternalDataset dataset = (ExternalDataset)persister.reconstitute(ExternalDataset.class, datasetId, false);
+			ExternalDataset dataset = (ExternalDataset)persister.reconstitute(ExternalDataset.class, datasetId, true);
 			dataset.setConnectionId(this.connection.getId());
+			log.info("DatabasePart Loaded ExternalDataset: " + JenabeanWriter.toString(dataset));
 			ModelPart modelPart = new ModelPart(dataset);
 			modelPart.setParent(this);
 			//modelPart.setPersister(this.persister);

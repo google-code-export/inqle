@@ -297,7 +297,7 @@ public class AppInfoWizard extends Wizard {
 			firstDataConnection.setDbPassword(embeddedFirstDataDBPage.getDbPassword());
 		}
 		firstDataDataset.setConnectionId(firstDataConnection.getId());
-		
+		firstDataDataset.addDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);
 		try {
 			DBConnector connector = new DBConnector(firstDataConnection);
 			int status = connector.tryToCreateSDBStore();

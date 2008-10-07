@@ -92,6 +92,7 @@ public class TextFieldShower implements IDataFieldShower {
 	}
 	
 	public void setTextValue(String textValue) {
+		if (textValue==null) return;
 		text.setText(textValue);
 	}
 

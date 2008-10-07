@@ -23,12 +23,10 @@ public class DatabaseWizardAction extends Action {
 	public static final int MODE_CLONE = 2;
 	private String menuText;
 	
-	private String id = null;
 	private IWorkbenchWindow window;
 	//private Persister persister = null;
 	private int mode = MODE_NEW;
 	private IPartType parentPart = null;
-	private IPart thisPart = null;
 	private DatabasePart databasePart;
 	private Connection connection;
 	

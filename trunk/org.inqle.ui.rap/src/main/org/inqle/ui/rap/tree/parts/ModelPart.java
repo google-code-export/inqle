@@ -2,22 +2,20 @@ package org.inqle.ui.rap.tree.parts;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.ui.rap.Part;
+import org.inqle.ui.rap.actions.DatasetWizardAction;
 import org.inqle.ui.rap.actions.DeleteModelAction;
 import org.inqle.ui.rap.actions.FileDataImporterAction;
-import org.inqle.ui.rap.actions.LoadCsvFileAction;
 import org.inqle.ui.rap.actions.LoadRdfFileAction;
-import org.inqle.ui.rap.actions.DatasetWizardAction;
 
 public class ModelPart extends Part {
 
 	private static final String ICON_PATH_EXTERNAL_DATASET = "org/inqle/ui/rap/images/table.gif";
-	private static final String ICON_PATH_ONTOLOGY_DATASET = "org/inqle/ui/rap/images/ontology.gif";
-	private Dataset dataset;
+//	private static final String ICON_PATH_ONTOLOGY_DATASET = "org/inqle/ui/rap/images/ontology.gif";
+	private ExternalDataset dataset;
 	
-	public ModelPart(Dataset dataset) {
+	public ModelPart(ExternalDataset dataset) {
 		this.dataset = dataset;
 		//this.persister = persister;
 	}
@@ -40,7 +38,7 @@ public class ModelPart extends Part {
 //			return null;
 //		}
 	}
-	public Dataset getDataset() {
+	public ExternalDataset getDataset() {
 		return this.dataset;
 	}
 	
@@ -60,7 +58,7 @@ public class ModelPart extends Part {
 //		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
 //		manager.add(loadCsvFileAction);
 		
-		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from a file...", this, workbenchWindow);
+		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from delimited text (CSV) file...", this, workbenchWindow);
 		manager.add(fileDataImporterAction);
 		
 		//Delete action
