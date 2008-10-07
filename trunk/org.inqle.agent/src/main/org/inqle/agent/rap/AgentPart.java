@@ -111,14 +111,6 @@ public class AgentPart extends PartType {
 	
 	public void initChildren() {
 		IAgent agent = agentFactory.getBaseAgent();
-		//initCount++;
-		//log.info("Agent #" + agentPartCount + ": initChildren #" + initCount);
-		//query for all Dataset children
-//		AppInfo appInfo = persister.getAppInfo();
-//		QueryCriteria queryCriteria = new QueryCriteria(persister);
-//		queryCriteria.setQuery(getSparqlToFindChildren());
-//		queryCriteria.addNamedModel(appInfo.getRepositoryNamedModel());
-//		RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
 		
 		//for each item in resultTable, add a ModelPart
 		childParts = new ArrayList<CustomizedAgentPart>();
