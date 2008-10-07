@@ -78,6 +78,7 @@ public class LoginDialog extends Dialog {
 		loginText.setToolTipText("Use no spaces or special characters.");
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		loginText.setLayoutData(gridData);
+		loginText.forceFocus();
 		
 		new Label(formComposite, SWT.NONE).setText("Password");
 		passwordText = new Text(formComposite, SWT.BORDER | SWT.PASSWORD);

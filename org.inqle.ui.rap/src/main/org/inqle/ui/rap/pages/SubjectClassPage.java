@@ -242,7 +242,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Document localDataSubjectDocument = XmlDocumentUtil.getDocument(localDataSubjectXml);;
 
 			//this looks up all RDF classes
-			String localRdfClassXml = SubjectLookup.lookupSubclassesInSchemaFiles(
+			String localRdfClassXml = SubjectLookup.lookupSubclassesInSchemaDatasets(
 					getSearchTextValue(), 
 					10, 
 					0);

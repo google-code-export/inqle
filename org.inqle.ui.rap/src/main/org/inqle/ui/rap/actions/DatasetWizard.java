@@ -23,12 +23,12 @@ import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
+import org.inqle.ui.rap.widgets.TextFieldShower;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -41,20 +41,22 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public class DatasetWizard extends Wizard {
 
-	public static final String DEFAULT_CHECKED_ATTRIBUTE = "defaultChecked";
+	public static final String DEFAULT_CHECKED_ATTRIBUTE = "checkedByDefault";
 	private Connection connection = null;
 	//private Persister persister;
 	static Logger log = Logger.getLogger(DatasetWizard.class);
-	Composite composite;
+	
 	int mode;
 
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
 	private ExternalDataset startingDataset;
 	private ExternalDataset dataset;
-	private Text datasetIdText;
+//	private Text datasetIdText;
 	Composite parent;
 	public List<Button> datasetFunctionCheckboxes = new ArrayList<Button>();
+	private DatasetInfoPage datasetInfoPage;
+	private DatasetFunctionsPage datasetFunctionsPage;
 	
 	/**
 	 * This generates the wizard page for creating a database connection
@@ -63,6 +65,10 @@ public class DatasetWizard extends Wizard {
 	 */
 	public class DatasetInfoPage extends WizardPage {
 
+		private Composite composite;
+		private TextFieldShower datasetIdTextField;
+		private TextFieldShower datasetDescriptionTextField;
+		
 		DatasetInfoPage(String pageName) {
 			super(pageName);
 		}
@@ -95,60 +101,107 @@ public class DatasetWizard extends Wizard {
 			});
 			*/
 			
-			new Label (composite, SWT.NONE).setText("Dataset ID (must be a unique name)");	
-	    datasetIdText = new Text(composite, SWT.BORDER);
-	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-	    datasetIdText.setLayoutData(gridData);
+			//cannot change the ID once created
+			int textFieldStyle = SWT.BORDER;
+			if (mode != DatasetWizardAction.MODE_NEW) {
+				textFieldStyle = textFieldStyle | SWT.READ_ONLY;
+			}
 			
-	    
+			datasetIdTextField = new TextFieldShower(
+					composite,
+					"Dataset ID",
+					"Must be a unique name for this server, and must not contain spaces or special characters.",
+					null,
+					textFieldStyle
+			);
+			if (mode != DatasetWizardAction.MODE_NEW && dataset!=null && dataset.getId() != null) {
+				datasetIdTextField.setTextValue(dataset.getId());
+			}
+//			new Label (composite, SWT.NONE).setText("Dataset ID (must be a unique name)");	
+//	    datasetIdText = new Text(composite, SWT.BORDER);
+//	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//	    datasetIdText.setLayoutData(gridData);
+			
+			datasetDescriptionTextField = new TextFieldShower(
+					composite,
+					"Description",
+					"Describe the use of this dataset.",
+					null,
+					SWT.MULTI | SWT.BORDER
+			);
+			if (dataset!=null && dataset.getDescription() != null) {
+				datasetDescriptionTextField.setTextValue(dataset.getDescription());
+			}
+			
 	    setControl(composite);
 
+		}
+		
+		String getDatasetId() {
+			return datasetIdTextField.getValue();
+		}
+		
+		String getDatasetDescription() {
+			return datasetDescriptionTextField.getValue();
 		}
 
 	}
 	
 	public class DatasetFunctionsPage extends WizardPage {
 
-		protected DatasetFunctionsPage(String pageName) {
-			super(pageName);
+		private static final String PAGE_NAME = "Dataset Functions";
+		private static final String PAGE_DESCRIPTION = "Select which functions this dataset will fulfill.";
+		private Composite composite;
+		
+		protected DatasetFunctionsPage() {
+			super(PAGE_NAME);
+			setMessage(PAGE_DESCRIPTION);
 		}
 
 		public void createControl(Composite parent) {
 			
-			//initialize the Dataset to the base starting Dataset
-			resetModel();
-			
 			composite = new Composite(parent, SWT.NONE);
 	    // create the desired layout for this wizard page
-			GridLayout gl = new GridLayout(1, true);
+			GridLayout gl = new GridLayout(2, false);
 			composite.setLayout(gl);
 	    
 	    List<IExtensionSpec> datasetFunctionExtensions = ExtensionFactory.getExtensionSpecs(Persister.EXTENSION_POINT_DATASET_FUNCTIONS);
-	    
-	    //create the form
-			GridData gridData;
+//	    log.info("Got datasetFunctionExtensions of size: " + datasetFunctionExtensions.size());
+	    //add the checkboxes
 			for (IExtensionSpec datasetFunctionExtension: datasetFunctionExtensions) {
 				addDatasetFunctionCheckbox(datasetFunctionExtension, composite);
 			}
+			setControl(composite);
 		}
 
 		private void addDatasetFunctionCheckbox(IExtensionSpec datasetFunctionExtension, Composite composite) {
+//			log.info("addDatasetFunctionCheckbox()...");
 			Button checkbox = new Button(composite, SWT.CHECK);
 			String extensionId = datasetFunctionExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			checkbox.setText(extensionId + ": " + datasetFunctionExtension.getAttribute(InqleInfo.DESCRIPTION_ATTRIBUTE));
+			String extensionName = datasetFunctionExtension.getAttribute(InqleInfo.NAME_ATTRIBUTE);
+			String extensionDescription = datasetFunctionExtension.getAttribute(InqleInfo.DESCRIPTION_ATTRIBUTE);
+			checkbox.setText(extensionName);
 			checkbox.setData(datasetFunctionExtension);
 			
-			String defaultChecked = datasetFunctionExtension.getAttribute(DEFAULT_CHECKED_ATTRIBUTE);
+			Text descriptionText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
+			descriptionText.setText(extensionDescription);
+			GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+			descriptionText.setLayoutData(gridData);
+			String defaultCheckedVal = datasetFunctionExtension.getAttribute(DEFAULT_CHECKED_ATTRIBUTE);
+			boolean defaultChecked = false;
+			if (defaultCheckedVal != null && defaultCheckedVal.toLowerCase().equals("true")) {
+				defaultChecked = true;
+			}
 			Collection<String> datasetFunctions = dataset.getDatasetFunctions();
+			log.info("Compare dataset function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
 			if (datasetFunctions != null && datasetFunctions.contains(extensionId)) {
 				checkbox.setSelection(true);
-			} else if (datasetFunctions==null && defaultChecked != null && defaultChecked.toLowerCase().equals("true")) {
+			} else if (datasetFunctions==null && defaultChecked) {
 				checkbox.setSelection(true);
 			}
+//			log.info("Add checkbox:" + extensionId + "...");
 			datasetFunctionCheckboxes.add(checkbox);
 		}
-		
-		
 	}
 	
 	public DatasetWizard(int mode, ExternalDataset startingDataset, DatabasePart databasePart) {
@@ -171,20 +224,30 @@ public class DatasetWizard extends Wizard {
 
 	@Override
 	public void addPages() {		
-		DatasetInfoPage datasetInfoPage = new DatasetInfoPage("Dataset Info");
+//		log.info("Dataset Wizard: adding DatasetInfoPage...");
+		datasetInfoPage = new DatasetInfoPage("Dataset Info");
 		addPage(datasetInfoPage);
 		
-		//TODO add description field
-//		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
-//		addPage(nameDescriptionPage);
+//		log.info("Dataset Wizard: creating DatasetFunctionsPage...");
+		datasetFunctionsPage = new DatasetFunctionsPage();
+//		log.info("Dataset Wizard: adding DatasetFunctionsPage...");
+		addPage(datasetFunctionsPage);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
-	 */
+	
+	@Override
+	public boolean canFinish() {
+		if (this.getContainer().getCurrentPage().equals(datasetFunctionsPage)) {
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public boolean performFinish() {
-		dataset.setId(datasetIdText.getText());
+//		dataset.setId(datasetIdText.getText());
+		dataset.setId(datasetInfoPage.getDatasetId());
+		dataset.setDescription(datasetInfoPage.getDatasetDescription());
 		if (dataset.getId() == null || dataset.getId().length() == 0) {
 			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Dataset ID", "");
 			return false;
@@ -192,8 +255,7 @@ public class DatasetWizard extends Wizard {
 		
 		Persister persister = Persister.getInstance();
 		
-		//if (databasePart.hasModelNamed(dataset.getId())) {
-		if (persister.datasetExists(dataset.getId())) {
+		if (mode != DatasetWizardAction.MODE_EDIT && persister.datasetExists(dataset.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
 					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
 			return false;
@@ -202,8 +264,10 @@ public class DatasetWizard extends Wizard {
 		//get the dataset functions assigned to this dataset
 		List<String> datasetFunctionIds = new ArrayList<String>();
 		for (Button checkbox: datasetFunctionCheckboxes) {
-			IExtensionSpec datasetFunctionSpecSpec = (IExtensionSpec)checkbox.getData();
-			String datasetFunctionId = datasetFunctionSpecSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			if (! checkbox.getSelection()) continue;
+			IExtensionSpec datasetFunctionSpec = (IExtensionSpec)checkbox.getData();
+			String datasetFunctionId = datasetFunctionSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			log.info("adding to dataset: function " + datasetFunctionId);
 			datasetFunctionIds.add(datasetFunctionId);
 		}
 		if (datasetFunctionIds.size() > 0) {

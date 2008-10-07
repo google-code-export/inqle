@@ -50,7 +50,7 @@ public class LoadRdfFileAction extends Action {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		//LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelPart, connection);
 		try {
-			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getDataset());
+			Model modelToImportInto = Persister.getInstance().getIndexableModel(modelPart.getDataset());
 			LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelToImportInto, window.getShell());
 			//DummyWizard wizard = new DummyWizard();
 			
