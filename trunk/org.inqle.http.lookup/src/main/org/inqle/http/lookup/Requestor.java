@@ -31,6 +31,8 @@ import org.w3c.dom.Document;
 /**
  * @author David Donohue
  * Jul 15, 2008
+ * 
+ * TODO support HTTP proxy
  */
 public class Requestor {
 
