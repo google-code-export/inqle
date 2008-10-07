@@ -156,7 +156,7 @@ public class Delete_OntologyDatasetWizard extends Wizard {
 		Persister persister = Persister.getInstance();
 		
 		//if (databasePart.hasModelNamed(dataset.getId())) {
-		if (persister.datasetExists(dataset.getId())) {
+		if (persister.externalDatasetExists(dataset.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
 					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
 			return false;

@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.ModelPart;
@@ -49,6 +50,7 @@ public class LoadRdfFileWizard extends DynaWizard {
 	Composite composite;
 	//private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
+	private NamedModel namedModel;
 	
 	private ModelPart modelPart = null;
 	//LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
@@ -211,6 +213,13 @@ public class LoadRdfFileWizard extends DynaWizard {
     	if (loader.getCountLoaded() == 0) {
     		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
     	} else {
+    		
+    		if (namedModel != null) {
+    			//flush any text indexes for the dataset
+    			Persister persister = Persister.getInstance();
+    			persister.flushIndexes(namedModel);
+    		}
+    		
     		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + loader.getCountLoaded() + " statements from file " + file.getName()); 
     	}
     } else {
@@ -221,6 +230,7 @@ public class LoadRdfFileWizard extends DynaWizard {
     	MessageDialog.openError(getShell(), "Error loading data", errorMessage);
     }
     log.info("Success? " + success);
+    
     
     //if (popup != null) popup.close();
 	}
@@ -237,6 +247,14 @@ public class LoadRdfFileWizard extends DynaWizard {
 		if (uploaderWidget != null) {
 			uploaderWidget.dispose();
 		}
+	}
+
+	public NamedModel getNamedModel() {
+		return namedModel;
+	}
+
+	public void setNamedModel(NamedModel namedModel) {
+		this.namedModel = namedModel;
 	}
 	
 	/**
