@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.LockObtainFailedException;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
@@ -456,17 +462,38 @@ public class Persister {
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetRoleId;
+				//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
+				
+				//first unlock the directory, if locked
+				try {
+					if (IndexReader.isLocked(indexFilePath)) {
+						log.info("Index is locked.  Unlocking...");
+						FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
+						IndexReader.unlock(dir);
+					}
+				} catch (Exception e) {
+					log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
+				}
+				
+				IndexWriter indexWriter = null;
+				try {
+					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
+				} catch (Exception e) {
+					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
+				}
+				
 				textIndexType = textIndexType.toLowerCase();
 				IndexBuilderModel larqBuilder = null;
 				
 				Model internalModel = getInternalModel(datasetRoleId);
 				log.info("got internalmodel for " + datasetRoleId + ".  Is null?" + (internalModel==null));
-				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 //					larqBuilder = new IndexBuilderSubject(indexFilePath);
-					larqBuilder = new IndexBuilderSubject(indexFilePath);
-				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+					larqBuilder = new IndexBuilderSubject(indexWriter);
+					
+				} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
 //					larqBuilder = new IndexBuilderString(indexFilePath);
-					larqBuilder = new IndexBuilderString(indexFilePath);
+					larqBuilder = new IndexBuilderString(indexWriter);
 				}
 				if (larqBuilder != null) {
 					log.info("Retrieving Index for role " + datasetRoleId + "...");
@@ -494,17 +521,37 @@ public class Persister {
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetFunctionId;
+				
+				IndexWriter indexWriter = null;
+				
+				//first unlock the directory, if locked
+				try {
+					if (IndexReader.isLocked(indexFilePath)) {
+						log.info("Index is locked.  Unlocking...");
+						FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
+						IndexReader.unlock(dir);
+					}
+				} catch (Exception e) {
+					log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
+				}
+				
+				try {
+					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
+				} catch (Exception e) {
+					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
+				}
+				
 				textIndexType = textIndexType.toLowerCase();
 				IndexBuilderModel larqBuilder = null;
 				
 				Model internalModel = getInternalModel(datasetFunctionId);
 				log.info("got internalmodel for " + datasetFunctionId + ".  Is null?" + (internalModel==null));
-				if (textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 //					larqBuilder = new IndexBuilderSubject(indexFilePath);
-					larqBuilder = new IndexBuilderSubject(indexFilePath);
-				} else if (textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+					larqBuilder = new IndexBuilderSubject(indexWriter);
+				} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
 //					larqBuilder = new IndexBuilderString(indexFilePath);
-					larqBuilder = new IndexBuilderString(indexFilePath);
+					larqBuilder = new IndexBuilderString(indexWriter);
 				}
 				//if this dataset function is a type to be indexed and if it has an index, load it.
 				if (larqBuilder != null) {
@@ -521,12 +568,6 @@ public class Persister {
 				}
 			}
 		}
-		
-		
-		
-		
-		
-		
 		
 		log.trace("assembled list of index builders:" + indexBuilders);
 		return indexBuilders;
@@ -554,6 +595,33 @@ public class Persister {
 //	}
 	
 	/**
+	 * Flush any Lucene text indexes for the NamedModel
+	 */
+	public void flushIndexes(NamedModel namedModel) {
+		if (namedModel instanceof InternalDataset) {
+			InternalDataset internalDataset = (InternalDataset) namedModel;
+			String datasetRole = internalDataset.getDatasetRole();
+			IndexBuilderModel builder = getIndexBuilder(datasetRole);
+			if (builder != null) {
+				log.info("Flushing index builder: " + builder + " for dataset role:" + datasetRole + "...");
+				builder.flushWriter();
+			}
+		} else if (namedModel instanceof ExternalDataset) {
+			ExternalDataset externalDataset = (ExternalDataset) namedModel;
+			Collection<String> functions = externalDataset.getDatasetFunctions();
+			if (functions != null) {
+				for (String function: functions) {
+					IndexBuilderModel builder = getIndexBuilder(function);
+					if (builder == null) continue;
+					log.info("Flushing index builder: " + builder + " for function:" + function + "...");
+					builder.flushWriter();
+				}
+			}
+		}
+		
+	}
+	
+	/**
 	 * retrieves the OntModel (stored in memory) which contains the RDF Schema files
 	 * @return
 	 */
@@ -570,7 +638,7 @@ public class Persister {
 	 * @param indexableDataset
 	 * @return
 	 */
-	public Model getIndexableModel(Dataset indexableDataset) {
+	public Model getIndexableModel(NamedModel indexableDataset) {
 		log.info("PPPPPPPPPPPPPPersister.getIndexableModel(Dataset of ID=" + indexableDataset.getId() + ")...");
 		Model model = getModel(indexableDataset);
 		if (indexableDataset instanceof ExternalDataset) {
@@ -579,6 +647,7 @@ public class Persister {
 			if (functions != null) {
 				for (String function: functions) {
 					IndexBuilderModel builder = getIndexBuilder(function);
+					if (builder == null) continue;
 					log.info("Registering index builder: " + builder + " for function:" + function);
 					model.register(builder);
 				}
@@ -738,14 +807,14 @@ public class Persister {
 	 * @param datasetId
 	 * @return
 	 */
-	public boolean datasetExists(String datasetId) {
+	public boolean externalDatasetExists(String externalDatasetId) {
 		boolean hasDatasetId = false;
 		try {
-			Object existingDataset = reconstitute(Dataset.class, datasetId, getMetarepositoryModel(), false);
+			Object existingDataset = reconstitute(ExternalDataset.class, externalDatasetId, getMetarepositoryModel(), false);
 			if (existingDataset != null) {
 				hasDatasetId = true;
 			}
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			//not found, leave as false
 		}
 		
@@ -1095,11 +1164,16 @@ public class Persister {
 	 */
 	public boolean deleteModel(NamedModel namedModel) {
 		
-		//first remove the connection reference from the metarepository
+		//remove all statements and all index info for the NamedModel
+		Model modelToBeDeleted = getIndexableModel(namedModel);
+		modelToBeDeleted.removeAll();
+		
+		//remove the reference to the NamedModel from the metarepository
 		log.debug("Removing NamedModel: " + namedModel.getUri());
 		Persister.remove(namedModel, getMetarepositoryModel());
 		
-		if (namedModel instanceof Dataset) {			
+		if (namedModel instanceof Dataset) {		
+			
 			//remove the model
 			DBConnector connector = new DBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
 			boolean successDeleting = connector.deleteSDBStore();
@@ -1182,6 +1256,7 @@ public class Persister {
 		Resource resource = ResourceFactory.createResource(uri);
 		return model.containsResource(resource);
 	}
+
 	
 	/* *********************************************************************
 	 * *** DEPRECATED METHODS
