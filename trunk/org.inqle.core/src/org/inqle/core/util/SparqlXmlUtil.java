@@ -163,7 +163,9 @@ public class SparqlXmlUtil {
 	 * @return
 	 */
 	public static List<SortedMap<String, String>> getRowValues(Document sparqlDocument) {
+		if (sparqlDocument==null) return null;
 		ArrayList<SortedMap<String, String>> rowElements = new ArrayList<SortedMap<String, String>>();
+		
 		NodeList results = sparqlDocument.getElementsByTagName("results");
 		Element resultsElement = (Element)results.item(0);
 		NodeList rows = resultsElement.getElementsByTagName("result");
