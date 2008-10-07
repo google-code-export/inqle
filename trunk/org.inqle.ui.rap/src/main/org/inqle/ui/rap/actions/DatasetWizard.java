@@ -192,11 +192,13 @@ public class DatasetWizard extends Wizard {
 			if (defaultCheckedVal != null && defaultCheckedVal.toLowerCase().equals("true")) {
 				defaultChecked = true;
 			}
+			
 			Collection<String> datasetFunctions = dataset.getDatasetFunctions();
 			log.info("Compare dataset function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
+			log.info("Default checked=" + defaultChecked);
 			if (datasetFunctions != null && datasetFunctions.contains(extensionId)) {
 				checkbox.setSelection(true);
-			} else if (datasetFunctions==null && defaultChecked) {
+			} else if ((datasetFunctions==null || datasetFunctions.size()==0) && defaultChecked) {
 				checkbox.setSelection(true);
 			}
 //			log.info("Add checkbox:" + extensionId + "...");
@@ -255,7 +257,7 @@ public class DatasetWizard extends Wizard {
 		
 		Persister persister = Persister.getInstance();
 		
-		if (mode != DatasetWizardAction.MODE_EDIT && persister.datasetExists(dataset.getId())) {
+		if (mode != DatasetWizardAction.MODE_EDIT && persister.externalDatasetExists(dataset.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
 					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
 			return false;

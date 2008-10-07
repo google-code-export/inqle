@@ -46,14 +46,14 @@ public class LoadRdfFileAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		//LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelPart, connection);
 		try {
-			Model modelToImportInto = Persister.getInstance().getIndexableModel(modelPart.getDataset());
+			Persister persister = Persister.getInstance();
+			Model modelToImportInto = persister.getIndexableModel(modelPart.getDataset());
 			LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelToImportInto, window.getShell());
-			//DummyWizard wizard = new DummyWizard();
-			
+			wizard.setNamedModel(modelPart.getDataset());
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			//LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);
 			//UploadDialog dialog = new UploadDialog(window.getShell(), "Upload File", true);

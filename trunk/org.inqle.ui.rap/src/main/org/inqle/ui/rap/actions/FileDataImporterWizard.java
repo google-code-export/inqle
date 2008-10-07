@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
@@ -62,6 +63,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private AddSubjectPage addSubjectPage;
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
 	private DateTimeMapperPage dateTimeMapperPage;
+	private NamedModel namedModel;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -169,6 +171,14 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		saveToModel.add(ontModel);
 		saveToModel.commit();
 		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
+		
+		if (namedModel != null) {
+			//flush any text indexes for the dataset
+			log.info("Flushing indexes for namedModel: " + namedModel + "...");
+			Persister persister = Persister.getInstance();
+			persister.flushIndexes(namedModel);
+		}
+		
 		return true;
 	}
 
@@ -430,6 +440,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			i++;
 		}
 		return tableMapping;
+	}
+
+	public void setNamedModel(NamedModel namedModel) {
+		this.namedModel = namedModel;
 	}
 
 }

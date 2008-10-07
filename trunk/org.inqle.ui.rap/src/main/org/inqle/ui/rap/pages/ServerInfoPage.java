@@ -1,5 +1,8 @@
 package org.inqle.ui.rap.pages;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -8,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class ServerInfoPage extends WizardPage {
+public class ServerInfoPage extends DynaWizardPage {
 
 	private static final String PAGE_NAME = "Your INQLE Server";
 	private static final String PAGE_DESCRIPTION = "Please enter info about your INQLE server.  " +
@@ -21,7 +24,7 @@ public class ServerInfoPage extends WizardPage {
 	private String defaultOwnerEmail;
 	
 	public ServerInfoPage(String pageName, String pageDescription) {
-		super(pageName, pageName, null);
+		super(pageName, null);
 		setMessage(pageDescription);
 	}
 
@@ -43,6 +46,7 @@ public class ServerInfoPage extends WizardPage {
 		siteNameText.setToolTipText("Enter a nickname for your INQLE Server, e.g. David Donohue's INQLE Server #3");
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		siteNameText.setLayoutData(gridData);
+		siteNameText.forceFocus();
 		
 		new Label(composite, SWT.NONE).setText("Owner Email");
 		ownerEmailText =  new Text(composite, SWT.BORDER);
@@ -73,11 +77,43 @@ public class ServerInfoPage extends WizardPage {
 	}
 	
 	public String getSiteName() {
+		if (siteNameText==null) return null;
 		return siteNameText.getText();
 	}
 	
 	public String getOwnerEmail() {
-		return ownerEmailText.getText();
+		if (ownerEmailText==null) return null;
+		
+		String ownerEmail = ownerEmailText.getText();
+		//Do a regular expression confirmation of the owner email:
+		//Set the email pattern string
+    Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+    Matcher m = p.matcher(ownerEmail);
+    if(! m.matches()) return null;
+		return ownerEmail;
+	}
+
+	@Override
+	public boolean onNextPage() {
+		setMessage(PAGE_DESCRIPTION);
+		
+		if (getSiteName()==null || getSiteName().length()==0) {
+			setMessage("Please enter a nickname for your INQLE server.");
+			return false;
+		}
+		
+		if (getOwnerEmail()==null) {
+			setMessage("Please enter a valid email address.");
+			return false;
+		}
+		
+		
+		
+		return true;
+	}
+	
+	@Override
+	public void addElements() {		
 	}
 
 }

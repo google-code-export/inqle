@@ -46,8 +46,9 @@ public class FileDataImporterAction extends Action {
 	@Override
 	public void runWithEvent(Event event) {
 		try {
-			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getDataset());
+			Model modelToImportInto = Persister.getInstance().getIndexableModel(modelPart.getDataset());
 			FileDataImporterWizard wizard = new FileDataImporterWizard(modelToImportInto, window.getShell());
+			wizard.setNamedModel(modelPart.getDataset());
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();
 		} catch (Exception e) {

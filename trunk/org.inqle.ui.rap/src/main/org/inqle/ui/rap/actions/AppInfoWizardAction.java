@@ -22,7 +22,7 @@ public class AppInfoWizardAction extends Action {
 	public void run() {
 		try {
 			AppInfoWizard wizard = new AppInfoWizard(shell);
-			WizardDialog dialog = new WizardDialog(shell, wizard);
+			DynaWizardDialog dialog = new DynaWizardDialog(shell, wizard);
 			dialog.open();
 		} catch (Exception e) {
 			log.error("Error running the AppInfoWizard", e);

@@ -228,17 +228,11 @@ public class AppInfoWizard extends Wizard {
 				if (metarepositoryConnectionPage.getDbClass().length()==0) return false;
 			}
 			
-			if (! userAccountPage.canFlipToNextPage()) return false;
+//			if (! userAccountPage.canFlipToNextPage()) return false;
 			
 			//Server Info form
 			if (serverInfoPage.getSiteName()==null || serverInfoPage.getSiteName().length()==0) return false;
 			if (serverInfoPage.getOwnerEmail()==null) return false;
-      
-			//Do a regular expression confirmation of the owner email:
-			//Set the email pattern string
-      Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-      Matcher m = p.matcher(serverInfoPage.getOwnerEmail());
-      if(! m.matches()) return false;
       
 		} catch (Exception e) {
 			log.error("Error validating setup wizard", e);

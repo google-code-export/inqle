@@ -40,7 +40,7 @@ public class DeleteModelAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		boolean deleteObject = false;
 		
 		if (this.modelPart instanceof IPartType) {
