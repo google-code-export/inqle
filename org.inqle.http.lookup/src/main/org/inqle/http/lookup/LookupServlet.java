@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.core.util.SparqlXmlUtil;
+import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.util.HttpParameterParser;
+import org.w3c.dom.Document;
 
 public class LookupServlet extends HttpServlet {
 
@@ -95,13 +98,38 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 		
-		//lookup Class URI
-		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
-		if (searchTermForRdfClass != null) {
+//		//lookup Class URI from Schema datasets
+//		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
+//		if (searchTermForRdfClass != null) {
+//			
+////			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaDatasets(searchTermForRdfClass, countResults, startIndex);
+//			String matchingClassesXml = SubjectLookup.lookupUmbelSubjectsInSchemaDatasets(searchTermForRdfClass, countResults, startIndex);
+//			respondOK(matchingClassesXml);
+//			return;
+//		}
+		
+		//lookup Class URI from UMBEL schemas, loaded in Schema dataset
+		String searchTermForUmbelClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_UMBEL_CLASS);
+		if (searchTermForUmbelClass != null) {
 			
-			//String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForRdfClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
-			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaDatasets(searchTermForRdfClass, countResults, startIndex);
+			String matchingClassesXml = SubjectLookup.lookupUmbelSubjectsInSchemaDatasets(searchTermForUmbelClass, countResults, startIndex);
 			respondOK(matchingClassesXml);
+			return;
+		}
+		
+	//lookup Class URI from UMBEL schemas, loaded in Schema dataset
+		String searchTermDataUmbelClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_DATA_UMBEL_CLASS);
+		if (searchTermDataUmbelClass != null) {
+			
+			String matchingDataClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
+
+			String matchingUmbelClassesXml = SubjectLookup.lookupUmbelSubjectsInSchemaDatasets(searchTermForUmbelClass, countResults, startIndex);
+			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
+			
+			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
+			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
+			respondOK(mergedDocumentXml);
 			return;
 		}
 		

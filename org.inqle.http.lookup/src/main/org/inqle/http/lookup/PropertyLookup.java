@@ -212,9 +212,7 @@ public class PropertyLookup {
 			"PREFIX pf: <" + RDF.PF + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
 			"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
-//			"{\n" +
-			"GRAPH ?g {\n" +
-//			"WHERE {" +
+			"{ GRAPH ?g {\n" +
 					"{ ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
 					"} UNION { \n" +
 					"?Property_URI rdfs:domain <" + RDF.SUBJECT + "> } \n" +
@@ -338,7 +336,7 @@ public class PropertyLookup {
 	 * @return
 	 */
 	public static String lookupPropertiesInSchemaDatasets(String subjectClassUri, int countSearchResults, int offset) {
-		Persister persister = Persister.getInstance();
+//		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
 		
 //		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
