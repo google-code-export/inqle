@@ -66,6 +66,9 @@ public class InqleInfo {
 	
 	public static final String PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES = "propertiesOfSubjectFromSchema";
 
+	public static final String PARAM_SEARCH_UMBEL_CLASS = "searchUmbelClass";
+	public static final String PARAM_SEARCH_DATA_UMBEL_CLASS = "searchDataUmbelClass";
+	
 //	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
 //	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
 
@@ -78,6 +81,8 @@ public class InqleInfo {
 	public static final String INDEXES_FOLDER = "indexes";
 
 	private static final String RDF_FOLDER = "rdf";
+
+	
 	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
