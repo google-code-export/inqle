@@ -170,7 +170,6 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		saveToModel.begin();
 		saveToModel.add(ontModel);
 		saveToModel.commit();
-		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
 		
 		if (namedModel != null) {
 			//flush any text indexes for the dataset
@@ -179,6 +178,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			persister.flushIndexes(namedModel);
 		}
 		
+		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
 		return true;
 	}
 
