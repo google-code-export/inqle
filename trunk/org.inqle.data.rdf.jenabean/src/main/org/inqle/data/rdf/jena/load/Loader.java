@@ -19,7 +19,7 @@ public class Loader {
 
 	/** types of RDF file formats to try to import */
   private static final String[] langs = {
-  	LANG_RDF_XML, LANG_N_TRIPLE, LANG_N3
+  	LANG_N3, LANG_RDF_XML, LANG_N_TRIPLE
   };
   
 	public static Logger log = Logger.getLogger(Loader.class);
@@ -62,7 +62,7 @@ public class Loader {
       // Without this, the model each statement is auto-committed as it is
       // added.
 			log.info("Before loading: model has " + initialSize + " statements.");
-      model.begin();
+//      model.begin();
       
     	InputStream in = new FileInputStream(file);
       if (in == null) {
@@ -101,9 +101,10 @@ public class Loader {
 	      log.info("SUCCESS loading: model now has " + model.size() + " statements.");
 	      countLoaded = model.size() - initialSize;
       }
-      model.commit();
+//      model.commit();
     } catch (Exception e) {
       log.error("Exception loading into model", e);
+//      model.abort();
       setError(e);
     } finally {
 

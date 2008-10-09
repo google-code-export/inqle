@@ -101,8 +101,8 @@ import com.hp.hpl.jena.sdb.SDB;
 			resultXml = ResultSetFormatter.asXMLString(resultSet);
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
-		} finally { 
-			qe.close(); 
+		} finally {
+			if (qe != null) qe.close();
 		}
 		
 		return resultXml;
@@ -127,7 +127,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			qe.close(); 
+			if (qe != null) qe.close(); 
 		}
 		
 		return resultText;
@@ -152,7 +152,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			qe.close(); 
+			if (qe != null) qe.close(); 
 		}
 		
 		return resultModel;
@@ -217,7 +217,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 			resultTable.setError(e);
 		} finally { 
-			qe.close(); 
+			if (qe != null) qe.close(); 
 		}
 		
 		
@@ -244,7 +244,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			qe.close(); 
+			if (qe != null) qe.close(); 
 		}
 		
 		//close the models in the QueryCriteria object
@@ -269,7 +269,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			qe.close(); 
+			if (qe != null) qe.close(); 
 		}
 		
 		return resultList;
