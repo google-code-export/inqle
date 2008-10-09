@@ -115,6 +115,35 @@ public class SubjectLookup {
 	}
 	
 	/**
+	 * Query the scheman datasets for subjects
+	 * @param searchTerm
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public static String getSparqlSearchUmbelSchemaDatasetsForSubjects(String searchTerm, int limit, int offset) {
+		String sparql = 
+			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+			"PREFIX pf: <" + RDF.PF + ">\n" + 
+			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+			"PREFIX skos: <" + RDF.SKOS + ">\n" +
+			"PREFIX umbel: <" + RDF.UMBEL + ">\n" +
+			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
+			"{ GRAPH ?g {\n" +
+			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+			"?URI a umbel:SubjectConcept \n" +
+			". OPTIONAL { ?URI skos:prefLabel ?Label }\n" +
+			". OPTIONAL { ?URI rdfs:label ?Label }\n" +
+			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
+			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
+			"} } ORDER BY DESC(?Score) \n" +
+			"LIMIT " + limit + " OFFSET " + offset;
+		return sparql;
+	}
+	
+	/**
 	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
 	 * @param searchTermForRdfClass the user-entered query term
 	 * @param owlClassUri the URI of the superclass 
@@ -219,6 +248,46 @@ public class SubjectLookup {
 //		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
 		
 		String sparql = getSparqlSearchSchemaDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
+		log.info("Querying w/ this sparql:\n" + sparql);
+		queryCriteria.setQuery(sparql);
+		String matchingClassesXml = Queryer.selectXml(queryCriteria);
+		log.info("Queried Schema Datasets and got these matching results:\n" + matchingClassesXml);
+		return matchingClassesXml;
+	}
+	
+	/**
+	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
+	 * @param searchTermForRdfClass the user-entered query term
+	 * @param owlClassUri the URI of the superclass 
+	 * @param countSearchResults
+	 * @param offset
+	 * @return
+	 */
+	public static String lookupUmbelSubjectsInSchemaDatasets(String searchTermForRdfClass, int countSearchResults, int offset) {
+		Persister persister = Persister.getInstance();
+//		QueryCriteria queryCriteria = new QueryCriteria();
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		//add any internal RDF schemas
+//		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
+		log.info("Get/Create index of Model...");
+//		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
+		IndexLARQ textIndex =  persister.getIndex(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		if (textIndex==null) return null;
+		
+		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
+		log.info("Searched Schema Datasets index for '" + searchTermForRdfClass + "'...");
+		while(searchResultI.hasNext()) {
+			HitLARQ hit = (HitLARQ)searchResultI.next();
+			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
+		}
+		if (textIndex != null) {
+			queryCriteria.setTextIndex(textIndex);
+		}
+		
+		log.info("Get/Create OntModel...");
+//		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
+		
+		String sparql = getSparqlSearchUmbelSchemaDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
