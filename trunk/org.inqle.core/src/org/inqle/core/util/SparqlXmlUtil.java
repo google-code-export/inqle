@@ -37,14 +37,15 @@ public class SparqlXmlUtil {
 	 */
 	public static Document merge(Document originalDocument, Document addDocument) {
 		//log.info("SparqlXmlUtil.merge()...");
+		if (addDocument == null) return originalDocument;
+		if (originalDocument == null) return addDocument;
+		
 		Document doc = null;
 		try {
 			doc = (Document)originalDocument.cloneNode(true);
 			//log.info("doc initialized to null...");
 //			originalDocument.setStrictErrorChecking(false);
 	//		addDocument.setStrictErrorChecking(false);
-			if (addDocument == null) return originalDocument;
-			if (originalDocument == null) return addDocument;
 		
 			//log.info("Neither Document is null.");
 			NodeList originalDocRows = null;

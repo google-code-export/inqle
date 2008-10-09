@@ -70,6 +70,7 @@ public class XmlDocumentUtil {
 	}
 
 	public static String xmlToString(Document document) {
+		if (document==null) return null;
 		return xmlToString(document.getDocumentElement());
 	}
 }
