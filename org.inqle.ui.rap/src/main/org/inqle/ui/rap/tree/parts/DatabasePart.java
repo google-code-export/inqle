@@ -101,7 +101,7 @@ public class DatabasePart extends PartType {
 		for (String datasetId: datasetIds) {
 			ExternalDataset dataset = (ExternalDataset)persister.reconstitute(ExternalDataset.class, datasetId, true);
 			dataset.setConnectionId(this.connection.getId());
-			log.info("DatabasePart Loaded ExternalDataset: " + JenabeanWriter.toString(dataset));
+//			log.info("DatabasePart Loaded ExternalDataset: " + JenabeanWriter.toString(dataset));
 			ModelPart modelPart = new ModelPart(dataset);
 			modelPart.setParent(this);
 			//modelPart.setPersister(this.persister);

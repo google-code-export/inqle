@@ -258,10 +258,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			//do the search
 			Map<String, String> params = new HashMap<String, String>();
-			params.put(InqleInfo.PARAM_SEARCH_DATA_SUBJECT, getSearchTextValue());
+			params.put(InqleInfo.PARAM_SEARCH_DATA_UMBEL_CLASS, getSearchTextValue());
 			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 			//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
-			List<SortedMap<String, String>> remoteRecords = SparqlXmlUtil.getRowValues(localDocument);
+			List<SortedMap<String, String>> remoteRecords = SparqlXmlUtil.getRowValues(remoteDocument);
 			
 			
 		//DO THIS WHEN READY: lookup subject info from UMBEL subject service
@@ -272,22 +272,23 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 
 			
 			List<SortedMap<String, String>> interimRecords = ListMapUtil.merge(localRecords, remoteRecords);
+			dataRecords = interimRecords;
 //			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
 			//log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
 			
 			//if insufficient results, do an additional query of the remote RDF Schema datafiles
-		  if (interimRecords.size() <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
-				//log.info("Doing remote RDF classes lookup...");
-				params = new HashMap<String, String>();
-				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
-				Document remoteRdfClassesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-				//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
-//				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
-				List<SortedMap<String, String>> remoteRdfClassesRecords = SparqlXmlUtil.getRowValues(remoteRdfClassesDocument);
-				dataRecords = ListMapUtil.merge(interimRecords, remoteRdfClassesRecords);
-		  } else {
-		  	dataRecords = interimRecords;
-		  }			
+//		  if (interimRecords.size() <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
+//				//log.info("Doing remote RDF classes lookup...");
+//				params = new HashMap<String, String>();
+//				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
+//				Document remoteRdfClassesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+//				//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
+////				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
+//				List<SortedMap<String, String>> remoteRdfClassesRecords = SparqlXmlUtil.getRowValues(remoteRdfClassesDocument);
+//				dataRecords = ListMapUtil.merge(interimRecords, remoteRdfClassesRecords);
+//		  } else {
+//		  	dataRecords = interimRecords;
+//		  }			
 			
 //			setXmlDocument(mergedDocument);
 //			List<SortedMap<String, String>> records = SparqlXmlUtil.getRowValues(mergedDocument);
