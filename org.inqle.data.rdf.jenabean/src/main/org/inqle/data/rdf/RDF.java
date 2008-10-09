@@ -19,6 +19,10 @@ public class RDF {
 	public static final String JA = "http://jena.hpl.hp.com/2005/11/Assembler#";
 	public static final String PF = "http://jena.hpl.hp.com/ARQ/property#";
 	public static final String FRESNEL = "http://www.w3.org/2004/09/fresnel#";
+	public static final String UMBEL = "http://umbel.org/umbel#";
+	public static final String UMBEL_SC = "http://umbel.org/umbel/sc/";
+	public static final String UMBEL_AC = "http://umbel.org/umbel/ac/";
+	public static final String UMBEL_NE = "http://umbel.org/umbel/ne/";
 	public static final String INQLE = "http://inqle.org/ns/";
 	
 	public static final String SDB = "http://jena.hpl.hp.com/2007/sdb#";	
@@ -43,6 +47,7 @@ public class RDF {
 	public static final String SUBJECT_PROPERTY = INQLE + "SubjectProperty";
 	public static final String DATE_PROPERTY = INQLE + "date";
 	public static final String IDENTIFIER_PROPERTY = INQLE + "identifier";
+	
 	
 	/**
 	 * This method is intended to be called in cases where the URI fragment 

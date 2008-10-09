@@ -333,7 +333,7 @@ public class Persister {
 		InternalDataset internalDataset = getInternalDataset(datasetRoleId);
 		
 		if (internalDataset != null) {
-			return getModel(internalDataset);
+			return getIndexableModel(internalDataset);
 		}
 		return null;
 	}
@@ -639,7 +639,7 @@ public class Persister {
 	 * @return
 	 */
 	public Model getIndexableModel(NamedModel indexableDataset) {
-		log.info("PPPPPPPPPPPPPPersister.getIndexableModel(Dataset of ID=" + indexableDataset.getId() + ")...");
+//		log.info("Persister.getIndexableModel(Dataset of ID=" + indexableDataset.getId() + ")...");
 		Model model = getModel(indexableDataset);
 		if (indexableDataset instanceof ExternalDataset) {
 			ExternalDataset externalDataset = (ExternalDataset)indexableDataset;
@@ -648,7 +648,7 @@ public class Persister {
 				for (String function: functions) {
 					IndexBuilderModel builder = getIndexBuilder(function);
 					if (builder == null) continue;
-					log.info("Registering index builder: " + builder + " for function:" + function);
+//					log.info("Registering index builder: " + builder + " for function:" + function);
 					model.register(builder);
 				}
 			}
@@ -1169,7 +1169,7 @@ public class Persister {
 		modelToBeDeleted.removeAll();
 		
 		//remove the reference to the NamedModel from the metarepository
-		log.debug("Removing NamedModel: " + namedModel.getUri());
+		log.info("Removing NamedModel: " + namedModel.getUri() + "...");
 		Persister.remove(namedModel, getMetarepositoryModel());
 		
 		if (namedModel instanceof Dataset) {		
@@ -1177,6 +1177,7 @@ public class Persister {
 			//remove the model
 			DBConnector connector = new DBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
 			boolean successDeleting = connector.deleteSDBStore();
+			log.info("Success deleting the SDB store? " + successDeleting);
 			//DBConnection jenaConnection = connector.getJenaConnection();
 	    //ModelMaker maker = ModelFactory.createModelRDBMaker(jenaConnection);
 	    //try {
@@ -1195,10 +1196,11 @@ public class Persister {
 	    connector.close();
 	    return successDeleting;
 		} else if (namedModel instanceof Datafile) {
-			String filePath = FileUtils.toFilename(((Datafile)namedModel).getFileUrl());
-			//not necessary to remove statements: modelToDelete.removeAll();
+			Model modelToDelete = getModel(namedModel);
+			modelToDelete.removeAll();
 			
 			//delete the file
+			String filePath = FileUtils.toFilename(((Datafile)namedModel).getFileUrl());
 			File fileToDelete = new File(filePath);
 			return fileToDelete.delete();
 		}
@@ -1218,19 +1220,25 @@ public class Persister {
 			return;
 		}
 		Model model = getInternalModel(targetDatasetRoleId);
+		model.begin();
 		Bean2RDF deleter = new Bean2RDF(model);
 		deleter.delete(objectToDelete);
+		model.commit();
 	}
 	
 	/**
 	 * Delete the Resource from the model, plus all references to it
 	 * 
-	 * @param nodeUri the URI of the Object object to be removed
+	 * @param objectToDelete the object to be removed
 	 * @param model the Jena Model containing the object to remove
 	 */
 	public static void remove(Object objectToDelete, Model model) {
+		log.info("Before delete: model has " + model.size() + " statements.");
+		model.begin();
 		Bean2RDF deleter = new Bean2RDF(model);
 		deleter.delete(objectToDelete);
+		model.commit();
+		log.info("After delete: model has " + model.size() + " statements.");
 	}
 
 	/* *********************************************************************
