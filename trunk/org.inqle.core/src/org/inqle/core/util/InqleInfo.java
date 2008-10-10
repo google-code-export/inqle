@@ -43,31 +43,12 @@ public class InqleInfo {
 //	private static final int CENTRAL_INQLE_SERVER_PORT = 7700;
 
 	//TODO use this:public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org/register";
-	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org:7700/register";
-	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://inqle.org:7700/lookup";
-	
-	public static final String PARAM_SITE_ID = "site";
+//	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org:7700/register";
+//	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://inqle.org:7700/lookup";
+//	
+	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost:7700/register";
+	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://localhost:7700/lookup";
 
-	public static final String PARAM_REGISTER_RDF = "rdf";
-
-	public static final String PARAM_INQLE_VERSION = "ver";
-
-	public static final String PARAM_SEARCH_DATA_SUBJECT = "searchDataSubject";
-
-	public static final String PARAM_SEARCH_RDF_CLASS = "searchRdfClass";
-	
-//	public static final String PARAM_SEARCH_ALL_DATA_CLASSES = "searchAllDataClasses";
-	
-	public static final String PARAM_SEARCH_START_INDEX = "start";
-
-	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
-
-	public static final String PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT = "dsPropertiesOfSubject";
-	
-	public static final String PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES = "propertiesOfSubjectFromSchema";
-
-	public static final String PARAM_SEARCH_UMBEL_CLASS = "searchUmbelClass";
-	public static final String PARAM_SEARCH_DATA_UMBEL_CLASS = "searchDataUmbelClass";
 	
 //	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
 //	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
@@ -75,6 +56,9 @@ public class InqleInfo {
 	private static final String RDF_SCHEMAS_FOLDER = "schemas";
 	private static final String RDF_DATA_FOLDER = "data";
 
+	public static final String PARAM_SITE_ID = "site";
+	public static final String PARAM_REGISTER_RDF = "rdf";
+	public static final String PARAM_INQLE_VERSION = "ver";
 	
 	public static final String DEFAULT_NAMED_MODEL_NAME = "org.inqle.models.defaultNamedModel";
 
