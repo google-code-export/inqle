@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.widgets.AOntResourceDialog;
 

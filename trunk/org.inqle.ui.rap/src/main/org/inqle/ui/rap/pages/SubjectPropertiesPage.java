@@ -26,6 +26,7 @@ import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
+import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.actions.CreateSubpropertyAction;
@@ -165,21 +166,22 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		log.trace("otherSubjectPropertiesDocument=" + otherSubjectPropertiesDocument);
 		Document allLocalPropertiesDocument = SparqlXmlUtil.merge(dataAndSubjectPropertiesDocument, otherSubjectPropertiesDocument);
 		
-		log.trace("Looking up remote Data & Subject properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+		log.trace("Looking up remote Data & Subject & preferred ontology properties for class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 		//do the search
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(InqleInfo.PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT, subjectClassUri);
-		Document remoteDataAndSubjectPropertiesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDataAndSubjectPropertiesDocument));
+		params.put(LookupServlet.PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY, subjectClassUri);
+//		Document remoteDataAndSubjectPropertiesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+		Document allRemotePropertiesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(allRemotePropertiesDocument));
 		
-		log.trace("Looking up in remote schema files properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
-		//do the search
-		params = new HashMap<String, String>();
-		params.put(InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES, subjectClassUri);
-		Document remotePropertiesFromSchemaFilesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(remotePropertiesFromSchemaFilesDocument));
+//		log.trace("Looking up in remote schema files properties of class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+//		//do the search
+//		params = new HashMap<String, String>();
+//		params.put(LookupServlet.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES, subjectClassUri);
+//		Document remotePropertiesFromSchemaFilesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
+//		log.trace("Received Document object:\n" + XmlDocumentUtil.xmlToString(remotePropertiesFromSchemaFilesDocument));
 		
-		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
+//		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
 				
 //		log.info("Merging all LOCAL results:\n" + XmlDocumentUtil.xmlToString(allLocalPropertiesDocument));
 		List<SortedMap<String, String>> localRowValues = SparqlXmlUtil.getRowValues(allLocalPropertiesDocument);
