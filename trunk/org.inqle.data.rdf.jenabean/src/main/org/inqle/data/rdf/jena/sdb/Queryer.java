@@ -349,11 +349,12 @@ import com.hp.hpl.jena.sdb.SDB;
 		String subjectStr = "";
 		String newNode = subject;
 		String lastNode = subject;
+		Object object = arc.getValue();
 		for (ArcStep step: arc.getArcSteps()) {
 			int stepType = step.getStepType();
 			String objectStr = "";
 			String predicate = step.getPredicate();
-			Object object = step.getObject();
+//			Object object = step.getObject();
 			
 			if (object == null) {
 				if (stepType == ArcStep.OUTGOING) {
