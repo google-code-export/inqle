@@ -17,7 +17,6 @@ import thewebsemantic.Namespace;
 		public static final int INCOMING = 1;
 		
 		private String predicate;
-		private Object object;
 		private int stepType = OUTGOING;
 
 		
@@ -52,26 +51,10 @@ import thewebsemantic.Namespace;
 			this.stepType = stepType;
 		}
 
-		public Object getObject() {
-			return object;
-		}
-
-		/**
-		 * The object can be any type that Jenabean can handle, including 
-		 * primitive wrappers (Integer, etc)
-		 * String
-		 * java.util.Date
-		 * 
-		 * @param object
-		 */
-		public void setObject(Object object) {
-			this.object = object;
-		}
-
 		public void clone(ArcStep objectToClone) {
 			setStepType(objectToClone.getStepType());
 			setPredicate(objectToClone.getPredicate());
-			setObject(objectToClone.getObject());
+//			setObject(objectToClone.getObject());
 			super.clone(objectToClone);
 		}
 		
@@ -82,15 +65,19 @@ import thewebsemantic.Namespace;
 		}
 		
 		public String getStringRepresentation() {
-			String s = "<" + predicate + ">";
-			if (object != null) {
-				s += "=";
-				if (object instanceof URI) {
-					s += "<" + object + ">";
-				} else {
-					s += object;
-				}
+			String s = "";
+			if (stepType == INCOMING) {
+				s += "IN:";
 			}
+			s += "<" + predicate + ">";
+//			if (object != null) {
+//				s += "=";
+//				if (object instanceof URI) {
+//					s += "<" + object + ">";
+//				} else {
+//					s += object;
+//				}
+//			}
 			return s;
 		}
 		

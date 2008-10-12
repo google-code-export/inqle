@@ -6,7 +6,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class TypeConverter {
 
-	public static Literal parseLiteral(String string) {
+	public static Literal parseStringToLiteral(String string) {
 		try {
 			Integer val = Integer.parseInt(string);
 			return ResourceFactory.createTypedLiteral(val);
