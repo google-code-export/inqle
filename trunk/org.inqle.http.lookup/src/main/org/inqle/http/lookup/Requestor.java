@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.InputStreamUtil;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -180,6 +181,7 @@ public class Requestor {
 			return null;
 		}
 		HttpURLConnection urlc = null;
+		InputStream in = null;
 		try {
 			urlc = (HttpURLConnection) url.openConnection();
 			try {
@@ -211,7 +213,7 @@ public class Requestor {
 				log.info("added request params:\n" + requestParams);
 			}
 			
-			InputStream in = urlc.getInputStream();
+			in = urlc.getInputStream();
 //			works:
 //			DocumentBuilder builder =
 //	       DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -224,9 +226,17 @@ public class Requestor {
 			log.error("Connection error; Unable to connect to server at " + url, e);
 		} catch (Exception e) {
 			log.error("Error parsing XML from InputStream from URL " + url + " for parameters: " + params, e);
+			log.info("Offending input stream=" + InputStreamUtil.convertStreamToString(in));
 		} finally {
 			if (urlc != null) {
 				urlc.disconnect();
+			}
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					//never mind
+				}
 			}
 		}
 		return document;

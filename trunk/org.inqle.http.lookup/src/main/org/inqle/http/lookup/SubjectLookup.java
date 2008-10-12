@@ -9,10 +9,12 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.QueryCriteriaFactory;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
+import com.hp.hpl.jena.rdf.model.Model;
 
 public class SubjectLookup {
 
@@ -23,12 +25,12 @@ public class SubjectLookup {
 	 * Generate SPARQL for finding subclasses of owlClassUri,
 	 * matching the searchTerm.  If owlClassUri is null, search all classes
 	 * @param searchTerm
-	 * @param owlClassUri
+	 * @param superClassUri
 	 * @param limit
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlSearchRdfSubclasses(String searchTerm, String owlClassUri, int limit, int offset) {
+	public static String getSparqlSearchRdfSubclasses(String searchTerm, String superClassUri, int limit, int offset) {
 			String sparql = 
 				"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 				"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -40,8 +42,8 @@ public class SubjectLookup {
 				"GRAPH ?g {\n" +
 				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n";
 //				". ?URI rdf:type rdfs:Class \n";
-				if (owlClassUri != null) {
-					sparql += ". ?URI rdfs:subClassOf <" + owlClassUri + "> \n";
+				if (superClassUri != null) {
+					sparql += ". ?URI rdfs:subClassOf <" + superClassUri + "> \n";
 				} else {
 //					sparql += ". ?URI rdf:type rdfs:Class \n";
 					sparql += ". ?URI rdfs:subClassOf rdfs:Class \n";
@@ -121,7 +123,7 @@ public class SubjectLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlSearchUmbelSchemaDatasetsForSubjects(String searchTerm, int limit, int offset) {
+	public static String getSparqlSearchPreferredOntologyDatasetsForSubjects(String searchTerm, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -133,8 +135,10 @@ public class SubjectLookup {
 			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
 			"{ GRAPH ?g {\n" +
 			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
-			"?URI a umbel:SubjectConcept \n" +
-			". OPTIONAL { ?URI skos:prefLabel ?Label }\n" +
+			". ?URI a umbel:SubjectConcept \n" +
+//			". OPTIONAL { ?URI skos:prefLabel ?Label }\n" +
+			". OPTIONAL { ?URI umbel:hasSemset ?semset \n" +
+			"    . ?semset skos:prefLabel ?Label }\n" +
 			". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 			". OPTIONAL { ?URI skos:definition ?Comment } \n" +
 			". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +
@@ -144,16 +148,17 @@ public class SubjectLookup {
 	}
 	
 	/**
-	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
-	 * @param searchTermForRdfClass the user-entered query term
-	 * @param owlClassUri the URI of the superclass 
+	 *  Lookup in the specified internal dataset any resource, of the provided OWL class URI, which matches the provided search term.
+	 * @param searchTermForRdfClass
+	 * @param superClassUri the OWL superclass of the subjects to find.  Leave null to search RDFS classes (i.e. subclasses of rdfs:Class)
+	 * @param internalDatasetRoleId the role of the internal dataset to search
 	 * @param countSearchResults
-	 * @param offset
+	 * @param offset usually = 0
 	 * @return
 	 */
-	public static String lookupSubclasses(
+	public static String lookupSubclassesInInternalDataset (
 			String searchTermForRdfClass, 
-			String owlClassUri, 
+			String superClassUri, 
 			String internalDatasetRoleId, 
 			int countSearchResults, 
 			int offset) {
@@ -170,7 +175,7 @@ public class SubjectLookup {
 		if (textIndex != null) {
 			queryCriteria.setTextIndex(textIndex);
 		}
-		String sparql = getSparqlSearchRdfSubclasses(searchTermForRdfClass, owlClassUri, countSearchResults, offset);
+		String sparql = getSparqlSearchRdfSubclasses(searchTermForRdfClass, superClassUri, countSearchResults, offset);
 		log.trace("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
@@ -263,7 +268,7 @@ public class SubjectLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupUmbelSubjectsInSchemaDatasets(String searchTermForRdfClass, int countSearchResults, int offset) {
+	public static String lookupPreferredOntologySubjectsInSchemaDatasets(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
 		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
@@ -287,11 +292,13 @@ public class SubjectLookup {
 		log.info("Get/Create OntModel...");
 //		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
 		
-		String sparql = getSparqlSearchUmbelSchemaDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
+		String sparql = getSparqlSearchPreferredOntologyDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
 		log.info("Queried Schema Datasets and got these matching results:\n" + matchingClassesXml);
+		Model matchingClassesModel = Queryer.selectRdf(queryCriteria);
+		log.info("Here are results as Jena model:\n" + JenabeanWriter.modelToString(matchingClassesModel));
 		return matchingClassesXml;
 	}
 }

@@ -24,9 +24,21 @@ public class LookupServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = -4242876578599704824L;
 
+//	public static final String PARAM_SEARCH_DATA_SUBJECT = "searchDataSubject";
+//	public static final String PARAM_SEARCH_RDF_CLASS = "searchRdfClass";
+	public static final String PARAM_SEARCH_START_INDEX = "start";
+	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
+//	public static final String PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT = "dsPropertiesOfSubject";
+//	public static final String PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES = "propertiesOfSubjectFromSchema";
+//	public static final String PARAM_SEARCH_PREFERRED_ONTOLOGY_CLASS = "searchPrefOntClass";
+	public static final String PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS = "searchDataAndPrefOntClass";
+	public static final String PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY = "propsDSPrefOnt";
+	
 	private static final int COUNT_SEARCH_RESULTS = 10;
 
 	private static final int MAX_COUNT_RESULTS = 100;
+
+	
 
 	private static Logger log = Logger.getLogger(LookupServlet.class);
 
@@ -66,7 +78,7 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 		
-		String startIndexString = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_START_INDEX);
+		String startIndexString = HttpParameterParser.getParam(request, PARAM_SEARCH_START_INDEX);
 		int startIndex = 0;
 		try {
 			startIndex = Integer.parseInt(startIndexString);
@@ -74,7 +86,7 @@ public class LookupServlet extends HttpServlet {
 			//leave default
 		}
 		
-		String countResultsString = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_COUNT_RESULTS);
+		String countResultsString = HttpParameterParser.getParam(request, PARAM_SEARCH_COUNT_RESULTS);
 		int countResults = COUNT_SEARCH_RESULTS;
 		try {
 			countResults = Integer.parseInt(countResultsString);
@@ -85,21 +97,21 @@ public class LookupServlet extends HttpServlet {
 			countResults = COUNT_SEARCH_RESULTS;
 		}
 		
-		//lookup Class URI, of classes which are subclasses of DataSubject
-		String searchTermForDataSubjectClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_DATA_SUBJECT);
-		if (searchTermForDataSubjectClass != null) {
-			
-//			//this looks up only sublcasses of DataSubject
-//			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, RDF.SUBJECT, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
-			//this looks up all RDF classes
-			String matchingClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
-
-			respondOK(matchingClassesXml);
-			return;
-		}
+		//Below, do searches and return results
+		
+		//lookup Class URI of subjects which have been used by other INQLE servers
+//		String searchTermForDataSubjectClass = HttpParameterParser.getParam(request, PARAM_SEARCH_DATA_SUBJECT);
+//		if (searchTermForDataSubjectClass != null) {
+//			
+//			//this looks up all RDF classes
+//			String matchingClassesXml = SubjectLookup.lookupSubclassesInInternalDataset(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+//
+//			respondOK(matchingClassesXml);
+//			return;
+//		}
 		
 //		//lookup Class URI from Schema datasets
-//		String searchTermForRdfClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_RDF_CLASS);
+//		String searchTermForRdfClass = HttpParameterParser.getParam(request, PARAM_SEARCH_RDF_CLASS);
 //		if (searchTermForRdfClass != null) {
 //			
 ////			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaDatasets(searchTermForRdfClass, countResults, startIndex);
@@ -108,23 +120,23 @@ public class LookupServlet extends HttpServlet {
 //			return;
 //		}
 		
-		//lookup Class URI from UMBEL schemas, loaded in Schema dataset
-		String searchTermForUmbelClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_UMBEL_CLASS);
-		if (searchTermForUmbelClass != null) {
-			
-			String matchingClassesXml = SubjectLookup.lookupUmbelSubjectsInSchemaDatasets(searchTermForUmbelClass, countResults, startIndex);
-			respondOK(matchingClassesXml);
-			return;
-		}
+		//lookup Class URI from UMBEL ontologies, loaded in Schema dataset
+//		String searchTermForPreferredOntologyClass = HttpParameterParser.getParam(request, PARAM_SEARCH_PREFERRED_ONTOLOGY_CLASS);
+//		if (searchTermForPreferredOntologyClass != null) {
+//			
+//			String matchingClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatasets(searchTermForPreferredOntologyClass, countResults, startIndex);
+//			respondOK(matchingClassesXml);
+//			return;
+//		}
 		
-	//lookup Class URI from UMBEL schemas, loaded in Schema dataset
-		String searchTermDataUmbelClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_SEARCH_DATA_UMBEL_CLASS);
+		//lookup Class URI from both subjects which have been used by other INQLE servers (in an internal dataset) and UMBEL schemas (in Schema dataset)
+		String searchTermDataUmbelClass = HttpParameterParser.getParam(request, PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS);
 		if (searchTermDataUmbelClass != null) {
 			
-			String matchingDataClassesXml = SubjectLookup.lookupSubclasses(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			String matchingDataClassesXml = SubjectLookup.lookupSubclassesInInternalDataset(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
 
-			String matchingUmbelClassesXml = SubjectLookup.lookupUmbelSubjectsInSchemaDatasets(searchTermForUmbelClass, countResults, startIndex);
+			String matchingUmbelClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatasets(searchTermDataUmbelClass, countResults, startIndex);
 			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
 			
 			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
@@ -133,27 +145,50 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 		
-		String dataAndSubjectPropertiesForClass = HttpParameterParser.getParam(request, InqleInfo.PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT);
-		if (dataAndSubjectPropertiesForClass != null) {
-			
-			String matchingPropertiesXml = PropertyLookup.lookupAllDataProperties(
-					dataAndSubjectPropertiesForClass, 
-					countResults, 
-					startIndex);
-			respondOK(matchingPropertiesXml);
-			return;
-		}
+//		String dataAndSubjectPropertiesForClass = HttpParameterParser.getParam(request, PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT);
+//		if (dataAndSubjectPropertiesForClass != null) {
+//			
+//			String matchingPropertiesXml = PropertyLookup.lookupAllDataProperties(
+//					dataAndSubjectPropertiesForClass, 
+//					countResults, 
+//					startIndex);
+//			respondOK(matchingPropertiesXml);
+//			return;
+//		}
 		
-		String propertiesForClassFromSchemaFiles = HttpParameterParser.getParam(request, InqleInfo.PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES);
-		if (propertiesForClassFromSchemaFiles != null) {
-			
-			String matchingPropertiesXml = PropertyLookup.lookupPropertiesInSchemaDatasets(
-					propertiesForClassFromSchemaFiles, 
-					countResults, 
-					startIndex);
-			respondOK(matchingPropertiesXml);
-			return;
-		}
+//		String propertiesForClassFromSchemaFiles = HttpParameterParser.getParam(request, PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES);
+//		if (propertiesForClassFromSchemaFiles != null) {
+//			
+//			String matchingPropertiesXml = PropertyLookup.lookupPropertiesInSchemaDatasets(
+//					propertiesForClassFromSchemaFiles, 
+//					countResults, 
+//					startIndex);
+//			respondOK(matchingPropertiesXml);
+//			return;
+//		}
+	
+//lookup Class URI from both subjects which have been used by other INQLE servers (in an internal dataset) and UMBEL schemas (in Schema dataset)
+	String propertiesForDataAndSubjectAndPreferredOntology = HttpParameterParser.getParam(request, PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY);
+	if (propertiesForDataAndSubjectAndPreferredOntology != null) {
+		
+		String matchingDSPropertiesXml = PropertyLookup.lookupAllDataProperties(
+				propertiesForDataAndSubjectAndPreferredOntology, 
+				countResults, 
+				startIndex);
+		Document matchingDSPropertiesDoc = XmlDocumentUtil.getDocument(matchingDSPropertiesXml);
+
+		String matchingPreferredOntologyPropertiesXml = PropertyLookup.lookupPropertiesInPreferredOntologyDatasets(
+				propertiesForDataAndSubjectAndPreferredOntology, 
+				countResults, 
+				startIndex);
+		Document matchingPreferredOntologyPropertiesDoc = XmlDocumentUtil.getDocument(matchingPreferredOntologyPropertiesXml);
+		
+		Document mergedDocument = SparqlXmlUtil.merge(matchingDSPropertiesDoc, matchingPreferredOntologyPropertiesDoc);
+		String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
+		respondOK(mergedDocumentXml);
+		return;
+	}
+	
 	}
 	
 	private void respondOK(String message) {
