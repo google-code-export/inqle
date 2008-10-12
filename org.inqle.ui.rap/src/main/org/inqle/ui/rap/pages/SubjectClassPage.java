@@ -28,6 +28,7 @@ import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.http.lookup.LookupInfo;
+import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.actions.CreateSubclassAction;
@@ -54,7 +55,9 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	private static final int COLUMN_WIDTH = 180;
 
 	//must exceed this count of search results, or a 2nd remote query is done
-	private static final int THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP = 0;
+//	private static final int THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP = 0;
+
+	private static final String MAX_NUMBER_REMOTE_SUBJECTS = "50";
 
 //	protected TableViewer tableViewer;
 
@@ -232,7 +235,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Clicked search button");
 
 			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
-			String localDataSubjectXml = SubjectLookup.lookupSubclasses(
+			String localDataSubjectXml = SubjectLookup.lookupSubclassesInInternalDataset(
 					getSearchTextValue(), 
 					null, 
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
@@ -258,7 +261,9 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			//do the search
 			Map<String, String> params = new HashMap<String, String>();
-			params.put(InqleInfo.PARAM_SEARCH_DATA_UMBEL_CLASS, getSearchTextValue());
+			params.put(LookupServlet.PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS, getSearchTextValue());
+			params.put(LookupServlet.PARAM_SEARCH_COUNT_RESULTS, MAX_NUMBER_REMOTE_SUBJECTS);
+			
 			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
 			//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
 			List<SortedMap<String, String>> remoteRecords = SparqlXmlUtil.getRowValues(remoteDocument);
@@ -270,9 +275,11 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 //		params.put(LookupInfo.UMBEL_SEARCH_PARAM, getSearchTextValue());
 //		Document umbelSearchDocument = Requestor.retrieveXmlViaGet(LookupInfo.UMBEL_SUBJECT_URL, params);
 
+//			List<SortedMap<String, String>> interimRecords = ListMapUtil.merge(localRecords, remoteRecords);
+//			dataRecords = interimRecords;
 			
-			List<SortedMap<String, String>> interimRecords = ListMapUtil.merge(localRecords, remoteRecords);
-			dataRecords = interimRecords;
+			dataRecords = ListMapUtil.merge(localRecords, remoteRecords);
+			
 //			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
 			//log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
 			

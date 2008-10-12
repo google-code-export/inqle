@@ -210,7 +210,7 @@ public class FileDataImporter {
 	}
 
 	private void importValue(OntResource individual, Property property, String value) {
-		Literal literal = TypeConverter.parseLiteral(value);
+		Literal literal = TypeConverter.parseStringToLiteral(value);
 		individual.addLiteral(property, literal);
 	}
 	
