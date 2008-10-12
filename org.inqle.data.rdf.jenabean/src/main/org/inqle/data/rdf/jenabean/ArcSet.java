@@ -3,6 +3,7 @@
  */
 package org.inqle.data.rdf.jenabean;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,6 +11,9 @@ import java.util.List;
 
 import org.inqle.data.rdf.RDF;
 
+import com.hp.hpl.jena.ontology.Individual;
+
+import sun.misc.Resource;
 import thewebsemantic.Namespace;
 
 /**
@@ -24,6 +28,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class ArcSet extends GlobalJenabean {
 	private List<Arc> arcs = new ArrayList<Arc>();
+	private URI subject;
 	
 	public void addArc(Arc arc) {
 		arcs.add(arc);
@@ -46,9 +51,23 @@ public class ArcSet extends GlobalJenabean {
 		Collections.sort(arcs);
 	}
 	
+	public void clone(ArcSet objectToBeCloned) {
+		super.clone(objectToBeCloned);
+		setSubject(objectToBeCloned.getSubject());
+		setArcs(objectToBeCloned.getArcs());
+	}
+	
 	public ArcSet createClone() {
 		ArcSet newArcSet = new ArcSet();
 		newArcSet.setArcs(arcs);
 		return newArcSet;
+	}
+
+	public URI getSubject() {
+		return subject;
+	}
+
+	public void setSubject(URI subject) {
+		this.subject = subject;
 	}
 }

@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.query.DataSource;
@@ -45,6 +44,7 @@ public class QueryCriteria {
 	private String query = "";
 	private IndexLARQ textIndex = null;
 
+	@Deprecated
 	private Model singleModel;
 	
 	//private Persister persister = null;
@@ -98,6 +98,7 @@ public class QueryCriteria {
 		dataSource.setDefaultModel(model);
 	}
 	
+	@Deprecated
 	public void setSingleModel(Model model) {
 		this.singleModel = model;
 //		dataSource.addNamedModel(InqleInfo.DEFAULT_NAMED_MODEL_NAME, model);
@@ -190,6 +191,7 @@ public class QueryCriteria {
 		this.textIndex = textIndex;
 	}
 
+	@Deprecated
 	public Model getSingleModel() {
 		return singleModel;
 	}

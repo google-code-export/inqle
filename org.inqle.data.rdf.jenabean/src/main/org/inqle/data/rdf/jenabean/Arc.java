@@ -16,11 +16,9 @@ import thewebsemantic.Namespace;
 	@Namespace(RDF.INQLE)
 	public class Arc extends GlobalJenabean {
 		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
-		public Arc() {
-		}
-//		public Arc(String predicate, RDFNode object) {
-//			addArcStep(new ArcStep(predicate, object));
-//		}
+		
+		private transient Object value;
+
 		public void addArcStep(ArcStep arcStep) {
 			arcStepList.add(arcStep);
 		}
@@ -57,5 +55,13 @@ import thewebsemantic.Namespace;
 			}
 			s += "}";
 			return s;
+		}
+
+		public Object getValue() {
+			return value;
+		}
+
+		public void setValue(Object value) {
+			this.value = value;
 		}
 	}

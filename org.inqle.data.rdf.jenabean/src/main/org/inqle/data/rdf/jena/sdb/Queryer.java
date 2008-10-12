@@ -159,6 +159,28 @@ import com.hp.hpl.jena.sdb.SDB;
 	}
 	
 	/**
+	 * Perform a CONSTRUCT query on a dataset and return results as RDF
+	 * e.g. CONSTRUCT * WHERE ( ?x vcard:FN ?name )
+	 * @param queryCriteria the QueryCriteria object containing all info about the query
+	 * @return an ResultSet object
+	 */
+	public static Model constructRdf(QueryCriteria queryCriteria) {
+		QueryExecution qe = getQueryExecution(queryCriteria);
+		
+		//Do the query
+		Model resultModel = null;
+		try {
+			resultModel = qe.execConstruct() ;
+		} catch (Exception e) {
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
+		} finally { 
+			if (qe != null) qe.close(); 
+		}
+		
+		return resultModel;
+	}
+	
+	/**
 	 * Query an ARQ dataset.
 
 	 * @param queryCriteria the QueryCriteria object containing all info about the query
