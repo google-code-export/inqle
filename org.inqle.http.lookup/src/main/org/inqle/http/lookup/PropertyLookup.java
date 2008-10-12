@@ -37,7 +37,7 @@ public class PropertyLookup {
 	 * inqle:subject.
 	 * @param subjectClassUri
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
 	@Deprecated
@@ -71,7 +71,7 @@ public class PropertyLookup {
 	 * That is, this finds properties of DataSubjects.
 	 * @param subjectClassUri
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
 	@Deprecated
@@ -105,7 +105,7 @@ public class PropertyLookup {
 	 * provided subjectClassUri as a inqle:subject.
 	 * @param subjectClassUri
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
 	@Deprecated
@@ -140,7 +140,7 @@ public class PropertyLookup {
 	 * @param searchTerm
 	 * @param subjectClassUri the URI of the subject class, which the 
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
 	public static String getSparqlFindDataProperties(String subjectClassUri, int limit, int offset) {
@@ -169,7 +169,7 @@ public class PropertyLookup {
 	 * @param searchTerm
 	 * @param subjectClassUri the URI of the subject class, which the 
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 * 
 	 * TODO standardize nomenclature: inqle:Data and inqle:Subject, and use "Data" and "Subject" in method names
@@ -201,7 +201,7 @@ public class PropertyLookup {
 	 * @param searchTerm
 	 * @param subjectClassUri the URI of the subject class, which the 
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
 	public static String getSparqlFindProperties(String subjectClassUri, int limit, int offset) {
@@ -225,12 +225,44 @@ public class PropertyLookup {
 	}
 	
 	/**
+	 * Generate SPARQL for finding properties of any class of the preferred onotology
+	 * (e.g. UMBEL);
+	 * usable for querying properties from
+	 * native OWL/RDFS vocabularies like SKOS, Geonames, etc.
+	 * @param searchTerm
+	 * @param subjectClassUri the URI of the subject class, which the 
+	 * @param limit
+	 * @param offset generally = 0
+	 * @return the SQPRQL string
+	 */
+	public static String getSparqlFindPropertiesFromPreferredOntology(String preferredSubjectClassUri, int limit, int offset) {
+		String sparql = 
+			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
+			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
+			"PREFIX owl: <" + RDF.OWL + ">\n" + 
+			"PREFIX pf: <" + RDF.PF + ">\n" + 
+			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
+			"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
+			"{ GRAPH ?g {\n" +
+					"?Property_URI rdfs:domain ?externalClass \n" +
+					". { { ?externalClass owl:equivalentClass <" + preferredSubjectClassUri + "> } \n" +
+							"UNION \n" +
+							"{ ?externalClass rdfs:subClassOf <" + preferredSubjectClassUri + "> } } \n" +
+					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
+					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
+					". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
+			"} } ORDER BY ASC(?Label) \n" +
+			"LIMIT " + limit + " OFFSET " + offset;
+		return sparql;
+	}
+	
+	/**
 	 * Generate SPARQL for finding properties of inqle:Data class, which themselves have inqle:subject of
 	 * the provided RDF class URI
 	 * @param searchTerm
 	 * @param subjectClassUri the URI of the subject class, which the 
 	 * @param limit
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 * 
 	 * TODO standardize nomenclature: inqle:Data and inqle:Subject, and use "Data" and "Subject" in method names
@@ -269,9 +301,10 @@ public class PropertyLookup {
 	 *  * mapped data tables or of their rows, having an inqle:subject of the subjectClassUri
 	 * @param subjectClassUri the URI of the class 
 	 * @param countSearchResults
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
+	@Deprecated
 	public static String lookupDataPropertiesAboutSubject(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -289,9 +322,10 @@ public class PropertyLookup {
 	 * Lookup any properties of mapped subject classes of URI subjectClassUri
 	 * @param subjectClassUri the URI of the class 
 	 * @param countSearchResults
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return the SQPRQL string
 	 */
+	@Deprecated
 	public static String lookupSubjectProperties(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -309,7 +343,7 @@ public class PropertyLookup {
 	 * Lookup any properties of data tables or of their rows, having an inqle:subject of the subjectClassUri
 	 * @param subjectClassUri the URI of the class 
 	 * @param countSearchResults
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return
 	 */
 	public static String lookupAllDataProperties(String subjectClassUri, int countSearchResults, int offset) {
@@ -332,7 +366,7 @@ public class PropertyLookup {
 	 * Lookup any properties of data tables or of their rows, from any RDFS/OWL vocabulary
 	 * @param subjectClassUri the URI of the class 
 	 * @param countSearchResults
-	 * @param offset
+	 * @param offset generally = 0
 	 * @return
 	 */
 	public static String lookupPropertiesInSchemaDatasets(String subjectClassUri, int countSearchResults, int offset) {
@@ -343,6 +377,28 @@ public class PropertyLookup {
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);
+		log.info("Querying w/ this sparql:\n" + sparql);
+		queryCriteria.setQuery(sparql);
+		String resultXml = Queryer.selectXml(queryCriteria);
+		return resultXml;
+	}
+	
+	/**
+	 * Lookup any properties of data tables or of their rows, from the preferred ontology
+	 * (e.g., UMBEL)
+	 * @param subjectClassUri the URI of the class 
+	 * @param countSearchResults
+	 * @param offset generally = 0
+	 * @return
+	 */
+	public static String lookupPropertiesInPreferredOntologyDatasets(String subjectClassUri, int countSearchResults, int offset) {
+//		Persister persister = Persister.getInstance();
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		
+//		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
+//		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
+		String sparql = getSparqlFindPropertiesFromPreferredOntology(subjectClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
