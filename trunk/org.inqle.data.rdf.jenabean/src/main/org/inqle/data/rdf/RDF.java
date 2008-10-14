@@ -23,7 +23,7 @@ public class RDF {
 	public static final String UMBEL_SC = "http://umbel.org/umbel/sc/";
 	public static final String UMBEL_AC = "http://umbel.org/umbel/ac/";
 	public static final String UMBEL_NE = "http://umbel.org/umbel/ne/";
-	public static final String INQLE = "http://inqle.org/ns/";
+	public static final String INQLE = "http://inqle.org/ns/0.1/";
 	
 	public static final String SDB = "http://jena.hpl.hp.com/2007/sdb#";	
 	public static final String THEWEBSEMANTIC = "http://thewebsemantic.com/";
