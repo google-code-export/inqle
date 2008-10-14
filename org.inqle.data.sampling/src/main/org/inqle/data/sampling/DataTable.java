@@ -147,7 +147,7 @@ public class DataTable {
 //		}
 		ArcSet learnableArcs = new ArcSet();
 		for (DataColumn dataColumn: dataColumns) {
-			learnableArcs.addArc(dataColumn.getArc());
+			learnableArcs.addArcAndValue(dataColumn.getArc(), null);
 		}
 		return learnableArcs;
 	}
