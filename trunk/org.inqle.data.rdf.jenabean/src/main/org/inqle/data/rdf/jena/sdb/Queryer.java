@@ -339,17 +339,18 @@ import com.hp.hpl.jena.sdb.SDB;
 	private static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
 		String sparql = "";
 		for (Arc arc: arcSet.getArcs()) {
-			sparql += getSparqlWhereFromArc(subject, arc);
+			Object value = arcSet.getValue(arc);
+			sparql += getSparqlWhereFromArc(subject, arc, value);
 		}
 		return sparql;
 	}
 
-	private static String getSparqlWhereFromArc(String subject, Arc arc) {
+	private static String getSparqlWhereFromArc(String subject, Arc arc, Object object) {
 		String sparql = "";
 		String subjectStr = "";
 		String newNode = subject;
 		String lastNode = subject;
-		Object object = arc.getValue();
+		
 		for (ArcStep step: arc.getArcSteps()) {
 			int stepType = step.getStepType();
 			String objectStr = "";

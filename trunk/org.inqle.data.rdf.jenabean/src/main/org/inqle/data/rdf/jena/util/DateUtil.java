@@ -35,4 +35,18 @@ public class DateUtil {
 		return xsdDate;
 	}
 	
+	public static Date tryToParseDateObject(String putativeDateString) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat();
+		Date parsedDate = null;
+		for (String dateMask: DATE_FORMATS_TO_TRY) {
+			dateFormat.applyPattern(dateMask);
+			
+			try {
+				parsedDate = dateFormat.parse(putativeDateString);
+			} catch (ParseException e) {}
+			if (parsedDate!=null) break;
+		}
+		return parsedDate;
+	}
+	
 }
