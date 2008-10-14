@@ -57,7 +57,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	//must exceed this count of search results, or a 2nd remote query is done
 //	private static final int THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP = 0;
 
-	private static final String MAX_NUMBER_REMOTE_SUBJECTS = "50";
+	private static final String MAX_NUMBER_REMOTE_SUBJECTS = "100";
 
 //	protected TableViewer tableViewer;
 

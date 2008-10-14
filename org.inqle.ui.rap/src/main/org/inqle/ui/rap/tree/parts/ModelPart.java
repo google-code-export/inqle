@@ -4,6 +4,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.ui.rap.Part;
+import org.inqle.ui.rap.actions.AddReasonerStatementsAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
 import org.inqle.ui.rap.actions.DeleteModelAction;
 import org.inqle.ui.rap.actions.FileDataImporterAction;
@@ -60,6 +61,10 @@ public class ModelPart extends Part {
 		
 		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from delimited text (CSV) file...", this, workbenchWindow);
 		manager.add(fileDataImporterAction);
+		
+		//"Add inferred statements" action
+		AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
+		manager.add(addReasonerStatementsAction);
 		
 		//Delete action
 		DeleteModelAction deleteDatabaseAction = new DeleteModelAction("Delete", this, workbenchWindow);
