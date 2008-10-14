@@ -48,13 +48,12 @@ public class DataPreparer {
 	}
 	
 	/**
-	 * Given an inqle.rdf.data.DataTable, converts to a edu.udo.cs.yale.example.MemoryExampleTable
+	 * Given an org.inqle.rdf.data.DataTable, converts to a edu.udo.cs.yale.example.MemoryExampleTable
 	 * @param dataTable the DataTable of data to convert
 	 * @return table the MemoryExampleTable of data
 	 */
 	public MemoryExampleTable createExampleTable() {
 		
-
 		//Attribute label = AttributeFactory.createAttribute("label", Ontology.NOMINAL));
 		//attributes.add(label);
 		//create table
@@ -104,7 +103,7 @@ public class DataPreparer {
 	
 	/**
 	 * Process the data table, assigning a data type to each column.
-	 * @return List of DataMiner Attributes, with mappings to the data
+	 * @return List of RapidMiner Attributes, with mappings to the data
 	 */
 	public List<Attribute> processColumnsIntoAttributes() {
 		//create attribute list
