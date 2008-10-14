@@ -17,7 +17,7 @@ import thewebsemantic.Namespace;
 	public class Arc extends GlobalJenabean {
 		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
 		
-		private transient Object value;
+//		private transient Object value;
 
 		public void addArcStep(ArcStep arcStep) {
 			arcStepList.add(arcStep);
@@ -57,11 +57,11 @@ import thewebsemantic.Namespace;
 			return s;
 		}
 
-		public Object getValue() {
-			return value;
-		}
-
-		public void setValue(Object value) {
-			this.value = value;
-		}
+//		public Object getValue() {
+//			return value;
+//		}
+//
+//		public void setValue(Object value) {
+//			this.value = value;
+//		}
 	}

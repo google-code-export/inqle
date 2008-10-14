@@ -5,16 +5,8 @@ package org.inqle.data.rdf.jenabean;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.inqle.data.rdf.RDF;
-
-import com.hp.hpl.jena.ontology.Individual;
-
-import sun.misc.Resource;
-import thewebsemantic.Namespace;
 
 /**
  * This class represents a set of Arc objects, 
@@ -25,43 +17,56 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Feb 22, 2008
  */
-@Namespace(RDF.INQLE)
-public class ArcSet extends GlobalJenabean {
-	private List<Arc> arcs = new ArrayList<Arc>();
+//@Namespace(RDF.INQLE)
+public class ArcSet {
+	private LinkedHashMap<Arc, Object> arcs = new LinkedHashMap<Arc, Object>();
 	private URI subject;
 	
-	public void addArc(Arc arc) {
-		arcs.add(arc);
+	public void addArcAndValue(Arc arc, Object value) {
+		arcs.put(arc, value);
 	}
 
-	public Collection<Arc> getArcs() {
-		return arcs;
+	public List<Arc> getArcs() {
+		List<Arc> keys = new ArrayList<Arc>();
+		for (Arc arc: arcs.keySet()) {
+			keys.add(arc);
+		}
+		return keys;
 	}
 
+	public Object getValue(Arc arc) {
+		return arcs.get(arc);
+	}
+	
+	public Object getValue(int columnIndex) {
+		Arc arc = getArcs().get(columnIndex);
+		return arcs.get(arc);
+	}
+	
 	public String getStringRepresentation() {
 		String s = "";
-		for (Arc arc: arcs) {
+		for (Arc arc: getArcs()) {
 			s += arc.toString() + "\n";
 		}
 		return s;
 	}
 
-	public void setArcs(Collection<Arc> arcCollection) {
-		this.arcs = new ArrayList<Arc>(arcCollection);
-		Collections.sort(arcs);
-	}
+//	public void setArcs(Collection<Arc> arcCollection) {
+//		this.arcs = new ArrayList<Arc>(arcCollection);
+//		Collections.sort(arcs);
+//	}
 	
-	public void clone(ArcSet objectToBeCloned) {
-		super.clone(objectToBeCloned);
-		setSubject(objectToBeCloned.getSubject());
-		setArcs(objectToBeCloned.getArcs());
-	}
-	
-	public ArcSet createClone() {
-		ArcSet newArcSet = new ArcSet();
-		newArcSet.setArcs(arcs);
-		return newArcSet;
-	}
+//	public void clone(ArcSet objectToBeCloned) {
+//		super.clone(objectToBeCloned);
+//		setSubject(objectToBeCloned.getSubject());
+//		setArcs(objectToBeCloned.getArcs());
+//	}
+//	
+//	public ArcSet createClone() {
+//		ArcSet newArcSet = new ArcSet();
+//		newArcSet.setArcs(arcs);
+//		return newArcSet;
+//	}
 
 	public URI getSubject() {
 		return subject;

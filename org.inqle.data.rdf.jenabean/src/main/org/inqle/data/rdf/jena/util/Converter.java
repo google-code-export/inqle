@@ -24,7 +24,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
  */
 public class Converter {
 
-	static Logger log = Logger.getLogger(Converter.class);
+	private static Logger log = Logger.getLogger(Converter.class);
 
 	public static List<Resource> resIteratorToList(ResIterator resI) {
 		ArrayList<Resource> returnL = new ArrayList<Resource>();

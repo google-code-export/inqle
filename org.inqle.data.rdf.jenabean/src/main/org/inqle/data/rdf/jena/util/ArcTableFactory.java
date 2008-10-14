@@ -1,8 +1,6 @@
 package org.inqle.data.rdf.jena.util;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
@@ -18,11 +16,11 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-public class ArcSetExtractor {
+public class ArcTableFactory {
 
 	private OntModel ontModel;
 
-	public ArcSetExtractor(OntModel ontModel) {
+	public ArcTableFactory(OntModel ontModel) {
 		this.ontModel = ontModel;
 	}
 	
@@ -33,16 +31,17 @@ public class ArcSetExtractor {
 	 * Each instance of this class will be represented by a row
 	 * @return
 	 */
-	public List<ArcSet> extract(Resource subjectClass) {
-		List<ArcSet> rows = new ArrayList<ArcSet>();
+	public ArcTable createArcTable(Resource subjectClass) {
+		ArcTable arcTable = new ArcTable();
+//		List<ArcSet> rows = new ArrayList<ArcSet>();
 		
 		ExtendedIterator subjectEI = ontModel.listIndividuals(subjectClass);
 		while (subjectEI.hasNext()) {
 			Individual individual = (Individual)subjectEI.next();
 			ArcSet arcSet = getArcSet(individual);
-			rows.add(arcSet);
+			arcTable.addArcSet(arcSet);
 		}//next subject row
-		return rows;
+		return arcTable;
 	}
 	
 	/**
@@ -54,7 +53,7 @@ public class ArcSetExtractor {
 	public ArcSet getArcSet(Resource startingSubjectInstance) {
 		ArcSet arcSet = new ArcSet();
 		arcSet.setSubject(URI.create(startingSubjectInstance.toString()));
-		addArcs(arcSet, startingSubjectInstance);
+		addArcAndValues(arcSet, startingSubjectInstance);
 		return arcSet;
 	}
 
@@ -63,7 +62,7 @@ public class ArcSetExtractor {
 	 * @param arcSet
 	 * @param startingResource
 	 */
-	private void addArcs(ArcSet arcSet, Resource startingResource) {
+	private void addArcAndValues(ArcSet arcSet, Resource startingResource) {
 		
 		//loop thru each property of each class
 		Property nullProperty = null;
@@ -96,8 +95,7 @@ public class ArcSetExtractor {
 		RDFNode rdfNode = startingStatement.getObject();
 		if (rdfNode instanceof Literal) {
 			Literal literal = (Literal) rdfNode;
-			arc.setValue(literal.getValue());
-			arcSet.addArc(arc);
+			arcSet.addArcAndValue(arc, literal.getValue());
 			return;
 		}
 		if (! (rdfNode instanceof Resource)) {
@@ -109,8 +107,7 @@ public class ArcSetExtractor {
   	
   	//if this is a non-blank resource with no properties, add the URI as a value
 	  if (!stmtIterator.hasNext() && !resource.isAnon()) {
-	  	arc.setValue(resource.toString());
-			arcSet.addArc(arc);
+	  	arcSet.addArcAndValue(arc, resource.toString());
 			return;
 	  }
   	int i=0;
@@ -125,4 +122,5 @@ public class ArcSetExtractor {
   		i++;
 	  }
 	}
+	
 }
