@@ -246,13 +246,13 @@ public class PropertyLookup {
 			"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
 			"{ GRAPH ?g {\n" +
 			
-			"?Property_URI rdfs:domain <" + preferredSubjectClassUri + "> \n" +
+//			"?Property_URI rdfs:domain <" + preferredSubjectClassUri + "> \n" +
 			
-//					"?Property_URI rdfs:domain ?externalClass \n" +
-//					". { { ?externalClass owl:equivalentClass <" + preferredSubjectClassUri + "> } \n" +
-//							"UNION \n" +
-//							"{ ?externalClass rdfs:subClassOf <" + preferredSubjectClassUri + "> } } \n" +
-//					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
+					"?Property_URI rdfs:domain ?externalClass \n" +
+					". { { ?externalClass owl:equivalentClass <" + preferredSubjectClassUri + "> } \n" +
+							"UNION \n" +
+							"{ ?externalClass rdfs:subClassOf <" + preferredSubjectClassUri + "> } } \n" +
+					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
 					
 					
 					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
