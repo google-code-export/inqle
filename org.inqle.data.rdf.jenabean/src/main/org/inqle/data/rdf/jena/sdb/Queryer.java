@@ -68,11 +68,13 @@ import com.hp.hpl.jena.sdb.SDB;
 //			log.debug("Querying model '" + (String)dsNames.next() + "'.");
 //		}
 		QueryExecution qe = null;
-		if (queryCriteria.getSingleModel() != null) {
-			qe = QueryExecutionFactory.create(query, queryCriteria.getSingleModel()) ;
-		} else {
-			qe = QueryExecutionFactory.create(query, queryCriteria.getDataset()) ;
-		}
+//		if (queryCriteria.getSingleModel() != null) {
+//			qe = QueryExecutionFactory.create(query, queryCriteria.getSingleModel()) ;
+//		} else {
+//			qe = QueryExecutionFactory.create(query, queryCriteria.getDataset()) ;
+//		}
+		
+		qe = QueryExecutionFactory.create(query, queryCriteria.getDataset()) ;
 		
 		if (queryCriteria.getTextIndex() != null) {
 			log.trace("setDefaultIndex...");
