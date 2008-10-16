@@ -220,11 +220,15 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 					RDF.SUBJECT);
 			createSubclassAction.run();
-			this.createdUri = createSubclassAction.getNewUri();
-			selectCreatedClassButton.setText(createdUri);
-			selectCreatedClassButton.setSelection(true);
-			selectNewSubjectLabel.setVisible(true);
-			selectCreatedClassButton.setVisible(true);
+			
+			if (createSubclassAction.getNewUri() != null) {
+				this.createdUri = createSubclassAction.getNewUri();
+				
+				selectCreatedClassButton.setText(createdUri);
+				selectCreatedClassButton.setSelection(true);
+				selectNewSubjectLabel.setVisible(true);
+				selectCreatedClassButton.setVisible(true);
+			}
 		} else if (clickedObject.equals(table)) {
 			selectCreatedClassButton.setSelection(false);
 			//log.info("Clicked table row.  getSubjectUri()=" + getSubjectUri());

@@ -7,9 +7,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.PopupDialog;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.rwt.RWT;
 import org.eclipse.rwt.widgets.Upload;
@@ -18,7 +15,6 @@ import org.eclipse.rwt.widgets.UploadEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -203,12 +199,23 @@ public class LoadRdfFileWizard extends DynaWizard {
 	}
 	
 	public void importFile(File file) {
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + file.getName() + "..." );
-		popup.open();
+//		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Loading Data...", "Loading from file " + file.getName() + "..." );
+//		popup.open();
+		
+		MessageDialog waitingDialog = new MessageDialog(
+				getShell(), 
+				"Loading Data...", 
+				 null, 
+				 "Loading from file " + file.getName() + "...", 
+				 MessageDialog.NONE,
+				  new String [] {  }, 0);
+		waitingDialog.setBlockOnOpen(false);
+		waitingDialog.open();
+		
 //		log.info("Rendered popup");
     Loader loader = new Loader(saveToModel);
     boolean success = loader.load(file, defaultUri);
-    popup.close();
+    waitingDialog.close();
     if (success) {
     	log.info("Success loading RDF file.");
     	if (loader.getCountLoaded() == 0) {

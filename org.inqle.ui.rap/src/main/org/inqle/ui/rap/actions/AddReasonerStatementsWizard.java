@@ -6,6 +6,7 @@ package org.inqle.ui.rap.actions;
 import java.io.File;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -141,17 +142,29 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 		if (ruleText==null || ruleText.length()==0) return false;
 		long preSize = saveToModel.size();
 		
-		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Adding inferred statements...", "Using inference rule:\n" + ruleText);
-		popup.open();
-		log.info("Rendered popup");
+//		PopupDialog popup = new PopupDialog(getShell(), SWT.NONE, true, false, false, false, "Adding inferred statements...", "Using inference rule:\n" + ruleText);
+//		popup.open();
+//		log.info("Rendered popup");
+		
+		MessageDialog waitingDialog = new MessageDialog(
+				getShell(), 
+				"Adding inferred statements...", 
+				 null, 
+				 "Using inference rule:\n" + ruleText, 
+				 MessageDialog.NONE,
+				  new String [] {  }, 0);
+		waitingDialog.setBlockOnOpen(false);
+		waitingDialog.open();
+				
+	
 		boolean errorOccurred = false;
 		try {
-			OntModelMerger.mergeInferredStatements(saveToModel, ruleText, true);
+			OntModelMerger.mergeInferredStatements(saveToModel, ruleText);
 		} catch (Exception e) {
 			log.error("Unable to add inferred statements for rule:\n" + ruleText, e);
 		}
 		
-		popup.close();
+		waitingDialog.close();
 		log.info("Closed popup");
 		long postSize = saveToModel.size();
 		
