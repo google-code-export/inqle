@@ -7,8 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.data.rdf.jena.util.OntModelFactory;
 import org.inqle.data.rdf.jenabean.Persister;
 
+import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.DataSource;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.DatasetFactory;
@@ -38,7 +40,7 @@ public class QueryCriteria {
 
 	private Store store;
 	
-	private List<Model> models = new ArrayList<Model>();
+//	private List<Model> models = new ArrayList<Model>();
 	private List<NamedModel> namedModels = new ArrayList<NamedModel>();
 	private DataSource dataSource = null;
 	private String query = "";
@@ -46,6 +48,8 @@ public class QueryCriteria {
 
 	@Deprecated
 	private Model singleModel;
+
+	private String inferenceRules;
 	
 	//private Persister persister = null;
 	
@@ -84,8 +88,17 @@ public class QueryCriteria {
 	}
 	
 	public void addModel(String id, Model model) {
-		models.add(model);
-		dataSource.addNamedModel(id, model);
+		if (inferenceRules  != null) {
+			//add the inference-capable OntModel instead
+			
+			OntModel ontModel = OntModelFactory.asOntModel(model, inferenceRules);
+//			models.add(ontModel);
+			dataSource.addNamedModel(id, ontModel);
+			log.info("Added inference rules to model of ID:" + id + "\n" + inferenceRules);
+		} else {
+//			models.add(model);
+			dataSource.addNamedModel(id, model);
+		}
 	}
 	
 	/**
@@ -94,7 +107,7 @@ public class QueryCriteria {
 	 * @param model
 	 */
 	public void setDefaultModel(Model model) {
-		models.add(model);
+//		models.add(model);
 		dataSource.setDefaultModel(model);
 	}
 	
@@ -161,27 +174,27 @@ public class QueryCriteria {
 	/**
 	 * Close any open objects, if any
 	 */
-	public void close() {
-		//call close method for each ARepository object
-		Iterator<Model> modelsI = models.iterator();
-		while (modelsI.hasNext()) {
-			Model model = (Model)modelsI.next();
-			if (!model.isClosed()) model.close();
-		}
-		if (store != null) store.close();
-	}
+//	public void close() {
+//		//call close method for each ARepository object
+//		Iterator<Model> modelsI = models.iterator();
+//		while (modelsI.hasNext()) {
+//			Model model = (Model)modelsI.next();
+//			if (!model.isClosed()) model.close();
+//		}
+//		if (store != null) store.close();
+//	}
 
 	/**
 	 * If a single model has been added to this object, return it.  Otherwise
 	 * throw an exception
 	 * @return
 	 */
-	public Model getModel() {
-		if (models.size() != 1) {
-			throw new RuntimeException("QueryCriteria has had " + models.size() + " models added to it.  Should have 1 model added to it if getModel() is to be called.");
-		}
-		return (Model) models.get(0);
-	}
+//	public Model getModel() {
+//		if (models.size() != 1) {
+//			throw new RuntimeException("QueryCriteria has had " + models.size() + " models added to it.  Should have 1 model added to it if getModel() is to be called.");
+//		}
+//		return (Model) models.get(0);
+//	}
 
 	public IndexLARQ getTextIndex() {
 		return textIndex;
@@ -194,6 +207,14 @@ public class QueryCriteria {
 	@Deprecated
 	public Model getSingleModel() {
 		return singleModel;
+	}
+
+	public String getInferenceRules() {
+		return inferenceRules;
+	}
+
+	public void setInferenceRules(String inferenceRules) {
+		this.inferenceRules = inferenceRules;
 	}
 	
 	/*

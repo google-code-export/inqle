@@ -2,6 +2,8 @@ package org.inqle.data.rdf.jena.sdb;
 
 import java.util.List;
 
+import org.inqle.data.rdf.jena.util.OntModelFactory;
+
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -44,24 +46,26 @@ public class OntModelMerger {
 	 * @param rulesText
 	 * @param transitiveClosureCaching
 	 */
-	public static void mergeInferredStatements(Model persistentModel, String rulesText, boolean transitiveClosureCaching) {
-		OntModelSpec spec = new OntModelSpec(OntModelSpec.OWL_MEM_RDFS_INF);
-//    Reasoner reasoner = ReasonerRegistry.getOWLMicroReasoner();
-		
-		List<?> rules = Rule.parseRules(rulesText);
-	  
-	  GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-	  reasoner.setParameter(ReasonerVocabulary.PROPtraceOn, Boolean.TRUE);
-
-	  //not sure whether to do this
-		reasoner.setTransitiveClosureCaching(transitiveClosureCaching);
-		
-    spec.setReasoner(reasoner);
-   
-    //get the Model of new, inferred statements
-    //hopefully no memory problem
-    OntModel model = ModelFactory.createOntologyModel(spec, persistentModel);
+	public static void mergeInferredStatements(Model persistentModel, String rulesText) {
+//		OntModelSpec spec = new OntModelSpec(OntModelSpec.OWL_MEM);
+////    Reasoner reasoner = ReasonerRegistry.getOWLMicroReasoner();
+//		
+//		List<?> rules = Rule.parseRules(rulesText);
+//	  
+//	  GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
+//	  reasoner.setParameter(ReasonerVocabulary.PROPtraceOn, Boolean.TRUE);
+//
+//	  //not sure whether to do this
+//		reasoner.setTransitiveClosureCaching(transitiveClosureCaching);
+//		
+//    spec.setReasoner(reasoner);
+//   
+//    //get the Model of new, inferred statements
+//    //hopefully no memory problem
+//    OntModel model = ModelFactory.createOntologyModel(spec, persistentModel);
   
+		OntModel model = OntModelFactory.asOntModel(persistentModel, rulesText);
+			
     //add this inferred model back to DB
     persistentModel.add(model);
 	}

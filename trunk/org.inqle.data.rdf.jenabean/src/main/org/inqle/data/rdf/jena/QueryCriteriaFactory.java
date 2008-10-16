@@ -15,7 +15,20 @@ public class QueryCriteriaFactory {
 	private static Logger log = Logger.getLogger(QueryCriteriaFactory.class);
 	
 	public static QueryCriteria createQueryCriteriaForDatasetFunction(String datasetFunctionId) {
+		return createQueryCriteriaForDatasetFunction(datasetFunctionId, null);
+	}
+	
+	/**
+	 * Create a QueryCriteria, prepared to search across all datasets of the
+	 * specified datasetFunctionId.  If any reasoning is to be done, specify the inferenceRules
+	 * as a string value.  Otherwise leave this parameter null.
+	 * @param datasetFunctionId
+	 * @param inferenceRules
+	 * @return
+	 */
+	public static QueryCriteria createQueryCriteriaForDatasetFunction(String datasetFunctionId, String inferenceRules) {
 		QueryCriteria returnQueryCriteria = new QueryCriteria();
+		returnQueryCriteria.setInferenceRules(inferenceRules);
 		Persister persister = Persister.getInstance();
 		returnQueryCriteria.setTextIndex(persister.getIndex(datasetFunctionId));
 		//query out the IDs of the ExternalDatasets of this function
