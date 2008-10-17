@@ -112,7 +112,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		searchBox = new SearchBox(selfComposite, SWT.NONE, "Find a subject", "Search");
 		searchBox.addSelectionListener(this);
 		new Label(selfComposite, SWT.NONE).setText("Choose an existing subject from this table...");
-		table = new Table(selfComposite, SWT.NONE);
+		table = new Table(selfComposite, SWT.WRAP);
 		
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
@@ -159,7 +159,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		//add columns
 		if (table.getColumns().length == 0)  {
 			for (String propertyName: labelProvider.getHeaderVariables()) {
-				TableColumn column = new TableColumn(table,SWT.LEFT);
+				TableColumn column = new TableColumn(table,SWT.LEFT | SWT.WRAP);
 				propertyName = propertyName.replace("_", " ");
 				column.setText(propertyName);
 				column.setResizable(true);
