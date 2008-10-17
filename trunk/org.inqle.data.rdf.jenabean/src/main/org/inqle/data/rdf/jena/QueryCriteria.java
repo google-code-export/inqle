@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jena.util.OntModelFactory;
+import org.inqle.data.rdf.jena.util.OntModelUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -91,7 +91,7 @@ public class QueryCriteria {
 		if (inferenceRules  != null) {
 			//add the inference-capable OntModel instead
 			
-			OntModel ontModel = OntModelFactory.asOntModel(model, inferenceRules);
+			OntModel ontModel = OntModelUtil.asOntModel(model, inferenceRules);
 //			models.add(ontModel);
 			dataSource.addNamedModel(id, ontModel);
 			log.info("Added inference rules to model of ID:" + id + "\n" + inferenceRules);
