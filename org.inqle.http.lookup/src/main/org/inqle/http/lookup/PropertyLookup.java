@@ -29,7 +29,7 @@ public class PropertyLookup {
 	public static final Object QUERY_HEADER_LABEL = "Label";
 	public static final Object QUERY_HEADER_COMMENT = "Comment";
 	public static final Object QUERY_HEADER_PROPERTY_TYPE = "Property_Type";
-	private static final String UMBEL_PROPERTY_INFERENCE_RULES = "[umbelSubj1: (?a owl:equivalentClass ?b) (?p rdfs:domain ?b) -> (?p rdfs:domain ?a)]\n[umbelSubj2: (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?c) (?c <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?d) -> (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?d)]\n[umbelSubj3: (?p rdfs:domain ?a) (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?c) -> (?p rdfs:domain ?c)]";
+//	private static final String UMBEL_PROPERTY_INFERENCE_RULES = "[umbelSubj1: (?a owl:equivalentClass ?b) (?p rdfs:domain ?b) -> (?p rdfs:domain ?a)]\n[umbelSubj2: (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?c) (?c <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?d) -> (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?d)]\n[umbelSubj3: (?p rdfs:domain ?a) (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?c) -> (?p rdfs:domain ?c)]";
 	/**
 	 * Generates SPARQL, to find all properties of all instances of all 
 	 * subclasses of inqle:Data, 
@@ -246,15 +246,13 @@ public class PropertyLookup {
 			"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
 			"{ GRAPH ?g {\n" +
 			
-//			"?Property_URI rdfs:domain <" + preferredSubjectClassUri + "> \n" +
+			"?Property_URI rdfs:domain <" + preferredSubjectClassUri + "> \n" +
 			
-					"?Property_URI rdfs:domain ?externalClass \n" +
-					". { { ?externalClass owl:equivalentClass <" + preferredSubjectClassUri + "> } \n" +
-							"UNION \n" +
-							"{ ?externalClass rdfs:subClassOf <" + preferredSubjectClassUri + "> } } \n" +
+//					"?Property_URI rdfs:domain ?externalClass \n" +
+//					". { { ?externalClass owl:equivalentClass <" + preferredSubjectClassUri + "> } \n" +
+//							"UNION \n" +
+//							"{ ?externalClass rdfs:subClassOf <" + preferredSubjectClassUri + "> } } \n" +
 					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
-					
-					
 					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
 					". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 			"} } ORDER BY ASC(?Label) \n" +
