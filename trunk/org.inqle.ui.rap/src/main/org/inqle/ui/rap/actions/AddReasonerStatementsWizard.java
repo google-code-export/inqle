@@ -3,19 +3,9 @@
  */
 package org.inqle.ui.rap.actions;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.PopupDialog;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.rwt.RWT;
-import org.eclipse.rwt.widgets.Upload;
-import org.eclipse.rwt.widgets.UploadAdapter;
-import org.eclipse.rwt.widgets.UploadEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -26,14 +16,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
-import org.inqle.data.rdf.jena.NamedModel;
-import org.inqle.data.rdf.jena.load.Loader;
-import org.inqle.data.rdf.jena.sdb.OntModelMerger;
+import org.inqle.data.rdf.jena.util.OntModelUtil;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -45,10 +30,10 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class AddReasonerStatementsWizard extends DynaWizard {
 
 	private Text reasonerText;
-	static Logger log = Logger.getLogger(AddReasonerStatementsWizard.class);
+	private static Logger log = Logger.getLogger(AddReasonerStatementsWizard.class);
 	Composite composite;
 	private Dataset dataset;
-	private ModelPart modelPart = null;
+//	private ModelPart modelPart = null;
 	private boolean successImporting = false;
 	
 	public AddReasonerStatementsWizard(Model saveToModel, Shell shell) {
@@ -159,7 +144,7 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 	
 		boolean errorOccurred = false;
 		try {
-			OntModelMerger.mergeInferredStatements(saveToModel, ruleText);
+			OntModelUtil.mergeInferredStatementsUsingSparql(saveToModel, ruleText);
 		} catch (Exception e) {
 			log.error("Unable to add inferred statements for rule:\n" + ruleText, e);
 		}
