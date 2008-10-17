@@ -5,7 +5,6 @@ import java.io.StringReader;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -29,21 +28,18 @@ public class OntModelUtil {
 	private static final Logger log = Logger.getLogger(OntModelUtil.class);
 	private static final int SPARQL_LIMIT = 1000;
 	
+	/**
+	 * Converts a (persistent) model into an OntMode, using the provided text of Jena
+	 * reasoning rules
+	 * @param model
+	 * @param rulesText
+	 * @return
+	 */
 	public static OntModel asOntModel(Model model, String rulesText) {
-//		OntModelSpec spec = new OntModelSpec(OntModelSpec.OWL_MEM_RDFS_INF);
-//		List<?> rules = Rule.parseRules(rulesText);
-//	  GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-//		reasoner.setTransitiveClosureCaching(transitiveClosureCaching);
-//	  spec.setReasoner(reasoner);
-//	  //get the Model of new, inferred statements
-//	  OntModel ontModel = ModelFactory.createOntologyModel(spec, model);
-		
 		OntModelSpec spec = new OntModelSpec(OntModelSpec.OWL_MEM);
-//  Reasoner reasoner = ReasonerRegistry.getOWLMicroReasoner();
 	
 		List<?> rules = getRulesList(rulesText);
 		
-//		List<?> rules = Rule.parseRules(rulesText);
 	  GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
 	  reasoner.setParameter(ReasonerVocabulary.PROPtraceOn, Boolean.TRUE);
 	
@@ -77,23 +73,6 @@ public class OntModelUtil {
 		 * @param transitiveClosureCaching
 		 */
 		public static void mergeInferredStatementsInMemory(Model persistentModel, String rulesText) {
-	//		OntModelSpec spec = new OntModelSpec(OntModelSpec.OWL_MEM);
-	////    Reasoner reasoner = ReasonerRegistry.getOWLMicroReasoner();
-	//		
-	//		List<?> rules = Rule.parseRules(rulesText);
-	//	  
-	//	  GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
-	//	  reasoner.setParameter(ReasonerVocabulary.PROPtraceOn, Boolean.TRUE);
-	//
-	//	  //not sure whether to do this
-	//		reasoner.setTransitiveClosureCaching(transitiveClosureCaching);
-	//		
-	//    spec.setReasoner(reasoner);
-	//   
-	//    //get the Model of new, inferred statements
-	//    //hopefully no memory problem
-	//    OntModel model = ModelFactory.createOntologyModel(spec, persistentModel);
-	  
 			OntModel model = null;
 			boolean errorOccurred = false;
 			try {
@@ -119,29 +98,48 @@ public class OntModelUtil {
 			String sparql = ruleToSparql(rule);
 			log.info("Rule " + rule.getName() + ":\n" + sparql);
 			
-			constructAndAddToModel(model, sparql);
+			constructAndAddToModel(model, sparql, true);
 		}
 	}
 
-	private static void constructAndAddToModel(Model model, String baseSparql) {
+	private static void constructAndAddToModel(Model model, String baseSparql, boolean repeatUntilNoNewStatements) {
 		Model memoryModel = ModelFactory.createDefaultModel();
 		int offset = 0;
-		while (true) {
-			String sparql = baseSparql + " LIMIT " + SPARQL_LIMIT + " OFFSET " + offset;
-			Query query = QueryFactory.create(sparql, RDF.INQLE, Syntax.syntaxARQ);
-			log.info("Querying:\n" + sparql);
-			QueryExecution qe = QueryExecutionFactory.create(query, model);
-			Model resultModel = qe.execConstruct();
-			if (resultModel.size()>0) {
-				log.info(offset + ": Adding " + resultModel.size() + " statements.");
-				memoryModel.add(resultModel);
+		boolean repeatPagination = true;
+		while (repeatPagination) {
+			repeatPagination = repeatUntilNoNewStatements;
+			//paginate through the SPARQL
+			while (true) {
+				String sparql = baseSparql + " LIMIT " + SPARQL_LIMIT + " OFFSET " + offset;
+				Query query = QueryFactory.create(sparql);
+				log.info("Querying:\n" + sparql);
+				QueryExecution qe = QueryExecutionFactory.create(query, model);
+				Model resultModel = qe.execConstruct();
+				if (resultModel.size()>0) {
+					log.info(offset + ": Adding " + resultModel.size() + " new statements to memory model.");
+					
+	//				memoryModel.add(resultModel);
+					
+					//add only new statements to the memory model.  
+					//Remove any statements that are already represented in the original model
+					memoryModel.add(resultModel.difference(model));
+				} else {
+					repeatPagination = false;
+					log.info("Found no matching triples.");
+					break;
+				}
+				offset = offset + SPARQL_LIMIT;
+			}//next page of results
+			if (memoryModel==null || memoryModel.size()==0) {
+				repeatPagination = false;
 			} else {
-				log.info("Found no matching triples.");
-				break;
+				log.info("Adding memory model of size " + memoryModel.size() + " to the persistent model.");
+				model.add(memoryModel);
 			}
-			offset = offset + SPARQL_LIMIT;
-		}
-		model.add(memoryModel);
+			
+		}//repeat pagination until finished
+		
+		
 	}
 
 	private static String ruleToSparql(Rule rule) {
