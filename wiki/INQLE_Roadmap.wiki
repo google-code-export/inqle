@@ -27,7 +27,7 @@ First release, with basic functionality for local data.
   * viewing history of experiment results
   * embedded H2 database, for simplified installation
 
-==Version 0.1.5==
+==Version 0.1.4==
 (October 1, 2008)
 
 Improved usability, without need to enter URIs.
@@ -35,7 +35,7 @@ Improved usability, without need to enter URIs.
   * The Central INQLE Server provides a registry for sharing the subjects and properties that other inqle servers have used, permitting standardization and cross-linking of data.
   * User name + password required to access the server.  Setup wizard captures this admin account info
 
-==Version 0.1.6==
+==Version 0.1.5==
 (October 18, 2008)
 
   * Users can add inferred statements to a dataset, by inputting 1 or more reasoner rules.
