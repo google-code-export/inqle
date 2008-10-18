@@ -28,12 +28,20 @@ First release, with basic functionality for local data.
   * embedded H2 database, for simplified installation
 
 ==Version 0.1.5==
-(expected early October, 2008)
+(October 1, 2008)
 
 Improved usability, without need to enter URIs.
   * New data importer, which captures both explicit and implicit data from spreadsheets, and enables the user to search existing stores of subjects and properties.
   * The Central INQLE Server provides a registry for sharing the subjects and properties that other inqle servers have used, permitting standardization and cross-linking of data.
-  * User name + password required to access the server
+  * User name + password required to access the server.  Setup wizard captures this admin account info
+
+==Version 0.1.6==
+(October 18, 2008)
+
+  * Users can add inferred statements to a dataset, by inputting 1 or more reasoner rules.
+  * On importing data using the File Data Importer, improved the lookup of subject and predicate URIs.  Now using UMBEL subjects and associated schemas (FOAF, etc.).  Expernal properties are associated to UMBEL subjects.
+  * Added new extension type: org.inqle.data.datasetFunctions.  This extension can be used by plugin contributors to specify set of datasets, that the plugin can use to do its work.   E.g. a plugin developer could create a "trivia" dataset function, and write a "trivia" plugin, which asks trivia questions from whichever datasets of the "trivia" function are available. 
+  * Added dataset function dataset function org.inqle.datasetFunctions.schemas, for lookup of subjects and properties, when importing data.
 
 ==Version 0.2==
 (expected end of 2008)
