@@ -43,11 +43,11 @@ public class InqleInfo {
 //	private static final int CENTRAL_INQLE_SERVER_PORT = 7700;
 
 	//TODO use this:public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org/register";
-//	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org:7700/register";
-//	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://inqle.org:7700/lookup";
+	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org:7700/register";
+	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://inqle.org:7700/lookup";
 //	
-	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost:7700/register";
-	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://localhost:7700/lookup";
+//	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost:7700/register";
+//	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://localhost:7700/lookup";
 
 	
 //	private static final String RDF_SCHEMAS_FOLDER = "assets/rdf/schemas/";
