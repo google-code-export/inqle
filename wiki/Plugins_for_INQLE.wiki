@@ -15,3 +15,23 @@ INQLE provides the following extension types
 || JUnit Tests || [JUnit_Test_Extensions org.inqle.testing.IJUnitTests] || If you have JUnit test code which you would like to run within your running INQLE server, you can declare them using this extension type.  This is a convenient way to test how your plugin will interact with other running parts of INQLE.  ||
 || Views || [Eclipse_View_Extensions org.eclipse.ui.views] || Views are an Eclipse concept.  They are a way to provide a page or form or report, which can be rendered in INQLE's user interface.  A View that you provide in this way will show up in the main menu, under the "Window" menu option. ||
 || Servlets || [Eclipse_Servlet_Extensions org.eclipse.equinox.http.registry.servlets] || Servlets are an Equinox extension type.  You can create an extension of this type if you need to add a servlet to your inqle server, listening and responding to requests for whatever reason. ||
+
+==Example Recipes for INQLE Plugins==
+Here are examples of plugins that could be built for INQLE.
+
+===Data Monitoring Module===
+What if you wanted INQLE to monitor certain data file for some condition.  You could accomplish this by adding the following extensions.
+
+
+===Quiz Module===
+Let's say you wanted INQLE to function as an educational tool.  Such a tool would benefit from INQLE's capabilities for working with semantic data.  You could add a plugin, named something like org.my.uri.quiz.  This module would provide the following extensions:
+  * an  Internal Dataset, for storing quiz results
+  * a Servlet, for rendering a simple login, then displaying a form with random questions from the database.  The servlet would capture the results into the Internal Dataset.
+  * a View, which queries the database and shows the results of the quiz
+
+===Survey Module===
+Let's say you wanted to extend your INQLE server to be able to not only process data that has been collected, but also to collect the data itself.  You could achieve this by adding a plugin with these extensions:
+  * an Internal Dataset, for storing survey results into the Internal Dataset.
+  * a Servlet, for rendering a simple login, then displaying a form with questions from the database.  The servlet would capture the results.
+  * a View, which queries the database and shows the results of the quiz
+  * a Survey Part Type.  This would permit users to design new surveys.
