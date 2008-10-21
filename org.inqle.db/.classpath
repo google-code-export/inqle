@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry exported="true" kind="lib" path="derbyclient.jar"/>
 	<classpathentry exported="true" kind="lib" path="hsqldb.jar"/>
 	<classpathentry exported="true" kind="lib" path="jtds-1.2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="mysql-connector-java-3.0.17-ga-bin.jar"/>
 	<classpathentry exported="true" kind="lib" path="ojdbc6.jar"/>
 	<classpathentry exported="true" kind="lib" path="postgresql-8.2-506.jdbc3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
