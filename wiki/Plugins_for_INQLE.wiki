@@ -16,7 +16,8 @@ INQLE provides the following extension types
 || Views || [Eclipse_View_Extensions org.eclipse.ui.views] || Views are an Eclipse concept.  They are a way to provide a page or form or report, which can be rendered in INQLE's user interface.  A View that you provide in this way will show up in the main menu, under the "Window" menu option. ||
 || Servlets || [Eclipse_Servlet_Extensions org.eclipse.equinox.http.registry.servlets] || Servlets are an Equinox extension type.  You can create an extension of this type if you need to add a servlet to your inqle server, listening and responding to requests for whatever reason. ||
 
-==Example Recipes for INQLE Plugins==
+
+=Example Recipes for INQLE Plugins=
 Here are examples of plugins that could be built for INQLE.
 
 ===Data Monitoring Module===
