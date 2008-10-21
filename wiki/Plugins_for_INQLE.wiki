@@ -20,8 +20,9 @@ INQLE provides the following extension types
 Here are examples of plugins that could be built for INQLE.
 
 ===Data Monitoring Module===
-What if you wanted INQLE to monitor certain data file for some condition.  You could accomplish this by adding the following extensions.
-
+Let's say you wanted INQLE to monitor data file for some condition.  You could accomplish this by adding the following extensions.
+  * an Internal Dataset, for storing Alert objects
+  * an "Alert" Part type, and an associated wizard which lets users design alerts, by specifying the dataset(s) to monitor, the SPARQL query to send, and the email(s) to contact.
 
 ===Quiz Module===
 Let's say you wanted INQLE to function as an educational tool.  Such a tool would benefit from INQLE's capabilities for working with semantic data.  You could add a plugin, named something like org.my.uri.quiz.  This module would provide the following extensions:
@@ -31,7 +32,12 @@ Let's say you wanted INQLE to function as an educational tool.  Such a tool woul
 
 ===Survey Module===
 Let's say you wanted to extend your INQLE server to be able to not only process data that has been collected, but also to collect the data itself.  You could achieve this by adding a plugin with these extensions:
-  * an Internal Dataset, for storing survey results into the Internal Dataset.
+  * an Internal Dataset, for storing survey results.
   * a Servlet, for rendering a simple login, then displaying a form with questions from the database.  The servlet would capture the results.
   * a View, which queries the database and shows the results of the quiz
   * a Survey Part Type.  This would permit users to design new surveys.
+
+===Research Module===
+INQLE could be extended to assist with more aspects of the lifecycle of a research trial.  Toward this, you could provide these extensions:
+  * an Internal Dataset, for storing research study objects.
+  * a "Study" Part Type and associated wizard for designing research study objects.
