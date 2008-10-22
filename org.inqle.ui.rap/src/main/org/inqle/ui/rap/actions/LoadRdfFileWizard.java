@@ -152,10 +152,12 @@ public class LoadRdfFileWizard extends DynaWizard {
 	          //String uploadedFileName = uploaderWidget.getLastFileUploaded();
 	          File uploadedFile = uploaderWidget.getLastUploadedFile();
 	          //File uploadedFile = new File (tempDir, uploadedFileName);
-	          log.info("Uploaded file " + uploadedFile.getAbsolutePath());
-	          //File uploadedFile = new File(uploadedFileName);
-	          //importFile(uploadedFile.getName());
-	          importFile(uploadedFile);
+	          if (uploadedFile == null) {
+	          	log.info("Unable to upload file: uploadedFile = null");
+	          } else {
+	          	log.info("Uploaded file " + uploadedFile.getAbsolutePath());
+	          	importFile(uploadedFile);
+	          }
 	        }
 	    	}
 	    });
