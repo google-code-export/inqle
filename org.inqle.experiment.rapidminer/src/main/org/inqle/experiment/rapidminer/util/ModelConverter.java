@@ -48,10 +48,7 @@ public class ModelConverter {
 		List<Attribute> attributes = getAttributes(arcTable);
 		
 		MemoryExampleTable table = new MemoryExampleTable(attributes);
-		
-		
-		
-		
+
 		//loop through rows of the DataTable, filling the table
 		List<List<Object>> rows = arcTable.getRows();
 		for (List<Object> row: rows) {//loop thru each row
