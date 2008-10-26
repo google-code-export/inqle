@@ -20,11 +20,6 @@ import thewebsemantic.Namespace;
  *    the Javabeans convention
  *  * override createClone(): First call super.createClone() to create new object,
  *    then add any new fields to your clone
- *  * override removeInterimData(): if any of your new fields are "interim" in the
- *    sense that they contain information not of enduring longer term value
- *    (i.e. only used for interim working purposes), then override
- *    this method to: first call super.removeInterimData(), then set any of your
- *    interim fields to null
  *  * override execute(): perform all steps to populate the resultDataTable field with
  *    a final result
  * @author David Donohue

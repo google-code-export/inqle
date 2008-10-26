@@ -36,7 +36,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDataset(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
-public class SimpleSparqlSampler extends ASparqlSampler {
+public class SimpleSparqlSampler extends ASelectSparqlSampler {
 
 	//TODO ensure that rows are retrieved randomly
 	public static final String MAXIMUM_ROWS_INITIAL_QUERY = "1000";

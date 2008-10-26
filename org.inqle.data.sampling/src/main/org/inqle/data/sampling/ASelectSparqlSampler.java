@@ -41,7 +41,7 @@ import thewebsemantic.Namespace;
  * Dec 26, 2007
  */
 @Namespace(RDF.INQLE)
-public abstract class ASparqlSampler extends ASampler {
+public abstract class ASelectSparqlSampler extends ASampler {
 
 	public static final String SUBJECT_LABEL = "subject";
 	
@@ -55,7 +55,7 @@ public abstract class ASparqlSampler extends ASampler {
 
 	//protected String query;
 	
-	static Logger log = Logger.getLogger(ASparqlSampler.class);
+	static Logger log = Logger.getLogger(ASelectSparqlSampler.class);
 	
 //	public void setPersister(Persister persister) {
 //		this.persister = persister;
@@ -200,21 +200,21 @@ public abstract class ASparqlSampler extends ASampler {
 //		this.query = query;
 //	}
 
-	public void replicate(ASparqlSampler objectToClone) {
+	public void replicate(ASelectSparqlSampler objectToClone) {
 		clone(objectToClone);
 		super.replicate(objectToClone);
 	}
 	
-	public void clone(ASparqlSampler templateSampler) {
+	public void clone(ASelectSparqlSampler templateSampler) {
 		super.clone(templateSampler);
-//		setQuery(((ASparqlSampler)templateSampler).getQuery());
+//		setQuery(((ASelectSparqlSampler)templateSampler).getQuery());
 	}
 	
 	/**
 	 * Add all field values from the provided template sampler to this sampler, including the ID field
 	 */
 //	public void replicate(ISampler templateSampler) {
-//		clone((ASparqlSampler)templateSampler);
-//		setId(((ASparqlSampler)templateSampler).getId());
+//		clone((ASelectSparqlSampler)templateSampler);
+//		setId(((ASelectSparqlSampler)templateSampler).getId());
 //	}
 }
