@@ -96,7 +96,7 @@ public interface ISampler extends IUniqueJenabean {
 	 * Execute this sampler in automated fashion
 	 * @return
 	 */
-	public DataTable execute();
+	public IDataTable execute();
 	
 	public ISampler createClone();
 }

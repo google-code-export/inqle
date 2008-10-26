@@ -14,6 +14,7 @@ import org.inqle.data.rdf.jenabean.ArcSet;
  * 
  * TODO implement an interface IDataTable?
  */
+@Deprecated
 public class DataTable {
 	private RdfTable rdfTable = new RdfTable();
 	
