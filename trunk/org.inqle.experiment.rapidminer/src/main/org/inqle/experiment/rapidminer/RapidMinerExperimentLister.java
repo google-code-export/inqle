@@ -7,8 +7,7 @@ import org.apache.log4j.Logger;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.sampling.DataColumn;
-import org.inqle.data.sampling.DataTable;
+import org.inqle.data.sampling.IDataTable;
 
 import com.rapidminer.tools.Ontology;
 
@@ -35,7 +34,7 @@ public class RapidMinerExperimentLister {
 
 	/**
 	 * Of the list of all experiments, return a sublist, 
-	 * containing only those which are applicable to the DataTable and the 
+	 * containing only those which are applicable to the IDataTable and the 
 	 * label attribute
 	 * @param dataTable
 	 * @param labelDataColumn
@@ -44,7 +43,7 @@ public class RapidMinerExperimentLister {
 	 * TODO make this more sophisticated, matching algorithms to experiments
 	 * also on basis of the attributes and other factors
 	 */
-	public static List<IRapidMinerExperiment> listMatchingExperiments(DataTable dataTable, DataColumn labelDataColumn) {
+	public static List<IRapidMinerExperiment> listMatchingExperiments(IDataTable dataTable) {
 		Persister persister = Persister.getInstance();
 		List<IRapidMinerExperiment> allExperiments = listRapidMinerExperiments(persister);
 		List<IRapidMinerExperiment> matchingExperiments = new ArrayList<IRapidMinerExperiment>();
@@ -59,10 +58,10 @@ public class RapidMinerExperimentLister {
 				typeList.add(type.trim().toLowerCase());
 			}
 			
-			if (labelDataColumn.getDataType() == Ontology.REAL && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
+			if (dataTable.getDataType(dataTable.getLabelColumnIndex()) == Ontology.REAL && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
 				matchingExperiments.add(experiment);
 			}
-			if (labelDataColumn.getDataType() == Ontology.NOMINAL && typeList.contains(IRapidMinerExperiment.CLASSIFICATION_TYPE)) {
+			if (dataTable.getDataType(dataTable.getLabelColumnIndex()) == Ontology.NOMINAL && typeList.contains(IRapidMinerExperiment.CLASSIFICATION_TYPE)) {
 				matchingExperiments.add(experiment);
 			}
 		}

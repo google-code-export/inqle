@@ -8,14 +8,10 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.util.JavaHasher;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.ArcSet;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
-import org.inqle.data.sampling.ISampler;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -53,7 +49,7 @@ public class ExperimentResult extends UniqueJenabean {
 	//private Exception learningException;
 	private String samplerClassName;
 	private Arc experimentLabelArc;
-	private ArcSet experimentAttributeArcs;
+	private Collection<Arc> experimentAttributeArcs;
 	private Arc experimentSubjectArc;
 	//private IRapidMinerExperiment rapidMinerExperiment;
 	private String rapidMinerExperimentId;
@@ -144,7 +140,7 @@ public class ExperimentResult extends UniqueJenabean {
 		this.experimentLabelArc = experimentLabelArc;
 	}
 
-	public void setExperimentAttributeArcs(ArcSet experimentAttributeArcs) {
+	public void setExperimentAttributeArcs(Collection<Arc> experimentAttributeArcs) {
 		this.experimentAttributeArcs = experimentAttributeArcs;
 	}
 
@@ -164,7 +160,7 @@ public class ExperimentResult extends UniqueJenabean {
 		return experimentSubjectArc;
 	}
 
-	public ArcSet getExperimentAttributeArcs() {
+	public Collection<Arc> getExperimentAttributeArcs() {
 		return experimentAttributeArcs;
 	}
 
