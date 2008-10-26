@@ -11,9 +11,7 @@ import java.util.List;
 /**
  * This class represents a set of Arc objects, 
  * each originating from a common RDF node.
- * Internally it is backed by an (ordered) List.
- * Externally, it represents this as an (unordered) Collection, for the 
- * purposes of RDF persistence, as Jenabean/RDF best handles unordered collections.
+ * Contains the value that is present of each arc.
  * @author David Donohue
  * Feb 22, 2008
  */

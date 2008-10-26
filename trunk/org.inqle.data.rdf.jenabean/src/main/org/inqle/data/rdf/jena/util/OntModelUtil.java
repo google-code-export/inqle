@@ -29,7 +29,7 @@ public class OntModelUtil {
 	private static final int SPARQL_LIMIT = 1000;
 	
 	/**
-	 * Converts a (persistent) model into an OntMode, using the provided text of Jena
+	 * Converts a (persistent) model into an OntModel, using the provided text of Jena
 	 * reasoning rules
 	 * @param model
 	 * @param rulesText

@@ -458,7 +458,7 @@ public class Persister {
 			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
 			
-			log.info("DDDDDDDDDDDDDDDDDDDDdatasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
+//			log.info("DDDDDDDDDDDDDDDDDDDDdatasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetRoleId;
@@ -517,7 +517,7 @@ public class Persister {
 			String datasetFunctionId = datasetFunctionExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String textIndexType = datasetFunctionExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
 			
-			log.info("FFFFFFFFFFFFFFFFFFdatasetFunctionId=" + datasetFunctionId + "; textIndexType=" + textIndexType);
+//			log.info("FFFFFFFFFFFFFFFFFFdatasetFunctionId=" + datasetFunctionId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetFunctionId;
