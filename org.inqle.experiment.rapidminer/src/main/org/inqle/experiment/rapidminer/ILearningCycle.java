@@ -1,6 +1,5 @@
 package org.inqle.experiment.rapidminer;
 
-import org.inqle.data.sampling.DataColumn;
 import org.inqle.data.sampling.ISampler;
 
 /**
@@ -22,9 +21,11 @@ public interface ILearningCycle {
 
 	public void setSampler(ISampler sampler);
 	
-	public DataColumn getLabelDataColumn();
+//	public IDataColumn getLabelDataColumn();
+//	public int getLabelDataColumnIndex();
 	
-	public void setLabelDataColumn(DataColumn labelDataColumn);
+//	public void setLabelDataColumn(IDataColumn labelDataColumn);
+//	public void setLabelDataColumnIndex(int labelDataColumnIndex);
 	
 	public IRapidMinerExperiment getRapidMinerExperiment();
 	

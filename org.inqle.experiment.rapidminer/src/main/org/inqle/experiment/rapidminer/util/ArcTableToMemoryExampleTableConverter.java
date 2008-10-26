@@ -25,22 +25,19 @@ import com.rapidminer.tools.Ontology;
  * @author David Donohue
  * Oct 10, 2008
  */
-public class ModelConverter {
+public class ArcTableToMemoryExampleTableConverter {
 
-	private OntModel ontModel;
-	private Resource subjectClass;
+//	private OntModel ontModel;
+//	private Resource subjectClass;
 
-	private static Logger log = Logger.getLogger(ModelConverter.class);
+	private static Logger log = Logger.getLogger(ArcTableToMemoryExampleTableConverter.class);
 	
-	public ModelConverter(OntModel ontModel, Resource subjectClass) {
-		this.ontModel = ontModel;
-		this.subjectClass = subjectClass;
-	}
+//	public ArcTableToMemoryExampleTableConverter(OntModel ontModel, Resource subjectClass) {
+//		this.ontModel = ontModel;
+//		this.subjectClass = subjectClass;
+//	}
 	
-	public MemoryExampleTable createExampleTable() {
-		
-		ArcTableFactory arcTableFactory = new ArcTableFactory(ontModel);
-		ArcTable arcTable = arcTableFactory.createArcTable(subjectClass);
+	public static MemoryExampleTable createExampleTable(ArcTable arcTable) {
 		
 		List<Attribute> attributes = getAttributes(arcTable);
 		
@@ -90,7 +87,7 @@ public class ModelConverter {
 		return table;
 	}
 	
-	private List<Attribute> getAttributes(ArcTable arcTable) {
+	private static List<Attribute> getAttributes(ArcTable arcTable) {
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		int columnCount = arcTable.getHeaders().size();
 		for (int i=0; i<columnCount; i++) {

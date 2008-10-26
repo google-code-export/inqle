@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.DataColumn;
-import org.inqle.data.sampling.DataTable;
+import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.IDataTableProvider;
 import org.inqle.data.sampling.ISampler;
+import org.inqle.data.sampling.rap.DataTablePage;
 import org.inqle.ui.rap.table.RdfTablePage;
 
 /**
@@ -17,11 +19,11 @@ import org.inqle.ui.rap.table.RdfTablePage;
  * @author David Donohue
  * Apr 10, 2008
  */
-public class SamplingResultPage extends RdfTablePage implements IDataTableProvider {
+public class SamplingResultPage extends DataTablePage implements IDataTableProvider {
 
 	private Persister persister;
 
-	private DataTable dataTable;
+	private IDataTable dataTable;
 
 	static Logger log = Logger.getLogger(SamplingResultPage.class);
 	
@@ -49,8 +51,8 @@ public class SamplingResultPage extends RdfTablePage implements IDataTableProvid
 		//log.info("resultDataTable.getRdfTable()=" + RdfTableWriter.dataTableToString(dataTable.getRdfTable()));
 		setRdfTable(dataTable.getRdfTable());
 		List<String> columnNames = new ArrayList<String>();
-		for (DataColumn dataColumn: dataTable.getColumns()) {
-			columnNames.add(dataColumn.getQueryLabel());
+		for (Arc arc: dataTable.getColumns()) {
+			columnNames.add(arc.toString());
 		}
 		
 		setPropertyNames(columnNames);

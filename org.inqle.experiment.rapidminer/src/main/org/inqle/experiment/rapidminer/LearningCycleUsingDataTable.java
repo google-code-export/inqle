@@ -10,9 +10,9 @@ import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
-import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
-import org.inqle.data.sampling.IDataTable;
+import org.inqle.data.sampling.DataColumn;
+import org.inqle.data.sampling.DataTable;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 
@@ -30,20 +30,23 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * Contains the results of an experiment
  * @author David Donohue
  * Apr 16, 2008
+ * 
+ * Legacy version, deprecated
  */
 @TargetDataset(ILearningCycle.LEARNING_CYCLES_DATASET)
 @Namespace(RDF.INQLE)
-public class LearningCycle extends UniqueJenabean implements ILearningCycle {
+@Deprecated
+public class LearningCycleUsingDataTable extends UniqueJenabean implements ILearningCycle {
 	public static final int USE_RANDOM_SAMPLER = 0;
 	public static final int USE_SELECTED_SAMPLER = 1;
 	
 	private ISampler sampler;
 	private int samplerMode = USE_RANDOM_SAMPLER;
-//	private int labelDataColumnIndex;
+	private DataColumn labelDataColumn;
 	private IRapidMinerExperiment rapidMinerExperiment;
 	//private Persister persister;
 
-	private static Logger log = Logger.getLogger(LearningCycle.class);
+	private static Logger log = Logger.getLogger(LearningCycleUsingDataTable.class);
 	
 //	public void setPersister(Persister persister) {
 //		this.persister = persister;
@@ -58,13 +61,13 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		this.sampler = sampler;
 	}
 	
-//	public int getLabelDataColumnIndex() {
-//		return labelDataColumnIndex;
-//	}
-//	
-//	public void setLabelDataColumnIndex(int labelDataColumnIndex) {
-//		this.labelDataColumnIndex = labelDataColumnIndex;
-//	}
+	public DataColumn getLabelDataColumn() {
+		return labelDataColumn;
+	}
+	
+	public void setLabelDataColumn(DataColumn labelDataColumn) {
+		this.labelDataColumn = labelDataColumn;
+	}
 
 	public IRapidMinerExperiment getRapidMinerExperiment() {
 		return rapidMinerExperiment;
@@ -74,29 +77,29 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		this.rapidMinerExperiment = rapidMinerExperiment;
 	}
 
-	public LearningCycle createClone() {
-		LearningCycle newObj = new LearningCycle();
+	public LearningCycleUsingDataTable createClone() {
+		LearningCycleUsingDataTable newObj = new LearningCycleUsingDataTable();
 		//newObj.setPersister(persister);
 		newObj.clone(this);
 		return newObj;
 	}
 
-	public LearningCycle createReplica() {
-		LearningCycle newObj = new LearningCycle();
+	public LearningCycleUsingDataTable createReplica() {
+		LearningCycleUsingDataTable newObj = new LearningCycleUsingDataTable();
 		//newObj.setPersister(persister);
 		newObj.replicate(this);
 		return newObj;
 	}
 	
-	public void clone(LearningCycle objectToBeCloned) {
+	public void clone(LearningCycleUsingDataTable objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		setSampler(objectToBeCloned.getSampler());
 		setSamplerMode(objectToBeCloned.getSamplerMode());
-//		setLabelDataColumnIndex(objectToBeCloned.getLabelDataColumnIndex());
+		setLabelDataColumn(objectToBeCloned.getLabelDataColumn());
 		setRapidMinerExperiment(objectToBeCloned.getRapidMinerExperiment());
 	}
 	
-	public void replicate(LearningCycle objectToClone) {
+	public void replicate(LearningCycleUsingDataTable objectToClone) {
 		clone(objectToClone);
 		setId(objectToClone.getId());
 		super.replicate(objectToClone);
@@ -104,11 +107,11 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	
 	/**
 	 * Execute the Learning Cycle.  
-	 * Use the provided sampler to create a IDataTable of data for learning.  
+	 * Use the provided sampler to create a DataTable of data for learning.  
 	 * Next, ensure that a label has been selected (or randomly choose one).
 	 * Next, ensure that a proper RapidMiner experiment has been selected
 	 * (or randomly choose one).
-	 * Next, convert the IDataTable into a RapidMiner ExampleSet.
+	 * Next, convert the DataTable into a RapidMiner ExampleSet.
 	 * Finally, run the ExampleSet through the experiment.
 	 */
 	public ExperimentResult execute() {
@@ -117,41 +120,40 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			log.warn("Unable to retrieve any sampler.");
 			return null;
 		}
-		IDataTable resultDataTable = samplerToUse.execute();
+		DataTable resultDataTable = samplerToUse.execute();
 		if (resultDataTable == null) {
 			log.warn("Sampler " + samplerToUse + " of class " + samplerToUse.getClass() + " was unable" +
 					" to retrieve a DataTable of results.");
 			return null;
 		}
-//		int labelDataColumnIndex = selectLabelColumnIndex(resultDataTable);
+		DataColumn labelDataColumn = selectLabel(resultDataTable);
 		//log.info("LLLLL Selected label DataColumn =" + labelDataColumn + " of data type " + labelDataColumn.getDataType());
 		
 		//assign data type to this data column
-//		int labelDataColumnIndex = resultDataTable.getColumns().indexOf(labelDataColumn);
-//		resultDataTable.setLabelColumnIndex(labelDataColumnIndex);
+		int labelDataColumnIndex = resultDataTable.getColumns().indexOf(labelDataColumn);
+		DataPreparer preparer = new DataPreparer(resultDataTable);
+		preparer.assignDataType(labelDataColumnIndex);
 		
-//		DataPreparer preparer = new DataPreparer(resultDataTable);
-//		preparer.assignDataType(labelDataColumnIndex);
-		
-		IRapidMinerExperiment experimentToUse = selectRapidMinerExperiment(resultDataTable);
+		IRapidMinerExperiment experimentToUse = selectRapidMinerExperiment(resultDataTable, labelDataColumn);
 		if (experimentToUse == null) {
-			log.warn("No RapidMiner experiment was found to match the IDataTable");
+			log.warn("No RapidMiner experiment was found to match the labelDataColumn=" + labelDataColumn);
 			return null;
 		}
-		ExperimentResult experimentResult = runDataThroughExperiment(resultDataTable, experimentToUse);
+		ExperimentResult experimentResult = runDataThroughExperiment(resultDataTable, experimentToUse, labelDataColumn);
 		
 		//add metadata to experimentResult
-//		IDataColumn idColumn = resultDataTable.getColumn(resultDataTable.getIdColumnIndex());
+		DataColumn idColumn = resultDataTable.getColumn(resultDataTable.getIdColumnIndex());
 		
 		experimentResult.setSamplerClassName(samplerToUse.getClass().getName());
-		experimentResult.setExperimentSubjectArc(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()));
-		experimentResult.setExperimentLabelArc(resultDataTable.getColumn(resultDataTable.getLabelColumnIndex()));
+		experimentResult.setExperimentSubjectArc(idColumn.getArc());
+		experimentResult.setExperimentLabelArc(labelDataColumn.getArc());
 		experimentResult.setRapidMinerExperimentId(experimentToUse.getId());
-		List<Arc> learnableArcs = resultDataTable.getLearnableColumns();
-		experimentResult.setExperimentAttributeArcs(learnableArcs);
+		List<DataColumn> learnableDataColumns = resultDataTable.getLearnableColumns();
+		learnableDataColumns.remove(labelDataColumn);
+		experimentResult.setExperimentAttributeArcs(DataTable.getArcSet(learnableDataColumns));
 		//experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
-//		log.trace("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
-		log.info("resultDataTable.getLearnableColumns()=" + resultDataTable.getLearnableColumns());
+		log.trace("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
+		log.info("resultDataTable.getLearnableColumnArcSet()=" + DataTable.getArcSet(learnableDataColumns));
 		return experimentResult;
 	}
 
@@ -172,21 +174,22 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	 * Ensure that the labelDataColumn field is populated with an appropriate field
 	 * @param dataTable
 	 */
-//	private int selectLabelColumnIndex(IDataTable dataTable) {
-//		assert(dataTable != null);
-//		if (getLabelDataColumnIndex() >=0 && dataTable.getLearnableColumns().contains(getLabelDataColumnIndex())) {
-//			return getLabelDataColumnIndex();
-//		}
-//		List<Arc> learnableColumns = dataTable.getLearnableColumns();
-//		//otherwise, randomly select
-//		int randomIndex = RandomListChooser.chooseRandomIndex(learnableColumns.size());
-//		return learnableColumns.get(randomIndex);
-//	}
+	private DataColumn selectLabel(DataTable dataTable) {
+		assert(dataTable != null);
+		List<DataColumn> learnableColumns = dataTable.getLearnableColumns();
+		if (getLabelDataColumn() != null && learnableColumns.contains(getLabelDataColumn())) {
+			return getLabelDataColumn();
+		}
+		
+		//otherwise, randomly select
+		int randomIndex = RandomListChooser.chooseRandomIndex(learnableColumns.size());
+		return learnableColumns.get(randomIndex);
+	}
 	
-	private IRapidMinerExperiment selectRapidMinerExperiment(IDataTable dataTable) {
-//		assert(dataTable.getColumns().contains(labelDataColumn));
-		//log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nIDataTable=" + IDataTableWriter.dataTableToString(dataTable));
-		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(dataTable);
+	private IRapidMinerExperiment selectRapidMinerExperiment(DataTable dataTable, DataColumn labelDataColumn) {
+		assert(dataTable.getColumns().contains(labelDataColumn));
+		//log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nDataTable=" + DataTableWriter.dataTableToString(dataTable));
+		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(dataTable, labelDataColumn);
 		
 		if (acceptableExperiments == null || acceptableExperiments.size() == 0) {
 			//log.warn("selectRapidMinerExperiment() finds no acceptable Experiments");
@@ -208,11 +211,11 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	}
 	
 	/**
-	 * Apply the IDataTable of data to the RapidMiner experiment, using the labelDataColumn as label.
+	 * Apply the DataTable of data to the RapidMiner experiment, using the labelDataColumn as label.
 	 * @param dataTable
 	 * @return
 	 */
-	private ExperimentResult runDataThroughExperiment(IDataTable dataTable, IRapidMinerExperiment rapidMinerExperiment) {
+	private ExperimentResult runDataThroughExperiment(DataTable dataTable, IRapidMinerExperiment rapidMinerExperiment, DataColumn labelDataColumn) {
 		//the results to return
 		ExperimentResult experimentResult = new ExperimentResult();
 		//get a RapidMiner Process object, representing the Experiment
@@ -222,15 +225,15 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			log.warn("Unable to retrieve a RapidMiner experiment/process object for rapidMinerExperiment" + rapidMinerExperiment.getExperimentClassPath());
 			return null;
 		}
-		//convert the IDataTable into a RapidMiner MemoryExampleTable
-		MemoryExampleTableFactory memoryExampleTableFactory = new MemoryExampleTableFactory();
-		MemoryExampleTable exampleTable =  memoryExampleTableFactory.createExampleTable(dataTable);
+		//convert the DataTable into a RapidMiner MemoryExampleTable
+		DataPreparer preparer = new DataPreparer(dataTable);
+		MemoryExampleTable exampleTable = preparer.createExampleTable();
 		
 		//convert the MemoryExampleTable into a RapidMiner ExampleSet
-//		int labelIndex = dataTable.getColumns().indexOf(labelDataColumn);
+		int labelIndex = dataTable.getColumns().indexOf(labelDataColumn);
 		
-//		assert(labelIndex >= 0);
-		Attribute labelAttribute = exampleTable.getAttribute(dataTable.getLabelColumnIndex());
+		assert(labelIndex >= 0);
+		Attribute labelAttribute = exampleTable.getAttribute(labelIndex);
 		Attribute weightAttribute = null;
 		Attribute idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
 		//log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
