@@ -14,6 +14,6 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	TestSimpleSparqlSampler.class
+	TestSimpleSubjectSparqlSampler.class
 })
 public class TestSamplerSuite extends TestSuite { }
