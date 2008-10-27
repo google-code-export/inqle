@@ -19,11 +19,12 @@ import thewebsemantic.Namespace;
 		private String predicate;
 		private int stepType = OUTGOING;
 
+		public ArcStep() {
+		}
 		
-//		public ArcStep(String predicate, RDFNode object) {
-//			this.predicate = predicate;
-//			this.object = object;
-//		}
+		public ArcStep(String predicate) {
+			this.predicate = predicate;
+		}
 		
 //		public ArcStep(String predicate, RDFNode object, int stepType) {
 //			this.predicate = predicate;
