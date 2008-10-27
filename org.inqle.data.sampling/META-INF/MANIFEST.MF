@@ -40,7 +40,8 @@ Require-Bundle: org.inqle.core,
  org.eclipse.rap.core.databinding.beans,
  org.eclipse.rap.jface.databinding,
  org.eclipse.rap.ui
-Export-Package: org.inqle.data.sampling
+Export-Package: org.inqle.data.sampling,
+ org.inqle.data.sampling.rap
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.ui.rap, 
  org.inqle.data.rdf.jenabean

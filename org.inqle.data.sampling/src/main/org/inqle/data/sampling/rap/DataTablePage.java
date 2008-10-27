@@ -41,7 +41,7 @@ public class DataTablePage extends BeanWizardPage {
 	/**
 	 * the class of items in the table's List field.
 	 */
-	protected Class<?> tableBeanClass = QuerySolution.class;
+	protected Class<?> tableBeanClass = List.class;
 
 	/**
 	 * the class of the objects in the model's List field.

@@ -41,6 +41,7 @@ import thewebsemantic.Namespace;
  * Dec 26, 2007
  */
 @Namespace(RDF.INQLE)
+@Deprecated
 public abstract class ASelectSparqlSampler extends ASampler {
 
 	public static final String SUBJECT_LABEL = "subject";
