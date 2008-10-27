@@ -338,11 +338,19 @@ import com.hp.hpl.jena.sdb.SDB;
 		return sparql;
 	}
 	
-	private static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
+	public static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
 		String sparql = "";
 		for (Arc arc: arcSet.getArcs()) {
 			Object value = arcSet.getValue(arc);
 			sparql += getSparqlWhereFromArc(subject, arc, value);
+		}
+		return sparql;
+	}
+	
+	public static String getSparqlWhereFromArcs(String subject, List<Arc> arcList) {
+		String sparql = "";
+		for (Arc arc: arcList) {
+			sparql += getSparqlWhereFromArc(subject, arc, null);
 		}
 		return sparql;
 	}
@@ -381,6 +389,44 @@ import com.hp.hpl.jena.sdb.SDB;
 				objectStr = object.toString();
 			}
 			sparql += " . " + subjectStr + " <" + predicate + "> " + objectStr;
+		}
+		return sparql;
+	}
+	
+	/**
+	 * Generate SPARQL to conduct a DESCRIBE query, given a starting Resource class, 
+	 * the List of Arcs, 
+	 * @param subjectClass
+	 * @param arcList the List of Arcs
+	 * @param randomize if true, the order will be randomized
+	 * @param offset the number of records to skip, when paginating.  Note paginating does not work with randomizing.
+	 * @param limit the number of records to retrieve
+	 * @return
+	 */
+	public static String generateSparqlDescribe(Resource subjectClass, List<Arc> arcList, boolean randomize, int offset, int limit) {
+		String where = Queryer.getSparqlWhereFromArcs(subjectClass.toString(), arcList);
+		String sparql = "";
+		if (randomize) {
+			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
+		}
+		sparql += "CONSTRUCT {\n" + where + "}\n";
+		sparql += "GRAPH ?anyGraph {\n" + where + "}\n";
+		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
+		if (randomize) {
+			sparql += "ORDER BY inqle-fn:Rand() \n";
+		}
+		return sparql;
+	}
+	
+	public static String decorateSparql(String baseSparql, boolean randomize, int offset, int limit) {
+		String sparql = "";
+		if (randomize) {
+			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
+		}
+		sparql += baseSparql;
+		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
+		if (randomize) {
+			sparql += " ORDER BY inqle-fn:Rand() \n";
 		}
 		return sparql;
 	}
