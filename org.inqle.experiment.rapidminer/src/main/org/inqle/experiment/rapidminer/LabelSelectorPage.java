@@ -8,9 +8,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.sampling.DataColumn;
-import org.inqle.data.sampling.DataTable;
+import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.IDataTableProvider;
-import org.inqle.ui.rap.pages.DynaWizardPage;
 import org.inqle.ui.rap.pages.ListSelectorPage;
 
 /**
@@ -40,7 +39,7 @@ public class LabelSelectorPage extends ListSelectorPage {
 	@Override
 	public void onEnterPageFromPrevious() {
 		log.info("onEnterPageFromPrevious() called");
-		DataTable dataTable = dataTableProvider.getDataTable();
+		IDataTable dataTable = dataTableProvider.getDataTable();
 		log.info("dataTable=" + dataTable);
 		log.info("dataTable.getLearnableColumns()=" + dataTable.getLearnableColumns());
 		DataColumn[] nullArray = new DataColumn[]{};

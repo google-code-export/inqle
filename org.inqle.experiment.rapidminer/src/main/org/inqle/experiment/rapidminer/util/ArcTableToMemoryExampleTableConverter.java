@@ -119,7 +119,7 @@ public class ArcTableToMemoryExampleTableConverter {
 			}
 			
 			
-			Arc headerArc = arcTable.getHeaderList().get(i);
+			Arc headerArc = arcTable.getColumns().get(i);
 			Attribute anAttribute = AttributeFactory.createAttribute(headerArc.toString(), rapidMinerDataType);
 			attributes.add(anAttribute);
 		}
