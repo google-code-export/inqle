@@ -652,6 +652,12 @@ public class Persister {
 					model.register(builder);
 				}
 			}
+		} else if (indexableDataset instanceof InternalDataset) {
+			InternalDataset internalDataset = (InternalDataset)indexableDataset;
+			IndexBuilderModel builder = getIndexBuilder(internalDataset.getDatasetRole());
+			if (builder != null) {
+				model.register(builder);
+			}
 		}
 		return model;
 	}
