@@ -24,10 +24,10 @@
   <extension
          point="org.inqle.data.sampling.rap.ISamplerFactory">
       <sampler-factory
-      		 class="org.inqle.data.sampling.rap.SimpleSparqlSamplerFactory"
+      		 class="org.inqle.data.sampling.rap.SimpleSubjectSparqlSamplerFactory"
            weight="1000"
-           name="SimpleSparqlSampler"
-           description="From 1 or more datasets, this Sampler selects 2-3 RDF predicates as attributes.  It then attempts to assemble a set of data which has these attributes in common.">
+           name="SimpleSubjectSparqlSampler"
+           description="From 1 or more datasets, this Sampler selects a subject class, then 2-3 Arcs as columns/attributes.  It then attempts to assemble the corresponding data into an ArcTable.">
       </sampler-factory>
    </extension>
 

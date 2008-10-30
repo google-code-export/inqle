@@ -9,21 +9,21 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.data.rdf.jena.util.ArcLister;
+import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import thewebsemantic.Namespace;
+
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 /** 
  * This simple sampler does the following:
@@ -80,50 +80,14 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	protected List<Arc> selectRandomArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect) {
-		String baseSparql = "SELECT ?pred1 ?pred2 ?pred3 \n" +
-			" GRAPH ?anyGraph {" +
-			"?subject a <" + subjectClass.toString() + "> . \n" +
-			"?subject ?pred1 ?obj1 . \n" +
-			"OPTIONAL { \n" +
-			"?obj1 ?pred2 ?obj2 \n" +
-			"} . \n" +
-			"OPTIONAL { \n" +
-			"?obj2 ?pred3 ?obj3 \n" +
-			"}" +
-			"}";
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(modelsToUse);
-		String sparql = Queryer.decorateSparql(baseSparql, true, 0, numberToSelect);
-		queryCriteria.setQuery(sparql);
-		RdfTable results = Queryer.selectRdfTable(queryCriteria);
-		if (results==null || results.countResults()==0) return null;
-		List<QuerySolution> resultsList = results.getResultList();
-		List<Arc> arcList = new ArrayList<Arc>();
-		for (QuerySolution querySolution: resultsList) {
-			Arc arc = new Arc();
-			Resource pred1 = querySolution.getResource("pred1");
-			if (pred1 != null && UriMapper.isUri(pred1.toString())) {
-				arc.addArcStep(new ArcStep(pred1.toString()));
-			}
-			Resource pred2 = querySolution.getResource("pred2");
-			if (pred2 != null && UriMapper.isUri(pred2.toString())) {
-				arc.addArcStep(new ArcStep(pred2.toString()));
-			}
-			Resource pred3 = querySolution.getResource("pred3");
-			if (pred3 != null && UriMapper.isUri(pred3.toString())) {
-				arc.addArcStep(new ArcStep(pred3.toString()));
-			}
-			arcList.add(arc);
-		}
-		return arcList;
+		return ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), numberToSelect);
 	}
 
 
 	@Override
 	protected URI selectRandomSubjectClass(Collection<String> modelsToUse) {
-		String baseSparql = "SELECT DISTINCT ?classUri GRAPH ?anyGraph { \n";
-		baseSparql += " . ?subject a ?classUri } \n";
-		String sparql = Queryer.decorateSparql(baseSparql, true, 0, 1);
+		
+		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, true, 0, 1);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(modelsToUse);
 		queryCriteria.setQuery(sparql);
@@ -135,7 +99,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 
 
 	@Override
-	protected String generateSparql(Resource subjectClass, List<Arc> dataColumns) {
+	protected String generateSparql(Resource subjectClass, Collection<Arc> dataColumns) {
 		return Queryer.generateSparqlDescribe(subjectClass, dataColumns, true, 0, MAX_NUMBER_OF_ROWS);
 	}
 
