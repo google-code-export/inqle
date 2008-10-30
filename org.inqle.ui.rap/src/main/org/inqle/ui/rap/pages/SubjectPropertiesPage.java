@@ -57,7 +57,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	
 	protected String[] headers;
 	
-	protected List<IDataFieldShower> dataFieldShowers;
+	protected List<IDataFieldShower> dataFieldShowers = new ArrayList<IDataFieldShower>();
 
 	protected Text enterNewDataPropertyButtonExplanation;
 	protected Text enterNewSubjectPropertyButtonExplanation;

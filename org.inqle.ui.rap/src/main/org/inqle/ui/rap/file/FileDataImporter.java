@@ -86,6 +86,7 @@ public class FileDataImporter {
 					ResourceFactory.createResource(subjectMapping.getSubjectClass().toString()));
 		}
 		subjectDataClass.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), subjectInstance);
+		subjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), subjectDataClass);
 		//import static values to the subject or the subjectDataClass
 		importStaticValues(subjectMapping, subjectInstance, subjectDataClass);
 		
@@ -135,6 +136,7 @@ public class FileDataImporter {
 			//wrong? Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
 			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 			rowDataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), rowSubjectInstance);
+			rowSubjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), rowDataInstance);
 			importStaticValues(subjectMapping, rowSubjectInstance, rowDataInstance);
 			importRowValues(subjectMapping, row, rowSubjectInstance, rowDataInstance);
 		}

@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
@@ -33,6 +34,8 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	private Label uriSuffixColumnLabel;
 
 	private String[] headers;
+
+	private String uriPrefix;
 	
 	public RowSubjectUriPage() {
 		this(DEFAULT_TITLE, null, DEFAULT_DESCRIPTION);
@@ -67,7 +70,10 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		
 		instanceUriPrefixField = new TextField(uriCreationArea, "URI prefix", "Enter the first part of a URI, which will be appended with a value.");
 		instanceUriPrefixField.setVisible(false);
-	
+		if (getUriPrefix() != null) {
+			instanceUriPrefixField.setTextValue(getUriPrefix());
+		}
+		
 		gl = new GridLayout(1, true);
 		Composite columnSelectionArea = new Composite(uriCreationArea, SWT.NONE);
 		columnSelectionArea.setLayout(gl);
@@ -181,5 +187,18 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		ICsvReaderWizard loadCsvFileWizard = (ICsvReaderWizard)getWizard();
 		//log.info("loadCsvFileWizard=" + loadCsvFileWizard);
 		return loadCsvFileWizard.getCsvReader();
+	}
+
+	public String getUriPrefix() {
+		if (uriPrefix != null) {
+			return uriPrefix;
+		} else {
+			Persister persister = Persister.getInstance();
+			return persister.getAppInfo().getSite().getUriPrefix();
+		}
+	}
+
+	public void setUriPrefix(String uriPrefix) {
+		this.uriPrefix = uriPrefix;
 	}
 }
