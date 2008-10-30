@@ -13,14 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 
 /**
- * This generates a wizard page which has a single text field, without validation.  
- * Usage (from within your implementation of DynaWizard):
- * 
- * public void addPages() {
- * 	SingleTextPage dbUserPage = new SingleTextPage(bean, "dbUser", "Database User Name", null);
- * 	dbUserPage.setLabelText("Enter database user name");
- * 	addPage(dbUserPage);
- * }
+ * This generates a wizard page which has a list selector, without validation.  
  * 
  * @author David Donohue
  * Feb 20, 2008

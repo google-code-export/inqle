@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.ViewerColumn;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -105,12 +106,11 @@ public class BeanTableSelectorPage extends BeanWizardPage {
 	 */
 	@Override
 	public void addElements() {
-		Composite composite = selfComposite;
-		assert(composite != null);
-		assert(beans != null);
+		GridLayout gl = new GridLayout(1, false);
+		selfComposite.setLayout(gl);
 		
 		//new Label (composite, SWT.NONE).setText(labelText);	
-		Table table = new Table(composite, SWT.MULTI | SWT.CHECK);
+		Table table = new Table(selfComposite, SWT.MULTI | SWT.CHECK);
     //GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
     //table.setLayoutData(gridData);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));

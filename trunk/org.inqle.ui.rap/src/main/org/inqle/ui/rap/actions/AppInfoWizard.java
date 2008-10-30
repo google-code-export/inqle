@@ -21,6 +21,7 @@ import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UserAccount;
 import org.inqle.ui.rap.pages.ConnectionPage;
 import org.inqle.ui.rap.pages.EmbeddedDBPage;
+import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.RadiosPage;
 import org.inqle.ui.rap.pages.ServerInfoPage;
 import org.inqle.ui.rap.pages.SingleTextPage;
@@ -84,6 +85,13 @@ public class AppInfoWizard extends Wizard {
 //		siteUrlPage.setLabelText("Enter base URL of this INQLE server");
 //		addPage(siteUrlPage);
 		//Persister persister = Persister.getInstance();
+		
+		InfoPage firstPage = new InfoPage(
+				"INQLE Set-up Wizard",
+				"Welcome to INQLE!",
+				"This wizard will help you set up your INQLE server.");
+		addPage(firstPage);
+		
 		serverInfoPage = new ServerInfoPage();
 		addPage(serverInfoPage);
 //		log.info("added serverInfoPage");
@@ -252,6 +260,7 @@ public class AppInfoWizard extends Wizard {
 		site.setRandomId();
 		site.setOwnerEmail(serverInfoPage.getOwnerEmail());
 		site.setName(serverInfoPage.getSiteName());
+		site.setUriPrefix(serverInfoPage.getUriPrefix());
 		appInfo.setSite(site);
 		
 		if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {

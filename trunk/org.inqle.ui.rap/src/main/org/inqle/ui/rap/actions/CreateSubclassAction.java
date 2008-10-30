@@ -3,7 +3,9 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.widgets.SubclassDialog;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -52,6 +54,7 @@ public class CreateSubclassAction extends ACreateOntResourceAction {
 			OntModel ontModel = ModelFactory.createOntologyModel();
 			OntClass ontClass = ontModel.createClass(parentResourceUri);
 			SubclassDialog aResourceDialog = new SubclassDialog(shell, ontClass);
+			
 			aResourceDialog.open();
 			if (aResourceDialog.getReturnCode() == Window.OK) {
 				log.info("Created new subclass of <" + parentResourceUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
