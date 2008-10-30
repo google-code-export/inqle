@@ -18,13 +18,14 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.SimpleSubjectSparqlSampler;
 import org.inqle.ui.rap.IList2Provider;
 import org.inqle.ui.rap.IListProvider;
+import org.inqle.ui.rap.IValueUpdater;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 import org.inqle.ui.rap.pages.SimpleListSelectorPage;
 import org.inqle.ui.rap.table.BeanTableSelectorPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements IListProvider, IList2Provider {
+public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements IListProvider, IList2Provider, IValueUpdater {
 
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSamplerWizard.class);
 	//private SimpleSubjectSparqlSampler sampler;
@@ -133,9 +134,11 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedNamedModels();
 			URI subjectClass = ((SimpleSubjectSparqlSampler)bean).getSubjectClass();
 			if (selectedModelsCollection == null || selectedModelsCollection.size()==0 || subjectClass == null) {
+				log.info("Returning NULL for list of Arcs");
 				arcsList = null;
 			} else {
 				arcsList = ArcLister.listArcs(selectedModelsCollection, subjectClass.toString());
+				log.info("Returning this list of Arcs: " + arcsList);
 			}
 			return arcsList;
 		}
@@ -146,10 +149,11 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (page.equals(subjectClassSelectorPage)) {
 			if (subjectClassSelectorPage.getSelectedString()==null) {
 				((SimpleSubjectSparqlSampler)bean).setSubjectClass(null);
+				log.info("UUUUUUUUUUUUUUUUUUUUU Updated sampler with null");
 			} else {
 				String selectedSubject = subjectClassSelectorPage.getSelectedString();
 				((SimpleSubjectSparqlSampler)bean).setSubjectClass(URI.create(selectedSubject));
-				log.info("Updated sampler with subject class: " + selectedSubject);
+				log.info("UUUUUUUUUUUUUUUUUUUUU Updated sampler with subject class: " + selectedSubject);
 			}
 		}
 		
