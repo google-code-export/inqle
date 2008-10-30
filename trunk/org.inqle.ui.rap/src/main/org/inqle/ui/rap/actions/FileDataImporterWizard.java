@@ -141,13 +141,13 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		PopupDialog popup;
 		TableMapping tableMapping = null;
 		try {
-			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
-			popup.open();
+//			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
+//			popup.open();
 			tableMapping = getTableMapping();
 			log.info("Saving new TableMapping:\n" + JenabeanWriter.toString(tableMapping));
 			Persister persister = Persister.getInstance();
 			persister.persist(tableMapping);
-			popup.close();
+//			popup.close();
 		} catch (RuntimeException e) {
 			log.error("Error saving mapping", e);
 		}
@@ -155,13 +155,13 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		OntModel ontModel = ModelFactory.createOntologyModel();
 		
 		try {
-			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Importing Data", "Importing your data..." );
-			popup.open();
+//			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Importing Data", "Importing your data..." );
+//			popup.open();
 			log.info("Importing data...");
 			FileDataImporter importer = new FileDataImporter(csvReader, tableMapping, ontModel);
 			importer.doImport();
 			log.info("Data for import=\n" + JenabeanWriter.modelToString(ontModel));
-			popup.close();
+//			popup.close();
 		} catch (RuntimeException e) {
 			log.error("Error importing data from file", e);
 		}

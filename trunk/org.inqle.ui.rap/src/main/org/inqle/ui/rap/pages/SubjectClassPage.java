@@ -239,10 +239,8 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Clicked search button");
 
 			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
-			String localDataSubjectXml = SubjectLookup.lookupSubclassesInInternalDataset(
+			String localDataSubjectXml = SubjectLookup.lookupSubjectsInSubjectsDataset(
 					getSearchTextValue(), 
-					null, 
-					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 					10, 
 					0);
 			//log.info("Retrieved this result set from LOCAL query:\n" + localDataSubjectXml);
@@ -283,9 +281,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 //			dataRecords = interimRecords;
 			
 			dataRecords = ListMapUtil.merge(localRecords, remoteRecords);
+			log.info("Merged 2 documents into:\n" + dataRecords);
 			
 //			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
-			//log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
+//			log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
 			
 			//if insufficient results, do an additional query of the remote RDF Schema datafiles
 //		  if (interimRecords.size() <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {

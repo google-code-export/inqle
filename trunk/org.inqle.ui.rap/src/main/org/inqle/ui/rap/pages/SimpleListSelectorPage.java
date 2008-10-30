@@ -85,6 +85,9 @@ public class SimpleListSelectorPage extends DynaWizardPage implements ISelection
 		if (getWizard() instanceof IListProvider) {
 			IListProvider provider = (IListProvider)getWizard();
 			List<Object> items = provider.getList(this);
+			if (items==null || items.size()==0) {
+				return;
+			}
 			Object[] nullArray = {};
 			Object[] itemArray = items.toArray(nullArray);
 			listViewer.add(itemArray);

@@ -94,18 +94,24 @@ public abstract class ACreateOntResourceAction extends Action {
 		
 		if (textIndexBuilder != null) {
 			model.register(textIndexBuilder);
+//			log.info("Registered text index builder");
 		}
+		long sizeBefore = model.size();
 		model.begin();
 		model.add(newStatementsModel);
 		model.commit();
+		
 		if (textIndexBuilder != null) {
 			model.unregister(textIndexBuilder);
 		}
+		long sizeDifference = model.size() - sizeBefore;
+		log.info("Registered new type locally: Added " + sizeDifference + " new statements to the model.");
+		
 		//send the new statements to the central INQLE server
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(newStatementsModel));
 		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
-		log.info("posting data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");
+		log.info("posting new type RDF data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");
 		boolean success = Requestor.sendPost(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, new PrintWriter(System.out));
 		log.info("...success? " + success);
 	}
