@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
+import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Arc;
@@ -16,6 +18,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ArcLister {
 
+	private static Logger log = Logger.getLogger(ArcLister.class);
+	
 	/**
 	 * Get SPARQL for finding Arc properties of the given resource subject.  
 	 * This query looks for Arcs with maximum of 3 steps.
@@ -23,7 +27,7 @@ public class ArcLister {
 	 * @return
 	 */
 	public static String getSparqlSelectArcs(String subjectClassUri) {
-		String sparql = "SELECT ?pred1 ?pred2 ?pred3 \n" +
+		String sparql = "SELECT DISTINCT ?pred1 ?pred2 ?pred3 \n" +
 			"{ GRAPH ?anyGraph {" +
 			"?subject a <" + subjectClassUri + "> . \n" +
 			"?subject ?pred1 ?obj1 . \n" +
@@ -40,6 +44,7 @@ public class ArcLister {
 
 	public static List<Arc> listArcs(Collection<String> datasetIdList, String subjectClassUri) {
 		String sparql = getSparqlSelectArcs(subjectClassUri);
+		log.info("Retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		queryCriteria.setQuery(sparql);
@@ -59,6 +64,7 @@ public class ArcLister {
 	
 	public static List<Arc> listArcs(QueryCriteria queryCriteria) {
 		RdfTable results = Queryer.selectRdfTable(queryCriteria);
+		log.info("Received results: " + RdfTableWriter.dataTableToString(results));
 		if (results==null || results.countResults()==0) return null;
 		List<QuerySolution> resultsList = results.getResultList();
 		List<Arc> arcList = new ArrayList<Arc>();
