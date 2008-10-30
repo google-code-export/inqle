@@ -12,7 +12,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.ontology.OntResource;
  
@@ -36,6 +38,7 @@ public abstract class AOntResourceDialog extends Dialog {
 		protected TextFieldShower commentTextField;
 //		private String messageString;
 		private OntResource ontResource;
+		private String uriPrefix;
 		
 		private static Logger log = Logger.getLogger(AOntResourceDialog.class);
 		
@@ -83,6 +86,9 @@ public abstract class AOntResourceDialog extends Dialog {
 						null,
 						SWT.BORDER
 				);
+				if (getUriPrefix() != null) {
+					uriTextField.setValue(getUriPrefix());
+				}
 				
 //        Label labelLabel = new Label(formComposite, SWT.NONE);
 //        labelLabel.setText("Label (name, usually 1 or 2 words)");
@@ -120,7 +126,14 @@ public abstract class AOntResourceDialog extends Dialog {
       return container;
     }
     
-    public abstract String getTitle();
+    private String getUriPrefix() {
+			if (uriPrefix != null) return uriPrefix;
+			Persister persister = Persister.getInstance();
+			AppInfo appInfo = persister.getAppInfo();
+			return appInfo.getSite().getUriPrefix();
+		}
+
+		public abstract String getTitle();
     
     public abstract String getMessage();
     
@@ -217,6 +230,10 @@ public abstract class AOntResourceDialog extends Dialog {
 
 		public OntResource getOntResource() {
 			return ontResource;
+		}
+		
+		public void setUriPrefix(String uriPrefix) {
+			this.uriPrefix = uriPrefix;
 		}
 }
 

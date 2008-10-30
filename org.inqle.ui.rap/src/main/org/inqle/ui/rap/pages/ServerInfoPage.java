@@ -10,6 +10,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.ui.rap.widgets.TextFieldShower;
 
 public class ServerInfoPage extends DynaWizardPage {
 
@@ -18,10 +20,14 @@ public class ServerInfoPage extends DynaWizardPage {
 			"This info will be sent to the Central INQLE Server.  " +
 			"It will be used to identify your server, and to permit INQLE to " +
 			"contact owners of INQLE servers with security-related messages.";
-	private Text siteNameText;
-	private Text ownerEmailText;
+//	private Text siteNameText;
+//	private Text ownerEmailText;
 	private String defaultSiteName;
 	private String defaultOwnerEmail;
+	private TextFieldShower siteNameShower;
+	private TextFieldShower ownerEmailShower;
+	private TextFieldShower uriPrefixShower;
+	private String defaultUriPrefix;
 	
 	public ServerInfoPage(String pageName, String pageDescription) {
 		super(pageName, null);
@@ -38,26 +44,72 @@ public class ServerInfoPage extends DynaWizardPage {
 		composite.setLayout (new GridLayout(2, false));
 		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		
-		new Label(composite, SWT.NONE).setText("Server Nickname");
-		siteNameText =  new Text(composite, SWT.BORDER);
+//		new Label(composite, SWT.NONE).setText("Server Nickname");
+//		siteNameText =  new Text(composite, SWT.BORDER);
+//		if (getDefaultSiteName() != null) {
+//			siteNameText.setText(getDefaultSiteName());
+//		}
+//		siteNameText.setToolTipText("Enter a nickname for your INQLE Server, e.g. David Donohue's INQLE Server #3");
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		siteNameText.setLayoutData(gridData);
+//		siteNameText.forceFocus();
+
+		siteNameShower = new TextFieldShower(
+				composite,
+				"Server Nickname",
+				"Enter a nickname for your INQLE Server, e.g. David Donohue's INQLE Server #3",
+				null,
+				SWT.BORDER
+		);
 		if (getDefaultSiteName() != null) {
-			siteNameText.setText(getDefaultSiteName());
+			siteNameShower.setValue(getDefaultSiteName());
 		}
-		siteNameText.setToolTipText("Enter a nickname for your INQLE Server, e.g. David Donohue's INQLE Server #3");
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		siteNameText.setLayoutData(gridData);
-		siteNameText.forceFocus();
 		
-		new Label(composite, SWT.NONE).setText("Owner Email");
-		ownerEmailText =  new Text(composite, SWT.BORDER);
+//		new Label(composite, SWT.NONE).setText("Owner Email");
+//		ownerEmailText =  new Text(composite, SWT.BORDER);
+//		if (getDefaultOwnerEmail() != null) {
+//			ownerEmailText.setText(getDefaultOwnerEmail());
+//		}
+//		ownerEmailText.setToolTipText("Email address of the owner of this server.");
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		ownerEmailText.setLayoutData(gridData);
+		
+		ownerEmailShower = new TextFieldShower(
+				composite,
+				"Owner Email",
+				"Enter the email address of the owner of this server.",
+				null,
+				SWT.BORDER
+		);
 		if (getDefaultOwnerEmail() != null) {
-			ownerEmailText.setText(getDefaultOwnerEmail());
+			ownerEmailShower.setValue(getDefaultOwnerEmail());
 		}
-		ownerEmailText.setToolTipText("Email address of the owner of this server.");
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		ownerEmailText.setLayoutData(gridData);
+			
+//		new Label(composite, SWT.NONE).setText("Server URI Prefix");
+//		uriPrefixText =  new Text(composite, SWT.BORDER);
+//		if (getDefaultSiteName() != null) {
+//			uriPrefixText.setText(getDefaultUriPrefix());
+//		}
+//		uriPrefixText.setToolTipText("Enter a unique URI for your INQLE Server, e.g. http://my.domain.name/inqle/1/");
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		uriPrefixText.setLayoutData(gridData);
+		
+		uriPrefixShower = new TextFieldShower(
+				composite,
+				"URI Prefix",
+				"Enter a unique URI for your INQLE Server, e.g. http://my.domain.name/inqle/1/",
+				null,
+				SWT.BORDER
+		);
+		if (getDefaultUriPrefix() != null) {
+			uriPrefixShower.setValue(getDefaultUriPrefix());
+		}
 		
 		setControl(composite);
+	}
+
+	public String getDefaultUriPrefix() {
+		return defaultUriPrefix;
 	}
 
 	public String getDefaultSiteName() {
@@ -77,20 +129,29 @@ public class ServerInfoPage extends DynaWizardPage {
 	}
 	
 	public String getSiteName() {
-		if (siteNameText==null) return null;
-		return siteNameText.getText();
+		if (siteNameShower==null) return null;
+		return siteNameShower.getValue();
 	}
 	
 	public String getOwnerEmail() {
-		if (ownerEmailText==null) return null;
+		if (ownerEmailShower==null) return null;
+		String ownerEmail = ownerEmailShower.getValue();
 		
-		String ownerEmail = ownerEmailText.getText();
 		//Do a regular expression confirmation of the owner email:
 		//Set the email pattern string
     Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
     Matcher m = p.matcher(ownerEmail);
     if(! m.matches()) return null;
 		return ownerEmail;
+	}
+	
+	public String getUriPrefix() {
+		String enteredUriPrefix = uriPrefixShower.getValue();
+		if (enteredUriPrefix == null || enteredUriPrefix.length()==0) return null;
+		if (!(enteredUriPrefix.charAt(enteredUriPrefix.length()-1)=="/".charAt(0))) {
+			enteredUriPrefix += "/";
+		}
+		return enteredUriPrefix;
 	}
 
 	@Override
@@ -104,6 +165,11 @@ public class ServerInfoPage extends DynaWizardPage {
 		
 		if (getOwnerEmail()==null) {
 			setMessage("Please enter a valid email address.");
+			return false;
+		}
+		
+		if (getUriPrefix()==null) {
+			setMessage("Please enter a URI prefix.  It should look like a web address.");
 			return false;
 		}
 		
