@@ -67,7 +67,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 
 	private URI subjectClass;
 
-	private List<Arc> arcList;
+	private Collection<Arc> arcs;
 
 	private int numberOfAttributes;
 	
@@ -87,7 +87,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		if (subjectClass == null) return null;
 		log.info("Subject class=" + subjectClass);
 		
-		List<Arc> dataColumnsToUse = selectDataColumns(modelsToUse, subjectClass);
+		Collection<Arc> dataColumnsToUse = selectDataColumns(modelsToUse, subjectClass);
 		log.debug("dataColumnsToUse=" + dataColumnsToUse);
 //		String sparql = generateSparql(modelsToUse, persister);
 		String sparql = generateSparql(subjectClass, dataColumnsToUse);
@@ -114,9 +114,9 @@ public abstract class AConstructSparqlSampler extends ASampler {
 
 	protected abstract URI selectRandomSubjectClass(Collection<String> modelsToUse);
 
-	public List<Arc> selectDataColumns(Collection<String> modelsToUse, Resource subjectClass) {
-		if (arcList != null) {
-			return arcList;
+	public Collection<Arc> selectDataColumns(Collection<String> modelsToUse, Resource subjectClass) {
+		if (arcs != null) {
+			return arcs;
 		}
 		
 		return selectRandomArcs(modelsToUse, subjectClass, getNumberOfAttributes());
@@ -137,7 +137,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @param numberToSelect the number of Arcs to select
 	 * @return
 	 */
-	protected abstract List<Arc> selectRandomArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect);
+	protected abstract Collection<Arc> selectRandomArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect);
 
 	/**
 	 * Get the Collection of NamedModels from which to extract data.  Implementations should
@@ -205,7 +205,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @param dataColumnsToUse 
 	 * @return
 	 */
-	protected Model doQuery(Collection<String> namedModelsToUse, List<Arc> dataColumnsToUse, String sparql) {
+	protected Model doQuery(Collection<String> namedModelsToUse, Collection<Arc> dataColumnsToUse, String sparql) {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(namedModelsToUse);
 		queryCriteria.setQuery(sparql);
@@ -233,7 +233,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * 
 	 * @return sparql the SPARQL query string, to generate the learnable table of data
 	 */
-	protected abstract String generateSparql(Resource subjectClass, List<Arc> dataColumns);
+	protected abstract String generateSparql(Resource subjectClass, Collection<Arc> dataColumns);
 	//protected abstract String generateSparql(Collection<String> modelsToUse, Persister persister);
 
 	/**
@@ -266,12 +266,31 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	}
 	
 	public void clone(AConstructSparqlSampler templateSampler) {
+		setSubjectClass(templateSampler.getSubjectClass());
+		setArcs(templateSampler.getArcs());
+		setNumberOfAttributes(templateSampler.getNumberOfAttributes());
 		super.clone(templateSampler);
 //		setQuery(((ASelectSparqlSampler)templateSampler).getQuery());
 	}
 
 	public void setNumberOfAttributes(int numberOfAttributes) {
 		this.numberOfAttributes = numberOfAttributes;
+	}
+
+	public URI getSubjectClass() {
+		return subjectClass;
+	}
+
+	public void setSubjectClass(URI subjectClass) {
+		this.subjectClass = subjectClass;
+	}
+
+	public Collection<Arc> getArcs() {
+		return arcs;
+	}
+
+	public void setArcs(Collection<Arc> arcs) {
+		this.arcs = arcs;
 	}
 	
 	/**
