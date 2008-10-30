@@ -1,8 +1,7 @@
 package org.inqle.data.rdf.jenabean;
 
-import java.net.URI;
-
 import org.inqle.data.rdf.RDF;
+
 import thewebsemantic.Namespace;
 
 
