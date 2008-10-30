@@ -2,6 +2,7 @@ package org.inqle.data.rdf.jena.sdb;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -347,7 +348,7 @@ import com.hp.hpl.jena.sdb.SDB;
 		return sparql;
 	}
 	
-	public static String getSparqlWhereFromArcs(String subject, List<Arc> arcList) {
+	public static String getSparqlWhereFromArcs(String subject, Collection<Arc> arcList) {
 		String sparql = "";
 		for (Arc arc: arcList) {
 			sparql += getSparqlWhereFromArc(subject, arc, null);
@@ -397,14 +398,14 @@ import com.hp.hpl.jena.sdb.SDB;
 	 * Generate SPARQL to conduct a DESCRIBE query, given a starting Resource class, 
 	 * the List of Arcs, 
 	 * @param subjectClass
-	 * @param arcList the List of Arcs
+	 * @param arcs the List of Arcs
 	 * @param randomize if true, the order will be randomized
 	 * @param offset the number of records to skip, when paginating.  Note paginating does not work with randomizing.
 	 * @param limit the number of records to retrieve
 	 * @return
 	 */
-	public static String generateSparqlDescribe(Resource subjectClass, List<Arc> arcList, boolean randomize, int offset, int limit) {
-		String where = Queryer.getSparqlWhereFromArcs(subjectClass.toString(), arcList);
+	public static String generateSparqlDescribe(Resource subjectClass, Collection<Arc> arcs, boolean randomize, int offset, int limit) {
+		String where = Queryer.getSparqlWhereFromArcs(subjectClass.toString(), arcs);
 		String sparql = "";
 		if (randomize) {
 			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";

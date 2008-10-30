@@ -30,6 +30,8 @@ public class Site extends UniqueJenabean {
 //		return s;
 //	}
 
+	private String uriPrefix;
+
 	public void clone(Site objectToBeCloned) {
 
 		super.clone(objectToBeCloned);
@@ -69,6 +71,14 @@ public class Site extends UniqueJenabean {
 
 	public void setOwnerEmail(String ownerEmail) {
 		this.ownerEmail = ownerEmail;
+	}
+
+	public void setUriPrefix(String uriPrefix) {
+		this.uriPrefix = uriPrefix;
+	}
+
+	public String getUriPrefix() {
+		return uriPrefix;
 	}	
 
 }
