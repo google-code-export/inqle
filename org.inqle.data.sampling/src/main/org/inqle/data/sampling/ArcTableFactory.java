@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
-import org.inqle.data.rdf.jenabean.ArcStep;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -88,11 +87,12 @@ public class ArcTableFactory {
 	 * @param startingStatement
 	 */
 	private void addArcSteps(Arc arc, ArcSet arcSet, Statement startingStatement) {
-		ArcStep arcStep = new ArcStep();
+//		ArcStep arcStep = new ArcStep();
 		Property property = startingStatement.getPredicate();
 		String propStr = property.toString();
-		arcStep.setPredicate(propStr);
-		arc.addArcStep(arcStep);
+//		arcStep.setPredicate(propStr);
+//		arc.addArcStep(arcStep);
+		arc.addArcStep(propStr);
 		
 		RDFNode rdfNode = startingStatement.getObject();
 		if (rdfNode instanceof Literal) {
