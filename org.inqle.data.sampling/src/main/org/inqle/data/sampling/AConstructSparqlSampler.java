@@ -97,6 +97,9 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		ontModel.add(resultModel);
 		ArcTableFactory factory = new ArcTableFactory(ontModel);
 		ArcTable resultDataTable = factory.createArcTable(subjectClass);
+		if (resultDataTable.getColumns().contains(getLabelArc())) {
+			resultDataTable.setLabelColumnIndex(resultDataTable.getHeaderIndex(getLabelArc()));
+		}
 		return resultDataTable;
 	}
 	

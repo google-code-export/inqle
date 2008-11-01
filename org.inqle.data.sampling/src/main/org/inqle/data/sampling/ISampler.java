@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Dictionary;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 
 import thewebsemantic.Id;
@@ -37,17 +38,6 @@ public interface ISampler extends IUniqueJenabean {
 	public static final String URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES = RDF.INQLE + "subjectContainingCommonAttributes";
 	public static final String ID = "org.inqle.data.sampling.ISampler";
 	public static final String SAMPLER_DATASET = "org.inqle.datasets.samplers";
-	/**
-	 * Get the Collection of IDs of NamedModels which are candidates for sampling.
-	 * @return the list of choosable NamedModels
-	 */
-//	public Collection<String> getAvailableNamedModels();
-	
-	/**
-	 * Set the Collection of IDs of NamedModel which are candidates for sampling.
-	 * @param the list of choosable NamedModels
-	 */
-//	public void setAvailableNamedModels(Collection<String> availableNamedModels);
 	
 	/**
 	 * Get the Collection of IDs of NamedModel which have been selected for 
@@ -61,25 +51,6 @@ public interface ISampler extends IUniqueJenabean {
 	 * @param the list of selected NamedModels
 	 */
 	public void setSelectedNamedModels(Collection<String> selectedNamedModels);
-	
-	//public void setDataColumns(DataColumn[] dataColumns);
-	
-	//public DataColumn[] getDataColumns();
-	
-//	public DataTable getResultDataTable();
-//	
-//	public void setResultDataTable(DataTable resultDataTable);
-
-	//public Dictionary<?, ?> getProperties();
-	
-//	/**
-//	 * Prepare this object for archiving.
-//	 * Remove any attributes stored in this object, which are not of 
-//	 * historical value.  This method is called before storing a ISampler object
-//	 * after experimentation.  Examples of such attributes include
-//	 * choosable data models,
-//	 */
-//	public void removeInterimData();
 
 	@Id
 	public String getId();
@@ -91,6 +62,10 @@ public interface ISampler extends IUniqueJenabean {
 	public String getName();
 
 	public void setName(String name);
+	
+	public Arc getLabelArc();
+	
+	public void setLabelArc(Arc labelArc);
 	
 	/**
 	 * Execute this sampler in automated fashion
