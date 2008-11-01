@@ -67,9 +67,9 @@ public class LearningCycleWizard extends DynaWizard {
 		//samplingResultsPage.setPersister(persister);
 		addPage(samplingResultsPage);
 		
-		LabelSelectorPage labelSelectorPage = new LabelSelectorPage(learningCycle, "labelDataColumn", "Select column to be used as the label", null);
-		labelSelectorPage.setDataTableProvider(samplingResultsPage);
-		addPage(labelSelectorPage);
+//		LabelSelectorPage labelSelectorPage = new LabelSelectorPage(learningCycle, "labelDataColumn", "Select column to be used as the label", null);
+//		labelSelectorPage.setDataTableProvider(samplingResultsPage);
+//		addPage(labelSelectorPage);
 	}
 
 	/* (non-Javadoc)

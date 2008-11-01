@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.IDataTable;
-import org.inqle.data.sampling.IDataTableProvider;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.rap.DataTablePage;
 
@@ -17,7 +16,7 @@ import org.inqle.data.sampling.rap.DataTablePage;
  * @author David Donohue
  * Apr 10, 2008
  */
-public class SamplingResultPage extends DataTablePage implements IDataTableProvider {
+public class SamplingResultPage extends DataTablePage {
 
 	private IDataTable dataTable;
 
