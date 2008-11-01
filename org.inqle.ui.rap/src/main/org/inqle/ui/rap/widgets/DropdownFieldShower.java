@@ -1,6 +1,5 @@
 package org.inqle.ui.rap.widgets;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,10 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class DropdownFieldShower implements IDataFieldShower {
 
@@ -56,7 +51,9 @@ public class DropdownFieldShower implements IDataFieldShower {
 			int listStyle) {
 		java.util.List<String> allOptions = new ArrayList<String>();
 		allOptions.add("");
-		allOptions.addAll(Arrays.asList(options));
+		if (options != null) {
+			allOptions.addAll(Arrays.asList(options));
+		}
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);

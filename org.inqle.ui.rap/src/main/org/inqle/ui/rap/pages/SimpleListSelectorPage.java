@@ -63,7 +63,7 @@ public class SimpleListSelectorPage extends DynaWizardPage implements ISelection
 	protected void createList() {
 		new Label (selfComposite, SWT.NONE).setText(labelText);	
 		listViewer = new ListViewer(selfComposite, SWT.V_SCROLL | SWT.BORDER | singleOrMulti);
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		listViewer.getList().setLayoutData(gridData);
 		listViewer.setContentProvider(new ArrayContentProvider());
 		listViewer.addSelectionChangedListener(this);
@@ -94,6 +94,7 @@ public class SimpleListSelectorPage extends DynaWizardPage implements ISelection
 			if (getWizard() instanceof IList2Provider) {
 				IList2Provider provider2 = (IList2Provider)getWizard();
 				List<Object> checkedItems = provider2.getList2(this);
+				if (checkedItems==null) return;
 				String[] nullStringArray = {};
 				String[] checkedArray = checkedItems.toArray(nullStringArray);
 				listViewer.getList().setSelection(checkedArray);
