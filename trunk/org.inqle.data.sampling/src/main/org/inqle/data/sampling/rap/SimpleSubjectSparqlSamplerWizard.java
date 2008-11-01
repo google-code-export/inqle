@@ -34,6 +34,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	private SimpleListSelectorPage arcSelectorPage;
 	private List<Arc> arcsList;
 	//protected SimpleSubjectSparqlSampler bean;
+	private SimpleListSelectorPage labelSelectorPage;
 	
 	public SimpleSubjectSparqlSamplerWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
@@ -59,6 +60,9 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		
 		subjectClassSelectorPage = new SimpleListSelectorPage("Select Class of Subject", "Select the class of the subject, with which to build the sample data set.", "Select subject:", SWT.SINGLE);
 		addPage(subjectClassSelectorPage);
+		
+		labelSelectorPage = new SimpleListSelectorPage("Select property to be predicted", "Select the property to be used in the data set, as the 'experimental label'.  That is, the value to be predicted.", "Select properties:", SWT.SINGLE);
+		addPage(labelSelectorPage);
 		
 		arcSelectorPage = new SimpleListSelectorPage("Select properties for learning", "Select the properties to use in the data set.", "Select properties:", SWT.MULTI);
 		addPage(arcSelectorPage);
@@ -130,7 +134,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 			return SubjectClassLister.listAllSubjectClasses(selectedModelsCollection);
 		}
 		
-		if (page.equals(arcSelectorPage)) {
+		if (page.equals(arcSelectorPage) || page.equals(labelSelectorPage)) {
 			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedNamedModels();
 			URI subjectClass = ((SimpleSubjectSparqlSampler)bean).getSubjectClass();
 			if (selectedModelsCollection == null || selectedModelsCollection.size()==0 || subjectClass == null) {
@@ -157,12 +161,22 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 			}
 		}
 		
+		if (page.equals(labelSelectorPage)) {
+			if (labelSelectorPage.getSelectedIndexes()==null || labelSelectorPage.getSelectedIndexes().length==0) {
+				((SimpleSubjectSparqlSampler)bean).setLabelArc(null);
+			} else {
+				int selectedArcIndex = labelSelectorPage.getSelectedIndex();
+				((SimpleSubjectSparqlSampler)bean).setLabelArc(arcsList.get(selectedArcIndex));
+				log.info("Updated sampler with label arc: " + arcsList.get(selectedArcIndex));
+			}
+		}
+		
 		if (page.equals(arcSelectorPage)) {
-			if (subjectClassSelectorPage.getSelectedIndexes()==null || subjectClassSelectorPage.getSelectedIndexes().length==0) {
-				((SimpleSubjectSparqlSampler)bean).setSubjectClass(null);
+			if (arcSelectorPage.getSelectedIndexes()==null || arcSelectorPage.getSelectedIndexes().length==0) {
+				((SimpleSubjectSparqlSampler)bean).setArcs(null);
 			} else {
 				List<Arc> newlySelectedArcs = new ArrayList<Arc>();
-				for (int selectedArcIndex: subjectClassSelectorPage.getSelectedIndexes()) {
+				for (int selectedArcIndex: arcSelectorPage.getSelectedIndexes()) {
 					newlySelectedArcs.add(arcsList.get(selectedArcIndex));
 				}
 				((SimpleSubjectSparqlSampler)bean).setArcs(newlySelectedArcs);
@@ -182,8 +196,16 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 			}
 			return selectedSubjectClass;
 		}
+		if (page.equals(labelSelectorPage)) {
+			Arc selectedLabelArc = ((SimpleSubjectSparqlSampler)bean).getLabelArc();
+			if (selectedLabelArc==null) return null;
+			List<String> selectedLabelArcList = new ArrayList<String>();
+			selectedLabelArcList.add(selectedLabelArc.toString());
+			return selectedLabelArcList;
+		}
 		if (page.equals(arcSelectorPage)) {
 			Collection<Arc> selectedArcsCollection = ((SimpleSubjectSparqlSampler)bean).getArcs();
+			if (selectedArcsCollection==null) return null;
 			List<Arc> selectedArcsList = new ArrayList<Arc>();
 			selectedArcsList.addAll(selectedArcsCollection);
 			return selectedArcsList;

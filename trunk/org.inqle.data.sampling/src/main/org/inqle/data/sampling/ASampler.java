@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
@@ -29,30 +30,23 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public abstract class ASampler extends UniqueJenabean implements ISampler {
 
-	protected Collection<String> availableNamedModels;
-//	protected DataColumn[] dataColumns;
-	//protected DataColumn labelDataColumn;
-	//protected DataTable resultDataTable = new DataTable();
+//	protected Collection<String> availableNamedModels;
+
 	protected Collection<String> selectedNamedModels;
-//	protected DataColumn subjectDataColumn;
-	//protected String id;
-	//protected Dictionary<?, ?> properties;
-//	private String name;
+
+	protected Arc labelArc;
 	
+	public Arc getLabelArc() {
+		return this.labelArc;
+	}
 	/**
 	 * Add all field values from the provided template sampler to this sampler,
 	 * except the ID field
 	 * @param sampler the provided sampler
 	 */
 	public void clone(ISampler templateSampler) {
-//		setAvailableNamedModels(templateSampler.getAvailableNamedModels());
-		//setDataColumns(templateSampler.getDataColumns());
-		//setLabelDataColumn(templateSampler.getLabelDataColumn());
-		//setResultDataTable(templateSampler.getResultDataTable());
 		setSelectedNamedModels(templateSampler.getSelectedNamedModels());
-		//setSubjectDataColumn(templateSampler.getSubjectDataColumn());
-		//setProperties(templateSampler.getProperties());
-		//setName(templateSampler.getName());
+		setLabelArc(templateSampler.getLabelArc());
 		super.clone(templateSampler);
 	}
 	
@@ -132,6 +126,10 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 			return this.getClass().getName();
 		}
 		return name;
+	}
+	
+	public void setLabelArc(Arc labelArc) {
+		this.labelArc = labelArc;
 	}
 
 //	public void setName(String name) {
