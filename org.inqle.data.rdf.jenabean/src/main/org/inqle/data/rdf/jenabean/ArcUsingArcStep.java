@@ -11,38 +11,37 @@ import thewebsemantic.Namespace;
 /**
 	 * This class represents an individual Arc
 	 * @author David Donohue
-	 * Feb 22, 2008
 	 * 
-	 * As of 10/31/08, switching this to use String to represent the predicate of each step.
-	 * Was using the ArcStep class, but this gave Jenabean related errors.
-	 * So now Arcs only support outgoing direction
+	 * This version represents steps using the ArcStep object, which supports incoming &
+	 * outgoing direction.  Not currently in use due to a bug in Jenabean
+	 * Feb 22, 2008
 	 */
 	@Namespace(RDF.INQLE)
-	public class Arc extends GlobalJenabean {
-		private List<String> arcStepList = new ArrayList<String>();
+	public class ArcUsingArcStep extends GlobalJenabean {
+		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
 		
 //		private transient Object value;
 
-		public void addArcStep(String arcStep) {
+		public void addArcStep(ArcStep arcStep) {
 			arcStepList.add(arcStep);
 		}
 
-		public void setArcSteps(String[] arcSteps) {
+		public void setArcSteps(ArcStep[] arcSteps) {
 			this.arcStepList = Arrays.asList(arcSteps);
 		}
 		
-		public String[] getArcSteps() {
-			String[] arcStepArr = new String[] {};
+		public ArcStep[] getArcSteps() {
+			ArcStep[] arcStepArr = new ArcStep[] {};
 			return arcStepList.toArray(arcStepArr);
 		}
 		
-		public void clone(Arc objectToBeCloned) {
+		public void clone(ArcUsingArcStep objectToBeCloned) {
 			setArcSteps(objectToBeCloned.getArcSteps());
 			super.clone(this);
 		}
 		
-		public Arc createClone() {
-			Arc arc = new Arc();
+		public ArcUsingArcStep createClone() {
+			ArcUsingArcStep arc = new ArcUsingArcStep();
 			arc.clone(this);
 			return arc;
 		}
@@ -54,7 +53,7 @@ import thewebsemantic.Namespace;
 				return s;
 			}
 			s = "Arc: {";
-			for (String arcStep: arcStepList) {
+			for (ArcStep arcStep: arcStepList) {
 				s += arcStep + " --> ";
 			}
 			s += "}";

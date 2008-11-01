@@ -8,7 +8,7 @@ import thewebsemantic.Namespace;
 
 /**
  * Test class to prove Jena saving & loading 
- * Jenabeans with List fields
+ * Jenabeans with array fields
  */
 @Namespace("http://my-uri.com/ns/")
 public class BeanWithArrays {

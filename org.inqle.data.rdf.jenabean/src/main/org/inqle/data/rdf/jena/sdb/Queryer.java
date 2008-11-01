@@ -3,7 +3,6 @@ package org.inqle.data.rdf.jena.sdb;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,11 +13,9 @@ import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.util.Converter;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
-import org.inqle.data.rdf.jenabean.ArcStep;
 
 import thewebsemantic.TypeWrapper;
 
-import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -362,23 +359,12 @@ import com.hp.hpl.jena.sdb.SDB;
 		String newNode = subject;
 		String lastNode = subject;
 		
-		for (ArcStep step: arc.getArcSteps()) {
-			int stepType = step.getStepType();
+		for (String predicate: arc.getArcSteps()) {
 			String objectStr = "";
-			String predicate = step.getPredicate();
-//			Object object = step.getObject();
-			
 			if (object == null) {
-				if (stepType == ArcStep.OUTGOING) {
-					newNode = "?out_" + UUID.randomUUID().toString();
-					objectStr = newNode;
-					subjectStr = lastNode;
-				} else {//stepType == ArcStep.INCOMING
-					newNode = "?in_" + UUID.randomUUID().toString();
-					objectStr = lastNode;
-					subjectStr = newNode;
-					lastNode = newNode;
-				}
+				newNode = UUID.randomUUID().toString();
+				objectStr = newNode;
+				subjectStr = lastNode;
 			} else if (object instanceof URI) {
 				subjectStr = lastNode;
 				objectStr = "<" + ((URI)object).toString() + ">";
@@ -393,6 +379,45 @@ import com.hp.hpl.jena.sdb.SDB;
 		}
 		return sparql;
 	}
+	
+	//This version supports Arcs using ArcStep, thus supporting both incoming & outgoing direction
+//	private static String getSparqlWhereFromArc(String subject, Arc arc, Object object) {
+//		String sparql = "";
+//		String subjectStr = "";
+//		String newNode = subject;
+//		String lastNode = subject;
+//		
+//		for (ArcStep step: arc.getArcSteps()) {
+//			int stepType = step.getStepType();
+//			String objectStr = "";
+//			String predicate = step.getPredicate();
+////			Object object = step.getObject();
+//			
+//			if (object == null) {
+//				if (stepType == ArcStep.OUTGOING) {
+//					newNode = "?out_" + UUID.randomUUID().toString();
+//					objectStr = newNode;
+//					subjectStr = lastNode;
+//				} else {//stepType == ArcStep.INCOMING
+//					newNode = "?in_" + UUID.randomUUID().toString();
+//					objectStr = lastNode;
+//					subjectStr = newNode;
+//					lastNode = newNode;
+//				}
+//			} else if (object instanceof URI) {
+//				subjectStr = lastNode;
+//				objectStr = "<" + ((URI)object).toString() + ">";
+//			} else if (object instanceof String) {
+//				subjectStr = lastNode;
+//				objectStr = "\"" + object.toString() + "\"";
+//			} else {
+//				subjectStr = lastNode;
+//				objectStr = object.toString();
+//			}
+//			sparql += " . " + subjectStr + " <" + predicate + "> " + objectStr;
+//		}
+//		return sparql;
+//	}
 	
 	/**
 	 * Generate SPARQL to conduct a DESCRIBE query, given a starting Resource class, 
