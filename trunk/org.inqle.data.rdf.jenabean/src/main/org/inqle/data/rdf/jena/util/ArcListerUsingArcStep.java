@@ -11,13 +11,16 @@ import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.ArcStep;
+import org.inqle.data.rdf.jenabean.ArcUsingArcStep;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-public class ArcLister {
+@Deprecated
+public class ArcListerUsingArcStep {
 
-	private static Logger log = Logger.getLogger(ArcLister.class);
+	private static Logger log = Logger.getLogger(ArcListerUsingArcStep.class);
 	
 	/**
 	 * Get SPARQL for finding Arc properties of the given resource subject.  
@@ -41,7 +44,7 @@ public class ArcLister {
 	}
 	
 
-	public static List<Arc> listArcs(Collection<String> datasetIdList, String subjectClassUri) {
+	public static List<ArcUsingArcStep> listArcs(Collection<String> datasetIdList, String subjectClassUri) {
 		String sparql = getSparqlSelectArcs(subjectClassUri);
 		log.info("Retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -51,7 +54,7 @@ public class ArcLister {
 		return listArcs(queryCriteria);
 	}
 	
-	public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int numberToSelect) {
+	public static List<ArcUsingArcStep> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int numberToSelect) {
 		String baseSparql = getSparqlSelectArcs(subjectClassUri);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
@@ -61,25 +64,25 @@ public class ArcLister {
 		return listArcs(queryCriteria);
 	}
 	
-	public static List<Arc> listArcs(QueryCriteria queryCriteria) {
+	public static List<ArcUsingArcStep> listArcs(QueryCriteria queryCriteria) {
 		RdfTable results = Queryer.selectRdfTable(queryCriteria);
 		log.info("Received results: " + RdfTableWriter.dataTableToString(results));
 		if (results==null || results.countResults()==0) return null;
 		List<QuerySolution> resultsList = results.getResultList();
-		List<Arc> arcList = new ArrayList<Arc>();
+		List<ArcUsingArcStep> arcList = new ArrayList<ArcUsingArcStep>();
 		for (QuerySolution querySolution: resultsList) {
-			Arc arc = new Arc();
+			ArcUsingArcStep arc = new ArcUsingArcStep();
 			Resource pred1 = querySolution.getResource("pred1");
 			if (pred1 != null && UriMapper.isUri(pred1.toString())) {
-				arc.addArcStep(pred1.toString());
+				arc.addArcStep(new ArcStep(pred1.toString()));
 			}
 			Resource pred2 = querySolution.getResource("pred2");
 			if (pred2 != null && UriMapper.isUri(pred2.toString())) {
-				arc.addArcStep(pred2.toString());
+				arc.addArcStep(new ArcStep(pred2.toString()));
 			}
 			Resource pred3 = querySolution.getResource("pred3");
 			if (pred3 != null && UriMapper.isUri(pred3.toString())) {
-				arc.addArcStep(pred3.toString());
+				arc.addArcStep(new ArcStep(pred3.toString()));
 			}
 			arcList.add(arc);
 		}
