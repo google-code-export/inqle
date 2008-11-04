@@ -24,6 +24,8 @@ import org.inqle.ui.rap.pages.SimpleListSelectorPage;
 import org.inqle.ui.rap.table.BeanTableSelectorPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements IListProvider, IList2Provider, IValueUpdater {
 
@@ -120,6 +122,19 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	public boolean performFinish() {
 		//ISampler sampler = (ISampler) bean;
 		//sampler.removeInterimData();
+		
+		//first work around a jena or Jenabean bug, and store all _1, _2, _3 properties for the sequences.
+//		String datasetRoleId = Persister.getDatasetRoleId(getBean());
+//		Persister persister = Persister.getInstance();
+//		Model model = persister.getInternalModel(datasetRoleId);
+//		long statementCount = model.size();
+//		model.begin();
+//		model.add(RDF.li(1), RDF.type, RDF.Property);
+//		model.add(RDF.li(2), RDF.type, RDF.Property);
+//		model.add(RDF.li(3), RDF.type, RDF.Property);
+//		model.commit();
+//		log.info("AAAAAAAAAAAAAAAAAA Added " + (model.size()-statementCount) + " statements before adding sampler.");
+		//store the sampler Jenabean
 		return super.performFinish();
 	}
 
@@ -206,8 +221,10 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (page.equals(arcSelectorPage)) {
 			Collection<Arc> selectedArcsCollection = ((SimpleSubjectSparqlSampler)bean).getArcs();
 			if (selectedArcsCollection==null) return null;
-			List<Arc> selectedArcsList = new ArrayList<Arc>();
-			selectedArcsList.addAll(selectedArcsCollection);
+			List<String> selectedArcsList = new ArrayList<String>();
+			for (Arc selectedArc: selectedArcsCollection) {
+				selectedArcsList.add(selectedArc.toString());
+			}
 			return selectedArcsList;
 		}
 		return null;
