@@ -96,6 +96,7 @@ public class SimpleListSelectorPage extends DynaWizardPage implements ISelection
 				List<Object> checkedItems = provider2.getList2(this);
 				if (checkedItems==null) return;
 				String[] nullStringArray = {};
+				log.info("CCCCCCCCCCCCCCCCC Checking these items:" + checkedItems);
 				String[] checkedArray = checkedItems.toArray(nullStringArray);
 				listViewer.getList().setSelection(checkedArray);
 			}
