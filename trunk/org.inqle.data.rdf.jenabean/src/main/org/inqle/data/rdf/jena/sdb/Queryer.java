@@ -359,7 +359,9 @@ import com.hp.hpl.jena.sdb.SDB;
 		String newNode = subject;
 		String lastNode = subject;
 		
+		int i=-1;
 		for (String predicate: arc.getArcSteps()) {
+			i++;
 			String objectStr = "";
 			if (object == null) {
 				newNode = UUID.randomUUID().toString();
@@ -375,7 +377,10 @@ import com.hp.hpl.jena.sdb.SDB;
 				subjectStr = lastNode;
 				objectStr = object.toString();
 			}
-			sparql += " . " + subjectStr + " <" + predicate + "> " + objectStr;
+			if (i > 0) {
+				sparql += " . ";
+			}
+			sparql += subjectStr + " <" + predicate + "> " + objectStr;
 		}
 		return sparql;
 	}
