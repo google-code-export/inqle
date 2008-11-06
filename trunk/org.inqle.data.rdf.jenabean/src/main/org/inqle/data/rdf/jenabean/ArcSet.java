@@ -24,7 +24,7 @@ public class ArcSet {
 		arcs.put(arc, value);
 	}
 
-	public List<Arc> getArcs() {
+	public List<Arc> getArcList() {
 		List<Arc> keys = new ArrayList<Arc>();
 		for (Arc arc: arcs.keySet()) {
 			keys.add(arc);
@@ -37,18 +37,25 @@ public class ArcSet {
 	}
 	
 	public Object getValue(int columnIndex) {
-		Arc arc = getArcs().get(columnIndex);
+		Arc arc = getArcList().get(columnIndex);
 		return arcs.get(arc);
 	}
 	
 	public String getStringRepresentation() {
 		String s = "";
-		for (Arc arc: getArcs()) {
-			s += arc.toString() + "\n";
+		for (Arc arc: getArcList()) {
+			s += arc.toString() + " = " + arcs.get(arc) + "\n";
+			
 		}
 		return s;
 	}
 
+	@Override
+	public String toString() {
+		return getStringRepresentation();
+	}
+	
+	
 //	public void setArcs(Collection<Arc> arcCollection) {
 //		this.arcs = new ArrayList<Arc>(arcCollection);
 //		Collections.sort(arcs);
