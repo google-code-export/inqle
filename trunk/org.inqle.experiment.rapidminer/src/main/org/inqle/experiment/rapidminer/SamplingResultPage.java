@@ -43,6 +43,11 @@ public class SamplingResultPage extends DataTablePage {
 		//ISampler sampler = ((LearningCycle)bean).getSampler();
 		//log.info("onEnterPage(): sampler=" + JenabeanWriter.toString(sampler));
 		this.dataTable = sampler.execute();
+		if (dataTable == null) {
+			log.info("Data table is null.  Adding no rows to table.");
+			return;
+		}
+		
 		//log.info("resultDataTable.getRdfTable()=" + RdfTableWriter.dataTableToString(dataTable.getRdfTable()));
 //		setRdfTable(dataTable.getRdfTable());
 		setDataTable(dataTable);
@@ -50,7 +55,7 @@ public class SamplingResultPage extends DataTablePage {
 		for (Arc arc: dataTable.getColumns()) {
 			columnNames.add(arc.toString());
 		}
-		
+		log.info("Adding column names: " + columnNames);
 		setPropertyNames(columnNames);
 		refreshTableData();
 		//getShell().pack();
