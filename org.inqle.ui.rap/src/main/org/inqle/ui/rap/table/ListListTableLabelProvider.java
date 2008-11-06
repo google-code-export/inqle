@@ -31,6 +31,7 @@ public class ListListTableLabelProvider extends CellLabelProvider {
 	 */
 	@Override
 	public void update(ViewerCell cell) {
+		if (columnFields==null || columnFields.size()==0) return;
 		Object querySolutionObj = cell.getElement();
 		List<Object> row = (List<Object>)querySolutionObj;
 		String fieldName = columnFields.get(cell.getColumnIndex());

@@ -8,6 +8,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -29,9 +30,8 @@ public class RadioOrListSelectorPage extends ListSelectorPage implements Selecti
 
 	@Override
 	public void addElements() {
-		Composite composite = selfComposite;
-		this.composite = composite;
-		assert(composite != null);
+		GridLayout gl = new GridLayout(1, false);
+		selfComposite.setLayout(gl);
 		assert(initialItems != null);
 		
 		createRadios();
@@ -40,7 +40,7 @@ public class RadioOrListSelectorPage extends ListSelectorPage implements Selecti
 	}
 
 	protected void createRadios() {
-		Composite radiosComposite = new Composite(composite, SWT.NONE);
+		Composite radiosComposite = new Composite(selfComposite, SWT.NONE);
 		radiosComposite.setLayout (new RowLayout (SWT.VERTICAL));
 		
 		int index = 0;
@@ -78,7 +78,7 @@ public class RadioOrListSelectorPage extends ListSelectorPage implements Selecti
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		
 		Button selectedButton = (Button)selectionEvent.getSource();
-		log.info("Button pressed:" + selectedButton.getText());
+		//log.info("Button pressed:" + selectedButton.getText());
 		int selectedIndex = getSelectedIndex(selectedButton);
 		setSelectedIndex(selectedIndex);
 		//if this is the last item, toggle the status of the List
@@ -118,7 +118,7 @@ public class RadioOrListSelectorPage extends ListSelectorPage implements Selecti
 	@Override
 	public void onEnterPageFromPrevious() {
 		super.onEnterPageFromPrevious();
-		log.info("Updating radios with selectedIndex = " + getSelectedOptionIndex());
+		//log.info("Updating radios with selectedIndex = " + getSelectedOptionIndex());
 		updateRadios();
 		updateListViewer();
 		//setSelectedOptionIndex();
@@ -126,7 +126,7 @@ public class RadioOrListSelectorPage extends ListSelectorPage implements Selecti
 	
 	private void updateRadios() {
 		Button selectedButton = buttons.get(getSelectedOptionIndex());
-		log.info("Selecting button: " + selectedButton.getText());
+		//log.info("Selecting button: " + selectedButton.getText());
 		selectedButton.setSelection(true);
 	}
 
