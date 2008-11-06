@@ -42,7 +42,7 @@ import com.hp.hpl.jena.sdb.SDB;
  */
 	public class Queryer {
 	
-	static Logger log = Logger.getLogger(Queryer.class);
+	private static Logger log = Logger.getLogger(Queryer.class);
 	
 	private static QueryExecution getQueryExecution(QueryCriteria queryCriteria) {
 		Query query;
@@ -338,49 +338,54 @@ import com.hp.hpl.jena.sdb.SDB;
 	
 	public static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
 		String sparql = "";
-		for (Arc arc: arcSet.getArcs()) {
+		int k=0;
+		for (Arc arc: arcSet.getArcList()) {
 			Object value = arcSet.getValue(arc);
-			sparql += getSparqlWhereFromArc(subject, arc, value);
+			sparql += getSparqlWhereFromArc(subject, arc, value, String.valueOf(k));
+			k++;
 		}
 		return sparql;
 	}
 	
 	public static String getSparqlWhereFromArcs(String subject, Collection<Arc> arcList) {
 		String sparql = "";
+		int j=0;
 		for (Arc arc: arcList) {
-			sparql += getSparqlWhereFromArc(subject, arc, null);
+			if (j > 0) {
+				sparql += "\n . ";
+			}
+			sparql += getSparqlWhereFromArc(subject, arc, null, String.valueOf(j));
+			j++;
 		}
 		return sparql;
 	}
 
-	private static String getSparqlWhereFromArc(String subject, Arc arc, Object object) {
+	private static String getSparqlWhereFromArc(String subject, Arc arc, Object object, String identifier) {
 		String sparql = "";
-		String subjectStr = "";
-		String newNode = subject;
-		String lastNode = subject;
-		
-		int i=-1;
+//		String subjectStr = "";
+//		String newNode = subject;
+		String subjectStr = "?subject_" + identifier;
+		sparql += subjectStr + " a <" + subject + ">";
+		int i=0;
+//		for (int i=0; i < arc.getArcSteps().length; i++) {
 		for (String predicate: arc.getArcSteps()) {
 			i++;
 			String objectStr = "";
 			if (object == null) {
-				newNode = UUID.randomUUID().toString();
-				objectStr = newNode;
-				subjectStr = lastNode;
+//				newNode = UUID.randomUUID().toString();
+				objectStr = "?attribute" + identifier + "_" + i;
 			} else if (object instanceof URI) {
-				subjectStr = lastNode;
 				objectStr = "<" + ((URI)object).toString() + ">";
 			} else if (object instanceof String) {
-				subjectStr = lastNode;
 				objectStr = "\"" + object.toString() + "\"";
 			} else {
-				subjectStr = lastNode;
 				objectStr = object.toString();
 			}
-			if (i > 0) {
-				sparql += " . ";
-			}
+//			if (i > 0) {
+				sparql += "\n . ";
+//			}
 			sparql += subjectStr + " <" + predicate + "> " + objectStr;
+			subjectStr = objectStr;
 		}
 		return sparql;
 	}
@@ -441,11 +446,12 @@ import com.hp.hpl.jena.sdb.SDB;
 			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
 		}
 		sparql += "CONSTRUCT {\n" + where + "}\n";
-		sparql += "GRAPH ?anyGraph {\n" + where + "}\n";
-		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
+		sparql += "{ GRAPH ?anyGraph {\n" + where + "\n} }\n";
 		if (randomize) {
 			sparql += "ORDER BY inqle-fn:Rand() \n";
 		}
+		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
+		
 		return sparql;
 	}
 	
