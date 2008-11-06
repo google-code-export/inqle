@@ -34,7 +34,7 @@ public class ListSelectorPage extends BeanWizardPage {
 
 	private Object[] items;
 
-	protected Composite composite;
+//	protected Composite composite;
 	protected ListViewer listViewer;
 	private static final Logger log = Logger.getLogger(ListSelectorPage.class);
 	
@@ -49,16 +49,14 @@ public class ListSelectorPage extends BeanWizardPage {
 	 */
 	@Override
 	public void addElements() {
-		this.composite = selfComposite;
-		assert(composite != null);
 		assert(initialItems != null);
 		
 		createList();
 	}
 
 	protected void createList() {
-		new Label (composite, SWT.NONE).setText(labelText);	
-		listViewer = new ListViewer(composite, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
+		new Label (selfComposite, SWT.NONE).setText(labelText);	
+		listViewer = new ListViewer(selfComposite, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		listViewer.getList().setLayoutData(gridData);
 		listViewer.setContentProvider(new ArrayContentProvider());
