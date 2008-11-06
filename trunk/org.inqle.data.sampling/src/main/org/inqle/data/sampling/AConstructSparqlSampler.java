@@ -35,15 +35,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
  * (2) Generate a SPARQL CONSTRUCT query, which will create a minable Model of data
  * (3) Execute the SPARQL against the set of datamodels.
  * (4) Convert the Model to a IDataTable (e.g., an ArcTable)
- * (5) Specify whichcolumns in the IDataTable are the ID and which is the label
- * 
- * At a minimum, implementing classes must implement the generateSparql() method,
- * to generate the SPARQL query, which will define the final DataSet.  The code for this
- * method should do the following
- *  * To the arcList field, add each DataColumn object, representing each column of 
- *    data to appear in the final DataTable
- *  * set the query field to a SPARQL query, which will retrieve the resultset of data
- *    to mine
+ * (5) Specify which column in the IDataTable is the label
  * 
  * @author David Donohue
  * Dec 26, 2007
@@ -87,43 +79,68 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		if (subjectClass == null) return null;
 		log.info("Subject class=" + subjectClass);
 		
-		Collection<Arc> dataColumnsToUse = selectDataColumns(modelsToUse, subjectClass);
-		log.debug("dataColumnsToUse=" + dataColumnsToUse);
-//		String sparql = generateSparql(modelsToUse, persister);
-		String sparql = generateSparql(subjectClass, dataColumnsToUse);
+		Arc labelArc = selectLabelArc(modelsToUse, subjectClass);
+		Collection<Arc> avoidArcs = new ArrayList<Arc>();
+		avoidArcs.add(labelArc);
+		Collection<Arc> learnableArcs = getLearnableArcs(modelsToUse, subjectClass, avoidArcs);
+		if (learnableArcs==null || learnableArcs.size()==0) {
+			log.warn("Retrieved no learnable attributes from Jena model.  returning null.");
+			return null;
+		}
+		if (learnableArcs.size() < getNumberOfAttributes()) {
+			log.warn("Retrieved only " + learnableArcs.size() + " learnable attributes.  Supposet to get " + getNumberOfAttributes() + ".  Proceeding.");
+		}
+		List<Arc> allArcs = new ArrayList<Arc>();
+		allArcs.add(labelArc);
+		allArcs.addAll(learnableArcs);
+		log.info("Learnable arcs=" + learnableArcs);
+		
+		String sparql = generateSparql(subjectClass, allArcs);
 		log.info("Generated sparql for sampling:" + sparql);
-		Model resultModel = doQuery(modelsToUse, dataColumnsToUse, sparql);
+		Model resultModel = doQuery(modelsToUse, allArcs, sparql);
+		if (resultModel==null) return null;
 		OntModel ontModel = ModelFactory.createOntologyModel();
 		ontModel.add(resultModel);
 		ArcTableFactory factory = new ArcTableFactory(ontModel);
 		ArcTable resultDataTable = factory.createArcTable(subjectClass);
-		if (resultDataTable.getColumns().contains(getLabelArc())) {
+		if (resultDataTable.getColumns().contains(labelArc)) {
 			resultDataTable.setLabelColumnIndex(resultDataTable.getHeaderIndex(getLabelArc()));
 		}
 		return resultDataTable;
 	}
-	
+
 	protected Resource selectSubjectClass(Collection<String> modelsToUse) {
 		if (subjectClass == null) {
-			subjectClass = selectRandomSubjectClass(modelsToUse);
+			subjectClass = decideSubjectClass(modelsToUse);
 		}
 		if (subjectClass == null) {
 			log.error("Unable to select a subject class.  Perhaps the input Model had no recognizable OWL classes.");
 			return null;
 		}
 		return ResourceFactory.createResource(subjectClass.toString());
-		
 	}
 
-	protected abstract URI selectRandomSubjectClass(Collection<String> modelsToUse);
-
-	public Collection<Arc> selectDataColumns(Collection<String> modelsToUse, Resource subjectClass) {
-		if (arcs != null) {
-			return arcs;
-		}
-		
-		return selectRandomArcs(modelsToUse, subjectClass, getNumberOfAttributes());
+	protected abstract URI decideSubjectClass(Collection<String> modelsToUse);
+	
+	public Arc selectLabelArc(Collection<String> modelsToUse, Resource subjectClass) {
+		if (labelArc != null) return labelArc;
+		return decideLabelArc(modelsToUse, subjectClass);
 	}
+	
+	protected abstract Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass);
+
+	public Collection<Arc> getLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, Collection<Arc> arcsToExclude) {
+		if (arcs != null) return arcs;
+		return decideLearnableArcs(modelsToUse, subjectClass, getNumberOfAttributes(), arcsToExclude);
+	}
+
+	/**
+	 * Select a List of Arcs to use as data columns in the table
+	 * @param modelsToUse the IDs of the NamedModels to query
+	 * @param numberToSelect the number of Arcs to select
+	 * @return
+	 */
+	protected abstract Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude);
 
 	/**
 	 * How many learnable attributes to use 
@@ -135,14 +152,6 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	}
 
 	/**
-	 * Select a List of Arcs to use as data columns in the table
-	 * @param modelsToUse the IDs of the NamedModels to query
-	 * @param numberToSelect the number of Arcs to select
-	 * @return
-	 */
-	protected abstract Collection<Arc> selectRandomArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect);
-
-	/**
 	 * Get the Collection of NamedModels from which to extract data.  Implementations should
 	 * return the user-specified values, if present.  Otherwise selects automatically 
 	 * from the provided list
@@ -151,9 +160,6 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 */
 	public Collection<String> selectAvailableNamedModels() {
 		Persister persister = Persister.getInstance();
-//		if (getAvailableNamedModels() != null) {
-//			return getAvailableNamedModels();
-//		}
 		List<NamedModel> allNamedModels = persister.listNamedModels();
 		log.debug("allNamedModels=" + allNamedModels);
 		if (allNamedModels != null) {
@@ -182,17 +188,6 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		//...otherwise populate the list of available named models
 		Collection<String> choosableNamedModels = selectAvailableNamedModels();
 		log.debug("choosableNamedModels=" + choosableNamedModels);
-		//int countChoosableNamedModels = choosableNamedModels.size();
-		
-		//if we do not have enough choosable datamodels, return null
-//		if (countChoosableNamedModels < getMinimumNumberOfNamedModels()) {
-//			return;
-//		}
-		
-		//if we do have enough choosable datamodels, return the entire list of choosable datamodels
-//		if (countChoosableNamedModels > getMaximumNumberOfNamedModels()) {
-//			return;
-//		}
 		
 		//we must select a subset of the choosable datamodels
 		//randomly remove datamodels until we reach the maximum acceptable number

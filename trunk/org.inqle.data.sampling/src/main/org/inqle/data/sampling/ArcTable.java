@@ -25,7 +25,7 @@ public class ArcTable implements IDataTable {
 	private List<LinkedHashSet<Object>> columnDistinctValues= new ArrayList<LinkedHashSet<Object>>();
 	
 	private LinkedHashSet<Arc> headers = new LinkedHashSet<Arc>();
-	private List<List<Object>> rowData;
+	private List<List<Object>> rowData = new ArrayList<List<Object>>();
 	private List<Integer> dataTypes = new ArrayList<Integer>();
 	private List<Integer> columnTypes = new ArrayList<Integer>();
 	private List<List<Object>> columnData;
@@ -83,7 +83,7 @@ public class ArcTable implements IDataTable {
 	 */
 	public void addArcSet(ArcSet newRowArcSet) {
 		List<Object> row = new ArrayList<Object>();
-		List<Arc> newArcs = newRowArcSet.getArcs();
+		List<Arc> newArcs = newRowArcSet.getArcList();
 		//add any new Arcs to the headers
 		addHeaders(newArcs);
 		for (Arc arc: newArcs) {

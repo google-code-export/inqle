@@ -26,12 +26,12 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /** 
- * This simple sampler does the following:
+ * This sampler does the following:
  * (1) Select 1-2 NamedModels from which to extract data
- * (2) From those NamedModels, get all distinct subject classes
- * (3) Randomly select a subject form among those
- * (4) Randomly select 2 or more Arcs, starting from this subject
- * (4) Dynamically generate a SPARQL query which selects for all
+ * (2) From those NamedModels, randomly select a subject class
+ * (3) Randomly select 1 Arc, starting from this subject, to be the experimental label
+ * (4) Randomly select 1 or more Arcs, starting from this subject
+ * (5) Dynamically generate a SPARQL query which selects for all
  * RDF data which contain all of the selected predicates.
  * 
  * Thus this sampler is agnostic of the nature of each subject 
@@ -71,6 +71,18 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 		return newSampler;
 	}
 
+	@Override
+	/**
+	 * Select a random set of Arcs, beginning with the provided subjectClass.
+	 * This implementation is capable of finding arcs that are 1, 2, or 3 
+	 * steps away from the subject.
+	 * 
+	 */
+	public Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass) {
+		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), 1);
+		if (randomArcs == null || randomArcs.size()==0) return null;
+		return randomArcs.get(0);
+	}
 
 	@Override
 	/**
@@ -79,13 +91,22 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * steps away from the subject.
 	 * 
 	 */
-	protected List<Arc> selectRandomArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect) {
-		return ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), numberToSelect);
+	public Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude) {
+		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), (numberToSelect * 3));
+		List<Arc> decidedArcs = new ArrayList<Arc>();
+		for (Arc randomArc: randomArcs) {
+			if (decidedArcs.size() >= numberToSelect) break;
+			if (arcsToExclude!=null && arcsToExclude.contains(randomArc)) {
+				continue;
+			}
+			decidedArcs.add(randomArc);
+		}
+		return decidedArcs;
 	}
 
 
 	@Override
-	protected URI selectRandomSubjectClass(Collection<String> modelsToUse) {
+	protected URI decideSubjectClass(Collection<String> modelsToUse) {
 		
 		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, true, 0, 1);
 		QueryCriteria queryCriteria = new QueryCriteria();

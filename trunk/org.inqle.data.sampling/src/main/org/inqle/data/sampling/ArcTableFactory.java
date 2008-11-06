@@ -2,6 +2,8 @@ package org.inqle.data.sampling;
 
 import java.net.URI;
 
+import org.apache.log4j.Logger;
+import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 
@@ -11,6 +13,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -19,6 +22,8 @@ public class ArcTableFactory {
 
 	private OntModel ontModel;
 
+	private static Logger log = Logger.getLogger(ArcTableFactory.class);
+	
 	public ArcTableFactory(OntModel ontModel) {
 		this.ontModel = ontModel;
 	}
@@ -33,6 +38,7 @@ public class ArcTableFactory {
 	 * @return
 	 */
 	public ArcTable createArcTable(Resource subjectClass) {
+		log.info("createArcTable(" + subjectClass.toString() + ")...");
 		ArcTable arcTable = new ArcTable();
 //		List<ArcSet> rows = new ArrayList<ArcSet>();
 		
@@ -41,6 +47,7 @@ public class ArcTableFactory {
 			Individual individual = (Individual)subjectEI.next();
 			ArcSet arcSet = getArcSet(individual);
 			arcTable.addArcSet(arcSet);
+			log.info("Adding ArcSet:" + arcSet);
 		}//next subject row
 		return arcTable;
 	}
@@ -51,10 +58,14 @@ public class ArcTableFactory {
 	 * @param startingSubjectInstance
 	 * @return
 	 */
-	public ArcSet getArcSet(Resource startingSubjectInstance) {
+	public ArcSet getArcSet(Individual startingSubject) {
+		String startingSubjectUri = startingSubject.getURI();
+		log.info("getArcSet(" + startingSubjectUri + ")...");
 		ArcSet arcSet = new ArcSet();
-		arcSet.setSubject(URI.create(startingSubjectInstance.toString()));
-		addArcAndValues(arcSet, startingSubjectInstance);
+		if (startingSubjectUri != null) {
+			arcSet.setSubject(URI.create(startingSubjectUri));
+		}
+		addArcAndValues(arcSet, startingSubject);
 		return arcSet;
 	}
 
@@ -63,12 +74,13 @@ public class ArcTableFactory {
 	 * @param arcSet
 	 * @param startingResource
 	 */
-	private void addArcAndValues(ArcSet arcSet, Resource startingResource) {
+	private void addArcAndValues(ArcSet arcSet, Individual startingResource) {
 		
 		//loop thru each property of each class
-		Property nullProperty = null;
-		RDFNode nullObject = null;
-		StmtIterator stmtIterator = ontModel.listStatements(startingResource, nullProperty, nullObject);
+//		Property nullProperty = null;
+//		RDFNode nullObject = null;
+//		StmtIterator stmtIterator = ontModel.listStatements(startingResource, nullProperty, nullObject);
+		StmtIterator stmtIterator = startingResource.listProperties();
 		while (stmtIterator.hasNext()) {
 			Statement statement = stmtIterator.nextStatement();
 			

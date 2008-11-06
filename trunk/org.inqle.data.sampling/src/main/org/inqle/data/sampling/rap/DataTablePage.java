@@ -10,15 +10,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.table.ListListTableLabelProvider;
-
-import com.hp.hpl.jena.query.QuerySolution;
 
 /**
  * This generates a wizard page which has a table of data, for display only.  
@@ -60,7 +58,7 @@ public class DataTablePage extends BeanWizardPage {
 
 //	protected TableViewer tableViewer;
 
-	private Composite composite;
+//	private Composite composite;
 
 //	private Table table;
 	
@@ -84,9 +82,8 @@ public class DataTablePage extends BeanWizardPage {
 	 */
 	@Override
 	public void addElements() {
-		Composite composite = selfComposite;
-		assert(composite != null);
-		this.composite = composite;
+		GridLayout gl = new GridLayout(1, false);
+		selfComposite.setLayout(gl);
 //		table = new Table(composite, SWT.NONE);
 //		tableViewer = new TableViewer(table);
 	}
@@ -102,7 +99,7 @@ public class DataTablePage extends BeanWizardPage {
 //			table.clearAll();
 //		}
 
-		Table table = new Table(composite, SWT.NONE);
+		Table table = new Table(selfComposite, SWT.NONE);
 		
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
@@ -145,8 +142,9 @@ public class DataTablePage extends BeanWizardPage {
 	 * @param beans
 	 */
 	public void setDataTable(IDataTable dataTable) {
-		//this.rdfTable = rdfTable;
-		this.rows = dataTable.getRows();
+		if (dataTable != null) {
+			this.rows = dataTable.getRows();
+		}
 	}
 
 	public void setPropertyNames(List<String> propertyNames) {
