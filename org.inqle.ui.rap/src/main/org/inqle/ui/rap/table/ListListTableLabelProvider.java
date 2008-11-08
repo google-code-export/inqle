@@ -35,6 +35,10 @@ public class ListListTableLabelProvider extends CellLabelProvider {
 		Object querySolutionObj = cell.getElement();
 		List<Object> row = (List<Object>)querySolutionObj;
 		String fieldName = columnFields.get(cell.getColumnIndex());
+		if (cell.getColumnIndex() >= row.size()) {
+			log.info("Skipping cell: " + cell);
+			return;
+		}
 		Object cellValue = row.get(cell.getColumnIndex());
 		if (cellValue == null) cellValue = "";
 		log.trace("Update cell: " + fieldName + "=" + cellValue);
