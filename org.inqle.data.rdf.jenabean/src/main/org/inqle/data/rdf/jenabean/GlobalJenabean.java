@@ -35,7 +35,7 @@ public abstract class GlobalJenabean extends BasicJenabean implements IGlobalJen
 		return getStringRepresentation();
 	}
 	
-	public int compareTo(IGlobalJenabean anotherBean) {
-		return getStringRepresentation().compareTo(anotherBean.getStringRepresentation());
-	}
+//	public int compareTo(IGlobalJenabean anotherBean) {
+//		return getStringRepresentation().compareTo(anotherBean.getStringRepresentation());
+//	}
 }

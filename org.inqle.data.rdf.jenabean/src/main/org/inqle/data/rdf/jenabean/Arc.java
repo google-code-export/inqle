@@ -18,7 +18,7 @@ import thewebsemantic.Namespace;
 	 * So now Arcs only support outgoing direction
 	 */
 	@Namespace(RDF.INQLE)
-	public class Arc extends GlobalJenabean {
+	public class Arc extends GlobalJenabean implements Comparable<Arc> {
 		private List<String> arcStepList = new ArrayList<String>();
 		
 //		private transient Object value;
@@ -28,7 +28,11 @@ import thewebsemantic.Namespace;
 		}
 
 		public void setArcSteps(String[] arcSteps) {
-			this.arcStepList = Arrays.asList(arcSteps);
+			this.arcStepList = new ArrayList<String>();
+			if (arcSteps==null) return;
+			for (String arcStep: arcSteps) {
+				arcStepList.add(arcStep);
+			}
 		}
 		
 		public String[] getArcSteps() {
@@ -59,6 +63,22 @@ import thewebsemantic.Namespace;
 			}
 			s += "}";
 			return s;
+		}
+
+		public int compareTo(Arc otherArc) {
+			return this.toString().compareTo(otherArc.toString());
+		}
+		
+//		@Override
+//		public int hashCode() {
+//			return this.toString().hashCode();
+//		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if (!(o instanceof Arc)) return false;
+			Arc otherArc = (Arc)o;
+			return this.toString().equals(otherArc.toString());
 		}
 
 //		public Object getValue() {
