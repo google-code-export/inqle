@@ -30,7 +30,7 @@ public class ArcTable implements IDataTable {
 	private List<Integer> columnTypes = new ArrayList<Integer>();
 	private List<List<Object>> columnData;
 	private List<Arc> headerList = new ArrayList<Arc>();
-
+	
 	private int idColumnIndex;
 	private int labelColumnIndex;
 	
@@ -44,7 +44,7 @@ public class ArcTable implements IDataTable {
 		headers.add(header);
 	}
 	public void addHeaders(List<Arc> headers) {
-		headers.addAll(headers);
+		this.headers.addAll(headers);
 	}
 	public int getHeaderIndex(Arc arc) {
 		return getColumns().indexOf(arc);
@@ -82,14 +82,35 @@ public class ArcTable implements IDataTable {
 	 * @param row
 	 */
 	public void addArcSet(ArcSet newRowArcSet) {
-		List<Object> row = new ArrayList<Object>();
+//		log.info("Adding to ArcTable: ArcSet=" + newRowArcSet);
+		ArrayList<Object> row = new ArrayList<Object>();
 		List<Arc> newArcs = newRowArcSet.getArcList();
 		//add any new Arcs to the headers
-		addHeaders(newArcs);
-		for (Arc arc: newArcs) {
-			int columnIndex = getHeaderIndex(arc);
-			Object value = newRowArcSet.getValue(arc);
-			row.add(columnIndex, value);
+		if (getHeaders()==null || getHeaders().size()==0) {
+			addHeaders(newArcs);
+			log.info("Added headers:" + newArcs);
+		} else {
+			for (Arc arc: newArcs) {
+				int columnIndex = getHeaderIndex(arc);
+				if (columnIndex < 0) {
+					log.warn("Arc not found among ArcTable headers:" + arc);
+					addHeader(arc);
+					log.info("Added header:" + arc);
+					columnIndex = getHeaderIndex(arc);
+				}
+				Object value = newRowArcSet.getValue(arc);
+				if (row.size() > columnIndex) {
+					row.set(columnIndex, value);
+				} else {
+					for (int i=row.size(); i<=columnIndex; i++) {
+						if (i==columnIndex) {
+							row.add(value);
+							break;
+						}
+						row.add(null);
+					}
+				}
+			}
 		}
 		addRow(row);
 	}
@@ -190,7 +211,7 @@ public class ArcTable implements IDataTable {
 		return labelColumnIndex;
 	}
 	public List<Arc> getLearnableColumns() {
-		List<Arc> learnableArcs = new ArrayList();
+		List<Arc> learnableArcs = new ArrayList<Arc>();
 		int colIndex = -1;
 		for (Arc arc: getColumns()) {
 			colIndex++;

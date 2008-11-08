@@ -16,6 +16,7 @@ import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jena.util.ArcLister;
+import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
@@ -121,7 +122,8 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 
 	@Override
 	protected String generateSparql(Resource subjectClass, Collection<Arc> dataColumns) {
-		return Queryer.generateSparqlDescribe(subjectClass, dataColumns, true, 0, MAX_NUMBER_OF_ROWS);
+		ArcSparqlBuilder builder = new ArcSparqlBuilder(dataColumns);
+		return builder.generateSparqlConstruct(subjectClass, true, 0, MAX_NUMBER_OF_ROWS);
 	}
 
 }
