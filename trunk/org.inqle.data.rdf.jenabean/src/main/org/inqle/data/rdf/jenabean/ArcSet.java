@@ -17,34 +17,36 @@ import java.util.List;
  */
 //@Namespace(RDF.INQLE)
 public class ArcSet {
-	private LinkedHashMap<Arc, Object> arcs = new LinkedHashMap<Arc, Object>();
+//	private LinkedHashMap<Arc, Object> arcs = new LinkedHashMap<Arc, Object>();
+	private LinkedHashMap<Arc, Object> arcValues = new LinkedHashMap<Arc, Object>();
 	private URI subject;
 	
 	public void addArcAndValue(Arc arc, Object value) {
-		arcs.put(arc, value);
+		arcValues.put(arc, value);
 	}
 
 	public List<Arc> getArcList() {
+//		return arcList;
 		List<Arc> keys = new ArrayList<Arc>();
-		for (Arc arc: arcs.keySet()) {
+		for (Arc arc: arcValues.keySet()) {
 			keys.add(arc);
 		}
 		return keys;
 	}
 
 	public Object getValue(Arc arc) {
-		return arcs.get(arc);
+		return arcValues.get(arc.toString());
 	}
 	
 	public Object getValue(int columnIndex) {
 		Arc arc = getArcList().get(columnIndex);
-		return arcs.get(arc);
+		return arcValues.get(arc);
 	}
 	
 	public String getStringRepresentation() {
 		String s = "";
 		for (Arc arc: getArcList()) {
-			s += arc.toString() + " = " + arcs.get(arc) + "\n";
+			s += arc.toString() + " = " + arcValues.get(arc) + "\n";
 			
 		}
 		return s;

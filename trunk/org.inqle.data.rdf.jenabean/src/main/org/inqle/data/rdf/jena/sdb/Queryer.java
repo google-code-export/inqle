@@ -1,8 +1,6 @@
 package org.inqle.data.rdf.jena.sdb;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,11 +8,12 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.RdfTable;
+import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.Converter;
-import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 
 import thewebsemantic.TypeWrapper;
+
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -26,7 +25,6 @@ import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sdb.SDB;
 
 /**
@@ -306,153 +304,10 @@ import com.hp.hpl.jena.sdb.SDB;
 	 * @return
 	 */
 	public static List<String> getJenabeanIds(Class<?> clazz, ArcSet arcSet, QueryCriteria queryCriteria) {
-		String sparql = getSparqlJenabeanId(clazz, arcSet);
+		String sparql = Queryer.getSparqlJenabeanId(clazz, arcSet);
 		queryCriteria.setQuery(sparql);
 		List<String> results = selectSimpleList(queryCriteria, "id");
 		return results;
-	}
-	
-	/**
-	 * Gets SPARQL query which will retrieve the ID of every Jenabean
-	 * RDF object which is of the provided class and matches the provided
-	 * arcs
-	 * @param clazz the provided class
-	 * @param arcSet
-	 * @return
-	 */
-	public static String getSparqlJenabeanId(Class<?> clazz, ArcSet arcSet) {
-		TypeWrapper classWrapper = TypeWrapper.wrap(clazz);
-		//String classBaseUri = classWrapper.inspect();
-		String classBaseUri = classWrapper.typeUri();
-		String classUri = classBaseUri + clazz.getCanonicalName();
-		String idPredicate = classBaseUri + RDF.JENABEAN_ID_ATTRIBUTE;
-		String sparql = "PREFIX ja: <" + RDF.JA + ">\n"; 
-		sparql += "select ?id {\n";
-		sparql += "GRAPH ?g {\n";
-		sparql += "?uri a <" + classUri + "> \n";
-		sparql += " . ?uri <" + idPredicate + "> ?id \n";
-		sparql += getSparqlWhereFromArcs("?uri", arcSet);
-		sparql += "} }\n";
-		return sparql;
-	}
-	
-	public static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
-		String sparql = "";
-		int k=0;
-		for (Arc arc: arcSet.getArcList()) {
-			Object value = arcSet.getValue(arc);
-			sparql += getSparqlWhereFromArc(subject, arc, value, String.valueOf(k));
-			k++;
-		}
-		return sparql;
-	}
-	
-	public static String getSparqlWhereFromArcs(String subject, Collection<Arc> arcList) {
-		String sparql = "";
-		int j=0;
-		for (Arc arc: arcList) {
-			if (j > 0) {
-				sparql += "\n . ";
-			}
-			sparql += getSparqlWhereFromArc(subject, arc, null, String.valueOf(j));
-			j++;
-		}
-		return sparql;
-	}
-
-	private static String getSparqlWhereFromArc(String subject, Arc arc, Object object, String identifier) {
-		String sparql = "";
-//		String subjectStr = "";
-//		String newNode = subject;
-		String subjectStr = "?subject_" + identifier;
-		sparql += subjectStr + " a <" + subject + ">";
-		int i=0;
-//		for (int i=0; i < arc.getArcSteps().length; i++) {
-		for (String predicate: arc.getArcSteps()) {
-			i++;
-			String objectStr = "";
-			if (object == null) {
-//				newNode = UUID.randomUUID().toString();
-				objectStr = "?attribute" + identifier + "_" + i;
-			} else if (object instanceof URI) {
-				objectStr = "<" + ((URI)object).toString() + ">";
-			} else if (object instanceof String) {
-				objectStr = "\"" + object.toString() + "\"";
-			} else {
-				objectStr = object.toString();
-			}
-//			if (i > 0) {
-				sparql += "\n . ";
-//			}
-			sparql += subjectStr + " <" + predicate + "> " + objectStr;
-			subjectStr = objectStr;
-		}
-		return sparql;
-	}
-	
-	//This version supports Arcs using ArcStep, thus supporting both incoming & outgoing direction
-//	private static String getSparqlWhereFromArc(String subject, Arc arc, Object object) {
-//		String sparql = "";
-//		String subjectStr = "";
-//		String newNode = subject;
-//		String lastNode = subject;
-//		
-//		for (ArcStep step: arc.getArcSteps()) {
-//			int stepType = step.getStepType();
-//			String objectStr = "";
-//			String predicate = step.getPredicate();
-////			Object object = step.getObject();
-//			
-//			if (object == null) {
-//				if (stepType == ArcStep.OUTGOING) {
-//					newNode = "?out_" + UUID.randomUUID().toString();
-//					objectStr = newNode;
-//					subjectStr = lastNode;
-//				} else {//stepType == ArcStep.INCOMING
-//					newNode = "?in_" + UUID.randomUUID().toString();
-//					objectStr = lastNode;
-//					subjectStr = newNode;
-//					lastNode = newNode;
-//				}
-//			} else if (object instanceof URI) {
-//				subjectStr = lastNode;
-//				objectStr = "<" + ((URI)object).toString() + ">";
-//			} else if (object instanceof String) {
-//				subjectStr = lastNode;
-//				objectStr = "\"" + object.toString() + "\"";
-//			} else {
-//				subjectStr = lastNode;
-//				objectStr = object.toString();
-//			}
-//			sparql += " . " + subjectStr + " <" + predicate + "> " + objectStr;
-//		}
-//		return sparql;
-//	}
-	
-	/**
-	 * Generate SPARQL to conduct a DESCRIBE query, given a starting Resource class, 
-	 * the List of Arcs, 
-	 * @param subjectClass
-	 * @param arcs the List of Arcs
-	 * @param randomize if true, the order will be randomized
-	 * @param offset the number of records to skip, when paginating.  Note paginating does not work with randomizing.
-	 * @param limit the number of records to retrieve
-	 * @return
-	 */
-	public static String generateSparqlDescribe(Resource subjectClass, Collection<Arc> arcs, boolean randomize, int offset, int limit) {
-		String where = Queryer.getSparqlWhereFromArcs(subjectClass.toString(), arcs);
-		String sparql = "";
-		if (randomize) {
-			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
-		}
-		sparql += "CONSTRUCT {\n" + where + "}\n";
-		sparql += "{ GRAPH ?anyGraph {\n" + where + "\n} }\n";
-		if (randomize) {
-			sparql += "ORDER BY inqle-fn:Rand() \n";
-		}
-		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
-		
-		return sparql;
 	}
 	
 	public static String decorateSparql(String baseSparql, boolean randomize, int offset, int limit) {
@@ -465,6 +320,32 @@ import com.hp.hpl.jena.sdb.SDB;
 		if (randomize) {
 			sparql += " ORDER BY inqle-fn:Rand() \n";
 		}
+		return sparql;
+	}
+
+	/**
+	 * Gets SPARQL query which will retrieve the ID of every Jenabean
+	 * RDF object which is of the provided class and matches the provided
+	 * arcs
+	 * @param clazz the provided class
+	 * @param arcSet
+	 * @return
+	 * I don't think this is used
+	 */
+	@Deprecated
+	public static String getSparqlJenabeanId(Class<?> clazz, ArcSet arcSet) {
+		TypeWrapper classWrapper = TypeWrapper.wrap(clazz);
+		//String classBaseUri = classWrapper.inspect();
+		String classBaseUri = classWrapper.typeUri();
+		String classUri = classBaseUri + clazz.getCanonicalName();
+		String idPredicate = classBaseUri + RDF.JENABEAN_ID_ATTRIBUTE;
+		String sparql = "PREFIX ja: <" + RDF.JA + ">\n"; 
+		sparql += "select ?id {\n";
+		sparql += "GRAPH ?g {\n";
+		sparql += "?uri a <" + classUri + "> \n";
+		sparql += " . ?uri <" + idPredicate + "> ?id \n";
+		sparql += ArcSparqlBuilder.getSparqlWhereFromArcs("?uri", arcSet);
+		sparql += "} }\n";
 		return sparql;
 	}
 	
