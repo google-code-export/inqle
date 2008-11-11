@@ -1,6 +1,8 @@
 package org.inqle.data.rdf.jenabean;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.uri.UriMapper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,13 +60,32 @@ import thewebsemantic.Namespace;
 				return s;
 			}
 			s = "Arc: {";
+			int i=0;
 			for (String arcStep: arcStepList) {
-				s += arcStep + " --> ";
+				if (i>0) s += " --> ";
+				s += arcStep;
+				i++;
 			}
 			s += "}";
 			return s;
 		}
 
+		public String getQNameRepresentation() {
+			UriMapper uriMapper = UriMapper.getInstance();
+			String s = "";
+			if (arcStepList.size() == 1) {
+				String uri = arcStepList.get(0).toString();
+				return uriMapper.getQname(uri);
+			}
+			int i=0;
+			for (String arcStep: arcStepList) {
+				if (i>0) s += " -> ";
+				s += uriMapper.getQname(arcStep);
+				i++;
+			}
+			return s;
+		}
+		
 		public int compareTo(Arc otherArc) {
 			return this.toString().compareTo(otherArc.toString());
 		}

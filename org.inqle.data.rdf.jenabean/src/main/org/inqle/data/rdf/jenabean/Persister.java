@@ -92,6 +92,7 @@ public class Persister {
 	private Map<String, IndexBuilderModel> indexBuilders;
 	private IndexLARQ schemaFilesSubjectIndex;
 	private OntModel schemaFilesOntModel;
+	private Model prefixesModel;
 	public static final String EXTENSION_POINT_DATASET_FUNCTIONS = "org.inqle.data.datasetFunctions";
 	
 	/* *********************************************************************
@@ -631,6 +632,13 @@ public class Persister {
 //		}
 //		return schemaFilesOntModel;
 //	}
+	
+	public Model getPrefixesModel() {
+	if (prefixesModel == null) {
+		prefixesModel = DatafileUtil.getModel(InqleInfo.getUriPrefixesDirectory());
+	}
+	return prefixesModel;
+	}
 
 	/**
 	 * Given a Dataset, retrieves a Model which has

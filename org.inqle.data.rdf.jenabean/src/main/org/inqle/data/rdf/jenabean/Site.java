@@ -2,6 +2,7 @@ package org.inqle.data.rdf.jenabean;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 
 import thewebsemantic.Namespace;
 
@@ -23,17 +24,13 @@ public class Site extends UniqueJenabean {
 	private String url;
 	private String ip;
 	private String ownerEmail;
-//	public String getStringRepresentation() {
-//		String s = getClass().toString() + " {\n";
-//		s += "[id=" + siteId + "]\n";
-//		s += "}";
-//		return s;
-//	}
-
-	private String uriPrefix;
+	private NamespaceMapping uriPrefix;
 
 	public void clone(Site objectToBeCloned) {
-
+		setUrl(objectToBeCloned.getUrl());
+		setIp(objectToBeCloned.getIp());
+		setOwnerEmail(objectToBeCloned.getOwnerEmail());
+		setUriPrefix(objectToBeCloned.getUriPrefix());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -73,12 +70,12 @@ public class Site extends UniqueJenabean {
 		this.ownerEmail = ownerEmail;
 	}
 
-	public void setUriPrefix(String uriPrefix) {
-		this.uriPrefix = uriPrefix;
+	public NamespaceMapping getUriPrefix() {
+		return uriPrefix;
 	}
 
-	public String getUriPrefix() {
-		return uriPrefix;
-	}	
+	public void setUriPrefix(NamespaceMapping uriPrefix) {
+		this.uriPrefix = uriPrefix;
+	}
 
 }
