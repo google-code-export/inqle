@@ -194,7 +194,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 			return uriPrefix;
 		} else {
 			Persister persister = Persister.getInstance();
-			return persister.getAppInfo().getSite().getUriPrefix();
+			return persister.getAppInfo().getSite().getUriPrefix().getNamespaceUri();
 		}
 	}
 

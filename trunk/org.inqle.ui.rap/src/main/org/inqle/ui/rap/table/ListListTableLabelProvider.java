@@ -22,7 +22,7 @@ public class ListListTableLabelProvider extends CellLabelProvider {
 
 //	protected int rowNumColumnIndex = -1;
 	
-	protected List<String> columnFields = new ArrayList<String>();
+//	protected List<String> columnFields = new ArrayList<String>();
 	
 	public static final Logger log = Logger.getLogger(ListListTableLabelProvider.class);
 	
@@ -32,24 +32,24 @@ public class ListListTableLabelProvider extends CellLabelProvider {
 	@Override
 	public void update(ViewerCell cell) {
 		
-		if (columnFields==null || columnFields.size()==0) return;
+//		if (columnFields==null || columnFields.size()==0) return;
 		Object cellObj = cell.getElement();
 //		log.info("Received cell:" + cell + " = " + cellObj);
 		List<Object> row = (List<Object>)cellObj;
-		String fieldName = columnFields.get(cell.getColumnIndex());
+//		String fieldName = columnFields.get(cell.getColumnIndex());
 		if (cell.getColumnIndex() >= row.size()) {
 			log.info("Skipping cell: " + cell);
 			return;
 		}
 		Object cellValue = row.get(cell.getColumnIndex());
 		if (cellValue == null) cellValue = "";
-		log.trace("Update cell: " + fieldName + "=" + cellValue);
+//		log.trace("Update cell: " + fieldName + "=" + cellValue);
 		cell.setText(cellValue.toString());
 	}
 
-	public void setColumnFields(List<String> columnFields) {
-		this.columnFields = columnFields;
-	}
+//	public void setColumnFields(List<String> columnFields) {
+//		this.columnFields = columnFields;
+//	}
 
 //	public void setRowNumColumnIndex(int rowNumColumnIndex) {
 //		this.rowNumColumnIndex = rowNumColumnIndex;

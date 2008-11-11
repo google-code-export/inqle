@@ -130,7 +130,7 @@ public abstract class AOntResourceDialog extends Dialog {
 			if (uriPrefix != null) return uriPrefix;
 			Persister persister = Persister.getInstance();
 			AppInfo appInfo = persister.getAppInfo();
-			return appInfo.getSite().getUriPrefix();
+			return appInfo.getSite().getUriPrefix().getNamespaceUri();
 		}
 
 		public abstract String getTitle();
