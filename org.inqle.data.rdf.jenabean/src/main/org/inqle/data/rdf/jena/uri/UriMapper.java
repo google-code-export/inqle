@@ -26,7 +26,8 @@ public class UriMapper {
 	
 	private UriMapper() {
 		//Start with Jena's Extended PrefixMapping, which knows about major namespaces like FOAF
-		prefixMapping = PrefixMapping.Extended;
+		prefixMapping = PrefixMapping.Factory.create();
+		prefixMapping.withDefaultMappings(PrefixMapping.Extended);
 		
 		//add INQLE's prefix mapping
 		prefixMapping.setNsPrefix("inqle", RDF.INQLE);
