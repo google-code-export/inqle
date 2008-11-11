@@ -31,9 +31,11 @@ public class ListListTableLabelProvider extends CellLabelProvider {
 	 */
 	@Override
 	public void update(ViewerCell cell) {
+		
 		if (columnFields==null || columnFields.size()==0) return;
-		Object querySolutionObj = cell.getElement();
-		List<Object> row = (List<Object>)querySolutionObj;
+		Object cellObj = cell.getElement();
+//		log.info("Received cell:" + cell + " = " + cellObj);
+		List<Object> row = (List<Object>)cellObj;
 		String fieldName = columnFields.get(cell.getColumnIndex());
 		if (cell.getColumnIndex() >= row.size()) {
 			log.info("Skipping cell: " + cell);

@@ -212,8 +212,9 @@ public class FileDataImporter {
 	}
 
 	private void importValue(OntResource individual, Property property, String value) {
-		Literal literal = TypeConverter.parseStringToLiteral(value);
-		individual.addLiteral(property, literal);
+//		Literal literal = TypeConverter.parseStringToLiteral(value);
+		Object valObject = TypeConverter.parseStringToType(value);
+		individual.addLiteral(property, valObject);
 	}
 	
 	private String generateDataInstanceUri(SubjectMapping subjectMapping, String[] row) {
