@@ -82,7 +82,7 @@ public class ArcTable implements IDataTable {
 	 * @param row
 	 */
 	public void addArcSet(ArcSet newRowArcSet) {
-//		log.info("Adding to ArcTable: ArcSet=" + newRowArcSet);
+		log.info("Adding to ArcTable: ArcSet=" + newRowArcSet);
 		ArrayList<Object> row = new ArrayList<Object>();
 		List<Arc> newArcs = newRowArcSet.getArcList();
 		//add any new Arcs to the headers
@@ -101,14 +101,16 @@ public class ArcTable implements IDataTable {
 				Object value = newRowArcSet.getValue(arc);
 				if (row.size() > columnIndex) {
 					row.set(columnIndex, value);
-				} else {
-					for (int i=row.size(); i<=columnIndex; i++) {
-						if (i==columnIndex) {
-							row.add(value);
-							break;
-						}
-						row.add(null);
+					log.info("Set item " + columnIndex + " to " + value);
+					continue;
+				}
+				for (int i=row.size(); i<=columnIndex; i++) {
+					if (i==columnIndex) {
+						row.add(value);
+						log.info("Add at item " + columnIndex + ": " + value);
+						continue;
 					}
+					row.add(null);
 				}
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.inqle.data.rdf.jena.util.TypeConverter;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -119,7 +120,8 @@ public class ArcTableFactory {
 //			log.info("Adding final ArcStep:" + propStr);
 			arc.addArcStep(propStr);
 			Literal literal = (Literal) rdfNode;
-			arcSet.addArcAndValue(arc, literal.getValue());
+//			arcSet.addArcAndValue(arc, literal.getValue());
+			arcSet.addArcAndValue(arc, TypeConverter.getObjectFromLiteral(literal));
 //			log.info("Added to ArcSet: \n" + arc + "\n= " + literal.getValue());
 			return;
 		}
