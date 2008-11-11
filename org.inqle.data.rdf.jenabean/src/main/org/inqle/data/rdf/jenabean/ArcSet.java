@@ -35,7 +35,7 @@ public class ArcSet {
 	}
 
 	public Object getValue(Arc arc) {
-		return arcValues.get(arc.toString());
+		return arcValues.get(arc);
 	}
 	
 	public Object getValue(int columnIndex) {
