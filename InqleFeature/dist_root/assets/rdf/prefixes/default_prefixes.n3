@@ -14,5 +14,5 @@
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix time: <http://www.w3.org/2006/time#> .
-@prefic geonames: <http://www.geonames.org/ontology#> .
+@prefix geonames: <http://www.geonames.org/ontology#> .
 @prefix sioc: <http://rdfs.org/sioc/ns#> .
