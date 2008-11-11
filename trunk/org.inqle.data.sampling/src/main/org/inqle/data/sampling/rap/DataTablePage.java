@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.ui.rap.pages.BeanWizardPage;
@@ -107,6 +108,7 @@ public class DataTablePage extends BeanWizardPage {
 		table.setLinesVisible(true);
 
 		//add columns
+		UriMapper uriMapper = UriMapper.getInstance();
 		for (String propertyName: propertyNames) {
 			TableColumn column = new TableColumn(table,SWT.LEFT);
 			column.setText(propertyName);
@@ -123,7 +125,7 @@ public class DataTablePage extends BeanWizardPage {
 		tableViewer.setContentProvider(olContentProvider);
 		
 		ListListTableLabelProvider labelProvider = new ListListTableLabelProvider();
-		labelProvider.setColumnFields(propertyNames);
+//		labelProvider.setColumnFields(propertyNames);
 		tableViewer.setLabelProvider(labelProvider);
 		
 		WritableList writableListInput = new WritableList(getRows(), tableBeanClass);
