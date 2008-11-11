@@ -6,6 +6,7 @@ package org.inqle.data.rdf.jena.uri;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.shared.PrefixMapping;
@@ -21,19 +22,40 @@ public class UriMapper {
 	
 	private static Logger log = Logger.getLogger(UriMapper.class);
 	
-	private PrefixMapping prefixMapping = PrefixMapping.Extended;
+	private PrefixMapping prefixMapping;
 	
 	private UriMapper() {
-		//Add to Jena's Extended PrefixMapping, all locally known prefix mappings
+		//Start with Jena's Extended PrefixMapping, which knows about major namespaces like FOAF
+		prefixMapping = PrefixMapping.Extended;
+		
+		//add INQLE's prefix mapping
+		prefixMapping.setNsPrefix("inqle", RDF.INQLE);
+		
+		//add the default NamespaceMapping for this server
 		Persister persister = Persister.getInstance();
+		NamespaceMapping defaultMapping = persister.getAppInfo().getSite().getUriPrefix();
+		prefixMapping.setNsPrefix(defaultMapping.getNamespaceAbbrev(), defaultMapping.getNamespaceUri());
+		
+		//add namespaces stored in the prefixes directory, including UMBEL and some related schemas
+		addMappings(persister.getPrefixesModel());
+		
+		//add any NamespaceMapping objects stored in the corresponding internal dataset
 		Collection<?> namespaces = persister.reconstituteAll(NamespaceMapping.class);
 		for (Object namespaceObj: namespaces) {
 			NamespaceMapping namespaceMapping = (NamespaceMapping) namespaceObj;
-			if (prefixMapping.getNsPrefixURI(namespaceMapping.getPrefix()) != null) {
-				log.warn("Multiple prefixes have been added of value '" + namespaceMapping.getPrefix() + "'.  Skipping <" + namespaceMapping.getUri() + ">; keeping <" + prefixMapping.getNsPrefixURI(namespaceMapping.getPrefix()) + ">");
+			if (prefixMapping.getNsPrefixURI(namespaceMapping.getNamespaceAbbrev()) != null) {
+				log.warn("Multiple prefixes have been added of value '" + namespaceMapping.getNamespaceAbbrev() + "'.  Skipping <" + namespaceMapping.getUri() + ">; keeping <" + prefixMapping.getNsPrefixURI(namespaceMapping.getNamespaceAbbrev()) + ">");
 			}
-			prefixMapping.setNsPrefix(namespaceMapping.getPrefix(), namespaceMapping.getNamespaceUri());
+			prefixMapping.setNsPrefix(namespaceMapping.getNamespaceAbbrev(), namespaceMapping.getNamespaceUri());
 		}
+	}
+	
+	/**
+	 * Add any prefix mappings from any Models or other PrefixMapping classes
+	 * @param prefixMapping
+	 */
+	public void addMappings(PrefixMapping modelOrOtherMapping) {
+		prefixMapping.withDefaultMappings(modelOrOtherMapping);
 	}
 	
 	private static class UriMapperHolder {

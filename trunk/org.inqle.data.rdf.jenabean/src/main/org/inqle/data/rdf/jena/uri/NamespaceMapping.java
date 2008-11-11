@@ -20,13 +20,11 @@ import thewebsemantic.Namespace;
 public class NamespaceMapping extends GlobalJenabean {
 
 	private static final String NAMESPACE_MAPPING_DATASET = "org.inqle.datasets.ns";
-	private String prefix;
+	private String namespaceAbbrev;
 	private String namespaceUri;
-	public String getPrefix() {
-		return prefix;
-	}
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
+
+	public void setNamespaceAbbrev(String namespaceAbbrev) {
+		this.namespaceAbbrev = namespaceAbbrev;
 	}
 	public String getNamespaceUri() {
 		return namespaceUri;
@@ -35,15 +33,18 @@ public class NamespaceMapping extends GlobalJenabean {
 		this.namespaceUri = namespaceUri;
 	}
 	public String getStringRepresentation() {
-		return prefix + "=<" + namespaceUri + ">";
+		return namespaceAbbrev + "=<" + namespaceUri + ">";
 	}
 	public void clone(NamespaceMapping objectToBeCloned) {
-		setPrefix(objectToBeCloned.getPrefix());
+		setNamespaceAbbrev(objectToBeCloned.getNamespaceAbbrev());
 		setNamespaceUri(objectToBeCloned.getUri());
 	}
 	public IBasicJenabean createClone() {
 		NamespaceMapping ns = new NamespaceMapping();
 		ns.clone(this);
 		return ns;
+	}
+	public String getNamespaceAbbrev() {
+		return namespaceAbbrev;
 	}
 }
