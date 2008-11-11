@@ -16,6 +16,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UserAccount;
@@ -260,7 +261,10 @@ public class AppInfoWizard extends Wizard {
 		site.setRandomId();
 		site.setOwnerEmail(serverInfoPage.getOwnerEmail());
 		site.setName(serverInfoPage.getSiteName());
-		site.setUriPrefix(serverInfoPage.getUriPrefix());
+		NamespaceMapping uriPrefixMapping = new NamespaceMapping();
+		uriPrefixMapping.setNamespaceUri(serverInfoPage.getUriPrefix());
+		uriPrefixMapping.setNamespaceAbbrev(serverInfoPage.getUriPrefixAbbrev());
+		site.setUriPrefix(uriPrefixMapping);
 		appInfo.setSite(site);
 		
 		if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {

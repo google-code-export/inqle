@@ -27,7 +27,9 @@ public class ServerInfoPage extends DynaWizardPage {
 	private TextFieldShower siteNameShower;
 	private TextFieldShower ownerEmailShower;
 	private TextFieldShower uriPrefixShower;
+	private TextFieldShower uriPrefixAbbrevShower;
 	private String defaultUriPrefix;
+	private String defaultUriPrefixAbbrev;
 	
 	public ServerInfoPage(String pageName, String pageDescription) {
 		super(pageName, null);
@@ -56,8 +58,8 @@ public class ServerInfoPage extends DynaWizardPage {
 
 		siteNameShower = new TextFieldShower(
 				composite,
-				"Server Nickname",
-				"Enter a nickname for your INQLE Server, e.g. David Donohue's INQLE Server #3",
+				"Server ID",
+				"Enter an ID for your INQLE Server, e.g. my.domain.name.inqle.server.1\nDo not use spaces or special characters.",
 				null,
 				SWT.BORDER
 		);
@@ -97,12 +99,23 @@ public class ServerInfoPage extends DynaWizardPage {
 		uriPrefixShower = new TextFieldShower(
 				composite,
 				"URI Prefix",
-				"Enter a unique URI for your INQLE Server, e.g. http://my.domain.name/inqle/1/",
+				"Enter the unique URI prefix for your institution, e.g. http://my.domain.name/inqle/ns/",
 				null,
 				SWT.BORDER
 		);
 		if (getDefaultUriPrefix() != null) {
 			uriPrefixShower.setValue(getDefaultUriPrefix());
+		}
+		
+		uriPrefixAbbrevShower = new TextFieldShower(
+				composite,
+				"URI Prefix Abbreviation",
+				"Enter an abbreviation for the URI prefix for your institution, e.g. my_domain\nDo not use spaces or special characters.",
+				null,
+				SWT.BORDER
+		);
+		if (getDefaultUriPrefixAbbrev() != null) {
+			uriPrefixAbbrevShower.setValue(getDefaultUriPrefixAbbrev());
 		}
 		
 		setControl(composite);
@@ -153,6 +166,11 @@ public class ServerInfoPage extends DynaWizardPage {
 		}
 		return enteredUriPrefix;
 	}
+	
+	public String getUriPrefixAbbrev() {
+		if (uriPrefixAbbrevShower==null) return null;
+		return uriPrefixAbbrevShower.getValue();
+	}
 
 	@Override
 	public boolean onNextPage() {
@@ -173,6 +191,11 @@ public class ServerInfoPage extends DynaWizardPage {
 			return false;
 		}
 		
+		if (getUriPrefixAbbrev()==null) {
+			setMessage("Please enter a URI prefix abbreviation.  It should contain no spaces or special characters.");
+			return false;
+		}
+		
 		
 		
 		return true;
@@ -180,6 +203,14 @@ public class ServerInfoPage extends DynaWizardPage {
 	
 	@Override
 	public void addElements() {		
+	}
+
+	public String getDefaultUriPrefixAbbrev() {
+		return defaultUriPrefixAbbrev;
+	}
+
+	public void setDefaultUriPrefixAbbrev(String defaultUriPrefixAbbrev) {
+		this.defaultUriPrefixAbbrev = defaultUriPrefixAbbrev;
 	}
 
 }
