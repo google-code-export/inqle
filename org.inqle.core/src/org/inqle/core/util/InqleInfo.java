@@ -54,6 +54,7 @@ public class InqleInfo {
 //	private static final String RDF_DATA_FOLDER = "assets/rdf/data/";
 
 	private static final String RDF_SCHEMAS_FOLDER = "schemas";
+	private static final String RDF_PREFIXES_FOLDER = "prefixes";
 	private static final String RDF_DATA_FOLDER = "data";
 
 	public static final String PARAM_SITE_ID = "site";
@@ -96,11 +97,17 @@ public class InqleInfo {
 		return getAssetsDirectory() + RDF_FOLDER + "/";
 	}
 	
+	@Deprecated
 	public static String getRdfSchemaFilesDirectory() {
 		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_SCHEMAS_FOLDER + "/";
 	}
 	
+	@Deprecated
 	public static String getRdfDataFilesDirectory() {
 		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_DATA_FOLDER + "/";
+	}
+	
+	public static String getUriPrefixesDirectory() {
+		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_PREFIXES_FOLDER + "/";
 	}
 }
