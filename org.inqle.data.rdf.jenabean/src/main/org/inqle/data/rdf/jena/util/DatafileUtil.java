@@ -88,7 +88,7 @@ public class DatafileUtil {
 	 * Gets a Jena Model, for all files inside the specified folder path
 	 */
 	public static void addModel(Model model, String folderPath) {
-		log.info("AAAAAAAAAAAAAAAAA addModel() for " + folderPath);
+//		log.info("addModel() for " + folderPath);
 		File folder = new File(folderPath);
 		for (File file: folder.listFiles()) {
 			if (file.isDirectory()) {

@@ -102,6 +102,10 @@ import thewebsemantic.Namespace;
 			return this.toString().equals(otherArc.toString());
 		}
 
+		@Override
+		public String toString() {
+			return getQNameRepresentation();
+		}
 //		public Object getValue() {
 //			return value;
 //		}
