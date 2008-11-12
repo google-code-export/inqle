@@ -168,11 +168,11 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (page.equals(subjectClassSelectorPage)) {
 			if (subjectClassSelectorPage.getSelectedString()==null) {
 				((SimpleSubjectSparqlSampler)bean).setSubjectClass(null);
-				log.info("UUUUUUUUUUUUUUUUUUUUU Updated sampler with null");
+				log.info("Updated sampler with null");
 			} else {
 				String selectedSubject = subjectClassSelectorPage.getSelectedString();
 				((SimpleSubjectSparqlSampler)bean).setSubjectClass(URI.create(selectedSubject));
-				log.info("UUUUUUUUUUUUUUUUUUUUU Updated sampler with subject class: " + selectedSubject);
+				log.info("Updated sampler with subject class: " + selectedSubject);
 			}
 		}
 		

@@ -57,6 +57,8 @@ public class DataTablePage extends BeanWizardPage {
 	 */
 	protected List<String> propertyNames = new ArrayList<String>();
 
+	private Table table;
+
 //	protected TableViewer tableViewer;
 
 //	private Composite composite;
@@ -87,6 +89,10 @@ public class DataTablePage extends BeanWizardPage {
 		selfComposite.setLayout(gl);
 //		table = new Table(composite, SWT.NONE);
 //		tableViewer = new TableViewer(table);
+		table = new Table(selfComposite, SWT.NONE);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
 	}
 	
 
@@ -96,19 +102,17 @@ public class DataTablePage extends BeanWizardPage {
 	 * 
 	 */
 	public void refreshTableData() {
-//		if (table != null) {
-//			table.clearAll();
-//		}
-
-		Table table = new Table(selfComposite, SWT.NONE);
+		if (table != null) {
+			table.clearAll();
+		}
+//		Table table = new Table(selfComposite, SWT.NONE);
 		
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+//		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//		
+//		table.setHeaderVisible(true);
+//		table.setLinesVisible(true);
 
 		//add columns
-		UriMapper uriMapper = UriMapper.getInstance();
 		for (String propertyName: propertyNames) {
 			TableColumn column = new TableColumn(table,SWT.LEFT);
 			column.setText(propertyName);
