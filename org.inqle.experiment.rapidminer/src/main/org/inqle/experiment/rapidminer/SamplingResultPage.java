@@ -66,14 +66,14 @@ public class SamplingResultPage extends DataTablePage {
 	 * Prevent the back button from being pressed.  
 	 * Due to a limitation of RAP, we cannot refresh the table with new info.
 	 */
-	@Override
-	public boolean onPreviousPage() {
-		this.setMessage("Due to RAP limitation, we are unable to go back.  You may instead close and restart this wizard.");
-		return false;
-	}
+//	@Override
+//	public boolean onPreviousPage() {
+//		this.setMessage("Due to RAP limitation, we are unable to go back.  You may instead close and restart this wizard.");
+//		return false;
+//	}
 	
-	public void setPersister(Persister persister) {
-	}
+//	public void setPersister(Persister persister) {
+//	}
 
 	public IDataTable getDataTable() {
 		return dataTable;
