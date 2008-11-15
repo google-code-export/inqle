@@ -144,7 +144,9 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 //		IDataColumn idColumn = resultDataTable.getColumn(resultDataTable.getIdColumnIndex());
 		
 		experimentResult.setSamplerClassName(samplerToUse.getClass().getName());
-		experimentResult.setExperimentSubjectArc(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()));
+		if (resultDataTable.getIdColumnIndex() >= 0) {
+			experimentResult.setExperimentSubjectArc(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()));
+		}
 		experimentResult.setExperimentLabelArc(resultDataTable.getColumn(resultDataTable.getLabelColumnIndex()));
 		experimentResult.setRapidMinerExperimentId(experimentToUse.getId());
 		List<Arc> learnableArcs = resultDataTable.getLearnableColumns();
@@ -232,7 +234,11 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 //		assert(labelIndex >= 0);
 		Attribute labelAttribute = exampleTable.getAttribute(dataTable.getLabelColumnIndex());
 		Attribute weightAttribute = null;
-		Attribute idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
+		Attribute idAttribute = null;
+		if (dataTable.getIdColumnIndex() >= 0) {
+			idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
+		}
+		
 		//log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
 		ExampleSet exampleSet = 
 			exampleTable.createExampleSet(
