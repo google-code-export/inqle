@@ -31,11 +31,19 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 	public IAgentWizard createWizardForReplica(Model model,	Shell shell) {
 		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
 		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createReplica();
-		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
+//		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
 		newWizard.setBean(replicaAgent);
 		return newWizard;
 	}
 
+	public IAgentWizard createWizardForClone(Model model,	Shell shell) {
+		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
+		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createClone();
+		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
+		newWizard.setBean(replicaAgent);
+		return newWizard;
+	}
+	
 	public boolean hasWizard() {
 		return true;
 	}

@@ -95,6 +95,7 @@ public class LearningCycleWizard extends DynaWizard implements IListProvider, IL
 		if (bean == null) return null;
 		LearningCycle learningCycle = (LearningCycle) bean;
 		if (page.equals(samplerSelectorPage)) {
+			if (learningCycle.getSampler()==null) return null;
 			List<Object> listItems = new ArrayList<Object>();
 			listItems.add(learningCycle.getSampler().getName());
 			return listItems;

@@ -21,12 +21,6 @@ public class SamplingResultPage extends DataTablePage {
 	private IDataTable dataTable;
 
 	static Logger log = Logger.getLogger(SamplingResultPage.class);
-	
-//	@Deprecated
-//	public SamplingResultPage(Object modelBean, String modelBeanValueId,
-//			Class<?> modelListClass, String title, ImageDescriptor titleImage) {
-//		super(modelBean, modelBeanValueId, modelListClass, title, titleImage);
-//	}
 
 	public SamplingResultPage(LearningCycle learningCycle, String title) {
 		super(learningCycle, null, null, title, null);
@@ -34,6 +28,7 @@ public class SamplingResultPage extends DataTablePage {
 
 	@Override
 	public void onEnterPageFromPrevious() {
+		clearTableData();
 		//this.getShell().redraw();
 		ISampler origSampler = ((LearningCycle)bean).getSampler();
 		if (origSampler == null) {
@@ -59,7 +54,6 @@ public class SamplingResultPage extends DataTablePage {
 		log.info("Adding column names: " + columnNames);
 		setPropertyNames(columnNames);
 		refreshTableData();
-		//getShell().pack();
 	}
 	
 	/**
@@ -70,9 +64,6 @@ public class SamplingResultPage extends DataTablePage {
 //	public boolean onPreviousPage() {
 //		this.setMessage("Due to RAP limitation, we are unable to go back.  You may instead close and restart this wizard.");
 //		return false;
-//	}
-	
-//	public void setPersister(Persister persister) {
 //	}
 
 	public IDataTable getDataTable() {
