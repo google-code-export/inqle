@@ -1,6 +1,8 @@
 package org.inqle.data.rdf.jenabean;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.uri.UriMapper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +20,7 @@ import thewebsemantic.Namespace;
 	 * So now Arcs only support outgoing direction
 	 */
 	@Namespace(RDF.INQLE)
-	public class ArcUsingStrings extends GlobalJenabean {
+	public class ArcUsingStrings extends GlobalJenabean implements Comparable<ArcUsingStrings> {
 		private List<String> arcStepList = new ArrayList<String>();
 		
 //		private transient Object value;
@@ -28,7 +30,11 @@ import thewebsemantic.Namespace;
 		}
 
 		public void setArcSteps(String[] arcSteps) {
-			this.arcStepList = Arrays.asList(arcSteps);
+			this.arcStepList = new ArrayList<String>();
+			if (arcSteps==null) return;
+			for (String arcStep: arcSteps) {
+				arcStepList.add(arcStep);
+			}
 		}
 		
 		public String[] getArcSteps() {
@@ -54,13 +60,52 @@ import thewebsemantic.Namespace;
 				return s;
 			}
 			s = "Arc: {";
+			int i=0;
 			for (String arcStep: arcStepList) {
-				s += arcStep + " --> ";
+				if (i>0) s += " --> ";
+				s += arcStep;
+				i++;
 			}
 			s += "}";
 			return s;
 		}
 
+		public String getQNameRepresentation() {
+			UriMapper uriMapper = UriMapper.getInstance();
+			String s = "";
+			if (arcStepList.size() == 1) {
+				String uri = arcStepList.get(0).toString();
+				return uriMapper.getQname(uri);
+			}
+			int i=0;
+			for (String arcStep: arcStepList) {
+				if (i>0) s += " -> ";
+				s += uriMapper.getQname(arcStep);
+				i++;
+			}
+			return s;
+		}
+		
+		public int compareTo(ArcUsingStrings otherArc) {
+			return this.toString().compareTo(otherArc.toString());
+		}
+		
+//		@Override
+//		public int hashCode() {
+//			return this.toString().hashCode();
+//		}
+		
+		@Override
+		public boolean equals(Object o) {
+			if (!(o instanceof ArcUsingStrings)) return false;
+			ArcUsingStrings otherArc = (ArcUsingStrings)o;
+			return this.toString().equals(otherArc.toString());
+		}
+
+		@Override
+		public String toString() {
+			return getQNameRepresentation();
+		}
 //		public Object getValue() {
 //			return value;
 //		}

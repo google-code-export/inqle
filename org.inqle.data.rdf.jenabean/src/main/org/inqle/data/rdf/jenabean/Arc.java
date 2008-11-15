@@ -21,24 +21,24 @@ import thewebsemantic.Namespace;
 	 */
 	@Namespace(RDF.INQLE)
 	public class Arc extends GlobalJenabean implements Comparable<Arc> {
-		private List<String> arcStepList = new ArrayList<String>();
+		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
 		
 //		private transient Object value;
 
-		public void addArcStep(String arcStep) {
+		public void addArcStep(ArcStep arcStep) {
 			arcStepList.add(arcStep);
 		}
 
-		public void setArcSteps(String[] arcSteps) {
-			this.arcStepList = new ArrayList<String>();
+		public void setArcSteps(ArcStep[] arcSteps) {
+			this.arcStepList = new ArrayList<ArcStep>();
 			if (arcSteps==null) return;
-			for (String arcStep: arcSteps) {
+			for (ArcStep arcStep: arcSteps) {
 				arcStepList.add(arcStep);
 			}
 		}
 		
-		public String[] getArcSteps() {
-			String[] arcStepArr = new String[] {};
+		public ArcStep[] getArcSteps() {
+			ArcStep[] arcStepArr = new ArcStep[] {};
 			return arcStepList.toArray(arcStepArr);
 		}
 		
@@ -60,28 +60,22 @@ import thewebsemantic.Namespace;
 				return s;
 			}
 			s = "Arc: {";
-			int i=0;
-			for (String arcStep: arcStepList) {
-				if (i>0) s += " --> ";
-				s += arcStep;
-				i++;
+			for (ArcStep arcStep: arcStepList) {
+				s += arcStep.toString();
 			}
 			s += "}";
 			return s;
 		}
 
 		public String getQNameRepresentation() {
-			UriMapper uriMapper = UriMapper.getInstance();
+//			UriMapper uriMapper = UriMapper.getInstance();
 			String s = "";
-			if (arcStepList.size() == 1) {
-				String uri = arcStepList.get(0).toString();
-				return uriMapper.getQname(uri);
-			}
-			int i=0;
-			for (String arcStep: arcStepList) {
-				if (i>0) s += " -> ";
-				s += uriMapper.getQname(arcStep);
-				i++;
+//			if (arcStepList.size() == 1) {
+//				String uri = arcStepList.get(0).toString();
+//				return uriMapper.getQname(uri);
+//			}
+			for (ArcStep arcStep: arcStepList) {
+				s += arcStep.getQNameRepresentation();
 			}
 			return s;
 		}

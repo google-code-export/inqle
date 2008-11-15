@@ -11,6 +11,7 @@ import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.ArcStep;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Resource;
@@ -61,6 +62,14 @@ public class ArcLister {
 		return listArcs(queryCriteria);
 	}
 	
+	/**
+	 * Conducts a query and converts the results into a List of Arc objects
+	 * Assumes that the predicates will be named "pred1", "pred2", and "pred3"
+	 * @param queryCriteria
+	 * @return the List of Arc
+	 * 
+	 * TODO dynamically handle predicates
+	 */
 	public static List<Arc> listArcs(QueryCriteria queryCriteria) {
 		RdfTable results = Queryer.selectRdfTable(queryCriteria);
 		log.info("Received results: " + RdfTableWriter.dataTableToString(results));
@@ -71,15 +80,16 @@ public class ArcLister {
 			Arc arc = new Arc();
 			Resource pred1 = querySolution.getResource("pred1");
 			if (pred1 != null && UriMapper.isUri(pred1.toString())) {
-				arc.addArcStep(pred1.toString());
+//				arc.addArcStep(pred1.toString());
+				arc.addArcStep(new ArcStep(pred1.toString()));
 			}
 			Resource pred2 = querySolution.getResource("pred2");
 			if (pred2 != null && UriMapper.isUri(pred2.toString())) {
-				arc.addArcStep(pred2.toString());
+				arc.addArcStep(new ArcStep(pred2.toString()));
 			}
 			Resource pred3 = querySolution.getResource("pred3");
 			if (pred3 != null && UriMapper.isUri(pred3.toString())) {
-				arc.addArcStep(pred3.toString());
+				arc.addArcStep(new ArcStep(pred3.toString()));
 			}
 			arcList.add(arc);
 		}

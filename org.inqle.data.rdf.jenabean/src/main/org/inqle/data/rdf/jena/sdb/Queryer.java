@@ -316,10 +316,10 @@ import com.hp.hpl.jena.sdb.SDB;
 			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
 		}
 		sparql += baseSparql;
-		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
 		if (randomize) {
 			sparql += " ORDER BY inqle-fn:Rand() \n";
 		}
+		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
 		return sparql;
 	}
 
