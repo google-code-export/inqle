@@ -59,17 +59,18 @@ public class AgentWizardAction extends Action {
 			//wizard = new AgentRunnerWizard(agent, window.getShell());
 		} else if (mode == MODE_OPEN) {
 			log.info("Creating wizard w/ part:" + JenabeanWriter.toString(agentPart));
-			//log.info("Creating wizard...");
 			//create wizard for storing bean into default target dataset
 			wizard = agentFactory.createWizardForReplica(null, window.getShell());
 			wizard.setPart(agentPart);
-			//log.info("Creating dialog...");
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
-			//log.info("Opening dialog...");
 			dialog.open();
 		} else if (mode == MODE_CLONE) {
-			agent.setName("Clone of " + agent.getName());
-			persister.persist(agent);
+//			agent.setName("Clone of " + agent.getName());
+//			persister.persist(agent);
+			wizard = agentFactory.createWizardForClone(null, window.getShell());
+			wizard.setPart(agentPart);
+			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
+			dialog.open();
 			agentPart.fireUpdatePart();
 		}
 	}

@@ -38,4 +38,10 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 		return newAgent;
 	}
 
+	public IAgentWizard createWizardForClone(Model model, Shell shell) {
+		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, shell);
+		newWizard.setBean((IAgent)getBaseAgent().createClone());
+		return newWizard;
+	}
+
 }
