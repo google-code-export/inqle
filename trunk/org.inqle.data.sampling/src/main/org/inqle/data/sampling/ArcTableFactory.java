@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.util.TypeConverter;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
+import org.inqle.data.rdf.jenabean.ArcStep;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 import com.hp.hpl.jena.ontology.Individual;
@@ -50,8 +51,11 @@ public class ArcTableFactory {
 		ExtendedIterator subjectEI = ontModel.listIndividuals(subjectClass);
 		while (subjectEI.hasNext()) {
 			Individual individual = (Individual)subjectEI.next();
-			ArcSet arcSet = getArcSet(individual);
-			arcTable.addArcSet(arcSet);
+			ArcSet theArcSet = getArcSet(individual);
+			if (theArcSet == null || theArcSet.getArcList() == null || theArcSet.getArcList().size()==0) {
+				continue;
+			}
+			arcTable.addArcSet(theArcSet);
 //			log.info("Adding ArcSet:" + arcSet);
 		}//next subject row
 		return arcTable;
@@ -118,7 +122,7 @@ public class ArcTableFactory {
 		
 		if (rdfNode instanceof Literal) {
 //			log.info("Adding final ArcStep:" + propStr);
-			arc.addArcStep(propStr);
+			arc.addArcStep(new ArcStep(propStr));
 			Literal literal = (Literal) rdfNode;
 //			arcSet.addArcAndValue(arc, literal.getValue());
 			arcSet.addArcAndValue(arc, TypeConverter.getObjectFromLiteral(literal));
@@ -131,7 +135,7 @@ public class ArcTableFactory {
 	  if (excludeResources.contains(resource)) {
 	  	return;
 	  }
-	  arc.addArcStep(propStr);
+	  arc.addArcStep(new ArcStep(propStr));
 	  excludeResources.add(resource);
 	  StmtIterator stmtIterator = resource.listProperties();
   	

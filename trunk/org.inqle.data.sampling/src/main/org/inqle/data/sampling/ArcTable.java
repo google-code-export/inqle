@@ -28,11 +28,11 @@ public class ArcTable implements IDataTable {
 	private List<List<Object>> rowData = new ArrayList<List<Object>>();
 	private List<Integer> dataTypes = new ArrayList<Integer>();
 	private List<Integer> columnTypes = new ArrayList<Integer>();
-	private List<List<Object>> columnData;
+	private List<List<Object>> columnData = new ArrayList<List<Object>>();;
 	private List<Arc> headerList = new ArrayList<Arc>();
 	
-	private int idColumnIndex;
-	private int labelColumnIndex;
+	private int idColumnIndex = -1;
+	private int labelColumnIndex = -1;
 	
 	public LinkedHashSet<Arc> getHeaders() {
 		return headers;
@@ -61,6 +61,9 @@ public class ArcTable implements IDataTable {
 	}
 	
 	public Arc getColumn(int columnIndex) {
+		if (columnIndex < 0 || headerList==null || headerList.size() <= columnIndex) {
+			return null;
+		}
 		if (headerList==null || headerList.size()< columnIndex + 1) {
 			return null;
 		}
@@ -89,29 +92,29 @@ public class ArcTable implements IDataTable {
 		if (getHeaders()==null || getHeaders().size()==0) {
 			addHeaders(newArcs);
 			log.info("Added headers:" + newArcs);
-		} else {
-			for (Arc arc: newArcs) {
-				int columnIndex = getHeaderIndex(arc);
-				if (columnIndex < 0) {
-					log.warn("Arc not found among ArcTable headers:" + arc);
-					addHeader(arc);
-					log.info("Added header:" + arc);
-					columnIndex = getHeaderIndex(arc);
-				}
-				Object value = newRowArcSet.getValue(arc);
-				if (row.size() > columnIndex) {
-					row.set(columnIndex, value);
-					log.info("Set item " + columnIndex + " to " + value);
+		}
+		
+		for (Arc arc: newArcs) {
+			int columnIndex = getHeaderIndex(arc);
+			if (columnIndex < 0) {
+				log.warn("Arc not found among ArcTable headers:" + arc);
+				addHeader(arc);
+				log.info("Added header:" + arc);
+				columnIndex = getHeaderIndex(arc);
+			}
+			Object value = newRowArcSet.getValue(arc);
+			if (row.size() > columnIndex) {
+				row.set(columnIndex, value);
+				log.info("Set item " + columnIndex + " to " + value);
+				continue;
+			}
+			for (int i=row.size(); i<=columnIndex; i++) {
+				if (i==columnIndex) {
+					row.add(value);
+					log.info("Add at item " + columnIndex + ": " + value);
 					continue;
 				}
-				for (int i=row.size(); i<=columnIndex; i++) {
-					if (i==columnIndex) {
-						row.add(value);
-						log.info("Add at item " + columnIndex + ": " + value);
-						continue;
-					}
-					row.add(null);
-				}
+				row.add(null);
 			}
 		}
 		addRow(row);
@@ -159,7 +162,13 @@ public class ArcTable implements IDataTable {
 		boolean containsDates = false;
 		boolean containsNumbers = false;
 		boolean containsStrings = false;
+		int rowIndex = 0;
 		for (List<Object> row: rowData) {
+//			log.info("Row #" + rowIndex + ": row=" + row);
+			if (row.size()<=columnIndex) {
+				log.warn("Column " + columnIndex + " not defined for row #" + rowIndex + ": row=" + row);
+				continue;
+			}
 			Object value = row.get(columnIndex);
 			//if the value is a string, attempt to parse it into other data types
 			if (value instanceof String) {
@@ -176,6 +185,7 @@ public class ArcTable implements IDataTable {
 			}
 			columnValues.add(value);
 			distinctValues.add(value);
+			rowIndex++;
 		}
 		
 		int dataType = IDataTable.DATA_TYPE_UNKNOWN;
@@ -196,15 +206,31 @@ public class ArcTable implements IDataTable {
 			columnType = IDataTable.COLUMN_TYPE_NO_VALUES;
 		} else if (distinctValues.size()==1) {
 			columnType = IDataTable.COLUMN_TYPE_ONE_VALUE;
-		} else if (distinctValues.size()==0) {
-			columnType = IDataTable.COLUMN_TYPE_NO_VALUES;
 		} else {
 			columnType = IDataTable.COLUMN_TYPE_LEARNABLE;
 		}
-		columnData.set(columnIndex, columnValues);
-		columnDistinctValues.set(columnIndex, distinctValues);
-		dataTypes.set(columnIndex, dataType);
-		columnTypes.set(columnIndex, columnType);
+		
+//		columnData.set(columnIndex, columnValues);
+//		columnDistinctValues.set(columnIndex, distinctValues);
+//		dataTypes.set(columnIndex, dataType);
+//		columnTypes.set(columnIndex, columnType);
+		addOrSetListItem(columnData, columnIndex, columnValues);
+		addOrSetListItem(columnDistinctValues, columnIndex, distinctValues);
+		addOrSetListItem(dataTypes, columnIndex, dataType);
+		addOrSetListItem(columnTypes, columnIndex, columnType);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void addOrSetListItem(List list, int index, Object value) {
+		if (list.size() <= index) {
+			for (int i=list.size(); i<index; i++) {
+				list.add(null);
+			}
+			list.add(value);
+		} else {
+			list.set(index, value);
+		}
+		
 	}
 	public int getIdColumnIndex() {
 		return idColumnIndex;

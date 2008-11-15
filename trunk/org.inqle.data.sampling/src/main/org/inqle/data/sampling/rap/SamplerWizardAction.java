@@ -64,12 +64,18 @@ public class SamplerWizardAction extends Action {
 				wizard.setPart(samplerPart);
 				DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 				dialog.open();
-				log.trace("Opened wizard.");
+				log.trace("Opened wizard for replica.");
 			} else if (mode == MODE_CLONE) {
-				Persister persister = Persister.getInstance();
-				sampler.setName("Clone of " + sampler.getName());
-				persister.persist(sampler);
-				samplerPart.fireUpdatePart();
+//				Persister persister = Persister.getInstance();
+//				sampler.setName("Clone of " + sampler.getName());
+//				persister.persist(sampler);
+//				samplerPart.fireUpdatePart();
+				log.trace("Cloning wizard...");
+				wizard = samplerFactory.createWizardForClone(null, window.getShell());
+				wizard.setPart(samplerPart);
+				DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
+				dialog.open();
+				log.trace("Opened wizard for clone.");
 			}
 		} catch (Exception e) {
 			log.error("Error running SamplerWizardAction", e);

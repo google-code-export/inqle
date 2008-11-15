@@ -74,6 +74,16 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	public ISamplerWizard createWizardForReplica(Model model, Shell shell);
 
 	/**
+	 * Create a wizard, using a clone of the base sampler as the 
+	 * model bean
+	 * @param metarepositoryModel
+	 * @param persister
+	 * @param shell
+	 * @return
+	 */
+	public ISamplerWizard createWizardForClone(Model model, Shell shell);
+	
+	/**
 	 * Creates a clone of the ISamplerFactory, using the current base sampler
 	 * @return
 	 */

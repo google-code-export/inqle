@@ -94,6 +94,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 */
 	public Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude) {
 		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), (numberToSelect * 3));
+		if (randomArcs==null) return null;
 		List<Arc> decidedArcs = new ArrayList<Arc>();
 		for (Arc randomArc: randomArcs) {
 			if (decidedArcs.size() >= numberToSelect) break;

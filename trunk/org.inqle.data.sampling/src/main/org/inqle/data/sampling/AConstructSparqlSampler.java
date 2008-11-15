@@ -105,6 +105,8 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		ArcTable resultDataTable = factory.createArcTable(subjectClass);
 		if (resultDataTable.getColumns().contains(labelArc)) {
 			resultDataTable.setLabelColumnIndex(resultDataTable.getHeaderIndex(getLabelArc()));
+		} else {
+			log.warn("TTTTTTTTTTTTTT Table lacks the label arc:" + labelArc);
 		}
 		return resultDataTable;
 	}
