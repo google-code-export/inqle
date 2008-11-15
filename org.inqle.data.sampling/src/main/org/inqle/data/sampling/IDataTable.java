@@ -29,6 +29,8 @@ public interface IDataTable {
 
 	public int getDataType(int columnIndex);
 
+	public int getColumnType(int columnIndex);
+	
 	public Arc getColumn(int columnIndex);
 
 	public List<List<Object>> getRows();

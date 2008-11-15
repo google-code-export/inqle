@@ -67,11 +67,16 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 //	}
 
 	public ISamplerWizard createWizardForReplica(Model model, Shell shell) {
-		//log.info("createWizardForReplica()...");
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
 		SimpleSubjectSparqlSampler replica = baseSampler.createReplica();
 		wizard.setBean(replica);
-		//log.info("Created wizard with (replica) Sampler: " + JenabeanWriter.toString(replica));
+		return wizard;
+	}
+	
+	public ISamplerWizard createWizardForClone(Model model, Shell shell) {
+		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
+		SimpleSubjectSparqlSampler clone = baseSampler.createClone();
+		wizard.setBean(clone);
 		return wizard;
 	}
 	

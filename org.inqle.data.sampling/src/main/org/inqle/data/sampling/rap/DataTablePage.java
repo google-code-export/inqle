@@ -95,6 +95,14 @@ public class DataTablePage extends BeanWizardPage {
 		table.setLinesVisible(true);
 	}
 	
+	public void clearTableData() {
+		if (table != null) {
+			table.clearAll();
+		}
+		for (TableColumn column: table.getColumns()) {
+			column.setText(" ");
+		}
+	}
 
 	/**
 	 * Create and populate the table, using the column names provided in 
@@ -102,9 +110,7 @@ public class DataTablePage extends BeanWizardPage {
 	 * 
 	 */
 	public void refreshTableData() {
-		if (table != null) {
-			table.clearAll();
-		}
+		clearTableData();
 //		Table table = new Table(selfComposite, SWT.NONE);
 		
 //		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -113,14 +119,21 @@ public class DataTablePage extends BeanWizardPage {
 //		table.setLinesVisible(true);
 
 		//add columns
+		int columnIndex = 0;
 		for (String propertyName: propertyNames) {
-			TableColumn column = new TableColumn(table,SWT.LEFT);
+			TableColumn column = null;
+			try {
+				column = table.getColumn(columnIndex);
+			} catch (Exception e) {
+				column = new TableColumn(table,SWT.LEFT);
+			}
 			column.setText(propertyName);
 			column.setResizable(true);
 			column.setWidth(200);
 			
 			//column.pack();
 			log.debug("Added column: " + propertyName);
+			columnIndex++;
 		}
 		
 		TableViewer tableViewer = new TableViewer(table);

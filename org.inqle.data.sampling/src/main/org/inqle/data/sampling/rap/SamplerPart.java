@@ -126,7 +126,7 @@ public class SamplerPart extends PartType {
 		//"Clone this Sampler" action.  This wizard works with a clone of the base sampler
 		//ISampler cloneOfSampler = samplerFactory.cloneSampler();
 		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
-		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Clone this sampler", this, workbenchWindow);
+		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Create a customized clone of this sampler...", this, workbenchWindow);
 		cloneSamplerWizardAction.setSampler(cloneOfSampler); 
 		manager.add(cloneSamplerWizardAction);
 	}
