@@ -41,15 +41,18 @@ public class CsvDisplayPage extends DynaWizardPage {
 		log.info("CsvDisplayPage.createControl()");
 		composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
-		table = new Table(composite, SWT.NONE);
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		createTable();
 		
 		setControl(composite);
 	}
 	
+	private void createTable() {
+		table = new Table(composite, SWT.NONE);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);		
+	}
+
 	/**
 	 * Create and populate the table, using the column names provided in 
 	 * <code>setPropertyNames</code> and the row data provided by <code>setRdfTable</code>
@@ -57,7 +60,12 @@ public class CsvDisplayPage extends DynaWizardPage {
 	 */
 	public void refreshTableData() {
 		log.info("CsvDisplayPage.refreshTableData()...");
+//		createTable();
 		table.clearAll();
+		for (TableColumn column: table.getColumns()) {
+			column.setText(" ");
+		}
+		
 		if (getWizard() == null || (!(getWizard() instanceof ICsvReaderWizard))) {
 			log.info("getWizard()=" + getWizard() + "; it is null or not a ICsvReaderWizard");
 			return;
@@ -84,14 +92,22 @@ public class CsvDisplayPage extends DynaWizardPage {
 //			table.setLinesVisible(true);
 
 			//add columns
+			int columnIndex=0;
 			for (String header: headers) {
-				TableColumn column = new TableColumn(table,SWT.LEFT);
+				TableColumn column = null;
+				try {
+					column = table.getColumn(columnIndex);
+				} catch (Exception e) {
+					//column does not exist: create new one
+					column = new TableColumn(table,SWT.LEFT);
+				}
 				column.setText(header);
 				column.setResizable(true);
 				column.setWidth(COLUMN_WIDTH);
 				
 				//column.pack();
 				log.info("Added column: " + header);
+				columnIndex++;
 			}
 			
 			TableViewer tableViewer = new TableViewer(table);
