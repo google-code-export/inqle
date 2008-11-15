@@ -58,6 +58,8 @@ public interface IAgentFactory extends INamedAndDescribed {
 
 	public IAgentFactory cloneFactory(IAgent childAgent);
 
+	public IAgentWizard createWizardForClone(Model model, Shell shell);
+
 //	public Persister getPersister();
 //	
 //	public void setPersister(Persister persister);
