@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
+import org.inqle.data.rdf.jenabean.ArcStep;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -38,6 +39,16 @@ public class ArcSparqlBuilder {
 		return sparql;
 	}
 
+	/**
+	 * Converts an Arc into the corresponding clause within a SPARQL where statement
+	 * @param subject
+	 * @param subjectVariableName
+	 * @param arc
+	 * @param object
+	 * @return
+	 * 
+	 * TODO support bidirectional ArcSteps (incomming)
+	 */
 	public String getSparqlWhereFromArc(String subject, String subjectVariableName, Arc arc, Object object) {
 			String sparql = "";
 	//		String subjectStr = "";
@@ -47,7 +58,8 @@ public class ArcSparqlBuilder {
 			List<String> stepsSoFar = new ArrayList<String>();
 			String subjectStr = subjectVariableName;
 			log.info("Adding where lines for Arc: " + arc);
-			for (String predicate: arc.getArcSteps()) {
+			for (ArcStep arcStep: arc.getArcSteps()) {
+				String predicate = arcStep.getPredicate();
 				stepsSoFar.add(predicate);
 				if (variableNameExists(stepsSoFar)) {
 					subjectStr = getVariableName(stepsSoFar);
@@ -145,7 +157,8 @@ public class ArcSparqlBuilder {
 		sparql += subjectStr + " a <" + subject + ">";
 		int i=0;
 //		for (int i=0; i < arc.getArcSteps().length; i++) {
-		for (String predicate: arc.getArcSteps()) {
+		for (ArcStep arcStep: arc.getArcSteps()) {
+			String predicate = arcStep.getPredicate();
 			i++;
 			String objectStr = "";
 			if (object == null) {
