@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
 
 import com.hp.hpl.jena.query.QuerySolution;
@@ -40,6 +41,10 @@ public class QuerySolutionTableLabelProvider extends CellLabelProvider {
 		QuerySolution querySolution = (QuerySolution)querySolutionObj;
 		String fieldName = columnFields.get(cell.getColumnIndex());
 		String cellValue = QuerySolutionValueExtractor.getDisplayable(querySolution, fieldName);
+		if (UriMapper.isUri(cellValue)) {
+			UriMapper mapper = UriMapper.getInstance();
+			cellValue = mapper.getQname(cellValue);
+		}
 		log.trace("Update cell: " + fieldName + "=" + cellValue);
 		cell.setText(cellValue);
 	}
