@@ -59,7 +59,7 @@ public class LearningCycleWizard extends DynaWizard implements IListProvider, IL
 		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(learningCycle, "Name and Description", null);
 		addPage(nameDescriptionPage);
 		
-		samplerSelectorPage = new SimpleListSelectorPage("Select sampler to use", "Select whether to use a randomly selected sampler, or specify the sampler to be used for this learning cycle.", "Select sampler:", SWT.SINGLE);
+		samplerSelectorPage = new SimpleListSelectorPage("Select Sampler to use", "Select whether to use a randomly selected Sampler, or specify the Sampler to be used for this Learning Cycle.", "Select Sampler:", SWT.SINGLE);
 		addPage(samplerSelectorPage);
 		
 		SamplingResultPage samplingResultsPage = new SamplingResultPage(learningCycle, "Result of Sampling");
@@ -91,6 +91,9 @@ public class LearningCycleWizard extends DynaWizard implements IListProvider, IL
 		return null;
 	}
 
+	/**
+	 * This is called by some wizard pages, to retrieve the list of items that are pre-selected
+	 */
 	public List<Object> getList2(IWizardPage page) {
 		if (bean == null) return null;
 		LearningCycle learningCycle = (LearningCycle) bean;
@@ -104,6 +107,9 @@ public class LearningCycleWizard extends DynaWizard implements IListProvider, IL
 		return null;
 	}
 
+	/**
+	 * This is called by some wizard pages, to permit update of the bean with appropriate value(s)
+	 */
 	public void updateValue(IWizardPage page) {
 		if (bean == null) return;
 		LearningCycle learningCycle = (LearningCycle) bean;

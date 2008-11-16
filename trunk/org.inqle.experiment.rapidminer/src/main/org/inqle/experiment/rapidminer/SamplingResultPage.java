@@ -49,7 +49,7 @@ public class SamplingResultPage extends DataTablePage {
 		List<String> columnNames = new ArrayList<String>();
 		for (Arc arc: dataTable.getColumns()) {
 //			columnNames.add(arc.toString());
-			columnNames.add(arc.getQNameRepresentation());
+			columnNames.add(arc.getQnameRepresentation());
 		}
 		log.info("Adding column names: " + columnNames);
 		setPropertyNames(columnNames);
