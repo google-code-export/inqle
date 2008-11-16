@@ -34,6 +34,8 @@ public interface IDataTable {
 	public Arc getColumn(int columnIndex);
 
 	public List<List<Object>> getRows();
+	
+	public String getSubjectClass();
 
 //	public void setLabelColumnIndex(int labelDataColumnIndex);
 }
