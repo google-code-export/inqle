@@ -26,9 +26,9 @@ public abstract class GlobalJenabean extends BasicJenabean implements IGlobalJen
 		return hash;
 	}
 	
-	public void setStringRepresentation(String stringRepresentation) {
-		//do nothing, let the string representation be generated from the fields
-	}
+//	public void setStringRepresentation(String stringRepresentation) {
+//		//do nothing, let the string representation be generated from the fields
+//	}
 	
 	@Override
 	public String toString() {

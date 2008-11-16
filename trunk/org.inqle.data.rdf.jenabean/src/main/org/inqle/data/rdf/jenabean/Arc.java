@@ -44,6 +44,7 @@ import thewebsemantic.Namespace;
 		
 		public void clone(Arc objectToBeCloned) {
 			setArcSteps(objectToBeCloned.getArcSteps());
+			setQnameRepresentation(objectToBeCloned.getQnameRepresentation());
 			super.clone(this);
 		}
 		
@@ -67,6 +68,10 @@ import thewebsemantic.Namespace;
 			return s;
 		}
 
+		/**
+		 * Get shortest representation of this Arc, using QNames where prefix abbreviation is available
+		 * @return
+		 */
 		public String getQnameRepresentation() {
 //			UriMapper uriMapper = UriMapper.getInstance();
 			String s = "";
@@ -80,6 +85,11 @@ import thewebsemantic.Namespace;
 			return s;
 		}
 		
+		/**
+		 * Add the set method, to make the qnameRepresentation field into a Javabean field,
+		 * permitting Jenabean to persist it to RDF store.
+		 * @param stringRepresentation
+		 */
 		public void setQnameRepresentation(String stringRepresentation) {
 			//do nothing, let the QName representation be generated from the fields
 		}

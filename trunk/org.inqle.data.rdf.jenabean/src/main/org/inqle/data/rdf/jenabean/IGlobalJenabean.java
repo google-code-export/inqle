@@ -21,6 +21,6 @@ import org.inqle.core.domain.INamedAndDescribed;
 public interface IGlobalJenabean extends IBasicJenabean {
 	
 	public String getStringRepresentation();
-	public void setStringRepresentation(String stringRepresentation);
+//	public void setStringRepresentation(String stringRepresentation);
 //	public int compareTo(IGlobalJenabean anotherBean);
 }
