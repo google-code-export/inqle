@@ -59,7 +59,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	protected TableViewer tableViewer;
 	protected List<String> propertyNames;
 	protected Button refreshButton;
-	protected String currentSortColumn = "creationDate";
+	protected String currentSortColumn = "Creation_Date";
 	protected String currentSortDirection = DEFAULT_SORT_DIRECTION;
 	protected org.eclipse.swt.widgets.List recordCountList;
 	protected Button previousButton;
@@ -135,7 +135,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		//add columns
 		for (String propertyName: getPropertyNames()) {
 			TableColumn column = new TableColumn(table,SWT.LEFT);
-			column.setText(propertyName);
+			if (propertyName==null) propertyName="";
+			column.setText(propertyName.replaceAll("_", " "));
 			column.setToolTipText("Click to sort");
 			column.setResizable(true);
 			column.setWidth(getColumnWidth());
@@ -314,9 +315,12 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		if (event.widget instanceof TableColumn) {
 			
 			TableColumn column = (TableColumn) event.widget;
+			String columnHeader = column.getText();
+			if (columnHeader==null) columnHeader="";
+			columnHeader = columnHeader.replaceAll(" ", "_");
 			//reset to the first record
 			offset = 0;
-			if (currentSortColumn.equals(column.getText())) {
+			if (currentSortColumn.equals(columnHeader)) {
 				toggleCurrentSortDirection();
 			} else {
 				currentSortColumn = column.getText();
