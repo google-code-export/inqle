@@ -34,11 +34,11 @@ import com.rapidminer.operator.performance.PerformanceVector;
 @TargetDataset(ILearningCycle.LEARNING_CYCLES_DATASET)
 @Namespace(RDF.INQLE)
 public class LearningCycle extends UniqueJenabean implements ILearningCycle {
-	public static final int USE_RANDOM_SAMPLER = 0;
-	public static final int USE_SELECTED_SAMPLER = 1;
+//	public static final int USE_RANDOM_SAMPLER = 0;
+//	public static final int USE_SELECTED_SAMPLER = 1;
 	
 	private ISampler sampler;
-	private int samplerMode = USE_RANDOM_SAMPLER;
+//	private int samplerMode = USE_RANDOM_SAMPLER;
 //	private int labelDataColumnIndex;
 	private IRapidMinerExperiment rapidMinerExperiment;
 	//private Persister persister;
@@ -91,7 +91,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	public void clone(LearningCycle objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		setSampler(objectToBeCloned.getSampler());
-		setSamplerMode(objectToBeCloned.getSamplerMode());
+//		setSamplerMode(objectToBeCloned.getSamplerMode());
 //		setLabelDataColumnIndex(objectToBeCloned.getLabelDataColumnIndex());
 		setRapidMinerExperiment(objectToBeCloned.getRapidMinerExperiment());
 	}
@@ -158,7 +158,10 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	}
 
 	private ISampler selectSampler() {
-		if (samplerMode == USE_RANDOM_SAMPLER || getSampler() == null) {
+//		if (samplerMode == USE_RANDOM_SAMPLER || getSampler() == null) {
+//			return selectRandomSampler();
+//		}
+		if (getSampler()==null) {
 			return selectRandomSampler();
 		}
 		return getSampler();
@@ -276,12 +279,12 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		return experimentResult;
 	}
 
-	public int getSamplerMode() {
-		return samplerMode;
-	}
-
-	public void setSamplerMode(int samplerMode) {
-		this.samplerMode = samplerMode;
-	}
+//	public int getSamplerMode() {
+//		return samplerMode;
+//	}
+//
+//	public void setSamplerMode(int samplerMode) {
+//		this.samplerMode = samplerMode;
+//	}
 	
 }

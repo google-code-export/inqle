@@ -1,5 +1,6 @@
 package org.inqle.experiment.rapidminer;
 
+import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.sampling.ISampler;
 
 /**
@@ -9,7 +10,7 @@ import org.inqle.data.sampling.ISampler;
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface ILearningCycle {
+public interface ILearningCycle extends IBasicJenabean{
 
 	/**
 	 * the ID of the ILearningCycle plugin type
