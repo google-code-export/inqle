@@ -33,6 +33,8 @@ public class ArcTable implements IDataTable {
 	
 	private int idColumnIndex = -1;
 	private int labelColumnIndex = -1;
+
+	private String subjectClass;
 	
 	public LinkedHashSet<Arc> getHeaders() {
 		return headers;
@@ -254,5 +256,11 @@ public class ArcTable implements IDataTable {
 	}
 	public void setLabelColumnIndex(int labelColumnIndex) {
 		this.labelColumnIndex = labelColumnIndex;
+	}
+	public String getSubjectClass() {
+		return subjectClass;
+	}
+	public void setSubjectClass(String subjectClass) {
+		this.subjectClass = subjectClass;
 	}
 }

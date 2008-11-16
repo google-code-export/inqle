@@ -46,6 +46,7 @@ public class ArcTableFactory {
 	public ArcTable createArcTable(Resource subjectClass) {
 		log.info("createArcTable(" + subjectClass + ")...");
 		ArcTable arcTable = new ArcTable();
+		arcTable.setSubjectClass(subjectClass.toString());
 //		List<ArcSet> rows = new ArrayList<ArcSet>();
 		
 		ExtendedIterator subjectEI = ontModel.listIndividuals(subjectClass);
