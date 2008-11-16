@@ -220,6 +220,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	private ExperimentResult runDataThroughExperiment(IDataTable dataTable, IRapidMinerExperiment rapidMinerExperiment) {
 		//the results to return
 		ExperimentResult experimentResult = new ExperimentResult();
+		experimentResult.setExperimentSubjectClass(dataTable.getSubjectClass());
 		//get a RapidMiner Process object, representing the Experiment
 		com.rapidminer.Process process = rapidMinerExperiment.createProcess();
 		

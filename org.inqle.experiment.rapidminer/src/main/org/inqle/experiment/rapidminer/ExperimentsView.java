@@ -21,13 +21,14 @@ public class ExperimentsView extends SparqlView {
 	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
 
 	private static final String[] PROPERTY_NAMES = {
-		"creationDate",
+		"Creation_Date",
 		"id",
-		"experimentSubject",
-		"experimentAttributes",
-		"experimentLabel",
-		"correlation",
-		"root_mean_squared_error"
+		"Subject_Class",
+		"Experiment_Subject",
+		"Experiment_Attributes",
+		"Experiment_Label",
+		"Correlation",
+		"Root_Mean_Squared_Error"
 	};
 
 	//TODO optional fields will render the columns retrieved on any pass thru variable. Must extract columns from the query
@@ -38,22 +39,23 @@ public class ExperimentsView extends SparqlView {
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?id ?creationDate ?name ?experimentSubject ?experimentAttributes ?experimentLabel ?correlation ?root_mean_squared_error\n" +
+			"SELECT ?id ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Attributes ?Experiment_Label ?Correlation ?Root_Mean_Squared_Error\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			"?uri inqle:id ?id\n" +
-			". ?uri inqle:creationDate ?creationDate\n" +
-			". OPTIONAL { ?uri dc:name ?name }\n" +
-			". OPTIONAL { ?uri inqle:experimentSubjectArc ?experimentSubjectArc \n" +
-			"  . ?experimentSubjectArc inqle:stringRepresentation ?experimentSubject }\n" +
-			". OPTIONAL { ?uri inqle:experimentLabelArc ?experimentLabelArc \n" +
-			"  . ?experimentLabelArc inqle:stringRepresentation ?experimentLabel }\n" +
-			". OPTIONAL { ?uri inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
-			"  . ?experimentAttributeArcs inqle:stringRepresentation ?experimentAttributes}\n" +
-			". OPTIONAL { ?uri inqle:correlation ?correlation }\n" +
-			". OPTIONAL { ?uri inqle:root_mean_squared_error ?root_mean_squared_error }\n" +
-			". ?uri a ?classUri\n" +
+			"?uri a ?classUri\n" +
 			"  . ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
+			". ?uri inqle:id ?id \n" +
+			". ?uri inqle:creationDate ?Creation_Date \n" +
+//			". OPTIONAL { ?uri dc:name ?Name }\n" +
+			". OPTIONAL { ?uri inqle:experimentSubjectClass ?Subject_Class } \n" +
+			". OPTIONAL { ?uri inqle:experimentSubjectArc ?experimentSubjectArc \n" +
+			"  . ?experimentSubjectArc inqle:qnameRepresentation ?Experiment_Subject }\n" +
+			". OPTIONAL { ?uri inqle:experimentLabelArc ?experimentLabelArc \n" +
+			"  . ?experimentLabelArc inqle:qnameRepresentation ?Experiment_Label }\n" +
+			". OPTIONAL { ?uri inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
+			"  . ?experimentAttributeArcs inqle:qnameRepresentation ?Experiment_Attributes}\n" +
+			". OPTIONAL { ?uri inqle:correlation ?Correlation }\n" +
+			". OPTIONAL { ?uri inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
 		return sparql;

@@ -51,6 +51,7 @@ public class ExperimentResult extends UniqueJenabean {
 	private Arc experimentLabelArc;
 	private Collection<Arc> experimentAttributeArcs;
 	private Arc experimentSubjectArc;
+	private String experimentSubjectClass;
 	//private IRapidMinerExperiment rapidMinerExperiment;
 	private String rapidMinerExperimentId;
 	private double correlation;
@@ -163,7 +164,20 @@ public class ExperimentResult extends UniqueJenabean {
 	public Collection<Arc> getExperimentAttributeArcs() {
 		return experimentAttributeArcs;
 	}
+	
+	public String getExperimentAttributeQnameRepresentation() {
+		if (experimentAttributeArcs==null) return null;
+		String s = "";
+		for (Arc attributeArc: experimentAttributeArcs) {
+			s += attributeArc.getQnameRepresentation() + ";\n";
+		}
+		return s;
+	}
 
+	public void setExperimentAttributeQnameRepresentation() {
+		//do nothing; this method ensure that the field will be stored by Jenabean
+	}
+	
 	public Arc getExperimentLabelArc() {
 		return experimentLabelArc;
 	}
@@ -194,6 +208,14 @@ public class ExperimentResult extends UniqueJenabean {
 
 	public void setSamplerClassName(String samplerClassName) {
 		this.samplerClassName = samplerClassName;
+	}
+
+	public String getExperimentSubjectClass() {
+		return experimentSubjectClass;
+	}
+
+	public void setExperimentSubjectClass(String experimentSubjectClass) {
+		this.experimentSubjectClass = experimentSubjectClass;
 	}
 
 
