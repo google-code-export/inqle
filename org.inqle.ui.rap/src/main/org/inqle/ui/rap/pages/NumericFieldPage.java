@@ -6,6 +6,7 @@ package org.inqle.ui.rap.pages;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -29,6 +30,9 @@ public class NumericFieldPage extends BeanWizardPage {
 	 */
 	@Override
 	public void addElements() {
+		GridLayout gl = new GridLayout(2, false);
+		selfComposite.setLayout(gl);
+		
 		Composite composite = selfComposite;
 		new Label (composite, SWT.NONE).setText(labelText);	
 		Text numericField = new Text(composite, SWT.BORDER);
