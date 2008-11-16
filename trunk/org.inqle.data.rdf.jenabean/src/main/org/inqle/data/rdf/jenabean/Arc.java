@@ -67,7 +67,7 @@ import thewebsemantic.Namespace;
 			return s;
 		}
 
-		public String getQNameRepresentation() {
+		public String getQnameRepresentation() {
 //			UriMapper uriMapper = UriMapper.getInstance();
 			String s = "";
 //			if (arcStepList.size() == 1) {
@@ -75,9 +75,13 @@ import thewebsemantic.Namespace;
 //				return uriMapper.getQname(uri);
 //			}
 			for (ArcStep arcStep: arcStepList) {
-				s += arcStep.getQNameRepresentation();
+				s += arcStep.getQnameRepresentation();
 			}
 			return s;
+		}
+		
+		public void setQnameRepresentation(String stringRepresentation) {
+			//do nothing, let the QName representation be generated from the fields
 		}
 		
 		public int compareTo(Arc otherArc) {
@@ -98,7 +102,7 @@ import thewebsemantic.Namespace;
 
 		@Override
 		public String toString() {
-			return getQNameRepresentation();
+			return getQnameRepresentation();
 		}
 //		public Object getValue() {
 //			return value;

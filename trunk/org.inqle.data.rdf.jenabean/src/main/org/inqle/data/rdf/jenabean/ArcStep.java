@@ -76,7 +76,7 @@ public class ArcStep extends GlobalJenabean {
 		return s;
 	}
 
-	public String getQNameRepresentation() {
+	public String getQnameRepresentation() {
 		UriMapper uriMapper = UriMapper.getInstance();
 		String s = "";
 		if (stepType == INCOMING) {

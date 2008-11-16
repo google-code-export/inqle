@@ -70,7 +70,7 @@ import thewebsemantic.Namespace;
 				return uriMapper.getQname(uri);
 			}
 			for (ArcStep arcStep: arcStepList) {
-				s += arcStep.getQNameRepresentation();
+				s += arcStep.getQnameRepresentation();
 			}
 			return s;
 		}
