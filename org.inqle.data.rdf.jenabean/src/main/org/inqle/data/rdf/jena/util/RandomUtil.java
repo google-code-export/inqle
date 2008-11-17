@@ -26,4 +26,17 @@ public class RandomUtil {
 		}
 		return returnset;
 	}
+	
+	/**
+	 * Returns a random number between start and end, inclusive
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static int getRandomInt(int start, int end) {
+		int span = end-start;
+		Random r = new Random();
+		int randint = r.nextInt(span + 1);
+		return start + randint;
+	}
 }
