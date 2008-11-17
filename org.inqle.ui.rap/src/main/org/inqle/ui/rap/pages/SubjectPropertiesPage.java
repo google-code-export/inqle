@@ -226,11 +226,12 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	}
 
 	protected void makePropertyFormElements(List<SortedMap<String, String>> rowValues) {
-		if (rowValues==null) return;
-		
 		dataFieldShowers = new ArrayList<IDataFieldShower>();
 		CsvReader csvImporter = getCsvReader();
 		headers = csvImporter.getHeaders();
+		
+		if (rowValues==null) return;
+		
 		for (Map<String, String> row: rowValues) {
 			String uri = row.get(PropertyLookup.QUERY_HEADER_URI);
 			if (uri != null) uri=uri.trim();
