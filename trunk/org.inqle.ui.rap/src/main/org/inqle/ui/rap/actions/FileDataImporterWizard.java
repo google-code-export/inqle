@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
@@ -170,6 +171,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		saveToModel.begin();
 		saveToModel.add(ontModel);
 		saveToModel.commit();
+		
+		MessageDialog.openInformation( getShell(), "Success importing data", "Successfully imported " + ontModel.size() + " statements."); 
 		
 		if (namedModel != null) {
 			//flush any text indexes for the dataset
