@@ -17,6 +17,7 @@ import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
+import org.inqle.data.rdf.jena.util.RandomUtil;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
@@ -56,7 +57,8 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	//TODO permit these to be configurable
 	public static final int MAXIMUM_LEARNABLE_PREDICATES = 3;
 	public static final int MINIMUM_LEARNABLE_PREDICATES = 2;
-	private static final int MAX_NUMBER_OF_ROWS = 500;
+	public static final int MAX_NUMBER_OF_ROWS = 500;
+	public static final int MAX_PROPERTY_ARC_DEPTH = 3;
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSampler.class);
 
@@ -80,7 +82,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass) {
-		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), 1);
+		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1);
 		if (randomArcs == null || randomArcs.size()==0) return null;
 		return randomArcs.get(0);
 	}
@@ -93,7 +95,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude) {
-		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), (numberToSelect * 3));
+		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, (numberToSelect * 3));
 		if (randomArcs==null) return null;
 		List<Arc> decidedArcs = new ArrayList<Arc>();
 		for (Arc randomArc: randomArcs) {
@@ -125,6 +127,11 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	protected String generateSparql(Resource subjectClass, Collection<Arc> dataColumns) {
 		ArcSparqlBuilder builder = new ArcSparqlBuilder(dataColumns);
 		return builder.generateSparqlConstruct(subjectClass, true, 0, MAX_NUMBER_OF_ROWS);
+	}
+
+	@Override
+	public int selectNumberOfAttributes() {
+		return RandomUtil.getRandomInt(MINIMUM_LEARNABLE_PREDICATES + 1, MAXIMUM_LEARNABLE_PREDICATES + 1);
 	}
 
 }
