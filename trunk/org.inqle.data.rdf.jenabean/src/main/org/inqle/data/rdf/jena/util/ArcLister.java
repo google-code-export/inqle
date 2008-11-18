@@ -24,26 +24,34 @@ public class ArcLister {
 	 * Get SPARQL for finding Arc properties of the given resource subject.  
 	 * This query looks for Arcs with maximum of 3 steps.
 	 * @param subjectClassUri
+	 * @param depth the number of steps from the subject to traverse
 	 * @return
 	 */
-	public static String getSparqlSelectArcs(String subjectClassUri) {
-		String sparql = "SELECT DISTINCT ?pred1 ?pred2 ?pred3 \n" +
-			"{ GRAPH ?anyGraph {" +
-			"?subject a <" + subjectClassUri + "> . \n" +
-			"?subject ?pred1 ?obj1 . \n" +
-			"OPTIONAL { \n" +
-			"?obj1 ?pred2 ?obj2 \n" +
-			"} . \n" +
-			"OPTIONAL { \n" +
-			"?obj2 ?pred3 ?obj3 \n" +
-			"}" +
-			"} }";
+	public static String getSparqlSelectArcs(String subjectClassUri, int depth) {
+		String sparql = "SELECT DISTINCT ?subject ";
+		for (int i=1; i<=depth; i++) {
+			sparql += "?pred" + i + " ";
+		}
+		sparql += "\n{ GRAPH ?anyGraph { \n" +
+			"?subject a <" + subjectClassUri + "> \n";
+		if (depth >= 1) {
+			sparql +=	". ?subject ?pred1 ?obj1 \n";
+		}
+		
+		String nextSubj = "?obj1";
+		for (int i=2; i<=depth; i++) {
+			String thisObj = "?obj" + i;
+			sparql += ". OPTIONAL { FILTER( bound(" + nextSubj + ") ) \n" + 
+				". " + nextSubj + " ?pred" + i + " " + thisObj + "} \n";
+			nextSubj = thisObj;
+		}
+		sparql += "} }";
 		return sparql;
 	}
 	
 
-	public static List<Arc> listArcs(Collection<String> datasetIdList, String subjectClassUri) {
-		String sparql = getSparqlSelectArcs(subjectClassUri);
+	public static List<Arc> listArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
+		String sparql = getSparqlSelectArcs(subjectClassUri, depth);
 		log.info("Retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
@@ -52,8 +60,8 @@ public class ArcLister {
 		return listArcs(queryCriteria);
 	}
 	
-	public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int numberToSelect) {
-		String baseSparql = getSparqlSelectArcs(subjectClassUri);
+	public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+		String baseSparql = getSparqlSelectArcs(subjectClassUri, depth);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		String sparql = Queryer.decorateSparql(baseSparql, true, 0, numberToSelect);
@@ -95,5 +103,7 @@ public class ArcLister {
 		}
 		return arcList;
 	}
+
+
 
 }
