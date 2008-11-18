@@ -156,7 +156,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 				log.info("Returning NULL for list of Arcs");
 				arcsList = null;
 			} else {
-				arcsList = ArcLister.listArcs(selectedModelsCollection, subjectClass.toString());
+				arcsList = ArcLister.listArcs(selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH);
 				log.info("Returning this list of Arcs: " + arcsList);
 			}
 			return arcsList;

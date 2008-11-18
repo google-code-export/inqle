@@ -150,8 +150,13 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @return
 	 */
 	public int getNumberOfAttributes() {
+		if (numberOfAttributes < 1) {
+			return selectNumberOfAttributes();
+		}
 		return numberOfAttributes;
 	}
+
+	public abstract int selectNumberOfAttributes();
 
 	/**
 	 * Get the Collection of NamedModels from which to extract data.  Implementations should
