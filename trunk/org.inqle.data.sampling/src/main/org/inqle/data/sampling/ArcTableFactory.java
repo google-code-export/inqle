@@ -56,8 +56,9 @@ public class ArcTableFactory {
 			if (theArcSet == null || theArcSet.getArcList() == null || theArcSet.getArcList().size()==0) {
 				continue;
 			}
+			log.info("Adding ArcSet:" + theArcSet + "...");
 			arcTable.addArcSet(theArcSet);
-//			log.info("Adding ArcSet:" + arcSet);
+			
 		}//next subject row
 		return arcTable;
 	}
