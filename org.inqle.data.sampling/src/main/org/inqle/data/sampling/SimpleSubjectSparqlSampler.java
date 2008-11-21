@@ -82,7 +82,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass) {
-		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1);
+		List<Arc> randomArcs = ArcLister.listRandomValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1);
 		if (randomArcs == null || randomArcs.size()==0) return null;
 		return randomArcs.get(0);
 	}
@@ -95,7 +95,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude) {
-		List<Arc> randomArcs = ArcLister.listRandomArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, (numberToSelect * 3));
+		List<Arc> randomArcs = ArcLister.listRandomValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, (numberToSelect * 3));
 		if (randomArcs==null) return null;
 		List<Arc> decidedArcs = new ArrayList<Arc>();
 		for (Arc randomArc: randomArcs) {

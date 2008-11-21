@@ -49,6 +49,8 @@ public class ArcTable implements IDataTable {
 		this.headers.addAll(headers);
 	}
 	public int getHeaderIndex(Arc arc) {
+		log.info("Finding index of Arc " + arc + " among these columns: " + getColumns());
+		log.info("getColumns().contains(arc)? " + getColumns().contains(arc));
 		return getColumns().indexOf(arc);
 	}
 	
@@ -216,24 +218,29 @@ public class ArcTable implements IDataTable {
 //		columnDistinctValues.set(columnIndex, distinctValues);
 //		dataTypes.set(columnIndex, dataType);
 //		columnTypes.set(columnIndex, columnType);
-		addOrSetListItem(columnData, columnIndex, columnValues);
-		addOrSetListItem(columnDistinctValues, columnIndex, distinctValues);
-		addOrSetListItem(dataTypes, columnIndex, dataType);
-		addOrSetListItem(columnTypes, columnIndex, columnType);
+		addOrSetListItem(columnData, columnIndex, columnValues, null);
+		addOrSetListItem(columnDistinctValues, columnIndex, distinctValues, null);
+		addOrSetListItem(dataTypes, columnIndex, dataType, IDataTable.DATA_TYPE_UNKNOWN);
+		addOrSetListItem(columnTypes, columnIndex, columnType, IDataTable.COLUMN_TYPE_UNKNOWN);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void addOrSetListItem(List list, int index, Object value) {
+	/**
+	 * Set a value at the desired list position, specified by index.
+	 * If the list is not of sufficient length, add elements of value undefinedValue
+	 * in the intervening positions.
+	 */
+	private void addOrSetListItem(List list, int index, Object value, Object undefindedValue) {
 		if (list.size() <= index) {
 			for (int i=list.size(); i<index; i++) {
-				list.add(null);
+				list.add(undefindedValue);
 			}
 			list.add(value);
 		} else {
 			list.set(index, value);
 		}
-		
 	}
+	
 	public int getIdColumnIndex() {
 		return idColumnIndex;
 	}

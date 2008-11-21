@@ -13,6 +13,7 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.JenabeanConverter;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
@@ -80,9 +81,11 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		log.info("Subject class=" + subjectClass);
 		
 		Arc labelArc = selectLabelArc(modelsToUse, subjectClass);
+		log.info("Label arc=" + labelArc);
 		Collection<Arc> avoidArcs = new ArrayList<Arc>();
 		avoidArcs.add(labelArc);
 		Collection<Arc> learnableArcs = getLearnableArcs(modelsToUse, subjectClass, avoidArcs);
+		log.info("Learnable arcs=" + learnableArcs);
 		if (learnableArcs==null || learnableArcs.size()==0) {
 			log.warn("Retrieved no learnable attributes from Jena model.  returning null.");
 			return null;
@@ -93,20 +96,25 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		List<Arc> allArcs = new ArrayList<Arc>();
 		allArcs.add(labelArc);
 		allArcs.addAll(learnableArcs);
-		log.info("Learnable arcs=" + learnableArcs);
+		log.info("All arcs=" + allArcs);
 		
 		String sparql = generateSparql(subjectClass, allArcs);
 		log.info("Generated sparql for sampling:" + sparql);
 		Model resultModel = doQuery(modelsToUse, allArcs, sparql);
+		log.info("Retrieved this sample:" + JenabeanWriter.modelToString(resultModel));
 		if (resultModel==null) return null;
 		OntModel ontModel = ModelFactory.createOntologyModel();
 		ontModel.add(resultModel);
 		ArcTableFactory factory = new ArcTableFactory(ontModel);
+		log.info("CACACACACACACACACACA Creating ArcTable...");
 		ArcTable resultDataTable = factory.createArcTable(subjectClass);
-		if (resultDataTable.getColumns().contains(labelArc)) {
-			resultDataTable.setLabelColumnIndex(resultDataTable.getHeaderIndex(getLabelArc()));
+//		if (resultDataTable.getColumns().contains(labelArc)) {
+		log.info("TATATATATATATATATATATA Testing arcs: " + resultDataTable.getColumns() + " for label arc: " + labelArc);
+		if (resultDataTable.getHeaderIndex(labelArc) >= 0) {
+			resultDataTable.setLabelColumnIndex(resultDataTable.getHeaderIndex(labelArc));
 		} else {
 			log.warn("TTTTTTTTTTTTTT Table lacks the label arc:" + labelArc);
+			return null;
 		}
 		return resultDataTable;
 	}
