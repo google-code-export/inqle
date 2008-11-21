@@ -11,13 +11,14 @@ import com.hp.hpl.jena.sparql.function.FunctionBase0;
 /**
  * This is designed to be used in a SPARQL query,
  * in order to retrieve a random set of records.
- * his returns a random value from 0 to 1.
+ * This returns a random value from 0 to 1.
  * 
  * Usage:
  * PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.>
  * SELECT ?whatever
- * { ?whatever ?p ?o }
- * ORDER BY inqle-fn:Rand()
+ * { ?whatever ?p ?o .
+ * LET (?rand := inqle-fn:Rand())}
+ * ORDER BY DESC(?rand)
  * LIMIT 100
  * 
  * @author David Donohue

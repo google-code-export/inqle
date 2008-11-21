@@ -107,7 +107,7 @@ import thewebsemantic.Namespace;
 		public boolean equals(Object o) {
 			if (!(o instanceof Arc)) return false;
 			Arc otherArc = (Arc)o;
-			return this.toString().equals(otherArc.toString());
+			return this.getStringRepresentation().equals(otherArc.getStringRepresentation());
 		}
 
 		@Override

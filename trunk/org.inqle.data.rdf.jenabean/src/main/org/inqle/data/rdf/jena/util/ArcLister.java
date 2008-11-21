@@ -49,7 +49,127 @@ public class ArcLister {
 		return sparql;
 	}
 	
+	/**
+	 * Get SPARQL for finding Arc properties of the given resource subject. Select
+	 * only Arcs that terminate with a literal value 
+	 * This query looks for Arcs with maximum of 3 steps.
+	 * @param subjectClassUri
+	 * @param depth the number of steps from the subject to traverse
+	 * @return
+	 */
+	public static String getSparqlSelectValuedArcs(String subjectClassUri, int depth) {
+		String sparql = "SELECT DISTINCT ";
+		for (int i=1; i<=depth; i++) {
+			sparql += "?pred" + i + " ";
+		}
+		sparql += "\n{ GRAPH ?anyGraph { \n" +
+			"?subject a <" + subjectClassUri + "> \n";
+//		String statements = ". ?subject ?pred1 ?obj1 \n";
+//		String nextSubj = "?obj1";
+//		if (depth >= 1) {
+//			sparql +=	". OPTIONAL { " + statements +
+//				"  . isLiteral(?obj1) } \n";
+//		}
+		String statements = "";
+		String nextSubj = "?subject";
+		for (int i=1; i<=depth; i++) {
+			String thisObj = "?obj" + i;
+			statements += "\n . " + nextSubj + " ?pred" + i + " " + thisObj;
+			sparql += ". OPTIONAL { " +
+					"FILTER( isLiteral(" + thisObj + ") ) " + 
+					statements + " } \n";
+			nextSubj = thisObj;
+		}
+		sparql += "} }";
+		return sparql;
+	}
+	
+	/**
+	 * Get SPARQL for finding Arc properties of the given resource subject.  
+	 * This query looks for Arcs with maximum of 3 steps.
+	 * @param subjectClassUri
+	 * @param depth the number of steps from the subject to traverse
+	 * @return
+	 */
+	public static String getSparqlSelectValuedArcs2(String subjectClassUri, int depth) {
+		String sparql = "SELECT DISTINCT ?subject ";
+		for (int i=1; i<=depth; i++) {
+			sparql += "?pred" + i + " ";
+		}
+		sparql += "\n{ GRAPH ?anyGraph { \n" +
+			"?subject a <" + subjectClassUri + "> \n";
+		if (depth >= 1) {
+			sparql +=	". ?subject ?pred1 ?obj1 \n" +
+					". { ";
+		}
+		
+		String nextSubj = "?obj1";
+		for (int i=2; i<=depth; i++) {
+			if (i > 2) {
+				sparql += " UNION ";
+			}
+			String thisObj = "?obj" + i;
+			sparql += "  { " + nextSubj + " ?pred" + i + " " + thisObj + " \n" +
+					"  . FILTER( bound(" + nextSubj + ") ) ";
+			if (i < depth) {
+				sparql += "  . OPTIONAL { FILTER( isLiteral(" + thisObj + ") ) } \n";
+			} else {
+				sparql += "  . FILTER( isLiteral(" + thisObj + ") ) \n";
+			}
+			sparql += " } \n";
+			nextSubj = thisObj;
+		}
+		sparql += "} } }";
+		return sparql;
+	}
 
+	
+	/**
+	 * A 3rd method to get SPARQL for finding Arc properties of the given resource subject.  
+	 * This query looks for Arcs with maximum of 3 steps.
+	 * @param subjectClassUri
+	 * @param depth the number of steps from the subject to traverse
+	 * @return
+	 */
+	public static String getSparqlSelectValuedArcs3(String subjectClassUri, int depth) {
+		String sparql = "SELECT DISTINCT ?subject ";
+		for (int i=1; i<=depth; i++) {
+			sparql += "?pred" + i + " ";
+		}
+		sparql += "\n{ GRAPH ?anyGraph { \n" +
+			"?subject a <" + subjectClassUri + "> \n";
+		if (depth >= 1) {
+			sparql +=	". ?subject ?pred1 ?obj1 \n";
+		}
+		
+		String nextSubj = "?obj1";
+		String lastPred = "?pred1";
+		for (int i=2; i<=depth; i++) {
+			String thisObj = "?obj" + i;
+			String thisPred = "?pred" + i;
+			sparql += ". OPTIONAL { FILTER( bound(" + lastPred + ") ) \n" + 
+				". " + nextSubj + " ?pred" + i + " " + thisObj + "} \n";
+			nextSubj = thisObj;
+			lastPred = thisPred;
+		}
+		
+		//add stipulation that the last object is a literal
+		sparql += " . FILTER ( \n";
+		for (int i=1; i<=depth; i++) {
+			if (i > 1) {
+//				sparql += " UNION ";
+				sparql += " || ";
+			}
+			String thisObj = "?obj" + i;
+//			sparql += " { FILTER( isLiteral(" + thisObj + ") ) } ";
+			sparql += " isLiteral(" + thisObj + ") ";
+		}
+		
+		sparql += "\n ) } }";
+//		sparql += "\n } }";
+		return sparql;
+	}
+	
 	public static List<Arc> listArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectArcs(subjectClassUri, depth);
 		log.info("Retrieving Arcs using this query: " + sparql);
@@ -60,11 +180,39 @@ public class ArcLister {
 		return listArcs(queryCriteria);
 	}
 	
+	/**
+	 * Generate a list of randomly selected arcs
+	 * @param datasetIdList a list of dataset IDs to query
+	 * @param subjectClassUri the URI of the subject class, from which to walk
+	 * @param depth max number of steps to take from the subject
+	 * @param numberToSelect number of Arcs to select
+	 * @return a list of selected arcs
+	 */
 	public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
 		String baseSparql = getSparqlSelectArcs(subjectClassUri, depth);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		String sparql = Queryer.decorateSparql(baseSparql, true, 0, numberToSelect);
+		log.info("Finding random Arcs using SPARQL:" + sparql);
+		queryCriteria.setQuery(sparql);
+		
+		return listArcs(queryCriteria);
+	}
+	
+	/**
+	 * Generate a list of randomly selected arcs, which terminate with a Literal value
+	 * @param datasetIdList a list of dataset IDs to query
+	 * @param subjectClassUri the URI of the subject class, from which to walk
+	 * @param depth max number of steps to take from the subject
+	 * @param numberToSelect number of Arcs to select
+	 * @return a list of selected arcs, terminating with a literal value
+	 */
+	public static List<Arc> listRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+		String baseSparql = getSparqlSelectValuedArcs3(subjectClassUri, depth);
+		QueryCriteria queryCriteria = new QueryCriteria();
+		queryCriteria.addNamedModelIds(datasetIdList);
+		String sparql = Queryer.decorateSparql(baseSparql, false, 0, numberToSelect);
+		log.info("Finding random Arcs using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
 		return listArcs(queryCriteria);

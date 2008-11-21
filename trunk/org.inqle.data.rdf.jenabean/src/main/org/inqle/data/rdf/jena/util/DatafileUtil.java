@@ -94,7 +94,7 @@ public class DatafileUtil {
 			if (file.isDirectory()) {
 				addModel(model, file.getAbsolutePath());
 			} else {
-				log.info("Getting model: " + file.getAbsolutePath());
+				log.trace("Getting model: " + file.getAbsolutePath());
 				model.add(Persister.getModelFromFile(file.getAbsolutePath()));
 			}
 		}
