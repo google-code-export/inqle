@@ -310,15 +310,31 @@ import com.hp.hpl.jena.sdb.SDB;
 		return results;
 	}
 	
+	/**
+	 * To a basic sparql query, add 
+	 * @param baseSparql
+	 * @param randomize
+	 * @param offset
+	 * @param limit
+	 * @return
+	 */
 	public static String decorateSparql(String baseSparql, boolean randomize, int offset, int limit) {
-		String sparql = "";
-		if (randomize) {
-			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
+		String sparql;
+		if (! randomize) {
+			sparql = baseSparql;
+		} else {
+			sparql = "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
+			//trim off everything after the last "}"
+			if (baseSparql.indexOf("}") >= 0) {
+				sparql += baseSparql.substring(0, baseSparql.lastIndexOf("}"));
+			} else {
+				sparql += baseSparql;
+			}
+//		sparql += " ORDER BY inqle-fn:Rand() \n";
+			sparql += ". LET (?rand := inqle-fn:Rand()) } \n";
+			sparql += "ORDER BY DESC(?rand) \n";
 		}
-		sparql += baseSparql;
-		if (randomize) {
-			sparql += " ORDER BY inqle-fn:Rand() \n";
-		}
+
 		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
 		return sparql;
 	}

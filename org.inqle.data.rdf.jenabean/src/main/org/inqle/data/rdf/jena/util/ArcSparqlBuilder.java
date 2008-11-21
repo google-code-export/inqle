@@ -34,7 +34,7 @@ public class ArcSparqlBuilder {
 		String subjectStr ="?" + SUBJECT_VARIABLE_NAME;
 		sparql += subjectStr + " a <" + subject + ">";
 		for (Arc arc: arcs) {
-			sparql += getSparqlWhereFromArc(subject, subjectStr, arc, null);
+			sparql += getSparqlWhereFromArc(subjectStr, arc, null);
 		}
 		return sparql;
 	}
@@ -49,7 +49,7 @@ public class ArcSparqlBuilder {
 	 * 
 	 * TODO support bidirectional ArcSteps (incomming)
 	 */
-	public String getSparqlWhereFromArc(String subject, String subjectVariableName, Arc arc, Object object) {
+	public String getSparqlWhereFromArc(String subjectVariableName, Arc arc, Object object) {
 			String sparql = "";
 	//		String subjectStr = "";
 	//		String newNode = subject;
@@ -57,20 +57,20 @@ public class ArcSparqlBuilder {
 	//		for (int i=0; i < arc.getArcSteps().length; i++) {
 			List<String> stepsSoFar = new ArrayList<String>();
 			String subjectStr = subjectVariableName;
-			log.info("Adding where lines for Arc: " + arc);
+			log.info("AAAAAAAAAAAAAAAA Adding where lines for Arc: " + arc);
 			for (ArcStep arcStep: arc.getArcSteps()) {
 				String predicate = arcStep.getPredicate();
 				stepsSoFar.add(predicate);
 				if (variableNameExists(stepsSoFar)) {
 					subjectStr = getVariableName(stepsSoFar);
-					log.info("Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
+					log.info("SSSSSSSSSSSSSSSSSS Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
 					continue;
 				}
 				String objectStr = null;
 				
 				if (object == null) {
 					objectStr = getVariableName(stepsSoFar);
-					log.info("Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
+					log.info("NNNNNNNNNNNNNN Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
 				} else if (object instanceof URI) {
 					objectStr = "<" + ((URI)object).toString() + ">";
 				} 
@@ -124,9 +124,14 @@ public class ArcSparqlBuilder {
 			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
 		}
 		sparql += "CONSTRUCT {\n" + where + "}\n";
-		sparql += "{ GRAPH ?anyGraph {\n" + where + "\n} }\n";
+		sparql += "{ GRAPH ?anyGraph {\n" + where;
 		if (randomize) {
-			sparql += "ORDER BY inqle-fn:Rand() \n";
+			sparql += "\n . LET($rand := inqle-fn:Rand()) \n";
+		}
+		sparql += "\n} }\n";
+		if (randomize) {
+//			sparql += "ORDER BY inqle-fn:Rand() \n";
+			sparql += "ORDER BY $rand \n";
 		}
 		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
 		
