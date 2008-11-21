@@ -110,11 +110,13 @@ public class ArcTableToMemoryExampleTableConverter {
 				PolynominalMapping mapping = new PolynominalMapping();
 				LinkedHashSet<Object> valuesSet = arcTable.getColumnDistinctValues(i);
 				int j=0;
-				for (Object strObj: valuesSet) {
-					String strVal = strObj.toString();
-					log.debug("Mapping " + i + ": " + strVal);
-					mapping.mapString(strVal.trim());
-					j++;
+				if (valuesSet != null) {
+					for (Object strObj: valuesSet) {
+						String strVal = strObj.toString();
+						log.debug("Mapping " + i + ": " + strVal);
+						mapping.mapString(strVal.trim());
+						j++;
+					}
 				}
 			}
 			
