@@ -123,7 +123,8 @@ public class Loader {
 		try {
   		log.info("Trying to read input stream using " + lang + " format...");
   		//Read the triples from the input stream into the model
-  		model = model.read(in, defaultUri, lang);
+//  		model = model.read(in, defaultUri, lang);
+  		model.read(in, defaultUri, lang);
   		success = true;
   	} catch (Exception e) {
 //  		log.error("Unable to read stream using " + lang + " format.", e);
