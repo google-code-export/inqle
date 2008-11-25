@@ -452,16 +452,16 @@ public class Persister {
 		}
 		
 		indexBuilders = new HashMap<String, IndexBuilderModel>();
-		//loop thru extensions, and create each index
+		//loop thru internal datasets extensions, and create each index
 		List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
 		for (IExtensionSpec datasetExtension: datasetExtensions) {
 			log.trace("datasetExtension=" + datasetExtension);
 			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String textIndexType = datasetExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
 			
-//			log.info("DDDDDDDDDDDDDDDDDDDDdatasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
+				log.info("Creating IndexBuilder for internal datasetRoleId=" + datasetRoleId + "; textIndexType=" + textIndexType);
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetRoleId;
 				//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
 				
@@ -514,13 +514,14 @@ public class Persister {
 		//add any external dataset functions which are supposed to be indexed
 		List<IExtensionSpec> datasetFunctionExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET_FUNCTIONS);
 		for (IExtensionSpec datasetFunctionExtension: datasetFunctionExtensions) {
-			log.trace("datasetExtension=" + datasetFunctionExtension);
+			
 			String datasetFunctionId = datasetFunctionExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String textIndexType = datasetFunctionExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
 			
 //			log.info("FFFFFFFFFFFFFFFFFFdatasetFunctionId=" + datasetFunctionId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
+				log.info("Making IndexBuilder for external dataset: datasetExtension=" + datasetFunctionExtension);
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetFunctionId;
 				
 				IndexWriter indexWriter = null;
@@ -538,6 +539,7 @@ public class Persister {
 				
 				try {
 					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
+					log.info("created IndexWriter");
 				} catch (Exception e) {
 					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
 				}
@@ -545,8 +547,8 @@ public class Persister {
 				textIndexType = textIndexType.toLowerCase();
 				IndexBuilderModel larqBuilder = null;
 				
-				Model internalModel = getInternalModel(datasetFunctionId);
-				log.info("got internalmodel for " + datasetFunctionId + ".  Is null?" + (internalModel==null));
+//				Model internalModel = getInternalModel(datasetFunctionId);
+//				log.info("got internalmodel for " + datasetFunctionId + ".  Is null?" + (internalModel==null));
 				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 //					larqBuilder = new IndexBuilderSubject(indexFilePath);
 					larqBuilder = new IndexBuilderSubject(indexWriter);
@@ -556,16 +558,23 @@ public class Persister {
 				}
 				//if this dataset function is a type to be indexed and if it has an index, load it.
 				if (larqBuilder != null) {
-					log.info("Retrieving index for function " + datasetFunctionId + "...");
+					log.info("Created indexBuilder for function " + datasetFunctionId + ".  Retrieving index if available...");
 //					larqBuilder.indexStatements(internalModel.listStatements()) ;
 					//this does not work because listener does not listen across JVMs:
 //					log.info("Registering Index for role " + datasetRoleId + "...");
 //					internalModel.register(larqBuilder);
 					//save this larqBuilder
-					if (larqBuilder.getIndex() == null) {
-						log.warn("No text index exists for dataset function " + datasetFunctionId);
+					IndexLARQ theIndex = null;
+					try {
+						theIndex = larqBuilder.getIndex();
+					} catch (Exception e) {
+						log.info("Unable to retrieve index for dataset function " + datasetFunctionId);
+					}
+					if (theIndex == null) {
+						log.warn("No text index exists yet for dataset function " + datasetFunctionId + "Proceeding w/ blank index.");
 					}
 					indexBuilders.put(datasetFunctionId, larqBuilder);
+					log.info("Added indexbuilder for function " + datasetFunctionId);
 				}
 			}
 		}
@@ -656,7 +665,7 @@ public class Persister {
 				for (String function: functions) {
 					IndexBuilderModel builder = getIndexBuilder(function);
 					if (builder == null) continue;
-//					log.info("Registering index builder: " + builder + " for function:" + function);
+					log.info("Registering index builder: " + builder + " for function:" + function);
 					model.register(builder);
 				}
 			}
