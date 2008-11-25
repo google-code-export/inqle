@@ -43,6 +43,13 @@ Improved usability, without need to enter URIs.
   * Added new extension type: org.inqle.data.datasetFunctions.  This extension can be used by plugin contributors to specify set of datasets, that the plugin can use to do its work.   E.g. a plugin developer could create a "trivia" dataset function, and write a "trivia" plugin, which asks trivia questions from whichever datasets of the "trivia" function are available. 
   * Added dataset function dataset function org.inqle.datasetFunctions.schemas, for lookup of subjects and properties, when importing data.
 
+==Version 0.1.8==
+(25 March, 2008)
+  * New subject-based sampler available.  Agnostic of how the data was loaded.  Uses full fledged arcs as attributes
+  * Fixed bugs in multiple wizards
+  * Added QName abbreviations of URIs & arcs
+  * Central INQLE server working for lookup of subjects and some predicates
+
 ==Version 0.2==
 (expected end of 2008)
 
