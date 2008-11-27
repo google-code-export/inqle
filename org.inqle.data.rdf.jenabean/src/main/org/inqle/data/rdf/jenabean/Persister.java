@@ -539,7 +539,7 @@ public class Persister {
 				
 				try {
 					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
-					log.info("created IndexWriter");
+					//log.info("created IndexWriter");
 				} catch (Exception e) {
 					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
 				}
@@ -558,7 +558,7 @@ public class Persister {
 				}
 				//if this dataset function is a type to be indexed and if it has an index, load it.
 				if (larqBuilder != null) {
-					log.info("Created indexBuilder for function " + datasetFunctionId + ".  Retrieving index if available...");
+					//log.info("Created indexBuilder for function " + datasetFunctionId + ".  Retrieving index if available...");
 //					larqBuilder.indexStatements(internalModel.listStatements()) ;
 					//this does not work because listener does not listen across JVMs:
 //					log.info("Registering Index for role " + datasetRoleId + "...");
@@ -613,7 +613,7 @@ public class Persister {
 			String datasetRole = internalDataset.getDatasetRole();
 			IndexBuilderModel builder = getIndexBuilder(datasetRole);
 			if (builder != null) {
-				log.info("Flushing index builder: " + builder + " for dataset role:" + datasetRole + "...");
+				//log.info("Flushing index builder: " + builder + " for dataset role:" + datasetRole + "...");
 				builder.flushWriter();
 			}
 		} else if (namedModel instanceof ExternalDataset) {
@@ -623,7 +623,7 @@ public class Persister {
 				for (String function: functions) {
 					IndexBuilderModel builder = getIndexBuilder(function);
 					if (builder == null) continue;
-					log.info("Flushing index builder: " + builder + " for function:" + function + "...");
+					//log.info("Flushing index builder: " + builder + " for function:" + function + "...");
 					builder.flushWriter();
 				}
 			}
@@ -973,7 +973,7 @@ public class Persister {
 				log.warn("Unable to persist object " + persistableObj + ".  It has no TargetDataset annotation.");
 				return;
 			}
-			log.info("Persisting to dataset of role:" + targetDatasetRoleId + "\npersistableObj=" + JenabeanWriter.toString(persistableObj));
+//			log.info("Persisting to dataset of role:" + targetDatasetRoleId + "\npersistableObj=" + JenabeanWriter.toString(persistableObj));
 			Model targetModel = getInternalModel(targetDatasetRoleId);
 			persist(persistableObj, targetModel);
 		}
