@@ -49,8 +49,8 @@ public class ArcTable implements IDataTable {
 		this.headers.addAll(headers);
 	}
 	public int getHeaderIndex(Arc arc) {
-		log.info("Finding index of Arc " + arc + " among these columns: " + getColumns());
-		log.info("getColumns().contains(arc)? " + getColumns().contains(arc));
+		//log.info("Finding index of Arc " + arc + " among these columns: " + getColumns());
+		//log.info("getColumns().contains(arc)? " + getColumns().contains(arc));
 		return getColumns().indexOf(arc);
 	}
 	
@@ -89,13 +89,13 @@ public class ArcTable implements IDataTable {
 	 * @param row
 	 */
 	public void addArcSet(ArcSet newRowArcSet) {
-		log.info("Adding to ArcTable: ArcSet=" + newRowArcSet);
+		//log.info("Adding to ArcTable: ArcSet=" + newRowArcSet);
 		ArrayList<Object> row = new ArrayList<Object>();
 		List<Arc> newArcs = newRowArcSet.getArcList();
 		//add any new Arcs to the headers
 		if (getHeaders()==null || getHeaders().size()==0) {
 			addHeaders(newArcs);
-			log.info("Added headers:" + newArcs);
+			//log.info("Added headers:" + newArcs);
 		}
 		
 		for (Arc arc: newArcs) {
@@ -103,19 +103,19 @@ public class ArcTable implements IDataTable {
 			if (columnIndex < 0) {
 				log.warn("Arc not found among ArcTable headers:" + arc);
 				addHeader(arc);
-				log.info("Added header:" + arc);
+				//log.info("Added header:" + arc);
 				columnIndex = getHeaderIndex(arc);
 			}
 			Object value = newRowArcSet.getValue(arc);
 			if (row.size() > columnIndex) {
 				row.set(columnIndex, value);
-				log.info("Set item " + columnIndex + " to " + value);
+				//log.info("Set item " + columnIndex + " to " + value);
 				continue;
 			}
 			for (int i=row.size(); i<=columnIndex; i++) {
 				if (i==columnIndex) {
 					row.add(value);
-					log.info("Add at item " + columnIndex + ": " + value);
+					//log.info("Add at item " + columnIndex + ": " + value);
 					continue;
 				}
 				row.add(null);
