@@ -44,7 +44,7 @@ public class ArcTableFactory {
 	 * @return
 	 */
 	public ArcTable createArcTable(Resource subjectClass) {
-		log.info("createArcTable(" + subjectClass + ")...");
+		//log.info("createArcTable(" + subjectClass + ")...");
 		ArcTable arcTable = new ArcTable();
 		arcTable.setSubjectClass(subjectClass.toString());
 //		List<ArcSet> rows = new ArrayList<ArcSet>();
@@ -56,7 +56,7 @@ public class ArcTableFactory {
 			if (theArcSet == null || theArcSet.getArcList() == null || theArcSet.getArcList().size()==0) {
 				continue;
 			}
-			log.info("Adding ArcSet:" + theArcSet + "...");
+			//log.info("Adding ArcSet:" + theArcSet + "...");
 			arcTable.addArcSet(theArcSet);
 			
 		}//next subject row
