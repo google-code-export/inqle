@@ -57,20 +57,20 @@ public class ArcSparqlBuilder {
 	//		for (int i=0; i < arc.getArcSteps().length; i++) {
 			List<String> stepsSoFar = new ArrayList<String>();
 			String subjectStr = subjectVariableName;
-			log.info("AAAAAAAAAAAAAAAA Adding where lines for Arc: " + arc);
+			//log.info("AAAAAAAAAAAAAAAA Adding where lines for Arc: " + arc);
 			for (ArcStep arcStep: arc.getArcSteps()) {
 				String predicate = arcStep.getPredicate();
 				stepsSoFar.add(predicate);
 				if (variableNameExists(stepsSoFar)) {
 					subjectStr = getVariableName(stepsSoFar);
-					log.info("SSSSSSSSSSSSSSSSSS Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
+					//log.info("SSSSSSSSSSSSSSSSSS Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
 					continue;
 				}
 				String objectStr = null;
 				
 				if (object == null) {
 					objectStr = getVariableName(stepsSoFar);
-					log.info("NNNNNNNNNNNNNN Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
+					//log.info("NNNNNNNNNNNNNN Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
 				} else if (object instanceof URI) {
 					objectStr = "<" + ((URI)object).toString() + ">";
 				} 

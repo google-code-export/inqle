@@ -172,7 +172,7 @@ public class ArcLister {
 	
 	public static List<Arc> listArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectArcs(subjectClassUri, depth);
-		log.info("Retrieving Arcs using this query: " + sparql);
+		//log.info("Retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		queryCriteria.setQuery(sparql);
@@ -193,7 +193,7 @@ public class ArcLister {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		String sparql = Queryer.decorateSparql(baseSparql, true, 0, numberToSelect);
-		log.info("Finding random Arcs using SPARQL:" + sparql);
+		//log.info("Finding random Arcs using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
 		return listArcs(queryCriteria);
@@ -212,7 +212,7 @@ public class ArcLister {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		String sparql = Queryer.decorateSparql(baseSparql, false, 0, numberToSelect);
-		log.info("Finding random Arcs using SPARQL:" + sparql);
+		//log.info("Finding random Arcs using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
 		return listArcs(queryCriteria);
@@ -228,7 +228,7 @@ public class ArcLister {
 	 */
 	public static List<Arc> listArcs(QueryCriteria queryCriteria) {
 		RdfTable results = Queryer.selectRdfTable(queryCriteria);
-		log.info("Received results: " + RdfTableWriter.dataTableToString(results));
+		//log.info("Received results: " + RdfTableWriter.dataTableToString(results));
 		if (results==null || results.countResults()==0) return null;
 		List<QuerySolution> resultsList = results.getResultList();
 		List<Arc> arcList = new ArrayList<Arc>();
