@@ -153,7 +153,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		experimentResult.setExperimentAttributeArcs(learnableArcs);
 		//experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
 //		log.trace("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
-		log.info("resultDataTable.getLearnableColumns()=" + resultDataTable.getLearnableColumns());
+		//log.info("resultDataTable.getLearnableColumns()=" + resultDataTable.getLearnableColumns());
 		return experimentResult;
 	}
 
@@ -249,16 +249,16 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 					labelAttribute, 
 					weightAttribute, 
 					idAttribute);
-		log.info("Created exampleSet of size " + exampleSet.size() + "."
-				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
-				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
-		);
+		//log.info("Created exampleSet of size " + exampleSet.size() + "."
+//				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
+//				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
+//		);
 		int i=0;
 		Iterator<?> regularAttributeI = exampleSet.getAttributes().iterator();
 		while (regularAttributeI.hasNext()) {
 			i++;
 			Attribute regularAttribute = (Attribute)regularAttributeI.next();
-			log.info("\n\nREGULAR Attribute =" + regularAttribute);
+			//log.info("\n\nREGULAR Attribute =" + regularAttribute);
 		}
 		//run this ExampleSet against the RapidMiner process
 		IOObject[] inputIOObjects = new IOObject[] { exampleSet };

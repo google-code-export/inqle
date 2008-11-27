@@ -62,16 +62,16 @@ public class ExperimenterAgent extends AAgent {
 
 	public LearningCycle selectLearningCycle() {
 		if (learningCycleMode == USE_RANDOM_LEARNING_CYCLE) {
-			log.info("Selecting random learning cycle...");
+			//log.info("Selecting random learning cycle...");
 			return selectRandomLearningCycle();
 		}
 		if (learningCycleMode == USE_BASE_LEARNING_CYCLE) {
-			log.info("Selecting the base learning cycle...");
+			//log.info("Selecting the base learning cycle...");
 			return new LearningCycle();
 		}
 		if (learningCycle != null) {
-			//otherwise, return the learning cycle field
-			log.info("Selecting pre-selected learning cycle...");
+			//otherwise, return the learnin//log.info(ield
+			//log.info("Selecting pre-selected learning cycle...");
 		} else {
 			// the learning cycle field is null, so select a random learning cycle
 			return selectRandomLearningCycle();
@@ -82,7 +82,7 @@ public class ExperimenterAgent extends AAgent {
 	public void run() {
 		Persister persister = Persister.getInstance();
 		setRunning();
-		log.info("Starting to run()");
+		//log.info("Starting to run()");
 //		LearningCycle learningCycleToRun = getLearningCycle();
 //		if (learningCycleToRun == null) {
 //			learningCycleToRun = selectRandomLearningCycle();
@@ -102,8 +102,8 @@ public class ExperimenterAgent extends AAgent {
 				log.warn("Resulting ExperimentResult is null.  Skip to next cycle.");
 				continue;
 			}
-			log.trace("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
-			//log.info("Storing experiment result");
+//			log.trace("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
+			log.info("Storing experiment result");
 			persister.persist(experimentResult);
 		}
 		log.info("Exiting.  Completed " + cycleCount + " cycles.");

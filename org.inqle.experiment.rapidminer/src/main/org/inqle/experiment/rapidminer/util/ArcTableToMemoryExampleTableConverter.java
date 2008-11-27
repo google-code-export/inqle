@@ -70,7 +70,7 @@ public class ArcTableToMemoryExampleTableConverter {
 					//val = column.getValuesSet().indexOf(cell.toString());
 					val = mapping.mapString(cell.toString());
 					if (attribute.getValueType() == Ontology.POLYNOMINAL) {
-						log.info("Cell val '" + cell + "' maps to " + val);
+						//log.info("Cell val '" + cell + "' maps to " + val);
 					}
 				}
 				//fill with proper data here

@@ -32,7 +32,7 @@ public class ExperimentResult extends UniqueJenabean {
 	
 	public ExperimentResult() {
 		setCreationDate(new Date());
-		log.info("Created ExperimentResult and set creationDate to " + getCreationDate());
+		//log.info("Created ExperimentResult and set creationDate to " + getCreationDate());
 	}
 	
 	@Override
