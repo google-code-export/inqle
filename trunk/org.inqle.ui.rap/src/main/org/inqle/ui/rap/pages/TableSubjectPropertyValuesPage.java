@@ -8,8 +8,8 @@ package org.inqle.ui.rap.pages;
  */
 public class TableSubjectPropertyValuesPage extends SubjectPropertyValuesPage {
 
-	private static final String DEFAULT_TITLE = "Property Values for Entire Table";
-	private static final String DEFAULT_DESCRIPTION = "For properties with a constant value for the entire table, specify what that value is.";
+	private static final String DEFAULT_TITLE = "What values/identifiers for this thing are NOT stored in the table (if any)?";
+	private static final String DEFAULT_DESCRIPTION = "Enter identifiers for this thing. These are properties with a constant value.";
 
 	public TableSubjectPropertyValuesPage() {
 		super(DEFAULT_TITLE, DEFAULT_DESCRIPTION);

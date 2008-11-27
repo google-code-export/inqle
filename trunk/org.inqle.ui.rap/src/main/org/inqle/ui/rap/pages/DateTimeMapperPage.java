@@ -39,18 +39,21 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		selectGlobalDateTime = new Button(selfComposite, SWT.RADIO);
 		selectGlobalDateTime.setText("All data being imported has the same date and time.");
 		selectGlobalDateTime.addSelectionListener(this);
-		
+
 		globalDateTextShower = new TextFieldShower(
 				selfComposite,
+				false,
 				"Enter the date and time for all data",
 				"Example: 2009-01-20 13:00:00\n" +
 						"(Use military time, with hours from 00 to 23)",
 				null,
 				SWT.BORDER | SWT.SINGLE
 		);
+		globalDateTextShower.setEnabled(false);
 		
 		selectRowDateTime = new Button(selfComposite, SWT.RADIO);
 		selectRowDateTime.setText("Different rows of data have different dates and/or times.");
+		selectRowDateTime.setSelection(true);
 		selectRowDateTime.addSelectionListener(this);
 		
 		new Label (selfComposite, SWT.NONE).setText("Date Column");

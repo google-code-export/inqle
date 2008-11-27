@@ -8,8 +8,13 @@ package org.inqle.ui.rap.pages;
  */
 public class TableSubjectPropertyMappingsPage extends SubjectPropertyMappingsPage {
 
-	private static final String DEFAULT_TITLE = "Property Values for Each Row";
-	private static final String DEFAULT_DESCRIPTION = "Specify which column in your file should populate applicable properties.";
+	private static final String DEFAULT_TITLE = "What values for this thing are stored in the table (if any)?";
+	
+	private static final String DEFAULT_DESCRIPTION = "For each known property of this thing, specify which column contains the " +
+			"value.  Example: All rows in the table contain data " +
+			"about your flower shop's 'Yodeling Monkey-gram' product, and this caption represents " +
+			"the 'Yodeling Monkey-gram' product.  Next to the the property 'price' you would select " +
+			"the column 'Monkeygram price'.";
 
 //	private List<TextFieldShower> textMappings;
 	

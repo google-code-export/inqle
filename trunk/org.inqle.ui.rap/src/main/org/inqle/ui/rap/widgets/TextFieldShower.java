@@ -26,6 +26,16 @@ public class TextFieldShower implements IDataFieldShower {
 	private String fieldPropertyType;
 	private static final Logger log = Logger.getLogger(TextFieldShower.class);
 	
+	public TextFieldShower(
+			Composite composite, 
+			String labelString, 
+			String descriptionString, 
+			String toolTipString, 
+			int textStyle) {
+		this (
+			composite, true, labelString, descriptionString, toolTipString, textStyle
+				);
+	}
 	/**
 	 * Adds a text field to an existing composite.  Expects that composite to have a 2 column GridLayout.
 	 * A text field consists of 
@@ -41,6 +51,7 @@ public class TextFieldShower implements IDataFieldShower {
 	 */
 	public TextFieldShower(
 			Composite composite, 
+			boolean skipColumnBeforeDescription,
 			String labelString, 
 			String descriptionString, 
 			String toolTipString, 
@@ -65,7 +76,9 @@ public class TextFieldShower implements IDataFieldShower {
 		if (descriptionString != null && descriptionString.length() > 0) {
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			//in next row, skip the label column
-			spacerLabel = new Label(composite, SWT.NONE);
+			if (skipColumnBeforeDescription) {
+				spacerLabel = new Label(composite, SWT.NONE);
+			}
 			
 			//add the description
 			descriptionText = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);

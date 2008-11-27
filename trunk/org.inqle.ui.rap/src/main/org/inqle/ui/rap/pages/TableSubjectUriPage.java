@@ -24,8 +24,9 @@ public class TableSubjectUriPage extends DynaWizardPage implements SelectionList
 
 	private static final Logger log = Logger.getLogger(TableSubjectUriPage.class);
 	
-	private static final String DEFAULT_TITLE = "Identify the Subjects";
-	private static final String DEFAULT_DESCRIPTION = "Please identify the instances.";
+	private static final String DEFAULT_TITLE = "Identify the Caption";
+	private static final String DEFAULT_DESCRIPTION = "Please identify the thing that this caption represents.  Example: if your data is about the population of the United States, you could add a caption with type: country and URI: http://www.geonames.org/countries/#US" +
+			"\nIf you do not know the URI (who does), you can select [unknown] below.";
 
 	private TextField instanceUriField;
 

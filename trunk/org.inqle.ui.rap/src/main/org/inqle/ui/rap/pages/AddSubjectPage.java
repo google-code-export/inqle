@@ -6,15 +6,20 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
 
 public class AddSubjectPage extends DynaWizardPage implements SelectionListener {
 
 	private static final String PAGE_TITLE = "Add a Subject";
 	private static final String PAGE_DESCRIPTION = null;
-	private static final String ROW_SUBJECT_BUTTON_TEXT = "Add multiple subjects, each pertaining to different rows.";
-	private static final String TABLE_SUBJECT_BUTTON_TEXT = "Add a single subject, which pertains to all rows.";
-
+	private static final String ROW_SUBJECT_BUTTON_TEXT = "Add a Subject";
+	private static final String ROW_SUBJECT_DESCRIPTION = "A subject is a kind of thing which describes each row.\nExample: If each row of your table represents a different medical encounter among various patients and doctors, you could add patient as one subject type and doctor as another subject type.";
+	
+	private static final String TABLE_SUBJECT_BUTTON_TEXT = "Add a caption";
+	private static final String TABLE_SUBJECT_DESCRIPTION = "A caption is single thing which pertains to the entire table.\nExample: If all the data in your table was collected at the same facility and by the same organization, you could add that facility as one caption, and that organization as another caption.";
+	
 	public AddSubjectPage() {
 		this(PAGE_TITLE, PAGE_DESCRIPTION);
 	}
@@ -36,11 +41,14 @@ public class AddSubjectPage extends DynaWizardPage implements SelectionListener 
 		newTableSubjectButton.setText(TABLE_SUBJECT_BUTTON_TEXT);
 //		newTableSubjectButton.setSelection(true);
 		newTableSubjectButton.addSelectionListener(this);
+		new Label(selfComposite, SWT.WRAP).setText(TABLE_SUBJECT_DESCRIPTION);
 		
+		new Text(selfComposite, SWT.NONE);
+				
 		newRowSubjectButton = new Button (selfComposite, SWT.PUSH);
 		newRowSubjectButton.setText(ROW_SUBJECT_BUTTON_TEXT);
 		newRowSubjectButton.addSelectionListener(this);
-		
+		new Label(selfComposite, SWT.WRAP).setText(ROW_SUBJECT_DESCRIPTION);
 	}
 
 	public void widgetDefaultSelected(SelectionEvent selectionEvent) {
