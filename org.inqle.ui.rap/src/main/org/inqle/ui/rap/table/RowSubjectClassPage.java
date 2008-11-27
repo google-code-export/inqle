@@ -11,8 +11,9 @@ import org.inqle.ui.rap.pages.SubjectClassPage;
  */
 public class RowSubjectClassPage extends SubjectClassPage {
 
-	private static String TITLE = "Type of Subject";
-	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
+	private static String TITLE = "What type of thing is this subject?";
+	private static String DESCRIPTION = "Find and select the type of subject that this data is about." +
+			"\nExample: If each ";
 //	private Table table;
 	
 	/**

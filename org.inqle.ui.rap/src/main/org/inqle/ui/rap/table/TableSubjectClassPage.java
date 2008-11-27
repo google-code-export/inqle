@@ -11,8 +11,8 @@ import org.inqle.ui.rap.pages.SubjectClassPage;
  */
 public class TableSubjectClassPage extends SubjectClassPage {
 
-	private static String TITLE = "Type of Subject";
-	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
+	private static String TITLE = "Type of Caption";
+	private static String DESCRIPTION = "What type of thing is this caption?  Find and select the type of thing, or enter a new one.  Example: if your data is about the population of the United States, you could add a caption with type: country.";
 //	private Table table;
 	
 	/**

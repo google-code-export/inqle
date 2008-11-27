@@ -49,13 +49,13 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWizard {
+public class FileDataImporterWizard2 extends DynaWizard implements ICsvReaderWizard {
 
-	public FileDataImporterWizard(Model saveToModel, Shell shell) {
+	public FileDataImporterWizard2(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
 	}
 
-	private static Logger log = Logger.getLogger(FileDataImporterWizard.class);
+	private static Logger log = Logger.getLogger(FileDataImporterWizard2.class);
 	Composite composite;
 	
 	private LoadFilePage loadFilePage;
@@ -260,10 +260,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		addPage(subjectClassPage);
 		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
 		addPage(subjectUriPage);
-		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
-		addPage(propertyMappingsPage);
 		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
 		addPage(propertyValuesPage);
+		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 		getContainer().updateButtons();
