@@ -72,6 +72,8 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	private Button enterNewClassButton;
 
 	private String uriFieldName = "URI";
+	
+	private String nameFieldName = "Label";
 
 	private Button selectCreatedClassButton;
 
@@ -318,7 +320,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 //		Individual selectedIndividual = ontModel.createIndividual(resource);
 //	}
 
-	public String getSubjectUri() {
+	public String getSelectedValue(String fieldName) {
 		if (createdUri != null && selectCreatedClassButton.getSelection()) {
 			return createdUri;
 		}
@@ -329,12 +331,36 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		TableItem selectedItem = selectedItems[0];
 		Map<String, String> selectedItemVals = (Map<String, String>)selectedItem.getData();
 		
-		String val = selectedItemVals.get(uriFieldName);
+		String val = selectedItemVals.get(fieldName);
 		if (val != null) {
 			val = val.trim();
 		}
 		//log.info("getting val for " + uriFieldName + " = " + val);
 		return val;
+	}
+	
+	public String getSubjectUri() {
+		return getSelectedValue(uriFieldName);
+//		if (createdUri != null && selectCreatedClassButton.getSelection()) {
+//			return createdUri;
+//		}
+//		TableItem[] selectedItems = table.getSelection();
+//		if (selectedItems == null || selectedItems.length < 1) {
+//			return null;
+//		}
+//		TableItem selectedItem = selectedItems[0];
+//		Map<String, String> selectedItemVals = (Map<String, String>)selectedItem.getData();
+//		
+//		String val = selectedItemVals.get(uriFieldName);
+//		if (val != null) {
+//			val = val.trim();
+//		}
+//		//log.info("getting val for " + uriFieldName + " = " + val);
+//		return val;
+	}
+	
+	public String getThingClass() {
+		return getSelectedValue(nameFieldName);
 	}
 	
 	@Override

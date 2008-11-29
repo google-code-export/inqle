@@ -137,6 +137,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			return;
 		}
 		
+		setTitle(getPageTitle());
+		setDescription(getPageDescription());
 //		formComposite.dispose();
 //		formComposite.redraw();
 		
@@ -199,6 +201,10 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 //		scrolledComposite.pack(true);
 	}
 
+	public abstract String getPageDescription();
+
+	public abstract String getPageTitle();
+
 	private void refreshScrolledComposite() {
 		scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		formComposite.layout();
@@ -223,6 +229,15 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	private String getSubjectUri() {
 		FileDataImporterWizard wizard = (FileDataImporterWizard)getWizard();
 		return wizard.getSubjectClassUri(this);
+	}
+	
+	/**
+	 * Get the a human readable representation of the thing's type
+	 * @return
+	 */
+	protected String getThingClass() {
+		FileDataImporterWizard wizard = (FileDataImporterWizard)getWizard();
+		return wizard.getThingClass(this);
 	}
 
 	protected void makePropertyFormElements(List<SortedMap<String, String>> rowValues) {

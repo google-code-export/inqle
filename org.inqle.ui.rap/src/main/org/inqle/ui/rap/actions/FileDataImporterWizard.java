@@ -274,10 +274,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		addPage(subjectClassPage);
 		RowSubjectUriPage subjectUriPage = new RowSubjectUriPage();
 		addPage(subjectUriPage);
-		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
-		addPage(propertyValuesPage);
 		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
 		addPage(propertyMappingsPage);
+		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 		getContainer().updateButtons();
@@ -310,6 +310,28 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			if (thePage instanceof SubjectClassPage) {
 				SubjectClassPage subjectClassPage = (SubjectClassPage)thePage;
 				return subjectClassPage.getSubjectUri();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get the a readable representation of the subject class URI of the most recent SubjectClassPage, 
+	 * preceding the one passed as an argument
+	 * @param pageAfterSubjectClassPage
+	 * @return
+	 */
+	public String getThingClass(IWizardPage pageAfterSubjectClassPage) {
+		IWizardPage thePage = pageAfterSubjectClassPage;
+		while (thePage.getPreviousPage() != null) {
+			thePage = thePage.getPreviousPage();
+			if (thePage instanceof SubjectClassPage) {
+				SubjectClassPage subjectClassPage = (SubjectClassPage)thePage;
+				String thingClass = subjectClassPage.getThingClass();
+				if (thingClass==null || thingClass.length()==0) {
+					thingClass = subjectClassPage.getSubjectUri();
+				}
+				return thingClass;
 			}
 		}
 		return null;
