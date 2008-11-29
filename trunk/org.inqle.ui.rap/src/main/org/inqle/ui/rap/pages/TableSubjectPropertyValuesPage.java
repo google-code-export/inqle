@@ -8,11 +8,21 @@ package org.inqle.ui.rap.pages;
  */
 public class TableSubjectPropertyValuesPage extends SubjectPropertyValuesPage {
 
-	private static final String DEFAULT_TITLE = "What values/identifiers for this thing are NOT stored in the table (if any)?";
-	private static final String DEFAULT_DESCRIPTION = "Enter identifiers for this thing. These are properties with a constant value.";
+	private static String DEFAULT_TITLE = "What values/identifiers for this THINGCLASS are NOT stored in the table (if any)?";
+	private static String DEFAULT_DESCRIPTION = "Enter identifiers for this THINGCLASS. These are properties with a constant value.";
 
 	public TableSubjectPropertyValuesPage() {
 		super(DEFAULT_TITLE, DEFAULT_DESCRIPTION);
+	}
+
+	@Override
+	public String getPageTitle() {
+		return DEFAULT_TITLE.replaceAll("THINGCLASS", getThingClass());
+	}
+
+	@Override
+	public String getPageDescription() {
+		return DEFAULT_DESCRIPTION.replaceAll("THINGCLASS", getThingClass());
 	}
 	
 	

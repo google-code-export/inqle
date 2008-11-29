@@ -12,7 +12,7 @@ import org.inqle.ui.rap.actions.FileDataImporterWizard;
 
 public class AddSubjectPage extends DynaWizardPage implements SelectionListener {
 
-	private static final String PAGE_TITLE = "Add a Subject";
+	private static final String PAGE_TITLE = "Add a Caption or Subject";
 	private static final String PAGE_DESCRIPTION = null;
 	private static final String ROW_SUBJECT_BUTTON_TEXT = "Add a Subject";
 	private static final String ROW_SUBJECT_DESCRIPTION = "A subject is a kind of thing which describes each row.\nExample: If each row of your table represents a different medical encounter among various patients and doctors, you could add patient as one subject type and doctor as another subject type.";

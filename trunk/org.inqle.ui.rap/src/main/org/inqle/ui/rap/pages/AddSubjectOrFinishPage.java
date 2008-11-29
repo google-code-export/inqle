@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Button;
 
 public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionListener {
 
-	private static final String PAGE_TITLE = "Add a Subject or Finish and Import";
+	private static final String PAGE_TITLE = "Add a Caption or a Subject or Finish and Import";
 	private static final String PAGE_DESCRIPTION = null;
 	private static final String FINISH_WIZARD_TEXT = "Finished adding subjects.  Ready to finish wizard and import the data.";
 
