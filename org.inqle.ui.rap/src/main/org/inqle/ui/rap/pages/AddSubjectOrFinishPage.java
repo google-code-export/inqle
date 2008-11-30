@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Text;
 
 public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionListener {
 
@@ -23,6 +24,8 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 	@Override
 	public void addElements() {
 		super.addElements();
+		
+		new Text(selfComposite, SWT.NONE);
 		
 		finishWizardButton = new Button (selfComposite, SWT.PUSH);
 		finishWizardButton.setText(FINISH_WIZARD_TEXT);

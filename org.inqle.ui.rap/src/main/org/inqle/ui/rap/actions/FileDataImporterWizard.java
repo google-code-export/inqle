@@ -51,6 +51,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  */
 public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWizard {
 
+	private static final String DEFAULT_THING_CLASS = "type of thing";
+
 	public FileDataImporterWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
 	}
@@ -260,10 +262,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		addPage(subjectClassPage);
 		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
 		addPage(subjectUriPage);
-		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
-		addPage(propertyMappingsPage);
 		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
 		addPage(propertyValuesPage);
+		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
 		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
 		addPage(addSubjectOrFinishPage);
 		getContainer().updateButtons();
@@ -331,10 +333,13 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				if (thingClass==null || thingClass.length()==0) {
 					thingClass = subjectClassPage.getSubjectUri();
 				}
+				if (thingClass==null || thingClass.length()==0) {
+					thingClass = DEFAULT_THING_CLASS;
+				}
 				return thingClass;
 			}
 		}
-		return null;
+		return DEFAULT_THING_CLASS;
 	}
 	
 	public TableMapping getTableMapping() {
@@ -426,9 +431,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				i++;
 				RowSubjectUriPage subjectUriPage = (RowSubjectUriPage)getPages()[i];
 				i++;
-				RowSubjectPropertyValuesPage propertyValuesPage = (RowSubjectPropertyValuesPage)getPages()[i];
-				i++;
 				RowSubjectPropertyMappingsPage propertyMappingsPage = (RowSubjectPropertyMappingsPage)getPages()[i];
+				i++;
+				RowSubjectPropertyValuesPage propertyValuesPage = (RowSubjectPropertyValuesPage)getPages()[i];
+				
 				String subjectClass = subjectClassPage.getSubjectUri();
 				String subjectUriPrefix = subjectUriPage.getInstancePrefixUri();
 				int subjectUriType = subjectUriPage.getSubjectCreationMethodIndex();

@@ -17,7 +17,7 @@ public class AddSubjectPage extends DynaWizardPage implements SelectionListener 
 	private static final String ROW_SUBJECT_BUTTON_TEXT = "Add a Subject";
 	private static final String ROW_SUBJECT_DESCRIPTION = "A subject is a kind of thing which describes each row.\nExample: If each row of your table represents a different medical encounter among various patients and doctors, you could add patient as one subject type and doctor as another subject type.";
 	
-	private static final String TABLE_SUBJECT_BUTTON_TEXT = "Add a caption";
+	private static final String TABLE_SUBJECT_BUTTON_TEXT = "Add a Caption";
 	private static final String TABLE_SUBJECT_DESCRIPTION = "A caption is single thing which pertains to the entire table.\nExample: If all the data in your table was collected at the same facility and by the same organization, you could add that facility as one caption, and that organization as another caption.";
 	
 	public AddSubjectPage() {

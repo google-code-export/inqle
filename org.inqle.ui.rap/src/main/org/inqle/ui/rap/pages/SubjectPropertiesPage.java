@@ -52,17 +52,22 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	protected Composite formComposite;
 
-	protected Button enterNewDataPropertyButton;
-	protected Button enterNewSubjectPropertyButton;
+//	protected Button enterNewDataPropertyButton;
+//	protected Button enterNewSubjectPropertyButton;
+	protected Button enterNewPropertyButton;
 	
 	protected String[] headers;
 	
 	protected List<IDataFieldShower> dataFieldShowers = new ArrayList<IDataFieldShower>();
 
-	protected Text enterNewDataPropertyButtonExplanation;
-	protected Text enterNewSubjectPropertyButtonExplanation;
+//	protected Text enterNewDataPropertyButtonExplanation;
+//	protected Text enterNewSubjectPropertyButtonExplanation;
 
 	private ScrolledComposite scrolledComposite;
+
+	private boolean pageInitialized = false;
+
+	private Text enterNewPropertyButtonExplanation;
 	
 	public SubjectPropertiesPage(String title, String description) {
 		super(title, null);
@@ -105,25 +110,31 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 		
 		
-		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
-//		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
-		enterNewDataPropertyButton.addSelectionListener(this);
-		enterNewDataPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
-		new Label(formComposite, SWT.NONE);
-		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
-				"These are properties that are measured, about the subject.  These values DO change with time.  " +
-				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
+//		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
+//		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
+////		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
+//		enterNewDataPropertyButton.addSelectionListener(this);
+//		enterNewDataPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
+//		new Label(formComposite, SWT.NONE);
+//		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
+//				"These are properties that are measured, about the subject.  These values DO change with time.  " +
+//				"Examples: 'stock price', 'annual Gross Domestic Product (GDP)'");
+//		
+//		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
+//		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
+////		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
+//		enterNewSubjectPropertyButton.addSelectionListener(this);
+//		enterNewSubjectPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
+//		new Label(formComposite, SWT.NONE);
+//		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
+//				"These are properties that identify the subject and generally do NOT change with time.  " +
+//				"Examples: 'has ticker symbol', 'has country code'");
 		
-		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
-//		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
-		enterNewSubjectPropertyButton.addSelectionListener(this);
-		enterNewSubjectPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
-		new Label(formComposite, SWT.NONE);
-		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
-				"These are properties that identify the subject and generally do NOT change with time.  " +
-				"Examples: 'has ticker symbol', 'has country code'");
+		enterNewPropertyButton = new Button(formComposite, SWT.PUSH);
+		enterNewPropertyButton.setText("Enter a new property for data measurements about the subject");
+//		enterNewPropertyButton.setAlignment(SWT.RIGHT);
+		enterNewPropertyButton.addSelectionListener(this);
+		enterNewPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
 		
 		setControl(scrolledComposite);
 		onEnterPageFromPrevious();
@@ -132,13 +143,19 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	@Override
 	public void onEnterPageFromPrevious() {
 		//log.info("Entering SubjectPropertiesPage");
-		if (enterNewDataPropertyButtonExplanation==null || enterNewSubjectPropertyButtonExplanation == null) {
+//		if (enterNewDataPropertyButtonExplanation==null || enterNewSubjectPropertyButtonExplanation == null) {
+//			//log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
+//			return;
+//		}
+		
+		if (! pageInitialized ) {
 			//log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
 			return;
 		}
 		
 		setTitle(getPageTitle());
 		setDescription(getPageDescription());
+		pageInitialized = true;
 //		formComposite.dispose();
 //		formComposite.redraw();
 		
@@ -150,8 +167,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		removePropertyFormElements();
 		
 		subjectClassUri = currentSubjectClassUri;
-		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
-		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
+//		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
+//		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
+		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
 		
 		log.trace("lookup properties from 4 places...");
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
@@ -214,12 +232,16 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		//do nothing; this was handled by createControl()
 	}
 	
-	private String getEnterNewSubjectPropertyButtonLabel() {
-		return "Create/register a new property of <" + subjectClassUri + ">";
-	}
+//	private String getEnterNewSubjectPropertyButtonLabel() {
+//		return "Create/register a new property of <" + subjectClassUri + ">";
+//	}
+//	
+//	private String getEnterNewDataPropertyButtonLabel() {
+//		return "Create/register a new property of data measurements about <" + subjectClassUri + ">";
+//	}
 	
-	private String getEnterNewDataPropertyButtonLabel() {
-		return "Create/register a new property of data measurements about <" + subjectClassUri + ">";
+	private String getEnterNewPropertyButtonLabel() {
+		return "Create/register a new property for " + getThingClass().toUpperCase();
 	}
 
 	/**
@@ -286,12 +308,62 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 
 	public void widgetSelected(SelectionEvent selectionEvent) {
 		Object clickedObject = selectionEvent.getSource();
-		if (clickedObject.equals(enterNewDataPropertyButton)) {			
+//		if (clickedObject.equals(enterNewDataPropertyButton)) {			
+//			//log.info("Clicked 'new data property' button");
+//			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
+//					formComposite.getShell(), 
+//					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
+//					RDF.DATA_PROPERTY);
+//			
+//			//add the domain class
+//			OntModel ontModel = ModelFactory.createOntologyModel();
+//			OntClass domainSubject = ontModel.createClass();
+//			Resource subjectResource = ResourceFactory.createResource(getSubjectUri());
+//			Property subjectProperty = ResourceFactory.createProperty(RDF.HAS_SUBJECT);
+//			domainSubject.addProperty(subjectProperty, subjectResource);
+//			createSubpropertyAction.setDomainClass(domainSubject);
+//			
+//			createSubpropertyAction.run();
+//			OntResource newProperty = createSubpropertyAction.getOntResource();
+////			log.trace("Adding form item for: uri=" + newProperty.getURI() + 
+////					"label=" + newProperty.getLabel("EN") +
+////					"description=" + newProperty.getComment("EN"));
+//			addPropertyFormItem(newProperty.getURI(), 
+//					newProperty.getLabel("EN"), 
+//					newProperty.getComment("EN"),
+//					RDF.DATA_PROPERTY);
+////			formComposite.layout();
+////			formComposite.pack(true);
+////			formComposite.redraw();
+//			refreshScrolledComposite();
+//		}
+		
+//		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			
+////			log.info("Clicked 'new subject property' button");
+//			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
+//					formComposite.getShell(), 
+//					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
+//					RDF.SUBJECT_PROPERTY);
+//			
+//			//add the domain class
+//			OntModel ontModel = ModelFactory.createOntologyModel();
+//			OntClass domainSubject = ontModel.createClass(getSubjectUri());
+//			createSubpropertyAction.setDomainClass(domainSubject);
+//			
+//			createSubpropertyAction.run();
+//			OntResource newProperty = createSubpropertyAction.getOntResource();
+//			addPropertyFormItem(newProperty.getURI(), 
+//					newProperty.getLabel("EN"), 
+//					newProperty.getComment("EN"),
+//					RDF.SUBJECT_PROPERTY);
+//			refreshScrolledComposite();
+//		}
+		
+		if (clickedObject.equals(enterNewPropertyButton)) {			
 			//log.info("Clicked 'new data property' button");
 			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
 					formComposite.getShell(), 
-					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
-					RDF.DATA_PROPERTY);
+					Data.DATA_PROPERTY_DATASET_ROLE_ID);
 			
 			//add the domain class
 			OntModel ontModel = ModelFactory.createOntologyModel();
@@ -313,27 +385,6 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 //			formComposite.layout();
 //			formComposite.pack(true);
 //			formComposite.redraw();
-			refreshScrolledComposite();
-		}
-		
-		if (clickedObject.equals(enterNewSubjectPropertyButton)) {			
-//			log.info("Clicked 'new subject property' button");
-			CreateSubpropertyAction createSubpropertyAction = new CreateSubpropertyAction(
-					formComposite.getShell(), 
-					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
-					RDF.SUBJECT_PROPERTY);
-			
-			//add the domain class
-			OntModel ontModel = ModelFactory.createOntologyModel();
-			OntClass domainSubject = ontModel.createClass(getSubjectUri());
-			createSubpropertyAction.setDomainClass(domainSubject);
-			
-			createSubpropertyAction.run();
-			OntResource newProperty = createSubpropertyAction.getOntResource();
-			addPropertyFormItem(newProperty.getURI(), 
-					newProperty.getLabel("EN"), 
-					newProperty.getComment("EN"),
-					RDF.SUBJECT_PROPERTY);
 			refreshScrolledComposite();
 		}
 	}

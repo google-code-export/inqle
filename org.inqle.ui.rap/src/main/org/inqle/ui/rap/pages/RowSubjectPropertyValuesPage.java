@@ -13,21 +13,26 @@ import org.inqle.ui.rap.widgets.TextFieldShower;
  */
 public class RowSubjectPropertyValuesPage extends SubjectPropertyValuesPage {
 
-	private static final String DEFAULT_TITLE = "What THINGCLASS values are stored in the table?";
-	private static final String DEFAULT_DESCRIPTION = "For each applicable property of THINGCLASS, specify which column contains the corresponding value.  Example: All rows in the table contain data about your flower shop's products, and this subject is 'store product'.  Next to the the property 'price' you would select the column 'product price'.";
-	
+	private static String DEFAULT_TITLE = "What values for each THINGCLASS are NOT stored " +
+	"in the table, but are common for each row (if any)?";
+private static String DEFAULT_DESCRIPTION = "Specify literal values that apply to each THINGCLASS.  " +
+	"Example: All rows in the table contain data about your flower shop's products, " +
+	"and this subject represents the 'store product'.  It happens that every product " +
+	"represented in this table comes from	the same distributor.  Next to the the property " +
+	"'product distributor' you would enter the value 'ABC Distributor Co.'.";
+
 	public RowSubjectPropertyValuesPage() {
 		super(DEFAULT_TITLE, DEFAULT_DESCRIPTION);
 	}
 
 	@Override
 	public String getPageTitle() {
-		return DEFAULT_TITLE.replaceAll("THINGCLASS", getThingClass());
+		return DEFAULT_TITLE.replaceAll("THINGCLASS", getThingClass().toUpperCase());
 	}
 
 	@Override
 	public String getPageDescription() {
-		return DEFAULT_DESCRIPTION.replaceAll("THINGCLASS", getThingClass());
+		return DEFAULT_DESCRIPTION.replaceAll("THINGCLASS", getThingClass().toUpperCase());
 	}
 
 }
