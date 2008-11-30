@@ -25,12 +25,12 @@ public class TableSubjectPropertyMappingsPage extends SubjectPropertyMappingsPag
 
 	@Override
 	public String getPageTitle() {
-		return DEFAULT_TITLE.replaceAll("THINGCLASS", getThingClass());
+		return DEFAULT_TITLE.replaceAll("THINGCLASS", getThingClass().toUpperCase());
 	}
 
 	@Override
 	public String getPageDescription() {
-		return DEFAULT_DESCRIPTION.replaceAll("THINGCLASS", getThingClass());
+		return DEFAULT_DESCRIPTION.replaceAll("THINGCLASS", getThingClass().toUpperCase());
 	}
 
 //	@Override
