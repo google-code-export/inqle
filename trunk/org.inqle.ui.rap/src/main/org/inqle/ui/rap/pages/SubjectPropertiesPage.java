@@ -112,7 +112,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
 //		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewDataPropertyButton.addSelectionListener(this);
-		enterNewDataPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
+		enterNewDataPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
 //		new Label(formComposite, SWT.NONE);
 //		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
@@ -123,7 +123,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
 //		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewSubjectPropertyButton.addSelectionListener(this);
-		enterNewSubjectPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY);
+		enterNewSubjectPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
 //		new Label(formComposite, SWT.NONE);
 //		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
@@ -236,17 +236,17 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	}
 	
 	private String getEnterNewSubjectPropertyButtonLabel() {
-		return "Create/register a new DATA property for " + getThingClass().toUpperCase() +
+		return "Create/register a new IDENTIFIER property for " + getThingClass().toUpperCase() +
 		"\nThese are properties that identify the " + getThingClass().toUpperCase() + 
 		" and generally do NOT change with time.  " +
-		"Examples: 'name', 'description', 'has ticker symbol', 'has country code', 'ISBN'";
+		"\nExamples: 'name', 'description', 'ticker symbol', 'country code', 'ISBN'";
 	}
 	
 	private String getEnterNewDataPropertyButtonLabel() {
-		return "Create/register a new IDENTIFIER property for " + getThingClass().toUpperCase() + 
+		return "Create/register a new DATA property for " + getThingClass().toUpperCase() + 
 		"\nThese are properties that are measured, about the " + getThingClass().toUpperCase() + 
 		".  These values DO change with time.  " +
-		"Examples: 'age', 'stock price', 'annual Gross Domestic Product (GDP)'";
+		"\nExamples: 'age', 'stock price', 'annual Gross Domestic Product (GDP)'";
 	}
 	
 //	private String getEnterNewPropertyButtonLabel() {
