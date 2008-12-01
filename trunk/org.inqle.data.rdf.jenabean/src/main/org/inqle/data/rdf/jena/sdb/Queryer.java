@@ -26,6 +26,8 @@ import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.sdb.SDB;
+import com.hp.hpl.jena.sparql.algebra.Transformer;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 
 /**
  * This class is capable of querying 1 or more models.  
@@ -311,7 +313,11 @@ import com.hp.hpl.jena.sdb.SDB;
 	}
 	
 	/**
-	 * To a basic sparql query, add 
+	 * To a basic sparql query, add elements to enforce random
+	 * sorting, offset, limit.
+	 * For random ordering to work, the query must have a
+	 * "graph" or "where", and should have no "order by" or "limit"
+	 * or "offset" or any other suffix.
 	 * @param baseSparql
 	 * @param randomize
 	 * @param offset
@@ -325,14 +331,29 @@ import com.hp.hpl.jena.sdb.SDB;
 		} else {
 			sparql = "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
 			//trim off everything after the last "}"
-			if (baseSparql.indexOf("}") >= 0) {
-				sparql += baseSparql.substring(0, baseSparql.lastIndexOf("}"));
+			int beginOfWhereBlock = -1;
+			String baseSparqlLC = baseSparql.toLowerCase();
+			beginOfWhereBlock = baseSparqlLC.indexOf("where");
+			if (beginOfWhereBlock == -1) {
+				beginOfWhereBlock = baseSparqlLC.indexOf("graph");
+			}
+			if (beginOfWhereBlock >= 0) {
+				int nextBracePosition = baseSparqlLC.indexOf("{", beginOfWhereBlock);
+				if (nextBracePosition==-1) {
+					sparql += baseSparql;
+				} else {
+					sparql += baseSparql.substring(0, nextBracePosition + 1);
+					sparql += " LET (?rand := inqle-fn:Rand()) . \n";
+					sparql += baseSparql.substring(nextBracePosition + 1);
+					sparql += " ORDER BY DESC(?rand) \n";
+				}
+				
 			} else {
 				sparql += baseSparql;
 			}
 //		sparql += " ORDER BY inqle-fn:Rand() \n";
-			sparql += ". LET (?rand := inqle-fn:Rand()) } \n";
-			sparql += "ORDER BY DESC(?rand) \n";
+//			sparql += ". LET (?rand := inqle-fn:Rand()) } \n";
+			
 		}
 
 		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
@@ -378,5 +399,4 @@ import com.hp.hpl.jena.sdb.SDB;
 //		//log.debug("Retrieved these Connections:" + connections);
 //		return objects;
 //	}
-	
 }
