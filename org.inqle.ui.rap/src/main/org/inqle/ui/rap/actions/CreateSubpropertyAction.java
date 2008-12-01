@@ -35,19 +35,6 @@ public class CreateSubpropertyAction extends ACreateOntResourceAction {
 	 * @param internalDatasetRoleId
 	 * @param owlPropertyUri
 	 */
-	public CreateSubpropertyAction(Shell shell, String internalDatasetRoleId) {
-		super(shell, internalDatasetRoleId, null);
-		log.trace("Created CreateSubpropertyAction");
-	}
-	
-	/**
-	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
-	 * owlPropertyUri.  Import into the internal dataset of the specified role.
-	 * This constructor supports updating the LARQ text index, if applicable.
-	 * @param shell
-	 * @param internalDatasetRoleId
-	 * @param owlPropertyUri
-	 */
 	public CreateSubpropertyAction(Shell shell, String internalDatasetRoleId, String owlPropertyUri) {
 		super(shell, internalDatasetRoleId, owlPropertyUri);
 		log.trace("Created CreateSubpropertyAction");
