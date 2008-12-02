@@ -357,6 +357,7 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 		}
 
 		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
+//		log.info("Decorated SPARQL:" + sparql);
 		return sparql;
 	}
 
