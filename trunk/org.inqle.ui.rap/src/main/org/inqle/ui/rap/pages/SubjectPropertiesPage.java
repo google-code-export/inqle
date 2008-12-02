@@ -109,22 +109,26 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		});
 
 		enterNewDataPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewDataPropertyButton.setText("Enter a new property for data measurements about the subject");
+		enterNewDataPropertyButton.setText("Add a new DATA property");
 //		enterNewDataPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewDataPropertyButton.addSelectionListener(this);
 		enterNewDataPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		enterNewDataPropertyButtonExplanation.setLayoutData(gridData);
 //		new Label(formComposite, SWT.NONE);
 //		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
 //				"These are properties that are measured, about the subject.  These values DO change with time.  " +
 //				"Examples: 'age', 'stock price', 'annual Gross Domestic Product (GDP)'");
 		
 		enterNewSubjectPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewSubjectPropertyButton.setText("Enter a new, fixed property for the subject");
+		enterNewSubjectPropertyButton.setText("Add a new IDENTIFIER property");
 //		enterNewSubjectPropertyButton.setAlignment(SWT.RIGHT);
 		enterNewSubjectPropertyButton.addSelectionListener(this);
 		enterNewSubjectPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		enterNewSubjectPropertyButtonExplanation.setLayoutData(gridData);
 //		new Label(formComposite, SWT.NONE);
 //		new Text(formComposite, SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY).setText(
 //				"These are properties that identify the subject and generally do NOT change with time.  " +
