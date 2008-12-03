@@ -80,6 +80,7 @@ public class ExperimenterAgent extends AAgent {
 	}
 	
 	public void run() {
+		long starttime = System.currentTimeMillis();
 		Persister persister = Persister.getInstance();
 		setRunning();
 		//log.info("Starting to run()");
@@ -106,7 +107,9 @@ public class ExperimenterAgent extends AAgent {
 			log.info("Storing experiment result");
 			persister.persist(experimentResult);
 		}
-		log.info("Exiting.  Completed " + cycleCount + " cycles.");
+		long stoptime = System.currentTimeMillis();
+		long runseconds = (stoptime - starttime) / 1000;
+		log.info("Exiting.  Completed " + cycleCount + " cycles, in " + runseconds + " seconds.");
 		setStopped();
 		
 	}
