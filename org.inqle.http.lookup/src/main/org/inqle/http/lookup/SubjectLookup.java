@@ -47,7 +47,7 @@ public class SubjectLookup {
 					sparql += ". ?URI rdfs:subClassOf <" + superClassUri + "> \n";
 				} else {
 //					sparql += ". ?URI rdf:type rdfs:Class \n";
-					sparql += ". ?URI rdfs:subClassOf rdfs:Class \n";
+//					sparql += ". ?URI rdfs:subClassOf rdfs:Class \n";
 				}
 				sparql += ". OPTIONAL { ?URI rdfs:label ?Label }\n" +
 				". OPTIONAL { ?URI rdfs:comment ?Comment } \n" +

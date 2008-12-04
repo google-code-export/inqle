@@ -142,6 +142,8 @@ public class LookupServlet extends HttpServlet {
 			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
 			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
 			respondOK(mergedDocumentXml);
+			
+//			String testingXml = XmlDocumentUtil.xmlToString(matchingDataClassesDoc);
 			return;
 		}
 		
