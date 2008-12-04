@@ -3,6 +3,7 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.widgets.SubpropertyDialog;
 
@@ -36,7 +37,7 @@ public class CreateSubpropertyAction extends ACreateOntResourceAction {
 	 * @param owlPropertyUri
 	 */
 	public CreateSubpropertyAction(Shell shell, String internalDatasetRoleId, String owlPropertyUri) {
-		super(shell, internalDatasetRoleId, owlPropertyUri);
+		super(shell, internalDatasetRoleId, owlPropertyUri, InqleInfo.ACTION_REGISTER_PROPERTIES);
 		log.trace("Created CreateSubpropertyAction");
 	}
 	
@@ -50,7 +51,7 @@ public class CreateSubpropertyAction extends ACreateOntResourceAction {
 	 * @param owlPropertyUri
 	 */
 	public CreateSubpropertyAction(Shell shell, Model model, String owlPropertyUri) {
-		super(shell, model, owlPropertyUri);
+		super(shell, model, owlPropertyUri, InqleInfo.ACTION_REGISTER_PROPERTIES);
 		log.trace("Created CreateSubpropertyAction");
 	}
 	

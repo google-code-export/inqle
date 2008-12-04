@@ -26,24 +26,24 @@ import com.hp.hpl.jena.util.FileUtils;
  */
 public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implements SelectionListener {
 
-	private List<String> headerList;
+	private String[] headers;
 	private List<Button> checkBoxes = new ArrayList<Button>();
 	private List<Text> uriTexts = new ArrayList<Text>();
 	private List<Text> nameTexts = new ArrayList<Text>();
 	private List<Text> descriptionTexts = new ArrayList<Text>();
 	private String subjectClass;
 
-	protected HeaderPropertiesDialog(Shell parentShell, OntModel ontModel, List<String> headerList, String subjectClass) {
+	public HeaderPropertiesDialog(Shell parentShell, OntModel ontModel, String[] headers, String subjectClass) {
 		super(parentShell);
 		setOntModel(ontModel);
-		this.headerList = headerList;
+		this.headers = headers;
 		this.subjectClass = subjectClass;
 	}
 
 	@Override
 	protected void addFormElements() {
 		int index=0;
-		for (String header: headerList) {
+		for (String header: headers) {
 			if (header == null) continue;
 			String headerId = header.replaceAll(" ", "_");
 			try {
