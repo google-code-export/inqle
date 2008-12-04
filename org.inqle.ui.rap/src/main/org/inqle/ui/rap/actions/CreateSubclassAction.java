@@ -3,6 +3,7 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -31,7 +32,7 @@ public class CreateSubclassAction extends ACreateOntResourceAction {
 	 * @param owlClassUri
 	 */
 	public CreateSubclassAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
-		super(shell, internalDatasetRoleId, owlClassUri);
+		super(shell, internalDatasetRoleId, owlClassUri, InqleInfo.ACTION_REGISTER_SUBJECTS);
 		log.trace("Created CreateSubclassAction");
 	}
 	
@@ -45,7 +46,7 @@ public class CreateSubclassAction extends ACreateOntResourceAction {
 	 * @param owlClassUri
 	 */
 	public CreateSubclassAction(Shell shell, Model model, String owlClassUri) {
-		super(shell, model, owlClassUri);
+		super(shell, model, owlClassUri, InqleInfo.ACTION_REGISTER_SUBJECTS);
 		log.trace("Created CreateSubclassAction");
 	}
 	

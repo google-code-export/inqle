@@ -59,6 +59,7 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 			super(parentShell);
 		}
 		
+		@Override
     protected Control createDialogArea(Composite parent) {
     	
     	Composite container = (Composite) super.createDialogArea(parent);

@@ -39,6 +39,8 @@ public abstract class ACreateOntResourceAction extends Action {
 	protected String parentResourceUri;
 
 	private OntResource ontResource;
+
+	private String actionType;
 	
 	private static final Logger log = Logger.getLogger(ACreateOntResourceAction.class);
 	
@@ -50,13 +52,14 @@ public abstract class ACreateOntResourceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlPropertyUri
 	 */
-	public ACreateOntResourceAction(Shell shell, String internalDatasetRoleId, String parentResourceUri) {
+	public ACreateOntResourceAction(Shell shell, String internalDatasetRoleId, String parentResourceUri, String actionType) {
 		this.shell = shell;
 		log.trace("Create ACreateOntResourceAction");
 		Persister persister = Persister.getInstance();
 		this.model = persister.getInternalModel(internalDatasetRoleId);
 		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
 		this.parentResourceUri = parentResourceUri;
+		this.actionType = actionType;
 	}
 	
 	/**
@@ -68,11 +71,12 @@ public abstract class ACreateOntResourceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlPropertyUri
 	 */
-	public ACreateOntResourceAction(Shell shell, Model model, String parentResourceUri) {
+	public ACreateOntResourceAction(Shell shell, Model model, String parentResourceUri, String actionType) {
 		this.shell = shell;
 		log.trace("Create ACreateOntResourceAction");
 		this.model = model;
 		this.parentResourceUri = parentResourceUri;
+		this.actionType = actionType;
 	}
 	
 	/**
@@ -109,6 +113,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		
 		//send the new statements to the central INQLE server
 		Map<String, String> params = new HashMap<String, String>();
+		params.put(InqleInfo.PARAM_ACTION, actionType);
 		params.put(InqleInfo.PARAM_REGISTER_RDF, JenabeanWriter.modelToString(newStatementsModel));
 		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
 		log.info("posting new type RDF data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");

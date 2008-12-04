@@ -127,7 +127,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 //		enterNewSubjectPropertyButtonExplanation.setLayoutData(gridData);		
 		
 		enterNewPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewPropertyButton.setText("Add a new IDENTIFIER property");
+		enterNewPropertyButton.setText("Add a new property for " + getThingClass().toUpperCase());
 		enterNewPropertyButton.addSelectionListener(this);
 		enterNewPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
@@ -375,20 +375,24 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		//	log.info("Clicked 'new subject property' button");
 			CreateHeaderPropertiesAction createHeaderPropertiesAction = new CreateHeaderPropertiesAction(
 					formComposite.getShell(),
+					getCsvReader().getHeaders(),
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
-					RDF.SUBJECT_PROPERTY);
+					getSubjectUri());
+			createHeaderPropertiesAction.run();
 			
 			//add the domain class
-			OntModel ontModel = ModelFactory.createOntologyModel();
-			OntClass domainSubject = ontModel.createClass(getSubjectUri());
-			createSubpropertyAction.setDomainClass(domainSubject);
+//			OntModel ontModel = ModelFactory.createOntologyModel();
+//			OntClass domainSubject = ontModel.createClass(getSubjectUri());
+//			createSubpropertyAction.setDomainClass(domainSubject);
+//			createSubpropertyAction.run();
+//			OntResource newProperty = createSubpropertyAction.getOntResource();
 			
-			createSubpropertyAction.run();
-			OntResource newProperty = createSubpropertyAction.getOntResource();
-			addPropertyFormItem(newProperty.getURI(), 
-					newProperty.getLabel("EN"), 
-					newProperty.getComment("EN"),
-					RDF.SUBJECT_PROPERTY);
+			//loop thru new properties, add a form item for each
+//			addPropertyFormItem(newProperty.getURI(), 
+//					newProperty.getLabel("EN"), 
+//					newProperty.getComment("EN"),
+//					RDF.SUBJECT_PROPERTY);
+			
 			refreshScrolledComposite();
 		}
 	}

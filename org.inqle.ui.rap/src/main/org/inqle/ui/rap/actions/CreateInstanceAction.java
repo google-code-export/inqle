@@ -3,6 +3,7 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.widgets.InstanceDialog;
 
@@ -29,7 +30,7 @@ public class CreateInstanceAction extends ACreateOntResourceAction {
 	 * @param owlClassUri
 	 */
 	public CreateInstanceAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
-		super(shell, internalDatasetRoleId, owlClassUri);
+		super(shell, internalDatasetRoleId, owlClassUri, InqleInfo.ACTION_REGISTER_SUBJECTS);
 		log.trace("Created CreateInstanceAction");
 	}
 	
@@ -42,8 +43,8 @@ public class CreateInstanceAction extends ACreateOntResourceAction {
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri
 	 */
-	public CreateInstanceAction(Shell shell, Model model, String owlClassUri) {
-		super(shell, model, owlClassUri);
+	public CreateInstanceAction(Shell shell, Model model, String owlClassUri, String actionType) {
+		super(shell, model, owlClassUri, actionType);
 		log.trace("Created CreateInstanceAction");
 	}
 	
