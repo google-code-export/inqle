@@ -59,6 +59,10 @@ public class InqleInfo {
 
 	public static final String PARAM_SITE_ID = "site";
 	public static final String PARAM_REGISTER_RDF = "rdf";
+	public static final String PARAM_ACTION = "action";
+	public static final String ACTION_REGISTER_PROPERTIES = "regProp";
+	public static final String ACTION_REGISTER_SUBJECTS = "regSubj";
+	public static final String ACTION_REGISTER_TABLEMAPPING = "regTMap";
 	public static final String PARAM_INQLE_VERSION = "ver";
 	
 	public static final String DEFAULT_NAMED_MODEL_NAME = "org.inqle.models.defaultNamedModel";
