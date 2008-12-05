@@ -377,7 +377,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 					formComposite.getShell(),
 					getCsvReader().getHeaders(),
 					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
-					getSubjectUri());
+					getSubjectUri(), 
+					getThingClass());
 			createHeaderPropertiesAction.run();
 			
 			//add the domain class
