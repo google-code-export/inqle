@@ -42,6 +42,7 @@ public class CreateHeaderPropertiesAction extends Action {
 	private String internalDatasetRoleId;
 	private String subjectClass;
 	private Model model;
+	private String subjectName;
 	
 	/**
 	 * Create a dialog, to create multiple properties
@@ -49,13 +50,14 @@ public class CreateHeaderPropertiesAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlPropertyUri
 	 */
-	public CreateHeaderPropertiesAction(Shell shell, String[] headers, String internalDatasetRoleId, String subjectClass) {
+	public CreateHeaderPropertiesAction(Shell shell, String[] headers, String internalDatasetRoleId, String subjectClass, String subjectName) {
 //		super(shell, internalDatasetRoleId, owlPropertyUri);
 		this.shell = shell;
 		this.headers = headers;
 		this.internalDatasetRoleId = internalDatasetRoleId;
 		log.trace("Created CreateHeaderPropertiesAction");
 		this.subjectClass = subjectClass;
+		this.subjectName = subjectName;
 		Persister persister = Persister.getInstance();
 		this.model = persister.getInternalModel(internalDatasetRoleId);
 	}
@@ -63,7 +65,7 @@ public class CreateHeaderPropertiesAction extends Action {
 	public void run() {
 		try {
 			OntModel ontModel = ModelFactory.createOntologyModel();
-			HeaderPropertiesDialog headerPropertiesDialog = new HeaderPropertiesDialog(shell, ontModel, headers, subjectClass);
+			HeaderPropertiesDialog headerPropertiesDialog = new HeaderPropertiesDialog(shell, ontModel, headers, subjectClass, subjectName);
 			headerPropertiesDialog.open();
 			if (headerPropertiesDialog.getReturnCode() == Window.OK) {
 				OntModel theModel = headerPropertiesDialog.getOntModel();

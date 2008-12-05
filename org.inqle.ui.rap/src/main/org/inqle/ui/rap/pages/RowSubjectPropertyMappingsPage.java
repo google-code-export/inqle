@@ -9,8 +9,8 @@ package org.inqle.ui.rap.pages;
 public class RowSubjectPropertyMappingsPage extends SubjectPropertyMappingsPage {
 
 	private static final String DEFAULT_TITLE = "What THINGCLASS values are stored in the table?";
-	private static final String DEFAULT_DESCRIPTION = "For each applicable property of THINGCLASS, " +
-			"specify which column contains the corresponding value.  Example: All rows in the table " +
+	private static final String DEFAULT_DESCRIPTION = "For each property of THINGCLASS, " +
+			"specify which column (if any) contains the corresponding value.  Example: All rows in the table " +
 			"contain data about your flower shop's products, and this subject is 'store product'.  " +
 			"Next to the the property 'price' you would select the column 'product price'.";
 	
