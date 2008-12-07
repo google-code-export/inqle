@@ -4,6 +4,7 @@ package org.inqle.ui.rap.widgets;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -19,7 +20,6 @@ import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Model;
  
 /**
  * This dialog is intended to be used anywhere in the app, to create multiple new resources 
@@ -40,46 +40,49 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 		protected OntModel ontModel;
 		private String message;
 		private String title;
+//		private Composite pageComposite;
 		
 		private static Logger log = Logger.getLogger(AScrolledOntResourceDialog.class);
 		
 		/**
-		 * @param parentShell
-		 * @param ontClass upon saving this data, it will be created as a new instance of this ontClass
-		 */
-//		public AOntResourceDialog(Shell parentShell, OntClass ontClass) {
-//      super(parentShell);
-//      this.ontClass = ontClass;
-//    }
-		
-		/**
 		 * ontClass is the super class, to be used for creating this OntResource
 		 */
-		protected AScrolledOntResourceDialog(Shell parentShell) {
+		protected AScrolledOntResourceDialog(Shell parentShell, String title, String description) {
 			super(parentShell);
+			setTitle(title);
+			setMessage(description);
 		}
+		
 		
 		@Override
     protected Control createDialogArea(Composite parent) {
+//    	Composite container = (Composite) super.createDialogArea(parent);
     	
-    	Composite container = (Composite) super.createDialogArea(parent);
-    	 
-    	scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
+			Shell shell = parent.getShell();
+			shell.setText(getTitle());
+			
+    	scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
   		GridLayout gl = new GridLayout(1, true);
   		scrolledComposite.setLayout(gl);
   		scrolledComposite.setExpandHorizontal(true);
   		scrolledComposite.setExpandVertical(true);
   		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
   		scrolledComposite.setLayoutData(gridData);
-//  		formComposite = new Composite(formComposite, SWT.NONE);
+  		
+//  		pageComposite = new Composite(scrolledComposite, SWT.NONE);
+//  		gl = new GridLayout(1, true);
+//  		pageComposite.setLayout(gl);
+  		
+//  		messageText = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
+//			if (getMessage() != null) {
+//				messageText.setText(getMessage());
+//			}
+//			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//			messageText.setLayoutData(gridData);
+  		
   		formComposite = new Composite(scrolledComposite, SWT.NONE);
   		
   		scrolledComposite.setContent(formComposite);
-  		
-  		gl = new GridLayout(4, false);
-  		formComposite.setLayout(gl);
-  		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-  		formComposite.setLayoutData(gridData);
   		
   		scrolledComposite.addControlListener(new ControlAdapter() {
   			public void controlResized(ControlEvent e) {
@@ -91,12 +94,8 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
   		
       
 //      try {
-			Shell shell = parent.getShell();
-			shell.setText(getTitle());
-			messageText = new Text(container, SWT.WRAP | SWT.READ_ONLY);
-			if (getMessage() != null) {
-				messageText.setText(getMessage());
-			}
+			
+			
 //			Composite formComposite = new Composite(container, SWT.NONE);
 //			GridLayout formLayout = new GridLayout(2, false);
 //			formComposite.setLayout(formLayout);
@@ -111,7 +110,9 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 			
 			addFormElements();
 			
-      return container;
+			scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			
+      return scrolledComposite;
     }
     
     /**
@@ -135,7 +136,7 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
     }
     
     protected Point getInitialSize() {
-        return new Point(500, 450);
+        return new Point(800, 450);
     }
     
     @Override
@@ -162,6 +163,7 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 		protected abstract boolean validate();
 		
 		public void setMessage(String messageString) {
+			this.message = messageString;
 			if (messageText != null) {
 				messageText.setText(messageString);
 			}

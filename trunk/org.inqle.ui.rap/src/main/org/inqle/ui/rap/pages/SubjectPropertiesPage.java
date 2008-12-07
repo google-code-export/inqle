@@ -127,7 +127,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 //		enterNewSubjectPropertyButtonExplanation.setLayoutData(gridData);		
 		
 		enterNewPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewPropertyButton.setText("Add a new property for " + getThingClass().toUpperCase());
+		enterNewPropertyButton.setText("Add new properties for " + getThingClass().toUpperCase());
 		enterNewPropertyButton.addSelectionListener(this);
 		enterNewPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
@@ -177,7 +177,6 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
 //		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
 		
-		log.trace("lookup properties from 4 places...");
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				10, 

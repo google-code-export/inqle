@@ -4,7 +4,6 @@
 package org.inqle.ui.rap.widgets;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -21,11 +21,9 @@ import org.inqle.data.rdf.RDF;
 
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.util.FileUtils;
 
 /**
  * @author David Donohue
@@ -47,29 +45,43 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 			String[] headers, 
 			String subjectClass, 
 			String subjectName) {
-		super(parentShell);
+		super(parentShell, getPageTitle(subjectName), getPageDescription(subjectName));
 		setOntModel(ontModel);
 		this.headers = headers;
 		this.subjectClass = subjectClass;
-		setTitle(getPageTitle(subjectName));
-		setMessage(getPageDescription(subjectName));
+//		setTitle(getPageTitle(subjectName));
+//		setMessage(getPageDescription(subjectName));
 	}
 
-	private String getPageDescription(String subjectName) {
+//	@Override
+//	public Control createDialogArea(Composite parent) {
+//		Composite container = (Composite) super.createDialogArea(parent);
+//		
+//		
+//		
+//		return container;
+//	}
+	
+	private static String getPageDescription(String subjectName) {
 		String s = "Select 1 or more properties to create.  Each new property will be registered " +
-				"as a property of " + subjectName.toUpperCase() + ".  " +
-				"For each property, provide a name, description, and specify whether it is an identifier" +
-				"(for example, a country code, a name, a description, the ISBN number), or whether it contains " +
-				"data (for example, medical diagnosis, population, price, weather info).";
+				"as a property of " + subjectName.toUpperCase() + ".  \n" +
+				"For each property, provide a URI, name, description.  If the property is an identifier \n" +
+				"(for example, a country code, a name, a description, the ISBN number), \n" +
+				"then select the checkbox under 'Identifier?'.";
 		return s;
 	}
 
-	private String getPageTitle(String subjectName) {
+	private static String getPageTitle(String subjectName) {
 		return "Create new properties for " + subjectName.toUpperCase();
 	}
 
 	@Override
 	protected void addFormElements() {
+		GridLayout gl = new GridLayout(5, false);
+		formComposite.setLayout(gl);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		formComposite.setLayoutData(gridData);
+		
 		new Label(formComposite, SWT.BOLD).setText("Select");
 		new Label(formComposite, SWT.BOLD).setText("URI");
 		Label typeLabel = new Label(formComposite, SWT.BOLD);
@@ -93,10 +105,13 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 			Text uriText = new Text(formComposite, SWT.BORDER);
 			uriText.setText(getUriPrefix() + headerId);
 			uriText.setEnabled(false);
-			GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-			uriText.setLayoutData(gridData);
+			uriText.setSize(50,20);
+//			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//			uriText.setLayoutData(gridData);
 			
 			Button typeCheckBox = new Button(formComposite, SWT.CHECK);
+			typeCheckBox.setEnabled(false);
+			typeCheckBox.setToolTipText("Check this box if this property is an identifier, and does not contain data.");
 			
 			Text nameText = new Text(formComposite, SWT.BORDER);
 			nameText.setText(header);
