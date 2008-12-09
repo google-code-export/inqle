@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -38,7 +39,10 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 	private List<Text> nameTexts = new ArrayList<Text>();
 	private List<Text> descriptionTexts = new ArrayList<Text>();
 	private String subjectClass;
+	private String subjectName;
 
+	private static Logger log = Logger.getLogger(HeaderPropertiesDialog.class);
+	
 	public HeaderPropertiesDialog(
 			Shell parentShell, 
 			OntModel ontModel, 
@@ -49,6 +53,7 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 		setOntModel(ontModel);
 		this.headers = headers;
 		this.subjectClass = subjectClass;
+		this.subjectName = subjectName;
 //		setTitle(getPageTitle(subjectName));
 //		setMessage(getPageDescription(subjectName));
 	}
@@ -79,10 +84,11 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 	protected void addFormElements() {
 		GridLayout gl = new GridLayout(5, false);
 		formComposite.setLayout(gl);
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		formComposite.setLayoutData(gridData);
 		
-		new Label(formComposite, SWT.BOLD).setText("Select");
+		new Label(formComposite, SWT.BOLD).setText("Create");
 		new Label(formComposite, SWT.BOLD).setText("URI");
 		Label typeLabel = new Label(formComposite, SWT.BOLD);
 		typeLabel.setText("Identifier?");
@@ -105,9 +111,9 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 			Text uriText = new Text(formComposite, SWT.BORDER);
 			uriText.setText(getUriPrefix() + headerId);
 			uriText.setEnabled(false);
-			uriText.setSize(50,20);
-//			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//			uriText.setLayoutData(gridData);
+//			uriText.setSize(50,20);
+			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+			uriText.setLayoutData(gridData);
 			
 			Button typeCheckBox = new Button(formComposite, SWT.CHECK);
 			typeCheckBox.setEnabled(false);
@@ -120,6 +126,7 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 			nameText.setLayoutData(gridData);
 			
 			Text descriptionText = new Text(formComposite, SWT.BORDER);
+			descriptionText.setText(header + " of a " + subjectName);
 			descriptionText.setEnabled(false);
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			descriptionText.setLayoutData(gridData);
@@ -146,13 +153,16 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 			Text uriText = uriTexts.get(i);
 			
 			OntProperty ontProperty = ontModel.createOntProperty(uriText.getText());
-			ontProperty.addDomain(ResourceFactory.createResource(subjectClass));
+			
 			Button typeCheckBox = typeCheckBoxes.get(i);
 			Property superProperty = null;
+			Property dataPropertyOf = ResourceFactory.createProperty(RDF.IS_DATA_PROPERTY_OF);
 			if (typeCheckBox.getSelection()) {
 				superProperty = ResourceFactory.createProperty(RDF.SUBJECT_PROPERTY);
+				ontProperty.addDomain(ResourceFactory.createResource(subjectClass));
 			} else {
 				superProperty = ResourceFactory.createProperty(RDF.DATA_PROPERTY);
+				ontProperty.setPropertyValue(dataPropertyOf, ResourceFactory.createResource(subjectClass));
 			}
 			ontProperty.setSuperProperty(superProperty);
 			
@@ -177,10 +187,11 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 		Button clickedButton = (Button)clickedObject;
 		Object buttonVal = clickedButton.getData();
 		int buttonInt = (Integer)buttonVal;
-		uriTexts.get(buttonInt).setEnabled(clickedButton.getEnabled());
-		typeCheckBoxes.get(buttonInt).setEnabled(clickedButton.getEnabled());
-		nameTexts.get(buttonInt).setEnabled(clickedButton.getEnabled());
-		descriptionTexts.get(buttonInt).setEnabled(clickedButton.getEnabled());
+		log.info("Setting item #" + buttonInt + " to " + clickedButton.getSelection());
+		uriTexts.get(buttonInt).setEnabled(clickedButton.getSelection());
+		typeCheckBoxes.get(buttonInt).setEnabled(clickedButton.getSelection());
+		nameTexts.get(buttonInt).setEnabled(clickedButton.getSelection());
+		descriptionTexts.get(buttonInt).setEnabled(clickedButton.getSelection());
 	}
 
 }

@@ -66,10 +66,12 @@ public class CreateHeaderPropertiesAction extends Action {
 		try {
 			OntModel ontModel = ModelFactory.createOntologyModel();
 			HeaderPropertiesDialog headerPropertiesDialog = new HeaderPropertiesDialog(shell, ontModel, headers, subjectClass, subjectName);
+			headerPropertiesDialog.setUriPrefix(subjectClass + "/");
 			headerPropertiesDialog.open();
 			if (headerPropertiesDialog.getReturnCode() == Window.OK) {
 				OntModel theModel = headerPropertiesDialog.getOntModel();
 				log.info("Created new Model:" + JenabeanWriter.modelToString(theModel));
+				registerNewRdf(theModel);
 //				log.info("Created new properties for <" + parentResourceUri + ">:\n" + JenabeanWriter.modelToString(ontModel));
 //				OntProperty ontProperty = (OntProperty)aResourceDialog.getOntResource();
 //				if (domainClass != null) {
