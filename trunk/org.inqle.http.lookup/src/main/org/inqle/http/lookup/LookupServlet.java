@@ -20,7 +20,7 @@ import org.w3c.dom.Document;
 public class LookupServlet extends HttpServlet {
 
 	/**
-	 * 
+	 * Search the INQLE server for various things (subjects used, properties matching a subject, etc.
 	 */
 	private static final long serialVersionUID = -4242876578599704824L;
 
@@ -34,9 +34,9 @@ public class LookupServlet extends HttpServlet {
 	public static final String PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS = "searchDataAndPrefOntClass";
 	public static final String PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY = "propsDSPrefOnt";
 	
-	private static final int COUNT_SEARCH_RESULTS = 10;
+	private static final int COUNT_SEARCH_RESULTS = 100;
 
-	private static final int MAX_COUNT_RESULTS = 100;
+	private static final int MAX_COUNT_RESULTS = 1000;
 
 	
 
@@ -136,11 +136,13 @@ public class LookupServlet extends HttpServlet {
 			String matchingDataClassesXml = SubjectLookup.lookupSubclassesInInternalDataset(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
 
-			String matchingUmbelClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatasets(searchTermDataUmbelClass, countResults, startIndex);
-			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
+//			String matchingUmbelClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatasets(searchTermDataUmbelClass, countResults, startIndex);
+//			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
+//			
+//			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
+//			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
 			
-			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
-			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
+			String mergedDocumentXml = XmlDocumentUtil.xmlToString(matchingDataClassesDoc);
 			respondOK(mergedDocumentXml);
 			
 //			String testingXml = XmlDocumentUtil.xmlToString(matchingDataClassesDoc);

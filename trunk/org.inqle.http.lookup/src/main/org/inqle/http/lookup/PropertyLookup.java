@@ -283,8 +283,9 @@ public class PropertyLookup {
 						"{ ?Property_URI rdfs:subPropertyOf inqle:DataProperty \n" +
 //						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
 						"  . LET(?Property_Type := str(inqle:DataProperty)) \n" +
-						"  . ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
-						"  . ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
+//						"  . ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
+//						"  . ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
+						"  . ?Property_URI inqle:isDataPropertyOf <" + subjectClassUri + "> \n" +
 						"  . OPTIONAL { ?Property_URI rdfs:label ?Label } \n" +
 						"  . OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 					"} UNION {\n" +
@@ -358,9 +359,10 @@ public class PropertyLookup {
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindDataAndSubjectProperties(subjectClassUri, countSearchResults, offset);
-//		log.info("Querying w/ this sparql:\n" + sparql);
+		log.info("lookupAllDataProperties(): Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
+		log.info("lookupAllDataProperties():got these properties:\n" + resultXml);
 		return resultXml;
 	}
 	
@@ -381,9 +383,10 @@ public class PropertyLookup {
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);
-		log.info("Querying w/ this sparql:\n" + sparql);
+		log.info("lookupPropertiesInSchemaDatasets(): Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
+		log.info("lookupPropertiesInSchemaDatasets(): got these properties:\n" + resultXml);
 		return resultXml;
 	}
 	
