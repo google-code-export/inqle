@@ -4,7 +4,6 @@ package org.inqle.ui.rap.widgets;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
@@ -40,7 +39,7 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 		protected OntModel ontModel;
 		private String message;
 		private String title;
-//		private Composite pageComposite;
+		private Composite pageComposite;
 		
 		private static Logger log = Logger.getLogger(AScrolledOntResourceDialog.class);
 		
@@ -56,61 +55,53 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 		
 		@Override
     protected Control createDialogArea(Composite parent) {
-//    	Composite container = (Composite) super.createDialogArea(parent);
-    	
+    	Composite container = (Composite) super.createDialogArea(parent);
+    	container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    	container.setLayout(new GridLayout());
+			
 			Shell shell = parent.getShell();
 			shell.setText(getTitle());
+
+			ScrolledComposite scrolled = new ScrolledComposite(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+			scrolled.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+			scrolled.setLayout(new GridLayout());
+			scrolled.setExpandVertical(true);
+			scrolled.setExpandHorizontal(true);
 			
-    	scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
-  		GridLayout gl = new GridLayout(1, true);
+    	scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
+  		GridLayout gl = new GridLayout();
   		scrolledComposite.setLayout(gl);
   		scrolledComposite.setExpandHorizontal(true);
   		scrolledComposite.setExpandVertical(true);
-  		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+  		GridData gridData = new GridData(GridData.FILL_BOTH);
   		scrolledComposite.setLayoutData(gridData);
   		
-//  		pageComposite = new Composite(scrolledComposite, SWT.NONE);
-//  		gl = new GridLayout(1, true);
-//  		pageComposite.setLayout(gl);
+  		pageComposite = new Composite(scrolledComposite, SWT.NONE);
+  		gl = new GridLayout(1, true);
+  		pageComposite.setLayout(gl);
+  		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+  		pageComposite.setLayoutData(gridData);
   		
-//  		messageText = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
-//			if (getMessage() != null) {
-//				messageText.setText(getMessage());
-//			}
-//			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//			messageText.setLayoutData(gridData);
+  		messageText = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
+			if (getMessage() != null) {
+				messageText.setText(getMessage());
+			}
+			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+			messageText.setLayoutData(gridData);
   		
-  		formComposite = new Composite(scrolledComposite, SWT.NONE);
-  		
-  		scrolledComposite.setContent(formComposite);
+  		formComposite = new Composite(pageComposite, SWT.NONE);
   		
   		scrolledComposite.addControlListener(new ControlAdapter() {
   			public void controlResized(ControlEvent e) {
-//  				Rectangle r = scrolledComposite.getClientArea();
-//  				scrolledComposite.setMinSize(formComposite.computeSize(r.width, SWT.DEFAULT));
-  				scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+  				scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
   			}
   		});
-  		
-      
-//      try {
-			
-			
-//			Composite formComposite = new Composite(container, SWT.NONE);
-//			GridLayout formLayout = new GridLayout(2, false);
-//			formComposite.setLayout(formLayout);
-//			GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//			formComposite.setLayoutData(gridData);
-			
-//        Label uriLabel = new Label(formComposite, SWT.NONE);
-//        uriLabel.setText("Enter the URI");
-//        uriText = new Text(formComposite, SWT.BORDER);
-//        gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//        uriText.setLayoutData(gridData);
 			
 			addFormElements();
 			
-			scrolledComposite.setMinSize(formComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			scrolledComposite.setContent(pageComposite);
+			
+			scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			
       return scrolledComposite;
     }
@@ -135,9 +126,9 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
             "Cancel", false);
     }
     
-    protected Point getInitialSize() {
-        return new Point(800, 450);
-    }
+//    protected Point getInitialSize() {
+//        return new Point(800, 450);
+//    }
     
     @Override
     protected void okPressed() {

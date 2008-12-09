@@ -85,6 +85,8 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 
 	private List<String> headerVariables;
 
+	private String createdName;
+
 //	private static String TITLE = "Type of Subject";
 //	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
 //	private Table table;
@@ -225,7 +227,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			
 			if (createSubclassAction.getNewUri() != null) {
 				this.createdUri = createSubclassAction.getNewUri();
-				
+				this.createdName = createSubclassAction.getNewName();
 				selectCreatedClassButton.setText(createdUri);
 				selectCreatedClassButton.setSelection(true);
 				selectNewSubjectLabel.setVisible(true);
@@ -321,9 +323,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 //	}
 
 	public String getSelectedValue(String fieldName) {
-		if (createdUri != null && selectCreatedClassButton.getSelection()) {
-			return createdUri;
-		}
+		
 		TableItem[] selectedItems = table.getSelection();
 		if (selectedItems == null || selectedItems.length < 1) {
 			return null;
@@ -340,6 +340,9 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	}
 	
 	public String getSubjectUri() {
+		if (createdUri != null && selectCreatedClassButton.getSelection()) {
+			return createdUri;
+		}
 		return getSelectedValue(uriFieldName);
 //		if (createdUri != null && selectCreatedClassButton.getSelection()) {
 //			return createdUri;
@@ -360,6 +363,9 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	}
 	
 	public String getThingClass() {
+		if (createdName != null && selectCreatedClassButton.getSelection()) {
+			return createdName;
+		}
 		return getSelectedValue(nameFieldName);
 	}
 	

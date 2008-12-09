@@ -30,9 +30,11 @@ public abstract class ACreateOntResourceAction extends Action {
 
 	protected Model newStatementsModel;
 
-	private IndexBuilderModel textIndexBuilder;
+//	private IndexBuilderModel textIndexBuilder;
 
 	private String newUri;
+	
+	private String newName;
 
 	protected Shell shell;
 
@@ -57,7 +59,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		log.trace("Create ACreateOntResourceAction");
 		Persister persister = Persister.getInstance();
 		this.model = persister.getInternalModel(internalDatasetRoleId);
-		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
+//		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
 		this.parentResourceUri = parentResourceUri;
 		this.actionType = actionType;
 	}
@@ -92,22 +94,23 @@ public abstract class ACreateOntResourceAction extends Action {
 //		this.newUri = aResourceDialog.getUri();
 		this.ontResource = ontResource;
 		this.newUri = ontResource.getURI();
+		this.newName = ontResource.getLabel("EN");
 		newStatementsModel = ontModel.difference(model);
 		log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatementsModel));
 		Persister persister = Persister.getInstance();
 		
-		if (textIndexBuilder != null) {
-			model.register(textIndexBuilder);
-//			log.info("Registered text index builder");
-		}
+//		if (textIndexBuilder != null) {
+//			model.register(textIndexBuilder);
+////			log.info("Registered text index builder");
+//		}
 		long sizeBefore = model.size();
 		model.begin();
 		model.add(newStatementsModel);
 		model.commit();
 		
-		if (textIndexBuilder != null) {
-			model.unregister(textIndexBuilder);
-		}
+//		if (textIndexBuilder != null) {
+//			model.unregister(textIndexBuilder);
+//		}
 		long sizeDifference = model.size() - sizeBefore;
 		log.info("Registered new type locally: Added " + sizeDifference + " new statements to the model.");
 		
@@ -127,6 +130,10 @@ public abstract class ACreateOntResourceAction extends Action {
 
 	public String getNewUri() {
 		return newUri;
+	}
+	
+	public String getNewName() {
+		return newName;
 	}
 	
 	public OntResource getOntResource() {
