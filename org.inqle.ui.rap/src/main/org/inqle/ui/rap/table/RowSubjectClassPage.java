@@ -13,7 +13,8 @@ public class RowSubjectClassPage extends SubjectClassPage {
 
 	private static String TITLE = "What type of thing is this subject?";
 	private static String DESCRIPTION = "Find and select the type of subject that this data is about." +
-			"\nExample: If each ";
+			"\nExample: If each row of your table is about a different country, then below you " +
+			"could search for 'country', then select the URI that represents 'country'.";
 //	private Table table;
 	
 	/**
