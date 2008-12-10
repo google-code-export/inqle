@@ -43,6 +43,7 @@ public class CreateHeaderPropertiesAction extends Action {
 	private String subjectClass;
 	private Model model;
 	private String subjectName;
+	private HeaderPropertiesDialog headerPropertiesDialog;
 	
 	/**
 	 * Create a dialog, to create multiple properties
@@ -65,7 +66,7 @@ public class CreateHeaderPropertiesAction extends Action {
 	public void run() {
 		try {
 			OntModel ontModel = ModelFactory.createOntologyModel();
-			HeaderPropertiesDialog headerPropertiesDialog = new HeaderPropertiesDialog(shell, ontModel, headers, subjectClass, subjectName);
+			headerPropertiesDialog = new HeaderPropertiesDialog(shell, ontModel, headers, subjectClass, subjectName);
 			headerPropertiesDialog.setUriPrefix(subjectClass + "/");
 			headerPropertiesDialog.open();
 			if (headerPropertiesDialog.getReturnCode() == Window.OK) {
@@ -108,6 +109,10 @@ public class CreateHeaderPropertiesAction extends Action {
 		log.info("posting new type RDF data to " + InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE + "...");
 		boolean success = Requestor.sendPost(InqleInfo.URL_CENTRAL_REGISTRATION_SERVICE, params, new PrintWriter(System.out));
 		log.info("...success? " + success);
+	}
+
+	public OntModel getModel() {
+		return headerPropertiesDialog.getOntModel();
 	}
 
 //	public void setDomainClass(OntClass domainSubject) {

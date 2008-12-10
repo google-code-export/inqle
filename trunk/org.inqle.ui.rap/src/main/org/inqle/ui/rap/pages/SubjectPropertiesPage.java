@@ -18,7 +18,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.ListMapUtil;
@@ -30,20 +29,15 @@ import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
 import org.inqle.ui.rap.actions.CreateHeaderPropertiesAction;
-import org.inqle.ui.rap.actions.CreateSubpropertyAction;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
 import org.w3c.dom.Document;
 
-import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntResource;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.ontology.OntProperty;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 public abstract class SubjectPropertiesPage extends DynaWizardPage implements SelectionListener {
 
@@ -380,18 +374,15 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 					getThingClass());
 			createHeaderPropertiesAction.run();
 			
-			//add the domain class
-//			OntModel ontModel = ModelFactory.createOntologyModel();
-//			OntClass domainSubject = ontModel.createClass(getSubjectUri());
-//			createSubpropertyAction.setDomainClass(domainSubject);
-//			createSubpropertyAction.run();
-//			OntResource newProperty = createSubpropertyAction.getOntResource();
-			
-			//loop thru new properties, add a form item for each
-//			addPropertyFormItem(newProperty.getURI(), 
-//					newProperty.getLabel("EN"), 
-//					newProperty.getComment("EN"),
-//					RDF.SUBJECT_PROPERTY);
+			OntModel newModel = createHeaderPropertiesAction.getModel();
+			ExtendedIterator propsEI = newModel.listAllOntProperties();
+			while (propsEI.hasNext()) {
+				OntProperty prop = (OntProperty)propsEI.next();
+				addPropertyFormItem(prop.getURI(), 
+						prop.getLabel("EN"), 
+						prop.getComment("EN"),
+						RDF.SUBJECT_PROPERTY);
+			}
 			
 			refreshScrolledComposite();
 		}

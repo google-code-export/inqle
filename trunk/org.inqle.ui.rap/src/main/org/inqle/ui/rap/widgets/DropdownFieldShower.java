@@ -51,16 +51,30 @@ public class DropdownFieldShower implements IDataFieldShower {
 			int listStyle) {
 		java.util.List<String> allOptions = new ArrayList<String>();
 		allOptions.add("");
+		//create a list of lower case version of the options
+		java.util.List lcOptions = new ArrayList<String>();
+		
 		if (options != null) {
 			allOptions.addAll(Arrays.asList(options));
+			
+			for (String option: options) {
+				if (option == null) lcOptions.add("");
+				lcOptions.add(option.toLowerCase().trim());
+			}
 		}
+		
+		
+		
+		
 		GridData gridData;
 //		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		
 		//create the controls
 		Label label = new Label(composite, SWT.NONE);
-		label.setText(labelString);
+		if (labelString != null) {
+			label.setText(labelString);
+		}
 
 //		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
@@ -72,6 +86,17 @@ public class DropdownFieldShower implements IDataFieldShower {
 		String[] nullStr = {};
 		list.setItems(allOptions.toArray(nullStr));
 		
+		//if possible, pre-select the value which matches the label
+		try {
+			String matchLabel = labelString.toLowerCase().trim();
+			if (lcOptions.indexOf(matchLabel) >= 0) {
+				list.setSelection(lcOptions.indexOf(matchLabel) + 1);
+			}
+		} catch (RuntimeException e) {
+			//error.  never mind pre-selecting the value which matches the label
+		}
+		
+		//if a description was added, show it
 		if (descriptionString != null && descriptionString.length() > 0) {
 			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			
@@ -80,7 +105,9 @@ public class DropdownFieldShower implements IDataFieldShower {
 			
 			//add the description
 			descriptionText = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY);
-			descriptionText.setText(descriptionString);
+			if (descriptionString != null) {
+				descriptionText.setText(descriptionString);
+			}
 			descriptionText.setLayoutData(gridData);
 			Font currentFont = descriptionText.getFont();
 			String fontName = null;
