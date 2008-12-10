@@ -51,20 +51,24 @@ Improved usability, without need to enter URIs.
   * Central INQLE server working for lookup of subjects and some predicates
 
 ==Version 0.2==
-(expected end of 2008)
+(9 December, 2008)
 
-Enhanced connectivity to data.
-  * Sampling algorithm which caters to data imported via the File Data Importer.
-  * Support for multiple user accounts
-  * Use of SPARQL endpoints as INQLE datasets
-  * INQLE servers are SPARQL endpoints
+  * Above features
+  * new generation of usability enhancements to file data importer wizard
+  * Sampling algorithm which is suited data imported via the File Data Importer.
+
   * Usability fixes
 
 ==Version 0.3==
-(expected end of March, 2009)
+(expected end of May, 2009)
 
-Expanded Reach
+Enhanced connectivity to data.
+  * Use of SPARQL endpoints as INQLE datasets
+  * INQLE servers are SPARQL endpoints
   * Sampling algorithms which combine local with remote data
   * Survey module: user creates/reuses survey questions, adds participant emails, specifies parameters such as frequency and duration of mailings, and starts the survey.
 
-==More to come...==
+==Version 1.0==
+(expected late 2009)
+
+Lives up the the name, Intelligent Network of Querying and Learning Engines
