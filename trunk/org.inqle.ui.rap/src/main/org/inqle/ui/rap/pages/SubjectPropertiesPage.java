@@ -378,6 +378,11 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			ExtendedIterator propsEI = newModel.listAllOntProperties();
 			while (propsEI.hasNext()) {
 				OntProperty prop = (OntProperty)propsEI.next();
+				
+				if (prop==null || prop.getLabel("EN")==null || prop.getLabel("EN").length()==0) {
+					continue;
+				}
+				
 				addPropertyFormItem(prop.getURI(), 
 						prop.getLabel("EN"), 
 						prop.getComment("EN"),
