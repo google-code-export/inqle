@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase0;
+import com.hp.hpl.jena.sparql.function.FunctionBase1;
 
 /**
  * This is designed to be used in a SPARQL query,
@@ -26,14 +27,14 @@ import com.hp.hpl.jena.sparql.function.FunctionBase0;
  * @author David Donohue
  * Oct 22, 2008
  */
-public class Rand extends FunctionBase0 {
+public class RandomPerValue extends FunctionBase1 {
 	
-	private static Logger log = Logger.getLogger(Rand.class);
+	private static Logger log = Logger.getLogger(Random.class);
 	
 	@Override
-	public NodeValue exec() {
+	public NodeValue exec(NodeValue nodeValue) {
 		double dbl = new Random().nextDouble();
-		log.info("Rand()=" + dbl);
+		log.info("RandomPerValue()=" + dbl);
 		NodeValue randomValue = NodeValue.makeDouble(dbl);
 		return randomValue;
 	}
