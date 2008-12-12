@@ -42,8 +42,31 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
  */
 	public class Queryer {
 	
+	
+
 	private static Logger log = Logger.getLogger(Queryer.class);
 	
+	private static final String[] COMMON_CLASSES_TO_FILTER = { 
+		RDF.RDFS + "Class",
+		RDF.RDFS + "Resource",
+		RDF.RDFS + "Datatype",
+		RDF.RDFS + "Class",
+		RDF.OWL + "Class", 
+		RDF.OWL + "Thing",
+		RDF.RDF + "Property",
+		RDF.RDF + "List",
+		RDF.INQLE + "Data"
+	};
+	public static String[] COMMON_PREDICATES_TO_FILTER = {
+		RDF.RDF + "type", 
+		RDF.RDFS + "domain",
+		RDF.RDFS + "range",
+		RDF.RDFS + "subClassOf",
+		RDF.RDFS + "subPropertyOf",
+		RDF.RDFS + "label",
+		RDF.RDFS + "comment"
+	};
+	                     
 	private static QueryExecution getQueryExecution(QueryCriteria queryCriteria) {
 		Query query;
 		try {
@@ -319,14 +342,15 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 	 * "graph" or "where", and should have no "order by" or "limit"
 	 * or "offset" or any other suffix.
 	 * @param baseSparql
-	 * @param randomize
+	 * @param variableToRandomizeOn the name fo a variable to use for generating random numners (e.g. "?pred1")
+	 * if no randomization is desired, set this argument null
 	 * @param offset
 	 * @param limit
 	 * @return
 	 */
-	public static String decorateSparql(String baseSparql, boolean randomize, int offset, int limit) {
+	public static String decorateSparql(String baseSparql, String variableToRandomizeOn, int offset, int limit) {
 		String sparql;
-		if (! randomize) {
+		if (variableToRandomizeOn==null) {
 			sparql = baseSparql;
 		} else {
 			sparql = "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
@@ -361,6 +385,47 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 		return sparql;
 	}
 
+	/**
+	 * Get a SPARQL fragment, suitable for embedding in a WHERE clause, for filtering out structural RDF properties like 
+	 * rdf:type, rdfs:subClassOf, etc.
+	 * @param varName the name of the variable to filter on.  E.g. "?p"
+	 * @return
+	 */
+	public static String getSparqlClauseFilterCommonPredicates(String varName) {
+		return getSparqlClauseFilterTargetUris(varName, COMMON_PREDICATES_TO_FILTER);
+	}
+	
+	/**
+	 * Get a SPARQL fragment, suitable for embedding in a WHERE clause, for filtering out structural RDF properties like 
+	 * rdf:type, rdfs:subClassOf, etc.
+	 * @param varName the name of the variable to filter on.  E.g. "?p"
+	 * @return
+	 */
+	public static String getSparqlClauseFilterCommonClasses(String varName) {
+		return getSparqlClauseFilterTargetUris(varName, COMMON_CLASSES_TO_FILTER);
+	}
+	
+	/**
+	 * Get a SPARQL fragment, suitable for embedding in a WHERE clause, for filtering out structural RDF properties like 
+	 * rdf:type, rdfs:subClassOf, etc.
+	 * @param varName the name of the variable to filter on.  E.g. "?p"
+	 * @return
+	 */
+	public static String getSparqlClauseFilterTargetUris(String varName, String[] urisToFilter) {
+		String s = "";
+		
+		s += "\n FILTER (";
+		int i=0;
+		for (String commonPred: urisToFilter) {
+			s += "\n    ";
+			if (i > 0) s += " && ";
+			s += varName + " != <" + commonPred + "> ";
+			i++;
+		}
+		s += ") ";
+		return s;
+	}
+	
 	/**
 	 * Gets SPARQL query which will retrieve the ID of every Jenabean
 	 * RDF object which is of the provided class and matches the provided

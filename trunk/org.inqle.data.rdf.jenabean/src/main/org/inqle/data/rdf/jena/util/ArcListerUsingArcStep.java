@@ -58,7 +58,7 @@ public class ArcListerUsingArcStep {
 		String baseSparql = getSparqlSelectArcs(subjectClassUri);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
-		String sparql = Queryer.decorateSparql(baseSparql, true, 0, numberToSelect);
+		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
 		queryCriteria.setQuery(sparql);
 		
 		return listArcs(queryCriteria);
