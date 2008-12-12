@@ -58,7 +58,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	public static final int MAXIMUM_LEARNABLE_PREDICATES = 3;
 	public static final int MINIMUM_LEARNABLE_PREDICATES = 2;
 	public static final int MAX_NUMBER_OF_ROWS = 500;
-	public static final int MAX_PROPERTY_ARC_DEPTH = 3;
+	public static final int MAX_PROPERTY_ARC_DEPTH = 2;
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSampler.class);
 
@@ -112,7 +112,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	@Override
 	protected URI decideSubjectClass(Collection<String> modelsToUse) {
 		
-		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, true, 0, 1);
+		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, "?subject", 0, 1);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(modelsToUse);
 		queryCriteria.setQuery(sparql);

@@ -78,10 +78,10 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		
 		Resource subjectClass = selectSubjectClass(modelsToUse);
 		if (subjectClass == null) return null;
-		//log.info("Subject class=" + subjectClass);
+		log.info("Subject class=" + subjectClass);
 		
 		Arc labelArc = selectLabelArc(modelsToUse, subjectClass);
-		//log.info("Label arc=" + labelArc);
+		log.info("Label arc=" + labelArc);
 		Collection<Arc> avoidArcs = new ArrayList<Arc>();
 		avoidArcs.add(labelArc);
 		Collection<Arc> learnableArcs = getLearnableArcs(modelsToUse, subjectClass, avoidArcs);

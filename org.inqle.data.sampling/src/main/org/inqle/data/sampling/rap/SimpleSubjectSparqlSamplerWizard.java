@@ -24,8 +24,6 @@ import org.inqle.ui.rap.pages.SimpleListSelectorPage;
 import org.inqle.ui.rap.table.BeanTableSelectorPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.vocabulary.RDF;
 
 public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements IListProvider, IList2Provider, IValueUpdater {
 
@@ -37,6 +35,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	private List<Arc> arcsList;
 	//protected SimpleSubjectSparqlSampler bean;
 	private SimpleListSelectorPage labelSelectorPage;
+	private NameDescriptionPage nameDescriptionPage;
 	
 	public SimpleSubjectSparqlSamplerWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
@@ -50,7 +49,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 //		samplerNamePage.setLabelText("Sampler Name");
 //		addPage(samplerNamePage);
 		
-		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
+		nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
 		addPage(nameDescriptionPage);
 		
 		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedNamedModels", String.class, "Select dataset(s) for sampling", null);
@@ -111,7 +110,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	
 	@Override
 	public boolean canFinish() {
-		if (getContainer().getCurrentPage().equals(arcSelectorPage)) {
+		if (! getContainer().getCurrentPage().equals(nameDescriptionPage)) {
 			return true;
 		} else {
 			return false;
@@ -146,7 +145,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (bean == null) return null;
 		if (page.equals(subjectClassSelectorPage)) {
 			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedNamedModels();
-			return SubjectClassLister.listAllSubjectClasses(selectedModelsCollection);
+			return SubjectClassLister.listUncommonSubjectClasses(selectedModelsCollection);
 		}
 		
 		if (page.equals(arcSelectorPage) || page.equals(labelSelectorPage)) {
@@ -156,7 +155,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 				log.info("Returning NULL for list of Arcs");
 				arcsList = null;
 			} else {
-				arcsList = ArcLister.listArcs(selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH);
+				arcsList = ArcLister.listValuedArcs(selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH);
 				log.info("Returning this list of Arcs: " + arcsList);
 			}
 			return arcsList;
