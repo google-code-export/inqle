@@ -80,6 +80,7 @@ public class SamplerWizardAction extends Action {
 		} catch (Exception e) {
 			log.error("Error running SamplerWizardAction", e);
 		}
+		samplerPart.fireUpdatePart();
 	}
 
 
