@@ -41,7 +41,7 @@ public class BeanTableCheckedList extends WritableList implements IChangeListene
 		Object rowBean = checkboxTableViewer.getElementAt(index);
 		while(rowBean != null) {
 			String id = JenabeanConverter.getId(rowBean);
-			log.info("rowBean of class " + rowBean.getClass() + " has id= " + id);
+			//log.info("rowBean of class " + rowBean.getClass() + " has id= " + id);
 			
 			//if (Arrays.binarySearch(beanItems, id) >= 0) {
 			if (initialCheckedItems.contains(id)) {
@@ -58,7 +58,7 @@ public class BeanTableCheckedList extends WritableList implements IChangeListene
 	 * Checks boxes upon initial loading
 	 */
 	public void handleChange(ChangeEvent event) {
-		log.info("Received Change event on model bean: " + event);
+		//log.info("Received Change event on model bean: " + event);
 		String[] nullStringArray = new String[] {};
 		List<String> beanItems = new ArrayList<String>();
 		try {
@@ -67,10 +67,10 @@ public class BeanTableCheckedList extends WritableList implements IChangeListene
 			log.error("Unable to convert selections to a String[]", e);
 		}
 		int index = 0;
-		log.info("checking these items:" + beanItems + "...");
+		//log.info("checking these items:" + beanItems + "...");
 		Object rowBean = checkboxTableViewer.getElementAt(index);
 		while(rowBean != null) {
-			log.info("rowBean of class " + rowBean.getClass() + " has id= " + JenabeanConverter.getId(rowBean));
+			//log.info("rowBean of class " + rowBean.getClass() + " has id= " + JenabeanConverter.getId(rowBean));
 			String id = JenabeanConverter.getId(rowBean);
 			//if (Arrays.binarySearch(beanItems, id) >= 0) {
 			if (beanItems.contains(id)) {
