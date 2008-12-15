@@ -1,0 +1,8 @@
+#summary describes the 3 types of data stores that INQLE employs
+
+An INQLE server uses 3 types of data stores.  Below we compare and contrast these.
+
+|| *Feature* || *External Dataset* || *Cache Dataset* || *Internal Dataset* ||
+|| What it stores || RDF data that the user has loaded || RDF objects derived by INQLE, describing the loaded data || RDF objects used by INQLE to function, such as databases, datasets, samplers
+|| How to create one || User creates in INQLE Administration web interface || Plug-in contributor creates || Plug-in contributor creates
+|| Architecture || INQLE server points to 1 or more databases, each of which may be shared by multiple INQLE servers || INQLE server points to a single database, which may be shared by multiple INQLE servers || INQLE server points to a single database, which is not shared
