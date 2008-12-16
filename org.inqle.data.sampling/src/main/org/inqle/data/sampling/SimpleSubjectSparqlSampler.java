@@ -6,25 +6,18 @@ package org.inqle.data.sampling;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.RandomUtil;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.TargetDataset;
-import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
-import org.inqle.data.rdf.jena.util.RandomUtil;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.ArcStep;
 
 import thewebsemantic.Namespace;
 
-import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 /** 
@@ -82,9 +75,9 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass) {
-		List<Arc> randomArcs = ArcLister.listRandomValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1);
+		Collection<Arc> randomArcs = ArcLister.getRandomFilteredValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1, null);
 		if (randomArcs == null || randomArcs.size()==0) return null;
-		return randomArcs.get(0);
+		return new ArrayList<Arc>(randomArcs).get(0);
 	}
 
 	@Override
@@ -95,31 +88,37 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude) {
-		List<Arc> randomArcs = ArcLister.listRandomValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, (numberToSelect * 3));
-		if (randomArcs==null) return null;
-		List<Arc> decidedArcs = new ArrayList<Arc>();
-		for (Arc randomArc: randomArcs) {
-			if (decidedArcs.size() >= numberToSelect) break;
-			if (arcsToExclude!=null && arcsToExclude.contains(randomArc)) {
-				continue;
-			}
-			decidedArcs.add(randomArc);
-		}
-		return decidedArcs;
+		Collection<Arc> randomArcs = ArcLister.getRandomFilteredValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, numberToSelect, arcsToExclude);
+		log.info("decideLearnableArcs() yields this list:\n" + randomArcs);
+		return randomArcs;
+//		if (randomArcs==null) return null;
+//		List<Arc> decidedArcs = new ArrayList<Arc>();
+//		for (Arc randomArc: randomArcs) {
+//			if (decidedArcs.size() >= numberToSelect) break;
+//			if (arcsToExclude!=null && arcsToExclude.contains(randomArc)) {
+//				continue;
+//			}
+//			decidedArcs.add(randomArc);
+//		}
+//		return decidedArcs;
 	}
 
 
 	@Override
 	protected URI decideSubjectClass(Collection<String> modelsToUse) {
-		
-		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, "?subject", 0, 1);
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(modelsToUse);
-		queryCriteria.setQuery(sparql);
-		List<String> results = Queryer.selectSimpleList(queryCriteria, "classUri");
-		if (results==null || results.size()==0) return null;
-		String classUri = results.get(0);
-		return URI.create(classUri);
+		Collection<String> randomSubjectClasses = SubjectClassLister.getRandomUncommonSubjectClasses(modelsToUse, 1, null);
+		if (randomSubjectClasses==null) return null;
+		String randomSubjectClass = new ArrayList<String>(randomSubjectClasses).get(0);
+		return URI.create(randomSubjectClass);
+//		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, "?subject", 0, 1);
+//		log.info("decideSubjectClass() yields this sparql:\n" + sparql);
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.addNamedModelIds(modelsToUse);
+//		queryCriteria.setQuery(sparql);
+//		List<String> results = Queryer.selectSimpleList(queryCriteria, "classUri");
+//		if (results==null || results.size()==0) return null;
+//		String classUri = results.get(0);
+//		return URI.create(classUri);
 	}
 
 

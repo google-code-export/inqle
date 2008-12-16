@@ -145,7 +145,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (bean == null) return null;
 		if (page.equals(subjectClassSelectorPage)) {
 			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedNamedModels();
-			return SubjectClassLister.listUncommonSubjectClasses(selectedModelsCollection);
+			return SubjectClassLister.getUncommonSubjectClasses(selectedModelsCollection);
 		}
 		
 		if (page.equals(arcSelectorPage) || page.equals(labelSelectorPage)) {
@@ -155,8 +155,8 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 				log.info("Returning NULL for list of Arcs");
 				arcsList = null;
 			} else {
-				arcsList = ArcLister.listValuedArcs(selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH);
-				log.info("Returning this list of Arcs: " + arcsList);
+				arcsList = new ArrayList<Arc>(ArcLister.getFilteredValuedArcs(selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH));
+				log.info("Returning this collection of Arcs: " + arcsList);
 			}
 			return arcsList;
 		}
