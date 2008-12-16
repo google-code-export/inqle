@@ -206,7 +206,8 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		
 		//we must select a subset of the choosable datamodels
 		//randomly remove datamodels until we reach the maximum acceptable number
-		Collection<String> selectedNamedModels = (Collection<String>) RandomListChooser.chooseRandomItems(new ArrayList(choosableNamedModels), getMinimumNumberOfNamedModels(), getMaximumNumberOfNamedModels());
+		int numberDatasetsToSelect = RandomListChooser.getRandomNumber(getMinimumNumberOfNamedModels(), getMaximumNumberOfNamedModels());
+		Collection<String> selectedNamedModels = (Collection<String>) RandomListChooser.chooseRandomItemsSubtractively(new ArrayList(choosableNamedModels), numberDatasetsToSelect);
 		
 		//if (selectedNamedModels != null) {
 		return selectedNamedModels;
