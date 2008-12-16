@@ -23,6 +23,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.cache.CacheTool;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -220,6 +221,7 @@ public class LoadRdfFileWizard extends DynaWizard {
     waitingDialog.close();
     if (success) {
     	log.info("Success loading RDF file.");
+    	CacheTool.invalidateDataCache(namedModel.getId());
     	if (loader.getCountLoaded() == 0) {
     		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
     	} else {

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.util.TypeConverter;
+import org.inqle.data.rdf.jenabean.cache.CacheTool;
 import org.inqle.data.rdf.jenabean.mapping.*;
 import org.inqle.ui.rap.csv.CsvReader;
 
@@ -58,7 +59,6 @@ public class FileDataImporter {
 				importRowSubjectMapping(subjectMapping);
 			}
 		}
-		
 		
 		//next loop thru each row and create subject, add values from mapping and from appropriate column
 //		ontModel.commit();
