@@ -49,7 +49,7 @@ public class RandomListChooser {
 	 * @param size the number of items to select
 	 * @return the randomly selected collection of items
 	 */
-	public static Collection<Object> chooseRandomItemsAdditively(Collection<Object> itemsToSelectFrom, Collection<Object> itemsToExclude, int size) {
+	public static Collection<?> chooseRandomItemsAdditively(Collection<?> itemsToSelectFrom, Collection<?> itemsToExclude, int size) {
 		List<Object> selectedItems = new ArrayList<Object>();
 		List<Object> listToSelectFrom = new ArrayList<Object>(itemsToSelectFrom);
 		int maxNumTries = itemsToSelectFrom.size() * 2;
