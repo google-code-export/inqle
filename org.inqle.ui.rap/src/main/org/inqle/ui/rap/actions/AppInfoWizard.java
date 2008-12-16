@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
@@ -73,6 +74,14 @@ public class AppInfoWizard extends Wizard {
 	private ServerInfoPage serverInfoPage;
 
 	private UserAccountPage userAccountPage;
+
+	private RadiosPage embeddedOrExternalCacheDBPage;
+
+	private EmbeddedDBPage embeddedCacheDBPage;
+
+	private InternalConnection cacheConnection;
+
+	private ConnectionPage cacheConnectionPage;
 	
 	public AppInfoWizard(Shell parentShell) {
 		this.shell = parentShell;
@@ -100,6 +109,7 @@ public class AppInfoWizard extends Wizard {
 		userAccountPage = new UserAccountPage();
 		addPage(userAccountPage);
 		
+		//Add pages for capturing the internal database connection and metarepository dataset
 		embeddedOrExternalMetarepositoryDBPage = new RadiosPage("We will create the internal database used by your INQLE server.", "Select whether to use an embedded database to use for the internal database.");
 		embeddedOrExternalMetarepositoryDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
 		addPage(embeddedOrExternalMetarepositoryDBPage);
@@ -140,7 +150,36 @@ public class AppInfoWizard extends Wizard {
 		addPage(metarepositoryDatasetPage);
 		log.info("added metarepositoryDatasetPage");
 		
-		//add form elements for the first dataset
+		
+		
+		
+		
+		embeddedOrExternalCacheDBPage = new RadiosPage("We will create the CACHE database used by your INQLE server.", "Select whether to use an embedded database to use for the INQLE CACHE database.");
+		embeddedOrExternalCacheDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
+		addPage(embeddedOrExternalCacheDBPage);
+//		log.info("added embeddedOrExternalCacheDBPage");
+		
+		embeddedCacheDBPage = new EmbeddedDBPage("INQLE Cache Database", "Specify connection info for the embedded H2 database, which will contain INQLE caching information.");
+		embeddedCacheDBPage.setDefaultDBName(DEFAULT_INTERNAL_DB_NAME);
+		embeddedCacheDBPage.setDefaultUserName(DEFAULT_INTERNAL_DB_USER_NAME);
+		addPage(embeddedCacheDBPage);
+//		log.info("added embeddedCacheDBPage");
+		
+		cacheConnection = new InternalConnection();
+		cacheConnection.setConnectionRole(Persister.CACHE_CONNECTION);
+		cacheConnection.setRandomId();
+		
+//		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
+		cacheConnectionPage = new ConnectionPage(
+				"Specify database connection info for your INQLE server", 
+				cacheConnection, 
+				shell
+		);
+		addPage(cacheConnectionPage);
+		
+		log.info("added cacheConnectionPage");
+		
+		//add form elements for the first external dataset
 		embeddedOrExternalFirstDataDBPage = new RadiosPage("Next, we will create a database for storing your data.", "Select whether to use an embedded database, in which to store your data.");
 		embeddedOrExternalFirstDataDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
 		addPage(embeddedOrExternalFirstDataDBPage);
@@ -192,6 +231,14 @@ public class AppInfoWizard extends Wizard {
 			return metarepositoryDatasetPage;
 		}
 
+		if (page == embeddedOrExternalCacheDBPage) {
+			if (embeddedOrExternalCacheDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
+				return embeddedCacheDBPage;
+			} else {
+				return cacheConnectionPage;
+			}
+		}
+		
 		if (page == embeddedOrExternalFirstDataDBPage) {
 			if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
 				return embeddedFirstDataDBPage;
@@ -222,6 +269,19 @@ public class AppInfoWizard extends Wizard {
 				if (firstDataConnectionPage.getDbType().length()==0) return false;
 				if (firstDataConnectionPage.getDbURL().length()==0) return false;
 				if (firstDataConnectionPage.getDbClass().length()==0) return false;
+			}
+			
+			//Cache forms
+			if (embeddedOrExternalCacheDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
+				//embedded database:
+				if (embeddedCacheDBPage.getDbName().length()==0) return false;
+				if (embeddedCacheDBPage.getDbLogin().length()==0) return false;
+				if (embeddedCacheDBPage.getDbPassword().length()==0) return false;
+			} else {
+				//external database:
+				if (cacheConnectionPage.getDbType().length()==0) return false;
+				if (cacheConnectionPage.getDbURL().length()==0) return false;
+				if (cacheConnectionPage.getDbClass().length()==0) return false;
 			}
 			
 			//Metarepository forms
@@ -294,6 +354,28 @@ public class AppInfoWizard extends Wizard {
 		} catch (Exception e) {
 			log.error("Unable to save AppInfo to " + Persister.getAppInfoFilePath(), e);
 		}
+		
+		
+		//next create the cache database
+		if (embeddedOrExternalCacheDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
+			cacheConnection.setDbURL(H2_DB_URL_BASE + embeddedCacheDBPage.getDbName());
+			cacheConnection.setDbClass(H2_DB_CLASS);
+			cacheConnection.setDbType(H2_DB_TYPE);
+			cacheConnection.setDbUser(embeddedCacheDBPage.getDbLogin());
+			cacheConnection.setDbPassword(embeddedCacheDBPage.getDbPassword());
+		}
+		
+		try {
+			DBConnector connector = new DBConnector(cacheConnection);
+			int status = connector.tryToCreateSDBStore();
+			log.info("Created data store for cache database: Status=" + status);
+			Persister persister = Persister.getInstance();
+			persister.registerInternalConnection(cacheConnection);
+		} catch (Exception e) {
+			log.error("Error creating/storing first dataset", e);
+		}
+		
+		
 		
 		//next create the first data dataset
 		if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {

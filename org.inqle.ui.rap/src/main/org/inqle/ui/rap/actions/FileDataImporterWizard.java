@@ -17,6 +17,7 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.cache.CacheTool;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
@@ -181,6 +182,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			log.info("Flushing indexes for namedModel: " + namedModel + "...");
 			Persister persister = Persister.getInstance();
 			persister.flushIndexes(namedModel);
+			
+			//invalidate the cache for this dataset
+			CacheTool.invalidateDataCache(namedModel.getId());
 		}
 		
 		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
