@@ -63,12 +63,12 @@ public class QueryCriteria {
 	
 	/**
 	 * Add a NamedModel to the list of models to query, 
-	 * given the URI of the NamedModel
+	 * given the ID of the NamedModel
 	 * @param datamodelUri
 	 */
-	public void addNamedModel(String namedModelUri) {
+	public void addNamedModel(String namedModelId) {
 		Persister persister = Persister.getInstance();
-		NamedModel namedModel = (NamedModel)persister.reconstitute(NamedModel.class, namedModelUri, true);
+		NamedModel namedModel = (NamedModel)persister.reconstitute(NamedModel.class, namedModelId, true);
 		addNamedModel(namedModel);
 	}
 	

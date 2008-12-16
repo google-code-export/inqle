@@ -33,6 +33,7 @@ import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
+import org.inqle.data.rdf.jenabean.cache.CacheTool;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
@@ -1017,6 +1018,11 @@ public class Persister {
 			return targetDataset.value();
 		}
 		
+		public Dataset getTargetDataset(Class<?> persistableClass) {
+			String roleId = getDatasetRoleId(persistableClass);
+			return getInternalDataset(roleId);
+		}
+		
 		public static String getDatasetRoleId(Class<?> persistableClass) {
 			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
 			if (targetDataset == null) {
@@ -1265,6 +1271,10 @@ public class Persister {
 				//do not close if unable
 			//}
 	    connector.close();
+	    
+	    //invalidate the cache
+	    CacheTool.invalidateDataCache(namedModel.getId());
+	    
 	    return successDeleting;
 		} else if (namedModel instanceof Datafile) {
 			Model modelToDelete = getModel(namedModel);

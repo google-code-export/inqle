@@ -1,7 +1,7 @@
 package org.inqle.data.rdf.jenabean.cache;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
@@ -21,10 +21,14 @@ public class SubjectArcsCache extends GlobalJenabean {
 
 	private String datasetId;
 	private Resource subjectClass;
-	private List<Arc> arcs;
+	private Collection<Arc> arcs;
+	private int depth;
+	private String type;
 
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
+		s += "[type=" + type + "]\n";
+		s += "[depth=" + depth + "]\n";
 		s += "[datasetId=" + datasetId + "]\n";
 		s += "[subjectClass=" + subjectClass.toString() + "]\n";
 		s += "[arcs=" + arcs.toString() + "]\n";
@@ -36,10 +40,12 @@ public class SubjectArcsCache extends GlobalJenabean {
 		setSubjectClass(objectToBeCloned.getSubjectClass());
 		setDatasetId(objectToBeCloned.getDatasetId());
 		setArcs(objectToBeCloned.getArcs());
+		setType(objectToBeCloned.getType());
+		setDepth(objectToBeCloned.getDepth());
 		super.clone(objectToBeCloned);
 	}
 
-	public List<Arc> getArcs() {
+	public Collection<Arc> getArcs() {
 		return arcs;
 	}
 
@@ -65,8 +71,24 @@ public class SubjectArcsCache extends GlobalJenabean {
 		return subjectArcsCache;
 	}
 
-	public void setArcs(List<Arc> arcs) {
+	public void setArcs(Collection<Arc> arcs) {
 		this.arcs = arcs;
+	}
+
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 }
