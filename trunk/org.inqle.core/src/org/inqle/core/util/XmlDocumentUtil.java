@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
@@ -34,10 +36,22 @@ public class XmlDocumentUtil {
 	}
 	
 	public static Document getDocument(InputStream in) {
+		if (in==null) return null;
+		
+		InputStreamReader reader = null;
+		try {
+			reader = new InputStreamReader(in, DEFAULT_XML_CHARACTER_SET);
+		} catch (UnsupportedEncodingException e) {
+			log.error("Unable to create InputStreamReader", e);
+			return null;
+		}
+		InputSource inputSource = new InputSource(reader);
+		
 		Document document = null;
 		try {
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			document = builder.parse(in);
+//			document = builder.parse(in);
+			document = builder.parse(inputSource);
 		} catch (Exception e) {
 			log.error("Unable to build/parse XML from local SPARQL query", e);
 		} finally {
