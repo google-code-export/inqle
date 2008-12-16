@@ -335,56 +335,86 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 		return results;
 	}
 	
+//	/**
+//	 * To a basic sparql query, add elements to enforce random
+//	 * sorting, offset, limit.
+//	 * For random ordering to work, the query must have a
+//	 * "graph" or "where", and should have no "order by" or "limit"
+//	 * or "offset" or any other suffix.
+//	 * @param baseSparql
+//	 * @param variableToRandomizeOn the name fo a variable to use for generating random numners (e.g. "?pred1")
+//	 * if no randomization is desired, set this argument null
+//	 * @param offset
+//	 * @param limit
+//	 * @return
+//	 */
+//	public static String decorateSparql(String baseSparql, String variableToRandomizeOn, int offset, int limit) {
+//		String sparql;
+//		if (variableToRandomizeOn==null) {
+//			sparql = baseSparql;
+//		} else {
+//			sparql = "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
+//			//trim off everything after the last "}"
+//			int beginOfWhereBlock = -1;
+//			String baseSparqlLC = baseSparql.toLowerCase();
+//			beginOfWhereBlock = baseSparqlLC.indexOf("where");
+//			if (beginOfWhereBlock == -1) {
+//				beginOfWhereBlock = baseSparqlLC.indexOf("graph");
+//			}
+//			if (beginOfWhereBlock >= 0) {
+//				int nextBracePosition = baseSparqlLC.indexOf("{", beginOfWhereBlock);
+//				if (nextBracePosition==-1) {
+//					sparql += baseSparql;
+//				} else {
+//					sparql += baseSparql.substring(0, nextBracePosition + 1);
+//					sparql += " LET (?rand := inqle-fn:RandomPerValue(" + variableToRandomizeOn + ")) . \n";
+//					sparql += " FILTER ( ?rand >= 0) . \n";
+//					sparql += baseSparql.substring(nextBracePosition + 1);
+//					sparql += " ORDER BY DESC(?rand) \n";
+//				}
+//				
+//			} else {
+//				sparql += baseSparql;
+//			}
+////		sparql += " ORDER BY inqle-fn:Rand() \n";
+////			sparql += ". LET (?rand := inqle-fn:Rand()) } \n";
+//			
+//		}
+//
+//		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
+////		log.info("Decorated SPARQL:" + sparql);
+//		return sparql;
+//	}
+
 	/**
-	 * To a basic sparql query, add elements to enforce random
+	 * To a basic sparql query, add elements for
 	 * sorting, offset, limit.
 	 * For random ordering to work, the query must have a
 	 * "graph" or "where", and should have no "order by" or "limit"
 	 * or "offset" or any other suffix.
 	 * @param baseSparql
-	 * @param variableToRandomizeOn the name fo a variable to use for generating random numners (e.g. "?pred1")
-	 * if no randomization is desired, set this argument null
+	 * @param sortField the field to sort on, e.g. "?subject"
+	 * @param sortDirection should be null, "ASC", or "DESC"
 	 * @param offset
 	 * @param limit
 	 * @return
 	 */
-	public static String decorateSparql(String baseSparql, String variableToRandomizeOn, int offset, int limit) {
-		String sparql;
-		if (variableToRandomizeOn==null) {
-			sparql = baseSparql;
-		} else {
-			sparql = "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
-			//trim off everything after the last "}"
-			int beginOfWhereBlock = -1;
-			String baseSparqlLC = baseSparql.toLowerCase();
-			beginOfWhereBlock = baseSparqlLC.indexOf("where");
-			if (beginOfWhereBlock == -1) {
-				beginOfWhereBlock = baseSparqlLC.indexOf("graph");
-			}
-			if (beginOfWhereBlock >= 0) {
-				int nextBracePosition = baseSparqlLC.indexOf("{", beginOfWhereBlock);
-				if (nextBracePosition==-1) {
-					sparql += baseSparql;
-				} else {
-					sparql += baseSparql.substring(0, nextBracePosition + 1);
-					sparql += " LET (?rand := inqle-fn:Rand()) . \n";
-					sparql += baseSparql.substring(nextBracePosition + 1);
-					sparql += " ORDER BY DESC(?rand) \n";
-				}
-				
+	public static String decorateSparql(String baseSparql, String sortField, String sortDirection, int offset, int limit) {
+		String sparql = baseSparql;
+		if (sortField != null) {
+			sparql += " ORDER BY ";
+			if (sortDirection != null) {
+				sparql += sortDirection + "(" + sortField + ") \n";
 			} else {
-				sparql += baseSparql;
+				sparql += sortField + " \n";
 			}
-//		sparql += " ORDER BY inqle-fn:Rand() \n";
-//			sparql += ". LET (?rand := inqle-fn:Rand()) } \n";
-			
 		}
 
 		sparql += " LIMIT " + limit + " OFFSET " + offset + "\n";
 //		log.info("Decorated SPARQL:" + sparql);
 		return sparql;
 	}
-
+	
 	/**
 	 * Get a SPARQL fragment, suitable for embedding in a WHERE clause, for filtering out structural RDF properties like 
 	 * rdf:type, rdfs:subClassOf, etc.

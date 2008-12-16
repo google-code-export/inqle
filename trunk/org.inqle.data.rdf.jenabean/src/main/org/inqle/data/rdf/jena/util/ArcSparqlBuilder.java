@@ -126,12 +126,13 @@ public class ArcSparqlBuilder {
 		sparql += "CONSTRUCT {\n" + where + "}\n";
 		sparql += "{ GRAPH ?anyGraph {\n" + where;
 		if (randomize) {
-			sparql += "\n . LET($rand := inqle-fn:Rand()) \n";
+			sparql += "\n . LET(?rand := inqle-fn:RandomPerValue(?" + SUBJECT_VARIABLE_NAME + ")) \n" +
+					". FILTER ( ?rand >= 0) \n";
 		}
 		sparql += "\n} }\n";
 		if (randomize) {
 //			sparql += "ORDER BY inqle-fn:Rand() \n";
-			sparql += "ORDER BY $rand \n";
+			sparql += "ORDER BY DESC(?rand) \n";
 		}
 		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
 		

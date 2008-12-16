@@ -27,6 +27,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
@@ -69,16 +70,27 @@ public class Persister {
 	public static final String FILENAME_APPINFO = "assets/_private/AppInfo.ttl";
 	public static final String TEMP_DIRECTORY = "assets/temp/";
 	public static final Class<?>[] MODEL_CLASSES = {ExternalDataset.class, Datafile.class};
+	
 	public static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
 	public static final String METAREPOSITORY_DATASET = "org.inqle.datasets.metaRepository";
 
+//	public static final String EXTENSION_POINT_CACHE_DATASET = "org.inqle.data.cacheDatasets";
+//	public static final String EXTENSION_SUBJECT_CLASS_CACHE = "org.inqle.cacheDatasets.subjectClass";
+//	public static final String EXTENSION_ARC_CACHE = "org.inqle.cacheDatasets.arc";
+	
+	public static final String EXTENSION_POINT_DATASET_FUNCTIONS = "org.inqle.data.datasetFunctions";
 	public static final String EXTENSION_DATASET_FUNCTION_DATA = "org.inqle.datasetFunctions.data";
 	public static final String EXTENSION_DATASET_FUNCTION_SCHEMAS = "org.inqle.datasetFunctions.schemas";
 	
-	private static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
-	private static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
-	private static final Object TEXT_INDEX_TYPE_SUBJECT = "subject";
-	private static final Object TEXT_INDEX_TYPE_LITERAL = "literal";
+	public static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
+	public static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
+	public static final Object TEXT_INDEX_TYPE_SUBJECT = "subject";
+	public static final Object TEXT_INDEX_TYPE_LITERAL = "literal";
+	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
+//	private static final String EXTENSION_POINT_CONNECTION = "org.inqle.data.connection";
+	public static final String CACHE_CONNECTION = "org.inqle.data.databases.cache";
+	public static final String DATASET_SUBJECT_CLASSES_CACHE = "org.inqle.datasets.cache.subjectClass";
+	public static final String DATASET_ARCS_CACHE = "org.inqle.datasets.cache.arc";
 	
 	private AppInfo appInfo = null;
 //	private OntModel metarepositoryModel = null;
@@ -89,11 +101,13 @@ public class Persister {
 	
 	private Map<String, Model> cachedModels = null;
 	private Map<String, InternalDataset> internalDatasets = null;
+	private Map<String, InternalConnection> internalConnections = null;
+//	private Map<String, CacheDataset> cacheDatasets = null;
 	private Map<String, IndexBuilderModel> indexBuilders;
 	private IndexLARQ schemaFilesSubjectIndex;
 	private OntModel schemaFilesOntModel;
 	private Model prefixesModel;
-	public static final String EXTENSION_POINT_DATASET_FUNCTIONS = "org.inqle.data.datasetFunctions";
+	
 	
 	/* *********************************************************************
 	 * *** FACTORY METHODS
@@ -387,6 +401,10 @@ public class Persister {
 			return internalDatasets;
 		}
 		
+//		if (internalConnections == null) {
+//			getInternalConnections();
+//		}
+		
 		internalDatasets = new HashMap<String, InternalDataset>();
 		//load all saved InternalDatasets
 		RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
@@ -411,6 +429,17 @@ public class Persister {
 			
 			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String cacheModelString = datasetExtension.getAttribute(ATTRIBUTE_CACHE_MODEL);
+			String databaseRoleId = datasetExtension.getAttribute(DATABASE_ROLE_ID_ATTRIBUTE);
+			Connection theConnection = defaultInternalConnection;
+			
+			if (databaseRoleId != null) {
+				theConnection = internalConnections.get(databaseRoleId);
+				if (theConnection==null) {
+					log.error("Unable to find Database of role: " + databaseRoleId + ". Not creating dataset of role:" + datasetRoleId);
+					continue;
+				}
+			}
+			
 			boolean cacheModel = Boolean.getBoolean(cacheModelString);
 			
 			if (internalDatasets.containsKey(datasetRoleId)) {
@@ -419,7 +448,7 @@ public class Persister {
 			//create the Dataset
 			InternalDataset internalDataset = new InternalDataset();
 			internalDataset.setDatasetRole(datasetRoleId);
-			internalDataset.setConnectionId(defaultInternalConnection.getId());
+			internalDataset.setConnectionId(theConnection.getId());
 			persist(internalDataset);
 			log.trace("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
 			internalDatasets.put(datasetRoleId, internalDataset);
@@ -438,7 +467,7 @@ public class Persister {
 		
 		return internalDatasets;
 	}
-
+	
 	public Map<String, Model> getCachedModels() {
 		if (cachedModels == null) {
 			getInternalDatasets();
@@ -991,11 +1020,30 @@ public class Persister {
 		public static String getDatasetRoleId(Class<?> persistableClass) {
 			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
 			if (targetDataset == null) {
-				log.warn("Unable to retrieve dataset role id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDataset annotation.");
+				log.warn("Unable to retrieve internal dataset role id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDataset annotation.");
 				return null;
 			}
 			return targetDataset.value();
 		}
+		
+//		public static String getCacheDatasetRoleId(Object persistableObject) {
+//			Class<? extends Object> persistableClass = persistableObject.getClass();
+//			TargetDataset targetDataset = persistableClass.getAnnotation(TargetDataset.class);
+//			if (targetDataset == null) {
+//				log.warn("Unable to retrieve internal dataset role id for " + persistableObject + ".  Perhaps the class definition for class " + persistableClass.getCanonicalName() + " needs to have the TargetDataset annotation.");
+//				return null;
+//			}
+//			return targetDataset.value();
+//		}
+//		
+//		public static String getCacheDatasetRoleId(Class<?> persistableClass) {
+//			TargetCache targetCache = persistableClass.getAnnotation(TargetCache.class);
+//			if (targetCache == null) {
+//				log.warn("Unable to retrieve cache dataset role id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetCache annotation.");
+//				return null;
+//			}
+//			return targetDataset.value();
+//		}
 		
 	/**
 	 * Persist a Object object to an SDB store as RDF
@@ -1286,6 +1334,12 @@ public class Persister {
 	public static boolean resourceExists(String uri, Model model) {
 		Resource resource = ResourceFactory.createResource(uri);
 		return model.containsResource(resource);
+	}
+
+	public void registerInternalConnection(InternalConnection cacheConnection) {
+		persist(cacheConnection);
+		internalConnections.put(cacheConnection.getConnectionRole(), cacheConnection);
+		
 	}
 
 	

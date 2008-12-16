@@ -254,7 +254,7 @@ public class ArcLister {
 		queryCriteria.addNamedModelIds(datasetIdList);
 		queryCriteria.setQuery(sparql);
 		
-		return listArcs(queryCriteria);
+		return queryGetListArcs(queryCriteria);
 	}
 	
 	public static List<Arc> listFilteredArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
@@ -264,34 +264,33 @@ public class ArcLister {
 		queryCriteria.addNamedModelIds(datasetIdList);
 		queryCriteria.setQuery(sparql);
 		
-		return listArcs(queryCriteria);
+		return queryGetListArcs(queryCriteria);
 	}
 	
+//	/**
+//	 * Generate a list of randomly selected arcs
+//	 * @param datasetIdList a list of dataset IDs to query
+//	 * @param subjectClassUri the URI of the subject class, from which to walk
+//	 * @param depth max number of steps to take from the subject
+//	 * @param numberToSelect number of Arcs to select
+//	 * @return a list of selected arcs
+//	 */
+//	public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//		String baseSparql = getSparqlSelectArcs(subjectClassUri, depth);
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.addNamedModelIds(datasetIdList);
+//		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
+//		//log.info("Finding random Arcs using SPARQL:" + sparql);
+//		queryCriteria.setQuery(sparql);
+//		
+//		return listArcs(queryCriteria);
+//	}
+	
 	/**
-	 * Generate a list of randomly selected arcs
+	 * Generate a list of arcs, which terminate with a Literal value
 	 * @param datasetIdList a list of dataset IDs to query
 	 * @param subjectClassUri the URI of the subject class, from which to walk
 	 * @param depth max number of steps to take from the subject
-	 * @param numberToSelect number of Arcs to select
-	 * @return a list of selected arcs
-	 */
-	public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
-		String baseSparql = getSparqlSelectArcs(subjectClassUri, depth);
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
-		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-		//log.info("Finding random Arcs using SPARQL:" + sparql);
-		queryCriteria.setQuery(sparql);
-		
-		return listArcs(queryCriteria);
-	}
-	
-	/**
-	 * Generate a list of randomly selected arcs, which terminate with a Literal value
-	 * @param datasetIdList a list of dataset IDs to query
-	 * @param subjectClassUri the URI of the subject class, from which to walk
-	 * @param depth max number of steps to take from the subject
-	 * @param numberToSelect number of Arcs to select
 	 * @return a list of selected arcs, terminating with a literal value
 	 */
 	public static List<Arc> listValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
@@ -301,46 +300,46 @@ public class ArcLister {
 		log.info("listValuedArcs() using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
-		return listArcs(queryCriteria);
+		return queryGetListArcs(queryCriteria);
 	}
 	
-	/**
-	 * Generate a list of randomly selected arcs
-	 * @param datasetIdList a list of dataset IDs to query
-	 * @param subjectClassUri the URI of the subject class, from which to walk
-	 * @param depth max number of steps to take from the subject
-	 * @param numberToSelect number of Arcs to select
-	 * @return a list of selected arcs
-	 */
-	public static List<Arc> listFilteredRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
-		String baseSparql = getSparqlSelectFilteredArcs(subjectClassUri, depth);
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
-		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-		log.info("listFilteredRandomArcs() using SPARQL:" + sparql);
-		queryCriteria.setQuery(sparql);
-		
-		return listArcs(queryCriteria);
-	}
+//	/**
+//	 * Generate a list of randomly selected arcs
+//	 * @param datasetIdList a list of dataset IDs to query
+//	 * @param subjectClassUri the URI of the subject class, from which to walk
+//	 * @param depth max number of steps to take from the subject
+//	 * @param numberToSelect number of Arcs to select
+//	 * @return a list of selected arcs
+//	 */
+//	public static List<Arc> listFilteredRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//		String baseSparql = getSparqlSelectFilteredArcs(subjectClassUri, depth);
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.addNamedModelIds(datasetIdList);
+//		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
+//		log.info("listFilteredRandomArcs() using SPARQL:" + sparql);
+//		queryCriteria.setQuery(sparql);
+//		
+//		return listArcs(queryCriteria);
+//	}
 	
-	/**
-	 * Generate a list of randomly selected arcs, which terminate with a Literal value
-	 * @param datasetIdList a list of dataset IDs to query
-	 * @param subjectClassUri the URI of the subject class, from which to walk
-	 * @param depth max number of steps to take from the subject
-	 * @param numberToSelect number of Arcs to select
-	 * @return a list of selected arcs, terminating with a literal value
-	 */
-	public static List<Arc> listRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
-		String baseSparql = getSparqlSelectValuedArcs(subjectClassUri, depth);
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
-		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-		log.info("listRandomValuedArcs() using SPARQL:" + sparql);
-		queryCriteria.setQuery(sparql);
-		
-		return listArcs(queryCriteria);
-	}
+//	/**
+//	 * Generate a list of randomly selected arcs, which terminate with a Literal value
+//	 * @param datasetIdList a list of dataset IDs to query
+//	 * @param subjectClassUri the URI of the subject class, from which to walk
+//	 * @param depth max number of steps to take from the subject
+//	 * @param numberToSelect number of Arcs to select
+//	 * @return a list of selected arcs, terminating with a literal value
+//	 */
+//	public static List<Arc> listRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//		String baseSparql = getSparqlSelectValuedArcs(subjectClassUri, depth);
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.addNamedModelIds(datasetIdList);
+//		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
+//		log.info("listRandomValuedArcs() using SPARQL:" + sparql);
+//		queryCriteria.setQuery(sparql);
+//		
+//		return listArcs(queryCriteria);
+//	}
 	
 	/**
 	 * Generate a list of all filtered arcs, which terminate with a Literal value
@@ -357,27 +356,27 @@ public class ArcLister {
 		log.info("listFilteredValuedArcs() using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
-		return listArcs(queryCriteria);
+		return queryGetListArcs(queryCriteria);
 	}
 	
-	/**
-	 * Generate a list of randomly selected arcs, which terminate with a Literal value
-	 * @param datasetIdList a list of dataset IDs to query
-	 * @param subjectClassUri the URI of the subject class, from which to walk
-	 * @param depth max number of steps to take from the subject
-	 * @param numberToSelect number of Arcs to select
-	 * @return a list of selected arcs, terminating with a literal value
-	 */
-	public static List<Arc> listFilteredRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
-		String baseSparql = getSparqlSelectFilteredValuedArcs(subjectClassUri, depth);
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
-		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-		log.info("listFilteredRandomValuedArcs() using SPARQL:" + sparql);
-		queryCriteria.setQuery(sparql);
-		
-		return listArcs(queryCriteria);
-	}
+//	/**
+//	 * Generate a list of randomly selected arcs, which terminate with a Literal value
+//	 * @param datasetIdList a list of dataset IDs to query
+//	 * @param subjectClassUri the URI of the subject class, from which to walk
+//	 * @param depth max number of steps to take from the subject
+//	 * @param numberToSelect number of Arcs to select
+//	 * @return a list of selected arcs, terminating with a literal value
+//	 */
+//	public static List<Arc> listFilteredRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//		String baseSparql = getSparqlSelectFilteredValuedArcs(subjectClassUri, depth);
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.addNamedModelIds(datasetIdList);
+//		String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
+//		log.info("listFilteredRandomValuedArcs() using SPARQL:" + sparql);
+//		queryCriteria.setQuery(sparql);
+//		
+//		return listArcs(queryCriteria);
+//	}
 	
 	/**
 	 * Conducts a query and converts the results into a List of Arc objects
@@ -387,7 +386,7 @@ public class ArcLister {
 	 * 
 	 * TODO dynamically handle predicates
 	 */
-	public static List<Arc> listArcs(QueryCriteria queryCriteria) {
+	public static List<Arc> queryGetListArcs(QueryCriteria queryCriteria) {
 		RdfTable results = Queryer.selectRdfTable(queryCriteria);
 		log.info("Queried and received results: " + RdfTableWriter.dataTableToString(results));
 		if (results==null || results.countResults()==0) return null;
