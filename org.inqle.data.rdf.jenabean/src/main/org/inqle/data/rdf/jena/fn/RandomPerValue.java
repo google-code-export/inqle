@@ -20,7 +20,7 @@ import com.hp.hpl.jena.sparql.function.FunctionBase1;
  * PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.>
  * SELECT ?whatever
  * { ?whatever ?p ?o .
- * LET (?rand := inqle-fn:Rand())}
+ * LET (?rand := inqle-fn:RandomPerValue())}
  * ORDER BY DESC(?rand)
  * LIMIT 100
  * 
@@ -29,12 +29,12 @@ import com.hp.hpl.jena.sparql.function.FunctionBase1;
  */
 public class RandomPerValue extends FunctionBase1 {
 	
-	private static Logger log = Logger.getLogger(Random.class);
+	private static Logger log = Logger.getLogger(RandomPerValue.class);
 	
 	@Override
 	public NodeValue exec(NodeValue nodeValue) {
-		double dbl = new Random().nextDouble();
-		log.info("RandomPerValue()=" + dbl);
+		double dbl = new Random(nodeValue.hashCode() + System.currentTimeMillis()).nextDouble();
+		log.info("RandomPerValue(" + nodeValue + ")=" + dbl);
 		NodeValue randomValue = NodeValue.makeDouble(dbl);
 		return randomValue;
 	}
