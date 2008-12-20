@@ -74,7 +74,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 */
 	public ArcTable execute() {
 		Collection<String> modelsToUse = selectNamedModels();
-		log.debug("modelsToUse=" + modelsToUse);
+		log.info("modelsToUse=" + modelsToUse);
 		
 		Resource subjectClass = selectSubjectClass(modelsToUse);
 		if (subjectClass == null) return null;
@@ -96,13 +96,16 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		List<Arc> allArcs = new ArrayList<Arc>();
 		allArcs.add(labelArc);
 		allArcs.addAll(learnableArcs);
-		//log.info("All arcs=" + allArcs);
+		log.info("All arcs for learning=" + allArcs);
 		
 		String sparql = generateSparql(subjectClass, allArcs);
 		//log.info("Generated sparql for sampling:" + sparql);
 		Model resultModel = doQuery(modelsToUse, allArcs, sparql);
-		//log.info("Retrieved this sample:" + JenabeanWriter.modelToString(resultModel));
+		
 		if (resultModel==null) return null;
+		
+		log.trace("Retrieved this sample:" + JenabeanWriter.modelToString(resultModel));
+		
 		OntModel ontModel = ModelFactory.createOntologyModel();
 		ontModel.add(resultModel);
 		ArcTableFactory factory = new ArcTableFactory(ontModel);
@@ -113,7 +116,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		if (resultDataTable.getHeaderIndex(labelArc) >= 0) {
 			resultDataTable.setLabelColumnIndex(resultDataTable.getHeaderIndex(labelArc));
 		} else {
-			log.warn("TTTTTTTTTTTTTT Table lacks the label arc:" + labelArc);
+			log.warn("Table lacks the label arc:" + labelArc);
 			return null;
 		}
 		return resultDataTable;
