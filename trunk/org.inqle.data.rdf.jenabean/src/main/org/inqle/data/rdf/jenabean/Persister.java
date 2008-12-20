@@ -434,7 +434,7 @@ public class Persister {
 			Connection theConnection = defaultInternalConnection;
 			
 			if (databaseRoleId != null) {
-				theConnection = internalConnections.get(databaseRoleId);
+				theConnection = getInternalConnections().get(databaseRoleId);
 				if (theConnection==null) {
 					log.error("Unable to find Database of role: " + databaseRoleId + ". Not creating dataset of role:" + datasetRoleId);
 					continue;
@@ -469,6 +469,20 @@ public class Persister {
 		return internalDatasets;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private Map<String, InternalConnection> getInternalConnections() {
+		if (internalConnections==null) {
+			log.info("Internal connections=null");
+			internalConnections = new HashMap<String, InternalConnection>();
+			Collection<InternalConnection> internalConnectionColl = (Collection<InternalConnection>)reconstituteAll(InternalConnection.class);
+			for (InternalConnection internalConnection: internalConnectionColl) {
+				log.info("Adding internalConnection=" + internalConnection);
+				internalConnections.put(internalConnection.getConnectionRole(), internalConnection);
+			}
+		}
+		return internalConnections;
+	}
+
 	public Map<String, Model> getCachedModels() {
 		if (cachedModels == null) {
 			getInternalDatasets();
@@ -736,8 +750,9 @@ public class Persister {
 			if (dataset.getConnectionId().equals(getAppInfo().getInternalConnection().getId())) {
 				theConnection = getAppInfo().getInternalConnection();
 			} else {
+				
 				try {
-					theConnection = (Connection)reader.load(Connection.class, dataset.getConnectionId());
+					theConnection = (InternalConnection)reader.load(InternalConnection.class, dataset.getConnectionId());
 				} catch (NotFoundException e) {
 					log.error("Unable to load Connection for Internal Dataset: " + dataset.getConnectionId());
 					return null;
@@ -1346,9 +1361,9 @@ public class Persister {
 		return model.containsResource(resource);
 	}
 
-	public void registerInternalConnection(InternalConnection cacheConnection) {
-		persist(cacheConnection);
-		internalConnections.put(cacheConnection.getConnectionRole(), cacheConnection);
+	public void registerInternalConnection(InternalConnection aConnection) {
+		persist(aConnection);
+		internalConnections.put(aConnection.getConnectionRole(), aConnection);
 		
 	}
 

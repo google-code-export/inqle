@@ -1,23 +1,20 @@
 package org.inqle.data.rdf.jena.util;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.util.JavaHasher;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Finder;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.SubjectClassCache;
-
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class SubjectClassLister {
 
@@ -32,6 +29,7 @@ public class SubjectClassLister {
 	 * @param size the size of the collection to return
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static Collection<String> getRandomUncommonSubjectClasses(String datasetId, int size, Collection<String> subjectClassesToExclude) {
 		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datasetId);
 		if (availableSubjectClasses == null) return null;
@@ -49,6 +47,7 @@ public class SubjectClassLister {
 	 * @param size the size of the collection to return
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static Collection<String> getRandomUncommonSubjectClasses(Collection<String> datasetIds, int size, Collection<String> subjectClassesToExclude) {
 		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datasetIds);
 		if (availableSubjectClasses == null) return null;
@@ -70,6 +69,7 @@ public class SubjectClassLister {
 		
 		//not in cache: query then cache it
 		subjectClasses = queryGetUncommonSubjectClasses(datasetId);
+		//log.info("Queried, got subjectClasses=" + subjectClasses);
 		cacheSubjectClasses(datasetId, subjectClasses);
 		return subjectClasses;
 	}
@@ -105,7 +105,7 @@ public class SubjectClassLister {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModel(datasetId);
 		queryCriteria.setQuery(getSparqlSelectUncommonClasses());
-		log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
+		//log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
 		return Queryer.selectUriList(queryCriteria);
 	}
 	
@@ -113,7 +113,7 @@ public class SubjectClassLister {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addNamedModelIds(datasetIdList);
 		queryCriteria.setQuery(getSparqlSelectUncommonClasses());
-		log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
+		//log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
 		return Queryer.selectUriList(queryCriteria);
 	}
 
@@ -130,35 +130,54 @@ public class SubjectClassLister {
 	private static Collection<String> getSubjectClassesFromCache(String datasetId) {
 		String cacheId = getSubjectClassCacheId(datasetId);
 		Persister persister = Persister.getInstance();
-		SubjectClassCache subjectClassCache = (SubjectClassCache)persister.reconstitute(SubjectClassCache.class, cacheId, true);
+		SubjectClassCache subjectClassCache = null;
+		try {
+			subjectClassCache = (SubjectClassCache)persister.reconstitute(SubjectClassCache.class, cacheId, true);
+		} catch (Exception e) {
+			//unable to reconstitute; assume it does not exist
+		}
 		if (subjectClassCache == null) return null;
+		//log.info("getSubjectClassesFromCache() loaded from cache: " + JenabeanWriter.toString(subjectClassCache)); 
 		Collection<String> subjectClassUris = new ArrayList<String>();
-		Collection<Resource> subjects =  subjectClassCache.getSubjectClasses();
-		for (Resource subject: subjects) {
+		Collection<URI> subjects =  subjectClassCache.getSubjectClasses();
+		if (subjects==null) return null;
+		for (URI subject: subjects) {
 			subjectClassUris.add(subject.toString());
 		}
+		//log.info("...converted to this collection of URI strings:" + subjectClassUris);
 		return subjectClassUris;
 	}
 
 	private static String getSubjectClassCacheId(String datasetId) {
-		return JavaHasher.hashSha256(datasetId);
+//		String cacheId = JavaHasher.hashSha256(datasetId);
+		String cacheId = "SCCacheId___" + datasetId;
+//		log.info("getSubjectClassCacheId(" + datasetId + ")=" + cacheId);
+		return cacheId;
 	}
 	
 	private static void cacheSubjectClasses(String datasetId, Collection<String> subjectClasses) {
 		String cacheId = getSubjectClassCacheId(datasetId);
 		Persister persister = Persister.getInstance();
-		SubjectClassCache subjectClassCache = (SubjectClassCache)persister.reconstitute(SubjectClassCache.class, cacheId, true);
+		SubjectClassCache subjectClassCache = null;
+		try {
+			subjectClassCache = (SubjectClassCache)persister.reconstitute(SubjectClassCache.class, cacheId, true);
+		} catch (RuntimeException e) {
+			//assume this cache object does not exist
+		}
 		if (subjectClassCache == null) {
 			subjectClassCache = new SubjectClassCache();
 			subjectClassCache.setId(cacheId);
 			subjectClassCache.setDatasetId(datasetId);
 		}
-		List<Resource> subjectClassResources = new ArrayList<Resource>();
+		List<URI> subjectClassURIs = new ArrayList<URI>();
 		for (String subjectClass: subjectClasses) {
-			Resource subjectClassResource = ResourceFactory.createResource(subjectClass);
-			subjectClassResources.add(subjectClassResource);
+			URI subjectClassURI = URI.create(subjectClass);
+			//log.info("Adding to cache: subject class:" + subjectClass + " = URI:" + subjectClassURI.toString());
+			subjectClassURIs.add(subjectClassURI);
 		}
-		subjectClassCache.setSubjectClasses(subjectClassResources);
+		subjectClassCache.setSubjectClasses(subjectClassURIs);
+		//log.info("Caching list of " + subjectClasses.size() + " subject classes for: datasetId=" + datasetId +
+//				"\n" + JenabeanWriter.toString(subjectClassCache));
 		persister.persist(subjectClassCache);
 		
 	}

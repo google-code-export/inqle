@@ -34,7 +34,7 @@ public class RandomPerValue extends FunctionBase1 {
 	@Override
 	public NodeValue exec(NodeValue nodeValue) {
 		double dbl = new Random(nodeValue.hashCode() + System.currentTimeMillis()).nextDouble();
-		log.info("RandomPerValue(" + nodeValue + ")=" + dbl);
+//		log.info("RandomPerValue(" + nodeValue + ")=" + dbl);
 		NodeValue randomValue = NodeValue.makeDouble(dbl);
 		return randomValue;
 	}
