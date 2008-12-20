@@ -18,6 +18,7 @@ import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.DBConnector;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UserAccount;
@@ -49,9 +50,11 @@ public class AppInfoWizard extends Wizard {
 
 	private static final String DEFAULT_METAREPOSITORY_ID = "Metarepository";
 	private static final String DEFAULT_FIRSTDATA_DATASET_ID = "data1";
-	private static final String DEFAULT_INTERNAL_DB_NAME = "inqle";
+	private static final String DEFAULT_INTERNAL_DB_NAME = "inqle_internal";
 	private static final String DEFAULT_INTERNAL_DB_USER_NAME = "inqle";
-	private static final String DEFAULT_FIRSTDATA_DB_NAME = "data1";
+	private static final String DEFAULT_CACHE_DB_NAME = "inqle_cache";
+	private static final String DEFAULT_CACHE_DB_USER_NAME = "inqle";
+	private static final String DEFAULT_FIRSTDATA_DB_NAME = "inqle_data1";
 	private static final String DEFAULT_FIRSTDATA_DB_USER_NAME = "inqle";
 	
 	private AppInfo appInfo = new AppInfo();
@@ -160,8 +163,8 @@ public class AppInfoWizard extends Wizard {
 //		log.info("added embeddedOrExternalCacheDBPage");
 		
 		embeddedCacheDBPage = new EmbeddedDBPage("INQLE Cache Database", "Specify connection info for the embedded H2 database, which will contain INQLE caching information.");
-		embeddedCacheDBPage.setDefaultDBName(DEFAULT_INTERNAL_DB_NAME);
-		embeddedCacheDBPage.setDefaultUserName(DEFAULT_INTERNAL_DB_USER_NAME);
+		embeddedCacheDBPage.setDefaultDBName(DEFAULT_CACHE_DB_NAME);
+		embeddedCacheDBPage.setDefaultUserName(DEFAULT_CACHE_DB_USER_NAME);
 		addPage(embeddedCacheDBPage);
 //		log.info("added embeddedCacheDBPage");
 		
@@ -171,7 +174,7 @@ public class AppInfoWizard extends Wizard {
 		
 //		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
 		cacheConnectionPage = new ConnectionPage(
-				"Specify database connection info for your INQLE server", 
+				"Specify database connection info for cached data", 
 				cacheConnection, 
 				shell
 		);
@@ -237,6 +240,10 @@ public class AppInfoWizard extends Wizard {
 			} else {
 				return cacheConnectionPage;
 			}
+		}
+		
+		if (page == embeddedCacheDBPage || page == cacheConnectionPage) {
+			return embeddedOrExternalFirstDataDBPage;
 		}
 		
 		if (page == embeddedOrExternalFirstDataDBPage) {
@@ -367,12 +374,13 @@ public class AppInfoWizard extends Wizard {
 		
 		try {
 			DBConnector connector = new DBConnector(cacheConnection);
+			log.info("cacheConnection=" + JenabeanWriter.toString(cacheConnection));
 			int status = connector.tryToCreateSDBStore();
 			log.info("Created data store for cache database: Status=" + status);
 			Persister persister = Persister.getInstance();
 			persister.registerInternalConnection(cacheConnection);
 		} catch (Exception e) {
-			log.error("Error creating/storing first dataset", e);
+			log.error("Error creating/storing cache database", e);
 		}
 		
 		

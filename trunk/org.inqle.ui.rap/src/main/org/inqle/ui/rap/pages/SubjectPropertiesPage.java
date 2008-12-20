@@ -383,10 +383,11 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 					continue;
 				}
 				
+				log.info("Creating form for " + prop.getURI() + ", subproperty of: " + prop.getSuperProperty().toString());
 				addPropertyFormItem(prop.getURI(), 
 						prop.getLabel("EN"), 
 						prop.getComment("EN"),
-						RDF.SUBJECT_PROPERTY);
+						prop.getSuperProperty().toString());
 			}
 			
 			refreshScrolledComposite();
