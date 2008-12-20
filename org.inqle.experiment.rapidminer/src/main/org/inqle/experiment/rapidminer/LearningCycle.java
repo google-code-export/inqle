@@ -118,6 +118,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			return null;
 		}
 		IDataTable resultDataTable = samplerToUse.execute();
+		log.info("Got resultDataTable=\n" + resultDataTable);
 		if (resultDataTable == null) {
 			log.warn("Sampler " + samplerToUse + " of class " + samplerToUse.getClass() + " was unable" +
 					" to retrieve a DataTable of results.");
@@ -190,11 +191,11 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	
 	private IRapidMinerExperiment selectRapidMinerExperiment(IDataTable dataTable) {
 //		assert(dataTable.getColumns().contains(labelDataColumn));
-		//log.info("Finding matching RapidMinerExperiment for label: " + labelDataColumn + "\nIDataTable=" + IDataTableWriter.dataTableToString(dataTable));
+		log.info("Finding matching RapidMinerExperiment...");
 		List<IRapidMinerExperiment> acceptableExperiments = RapidMinerExperimentLister.listMatchingExperiments(dataTable);
-		
+		log.info("Acceptable experiments include:" + acceptableExperiments);
 		if (acceptableExperiments == null || acceptableExperiments.size() == 0) {
-			//log.warn("selectRapidMinerExperiment() finds no acceptable Experiments");
+			log.warn("selectRapidMinerExperiment() finds no acceptable Experiments");
 			return null;
 		}
 		
@@ -209,6 +210,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			log.warn("random index from 0 to acceptableExperiments.size()-1 = " + randomIndex);
 			return null;
 		}
+		log.info("Selected this RM Experiment: " + acceptableExperiments.get(randomIndex));
 		return acceptableExperiments.get(randomIndex);
 	}
 	
@@ -249,10 +251,10 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 					labelAttribute, 
 					weightAttribute, 
 					idAttribute);
-		//log.info("Created exampleSet of size " + exampleSet.size() + "."
-//				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
-//				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
-//		);
+		log.info("Created exampleSet of size " + exampleSet.size() + "."
+				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
+				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
+		);
 		int i=0;
 		Iterator<?> regularAttributeI = exampleSet.getAttributes().iterator();
 		while (regularAttributeI.hasNext()) {

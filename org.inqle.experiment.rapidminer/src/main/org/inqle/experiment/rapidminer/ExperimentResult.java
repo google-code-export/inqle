@@ -169,7 +169,7 @@ public class ExperimentResult extends UniqueJenabean {
 		if (experimentAttributeArcs==null) return null;
 		String s = "";
 		for (Arc attributeArc: experimentAttributeArcs) {
-			s += attributeArc.getQnameRepresentation() + ";\n";
+			s += attributeArc.getQnameRepresentation() + "; ";
 		}
 		return s;
 	}
