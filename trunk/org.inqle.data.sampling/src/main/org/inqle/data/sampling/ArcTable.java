@@ -270,4 +270,13 @@ public class ArcTable implements IDataTable {
 	public void setSubjectClass(String subjectClass) {
 		this.subjectClass = subjectClass;
 	}
+	
+	@Override
+	public String toString() {
+		String s = "\nClass: " + this.getClass().getName();
+		s += "\nColumns: " + getColumns();
+		s += "\nRows:\n" + getRows();
+		s += "\n";
+		return s;
+	}
 }

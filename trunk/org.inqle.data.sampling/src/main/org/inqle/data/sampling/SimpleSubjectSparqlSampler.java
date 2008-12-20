@@ -44,13 +44,13 @@ import com.hp.hpl.jena.rdf.model.Resource;
 public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 
 	//TODO ensure that rows are retrieved randomly
-	public static final String MAXIMUM_ROWS_INITIAL_QUERY = "1000";
-	public static final String MAXIMUM_ROWS_DATATABLE = "1000";
+//	public static final String MAXIMUM_ROWS_INITIAL_QUERY = "1000";
+//	public static final String MAXIMUM_ROWS_DATATABLE = "1000";
 	
 	//TODO permit these to be configurable
 	public static final int MAXIMUM_LEARNABLE_PREDICATES = 3;
 	public static final int MINIMUM_LEARNABLE_PREDICATES = 2;
-	public static final int MAX_NUMBER_OF_ROWS = 500;
+	public static final int MAX_NUMBER_OF_ROWS = 1000;
 	public static final int MAX_PROPERTY_ARC_DEPTH = 2;
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSampler.class);
@@ -106,19 +106,11 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 
 	@Override
 	protected URI decideSubjectClass(Collection<String> modelsToUse) {
+		log.info("decideSubjectClass()...");
 		Collection<String> randomSubjectClasses = SubjectClassLister.getRandomUncommonSubjectClasses(modelsToUse, 1, null);
 		if (randomSubjectClasses==null) return null;
 		String randomSubjectClass = new ArrayList<String>(randomSubjectClasses).get(0);
 		return URI.create(randomSubjectClass);
-//		String sparql = Queryer.decorateSparql(SubjectClassLister.SPARQL_SELECT_CLASSES, "?subject", 0, 1);
-//		log.info("decideSubjectClass() yields this sparql:\n" + sparql);
-//		QueryCriteria queryCriteria = new QueryCriteria();
-//		queryCriteria.addNamedModelIds(modelsToUse);
-//		queryCriteria.setQuery(sparql);
-//		List<String> results = Queryer.selectSimpleList(queryCriteria, "classUri");
-//		if (results==null || results.size()==0) return null;
-//		String classUri = results.get(0);
-//		return URI.create(classUri);
 	}
 
 
