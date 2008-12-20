@@ -49,7 +49,7 @@ public class RapidMinerExperimentLister {
 		//log.info("dataTable.getDataType(dataTable.getLabelColumnIndex())=" + dataTable.getDataType(dataTable.getLabelColumnIndex()));
 		
 		for (IRapidMinerExperiment experiment: allExperiments) {
-			//log.info("Experiment: " + experiment + " has types: " + experiment.getExperimentType());
+			
 			String[] types = experiment.getExperimentType().split("\\|");
 			ArrayList<String> typeList = new ArrayList<String>();
 			for (String type: types) {
@@ -60,8 +60,10 @@ public class RapidMinerExperimentLister {
 			}
 			
 			if (dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_NUMERIC && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
+				log.info("Adding experiment: " + experiment + " because it is a REGRESSION learner and the data has a numeric label.");
 				matchingExperiments.add(experiment);
-			} else if (dataTable.getColumnType(dataTable.getLabelColumnIndex()) == IDataTable.COLUMN_TYPE_LEARNABLE && typeList.contains(IRapidMinerExperiment.CLASSIFICATION_TYPE)) {
+			} else if (dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_STRING && typeList.contains(IRapidMinerExperiment.CLASSIFICATION_TYPE)) {
+				log.info("Adding experiment: " + experiment + " because it is a CLASSIFICATION learner and the data has a string label.");
 				matchingExperiments.add(experiment);
 			}
 		}
