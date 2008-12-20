@@ -164,7 +164,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			log.info("Importing data...");
 			FileDataImporter importer = new FileDataImporter(csvReader, tableMapping, ontModel);
 			importer.doImport();
-			log.info("Data for import=\n" + JenabeanWriter.modelToString(ontModel));
+//			log.info("Data for import=\n" + JenabeanWriter.modelToString(ontModel));
 //			popup.close();
 		} catch (RuntimeException e) {
 			log.error("Error importing data from file", e);

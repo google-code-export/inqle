@@ -44,7 +44,7 @@ public class CsvReader {
 
 	public CsvReader(File file) {
 		//first convert Max line breaks (\r) to Unix line breaks (\n)
-		log.info("Creating CSV Importer, using file=" + file + "...");    
+		log.trace("Creating CSV Importer, using file=" + file + "...");    
     
 		String fileText = "";
 //		try {
@@ -57,13 +57,12 @@ public class CsvReader {
 //			return;
 //		}
 		
-		log.info("loading file using readFileToString..." + file + "; can read?" + file.canRead());
 		fileText = CsvReader.readFileToString(file);
-		log.info("loaded file.");
+		log.trace("loaded file.");
 		
 		//load and save the file, to fix any problems with CSV files saved using older Mac method 
 		//(which used \r as line feed)
-		log.info("Loaded CSV file, retrieved text:\n" + fileText);
+		log.trace("Loaded CSV file, retrieved text:\n" + fileText);
 //		fileText.replaceAll("\\\\r\\\\n", "\n");
 //		fileText.replaceAll("\\\\r", "\n");
 //		log.info("Replaced Carriage Return characters.  CSV file text=\n" + fileText);
@@ -76,7 +75,7 @@ public class CsvReader {
 		}
 		
 		this.file = file;
-		log.info("Creating CSVConfigGuesser for file:" + file);
+		log.trace("Creating CSVConfigGuesser for file:" + file);
 		//CSVConfig csvConfig = CSVConfig.guessConfig(inputStream);
 		try {
 			FileInputStream fis = new FileInputStream(file);
