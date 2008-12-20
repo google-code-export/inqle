@@ -58,7 +58,7 @@ Improved usability, without need to enter URIs.
   * Sampling algorithm which is suited data imported via the File Data Importer.
   * Usability fixes
 
-==Version 0.2==
+==Version 0.2.1==
 (19 December, 2008)
 
   * Added ability to plug in a database
