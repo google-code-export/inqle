@@ -62,7 +62,7 @@ public class RandomListChooser {
 			if (triedIndexes.contains(randomIndex)) continue;
 			triedIndexes.add(randomIndex);
 			Object selectedObject = listToSelectFrom.get(randomIndex);
-			if (itemsToExclude.contains(selectedObject)) continue;
+			if (itemsToExclude != null && itemsToExclude.contains(selectedObject)) continue;
 			selectedItems.add(selectedObject);
 		} 
 		return selectedItems;
