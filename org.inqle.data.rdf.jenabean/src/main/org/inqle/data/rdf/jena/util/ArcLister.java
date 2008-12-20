@@ -1,11 +1,11 @@
 package org.inqle.data.rdf.jena.util;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.util.JavaHasher;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Dataset;
@@ -17,12 +17,12 @@ import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
 import org.inqle.data.rdf.jenabean.Finder;
+import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.SubjectArcsCache;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 /**
  * Retrieves collections of Arcs.  When possible, retrieves from the cache.
@@ -37,7 +37,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
  */
 public class ArcLister {
 
-	private static final String FILTERED_VALUED_ARCS = "Filtered Valued Arcs";
+	private static final String FILTERED_VALUED_ARCS = "Filtered_Valued_Arcs";
 	private static Logger log = Logger.getLogger(ArcLister.class);
 	
 	/**
@@ -94,6 +94,7 @@ public class ArcLister {
 		//not in cache: query then cache it
 		arcs = queryGetFilteredValuedArcs(datasetId, subjectClassUri, depth);
 		cacheArcs(datasetId, subjectClassUri, depth, FILTERED_VALUED_ARCS, arcs);
+//		log.info("Retrieved arcs from cache:" + arcs);
 		return arcs;
 	}
 	
@@ -329,7 +330,6 @@ public class ArcLister {
 		queryCriteria.setQuery(sparql);
 		
 		List<Arc> arcs = queryGetArcs(queryCriteria);
-		//cache the result
 		
 		return arcs;
 	}
@@ -344,7 +344,7 @@ public class ArcLister {
 	 */
 	public static List<Arc> queryGetArcs(QueryCriteria queryCriteria) {
 		RdfTable results = Queryer.selectRdfTable(queryCriteria);
-		log.info("Queried and received results: " + RdfTableWriter.dataTableToString(results));
+		//log.info("Queried and received results: " + RdfTableWriter.dataTableToString(results));
 		if (results==null || results.countResults()==0) return null;
 		List<QuerySolution> resultsList = results.getResultList();
 		List<Arc> arcs = new ArrayList<Arc>();
@@ -379,16 +379,22 @@ public class ArcLister {
 		//first retrieve the appropriate arc
 		String arcCacheId = getArcCacheId(datasetId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
-		SubjectArcsCache arcsCache = (SubjectArcsCache)persister.reconstitute(SubjectArcsCache.class, arcCacheId, true);
+		SubjectArcsCache arcsCache = null;
+		try {
+			arcsCache = (SubjectArcsCache)persister.reconstitute(SubjectArcsCache.class, arcCacheId, true);
+		} catch (Exception e) {
+			//unable to reconstitute.  Assume this cache object has not been created
+		}
 		if (arcsCache == null) {
 			arcsCache = new SubjectArcsCache();
 			arcsCache.setId(arcCacheId);
 			arcsCache.setDatasetId(datasetId);
-			arcsCache.setSubjectClass(ResourceFactory.createResource(subjectClassUri));
+			arcsCache.setSubjectClass(URI.create(subjectClassUri));
 			arcsCache.setDepth(depth);
 			arcsCache.setType(FILTERED_VALUED_ARCS);
 		}
 		arcsCache.setArcs(arcs);
+		log.info("Caching list of " + arcs.size() + " arcs for datasetId=" + datasetId + "; subjectClassUri=" + subjectClassUri + ".");
 		persister.persist(arcsCache);
 	}
 
@@ -397,6 +403,8 @@ public class ArcLister {
 		Persister persister = Persister.getInstance();
 		SubjectArcsCache arcsCache = (SubjectArcsCache)persister.reconstitute(SubjectArcsCache.class, arcCacheId, true);
 		if (arcsCache == null) return null;
+//		log.info("Retrieved ArcsCache from cache:" + JenabeanWriter.toString(arcsCache));
+		log.info("Retrieved Arcs from cache");
 		return arcsCache.getArcs();
 	}
 	
@@ -410,7 +418,9 @@ public class ArcLister {
 	 * @return
 	 */
 	public static String getArcCacheId(String datasetId, String subjectClassUri, int depth, String type) {
-		return JavaHasher.hashSha256(datasetId + "_" + subjectClassUri + "_" + depth + "_" + type);
+		String cacheId = "ArcCacheId_" + datasetId + "_" + subjectClassUri + "_" + depth + "_" + type;
+//		log.info("getArcCacheId(" + datasetId + ")=" + cacheId);
+		return cacheId;
 	}
 	
 	/**

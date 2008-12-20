@@ -136,6 +136,7 @@ public class ArcSparqlBuilder {
 		}
 		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
 		
+		log.info("Generating sample with this SPARQL:" + sparql);
 		return sparql;
 	}
 

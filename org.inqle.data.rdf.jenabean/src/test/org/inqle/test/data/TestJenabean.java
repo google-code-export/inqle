@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -142,4 +144,42 @@ public class TestJenabean {
 			assertTrue(false);
 		}
 	}
+	
+	
+	@Test
+	public void testUriCollectionField() {
+		BeanWithCollectionOfUris beanWithCollectionOfUris = new BeanWithCollectionOfUris();
+		beanWithCollectionOfUris.setId("1234");
+		Collection<URI> uriCollection = new ArrayList<URI>();
+		URI personUri = URI.create(RDF.FOAF + "Person");
+		uriCollection.add(personUri);
+		URI documentUri = URI.create(RDF.DC + "Document");
+		uriCollection.add(documentUri);
+		beanWithCollectionOfUris.setUriCollection(uriCollection);
+		
+		//save the beanWithUri
+		Model memoryModel = ModelFactory.createDefaultModel();
+		
+		Bean2RDF writer = new Bean2RDF(memoryModel);
+		writer.save(beanWithCollectionOfUris);
+		System.out.println("Saved beanWithCollectionOfUris:" + JenabeanWriter.toString(beanWithCollectionOfUris));
+	
+		RDF2Bean reader = new RDF2Bean(memoryModel);
+		BeanWithCollectionOfUris reconstitutedBeanWithCollectionOfUris = null;
+		try {
+			reconstitutedBeanWithCollectionOfUris = (BeanWithCollectionOfUris)reader.load(BeanWithCollectionOfUris.class, "1234");
+			System.out.println("Loaded beanWithCollectionOfUris:" + JenabeanWriter.toString(reconstitutedBeanWithCollectionOfUris));
+		} catch (NotFoundException e) {
+			System.out.println("Error reconstituting BeanWithCollectionOfUris");
+			e.printStackTrace();
+			assertTrue(false);
+		}
+		
+		Collection<URI> reconstitutedUris = reconstitutedBeanWithCollectionOfUris.getUriCollection();
+		System.out.println("reconstituted Collection<URI>=" + reconstitutedUris);
+		assertTrue(reconstitutedUris.size()==2);
+		assertTrue(reconstitutedUris.contains(personUri));
+		assertTrue(reconstitutedUris.contains(documentUri));
+	}
+	
 }

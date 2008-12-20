@@ -6,21 +6,17 @@ import java.util.Collection;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDataset;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
-import org.inqle.data.rdf.jenabean.mapping.DataMapping;
+import org.inqle.data.rdf.jenabean.BasicJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
-
-import com.hp.hpl.jena.rdf.model.Resource;
 
 import thewebsemantic.Namespace;
 
 @TargetDataset(Persister.DATASET_ARCS_CACHE)
 @Namespace(RDF.INQLE)
-public class SubjectArcsCache extends GlobalJenabean {
+public class SubjectArcsCache extends BasicJenabean {
 
 	private String datasetId;
-	private Resource subjectClass;
+	private URI subjectClass;
 	private Collection<Arc> arcs;
 	private int depth;
 	private String type;
@@ -49,11 +45,11 @@ public class SubjectArcsCache extends GlobalJenabean {
 		return arcs;
 	}
 
-	public void setSubjectClass(Resource subjectClass) {
+	public void setSubjectClass(URI subjectClass) {
 		this.subjectClass = subjectClass;
 	}
 
-	public Resource getSubjectClass() {
+	public URI getSubjectClass() {
 		return subjectClass;
 	}
 

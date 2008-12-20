@@ -68,7 +68,7 @@ public class QueryCriteria {
 	 */
 	public void addNamedModel(String namedModelId) {
 		Persister persister = Persister.getInstance();
-		NamedModel namedModel = (NamedModel)persister.reconstitute(NamedModel.class, namedModelId, true);
+		NamedModel namedModel = (NamedModel)persister.getNamedModel(namedModelId);
 		addNamedModel(namedModel);
 	}
 	
