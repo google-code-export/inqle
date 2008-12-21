@@ -16,7 +16,7 @@ import com.rapidminer.RapidMiner;
  */
 public class Activator extends Plugin {
 
-	private static final String SYSTEM_PROPERTY_RAPIDMINER_HOME = "rapidminer.home";
+//	private static final String SYSTEM_PROPERTY_RAPIDMINER_HOME = "rapidminer.home";
 
 	/**
 	 * 
@@ -30,7 +30,8 @@ public class Activator extends Plugin {
 		
 		//initialize RapidMiner
 		String rapidMinerHome = InqleInfo.getPluginsDirectory() + context.getBundle().getSymbolicName();
-		System.setProperty(SYSTEM_PROPERTY_RAPIDMINER_HOME, rapidMinerHome);
+		System.setProperty(RapidMiner.PROPERTY_RAPIDMINER_HOME, rapidMinerHome);
+		System.setProperty(RapidMiner.PROPERTY_RAPIDMINER_WEKA_JAR, rapidMinerHome + "/lib");
 		boolean addWekaOperators = true;
 		boolean searchJDBCInLibDir = false;
 		boolean searchJDBCInClasspath = false;
