@@ -9,6 +9,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
@@ -16,7 +17,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class DropdownFieldShower implements IDataFieldShower {
 
-	private List list;
+//	private List list;
+	private Combo list;
 	private Text descriptionText;
 	private String fieldUri;
 	private String fieldPropertyType;
@@ -78,7 +80,8 @@ public class DropdownFieldShower implements IDataFieldShower {
 
 //		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		list = new List(composite, listStyle);
+//		list = new List(composite, listStyle);
+		list = new Combo(composite, listStyle | SWT.READ_ONLY);
 		list.setLayoutData(gridData);
 		if (toolTipString != null) {
 			list.setToolTipText(toolTipString);
@@ -90,7 +93,8 @@ public class DropdownFieldShower implements IDataFieldShower {
 		try {
 			String matchLabel = labelString.toLowerCase().trim();
 			if (lcOptions.indexOf(matchLabel) >= 0) {
-				list.setSelection(lcOptions.indexOf(matchLabel) + 1);
+//				list.setSelection(lcOptions.indexOf(matchLabel) + 1);
+				list.select(lcOptions.indexOf(matchLabel) + 1);
 			}
 		} catch (RuntimeException e) {
 			//error.  never mind pre-selecting the value which matches the label
@@ -139,7 +143,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 	}
 	
 	public void setSelectedIndex(int selectedIndex) {
-		list.setSelection(selectedIndex);
+		list.select(selectedIndex);
 	}
 
 	public void setEnabled(boolean enabled) {
