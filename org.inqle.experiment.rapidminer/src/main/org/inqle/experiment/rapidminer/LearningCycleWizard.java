@@ -80,7 +80,7 @@ public class LearningCycleWizard extends DynaWizard implements IListProvider, IL
 			List<String> listItems = new ArrayList<String>();
 			listItems.add(OPTION_USE_RANDOM_SAMPLER);
 			if (allSamplers==null) {
-				allSamplers = SamplerLister.listSamplers();
+				allSamplers = SamplerLister.listSamplers(true);
 			}
 			for (ISampler sampler: allSamplers) {
 				listItems.add(sampler.getName());

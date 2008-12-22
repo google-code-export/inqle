@@ -33,28 +33,44 @@
 	</extension>
    <extension
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
-      <rapidminer-experiment
+      <!--rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleRegressionNeuralNet"
       		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionNeuralNet.xml"
       		 name="Simple Regression Using RapidMiner's Neural Net Learner"
       		 description="A simple regression experiment"
       		 type="regression"
            weight="1000">
-      </rapidminer-experiment>
+      </rapidminer-experiment-->
+      <!--rapidminer-experiment
+      		 id="org.inqle.experiment.basic.SimpleRegressionM5P"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionM5P.xml"
+      		 name="Simple Regression Using Weka's M5 Prime Decision tree learner"
+      		 description="A simple regression experiment"
+      		 type="regression"
+           weight="1000">
+      </rapidminer-experiment-->
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleClassificationDecisionTree"
       		 file="/org/inqle/experiment/rapidminer/xml/SimpleClassificationDecisionTree.xml"
-      		 name="Simple Classification Using RapidMiner's Decision Tree Learner"
-      		 description="A simple classification experiment"
+      		 name="Decision Tree Classification"
+      		 description="Simple Classification Using RapidMiner's Decision Tree Learner"
       		 type="classification"
            weight="1000">
       </rapidminer-experiment>
       <rapidminer-experiment
-      		 id="org.inqle.experiment.basic.SimpleNearestNeighbor"
-      		 file="/org/inqle/experiment/rapidminer/xml/SimpleNearestNeighbor.xml"
-      		 name="Simple Classification or Regression Using RapidMiner's Nearest Neighbor Learner"
-      		 description="A simple classification or regression experiment"
-      		 type="classification|regression"
+      		 id="org.inqle.experiment.basic.SimpleClassificationNearestNeighbor"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleClassificationNearestNeighbor.xml"
+      		 name="Nearest Neighbor Classification"
+      		 description="Simple Classification Using RapidMiner's Nearest Neighbor Learner"
+      		 type="classification"
+           weight="1000">
+      </rapidminer-experiment>
+      <rapidminer-experiment
+      		 id="org.inqle.experiment.basic.SimpleRegressionNearestNeighbor"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionNearestNeighbor.xml"
+      		 name="Nearest Neighbor Regression"
+      		 description="Simple Regression Using RapidMiner's Nearest Neighbor Learner"
+      		 type="regression"
            weight="1000">
       </rapidminer-experiment>
    </extension>

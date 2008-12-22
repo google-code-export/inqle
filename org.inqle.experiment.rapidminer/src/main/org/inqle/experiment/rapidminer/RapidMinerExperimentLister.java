@@ -59,10 +59,10 @@ public class RapidMinerExperimentLister {
 				typeList.add(type.trim().toLowerCase());
 			}
 			
-			if (dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_NUMERIC && typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE)) {
+			if (typeList.contains(IRapidMinerExperiment.REGRESSION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_NUMERIC) {
 				log.info("Adding experiment: " + experiment + " because it is a REGRESSION learner and the data has a numeric label.");
 				matchingExperiments.add(experiment);
-			} else if (dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_STRING && typeList.contains(IRapidMinerExperiment.CLASSIFICATION_TYPE)) {
+			} else if (typeList.contains(IRapidMinerExperiment.CLASSIFICATION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_STRING) {
 				log.info("Adding experiment: " + experiment + " because it is a CLASSIFICATION learner and the data has a string label.");
 				matchingExperiments.add(experiment);
 			}
