@@ -168,8 +168,17 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		return getSampler();
 	}
 	
+	/**
+	 * Select a random sampler.  Choose among all customized samplers.  If none
+	 * exist, choose among all base (uncustomized) samplers
+	 * @return
+	 */
 	public ISampler selectRandomSampler() {
-		List<ISampler> availableSamplers = SamplerLister.listSamplers();
+		List<ISampler> availableSamplers = SamplerLister.listSamplers(false);
+		log.info("LC.selectRandomSampler(): availableSamplers(false)=" + availableSamplers);
+		if (availableSamplers==null || availableSamplers.size()==0) {
+			availableSamplers = SamplerLister.listSamplers(true);
+		}
 		int randomIndex = RandomListChooser.chooseRandomIndex(availableSamplers.size());
 		return availableSamplers.get(randomIndex);
 	}
