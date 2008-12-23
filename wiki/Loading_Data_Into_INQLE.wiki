@@ -69,3 +69,5 @@ In this dialog, we will create new properties for the Breast Tumor type.  We hav
 Now our Breast Tumor properties page has selectors for our nely entered properties.  For each properyt, select which column (if any) contains the value for that property.  The form automatically assumes that a if a column's header matches the property name, then that column's values should populate the matching property.
 
 
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/13_FDIW_p11.png]
+In this page, we capture static values, which all subjects (rows in the table) share.  For instance, if this dataset were about breast tumors This 
