@@ -43,8 +43,16 @@ Alternatively, if each row of data pertains to a different date, then specify be
 
 Click *Next*.  The remaining steps of the wizard will specify the _things_ that your data is about, plus the _attributes_ of those things.  
 
-For the purposes of this wizard, there are 2 types of _things_.
-  # _Subjects_ are things that describe a single row in the table.  When importing subjects, you must specify what type of thing each subject is a member of.  Example: we are importing a spreadsheet of companies.  The subject type is "company", and each row represents a different instance of that type (i.e., each row is a different company).
-  # _Captions_ are things that describe the entire table.  Each row does not represent a new thing of some common type.  Rather, the caption represents a single thing.  Example: the above table of companies is our company's list of suppliers.  So we might add a caption of the type "company", with an identifier of "Our Company".  This says that the entire table is about "Our Company".  Another example: we are importing prices of the S&P 500 Index.  We define a single caption, of type "stock index", and identify it as "the S&P 500 Index".
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/07_FDIW_p5.png]
 
-OK, so how do we import these things and their attributes?  First, decide which _subject(s)_ and _caption(s)_ your data is about.  In general, start with your table.  What does each row represent?  If it represents a thing, then chances you need to add a subject of each thing's type.  If each row represents a collection of measurements about the same thing, then you need to add a _caption_ of that type.  
+For the purposes of this wizard, there are 2 types of _things_.
+  # *_Subjects_* are things that describe a single row in the table.  When importing subjects, you must specify what type of thing each subject is a member of.  Example: we are importing a spreadsheet of companies.  The subject type is "company", and each row represents a different instance of that type (i.e., each row is a different company).
+  # *_Captions_* are things that describe the entire table.  Each row does not represent a new thing of some common type.  Rather, the caption represents a single thing.  Example: the above table of companies is our company's list of suppliers.  So we might add a caption of the type "company", with an identifier of "Our Company".  This says that the entire table is about "Our Company".  Another example: we are importing prices of the S&P 500 Index.  We define a single caption, of type "stock index", and identify it as "the S&P 500 Index".
+
+OK, so how do we import these things and their attributes?  First, decide which _subject(s)_ and _caption(s)_ your data is about.  In general, start with your table.  What does each row represent?  If it represents a thing, then chances you need to add a subject of each thing's type.  If each row represents a collection of measurements about the same thing, then you need to add a _caption_ of that type.  Regardless of what each row is about, you may need to add additional captions, describing things about the table.  For example, if you are importing a table of laboratory data from your lab, you might add a caption of type "Laboratory", identified as your own laboratory.
+
+Clicking "Add a Subject" or "Add a Caption" will add 4 pages to the wizard, for capturing information about the subject or caption respectively.  For this tutorial, we are importing a table of data about breast tumors biopsy specimens.  So we will add a subject of type "Breast Tumor".  
+
+First we can search to see if others have defined the type "Breast Tumor".  We type in "tumor" and click the *Search* button.  This queries both your INQLE server, plus the Central INQLE Server, running at inqle.org.  In this case, we have found the correct type of thing (Breast Tumor), select it and move on to the next page.
+
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/08_FDIW_p6.png]
