@@ -14,30 +14,32 @@ To facilitate importing data into INQLE, we provide a File Data Importer Wizard.
 Before using the wizard, you should get your data into a spreadsheet program, and select File -> Save as -> 
 and select to save your spreadsheet as Comma-Seperated Values (CSV) or delimited text file.
 
-Next start the wizard, right click a dataset in your INQLE Administrator, and select Load data from a file".
-[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/menu_import_file_data.gif]
+To start the wizard, right click a dataset in your INQLE Administrator, and select "Load data from a file...".
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/02_load_database.png]
 
 ----
-Next, click *Browse* and find your CSV file, and click *Open*.  Click *Upload*.
+You will now see the file data importer wizard.  Click *Browse* and find your CSV file, and click *Open*.  Click *Upload*.
 
-[http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/upload_file.gif]
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/03_FDIW_p1.png]
 
 ----
 Click *Next*.  You should see the first few rows of your CSV data. 
 
-[http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/view_data.gif]
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/04_FDIW_p2.png]
 
 ----
 Click *Next*.  
 
-[http://inqle.googlecode.com/svn-history/r464/trunk/InqleDocuments/images/specify_date.gif]
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/05_FDIW_p3.png]
 
 Here you can specify date information about your data.  If your CSV all pertains to a single date or time, then you can select that all data being imported has the same date and time, and enter this date (and optionally time).
-Alternatively, if each row of data pertains to a different date, then specify below which column contains this date information.
+Alternatively, if each row of data pertains to a different date, then specify below which column contains this date information.  If your data does not pertain to any dates, you can leave the form as it is.
 
 ----
 
-Click *Next*.  The remaining steps of the wizard will specify the type and identity of the _subjects_ of your data, plus the _attributes_ of those subjects.  For each subject we first specify if the table represents a single individual or if instead each row of data pertains to a different individual.
+Click *Next*.  The remaining steps of the wizard will specify the things that your data is about, plus the _attributes_ of those things.  
 
-
-(more coming)
+For the purposes of this wizard, there are 2 types of things.
+  # _Subjects_ are things that describe a single row in the table.  When importing subjects, you must specify what type of thing each subject is a member of.  Example: we are importing a spreadsheet of companies.  The subject type is "company", and each row represents a different instance of that type (i.e., each row is a different company).
+  # _Captions_ are things that describe the entire table.  Each row does not represent a new thing of the same type.  Rather, the caption represents a single thing.
+  Example: the above table of companies is our company's list of suppliers.  So we might add a caption of the type "company", with an identifier of "Our Company".  Another example: we are importing prices of the S&P 500 Index.  We define a single caption, of type "stock index", specifically "the S&P 500 Index".
