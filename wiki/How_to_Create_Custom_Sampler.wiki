@@ -1,0 +1,42 @@
+#summary How to create a custom sampler in INQLE
+
+A Sampler pulls a chunk of data out of INQLE or other data sources.  Generally, this sample of data is randomly selected to some degree.  Samplers are an INQLE extension type.  This means that contributors can provide their own samplers, which can employ a variety of different strategies for gathering a sample of data.
+
+INQLE ships with a single sampler, SimpleSubjectSparqlSampler (SSSS).  This sampler performs these actions:
+  # Select a local INQLE dataset, from which to retrieve data
+  # From that dataset, select one subject class = one type of thing = one RDFS/OWL class.
+  # From the set of all arcs of 3 steps or less, emanating from instances of this subject class, select one label attribute (the property to be predicted) and 3 attributes
+  # Randomly select 1000 records and their values for each of the selected properties.
+
+When this base SSSS is run, it will make a random selection at each juncture.  
+You may create 1 or more customizations of this sampler.  When you customize a SSSS, you may specify which dataset(s) it will select from, which subject class it will use, which label it will be use, and/or which attributes it will use.
+
+[[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/01_BaseSampler.png]
+
+To customize a sampler, first right click the base sampler, of which you wish to create a customization.  So right click *SimpleSubjectSparqlSampler* and select *Create a customized clone of this sampler*:
+
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/02_CreateClone.png]
+----
+The SSSS customization wizard opens.  First enter a name and a description.
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/03_SSSWizard_p1.png]
+
+Click *Next*.
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/04_SSSWizard_p2.png]
+
+Select which dataset(s) you wish to sample from.  In our case we have only one.  Select it and click *Next*.
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/05_SSSWizard_p3.png]
+
+Select the subject class to generate sample data from.  Select "BreastTumor".
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/06_SSSWizard_p4.png]
+
+Select the attribute that we wish to predict.  In this case we want to predict the diagnosis (whether the tumor turned out to be cancer or not).
+
+We would like our customized sampler to randomly select attributes to correlate with this label.  So we are finished customizing this sampler.  Click *Finish*.
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/07_CustomizedSampler.png]
+
+We can see our new sampler in the INQLE administration.  It will be available for learning cycles to use.  When custom sampler(s) have been created, the base learning cycle will select from among them.  Since this is our first custom sampler, if we run the 
+Experimenter Agent, it will use this sampler repeatedly every cycle.
