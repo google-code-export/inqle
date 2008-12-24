@@ -44,7 +44,7 @@ public class SamplerLister {
 	 * List plugin samplers plus their customized children
 	 * @return
 	 */
-	public static List<ISampler> listSamplers() {
+	public static List<ISampler> listSamplers(boolean includeBaseSamplers) {
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		
 		//first add the base plugins
@@ -53,7 +53,9 @@ public class SamplerLister {
 			if (object == null) continue;
 			ISamplerFactory samplerFactory = (ISamplerFactory)object;
 			ISampler baseSampler = samplerFactory.newSampler();
-			samplers.add(baseSampler);
+			if (includeBaseSamplers) {
+				samplers.add(baseSampler);
+			}
 			samplers.addAll(listCustomSamplers(baseSampler));
 		}
 		

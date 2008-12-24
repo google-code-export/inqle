@@ -143,7 +143,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	protected abstract Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass);
 
 	public Collection<Arc> getLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, Collection<Arc> arcsToExclude) {
-		if (arcs != null) return arcs;
+		if (arcs != null && arcs.size() > 0) return arcs;
 		return decideLearnableArcs(modelsToUse, subjectClass, getNumberOfAttributes(), arcsToExclude);
 	}
 
