@@ -90,6 +90,8 @@ public class DatafileUtil {
 	public static void addModel(Model model, String folderPath) {
 //		log.info("addModel() for " + folderPath);
 		File folder = new File(folderPath);
+		//abort if the folder is null or nonexistant
+		if (folder==null || ! folder.exists()) return;
 		for (File file: folder.listFiles()) {
 			if (file.isDirectory()) {
 				addModel(model, file.getAbsolutePath());
