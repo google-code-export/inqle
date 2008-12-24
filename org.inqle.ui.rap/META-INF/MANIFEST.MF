@@ -36,3 +36,4 @@ Bundle-ClassPath: bin/main/,
  .,
  lib/commons-csv-20070725.jar
 Bundle-Activator: org.inqle.ui.rap.InqleUiActivator
+Eclipse-LazyStart: true

@@ -343,7 +343,10 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	}
 
 	public String getCurrentSortColumn() {
-		return currentSortColumn;
+		if (currentSortColumn == null) {
+			return null;
+		}
+		return currentSortColumn.replaceAll(" ", "_");
 	}
 
 	public void setCurrentSortColumn(String currentSortColumn) {
