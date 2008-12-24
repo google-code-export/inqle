@@ -52,22 +52,49 @@ For the purposes of this wizard, there are 2 types of _things_.
 OK, so how do we import these things and their attributes?  First, decide which _subject(s)_ and _caption(s)_ your data is about.  In general, start with your table.  What does each row represent?  If it represents a thing, then chances you need to add a subject of each thing's type.  If each row represents a collection of measurements about the same thing, then you need to add a _caption_ of that type.  Regardless of what each row is about, you may need to add additional captions, describing things about the table.  For example, if you are importing a table of laboratory data from your lab, you might add a caption of type "Laboratory", identified as your own laboratory.
 
 Clicking "Add a Subject" or "Add a Caption" will add 4 pages to the wizard, for capturing information about the subject or caption respectively.  For this tutorial, we are importing a table of data about breast tumors biopsy specimens.  So we will add a subject of type "Breast Tumor".  
-
+----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/08_FDIW_p6.png]
+
 First we can search to see if others have defined the type "Breast Tumor".  We type in "tumor" and click the *Search* button.  This queries both your INQLE server, plus the Central INQLE Server, running at inqle.org.  If the type of thing has not yet been defined, you can define it (and register it with the Central INQLE Server) by clicking on the "Enter a new subject" button.  In this case, we have found the correct type of thing (Breast Tumor), select it and move on to the next page.
-
+----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/09_FDIW_p7.png]
-In this page, we seek to identify the subject (thing) of each row.  Specifcally, we need to understand how to create the unique identifier (URI) for each subject.  In general, it is safe to select that the URI is "unknown".
 
+In this page, we seek to identify the subject (thing) of each row.  Specifcally, we need to understand how to create the unique identifier (URI) for each subject.  In general, it is safe to select that the URI is "unknown".
+----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/10_FDIW_p8.png]
+
 Next we will specify how the columns of the CSV table map to each breast tumor.  Currently our INQLE server (and the Central INQLE Server) do not know about any properties of this type.  So we must enter them.  Click on the *Add new properties for BREAST TUMOR* button.
 
+----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/11_FDIW_p9.png]
+
 In this dialog, we will create new properties for the Breast Tumor type.  We have simplified this process, by permitting you to click the checkbox under the "Create" column.  This will enable the property in question.  Edit the values for the name and description of each label.  These values will be used when other INQLE users import data about breast tumors.  If a property is an identifier, rather than a data property, then select the "Identifier?" checkbox.  Click *Save*.
 
+----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/12_FDIW_p10.png]
-Now our Breast Tumor properties page has selectors for our nely entered properties.  For each properyt, select which column (if any) contains the value for that property.  The form automatically assumes that a if a column's header matches the property name, then that column's values should populate the matching property.
 
+Now our Breast Tumor properties page has selectors for our nely entered properties.  For each property, select which column (if any) contains the value for that property.  The form automatically assumes that a if a column's header matches the property name, then that column's values should populate the matching property.
 
+----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/13_FDIW_p11.png]
-In this page, we capture static values, which all subjects (rows in the table) share.  For instance, if this dataset were about breast tumors This 
+In this page, we capture static values, which all subjects (rows in the table) share.  For instance, if this dataset were about breast tumors in women who were positive for the BRCA gene, then we might add a property "BRCA Status", and specify here that the static value (for all rows) is "positive".
+
+In this case, we can skip this page.  Click *Next*.
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/13a_FDIW_p11a.png]
+
+Next, you could add more subjects and/or captions.  For now, we will click *Finished adding subjects*.
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/14_FDIW_p12.png]
+
+In this page you can specify a name and a description for the *mapping* you have created.  In a future version, INQLE will be able to reuse these mappings to automatically import CSV tables with matching column names.
+
+Click *Finish*
+----
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/15_FDIW_p13.png]
+
+INQLE has imported your data.
+
+You are finished with the File Data Importer Wizard.
+
+From here, you could [Create_Custom_Sampler create a custom sampler].
