@@ -23,10 +23,22 @@ import thewebsemantic.Namespace;
 	public class Arc extends GlobalJenabean implements Comparable<Arc> {
 		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
 		
-//		private transient Object value;
+		public Arc() {}
+		
+		public Arc(ArcStep firstArcStep) {
+			addArcStep(firstArcStep);
+		}
+		
+		public Arc(String firstArcStep) {
+			addArcStep(firstArcStep);
+		}
 
 		public void addArcStep(ArcStep arcStep) {
 			arcStepList.add(arcStep);
+		}
+		
+		public void addArcStep(String arcStepString) {
+			arcStepList.add(new ArcStep(arcStepString));
 		}
 
 		public void setArcSteps(ArcStep[] arcSteps) {
