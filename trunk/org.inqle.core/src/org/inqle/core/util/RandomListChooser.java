@@ -50,7 +50,10 @@ public class RandomListChooser {
 	 * @return the randomly selected collection of items
 	 */
 	public static Collection<?> chooseRandomItemsAdditively(Collection<?> itemsToSelectFrom, Collection<?> itemsToExclude, int size) {
+		if (itemsToSelectFrom == null) return null;
 		List<Object> selectedItems = new ArrayList<Object>();
+		if (itemsToSelectFrom.size()==0) return selectedItems;
+		
 		List<Object> listToSelectFrom = new ArrayList<Object>(itemsToSelectFrom);
 		int maxNumTries = itemsToSelectFrom.size() * 2;
 		List<Integer> triedIndexes = new ArrayList<Integer>();
