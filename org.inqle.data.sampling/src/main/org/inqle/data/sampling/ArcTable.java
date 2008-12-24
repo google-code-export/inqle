@@ -20,6 +20,9 @@ import org.inqle.data.rdf.jenabean.ArcSet;
  */
 public class ArcTable implements IDataTable {
 
+	private static final double THRESHOLD_RATIO_FOR_DATE = 0.7;
+	private static final double THRESHOLD_RATIO_FOR_NUMERIC = 0.7;
+
 	private static Logger log = Logger.getLogger(ArcTable.class);
 	
 	private List<LinkedHashSet<Object>> columnDistinctValues= new ArrayList<LinkedHashSet<Object>>();
@@ -167,6 +170,8 @@ public class ArcTable implements IDataTable {
 		boolean containsNumbers = false;
 		boolean containsStrings = false;
 		int rowIndex = 0;
+		int dateCount = 0;
+		int numberCount = 0;
 		for (List<Object> row: rowData) {
 //			log.info("Row #" + rowIndex + ": row=" + row);
 			if (row.size()<=columnIndex) {
@@ -183,21 +188,35 @@ public class ArcTable implements IDataTable {
 			}
 			if (value instanceof Date) {
 				containsDates = true;
+				dateCount++;
 			}
 			if (value instanceof Integer || value instanceof Double) {
 				containsNumbers = true;
+				numberCount++;
 			}
 			columnValues.add(value);
 			distinctValues.add(value);
 			rowIndex++;
 		}
 		
+		boolean predominantlyDate = false;
+		if (dateCount / rowData.size() > THRESHOLD_RATIO_FOR_DATE) {
+			predominantlyDate = true;
+		}
+		
+		boolean predominantlyNumeric = false;
+		if (numberCount / rowData.size() > THRESHOLD_RATIO_FOR_NUMERIC) {
+			predominantlyNumeric = true;
+		}
+		
 		int dataType = IDataTable.DATA_TYPE_UNKNOWN;
 		if (distinctValues.size()==0) {
 			dataType = IDataTable.DATA_TYPE_NO_VALUES;
-		} else if (!containsStrings && containsNumbers && !containsDates) {
+//		} else if (!containsStrings && containsNumbers && !containsDates) {
+		} else if (predominantlyNumeric) {
 			dataType = IDataTable.DATA_TYPE_NUMERIC;
-		} else if (!containsStrings && !containsNumbers && containsDates) {
+//		} else if (!containsStrings && !containsNumbers && containsDates) {
+		} else if (predominantlyDate) {
 			dataType = IDataTable.DATA_TYPE_DATE;
 		} else {
 			dataType = IDataTable.DATA_TYPE_STRING;
@@ -274,8 +293,13 @@ public class ArcTable implements IDataTable {
 	@Override
 	public String toString() {
 		String s = "\nClass: " + this.getClass().getName();
-		s += "\nColumns: " + getColumns();
-		s += "\nRows:\n" + getRows();
+		s += "\nColumn --- Column Type --- Data Type ";
+		int numColumns = getColumns().size();
+		for (int col = 0; col < numColumns; col++) {
+			Arc arc = getColumn(col);
+			s += "\n" + arc + " --- " + getColumnType(col) + " --- " + getDataType(col);
+		}
+		s += "\n\nRows:\n" + getRows();
 		s += "\n";
 		return s;
 	}
