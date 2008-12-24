@@ -2,7 +2,7 @@
 
 A Sampler pulls a chunk of data out of INQLE or other data sources.  Generally, this sample of data is randomly selected to some degree.  Samplers are an INQLE extension type.  This means that contributors can provide their own samplers, which can employ a variety of different strategies for gathering a sample of data.
 
-INQLE ships with a single sampler, SimpleSubjectSparqlSampler (SSSS).  This sampler performs these actions:
+INQLE ships with a single sampler, !SimpleSubjectSparqlSampler (SSSS).  This sampler performs these actions:
   # Select a local INQLE dataset, from which to retrieve data
   # From that dataset, select one subject class = one type of thing = one RDFS/OWL class.
   # From the set of all arcs of 3 steps or less, emanating from instances of this subject class, select one label attribute (the property to be predicted) and 3 attributes
@@ -11,7 +11,7 @@ INQLE ships with a single sampler, SimpleSubjectSparqlSampler (SSSS).  This samp
 When this base SSSS is run, it will make a random selection at each juncture.  
 You may create 1 or more customizations of this sampler.  When you customize a SSSS, you may specify which dataset(s) it will select from, which subject class it will use, which label it will be use, and/or which attributes it will use.
 
-[[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/01_BaseSampler.png]
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/01_BaseSampler.png]
 
 To customize a sampler, first right click the base sampler, of which you wish to create a customization.  So right click *SimpleSubjectSparqlSampler* and select *Create a customized clone of this sampler*:
 
