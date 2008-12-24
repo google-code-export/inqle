@@ -97,4 +97,4 @@ INQLE has imported your data.
 
 You are finished with the File Data Importer Wizard.
 
-From here, you could [Create_Custom_Sampler create a custom sampler].
+From here, you could [How_to_Create_Custom_Sampler create a custom sampler], [How_to_Run_Experimenter_Agent run the experimenter agent], and [How_to_View_Experiments view results of experiments].
