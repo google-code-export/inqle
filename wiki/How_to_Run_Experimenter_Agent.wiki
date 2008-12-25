@@ -1,3 +1,29 @@
 #summary How to run INQLE's Experimenter Agent.
 
-INQLE's Experimenter Agent repeatedly runs experiments.  Specifically, it repeatedly selects and runs a Learning Cycle.  Each Learning Cycle, in turn, runs a sampler, then applies the sample of data against an appropriate !RapidMiner learning algorithm.  Each Learning Cycle stores the results of its experiment.
+INQLE's Experimenter Agent repeatedly runs experiments.  Specifically, it repeatedly selects and runs a Learning Cycle.  Each learning cycle, in turn, runs a sampler, then applies the sample of data against an appropriate !RapidMiner learning algorithm.  Each learning cycle stores the results of its experiment.
+
+You may create a customized learning cycle, and/or a customized experimenter agent.  For now, we will simply run the base (uncustomized) experimenter agent.  This will randomly select from among all available learning cycles and run it.  When completed, it will randomly select another learning cycle and run it.  And so on.
+
+Each learning cycle randomly selects from all available samplers.  You can create new samplers by offering a new plugin.  You can create customizations of existing samplers by running a wizard, [How_to_Create_Custom_Sampler as described here].
+
+To start the Experimenter Agent, first find and right click on the *Experimenter Agent*.
+
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimenterWizard/01_Agents.png]
+---
+Next, right click it and select *Run this agent*:
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimenterWizard/02_RunExperimenterAgent.png]
+---
+The agent will begin running:
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimenterWizard/03_ExperimenterAgentRunning.png]
+
+---
+You can view the results of experiments by opening the Experiments View:
+
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimentsView/01_OpenExperimentsView.png]
+---
+Within this view, you can click on a header to sort by it:
+[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimentsView/02_ViewExperiments]
+
+
+
+You can look at the results of experiments by 
