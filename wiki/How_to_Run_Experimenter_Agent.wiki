@@ -1,0 +1,3 @@
+#summary How to run INQLE's Experimenter Agent.
+
+INQLE's Experimenter Agent repeatedly runs experiments.  Specifically, it repeatedly selects and runs a Learning Cycle.  Each Learning Cycle, in turn, runs a sampler, then applies the sample of data against an appropriate !RapidMiner learning algorithm.  Each Learning Cycle stores the results of its experiment.
