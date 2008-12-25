@@ -10,20 +10,23 @@ To start the Experimenter Agent, first find and right click on the *Experimenter
 
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimenterWizard/01_Agents.png]
 ----
+
 Next, right click it and select *Run this agent*:
+
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimenterWizard/02_RunExperimenterAgent.png]
 ----
+
 The agent will begin running:
+
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimenterWizard/03_ExperimenterAgentRunning.png]
 
 ----
+
 You can view the results of experiments by opening the Experiments View:
 
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimentsView/01_OpenExperimentsView.png]
 ----
+
 Within this view, you can click on a header to sort by it:
+
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/ExperimentsView/02_ViewExperiments]
-
-
-
-You can look at the results of experiments by 
