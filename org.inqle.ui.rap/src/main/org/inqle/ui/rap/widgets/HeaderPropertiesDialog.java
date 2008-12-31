@@ -187,7 +187,7 @@ public class HeaderPropertiesDialog extends AScrolledOntResourceDialog implement
 		Button clickedButton = (Button)clickedObject;
 		Object buttonVal = clickedButton.getData();
 		int buttonInt = (Integer)buttonVal;
-		log.info("Setting item #" + buttonInt + " to " + clickedButton.getSelection());
+		log.trace("Setting item #" + buttonInt + " to " + clickedButton.getSelection());
 		uriTexts.get(buttonInt).setEnabled(clickedButton.getSelection());
 		typeCheckBoxes.get(buttonInt).setEnabled(clickedButton.getSelection());
 		nameTexts.get(buttonInt).setEnabled(clickedButton.getSelection());
