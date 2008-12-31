@@ -20,7 +20,9 @@ import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -270,6 +272,31 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 		//queryCriteria.close();
 		
 		return resultTable;
+	}
+	
+	/**
+	 * Query an ARQ dataset.
+
+	 * @param queryCriteria the QueryCriteria object containing all info about the query
+	 * @return an RdfTable object
+	 */
+	public static ResultSetRewindable selectResultSet(QueryCriteria queryCriteria) {
+		QueryExecution qe = getQueryExecution(queryCriteria);
+		
+		//Do the query
+		ResultSet resultSet;
+		//SDB.getContext().set(SDB.unionDefaultGraph, true);
+		ResultSetRewindable resultSetRewindable = null;
+		try {
+			resultSet = qe.execSelect() ;
+			resultSetRewindable = ResultSetFactory.copyResults(resultSet); 
+		} catch (Exception e) {
+			log.error("Error performing query " + queryCriteria.getQuery(), e);
+		} finally { 
+			if (qe != null) qe.close(); 
+		}
+		
+		return resultSetRewindable;
 	}
 	
 	public static List<String> selectUriList(QueryCriteria queryCriteria) {
