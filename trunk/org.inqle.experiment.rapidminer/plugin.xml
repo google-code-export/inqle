@@ -21,14 +21,16 @@
       <dataset
            id="org.inqle.datasets.learningCycles"
            weight="7000"
-           description="contains customized Learning Cycles">
+           description="contains customized Learning Cycles"
 					 cacheInMemory="false"
+					 targetDatabase="org.inqle.data.databases.cache">
 			</dataset>
 			<dataset
            id="org.inqle.datasets.experiments"
            weight="8000"
-           description="contains experiment results">
+           description="contains experiment results"
 					 cacheInMemory="false"
+					 targetDatabase="org.inqle.data.databases.cache">
 			</dataset>
 	</extension>
    <extension
@@ -91,6 +93,13 @@
             icon="icons/microscope.jpeg"
             class="org.inqle.experiment.rapidminer.ExperimentsView"
             id="org.inqle.experiment.rapidminer.experimentsView">
+      </view>
+      
+      <view
+            name="Experiments2"
+            icon="icons/microscope.jpeg"
+            class="org.inqle.experiment.rapidminer.ExperimentsView2"
+            id="org.inqle.experiment.rapidminer.experimentsView2">
       </view>
   </extension>
 </plugin>
