@@ -28,6 +28,7 @@ public class TestRandomArcSelection {
 		selectedArcs = (Collection<Arc>) RandomListChooser.chooseRandomItemsAdditively(selectableArcs, avoidArcs, 1);
 		
 		Arc arc1 = new Arc("http://stooge.com/");
+		Arc arc1a = new Arc("http://stooge.com/");
 		selectableArcs.add(arc1);
 		selectedArcs = (Collection<Arc>) RandomListChooser.chooseRandomItemsAdditively(selectableArcs, null, 1);
 		assertEquals(1, selectedArcs.size());
@@ -37,21 +38,24 @@ public class TestRandomArcSelection {
 		assertEquals(0, selectedArcs.size());
 		
 		Arc arc2 = new Arc("http://silly.com/");
+		Arc arc2a = new Arc("http://silly.com/");
 		selectableArcs.add(arc2);
 		selectedArcs = (Collection<Arc>) RandomListChooser.chooseRandomItemsAdditively(selectableArcs, null, 1);
 		assertEquals(1, selectedArcs.size());
 		assertTrue(selectedArcs.contains(arc1) || selectedArcs.contains(arc2));
+		assertTrue(selectedArcs.contains(arc1a) || selectedArcs.contains(arc2a));
 		
 		selectedArcs = (Collection<Arc>) RandomListChooser.chooseRandomItemsAdditively(selectableArcs, avoidArcs, 1);
 		assertEquals(1, selectedArcs.size());
 		assertTrue(selectedArcs.contains(arc1) || selectedArcs.contains(arc2));
+		assertTrue(selectedArcs.contains(arc1a) || selectedArcs.contains(arc2a));
 		
-		avoidArcs.add(arc2);
+		avoidArcs.add(arc2a);
 		selectedArcs = (Collection<Arc>) RandomListChooser.chooseRandomItemsAdditively(selectableArcs, avoidArcs, 1);
 		assertEquals(1, selectedArcs.size());
 		assertTrue(selectedArcs.contains(arc1));
 		
-		avoidArcs.add(arc1);
+		avoidArcs.add(arc1a);
 		selectedArcs = (Collection<Arc>) RandomListChooser.chooseRandomItemsAdditively(selectableArcs, avoidArcs, 1);
 		assertEquals(0, selectedArcs.size());
 		

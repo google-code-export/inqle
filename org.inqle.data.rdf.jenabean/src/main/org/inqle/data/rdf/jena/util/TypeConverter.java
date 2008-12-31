@@ -10,7 +10,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
 public class TypeConverter {
 
-	public static final Logger log = Logger.getLogger(TypeConverter.class);
+	private static final Logger log = Logger.getLogger(TypeConverter.class);
 	
 	public static Literal parseStringToLiteral(String string) {
 		try {
