@@ -168,14 +168,17 @@ public class ExperimentResult extends UniqueJenabean {
 	public String getExperimentAttributeQnameRepresentation() {
 		if (experimentAttributeArcs==null) return null;
 		String s = "";
+		int i=0;
 		for (Arc attributeArc: experimentAttributeArcs) {
-			s += attributeArc.getQnameRepresentation() + "; ";
+			if (i > 0) s += "; \n";
+			s += attributeArc.getQnameRepresentation();
+			i++;
 		}
 		return s;
 	}
 
-	public void setExperimentAttributeQnameRepresentation() {
-		//do nothing; this method ensure that the field will be stored by Jenabean
+	public void setExperimentAttributeQnameRepresentation(String dummy) {
+		//do nothing; this method ensures that the field will be stored by Jenabean
 	}
 	
 	public Arc getExperimentLabelArc() {
