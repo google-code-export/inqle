@@ -266,11 +266,21 @@ public class ArcTable implements IDataTable {
 	public int getLabelColumnIndex() {
 		return labelColumnIndex;
 	}
+	
+	/**
+	 * Get the list of learnable columne, which do not include the ID column
+	 * or the label column
+	 */
 	public List<Arc> getLearnableColumns() {
 		List<Arc> learnableArcs = new ArrayList<Arc>();
 		int colIndex = -1;
 		for (Arc arc: getColumns()) {
 			colIndex++;
+			
+			//learnable columns do not include the ID column or the label column
+			if (colIndex==getIdColumnIndex() || colIndex==getLabelColumnIndex()) {
+				continue;
+			}
 			if (getColumnType(colIndex) == IDataTable.COLUMN_TYPE_LEARNABLE) {
 				learnableArcs.add(arc);
 			}
