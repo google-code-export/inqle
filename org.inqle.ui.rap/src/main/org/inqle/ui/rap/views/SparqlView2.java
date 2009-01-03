@@ -11,11 +11,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.QueryCriteria;
@@ -37,7 +36,7 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 
 	private static final Logger log = Logger.getLogger(SparqlView2.class);
 	
-	private static final int COLUMN_WIDTH = 120;
+//	private static final int COLUMN_WIDTH = 120;
 
 	private static final int DEFAULT_RECORD_COUNT_INDEX = 0;
 	private static final String[] RECORD_COUNT_OPTIONS = {"10", "20", "50", "100", "200", "500", "1000" };
@@ -56,7 +55,7 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 	protected Button refreshButton;
 	protected String currentSortColumn = "Creation_Date";
 	protected String currentSortDirection = DEFAULT_SORT_DIRECTION;
-	protected org.eclipse.swt.widgets.List recordCountList;
+	protected Combo recordCountCombo;
 	protected Button previousButton;
 	protected Button nextButton;
 	protected Label resultDescription;
@@ -68,6 +67,10 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 	private Button deleteButton;
 
 	private NamedModel namedModel;
+
+	private Button checkAllButton;
+
+	private Button uncheckAllButton;
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -85,8 +88,9 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
     
 		showForm();
 		showResultDescription();
-		showTable();
-		refreshForm();
+//		showTable();
+//		refreshForm();
+		refreshView();
 	}
 
 	private void showForm() {
@@ -95,9 +99,10 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 		formComposite.setLayout(rowLayout);
 		
 		//select list for number of records to show
-		recordCountList = new org.eclipse.swt.widgets.List(formComposite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
-		recordCountList.setItems(RECORD_COUNT_OPTIONS);
-		recordCountList.setSelection(DEFAULT_RECORD_COUNT_INDEX);
+		new Label(formComposite, SWT.NONE).setText("Number of rows");
+		recordCountCombo = new Combo(formComposite, SWT.BORDER | SWT.READ_ONLY);
+		recordCountCombo.setItems(RECORD_COUNT_OPTIONS);
+		recordCountCombo.select(DEFAULT_RECORD_COUNT_INDEX);
 		//GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//formComposite.setLayoutData(gridData);
 		refreshButton = new Button(formComposite, SWT.PUSH);
@@ -116,23 +121,46 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 		previousButton = new Button(descriptionComposite, SWT.PUSH);
 		previousButton.setText("<--");
 		previousButton.addSelectionListener(this);
+		previousButton.setEnabled(false);
 		nextButton = new Button(descriptionComposite, SWT.PUSH);
 		nextButton.setText("-->");
 		nextButton.addSelectionListener(this);
+		nextButton.setEnabled(false);
+		checkAllButton = new Button(descriptionComposite, SWT.PUSH);
+		checkAllButton.setText("Check All");
+		checkAllButton.addSelectionListener(this);
+		checkAllButton.setEnabled(false);
+		uncheckAllButton = new Button(descriptionComposite, SWT.PUSH);
+		uncheckAllButton.setText("Uncheck All");
+		uncheckAllButton.addSelectionListener(this);
+		uncheckAllButton.setEnabled(false);
 		deleteButton = new Button(descriptionComposite, SWT.PUSH);
 		deleteButton.setText("Delete");
 		deleteButton.addSelectionListener(this);
+		deleteButton.setEnabled(false);
 	}
 	
 	public void createTable() {
-		//if no data, return
+		resultSetTable = new ResultSetTable(composite, SWT.MULTI, resultSet);
+		resultSetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		resultSetTable.renderTable(this);
 		if (resultSet == null || resultSet.size() == 0) {
 			return;
 		}
-		log.info("Rendering table for result set of size: " + resultSet.size());
-		resultSetTable = new ResultSetTable(composite, SWT.NONE, resultSet);
-		resultSetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		resultSetTable.renderTable(this);
+		log.info("Rendered table for result set of size: " + resultSet.size());
+	}
+	
+	public void recreateTable() {
+		resultSetTable.dispose();
+		createTable();
+		resultSetTable.redraw();
+//		resultSetTable.clearTable();
+//		resultSetTable.setResultSet(resultSet);
+//		resultSetTable.renderTable(this);
+//		if (resultSet == null || resultSet.size() == 0) {
+//			return;
+//		}
+//		log.info("Rendered table for result set of size: " + resultSet.size());
 	}
 	
 	/**
@@ -140,36 +168,42 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 	 * By default, set to 100
 	 * @return
 	 */
-	private int getColumnWidth() {
-		return COLUMN_WIDTH;
-	}
+//	private int getColumnWidth() {
+//		return COLUMN_WIDTH;
+//	}
 
 	public void showTable() {
-		if (resultSet == null || resultSet.size() == 0) {
-			doQuery();
-		}
-		
-		if (resultSet == null || resultSet.size() == 0) {
-			return;
-		}
-		
+//		if (resultSet == null || resultSet.size() == 0) {
+//			doQuery();
+//		}
+//		
+//		if (resultSet == null || resultSet.size() == 0) {
+//			return;
+//		}
+//		
 		if (resultSetTable == null) {
 			createTable();
+		} else {
+			recreateTable();
 		}
 		//update the results description
-		resultDescription.setText("Showing results " + (offset + 1) + " to " + (resultSet.size() + offset));
+		String message = "No items found.";
+		if (resultSet != null && resultSet.size() > 0) {
+			message = "Showing results " + (offset + 1) + " to " + (resultSet.size() + offset);
+		}
+		resultDescription.setText(message);
 		
 		
 	}
 	
 	@Override
 	public void setFocus() {
-		showTable();
+//		showTable();
 	}
 	
 	public void doQuery() {
 		String sparql = getSparql();
-		log.trace("Querying w/ SPARQL:" + sparql);
+		log.info("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(sparql);
 		queryCriteria.addNamedModel(getNamedModel());
@@ -194,7 +228,7 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 //	}
 	
 	public int getRecordCount() {
-		int selectedIndex = recordCountList.getSelectionIndex();
+		int selectedIndex = recordCountCombo.getSelectionIndex();
 		String recordCountStr = RECORD_COUNT_OPTIONS[selectedIndex];
 		int recordCount = Integer.parseInt(recordCountStr);
 		return recordCount;
@@ -212,6 +246,7 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 		if (event.getSource() == refreshButton) {
 			log.trace("Refresh clicked");
 			refreshView();
+			return;
 		}
 		
 		if (event.getSource() == previousButton) {
@@ -221,6 +256,7 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 			}
 			log.trace("Previous clicked");
 			refreshView();
+			return;
 		}
 		
 		if (event.getSource() == nextButton) {
@@ -232,12 +268,25 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 			
 			log.trace("Next clicked");
 			refreshView();
+			return;
 		}
 		
+		if (event.getSource() == checkAllButton) {
+//			log.info("Delete clicked");
+			checkAllItems(true);
+			return;
+		}
+		
+		if (event.getSource() == uncheckAllButton) {
+//		log.info("Delete clicked");
+		checkAllItems(false);
+		return;
+	}
+		
 		if (event.getSource() == deleteButton) {
-			log.info("Delete clicked");
+//			log.info("Delete clicked");
 			deleteSelectedItems();
-			refreshView();
+			return;
 		}
 		
 		if (event.getSource() instanceof Link) {
@@ -259,18 +308,24 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 			}
 			log.info("Sort by " + currentSortColumn + " " + currentSortDirection);
 			//no need to refresh the form, since we are only changing sort
-			doQuery();
-			showTable();
+			refreshView();
+			return;
 		}
 	}
 	
+	private void checkAllItems(boolean checked) {
+		resultSetTable.checkAllRows(checked);
+	}
+
 	private void refreshView() {
 		doQuery();
 		refreshForm();
 		showTable();
+		resultSetTable.redraw();
 	}
 
 	private void refreshForm() {
+		if (resultSet==null) return;
 		if (offset <= 0) {
 			log.trace("Disabled previousButton");
 			previousButton.setEnabled(false);
@@ -286,8 +341,12 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 			nextButton.setEnabled(true);
 		}
 		if (resultSet.size()>0) {
+			checkAllButton.setEnabled(true);
+			uncheckAllButton.setEnabled(true);
 			deleteButton.setEnabled(true);
 		} else {
+			checkAllButton.setEnabled(false);
+			uncheckAllButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 		}
 	}
@@ -349,7 +408,7 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 		}
 		Persister persister = Persister.getInstance();
 		
-		boolean confirmDelete = MessageDialog.openConfirm(composite.getShell(), "Delete these items?", "Are you sure you want to delete these " + checkedItems.size() + " items?\nTHIS CANNOT BE UNDONE!");
+		boolean confirmDelete = MessageDialog.openConfirm(composite.getShell(), "Delete these items?", "Are you sure you want to delete these " + checkedItems.size() + " items?\nTHIS CANNOT BE UNDONE!\n" + checkedItems);
 		if (! confirmDelete) return;
 		
 		Model modelToDeleteFrom = persister.getModel(getNamedModel());
@@ -361,16 +420,18 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 				log.info("Unable to retrieve resource from model: " + uriToDelete);
 				continue;
 			}
-			modelToDeleteFrom.remove(resourceToDelete, (Property)null, (RDFNode)null);
-			modelToDeleteFrom.remove((Resource)null, (Property)null, resourceToDelete);
+			modelToDeleteFrom.removeAll(resourceToDelete, (Property)null, (RDFNode)null);
+			modelToDeleteFrom.removeAll((Resource)null, (Property)null, resourceToDelete);
 			deletedCount++;
 		}
 		long sizeAfterDelete = modelToDeleteFrom.size();
 		long totalDeletedStatements = sizeBeforeDelete - sizeAfterDelete;
 		if (deletedCount == checkedItems.size()) {
 			MessageDialog.openInformation(composite.getShell(), "Success Deleting", "Successfully deleted " + deletedCount + " items, " + totalDeletedStatements + " statements.");
+			refreshView();
 		} else if (deletedCount > 0) {
 			MessageDialog.openWarning(composite.getShell(), "Deleted Some Items", "Deleted " + deletedCount + " items, " + totalDeletedStatements + " statements.\nFailed to delete " + (checkedItems.size() - deletedCount)+ " items.");
+			refreshView();
 		} else {
 			MessageDialog.openWarning(composite.getShell(), "Failed to Delete Any Items", "No items were deleted.");
 		}
@@ -378,33 +439,6 @@ public abstract class SparqlView2 extends ViewPart implements SelectionListener 
 
 	public void setNamedModel(NamedModel namedModel) {
 		this.namedModel = namedModel;
-	}
-	
-	public void handleEvent(Event event) {
-		log.info("Selection: " + event.text + "; data=" + event.data);
-		
-//		if (event.widget instanceof Link) {
-//			Link clickedLink = (Link)event.widget;
-//			Object linkData = clickedLink.getData();
-//			if (linkData ==null) {
-//				log.warn("Clicked link has no data.");
-//				return;
-//			}
-//			String linkValue = linkData.toString();
-//			//reset to the first record
-//			offset = 0;
-//			if (currentSortColumn.equals(linkValue)) {
-//				toggleCurrentSortDirection();
-//				
-//			} else {
-//				currentSortColumn = linkValue;
-//				currentSortDirection = DEFAULT_SORT_DIRECTION;
-//			}
-//			log.info("Sort by " + currentSortColumn + " " + currentSortDirection);
-//			//no need to refresh the form, since we are only changing sort
-//			doQuery();
-//			showTable();
-//		}
 	}
 
 }

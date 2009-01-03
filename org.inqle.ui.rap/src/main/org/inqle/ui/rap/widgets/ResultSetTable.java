@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -18,11 +20,13 @@ import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSetRewindable;
 
 /**
- * This widget is a table, generated from a Jena ResultSetRewindable object
+ * This widget is a table, generated from a Jena ResultSetRewindable object.
+ * For column names, this uses the variable names from the first row
+ * in the result set.
  * @author David Donohue
  * Dec 31, 2008
  */
-public class ResultSetTable extends AScrolledTable {
+public class ResultSetTable extends AScrolledTable implements SelectionListener {
 
 	private static final String URI_VARIABLE = "uri";
 	ResultSetRewindable resultSet;
@@ -46,7 +50,9 @@ public class ResultSetTable extends AScrolledTable {
 	protected List<String> getColumnNames() {
 		if (columnNames == null || columnNames.size()==0) {
 			columnNames = new ArrayList<String>();
-			
+			if (resultSet==null || resultSet.size()==0) {
+				return columnNames;
+			}
 			resultSet.reset();
 			QuerySolution querySolution = resultSet.nextSolution();
 			Iterator<?> varNames = querySolution.varNames();
@@ -70,17 +76,15 @@ public class ResultSetTable extends AScrolledTable {
 			Button cb = new Button(composite, SWT.CHECK);
 			checkboxes.add(cb);
 			QuerySolution querySolution = resultSet.nextSolution();
-		
+			String uriVal = QuerySolutionValueExtractor.getDisplayable(querySolution, uriVariable);
+			cb.setData(uriVal);
+			cb.addSelectionListener(this);
 			for (String columnName: getColumnNames()) {
 				String displayableValue = QuerySolutionValueExtractor.getDisplayable(querySolution, columnName);
-				log.trace(columnName + " = " + displayableValue);
-				if (columnName.equals(uriVariable)) {
-					cb.setData(displayableValue);
-				} else {
-					Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-					text.setText(displayableValue);
-					text.setLayoutData(new GridData(GridData.FILL_BOTH));
-				}
+				//log.info(columnName + " = " + displayableValue);
+				Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+				text.setText(displayableValue);
+				text.setLayoutData(new GridData(GridData.FILL_BOTH));
 			}
 		}
 
@@ -89,6 +93,7 @@ public class ResultSetTable extends AScrolledTable {
 	public List<String> getCheckedItems() {
 		List<String> checkedItems = new ArrayList<String>();
 		for (Button cb: checkboxes) {
+			//log.info("Checkbox " + cb + " has data: " + cb.getData() + "; is checked? " + cb.getSelection());
 			if (cb.getSelection()) {
 				Object uri = cb.getData();
 				if (uri==null) {
@@ -118,4 +123,31 @@ public class ResultSetTable extends AScrolledTable {
 		this.uriVariable = uriVariable;
 	}
 
+	public void checkAllRows(boolean checked) {
+		if (checkboxes==null) return;
+		for (Button cb: checkboxes) {
+			cb.setSelection(checked);
+		}
+	}
+	
+	public void checkItem(Button cb) {
+		if (selectionMode == SWT.SINGLE) {
+			checkAllRows(false);
+			cb.setSelection(true);
+		}
+	}
+
+	public void widgetDefaultSelected(SelectionEvent arg0) {
+	}
+
+	public void widgetSelected(SelectionEvent event) {
+		Object source = event.getSource();
+		if (source instanceof Button) {
+			Button clickedButton = (Button) source;
+			if (clickedButton.getSelection()) {
+				checkItem(clickedButton);
+			}
+		}
+		
+	}
 }

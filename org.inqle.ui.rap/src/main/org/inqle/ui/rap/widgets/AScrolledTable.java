@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
@@ -25,10 +26,17 @@ public abstract class AScrolledTable extends AScrolledWidget {
 	
 	protected List<String> columnNames = new ArrayList<String>();
 
+	protected int selectionMode;
+
 	private static Logger log = Logger.getLogger(AScrolledTable.class);
 	
 	protected AScrolledTable(Composite parent, int style) {
 		super(parent, style);		
+		if ((style & SWT.SINGLE) == SWT.SINGLE) {
+			selectionMode = SWT.SINGLE;
+		} else {
+			selectionMode = SWT.MULTI;
+		}
 	}
 	
 	public void setColumnNames(List<String> columnNames) {
@@ -54,19 +62,32 @@ public abstract class AScrolledTable extends AScrolledWidget {
 	protected abstract void fillTable();
 
 	protected void fillColumnNames(SelectionListener listener) {
+		List<String> colNames = getColumnNames();
+		if (colNames == null || colNames.size()==0) return;
 		Label label = new Label(composite, SWT.BOLD);
 		label.setText(SELECT_COLUMN_NAME);
 //		label.setLayoutData(new GridData(GridData.FILL_BOTH));
-		for (String columnName: getColumnNames()) {
+		for (String columnName: colNames) {
 			if (columnName==null) columnName = "";
 			String displayName = columnName.replaceAll("_", " ");
 			Link link = new Link(composite, SWT.NONE);
 			link.setToolTipText("Click to sort");
 			link.addSelectionListener(listener);
-			link.setText(displayName);
+			link.setText("<a>"+displayName+"</a>");
 			link.setData(columnName);
 //			link.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 	}
 
+//	public void clearTable() {
+//		for (Control control: getChildren()) {
+//			log.info("Disposing control: " + control);
+//			control.dispose();
+//		}
+//	}
+	
+//	@Override
+//	public void dispose() {
+//		super.dispose();
+//	}
 }
