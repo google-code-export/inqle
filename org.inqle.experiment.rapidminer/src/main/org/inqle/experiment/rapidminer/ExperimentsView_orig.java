@@ -8,14 +8,14 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
-import org.inqle.ui.rap.views.SparqlView;
+import org.inqle.ui.rap.views.SparqlView_orig;
 
 /**
  * @author David Donohue
  * May 6, 2008
  */
 @Deprecated
-public class ExperimentsView_orig extends SparqlView {
+public class ExperimentsView_orig extends SparqlView_orig {
 
 	private static final Logger log = Logger.getLogger(ExperimentsView_orig.class);
 
