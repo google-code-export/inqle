@@ -88,18 +88,18 @@
   
   <extension
          point="org.eclipse.ui.views">
+      <!--view
+            name="Experiments"
+            icon="icons/microscope.jpeg"
+            class="org.inqle.experiment.rapidminer.ExperimentsView"
+            id="org.inqle.experiment.rapidminer.experimentsView">
+      </view-->
+      
       <view
             name="Experiments"
             icon="icons/microscope.jpeg"
             class="org.inqle.experiment.rapidminer.ExperimentsView"
             id="org.inqle.experiment.rapidminer.experimentsView">
-      </view>
-      
-      <view
-            name="Experiments2"
-            icon="icons/microscope.jpeg"
-            class="org.inqle.experiment.rapidminer.ExperimentsView2"
-            id="org.inqle.experiment.rapidminer.experimentsView2">
       </view>
   </extension>
 </plugin>
