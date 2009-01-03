@@ -1,8 +1,10 @@
 package org.inqle.ui.rap;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.rwt.graphics.Graphics;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -102,5 +104,13 @@ public abstract class Part implements IPart {
 	 */
 	public Object getObject() {
 		return null;
+	}
+	
+	/**
+	 * Default: return a BeanViewer, which shows some fields and a RDF representation
+	 * of the object
+	 */
+	public Viewer getViewer(Composite composite) {
+		return new BeanViewer(composite, getObject());
 	}
 }

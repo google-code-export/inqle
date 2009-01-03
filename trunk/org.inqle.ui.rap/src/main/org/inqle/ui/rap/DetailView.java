@@ -14,7 +14,7 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class DetailView extends ViewPart implements ISelectionListener {
 
-	private static final Logger log = Logger.getLogger(DetailView.class);
+	private static final Logger log = Logger.getLogger(DetailView_orig.class);
 	
 	public static final String ID = "org.inqle.ui.rap.detailView";
 

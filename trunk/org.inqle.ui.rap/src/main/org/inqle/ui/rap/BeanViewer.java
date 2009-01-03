@@ -26,6 +26,11 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 	private Text descriptionWidget;
 	private Text detailWidget;
 	
+	public BeanViewer(Composite parentComposite, Object bean) {
+		this(parentComposite);
+		setInput(bean);
+	}
+	
 	public BeanViewer(Composite parentComposite) {
 		//this.parentComposite = parentComposite;
 		
