@@ -22,7 +22,7 @@ public class ExperimentsView2 extends SparqlView2 {
 
 	private static final Logger log = Logger.getLogger(ExperimentsView2.class);
 
-	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView2";
+	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
 
 	//TODO optional fields will render the columns retrieved on any pass thru variable. Must extract columns from the query
 	@Override
