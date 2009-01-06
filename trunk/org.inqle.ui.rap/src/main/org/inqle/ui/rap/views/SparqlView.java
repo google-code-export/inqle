@@ -23,6 +23,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 
 import com.hp.hpl.jena.query.ResultSetRewindable;
+import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -66,11 +67,16 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 
 	private Button deleteButton;
 
-	private NamedModel namedModel;
+	protected NamedModel namedModel;
 
 	private Button checkAllButton;
 
 	private Button uncheckAllButton;
+
+	protected boolean hideUriColumn = true;
+
+	protected String linkColumn;
+	public boolean linkUriOnly = true;
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -90,7 +96,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 		showResultDescription();
 //		showTable();
 //		refreshForm();
-		refreshView();
+//		refreshView();
 	}
 
 	private void showForm() {
@@ -141,9 +147,13 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 	}
 	
 	public void createTable() {
-		resultSetTable = new ResultSetTable(composite, SWT.MULTI, resultSet);
+		resultSetTable = new ResultSetTable(composite, SWT.MULTI | SWT.CHECK, resultSet);
 		resultSetTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		resultSetTable.setHideUriColumn(hideUriColumn);
+		resultSetTable.setLinkColumn(linkColumn);
+		resultSetTable.setLinkUriOnly(linkUriOnly);
 		resultSetTable.renderTable(this);
+		
 		if (resultSet == null || resultSet.size() == 0) {
 			return;
 		}
@@ -317,10 +327,11 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 		resultSetTable.checkAllRows(checked);
 	}
 
-	private void refreshView() {
+	public void refreshView() {
 		doQuery();
 		refreshForm();
 		showTable();
+		resultSetTable.recomputeSize();
 		resultSetTable.redraw();
 	}
 
@@ -414,22 +425,29 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 		Model modelToDeleteFrom = persister.getModel(getNamedModel());
 		long sizeBeforeDelete = modelToDeleteFrom.size();
 		int deletedCount = 0;
+		log.info("Deleting these items: " + checkedItems);
 		for (String uriToDelete: checkedItems) {
+			if (uriToDelete==null || uriToDelete.length()==0) continue;
+			
 			Resource resourceToDelete = modelToDeleteFrom.getResource(uriToDelete);
+//			if (resourceToDelete==null) {
+//				resourceToDelete = modelToDeleteFrom.createResource(new AnonId(uriToDelete));
+//			}
 			if (resourceToDelete==null) {
 				log.info("Unable to retrieve resource from model: " + uriToDelete);
 				continue;
 			}
+			log.info("Deleting resource: " + resourceToDelete);
 			modelToDeleteFrom.removeAll(resourceToDelete, (Property)null, (RDFNode)null);
 			modelToDeleteFrom.removeAll((Resource)null, (Property)null, resourceToDelete);
 			deletedCount++;
 		}
 		long sizeAfterDelete = modelToDeleteFrom.size();
 		long totalDeletedStatements = sizeBeforeDelete - sizeAfterDelete;
-		if (deletedCount == checkedItems.size()) {
+		if (deletedCount == checkedItems.size() && totalDeletedStatements > 0) {
 			MessageDialog.openInformation(composite.getShell(), "Success Deleting", "Successfully deleted " + deletedCount + " items, " + totalDeletedStatements + " statements.");
 			refreshView();
-		} else if (deletedCount > 0) {
+		} else if (deletedCount > 0 && totalDeletedStatements > 0) {
 			MessageDialog.openWarning(composite.getShell(), "Deleted Some Items", "Deleted " + deletedCount + " items, " + totalDeletedStatements + " statements.\nFailed to delete " + (checkedItems.size() - deletedCount)+ " items.");
 			refreshView();
 		} else {

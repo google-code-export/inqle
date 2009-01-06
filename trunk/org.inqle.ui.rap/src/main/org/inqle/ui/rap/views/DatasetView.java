@@ -3,6 +3,7 @@ package org.inqle.ui.rap.views;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+@Deprecated
 public class DatasetView extends ViewPart {
 
 	@Override

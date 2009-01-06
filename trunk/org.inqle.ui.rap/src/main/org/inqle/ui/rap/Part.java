@@ -110,7 +110,7 @@ public abstract class Part implements IPart {
 	 * Default: return a BeanViewer, which shows some fields and a RDF representation
 	 * of the object
 	 */
-	public Viewer getViewer(Composite composite) {
-		return new BeanViewer(composite, getObject());
+	public IDisposableViewer getViewer(Composite composite) {
+		return new ObjectViewer(composite, getObject());
 	}
 }

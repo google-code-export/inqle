@@ -44,7 +44,7 @@ public interface IPart extends INamedAndDescribed {
 
 	public void fireUpdatePart();
 
-	public Viewer getViewer(Composite composite);
+	public IDisposableViewer getViewer(Composite composite);
 	
 	//public void setPersister(Persister persister);
 	

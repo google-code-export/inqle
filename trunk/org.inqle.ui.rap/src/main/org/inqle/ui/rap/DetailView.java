@@ -14,16 +14,19 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class DetailView extends ViewPart implements ISelectionListener {
 
-	private static final Logger log = Logger.getLogger(DetailView_orig.class);
+	private static final Logger log = Logger.getLogger(DetailView.class);
 	
 	public static final String ID = "org.inqle.ui.rap.detailView";
 
-	private BeanViewer beanViewer;
+	private IDisposableViewer viewer;
+
+	private Composite composite;
 	
 	@Override
 	public void createPartControl(Composite parent) {
 		getSite().getPage().addSelectionListener(this);
-		beanViewer = new BeanViewer(parent);
+		this.composite = parent;
+//		beanViewer = new BeanViewer(parent);
 	}
 	
 	@Override
@@ -117,24 +120,35 @@ public class DetailView extends ViewPart implements ISelectionListener {
 
 	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
 		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
-	  log.trace("Selection Made in Tree" + iSelection.toString());
+//	  log.info("Selection Made in Tree" + iSelection.toString());
 		if(iSelection instanceof IStructuredSelection) {
 	     IStructuredSelection selection = (IStructuredSelection)iSelection;
 	     
 	     Object firstSelectedObject = selection.getFirstElement();
 	     if (firstSelectedObject == null) {
-	    	 log.trace("firstSelectedObject is null");
+	    	 log.info("firstSelectedObject is null");
 	    	 return;
 	     }
 	     
 	     if (firstSelectedObject instanceof IPart) {
-	     	 Object representedObject = ((IPart) firstSelectedObject).getObject();
-	     	 beanViewer.setInput(representedObject);
+	    	 IPart selectedPart = (IPart)firstSelectedObject;
+//	     	 Object representedObject = ((IPart) firstSelectedObject).getObject();
+	    	 if (viewer != null) {
+	    		 viewer.dispose();
+	    	 }
+	     	 viewer = selectedPart.getViewer(composite);
+	     	composite.pack();
+	     	composite.redraw();
+	     	composite.setVisible(true);
+//	     	 viewer.setInput(representedObject);
 	     	 log.trace("is an IPart");
 	     	 //resetView(representedObject);
 	     } else {
 	    	 log.trace("not an IPart");
-	    	 beanViewer.setInput(firstSelectedObject);
+	    	 viewer.setInput(firstSelectedObject);
+	    	 composite.pack();
+	     	 composite.redraw();
+	     	 composite.setVisible(true);
 	     }
 	     
 	     
