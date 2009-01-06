@@ -6,6 +6,8 @@ import java.util.Date;
 
 public class DateFormatter {
 
+	private static final String DEFAULT_DATE_MASK = "yyyy-MM-dd HH:mm:ss z";
+
 	public static String getDateString(int timestamp, String mask) {
 		long time_ms = 1000 * timestamp;
 		Date date = new Date(time_ms);
@@ -15,8 +17,19 @@ public class DateFormatter {
 		return dateStr;
 	}
 	
+	public static String getDateString(Date date) {
+		return getDateString(date, DEFAULT_DATE_MASK);
+	}
+	
+	public static String getDateString(Date date, String mask) {
+		String dateStr = "";
+		SimpleDateFormat df = new SimpleDateFormat(mask);
+		dateStr = df.format(date);
+		return dateStr;
+	}
+	
 	public static String getDateString(int timestamp) {
-		return DateFormatter.getDateString(timestamp, "yyyy-MM-dd HH:mm:ss z");
+		return DateFormatter.getDateString(timestamp, DEFAULT_DATE_MASK);
 	}
 	
 	/**
