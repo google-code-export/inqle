@@ -4,6 +4,7 @@
 package org.inqle.experiment.rapidminer;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.widgets.Composite;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
@@ -20,6 +21,15 @@ public class ExperimentsView extends SparqlView {
 
 	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
 
+	@Override
+	/**
+	 * This view is ready to display upon creation, so refresh (and show) the view
+	 */
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		refreshView();
+	}
+	
 	//TODO optional fields will render the columns retrieved on any pass thru variable. Must extract columns from the query
 	@Override
 	public String getSparql() {
