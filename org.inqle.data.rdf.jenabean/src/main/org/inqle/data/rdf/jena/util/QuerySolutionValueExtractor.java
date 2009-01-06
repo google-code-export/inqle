@@ -14,6 +14,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 
 public class QuerySolutionValueExtractor {
 
+	public static final String DISPLAY_NULL = "[null]";
+
 	public static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	static Logger log = Logger.getLogger(QuerySolutionValueExtractor.class);
@@ -51,7 +53,7 @@ public class QuerySolutionValueExtractor {
 		} else if (node != null) {
 			return node.toString();
 		} else {
-			return "[null]";
+			return DISPLAY_NULL;
 		}
 	}
 

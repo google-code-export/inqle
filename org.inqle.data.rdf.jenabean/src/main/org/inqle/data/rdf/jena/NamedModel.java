@@ -2,6 +2,7 @@ package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.BasicJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 /**
@@ -15,7 +16,8 @@ import thewebsemantic.Namespace;
 //public abstract class NamedModel extends JenaAssemblerObject {
 
 @Namespace(RDF.INQLE)
-public abstract class NamedModel extends BasicJenabean {
+//public abstract class NamedModel extends BasicJenabean {
+public abstract class NamedModel extends UniqueJenabean {
 
 	//private String modelName;
 
