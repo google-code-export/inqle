@@ -74,6 +74,12 @@ public class Datafile extends NamedModel {
 		return newObj;
 	}
 
+	public Datafile createReplica() {
+		Datafile newObj = new Datafile();
+		newObj.replicate(this);
+		return newObj;
+	}
+	
 	public String getFileUrl() {
 		return fileUrl;
 	}

@@ -16,6 +16,8 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.SubjectClassCache;
 
+import com.hp.hpl.jena.query.ResultSetRewindable;
+
 public class SubjectClassLister {
 
 	private static Logger log = Logger.getLogger(SubjectClassLister.class);
@@ -92,6 +94,16 @@ public class SubjectClassLister {
 	public static final String SPARQL_SELECT_CLASSES = "SELECT DISTINCT " +
 			"?classUri { GRAPH ?anyGraph { \n " +
 			"?subject a ?classUri } } \n";
+
+	public static final String CLASS_URI_VAR = "Type_URI";
+	
+	private static final String SPARQL_SELECT_CLASSES_TABLE = "PREFIX rdfs: <" + RDF.RDFS + "> \n" +
+			"SELECT DISTINCT " +
+			"?" + CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
+			"?subject a ?" + CLASS_URI_VAR + " ." +
+			"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
+			"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
+			"} } \n";
 	
 
 	public static List<String> queryGetAllSubjectClasses(Collection<String> datasetIdList) {
@@ -99,6 +111,13 @@ public class SubjectClassLister {
 		queryCriteria.addNamedModelIds(datasetIdList);
 		queryCriteria.setQuery(SPARQL_SELECT_CLASSES);
 		return Queryer.selectUriList(queryCriteria);
+	}
+	
+	public static ResultSetRewindable queryGetAllSubjectsRS(String datasetId) {
+		QueryCriteria queryCriteria = new QueryCriteria();
+		queryCriteria.addNamedModel(datasetId);
+		queryCriteria.setQuery(SPARQL_SELECT_CLASSES_TABLE);
+		return Queryer.selectResultSet(queryCriteria);
 	}
 	
 	public static List<String> queryGetUncommonSubjectClasses(String datasetId) {
@@ -150,7 +169,7 @@ public class SubjectClassLister {
 
 	private static String getSubjectClassCacheId(String datasetId) {
 //		String cacheId = JavaHasher.hashSha256(datasetId);
-		String cacheId = "SCCacheId___" + datasetId;
+		String cacheId = "SCCacheId_" + datasetId;
 //		log.info("getSubjectClassCacheId(" + datasetId + ")=" + cacheId);
 		return cacheId;
 	}
