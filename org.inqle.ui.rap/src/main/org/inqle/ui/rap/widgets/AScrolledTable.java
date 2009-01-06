@@ -28,6 +28,11 @@ public abstract class AScrolledTable extends AScrolledWidget {
 
 	protected int selectionMode;
 
+	protected boolean sortable = true;
+	protected boolean addCheckBoxes = false;
+
+	protected SelectionListener listener;
+	
 	private static Logger log = Logger.getLogger(AScrolledTable.class);
 	
 	protected AScrolledTable(Composite parent, int style) {
@@ -37,6 +42,11 @@ public abstract class AScrolledTable extends AScrolledWidget {
 		} else {
 			selectionMode = SWT.MULTI;
 		}
+		
+		if ((style & SWT.CHECK) == SWT.CHECK) {
+			addCheckBoxes  = true;
+		}
+		
 	}
 	
 	public void setColumnNames(List<String> columnNames) {
@@ -48,11 +58,16 @@ public abstract class AScrolledTable extends AScrolledWidget {
 	}
 	
 	public void renderTable(SelectionListener listener) {
+		this.listener = listener;
 //		log.info("Rendering table.  getColumnNames()=" + getColumnNames());
-		GridLayout gl = new GridLayout(getColumnNames().size() + 1, false);
+		int size = getColumnNames().size();
+		if (addCheckBoxes) {
+			size = size + 1;
+		}
+		GridLayout gl = new GridLayout(size, false);
 		composite.setLayout(gl);
 		
-		fillColumnNames(listener);
+		fillColumnNames();
 		
 		fillTable();
 		
@@ -61,11 +76,14 @@ public abstract class AScrolledTable extends AScrolledWidget {
 
 	protected abstract void fillTable();
 
-	protected void fillColumnNames(SelectionListener listener) {
+	protected void fillColumnNames() {
 		List<String> colNames = getColumnNames();
 		if (colNames == null || colNames.size()==0) return;
-		Label label = new Label(composite, SWT.BOLD);
-		label.setText(SELECT_COLUMN_NAME);
+		Label label;
+		if (addCheckBoxes) {
+			label = new Label(composite, SWT.BOLD);
+			label.setText(SELECT_COLUMN_NAME);
+		}
 //		label.setLayoutData(new GridData(GridData.FILL_BOTH));
 		for (String columnName: colNames) {
 			if (columnName==null) columnName = "";
@@ -73,10 +91,22 @@ public abstract class AScrolledTable extends AScrolledWidget {
 			Link link = new Link(composite, SWT.NONE);
 			link.setToolTipText("Click to sort");
 			link.addSelectionListener(listener);
-			link.setText("<a>"+displayName+"</a>");
+			if (sortable) {
+				link.setText("<a>"+displayName+"</a>");
+			} else {
+				link.setText(displayName);
+			}
 			link.setData(columnName);
 //			link.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
+	}
+
+	public boolean isSortable() {
+		return sortable;
+	}
+
+	public void setSortable(boolean sortable) {
+		this.sortable = sortable;
 	}
 
 //	public void clearTable() {

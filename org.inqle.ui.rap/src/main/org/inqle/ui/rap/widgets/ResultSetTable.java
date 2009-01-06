@@ -12,12 +12,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
 import org.inqle.data.rdf.jena.util.TypeConverter;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSetRewindable;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 
 /**
  * This widget is a table, generated from a Jena ResultSetRewindable object.
@@ -28,12 +30,19 @@ import com.hp.hpl.jena.query.ResultSetRewindable;
  */
 public class ResultSetTable extends AScrolledTable implements SelectionListener {
 
-	private static final String URI_VARIABLE = "uri";
+	public static final String URI_VARIABLE = "URI";
 	ResultSetRewindable resultSet;
 	protected String uriVariable = URI_VARIABLE;
 	private ArrayList<Button> checkboxes;
+	protected String linkColumn;
+	private boolean hideUriColumn = true;
+	private boolean linkUriOnly = true;
 	
 	private static final Logger log = Logger.getLogger(ResultSetTable.class);
+	
+	public ResultSetTable(Composite parent, int style) {
+		super(parent, style);
+	}
 	
 	public ResultSetTable(Composite parent, int style, ResultSetRewindable resultSet) {
 		super(parent, style);
@@ -59,9 +68,11 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 			while (varNames.hasNext()) {
 				Object varName = varNames.next();
 				if (varName==null) varName="";
-				if (! varName.equals(uriVariable)) {
-					columnNames.add(varName.toString());
+				if (hideUriColumn  && varName.equals(uriVariable)) {
+//					log.info("Hiding column: " + uriVariable);
+					continue;
 				}
+				columnNames.add(varName.toString());
 			}
 		}
 		return columnNames;
@@ -70,21 +81,50 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 	@Override
 	protected void fillTable() {
 		resultSet.reset();
-		checkboxes = new ArrayList<Button>();
+		if (addCheckBoxes) {
+			checkboxes = new ArrayList<Button>();
+		}
 		while (resultSet.hasNext()) {
-			//add the checkbox
-			Button cb = new Button(composite, SWT.CHECK);
-			checkboxes.add(cb);
 			QuerySolution querySolution = resultSet.nextSolution();
+			RDFNode uriNode = querySolution.get(uriVariable);
 			String uriVal = QuerySolutionValueExtractor.getDisplayable(querySolution, uriVariable);
-			cb.setData(uriVal);
-			cb.addSelectionListener(this);
+			//add the checkbox
+			if (addCheckBoxes) {
+//				if (uriVal != null && uriVal.length() > 0 && !uriVal.equals(QuerySolutionValueExtractor.DISPLAY_NULL)) {
+				if (uriNode != null && uriNode.isURIResource()) {
+					Button cb = new Button(composite, SWT.CHECK);
+					checkboxes.add(cb);
+					cb.setData(uriVal);
+					cb.addSelectionListener(this);
+				} else {
+					new Label(composite, SWT.NONE);
+				}
+			}
+			
 			for (String columnName: getColumnNames()) {
 				String displayableValue = QuerySolutionValueExtractor.getDisplayable(querySolution, columnName);
+				
+				if (linkColumn != null && linkColumn.equals(columnName)) {
+					RDFNode linkColNode = querySolution.get(columnName);
+//					log.info("Column: " + columnName + "; linkUriOnly=" + linkUriOnly + "; linkColumn=" + linkColumn + "; linkColNode.isURIResource()=" + linkColNode.isURIResource());
+					if (linkUriOnly && (linkColNode==null || ! (linkColNode.isURIResource()))) {
+						Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+						text.setText(displayableValue);
+						text.setLayoutData(new GridData(GridData.FILL_BOTH));
+					} else {
+//					RDFNode node = querySolution.get(columnName);
+						Link link = new Link(composite, SWT.NONE);
+	//					link.setToolTipText("Click to sort");
+						link.addSelectionListener(listener);
+						link.setText("<a>"+displayableValue+"</a>");
+						link.setData(displayableValue);
+					}
+				} else {
 				//log.info(columnName + " = " + displayableValue);
-				Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-				text.setText(displayableValue);
-				text.setLayoutData(new GridData(GridData.FILL_BOTH));
+					Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+					text.setText(displayableValue);
+					text.setLayoutData(new GridData(GridData.FILL_BOTH));
+				}
 			}
 		}
 
@@ -148,6 +188,26 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 				checkItem(clickedButton);
 			}
 		}
+	}
+
+	public String getLinkColumn() {
+		return linkColumn;
+	}
+
+	public void setLinkColumn(String linkColumn) {
+		this.linkColumn = linkColumn;
+	}
+
+	public boolean isHideUriColumn() {
+		return hideUriColumn;
+	}
+
+	public void setHideUriColumn(boolean hideUriColumn) {
+		this.hideUriColumn = hideUriColumn;
+	}
+
+	public void setLinkUriOnly(boolean linkUriOnly) {
+		this.linkUriOnly  = linkUriOnly;
 		
 	}
 }

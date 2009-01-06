@@ -26,13 +26,19 @@
             name="Detail"
             icon="icons/detail.gif"
             class="org.inqle.ui.rap.DetailView"
-            id="org.inqle.ui.rap.detailView">
-      </view>
+            id="org.inqle.ui.rap.detailView"/>
       <view
             name="Parts"
             class="org.inqle.ui.rap.tree.PartsView"
-            id="org.inqle.ui.rap.partsView">
-      </view>
+            id="org.inqle.ui.rap.partsView"/>
+       <view
+            name="Class View"
+            class="org.inqle.ui.rap.views.ClassView"
+            id="org.inqle.ui.rap.views.classView"/>
+       <view
+            name="Object View"
+            class="org.inqle.ui.rap.views.SubjectStatementsView"
+            id="org.inqle.ui.rap.views.subjectStatementsView"/>
    </extension>
    <!--extension
          point="org.eclipse.ui.commands">
