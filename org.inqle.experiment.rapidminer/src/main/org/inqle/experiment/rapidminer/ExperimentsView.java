@@ -26,6 +26,8 @@ public class ExperimentsView extends SparqlView {
 	 * This view is ready to display upon creation, so refresh (and show) the view
 	 */
 	public void createPartControl(Composite parent) {
+		linkColumn = "URI";
+		hideUriColumn = false;
 		super.createPartControl(parent);
 		refreshView();
 	}
@@ -38,24 +40,24 @@ public class ExperimentsView extends SparqlView {
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?uri ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Root_Mean_Squared_Error\n" +
+			"SELECT ?URI ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Root_Mean_Squared_Error\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			"?uri a ?classUri\n" +
+			"?URI a ?classUri\n" +
 			"  . ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
-			". ?uri inqle:id ?id \n" +
-			". ?uri inqle:creationDate ?Creation_Date \n" +
-//			". OPTIONAL { ?uri dc:name ?Name }\n" +
-			". OPTIONAL { ?uri inqle:experimentSubjectClass ?Subject_Class } \n" +
-			". OPTIONAL { ?uri inqle:experimentSubjectArc ?experimentSubjectArc \n" +
+			". ?URI inqle:id ?id \n" +
+			". ?URI inqle:creationDate ?Creation_Date \n" +
+//			". OPTIONAL { ?URI dc:name ?Name }\n" +
+			". OPTIONAL { ?URI inqle:experimentSubjectClass ?Subject_Class } \n" +
+			". OPTIONAL { ?URI inqle:experimentSubjectArc ?experimentSubjectArc \n" +
 			"  . ?experimentSubjectArc inqle:qnameRepresentation ?Experiment_Subject }\n" +
-			". OPTIONAL { ?uri inqle:experimentLabelArc ?experimentLabelArc \n" +
+			". OPTIONAL { ?URI inqle:experimentLabelArc ?experimentLabelArc \n" +
 			"  . ?experimentLabelArc inqle:qnameRepresentation ?Experiment_Label }\n" +
-			". OPTIONAL { ?uri inqle:experimentAttributeQnameRepresentation ?Experiment_Attributes } \n" +
-//			". OPTIONAL { ?uri inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
+			". OPTIONAL { ?URI inqle:experimentAttributeQnameRepresentation ?Experiment_Attributes } \n" +
+//			". OPTIONAL { ?URI inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
 //			"  . ?experimentAttributeArcs inqle:qnameRepresentation ?Experiment_Attributes}\n" +
-			". OPTIONAL { ?uri inqle:correlation ?Correlation }\n" +
-			". OPTIONAL { ?uri inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
+			". OPTIONAL { ?URI inqle:correlation ?Correlation }\n" +
+			". OPTIONAL { ?URI inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
 		return sparql;
