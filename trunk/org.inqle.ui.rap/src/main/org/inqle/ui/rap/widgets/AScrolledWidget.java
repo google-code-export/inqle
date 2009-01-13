@@ -1,6 +1,8 @@
 package org.inqle.ui.rap.widgets;
 
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -9,6 +11,8 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.hp.hpl.jena.ontology.OntModel;
  
@@ -22,12 +26,12 @@ import com.hp.hpl.jena.ontology.OntModel;
 public abstract class AScrolledWidget extends Composite {
 		
 	protected Composite composite;
-	private ScrolledComposite scrolledComposite;
+	protected ScrolledComposite scrolledComposite;
 	protected OntModel ontModel;
 	private Composite pageComposite;
 	private AScrolledWidget container;
 //	protected Composite unscrolledTopComposite;
-	
+	protected Composite unscrolledBottomComposite;
 	private static Logger log = Logger.getLogger(AScrolledWidget.class);
 	
 	/**
@@ -48,7 +52,23 @@ public abstract class AScrolledWidget extends Composite {
 //		scrolled.setExpandVertical(true);
 //		scrolled.setExpandHorizontal(true);
 		
-  	scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
+  	recreateScrolledComposite();
+  }
+	
+	@Override
+	public void dispose() {
+		composite.dispose();
+		pageComposite.dispose();
+		scrolledComposite.dispose();
+		unscrolledBottomComposite.dispose();
+		super.dispose();
+	}
+	
+	protected void recreateScrolledComposite() {
+		if (scrolledComposite != null) {
+			scrolledComposite.dispose();
+		}
+		scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
 		scrolledComposite.setLayout(new GridLayout(1, true));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
@@ -57,8 +77,7 @@ public abstract class AScrolledWidget extends Composite {
 		
 		pageComposite = new Composite(scrolledComposite, SWT.NONE);
 		pageComposite.setLayout(new GridLayout(1, true));
-		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		pageComposite.setLayoutData(gridData);
+		pageComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 //  		messageText = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
 //			if (getMessage() != null) {
@@ -77,12 +96,19 @@ public abstract class AScrolledWidget extends Composite {
 		
 		scrolledComposite.setContent(pageComposite);
 		
-  }
-	
+		unscrolledBottomComposite = new Composite(container, SWT.NONE);
+		unscrolledBottomComposite.setLayout(new GridLayout(1, true));
+//		Text text = new Text(unscrolledBottomComposite, SWT.NONE);
+//		text.setVisible(false);
+//		text.setText(UUID.randomUUID().toString());
+	}
+
 	public void recomputeSize() {
-		scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		scrolledComposite.redraw();
-		scrolledComposite.layout(true, true);
+//		container.changed(new Control[] {scrolledComposite});
+		scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true));
+//		scrolledComposite.redraw();
+//		scrolledComposite.layout(true, true);
+//		scrolledComposite.setVisible(true);
 	}
     
 }

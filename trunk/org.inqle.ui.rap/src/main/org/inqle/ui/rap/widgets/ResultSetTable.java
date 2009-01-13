@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
 
 import com.hp.hpl.jena.query.QuerySolution;
@@ -106,6 +107,7 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 		if (addCheckBoxes) {
 			checkboxes = new ArrayList<Button>();
 		}
+		UriMapper uriMapper = UriMapper.getInstance();
 		while (resultSet.hasNext()) {
 			QuerySolution querySolution = resultSet.nextSolution();
 			RDFNode uriNode = querySolution.get(uriVariable);
@@ -125,43 +127,55 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 			
 			for (String columnName: getColumnNames()) {
 				String displayableValue = QuerySolutionValueExtractor.getDisplayable(querySolution, columnName);
+				String origValue = new String(displayableValue);
+				//				String displayVal = displayableValue;
+				RDFNode colNode = querySolution.get(columnName);
+				if (colNode != null && colNode.isURIResource()) {
+					displayableValue = uriMapper.getQname(displayableValue);
+				}
 				
+				//render a link?
 				if (linkColumn != null && linkColumn.equals(columnName)) {
-					RDFNode linkColNode = querySolution.get(columnName);
+//					RDFNode linkColNode = querySolution.get(columnName);
 //					log.info("Column: " + columnName + "; linkUriOnly=" + linkUriOnly + "; linkColumn=" + linkColumn + "; linkColNode.isURIResource()=" + linkColNode.isURIResource());
-					if (linkUriOnly && (linkColNode==null || ! (linkColNode.isURIResource()))) {
+					if (linkUriOnly && (colNode==null || ! (colNode.isURIResource()))) {
 //						Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
 //						text.setText(displayableValue);
 //						text.setLayoutData(new GridData(GridData.FILL_BOTH));
-//						Label label = new Label(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-//						label.setText(displayableValue);
-//						label.setLayoutData(new GridData(GridData.FILL_BOTH));
-						Link link = new Link(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-						link.setText(displayableValue);
-						link.setLayoutData(new GridData(GridData.FILL_BOTH));
+						Label label = new Label(composite, SWT.BORDER | SWT.WRAP);
+						label.setText(displayableValue);
+						label.setLayoutData(new GridData(GridData.FILL_BOTH));
+//						Link link = new Link(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+//						link.setText(displayableValue);
+//						link.setLayoutData(new GridData(GridData.FILL_BOTH));
 					} else {
 //					RDFNode node = querySolution.get(columnName);
 						Link link = new Link(composite, SWT.NONE);
 	//					link.setToolTipText("Click to sort");
 						link.addSelectionListener(listener);
 						link.setText("<a>"+displayableValue+"</a>");
-						link.setData(new UriValData(displayableValue));
-//						log.info("Set link data to: " + displayableValue);
+						link.setData(new UriValData(origValue));
+						log.info("Set link data to: " + displayableValue);
 					}
 				} else {
+					
 				//log.info(columnName + " = " + displayableValue);
 //					Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
 //					text.setText(displayableValue);
 //					text.setLayoutData(new GridData(GridData.FILL_BOTH));
-//					Label label = new Label(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-//					label.setText(displayableValue);
-//					label.setLayoutData(new GridData(GridData.FILL_BOTH));
-					Link link = new Link(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
-					link.setText(displayableValue);
-					link.setLayoutData(new GridData(GridData.FILL_BOTH));
+					Label label = new Label(composite, SWT.BORDER | SWT.WRAP);
+					label.setText(displayableValue);
+					label.setLayoutData(new GridData(GridData.FILL_BOTH));
+//					Link link = new Link(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+//					link.setText(displayableValue);
+//					link.setLayoutData(new GridData(GridData.FILL_BOTH));
 				}
 			}
 		}
+		//add a blank row at bottom to make sure every row shows up in the scrolledcomposite
+//		Label label = new Label(composite, SWT.NONE);
+//		label.setText("");
+		
 
 	}
 

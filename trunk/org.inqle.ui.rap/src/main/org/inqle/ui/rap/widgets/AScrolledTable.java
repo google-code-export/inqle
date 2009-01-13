@@ -2,6 +2,7 @@ package org.inqle.ui.rap.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -13,6 +14,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 
 /**
  * Renders a table of widgets.  To render a table, either the subclass or the calling
@@ -87,6 +89,10 @@ public abstract class AScrolledTable extends AScrolledWidget {
 //		tableTitle.setText(getTableTitle());
 		
 		this.listener = listener;
+		
+		log.info("Recreating scrolled composite...");
+		recreateScrolledComposite();
+		
 //		log.info("Rendering table.  getColumnNames()=" + getColumnNames());
 		int size = getColumnNames().size();
 		if (addCheckBoxes) {
@@ -98,6 +104,12 @@ public abstract class AScrolledTable extends AScrolledWidget {
 		fillColumnNames();
 		
 		fillTable();
+		
+		//RAP workaround: add hidden random string to force RAP to render this widget
+		Text hiddenText = new Text(unscrolledBottomComposite, SWT.NONE);
+//		Text hiddenText = new Text(scrolledComposite, SWT.NONE);
+		hiddenText.setVisible(false);
+		hiddenText.setText(UUID.randomUUID().toString());
 		
 		recomputeSize();
 	}
