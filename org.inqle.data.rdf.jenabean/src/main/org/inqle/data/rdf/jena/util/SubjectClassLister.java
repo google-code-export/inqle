@@ -105,6 +105,17 @@ public class SubjectClassLister {
 			"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
 			"} } \n";
 	
+	private static String getSparqlSelectUncommonClassesTable() {
+		String s = "SELECT DISTINCT " +
+		"?" + CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
+		"?subject a ?" + CLASS_URI_VAR + " ." +
+		"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
+		"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
+		 	Queryer.getSparqlClauseFilterCommonClasses("?" + CLASS_URI_VAR) +
+		"\n} } \n";
+		
+		return s;
+	}
 
 	public static List<String> queryGetAllSubjectClasses(Collection<String> datasetIdList) {
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -119,6 +130,15 @@ public class SubjectClassLister {
 		queryCriteria.setQuery(SPARQL_SELECT_CLASSES_TABLE);
 		return Queryer.selectResultSet(queryCriteria);
 	}
+	
+	public static ResultSetRewindable queryGetUncommonSubjectsRS(String datasetId) {
+		QueryCriteria queryCriteria = new QueryCriteria();
+		queryCriteria.addNamedModel(datasetId);
+		queryCriteria.setQuery(getSparqlSelectUncommonClassesTable());
+		return Queryer.selectResultSet(queryCriteria);
+	}
+
+
 	
 	public static List<String> queryGetUncommonSubjectClasses(String datasetId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
