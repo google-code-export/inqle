@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
-import org.inqle.data.rdf.jena.util.TypeConverter;
 
 import com.hp.hpl.jena.query.QuerySolution;
 import com.hp.hpl.jena.query.ResultSetRewindable;
@@ -37,8 +36,31 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 	protected String linkColumn;
 	private boolean hideUriColumn = true;
 	private boolean linkUriOnly = true;
-	
 	private static final Logger log = Logger.getLogger(ResultSetTable.class);
+	
+	/**
+	 * This class holds the name of a column, and is attached to a link
+	 * @author David Donohue
+	 * Jan 12, 2009
+	 */
+	public class UriValData {
+
+		private String uriVal;
+
+		public UriValData(String uriVal) {
+			this.uriVal = uriVal;
+		}
+
+		public String getUriVal() {
+			return uriVal;
+		}
+		
+		@Override
+		public String toString() {
+			return uriVal;
+		}
+
+	}
 	
 	public ResultSetTable(Composite parent, int style) {
 		super(parent, style);
@@ -108,22 +130,35 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 					RDFNode linkColNode = querySolution.get(columnName);
 //					log.info("Column: " + columnName + "; linkUriOnly=" + linkUriOnly + "; linkColumn=" + linkColumn + "; linkColNode.isURIResource()=" + linkColNode.isURIResource());
 					if (linkUriOnly && (linkColNode==null || ! (linkColNode.isURIResource()))) {
-						Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-						text.setText(displayableValue);
-						text.setLayoutData(new GridData(GridData.FILL_BOTH));
+//						Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+//						text.setText(displayableValue);
+//						text.setLayoutData(new GridData(GridData.FILL_BOTH));
+//						Label label = new Label(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+//						label.setText(displayableValue);
+//						label.setLayoutData(new GridData(GridData.FILL_BOTH));
+						Link link = new Link(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+						link.setText(displayableValue);
+						link.setLayoutData(new GridData(GridData.FILL_BOTH));
 					} else {
 //					RDFNode node = querySolution.get(columnName);
 						Link link = new Link(composite, SWT.NONE);
 	//					link.setToolTipText("Click to sort");
 						link.addSelectionListener(listener);
 						link.setText("<a>"+displayableValue+"</a>");
-						link.setData(displayableValue);
+						link.setData(new UriValData(displayableValue));
+//						log.info("Set link data to: " + displayableValue);
 					}
 				} else {
 				//log.info(columnName + " = " + displayableValue);
-					Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
-					text.setText(displayableValue);
-					text.setLayoutData(new GridData(GridData.FILL_BOTH));
+//					Text text = new Text(composite, SWT.BORDER | SWT.READ_ONLY | SWT.MULTI | SWT.WRAP);
+//					text.setText(displayableValue);
+//					text.setLayoutData(new GridData(GridData.FILL_BOTH));
+//					Label label = new Label(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+//					label.setText(displayableValue);
+//					label.setLayoutData(new GridData(GridData.FILL_BOTH));
+					Link link = new Link(composite, SWT.BORDER | SWT.MULTI | SWT.WRAP);
+					link.setText(displayableValue);
+					link.setLayoutData(new GridData(GridData.FILL_BOTH));
 				}
 			}
 		}
@@ -208,6 +243,10 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 
 	public void setLinkUriOnly(boolean linkUriOnly) {
 		this.linkUriOnly  = linkUriOnly;
-		
+	}
+	
+	public int countCheckboxes() {
+		if (checkboxes==null) return 0;
+		return checkboxes.size();
 	}
 }

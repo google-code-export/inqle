@@ -22,6 +22,30 @@ import org.eclipse.swt.widgets.Listener;
  */
 public abstract class AScrolledTable extends AScrolledWidget {
 
+	/**
+	 * This class holds the name of a column, and is attached to a link
+	 * @author David Donohue
+	 * Jan 12, 2009
+	 */
+	public class ColumnNameData {
+
+		private String columnName;
+
+		public ColumnNameData(String columnName) {
+			this.columnName = columnName;
+		}
+
+		public String getColumnName() {
+			return columnName;
+		}
+		
+		@Override
+		public String toString() {
+			return columnName;
+		}
+
+	}
+
 	protected static final String SELECT_COLUMN_NAME = "Select";
 	
 	protected List<String> columnNames = new ArrayList<String>();
@@ -58,6 +82,10 @@ public abstract class AScrolledTable extends AScrolledWidget {
 	}
 	
 	public void renderTable(SelectionListener listener) {
+//		unscrolledTopComposite.setLayout(new GridLayout(1,true));
+//		Label tableTitle = new Label(unscrolledTopComposite, SWT.NONE);
+//		tableTitle.setText(getTableTitle());
+		
 		this.listener = listener;
 //		log.info("Rendering table.  getColumnNames()=" + getColumnNames());
 		int size = getColumnNames().size();
@@ -96,7 +124,7 @@ public abstract class AScrolledTable extends AScrolledWidget {
 			} else {
 				link.setText(displayName);
 			}
-			link.setData(columnName);
+			link.setData(new ColumnNameData(columnName));
 //			link.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 	}

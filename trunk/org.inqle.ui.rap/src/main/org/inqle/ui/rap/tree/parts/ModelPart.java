@@ -6,7 +6,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.ui.rap.DatasetViewer;
 import org.inqle.ui.rap.IDisposableViewer;
-import org.inqle.ui.rap.ObjectViewer;
 import org.inqle.ui.rap.Part;
 import org.inqle.ui.rap.actions.AddReasonerStatementsAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;

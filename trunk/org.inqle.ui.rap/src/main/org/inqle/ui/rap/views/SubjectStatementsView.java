@@ -9,6 +9,7 @@ import org.eclipse.ui.PlatformUI;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.ui.rap.widgets.ResultSetTable;
+import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
 /**
  * @author David Donohue
@@ -69,26 +70,32 @@ public class SubjectStatementsView extends SparqlView {
 	
 	@Override
 	public void widgetSelected(SelectionEvent event) {
+		
 		Object source = event.getSource();
 		if (source instanceof Link) {
 			Link link = (Link)source;
 			Object data = link.getData();
 			if (data==null) return;
-//			log.info(data + " clicked.");
-//			ClassView classView = new ClassView();
 			
-			SubjectStatementsView ssView = (SubjectStatementsView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(SubjectStatementsView.ID);
-			if (ssView==null) {
-				try {
-					ssView = (SubjectStatementsView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SubjectStatementsView.ID);
-				} catch (PartInitException e) {
-					log.error("Error showing view: " + SubjectStatementsView.ID, e);
+			if (data instanceof UriValData) {
+				UriValData uriValData = (UriValData) data;
+				SubjectStatementsView ssView = (SubjectStatementsView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(SubjectStatementsView.ID);
+				if (ssView==null) {
+					try {
+						ssView = (SubjectStatementsView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SubjectStatementsView.ID);
+					} catch (PartInitException e) {
+						log.error("Error showing view: " + SubjectStatementsView.ID, e);
+					}
 				}
+				ssView.setNamedModel(getNamedModel());
+				ssView.setSubjectUri(uriValData.getUriVal());
+				ssView.setTitleText("Properties of Thing: <" + uriValData.getUriVal() + ">");
+				log.info("Refreshing Subject Statements View with dataset: " + getNamedModel() + " and instance URI: " + data.toString());
+				ssView.refreshView();
+				return;
 			}
-			ssView.setNamedModel(getNamedModel());
-			ssView.setSubjectUri(data.toString());
-			log.info("Refreshing Subject Statements View with dataset: " + getNamedModel() + " and instance URI: " + data.toString());
-			ssView.refreshView();
 		}
+		
+		super.widgetSelected(event);
 	}
 }
