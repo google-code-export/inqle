@@ -26,7 +26,7 @@ public abstract class AScrolledWidget extends Composite {
 	protected OntModel ontModel;
 	private Composite pageComposite;
 	private AScrolledWidget container;
-	private Composite unscrolledTopComposite;
+//	protected Composite unscrolledTopComposite;
 	
 	private static Logger log = Logger.getLogger(AScrolledWidget.class);
 	
@@ -40,6 +40,8 @@ public abstract class AScrolledWidget extends Composite {
   	container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
   	container.setLayout(new GridLayout(1, true));
 
+//  	unscrolledTopComposite = new Composite(container, SWT.NONE);
+  	
 //		ScrolledComposite scrolled = new ScrolledComposite(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 //		scrolled.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 //		scrolled.setLayout(new GridLayout());
@@ -79,6 +81,8 @@ public abstract class AScrolledWidget extends Composite {
 	
 	public void recomputeSize() {
 		scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite.redraw();
+		scrolledComposite.layout(true, true);
 	}
     
 }

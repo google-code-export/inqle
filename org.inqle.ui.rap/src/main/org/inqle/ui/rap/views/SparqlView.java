@@ -15,12 +15,14 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.widgets.ResultSetTable;
+import org.inqle.ui.rap.widgets.AScrolledTable.ColumnNameData;
 
 import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.rdf.model.AnonId;
@@ -76,7 +78,11 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 	protected boolean hideUriColumn = true;
 
 	protected String linkColumn;
+	protected String titleText;
+	
 	public boolean linkUriOnly = true;
+
+	private Text title;
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -92,11 +98,20 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
     gridLayout.numColumns = 1;
     composite.setLayout(gridLayout);
     
+    showHeader();
 		showForm();
 		showResultDescription();
 //		showTable();
 //		refreshForm();
 //		refreshView();
+	}
+
+	private void showHeader() {
+		Composite headerComposite = new Composite(composite, SWT.NONE);
+		headerComposite.setLayout(new GridLayout(1, true));
+		title = new Text(headerComposite, SWT.BOLD);
+		if (titleText==null || titleText.length()==0) return;
+		title.setText(titleText);
 	}
 
 	private void showForm() {
@@ -122,7 +137,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 		RowLayout rowLayout = new RowLayout();
 		descriptionComposite.setLayout(rowLayout);
 		resultDescription = new Label(descriptionComposite, SWT.NONE);
-		resultDescription.setText("No Experiment Results found.");
+		resultDescription.setText("No results found.");
 		
 		previousButton = new Button(descriptionComposite, SWT.PUSH);
 		previousButton.setText("<--");
@@ -160,6 +175,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 		log.info("Rendered table for result set of size: " + resultSet.size());
 	}
 	
+
 	public void recreateTable() {
 		resultSetTable.dispose();
 		createTable();
@@ -299,6 +315,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 			return;
 		}
 		
+		//was a column header clicked?
 		if (event.getSource() instanceof Link) {
 			Link clickedLink = (Link)event.getSource();
 			Object linkData = clickedLink.getData();
@@ -306,20 +323,23 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 				log.warn("Clicked link has no data.");
 				return;
 			}
-			String linkValue = linkData.toString();
-			//reset to the first record
-			offset = 0;
-			if (currentSortColumn.equals(linkValue)) {
-				toggleCurrentSortDirection();
+			if (linkData instanceof ColumnNameData) {
 				
-			} else {
-				currentSortColumn = linkValue;
-				currentSortDirection = DEFAULT_SORT_DIRECTION;
+				String linkValue = linkData.toString();
+				//reset to the first record
+				offset = 0;
+				if (currentSortColumn.equals(linkValue)) {
+					toggleCurrentSortDirection();
+					
+				} else {
+					currentSortColumn = linkValue;
+					currentSortDirection = DEFAULT_SORT_DIRECTION;
+				}
+				log.info("Sort by " + currentSortColumn + " " + currentSortDirection);
+				//no need to refresh the form, since we are only changing sort
+				refreshView();
+				return;
 			}
-			log.info("Sort by " + currentSortColumn + " " + currentSortDirection);
-			//no need to refresh the form, since we are only changing sort
-			refreshView();
-			return;
 		}
 	}
 	
@@ -331,7 +351,9 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 		doQuery();
 		refreshForm();
 		showTable();
+		resultSetTable.layout(true, true);
 		resultSetTable.recomputeSize();
+		resultSetTable.setVisible(true);
 		resultSetTable.redraw();
 	}
 
@@ -351,7 +373,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 			log.trace("Enabled nextButton");
 			nextButton.setEnabled(true);
 		}
-		if (resultSet.size()>0) {
+		if (resultSet.size()>0 && resultSetTable != null && resultSetTable.countCheckboxes() > 0) {
 			checkAllButton.setEnabled(true);
 			uncheckAllButton.setEnabled(true);
 			deleteButton.setEnabled(true);
@@ -457,6 +479,17 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 
 	public void setNamedModel(NamedModel namedModel) {
 		this.namedModel = namedModel;
+	}
+
+	public String getTitleText() {
+		return titleText;
+	}
+
+	public void setTitleText(String titleText) {
+		this.titleText = titleText;
+		if (title != null) {
+			title.setText(titleText);
+		}
 	}
 
 }

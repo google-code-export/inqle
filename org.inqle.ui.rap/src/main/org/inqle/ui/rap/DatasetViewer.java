@@ -73,6 +73,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 		l.setText("ID");
 		//l.setFont(boldFont);
 		idWidget = new Text(formComposite, SWT.BORDER | SWT.WRAP);
+		idWidget.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 //	  GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 //	  idWidget.setLayoutData(gridData);
 	  
@@ -298,6 +299,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 			}
 			classView.setNamedModel(getDataset());
 			classView.setClassUri(data.toString());
+			classView.setTitleText("Things of Type: <" + data.toString() + ">");
 			log.info("Refreshing Class View with dataset: " + getDataset() + " and class URI: " + data.toString());
 			classView.refreshView();
 		}
