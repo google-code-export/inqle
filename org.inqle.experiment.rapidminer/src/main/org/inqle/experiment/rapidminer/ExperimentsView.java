@@ -4,12 +4,19 @@
 package org.inqle.experiment.rapidminer;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Link;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.views.SparqlView;
+import org.inqle.ui.rap.views.SubjectStatementsView;
+import org.inqle.ui.rap.widgets.ResultSetTable;
+import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
 /**
  * @author David Donohue
@@ -26,9 +33,11 @@ public class ExperimentsView extends SparqlView {
 	 * This view is ready to display upon creation, so refresh (and show) the view
 	 */
 	public void createPartControl(Composite parent) {
-		linkColumn = "URI";
-		hideUriColumn = false;
 		super.createPartControl(parent);
+		linkColumn = ResultSetTable.URI_VARIABLE;
+		linkUriOnly = true;
+		hideUriColumn = false;
+		setTitleText("Log of Experiments Done");
 		refreshView();
 	}
 	
@@ -40,24 +49,24 @@ public class ExperimentsView extends SparqlView {
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?URI ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Root_Mean_Squared_Error\n" +
+			"SELECT ?" + ResultSetTable.URI_VARIABLE + " ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Root_Mean_Squared_Error\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			"?URI a ?classUri\n" +
+			"?" + ResultSetTable.URI_VARIABLE + " a ?classUri\n" +
 			"  . ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
-			". ?URI inqle:id ?id \n" +
-			". ?URI inqle:creationDate ?Creation_Date \n" +
-//			". OPTIONAL { ?URI dc:name ?Name }\n" +
-			". OPTIONAL { ?URI inqle:experimentSubjectClass ?Subject_Class } \n" +
-			". OPTIONAL { ?URI inqle:experimentSubjectArc ?experimentSubjectArc \n" +
+			". ?" + ResultSetTable.URI_VARIABLE + " inqle:id ?id \n" +
+			". ?" + ResultSetTable.URI_VARIABLE + " inqle:creationDate ?Creation_Date \n" +
+//			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " dc:name ?Name }\n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentSubjectClass ?Subject_Class } \n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentSubjectArc ?experimentSubjectArc \n" +
 			"  . ?experimentSubjectArc inqle:qnameRepresentation ?Experiment_Subject }\n" +
-			". OPTIONAL { ?URI inqle:experimentLabelArc ?experimentLabelArc \n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentLabelArc ?experimentLabelArc \n" +
 			"  . ?experimentLabelArc inqle:qnameRepresentation ?Experiment_Label }\n" +
-			". OPTIONAL { ?URI inqle:experimentAttributeQnameRepresentation ?Experiment_Attributes } \n" +
-//			". OPTIONAL { ?URI inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentAttributeQnameRepresentation ?Experiment_Attributes } \n" +
+//			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
 //			"  . ?experimentAttributeArcs inqle:qnameRepresentation ?Experiment_Attributes}\n" +
-			". OPTIONAL { ?URI inqle:correlation ?Correlation }\n" +
-			". OPTIONAL { ?URI inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:correlation ?Correlation }\n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
 		return sparql;
@@ -68,6 +77,40 @@ public class ExperimentsView extends SparqlView {
 		Persister persister = Persister.getInstance();
 		InternalDataset dataset = persister.getInternalDataset(ExperimentResult.EXPERIMENTS_DATASET);
 		return dataset;
+	}
+	
+	@Override
+	public void widgetSelected(SelectionEvent event) {
+		
+		Object source = event.getSource();
+		if (source instanceof Link) {
+			Link link = (Link)source;
+			Object data = link.getData();
+			if (data==null) return;
+			
+			if (data instanceof UriValData) {
+				UriValData uriValData = (UriValData) data;
+				SubjectStatementsView ssView = (SubjectStatementsView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(SubjectStatementsView.ID);
+				if (ssView==null) {
+					try {
+						ssView = (SubjectStatementsView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(SubjectStatementsView.ID);
+					} catch (PartInitException e) {
+						log.error("Error showing view: " + SubjectStatementsView.ID, e);
+					}
+				}
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(ssView);
+				ssView.setNamedModel(getNamedModel());
+				ssView.setSubjectUri(uriValData.getUriVal());
+				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
+				log.info("Refreshing Subject Statements View with dataset: " + getNamedModel() + " and instance URI: " + data.toString());
+				ssView.refreshView();
+//				ssView.setFocus();
+				
+				return;
+			}
+		}
+		
+		super.widgetSelected(event);
 	}
 
 }
