@@ -26,7 +26,8 @@ public class ClassView extends SparqlView {
 	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-		this.currentSortColumn = ResultSetTable.URI_VARIABLE;
+		currentSortColumn = ResultSetTable.URI_VARIABLE;
+		currentSortDirection = SparqlView.ASC;
 		hideUriColumn = false;
 		linkColumn = ResultSetTable.URI_VARIABLE;
 		linkUriOnly = true;
@@ -85,11 +86,14 @@ public class ClassView extends SparqlView {
 						log.error("Error showing view: " + SubjectStatementsView.ID, e);
 					}
 				}
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(ssView);
 				ssView.setNamedModel(getNamedModel());
 				ssView.setSubjectUri(uriValData.getUriVal());
-				ssView.setTitleText("Properties of Thing: <" + uriValData.getUriVal() + ">");
+				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
 				log.info("Refreshing Subject Statements View with dataset: " + getNamedModel() + " and instance URI: " + data.toString());
 				ssView.refreshView();
+//				ssView.setFocus();
+				
 				return;
 			}
 		}

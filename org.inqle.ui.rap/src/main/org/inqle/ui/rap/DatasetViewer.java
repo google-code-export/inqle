@@ -193,7 +193,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 				createdWidget.setText(DateFormatter.getDateString(creationDate));
 			}
 			//query for subjects
-			ResultSetRewindable subjectsRS = SubjectClassLister.queryGetAllSubjectsRS(getDataset().getId());
+			ResultSetRewindable subjectsRS = SubjectClassLister.queryGetUncommonSubjectsRS(getDataset().getId());
 			resultSetTable.setResultSet(subjectsRS);
 			resultSetTable.setSortable(false);
 			resultSetTable.setLinkColumn(SubjectClassLister.CLASS_URI_VAR);
@@ -297,11 +297,13 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 					log.error("Error showing view: " + ClassView.ID, e);
 				}
 			}
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
 			classView.setNamedModel(getDataset());
 			classView.setClassUri(data.toString());
-			classView.setTitleText("Things of Type: <" + data.toString() + ">");
+			classView.setTitleText("Things of type: <" + data.toString() + ">");
 			log.info("Refreshing Class View with dataset: " + getDataset() + " and class URI: " + data.toString());
 			classView.refreshView();
+//			classView.setFocus();
 		}
 	}
 	

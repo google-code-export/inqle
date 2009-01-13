@@ -43,8 +43,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 
 	private static final int DEFAULT_RECORD_COUNT_INDEX = 0;
 	private static final String[] RECORD_COUNT_OPTIONS = {"10", "20", "50", "100", "200", "500", "1000" };
-	private static final String DESC = "DESC";
-	private static final String ASC = "ASC";
+	public static final String DESC = "DESC";
+	public static final String ASC = "ASC";
 
 	private static final String DEFAULT_SORT_DIRECTION = DESC;
 	
@@ -348,13 +348,15 @@ public abstract class SparqlView extends ViewPart implements SelectionListener {
 	}
 
 	public void refreshView() {
+		log.info("refresh view...");
 		doQuery();
 		refreshForm();
 		showTable();
+//		resultSetTable.recomputeSize();
 		resultSetTable.layout(true, true);
-		resultSetTable.recomputeSize();
-		resultSetTable.setVisible(true);
+		resultSetTable.setVisible(false);
 		resultSetTable.redraw();
+		resultSetTable.setVisible(true);
 	}
 
 	private void refreshForm() {

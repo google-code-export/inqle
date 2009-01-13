@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -151,7 +152,7 @@ public class DetailView extends ViewPart implements ISelectionListener {
 	     	 composite.setVisible(true);
 	     }
 	     
-	     
+	     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(this);
 //	     String msg = "Selected:\n";
 //	     for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
 //	       Object selectedObj = iterator.next();
