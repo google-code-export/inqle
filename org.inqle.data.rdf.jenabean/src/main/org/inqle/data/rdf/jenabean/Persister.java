@@ -1251,8 +1251,21 @@ public class Persister {
 	}
 	
 	/**
+	 * Delete all statements from a model.
+	 * @return successClearing true if the store was emptied
+	 */
+	public boolean emptyModel(NamedModel namedModel) {
+		
+		//remove all statements and all index info for the NamedModel
+		Model modelToBeDeleted = getIndexableModel(namedModel);
+		modelToBeDeleted.removeAll();
+		
+		return true;
+	}
+	
+	/**
 	 * Delete a model and all its statements.
-	 * @param successDeleting true if the SDB store was deleted
+	 * @return successDeleting true if the SDB store was deleted
 	 */
 	public boolean deleteModel(NamedModel namedModel) {
 		
