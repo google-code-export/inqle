@@ -1,14 +1,12 @@
-#summary This is the road map for project INQLE
+#summary This is the roadmap for project INQLE
 
-= Introduction =
 The list of all past and present tasks for this project can be seen here:
 http://code.google.com/p/inqle/issues/list?can=1&q=label:Type-Task&sort=-status+milestone+priority&colspec=ID%20Type%20Status%20Priority%20Milestone%20Owner%20Summary
 
 Here is the current to-do list:
 http://code.google.com/p/inqle/issues/list?can=1&q=label%3AType-Task+status%3AAccepted&sort=-status+milestone+priority&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles
 
-Below are the milestones, past and future, for project INQLE
-
+Below are the milestones, past and future.
 
 = Releases =
 
