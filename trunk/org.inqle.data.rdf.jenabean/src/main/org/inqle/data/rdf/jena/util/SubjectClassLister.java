@@ -106,7 +106,8 @@ public class SubjectClassLister {
 			"} } \n";
 	
 	private static String getSparqlSelectUncommonClassesTable() {
-		String s = "SELECT DISTINCT " +
+		String s = "PREFIX rdfs: <" + RDF.RDFS + "> \n" +
+		"SELECT DISTINCT " +
 		"?" + CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
 		"?subject a ?" + CLASS_URI_VAR + " ." +
 		"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
