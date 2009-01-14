@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
+import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.widgets.TextField;
@@ -190,11 +191,15 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	}
 
 	public String getUriPrefix() {
+		
 		if (uriPrefix != null) {
 			return uriPrefix;
 		} else {
-			Persister persister = Persister.getInstance();
-			return persister.getAppInfo().getSite().getUriPrefix().getNamespaceUri();
+			FileDataImporterWizard wizard = (FileDataImporterWizard)getWizard();
+			String subjectClassUri = wizard.getSubjectClassUri(this);
+//			Persister persister = Persister.getInstance();
+//			return persister.getAppInfo().getSite().getUriPrefix().getNamespaceUri();
+			return subjectClassUri + "/";
 		}
 	}
 
