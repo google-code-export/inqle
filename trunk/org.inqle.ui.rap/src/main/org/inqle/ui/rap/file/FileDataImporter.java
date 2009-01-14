@@ -70,8 +70,11 @@ public class FileDataImporter {
 	 * TODO add date info to each tableClass or rowInstance
 	 */
 	private void importInstanceSubjectMapping(SubjectMapping subjectMapping) {
+		String dataTableClassPrefix = subjectMapping.getSubjectClass().toString();
+		dataTableClassPrefix += "/DataTable";
 		//create a data (class) representing the subject's data at the table level
-		OntClass subjectDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
+//		OntClass subjectDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
+		OntClass subjectDataClass = ontModel.createClass(RDF.randomInstanceUri(dataTableClassPrefix));
 		subjectDataClass.setSuperClass(tableDataClass);
 		
 //		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
@@ -92,10 +95,11 @@ public class FileDataImporter {
 		
 		String[][] rows = csvReader.getRawData();
 //		OntClass subjectClass = ontModel.createClass(subjectMapping.getSubjectClass().toString());
+		String rowDataBaseUri = subjectDataClass.toString() + "/Row";
 		for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
 			//for each row, create a inqle:Data, an inqle:Subject, and add mapped values to each
 			String[] row = rows[i];
-			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), subjectDataClass);	
+			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(rowDataBaseUri), subjectDataClass);	
 			importRowValues(subjectMapping, row, subjectInstance, rowDataInstance);
 		}
 		
@@ -134,7 +138,9 @@ public class FileDataImporter {
 			}
 			
 			//wrong? Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
-			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
+			String rowDataBaseUri = subjectClass.toString() + "/Row";
+//			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
+			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(rowDataBaseUri), tableDataClass);
 			rowDataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), rowSubjectInstance);
 			rowSubjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), rowDataInstance);
 			importStaticValues(subjectMapping, rowSubjectInstance, rowDataInstance);

@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.widgets.TextField;
@@ -33,6 +34,8 @@ public class TableSubjectUriPage extends DynaWizardPage implements SelectionList
 	private Button selectUnknownUriButton;
 
 	private Button selectKnownUriButton;
+
+	private String uriPrefix;
 	
 	public TableSubjectUriPage() {
 		this(DEFAULT_TITLE, null, DEFAULT_DESCRIPTION);
@@ -59,7 +62,7 @@ public class TableSubjectUriPage extends DynaWizardPage implements SelectionList
 		
 		instanceUriField = new TextField(selfComposite, "Enter URI of this instance", "Enter a URI that represents the thing");
 		instanceUriField.setEnabled(false);
-		
+		instanceUriField.setTextValue(getUriPrefix());
 		gl = new GridLayout(2, true);
 		Composite uriCreationArea = new Composite(selfComposite, SWT.NONE);
 		uriCreationArea.setLayout(gl);
@@ -78,6 +81,19 @@ public class TableSubjectUriPage extends DynaWizardPage implements SelectionList
 //		}
 //		
 //	}
+
+	public String getUriPrefix() {
+		
+		if (uriPrefix != null) {
+			return uriPrefix;
+		} else {
+			FileDataImporterWizard wizard = (FileDataImporterWizard)getWizard();
+			String subjectClassUri = wizard.getSubjectClassUri(this);
+//			Persister persister = Persister.getInstance();
+//			return persister.getAppInfo().getSite().getUriPrefix().getNamespaceUri();
+			return subjectClassUri + "/";
+		}
+	}
 
 	public void widgetDefaultSelected(SelectionEvent arg0) {
 	}
@@ -116,5 +132,9 @@ public class TableSubjectUriPage extends DynaWizardPage implements SelectionList
 	
 	public boolean isSubjectUriUnknown() {
 		return selectUnknownUriButton.getSelection();
+	}
+
+	public void setUriPrefix(String uriPrefix) {
+		this.uriPrefix = uriPrefix;
 	}
 }

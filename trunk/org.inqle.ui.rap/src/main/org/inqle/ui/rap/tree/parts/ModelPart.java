@@ -10,6 +10,7 @@ import org.inqle.ui.rap.Part;
 import org.inqle.ui.rap.actions.AddReasonerStatementsAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
 import org.inqle.ui.rap.actions.DeleteModelAction;
+import org.inqle.ui.rap.actions.EmptyModelAction;
 import org.inqle.ui.rap.actions.FileDataImporterAction;
 import org.inqle.ui.rap.actions.LoadRdfFileAction;
 
@@ -69,9 +70,13 @@ public class ModelPart extends Part {
 		AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
 		manager.add(addReasonerStatementsAction);
 		
+		//Clear dataset action
+		EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
+		manager.add(emptyDatasetAction);
+		
 		//Delete action
-		DeleteModelAction deleteDatabaseAction = new DeleteModelAction("Delete", this, workbenchWindow);
-		manager.add(deleteDatabaseAction);
+		DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this dataset", this, workbenchWindow);
+		manager.add(deleteDatasetAction);
 	}
 	
 	@Override

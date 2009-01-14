@@ -155,7 +155,7 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 						link.addSelectionListener(listener);
 						link.setText("<a>"+displayableValue+"</a>");
 						link.setData(new UriValData(origValue));
-						log.info("Set link data to: " + displayableValue);
+//						log.info("Set link data to: " + displayableValue);
 					}
 				} else {
 					
