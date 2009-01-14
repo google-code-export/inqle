@@ -59,7 +59,7 @@ First we can search to see if others have defined the type "Breast Tumor".  We t
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/09_FDIW_p7.png]
 
-In this page, we seek to identify the subject (thing) of each row.  Specifcally, we need to understand how to create the unique identifier (URI) for each subject.  In general, it is safe to select that the URI is "unknown".
+In this page, we seek to identify the subject (thing) of each row.  Specifcally, we need to understand how to create the unique identifier (URI) for each subject.  You can select that the URI is "unknown".  However, if you do this, you will not be able to browse or delete this data, after it has been imported.  It is generally a good idea to select something other than "unknown".
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/10_FDIW_p8.png]
 
