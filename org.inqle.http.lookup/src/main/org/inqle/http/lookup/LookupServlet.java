@@ -136,13 +136,13 @@ public class LookupServlet extends HttpServlet {
 			String matchingDataClassesXml = SubjectLookup.lookupSubclassesInInternalDataset(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
 
-//			String matchingUmbelClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatasets(searchTermDataUmbelClass, countResults, startIndex);
-//			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
-//			
-//			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
-//			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
+			String matchingUmbelClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatasets(searchTermDataUmbelClass, countResults, startIndex);
+			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
 			
-			String mergedDocumentXml = XmlDocumentUtil.xmlToString(matchingDataClassesDoc);
+			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
+			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
+			
+//			String mergedDocumentXml = XmlDocumentUtil.xmlToString(matchingDataClassesDoc);
 			respondOK(mergedDocumentXml);
 			
 //			String testingXml = XmlDocumentUtil.xmlToString(matchingDataClassesDoc);
