@@ -1,6 +1,9 @@
 package org.inqle.ui.rap.tree;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -239,7 +242,11 @@ public class PartsView extends ViewPart implements IMenuListener {
 		IPart selectedPart = (IPart)selectedObj;
 		
 		//add any Actions for this part
-		selectedPart.addActions(manager, getSite().getWorkbenchWindow());
+//		selectedPart.addActions(manager, getSite().getWorkbenchWindow());
+		List<IAction> actions = selectedPart.getActions(getSite().getWorkbenchWindow());
+		for (IAction action: actions) {
+			manager.add(action);
+		}
 		
 		//add the Refresh option
 		manager.add(new RefreshPartAction(selectedPart));

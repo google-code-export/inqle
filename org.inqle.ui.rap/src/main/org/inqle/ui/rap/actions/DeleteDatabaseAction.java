@@ -40,7 +40,7 @@ public class DeleteDatabaseAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		boolean deleteObject = false;
 		
 		if (this.databasePart instanceof IPartType) {

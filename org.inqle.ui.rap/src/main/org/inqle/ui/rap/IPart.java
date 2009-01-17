@@ -1,5 +1,8 @@
 package org.inqle.ui.rap;
 
+import java.util.List;
+
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
@@ -34,8 +37,10 @@ public interface IPart extends INamedAndDescribed {
 	 * @param workbenchWindow 
 	 * @param contextMenu
 	 */
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow);
+//	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow);
 
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow);
+	
 	public void addListener(IDeltaListener listener);
 
 	public void removeListener(IDeltaListener listener);

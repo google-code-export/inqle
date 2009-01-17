@@ -3,9 +3,11 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.inqle.ui.rap.ICommandIds;
 
@@ -14,15 +16,20 @@ import org.inqle.ui.rap.ICommandIds;
  */
 public class OpenViewAction extends Action {
 	
-	private final IWorkbenchWindow window;
+	protected IWorkbenchWindow theWindow = null;
 	//private int instanceNum = 0;
-	private final String viewId;
+	protected String viewId = null;
 	
 	private static final Logger log = Logger.getLogger(OpenViewAction.class);
 	
-	public OpenViewAction(IWorkbenchWindow window, String label, String viewId, String pluginId, String iconPath) {
+	public OpenViewAction(
+			IWorkbenchWindow window, 
+			String label, 
+			String viewId, 
+			String pluginId, 
+			String iconPath) {
 		log.trace("Create OpenViewAction: viewId=" + viewId + "; pluginId=" + pluginId + "; iconPath=" + iconPath);
-		this.window = window;
+		this.theWindow = window;
 		this.viewId = viewId;
         setText(label);
     // The id is used to refer to the action in a menu or toolbar
@@ -35,12 +42,18 @@ public class OpenViewAction extends Action {
 	}
 	
 	public void run() {
-		if(window != null) {	
+		if(theWindow != null) {	
 			try {
+				IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(viewId);
+				if (view==null) {
+					view = (IViewPart)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+				}
+				
 				//window.getActivePage().showView(viewId, Integer.toString(instanceNum++), IWorkbenchPage.VIEW_ACTIVATE);
-				window.getActivePage().showView(viewId);
+				theWindow.getActivePage().showView(viewId);
+				theWindow.getActivePage().bringToTop(view);
 			} catch (PartInitException e) {
-				MessageDialog.openError(window.getShell(), "Error", "Error opening view:" + e.getMessage());
+				MessageDialog.openError(theWindow.getShell(), "Error", "Error opening view:" + e.getMessage());
 			}
 		}
 	}

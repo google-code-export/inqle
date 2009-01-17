@@ -1,4 +1,4 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.views;
 
 import java.util.Date;
 
@@ -27,13 +27,13 @@ import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.views.ClassView;
+import org.inqle.ui.rap.IDisposableViewer;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 
 import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.rdf.model.Model;
 
-public class DatasetViewer extends Viewer implements IDisposableViewer, SelectionListener {
+public class DatasetViewer extends Viewer implements IDisposableViewer {
 
 	private Composite composite;
 	private Text idWidget;
@@ -42,7 +42,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 	private Text descriptionWidget;
 	private Text sizeWidget;
 	private Text createdWidget;
-	private ResultSetTable resultSetTable;
+//	private ResultSetTable resultSetTable;
 	
 	public DatasetViewer(Composite parentComposite, Object bean) {
 		this(parentComposite);
@@ -106,7 +106,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 	  l = new Label(composite, SWT.BOLD);
 		l.setText("Types In This Dataset:");
 		
-	  resultSetTable = new ResultSetTable(composite, SWT.SINGLE);
+//	  resultSetTable = new ResultSetTable(composite, SWT.SINGLE);
 	  composite.setVisible(true);
 	}
 	
@@ -192,12 +192,12 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 			if (creationDate != null) {
 				createdWidget.setText(DateFormatter.getDateString(creationDate));
 			}
-			//query for subjects
-			ResultSetRewindable subjectsRS = SubjectClassLister.queryGetUncommonSubjectsRS(getDataset().getId());
-			resultSetTable.setResultSet(subjectsRS);
-			resultSetTable.setSortable(false);
-			resultSetTable.setLinkColumn(SubjectClassLister.CLASS_URI_VAR);
-			resultSetTable.renderTable(this);
+//			//query for subjects
+//			ResultSetRewindable subjectsRS = SubjectClassLister.queryGetUncommonSubjectsRS(getDataset().getId());
+//			resultSetTable.setResultSet(subjectsRS);
+//			resultSetTable.setSortable(false);
+//			resultSetTable.setLinkColumn(SubjectClassLister.CLASS_URI_VAR);
+//			resultSetTable.renderTable(this);
 		}
 		
 		
@@ -265,7 +265,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 		nameWidget.setText("");
 		classWidget.setText("");
 		descriptionWidget.setText("");
-		resultSetTable.dispose();
+//		resultSetTable.dispose();
 	}
 
 	public void dispose() {
@@ -273,38 +273,38 @@ public class DatasetViewer extends Viewer implements IDisposableViewer, Selectio
 		nameWidget.dispose();
 		classWidget.dispose();
 		descriptionWidget.dispose();
-		resultSetTable.dispose();
+//		resultSetTable.dispose();
 		composite.dispose();
 	}
 
-	public void widgetDefaultSelected(SelectionEvent arg0) {
-	}
+//	public void widgetDefaultSelected(SelectionEvent arg0) {
+//	}
 
-	public void widgetSelected(SelectionEvent event) {
-		Object source = event.getSource();
-		if (source instanceof Link) {
-			Link link = (Link)source;
-			Object data = link.getData();
-			if (data==null) return;
-//			log.info(data + " clicked.");
-//			ClassView classView = new ClassView();
-			
-			ClassView classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ClassView.ID);
-			if (classView==null) {
-				try {
-					classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ClassView.ID);
-				} catch (PartInitException e) {
-					log.error("Error showing view: " + ClassView.ID, e);
-				}
-			}
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
-			classView.setNamedModel(getDataset());
-			classView.setClassUri(data.toString());
-			classView.setTitleText("Things of type: <" + data.toString() + ">");
-			log.info("Refreshing Class View with dataset: " + getDataset() + " and class URI: " + data.toString());
-			classView.refreshView();
-//			classView.setFocus();
-		}
-	}
+//	public void widgetSelected(SelectionEvent event) {
+//		Object source = event.getSource();
+//		if (source instanceof Link) {
+//			Link link = (Link)source;
+//			Object data = link.getData();
+//			if (data==null) return;
+////			log.info(data + " clicked.");
+////			ClassView classView = new ClassView();
+//			
+//			ClassView classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ClassView.ID);
+//			if (classView==null) {
+//				try {
+//					classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ClassView.ID);
+//				} catch (PartInitException e) {
+//					log.error("Error showing view: " + ClassView.ID, e);
+//				}
+//			}
+//			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
+//			classView.setNamedModel(getDataset());
+//			classView.setClassUri(data.toString());
+//			classView.setTitleText("Things of type: <" + data.toString() + ">");
+//			log.info("Refreshing Class View with dataset: " + getDataset() + " and class URI: " + data.toString());
+//			classView.refreshView();
+////			classView.setFocus();
+//		}
+//	}
 	
 }

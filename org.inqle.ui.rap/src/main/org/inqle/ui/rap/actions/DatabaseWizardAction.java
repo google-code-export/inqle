@@ -55,7 +55,7 @@ public class DatabaseWizardAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
 		DatabaseWizard wizard = new DatabaseWizard(mode, parentPart, window.getShell());
 		//wizard.setConnection(connection);
