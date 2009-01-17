@@ -66,6 +66,17 @@ public class ExtensionFactory {
 		return extList;
 	}
 	
+	public static IExtensionSpec getExtensionSpec(String extensionPointId, String extensionId) {
+		
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IExtensionPoint extensionPoint = registry.getExtensionPoint(extensionPointId);
+		IExtension extension = extensionPoint.getExtension(extensionId);
+		IConfigurationElement [] configElements = extension.getConfigurationElements();
+		//log.info("Found extensions w/ configElements of length="+configElements.length);
+		
+		IExtensionSpec extensionSpec = ExtensionSpecFactory.createExtensionSpec(configElements[0], extension.getContributor().getName());
+		return extensionSpec;
+	}
 	
 	/**
 	 * Get a list of all extensions objects extending the provided extension point
@@ -82,6 +93,7 @@ public class ExtensionFactory {
 		}
 		return extList;
 	}
+	
 	
 	/**
 	 * Creates an object, given an extension spec
