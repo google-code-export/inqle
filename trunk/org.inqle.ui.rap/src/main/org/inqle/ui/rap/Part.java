@@ -1,5 +1,8 @@
 package org.inqle.ui.rap;
 
+import java.util.List;
+
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.rwt.graphics.Graphics;
@@ -63,8 +66,12 @@ public abstract class Part implements IPart {
 	 * Subclasses should override this method if they add any context menu info
 	 * (and handle consequent event, by overriding handleEvent method).
 	 */
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
-		
+//	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//		
+//	}
+
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		return null;
 	}
 
 	public void handleEvent(Event event) {

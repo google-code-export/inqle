@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
@@ -44,10 +45,11 @@ public class FileDataImporterAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		try {
 			Model modelToImportInto = Persister.getInstance().getIndexableModel(modelPart.getDataset());
 			FileDataImporterWizard wizard = new FileDataImporterWizard(modelToImportInto, window.getShell());
+			wizard.setPart(modelPart);
 			wizard.setNamedModel(modelPart.getDataset());
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();

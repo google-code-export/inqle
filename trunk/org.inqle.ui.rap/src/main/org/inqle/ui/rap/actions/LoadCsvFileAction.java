@@ -47,7 +47,7 @@ public class LoadCsvFileAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		try {
 			Model modelToImportInto = Persister.getInstance().getModel(modelPart.getDataset());
 			LoadCsvFileWizard wizard = new LoadCsvFileWizard(modelToImportInto, window.getShell());

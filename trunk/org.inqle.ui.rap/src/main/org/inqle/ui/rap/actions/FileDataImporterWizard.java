@@ -21,6 +21,8 @@ import org.inqle.data.rdf.jenabean.cache.CacheTool;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
+import org.inqle.ui.rap.IPart;
+import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.file.FileDataImporter;
 import org.inqle.ui.rap.pages.AddSubjectOrFinishPage;
@@ -68,6 +70,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
 	private DateTimeMapperPage dateTimeMapperPage;
 	private NamedModel namedModel;
+	private IPart part;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -188,6 +191,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		}
 		
 		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
+		if (part != null) {
+			part.fireUpdatePart();
+		}
 		return true;
 	}
 

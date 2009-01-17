@@ -39,6 +39,11 @@
             name="Object View"
             class="org.inqle.ui.rap.views.SubjectStatementsView"
             id="org.inqle.ui.rap.views.subjectStatementsView"/>
+       <view
+            name="Browse Dataset"
+            class="org.inqle.ui.rap.views.DatasetView"
+            id="org.inqle.views.browseData"/>
+            
    </extension>
    <!--extension
          point="org.eclipse.ui.commands">

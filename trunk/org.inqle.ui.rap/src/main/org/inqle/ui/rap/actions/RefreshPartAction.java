@@ -18,7 +18,7 @@ public class RefreshPartAction extends Action {
 	}
 
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		partToRefresh.fireUpdatePart();
 	}
 }

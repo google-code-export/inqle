@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.AppInfo;
@@ -130,30 +131,34 @@ public class DatabasePart extends PartType {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = new ArrayList<IAction>();
 		//"Add a dataset" action
 		DatasetWizardAction newModelWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
 		newModelWizardAction.setDataset(getNewDataset());
-		manager.add(newModelWizardAction);
+		actions.add(newModelWizardAction);
 		
 		//"Add an ontology dataset" action
 //		DatasetWizardAction newOntologyDatasetWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add an ontology dataset...", this, workbenchWindow);
 //		newOntologyDatasetWizardAction.setDataset(getNewOntologyDataset());
-//		manager.add(newOntologyDatasetWizardAction);
+//		actions.add(newOntologyDatasetWizardAction);
 		
 		//"Edit this database" action
 		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow);
 		editDatabaseWizardAction.setDatabasePart(this);
-		manager.add(editDatabaseWizardAction);
+		actions.add(editDatabaseWizardAction);
 		
 		//"Clone this database" action
 		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", this.getParent(), workbenchWindow);
 		cloneDatabaseWizardAction.setDatabasePart(this);
-		manager.add(cloneDatabaseWizardAction);
+		actions.add(cloneDatabaseWizardAction);
 		
 		//Delete action
 		DeleteDatabaseAction deleteDatabaseAction = new DeleteDatabaseAction("Delete", this, workbenchWindow);
-		manager.add(deleteDatabaseAction);
+		actions.add(deleteDatabaseAction);
+		
+		return actions;
 	}
 
 	private ExternalDataset getNewDataset() {

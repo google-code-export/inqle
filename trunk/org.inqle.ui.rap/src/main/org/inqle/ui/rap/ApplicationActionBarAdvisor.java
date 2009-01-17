@@ -33,10 +33,10 @@ import org.inqle.ui.rap.actions.OpenViewAction;
  */
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
-    private static final String VIEWS = "org.eclipse.ui.views";
-		private static final String NAME = "name";
-		private static final String ID = "id";
-		private static final String ICON = "icon";
+		public static final String VIEWS = "org.eclipse.ui.views";
+    public static final String NAME = "name";
+		public static final String ID = "id";
+		public static final String ICON = "icon";
 		private static final String H2_ADMIN_URL = "http://localhost:8082";
 		private static final String H2_ADMIN_TEXT = "Administer Embedded H2 Server";
 		private static final String PLUGIN_ID = "org.inqle.ui.rap";

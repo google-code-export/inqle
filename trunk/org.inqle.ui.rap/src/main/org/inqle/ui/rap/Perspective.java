@@ -4,6 +4,7 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.inqle.ui.rap.tree.PartsView;
+import org.inqle.ui.rap.views.DetailView;
 
 /**
  * Configures the perspective layout. This class is contributed through the

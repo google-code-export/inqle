@@ -1,13 +1,17 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.views;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.inqle.ui.rap.IDisposableViewer;
+import org.inqle.ui.rap.IPart;
+import org.inqle.ui.rap.widgets.ActionsMenu;
 
 /**
  * This view shows a &quot;mail message&quot;. This class is contributed through
@@ -138,9 +142,12 @@ public class DetailView extends ViewPart implements ISelectionListener {
 	    		 viewer.dispose();
 	    	 }
 	     	 viewer = selectedPart.getViewer(composite);
-	     	composite.pack();
-	     	composite.redraw();
-	     	composite.setVisible(true);
+	     	 
+	     	 ActionsMenu actionsMenu = new ActionsMenu(composite, SWT.NONE, selectedPart.getActions(getSite().getWorkbenchWindow()));
+	     	 
+	     	 composite.pack();
+	     	 composite.redraw();
+	     	 composite.setVisible(true);
 //	     	 viewer.setInput(representedObject);
 	     	 log.trace("is an IPart");
 	     	 //resetView(representedObject);

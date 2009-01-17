@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.Connection;
@@ -76,8 +77,11 @@ public class Databases extends PartType {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = new ArrayList<IAction>();
 		DatabaseWizardAction databaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_NEW, "Create new database....", this, workbenchWindow);
-		manager.add(databaseWizardAction);
+		actions.add(databaseWizardAction);
+		return actions;
 	}
 }

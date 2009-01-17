@@ -21,11 +21,11 @@ import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.actions.INamedModelView;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.AScrolledTable.ColumnNameData;
 
 import com.hp.hpl.jena.query.ResultSetRewindable;
-import com.hp.hpl.jena.rdf.model.AnonId;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -35,7 +35,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author David Donohue
  * May 6, 2008
  */
-public abstract class SparqlView extends ViewPart implements SelectionListener {
+public abstract class SparqlView extends ViewPart implements SelectionListener, INamedModelView {
 
 	private static final Logger log = Logger.getLogger(SparqlView.class);
 	
