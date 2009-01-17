@@ -49,7 +49,7 @@ public class SamplerWizardAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		log.info("Running SamplerWizardAction");
 		//SimpleSparqlSampler testSampler = new SimpleSparqlSampler();
 //		log.info("Running SamplerWizardAction for sampler: " + JenabeanWriter.toString(sampler));

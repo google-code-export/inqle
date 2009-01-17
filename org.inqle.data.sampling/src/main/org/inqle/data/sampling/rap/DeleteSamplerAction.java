@@ -38,7 +38,7 @@ public class DeleteSamplerAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		boolean confirmDelete = false;
 		
 		if (this.samplerPart instanceof IPartType) {

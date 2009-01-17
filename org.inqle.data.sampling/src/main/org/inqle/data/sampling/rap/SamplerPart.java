@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.sampling.ISampler;
@@ -108,7 +109,9 @@ public class SamplerPart extends PartType {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = new ArrayList<IAction>();
 		//"Run this wizard" action
 		//ISampler replicaOfSampler = samplerFactory.replicateSampler();
 //		SamplerWizardAction runSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_RUN, "Run this sampler", this, workbenchWindow, persister);
@@ -116,7 +119,7 @@ public class SamplerPart extends PartType {
 //		manager.add(runSamplerWizardAction);
 		
 		if (!samplerFactory.hasWizard()) {
-			return;
+			return actions;
 		}
 		
 		//Delete action
@@ -128,7 +131,9 @@ public class SamplerPart extends PartType {
 		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
 		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Create a customized clone of this sampler...", this, workbenchWindow);
 		cloneSamplerWizardAction.setSampler(cloneOfSampler); 
-		manager.add(cloneSamplerWizardAction);
+		actions.add(cloneSamplerWizardAction);
+		
+		return actions;
 	}
 
 	@Override
