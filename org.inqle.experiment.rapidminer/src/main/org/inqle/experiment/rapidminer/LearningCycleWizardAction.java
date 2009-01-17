@@ -47,7 +47,7 @@ public class LearningCycleWizardAction extends Action {
 
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		LearningCycleWizard learningCycleWizard = new LearningCycleWizard(learningCycle, null, window.getShell());
 		if (partToRefresh != null) {
 			learningCycleWizard.setPart(partToRefresh);

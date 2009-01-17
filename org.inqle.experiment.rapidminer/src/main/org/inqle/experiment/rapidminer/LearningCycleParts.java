@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.ui.rap.IPart;
@@ -71,13 +72,17 @@ public class LearningCycleParts extends PartType {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = new ArrayList<IAction>();
 		LearningCycleWizardAction newExperimentWizardAction = 
 			new LearningCycleWizardAction(
 					"Create a new customized learning cycle...", 
 					workbenchWindow);
 		newExperimentWizardAction.setLearningCycle(new LearningCycle().createClone());
 		newExperimentWizardAction.setPartToRefresh(this);
-		manager.add(newExperimentWizardAction);
+		actions.add(newExperimentWizardAction);
+		
+		return actions;
 	}
 }

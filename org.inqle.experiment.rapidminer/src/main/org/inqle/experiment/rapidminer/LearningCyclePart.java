@@ -1,6 +1,10 @@
 package org.inqle.experiment.rapidminer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.ui.rap.Part;
@@ -27,17 +31,21 @@ public class LearningCyclePart extends Part {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = new ArrayList<IAction>();
 		LearningCycleWizardAction editLCWizardAction = 
 			new LearningCycleWizardAction(
 					"Edit this learning cycle...", 
 					workbenchWindow);
 		editLCWizardAction.setPartToRefresh(this);
 		editLCWizardAction.setLearningCycle(learningCycle);
-		manager.add(editLCWizardAction);
+		actions.add(editLCWizardAction);
 		
 		DeleteLearningCycleAction deleteLCAction = new DeleteLearningCycleAction("Delete", this, workbenchWindow);
-		manager.add(deleteLCAction);
+		actions.add(deleteLCAction);
+		
+		return actions;
 	}
 
 	public LearningCycle getLearningCycle() {
