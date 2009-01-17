@@ -3,7 +3,11 @@
  */
 package org.inqle.data.sampling.rap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -29,23 +33,26 @@ public class CustomizedSamplerPart extends SamplerPart {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
-		super.addActions(manager, workbenchWindow);
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = super.getActions(workbenchWindow);
 		
 		if (!samplerFactory.hasWizard()) {
-			return;
+			return actions;
 		}
 		
 		//"Open this Sampler" action.  This wizard works with a replica of the base sampler
 		//log.info("CustomizedSamplerPart.addActions()...");
 		SamplerWizardAction editSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_OPEN, "Edit this sampler...", this, workbenchWindow);
-		manager.add(editSamplerWizardAction);
+		actions.add(editSamplerWizardAction);
 		
 		//Delete action
 		//ISampler replicaOfSampler = samplerFactory.replicateSampler();
 		log.debug("Created replica of sampler:" + JenabeanWriter.toString(samplerFactory.getBaseSampler()));
 		DeleteSamplerAction deleteSamplerAction = new DeleteSamplerAction("Delete", this, workbenchWindow);
-		manager.add(deleteSamplerAction);
+		actions.add(deleteSamplerAction);
+		
+		return actions;
 	}
 	
 }
