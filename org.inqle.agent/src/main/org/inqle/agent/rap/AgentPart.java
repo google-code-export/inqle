@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.AgentLister;
@@ -127,7 +128,9 @@ public class AgentPart extends PartType {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = new ArrayList<IAction>();
 		IAgent agent = agentFactory.getBaseAgent();
 		int mode = agent.getMode();
 		if (mode == IAgent.STOPPED) {
@@ -135,28 +138,30 @@ public class AgentPart extends PartType {
 			log.trace("Adding 'Run this agent' for agentFactory=" + this.getAgentFactory());
 			RunAgentAction runAgentAction = new RunAgentAction("Run this agent", this, workbenchWindow);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
-			manager.add(runAgentAction);
+			actions.add(runAgentAction);
 		}
 		
 		if (mode == IAgent.RUNNING) {
 			StopAgentAction stopAgentAction = new StopAgentAction("Stop this agent", this);
 			///runAgentWizardAction.setAgent(replicaOfAgent);
-			manager.add(stopAgentAction);
+			actions.add(stopAgentAction);
 		}
 		
 		if (!agentFactory.hasWizard()) {
-			return;
+			return actions;
 		}
 		
 		//Delete action
 //		DeleteAgentAction deleteAgentAction = new DeleteAgentAction("Delete", this, workbenchWindow, this.persister);
-//		manager.add(deleteAgentAction);
+//		actions.add(deleteAgentAction);
 		
 		//"Clone this Agent" action.  This wizard works with a clone of the base agent
 		IAgent cloneOfAgent = (IAgent)agentFactory.getBaseAgent().createClone();
 		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Create customization of this agent", this, workbenchWindow);
 		cloneAgentWizardAction.setAgent(cloneOfAgent); 
-		manager.add(cloneAgentWizardAction);
+		actions.add(cloneAgentWizardAction);
+		
+		return actions;
 	}
 
 	@Override
