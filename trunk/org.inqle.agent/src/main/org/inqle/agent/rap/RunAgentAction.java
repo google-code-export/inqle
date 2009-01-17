@@ -40,7 +40,7 @@ public class RunAgentAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		log.info("Running agent: " + agentToRun);
 		if (agentToRun != null) {
 			new Thread(agentToRun).start();

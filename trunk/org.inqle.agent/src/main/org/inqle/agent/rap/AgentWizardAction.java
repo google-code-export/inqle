@@ -49,7 +49,7 @@ public class AgentWizardAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		Persister persister = Persister.getInstance();
 		//SimpleSparqlAgent testAgent = new SimpleSparqlAgent();
 		//log.info(JenabeanWriter.toString(testAgent));

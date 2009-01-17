@@ -3,7 +3,11 @@
  */
 package org.inqle.agent.rap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -29,23 +33,26 @@ public class CustomizedAgentPart extends AgentPart {
 	}
 	
 	@Override
-	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
-		super.addActions(manager, workbenchWindow);
+//public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
+	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
+		List<IAction> actions = super.getActions(workbenchWindow);
 		
 		if (!agentFactory.hasWizard()) {
-			return;
+			return actions;
 		}
 		
 		//"Open this Agent" action.  This wizard works with a replica of the base agent
 		//log.info("CustomizedAgentPart.addActions(): persister=" + persister);
 		AgentWizardAction editAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_OPEN, "Edit this agent...", this, workbenchWindow);
-		manager.add(editAgentWizardAction);
+		actions.add(editAgentWizardAction);
 		
 		//Delete action
 		//IAgent replicaOfAgent = agentFactory.replicateAgent();
 		log.debug("Created replica of agent:" + JenabeanWriter.toString(agentFactory.getBaseAgent()));
 		DeleteAgentAction deleteAgentAction = new DeleteAgentAction("Delete", this, workbenchWindow);
-		manager.add(deleteAgentAction);
+		actions.add(deleteAgentAction);
+		
+		return actions;
 	}
 	
 }

@@ -37,7 +37,7 @@ public class DeleteAgentAction extends Action {
 	}
 	
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 		boolean confirmDelete = false;
 		
 		if (this.agentPart instanceof IPartType) {
