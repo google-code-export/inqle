@@ -4,7 +4,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -21,16 +23,22 @@ public class DetailView extends ViewPart implements ISelectionListener {
 
 	private static final Logger log = Logger.getLogger(DetailView.class);
 	
-	public static final String ID = "org.inqle.ui.rap.detailView";
+	public static final String ID = "org.inqle.ui.rap.views.DetailView";
 
 	private IDisposableViewer viewer;
 
 	private Composite composite;
+
+	private Composite pageComposite;
 	
 	@Override
 	public void createPartControl(Composite parent) {
 		getSite().getPage().addSelectionListener(this);
-		this.composite = parent;
+		pageComposite = new Composite(parent, SWT.NONE);
+		pageComposite.setLayout(new GridLayout(1, true));
+//		this.composite = parent;
+		composite = new Composite(pageComposite, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
 //		beanViewer = new BeanViewer(parent);
 	}
 	
@@ -125,7 +133,7 @@ public class DetailView extends ViewPart implements ISelectionListener {
 
 	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
 		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
-//	  log.info("Selection Made in Tree" + iSelection.toString());
+	  log.info("Selection Made in Tree" + iSelection.toString());
 		if(iSelection instanceof IStructuredSelection) {
 	     IStructuredSelection selection = (IStructuredSelection)iSelection;
 	     
@@ -143,7 +151,10 @@ public class DetailView extends ViewPart implements ISelectionListener {
 	    	 }
 	     	 viewer = selectedPart.getViewer(composite);
 	     	 
-	     	 ActionsMenu actionsMenu = new ActionsMenu(composite, SWT.NONE, selectedPart.getActions(getSite().getWorkbenchWindow()));
+	   	  Label l = new Label(composite, SWT.BOLD);
+	  		l.setText("Available Actions");
+	  		
+	     	 ActionsMenu actionsMenu = new ActionsMenu(pageComposite, SWT.BORDER, selectedPart.getActions(getSite().getWorkbenchWindow()));
 	     	 
 	     	 composite.pack();
 	     	 composite.redraw();

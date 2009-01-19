@@ -25,24 +25,24 @@
       <view
             name="Detail"
             icon="icons/detail.gif"
-            class="org.inqle.ui.rap.DetailView"
-            id="org.inqle.ui.rap.detailView"/>
+            class="org.inqle.ui.rap.views.DetailView"
+            id="org.inqle.ui.rap.views.DetailView"/>
       <view
             name="Parts"
             class="org.inqle.ui.rap.tree.PartsView"
-            id="org.inqle.ui.rap.partsView"/>
+            id="org.inqle.ui.rap.views.PartsView"/>
        <view
             name="Class View"
             class="org.inqle.ui.rap.views.ClassView"
-            id="org.inqle.ui.rap.views.classView"/>
+            id="org.inqle.ui.rap.views.ClassView"/>
        <view
             name="Object View"
             class="org.inqle.ui.rap.views.SubjectStatementsView"
-            id="org.inqle.ui.rap.views.subjectStatementsView"/>
+            id="org.inqle.ui.rap.views.SubjectStatementsView"/>
        <view
             name="Browse Dataset"
             class="org.inqle.ui.rap.views.DatasetView"
-            id="org.inqle.views.browseData"/>
+            id="org.inqle.ui.rap.views.DatasetView"/>
             
    </extension>
    <!--extension

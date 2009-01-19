@@ -28,6 +28,7 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IDisposableViewer;
+import org.inqle.ui.rap.widgets.ActionsMenu;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 
 import com.hp.hpl.jena.query.ResultSetRewindable;
@@ -102,9 +103,6 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 		l.setText("Statements");
 	  sizeWidget = new Text(formComposite, SWT.BORDER);
 	  sizeWidget.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP));
-	  
-	  l = new Label(composite, SWT.BOLD);
-		l.setText("Types In This Dataset:");
 		
 //	  resultSetTable = new ResultSetTable(composite, SWT.SINGLE);
 	  composite.setVisible(true);
@@ -200,7 +198,10 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 //			resultSetTable.renderTable(this);
 		}
 		
-		
+//		Label l = new Label(composite, SWT.BOLD);
+//		l.setText("Available Actions");
+//		
+//		ActionsMenu actionsMenu = new ActionsMenu(composite, SWT.BORDER, selectedPart.getActions(getSite().getWorkbenchWindow()));
 	}
 
 	@Override

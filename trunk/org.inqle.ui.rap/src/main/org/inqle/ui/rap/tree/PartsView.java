@@ -39,7 +39,7 @@ import org.inqle.http.lookup.Requestor;
  */
 public class PartsView extends ViewPart implements IMenuListener {
 
-	public static final String ID = "org.inqle.ui.rap.partsView";
+	public static final String ID = "org.inqle.ui.rap.views.PartsView";
 	private TreeViewer viewer;
 	
 	private MenuManager contextMenuManager;
