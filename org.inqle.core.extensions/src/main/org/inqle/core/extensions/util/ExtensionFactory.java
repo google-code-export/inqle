@@ -67,15 +67,33 @@ public class ExtensionFactory {
 	}
 	
 	public static IExtensionSpec getExtensionSpec(String extensionPointId, String extensionId) {
+		if (extensionPointId==null || extensionId==null) return null;
+		List<IExtensionSpec> theExtensions = getExtensionSpecs(extensionPointId);
+		for (IExtensionSpec extensionSpec: theExtensions) {
+			String id = extensionSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			if (extensionId.equals(id)) {
+				return extensionSpec;
+			}
+		}
+		return null;
 		
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint extensionPoint = registry.getExtensionPoint(extensionPointId);
-		IExtension extension = extensionPoint.getExtension(extensionId);
-		IConfigurationElement [] configElements = extension.getConfigurationElements();
-		//log.info("Found extensions w/ configElements of length="+configElements.length);
-		
-		IExtensionSpec extensionSpec = ExtensionSpecFactory.createExtensionSpec(configElements[0], extension.getContributor().getName());
-		return extensionSpec;
+		//this fails when the extension has no ID (which it could:
+//		IExtensionRegistry registry = Platform.getExtensionRegistry();
+//		IExtensionPoint extensionPoint = registry.getExtensionPoint(extensionPointId);
+//		if (extensionPoint==null) {
+//			log.warn("Unable to retrieve extension point '" + extensionPoint + "'.");
+//			return null;
+//		}
+//		IExtension extension = extensionPoint.getExtension(extensionId);
+//		if (extension==null) {
+//			log.warn("Unable to retrieve extension '" + extensionId + "'.");
+//			return null;
+//		}
+//		IConfigurationElement [] configElements = extension.getConfigurationElements();
+//		//log.info("Found extensions w/ configElements of length="+configElements.length);
+//		
+//		IExtensionSpec extensionSpec = ExtensionSpecFactory.createExtensionSpec(configElements[0], extension.getContributor().getName());
+//		return extensionSpec;
 	}
 	
 	/**
