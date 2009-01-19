@@ -19,7 +19,7 @@ public class SubjectStatementsView extends SparqlView {
 
 	private static final Logger log = Logger.getLogger(SubjectStatementsView.class);
 
-	public static final String ID = "org.inqle.ui.rap.views.subjectStatementsView";
+	public static final String ID = "org.inqle.ui.rap.views.SubjectStatementsView";
 
 	private static final String PROPERTY_VARIABLE = "Property";
 

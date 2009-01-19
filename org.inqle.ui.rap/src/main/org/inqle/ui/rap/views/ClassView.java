@@ -19,7 +19,7 @@ public class ClassView extends SparqlView {
 
 	private static final Logger log = Logger.getLogger(ClassView.class);
 
-	public static final String ID = "org.inqle.ui.rap.views.classView";
+	public static final String ID = "org.inqle.ui.rap.views.ClassView";
 
 	protected String classUri;
 	
