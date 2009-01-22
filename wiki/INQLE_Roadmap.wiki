@@ -74,6 +74,12 @@ Improved usability, without need to enter URIs.
   * New data listing/browsing views, supporting faceted browsing
   * Added clearing of external datasets
 
+==Version 0.2.4==
+(22 January, 2009)
+
+  * Added actions to the detail view, and made it scrollable
+  * Moved dataset browsing to a new view
+
 ==Version 0.3==
 (expected end of May, 2009)
 
