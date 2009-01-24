@@ -28,7 +28,7 @@ import com.hp.hpl.jena.sdb.sql.SDBConnection;
  * Jul 17, 2007
  * 
  */
-public class DBConnector {
+public class SDBConnector {
 	/**
 	 * This store already exists in the database, and has statements
 	 */
@@ -49,7 +49,7 @@ public class DBConnector {
 	 */
 	public static final int STORE_CREATED = 1;
 	
-	static Logger log = Logger.getLogger(DBConnector.class);
+	static Logger log = Logger.getLogger(SDBConnector.class);
 	private Store store = null;
 	private Dataset dataset = null;
 	private boolean initialized = false;
@@ -63,7 +63,7 @@ public class DBConnector {
 	private String dbPassword = null;
 	private String dbType = null;
 	
-	public DBConnector(Connection connectionInfo) {
+	public SDBConnector(Connection connectionInfo) {
 		this.connectionInfo = connectionInfo;
 		initConnection();
 	}
@@ -72,7 +72,7 @@ public class DBConnector {
 	 * When SDB supports something like this
 	 * getStore().getConnection().getTableNames()
 	 * then switch to that.  For now, reconstitute the objects via Jenabean & Persister
-	 * Yes, this is a circular reference between Persister and DBConnector
+	 * Yes, this is a circular reference between Persister and SDBConnector
 	 * @return
 	 */
 	public List<org.inqle.data.rdf.jena.Dataset> getExternalDatasets() {
@@ -241,7 +241,7 @@ public class DBConnector {
 
 	/**
 	 * Create a new SDB store only if it does not yet exist
-	 * @return DBConnector.status
+	 * @return SDBConnector.status
 	 */
 	public int tryToCreateSDBStore() {
 		log.info("Trying to create store...");

@@ -2,7 +2,6 @@ package org.inqle.data.rdf.jena.sdb;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
@@ -13,7 +12,6 @@ import org.inqle.data.rdf.jena.util.Converter;
 import org.inqle.data.rdf.jenabean.ArcSet;
 
 import thewebsemantic.TypeWrapper;
-
 
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -28,8 +26,6 @@ import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.sdb.SDB;
-import com.hp.hpl.jena.sparql.algebra.Transformer;
-import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 
 /**
  * This class is capable of querying 1 or more models.  
@@ -79,23 +75,7 @@ import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 		}
 		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
 		
-		//log info about the dataset
-//		Iterator<?> datasetNamesI = dataset.listNames();
-//		log.debug("Querying dataset '" + dataset.toString() + "' with names...");
-//		while (datasetNamesI.hasNext()) {
-//			log.debug((String)datasetNamesI.next());
-//		}
-		
-//		Iterator<?> dsNames = dataset.listNames();
-//		while (dsNames.hasNext()) {
-//			log.debug("Querying model '" + (String)dsNames.next() + "'.");
-//		}
 		QueryExecution qe = null;
-//		if (queryCriteria.getSingleModel() != null) {
-//			qe = QueryExecutionFactory.create(query, queryCriteria.getSingleModel()) ;
-//		} else {
-//			qe = QueryExecutionFactory.create(query, queryCriteria.getDataset()) ;
-//		}
 		
 		qe = QueryExecutionFactory.create(query, queryCriteria.getDataset()) ;
 		

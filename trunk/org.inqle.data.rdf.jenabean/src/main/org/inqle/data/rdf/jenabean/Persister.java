@@ -31,7 +31,7 @@ import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
 
@@ -253,8 +253,8 @@ public class Persister {
 	 * @return
 	 */
 	public Model createDBModel(Connection connection, String dbModelName) {
-		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
-		DBConnector dbConnector = new DBConnector(connection);
+//		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
+		SDBConnector dbConnector = new SDBConnector(connection);
 		//DBConnection dbConnection = dbConnector.getJenaConnection();
 				
 		// create a model maker with the given connection parameters
@@ -293,7 +293,7 @@ public class Persister {
 		//String dbModelName = rdbModel.getModelName();
 		String dbModelName = dataset.getId();
 		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
-		DBConnector dbConnector = new DBConnector(connection);
+		SDBConnector dbConnector = new SDBConnector(connection);
 		//DBConnection dbConnection = dbConnector.getJenaConnection();
 				
 		// create a model maker with the given connection parameters
@@ -758,7 +758,7 @@ public class Persister {
 					return null;
 				}
 			}
-			DBConnector connector = new DBConnector(theConnection);
+			SDBConnector connector = new SDBConnector(theConnection);
 			model = connector.getModel(namedModel.getId());
 			
 		} else if (namedModel instanceof ExternalDataset) {
@@ -772,7 +772,7 @@ public class Persister {
 				log.error("Unable to load Connection for External Dataset: " + getConnection(dataset.getConnectionId()).getId());
 				return null;
 			}
-			DBConnector connector = new DBConnector(dbConnectionInfo);
+			SDBConnector connector = new SDBConnector(dbConnectionInfo);
 			model = connector.getModel(namedModel.getId());
 			
 			/*if null, create a new model
@@ -848,7 +848,7 @@ public class Persister {
 //				e.printStackTrace();
 //				return null;
 //			}
-//			DBConnector connector = new DBConnector(dbConnectionInfo);
+//			SDBConnector connector = new SDBConnector(dbConnectionInfo);
 ////			ontModel = connector.getOntModel(namedModel.getModelName());
 //			ontModel = connector.getMemoryOntModel(namedModel.getId());
 //			
@@ -903,7 +903,7 @@ public class Persister {
 //		Connection metarepositoryConnection = getAppInfo().getDefaultInternalConnection();
 //		
 //		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-//		DBConnector connector = new DBConnector(metarepositoryConnection);
+//		SDBConnector connector = new SDBConnector(metarepositoryConnection);
 //		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
 //		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
 //
@@ -922,7 +922,7 @@ public class Persister {
 		Connection metarepositoryConnection = getAppInfo().getInternalConnection();
 		
 		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-		DBConnector connector = new DBConnector(metarepositoryConnection);
+		SDBConnector connector = new SDBConnector(metarepositoryConnection);
 		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
 		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
 
@@ -949,15 +949,15 @@ public class Persister {
 	 */
 	public int createNewDBConnection(Connection connection) {
 		//log.info("Will try to create a new Conection spec for test data:\n" + JenabeanWriter.toString(connection));
-		//first create the DBConnector and use it to create the SDB store in the database
-		DBConnector connector = new DBConnector(connection);
-		//int status = DBConnector.STORE_CREATED;
+		//first create the SDBConnector and use it to create the SDB store in the database
+		SDBConnector connector = new SDBConnector(connection);
+		//int status = SDBConnector.STORE_CREATED;
 		int status = connector.tryToCreateSDBStore();
 		//connector.createSDBStore();
 		log.debug("Tried to create new SDB store, with status=" + status);
 		//next register the new DB in the repositories namedModel
-		//TODO: when deleting works, remove the below " || status == DBConnector.STORE_IS_BLANK"
-		if (status == DBConnector.STORE_CREATED || status == DBConnector.STORE_IS_BLANK) {
+		//TODO: when deleting works, remove the below " || status == SDBConnector.STORE_IS_BLANK"
+		if (status == SDBConnector.STORE_CREATED || status == SDBConnector.STORE_IS_BLANK) {
 			//log.info("Persisting new connectioninfo ... \n" + JenabeanWriter.toString(connectionInfo) + "\n...to the repository model...");
 			//worked: OntModel metarepositoryOntModel = getMetarepositoryModel();
 			//log.info("BEFORE: Repository model has " + metarepositoryOntModel.size() + " statements");
@@ -1241,7 +1241,7 @@ public class Persister {
 		
 		//try to delete the connection
 		try {
-			DBConnector connector = new DBConnector(connection);
+			SDBConnector connector = new SDBConnector(connection);
 			connector.deleteSDBStore();
 			connector.close();
 		} catch (Exception e) {
@@ -1280,7 +1280,7 @@ public class Persister {
 		if (namedModel instanceof Dataset) {		
 			
 			//remove the model
-			DBConnector connector = new DBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
+			SDBConnector connector = new SDBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
 			boolean successDeleting = connector.deleteSDBStore();
 			log.info("Success deleting the SDB store? " + successDeleting);
 			//DBConnection jenaConnection = connector.getJenaConnection();
@@ -1414,7 +1414,7 @@ public OntModel getRepositoryModel() {
 		repositoryConnection = ((Dataset)repositoryNamedModel).getConnection();
 	}
 	//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-	DBConnector connector = new DBConnector(repositoryConnection);
+	SDBConnector connector = new SDBConnector(repositoryConnection);
 	log.debug("getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
 	
 	return connector.getModel(repositoryNamedModel.getModelName());
