@@ -1074,7 +1074,7 @@ public class Persister {
 	 * will be persisted.  If false, they will not.
 	 */
 	public void persist(Object persistableObj, Model model, boolean persistMembers) {
-		log.trace("Persister.persist():" + JenabeanWriter.toString(persistableObj));
+//		log.trace("Persister.persist():" + JenabeanWriter.toString(persistableObj));
 		if (persistableObj instanceof IUniqueJenabean) {
 			((IUniqueJenabean)persistableObj).setUpdateDate(new Date());
 		}
@@ -1167,7 +1167,7 @@ public class Persister {
 			if (reconstituteMembers) {
 				log.debug("reader.loadDeep(" + clazz + ", " + objectId + ")");
 				reconstitutedObj = reader.loadDeep(clazz, objectId);
-				log.debug("Reconstituted " + JenabeanWriter.toString(reconstitutedObj));
+//				log.debug("Reconstituted " + JenabeanWriter.toString(reconstitutedObj));
 			} else {
 				log.debug("reader.load(" + clazz + ", " + objectId + ")");
 				reconstitutedObj = reader.load(clazz, objectId);
