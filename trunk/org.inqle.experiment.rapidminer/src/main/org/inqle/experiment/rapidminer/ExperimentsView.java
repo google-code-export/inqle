@@ -69,6 +69,7 @@ public class ExperimentsView extends SparqlView {
 			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
+		log.info("SPARQL=" + sparql);
 		return sparql;
 	}
 	
