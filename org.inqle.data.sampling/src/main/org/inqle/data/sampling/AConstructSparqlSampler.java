@@ -84,8 +84,9 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		log.info("Label arc=" + labelArc);
 		Collection<Arc> avoidArcs = new ArrayList<Arc>();
 		avoidArcs.add(labelArc);
+		log.info("Getting learnable arcs...");
 		Collection<Arc> learnableArcs = getLearnableArcs(modelsToUse, subjectClass, avoidArcs);
-		//log.info("Learnable arcs=" + learnableArcs);
+		log.info("Learnable arcs=" + learnableArcs);
 		if (learnableArcs==null || learnableArcs.size()==0) {
 			log.warn("Retrieved no learnable attributes from Jena model.  returning null.");
 			return null;
