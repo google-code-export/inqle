@@ -24,7 +24,7 @@ import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.ExternalDataset;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
@@ -278,7 +278,7 @@ public class DatasetWizard extends Wizard {
 			dataset.setDatasetFunctions(null);
 		}
 		
-		DBConnector connector = new DBConnector(connection);
+		SDBConnector connector = new SDBConnector(connection);
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (! connectionSucceeds) {

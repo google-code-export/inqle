@@ -16,7 +16,7 @@ import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.InternalDataset;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -355,7 +355,7 @@ public class AppInfoWizard extends Wizard {
 			Persister.persistToFile(appInfo, Persister.getAppInfoFilePath(), true);
 //			Persister persister = Persister.getInstance();
 //			persister.createNewDBConnection(metarepositoryConnection);
-			DBConnector connector = new DBConnector(metarepositoryConnection);
+			SDBConnector connector = new SDBConnector(metarepositoryConnection);
 			int status = connector.tryToCreateSDBStore();
 			log.info("Tried to create new SDB store for Metarepository, with status=" + status);
 		} catch (Exception e) {
@@ -373,7 +373,7 @@ public class AppInfoWizard extends Wizard {
 		}
 		
 		try {
-			DBConnector connector = new DBConnector(cacheConnection);
+			SDBConnector connector = new SDBConnector(cacheConnection);
 			log.info("cacheConnection=" + JenabeanWriter.toString(cacheConnection));
 			int status = connector.tryToCreateSDBStore();
 			log.info("Created data store for cache database: Status=" + status);
@@ -396,7 +396,7 @@ public class AppInfoWizard extends Wizard {
 		firstDataDataset.setConnectionId(firstDataConnection.getId());
 		firstDataDataset.addDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);
 		try {
-			DBConnector connector = new DBConnector(firstDataConnection);
+			SDBConnector connector = new SDBConnector(firstDataConnection);
 			int status = connector.tryToCreateSDBStore();
 			log.info("Created data store for first dataset " + firstDataDataset + ": Status=" + status);
 			Persister persister = Persister.getInstance();

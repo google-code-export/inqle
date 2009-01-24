@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 /**
@@ -218,7 +218,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		}
 
 		private void showTestConnectionDialog() {
-			DBConnector connector = new DBConnector(connection);
+			SDBConnector connector = new SDBConnector(connection);
 			boolean connectionSucceeds = connector.testConnection();
 			String title = "Connection Succeeds";
 			String message = "Success connecting to the database.";

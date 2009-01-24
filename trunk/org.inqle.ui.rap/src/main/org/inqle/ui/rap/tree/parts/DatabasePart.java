@@ -91,7 +91,7 @@ public class DatabasePart extends PartType {
 		//RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
 		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
 		log.trace("datasetIds=" + datasetIds);
-//		DBConnector dbConnector = new DBConnector(getConnection());
+//		SDBConnector dbConnector = new SDBConnector(getConnection());
 //		List<Dataset> datasets = dbConnector.getDatasets();
 //		log.trace("datasets=" + datasets);
 		
