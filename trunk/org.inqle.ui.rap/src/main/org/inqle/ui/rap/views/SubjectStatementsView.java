@@ -56,14 +56,14 @@ public class SubjectStatementsView extends SparqlView {
 		return subjectUri;
 	}
 
-	@Override
-	public NamedModel getNamedModel() {
-		return namedModel;
-	}
-
-	public void setNamedModel(NamedModel namedModel) {
-		this.namedModel = namedModel;
-	}
+//	@Override
+//	public NamedModel getNamedModel() {
+//		return namedModel;
+//	}
+//
+//	public void setNamedModel(NamedModel namedModel) {
+//		this.namedModel = namedModel;
+//	}
 
 	public void setSubjectUri(String subjectUri) {
 		this.subjectUri = subjectUri;

@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -35,12 +34,6 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 		//this.parentComposite = parentComposite;
 		
 		composite = new Composite(parentComposite, SWT.NONE);
-		//composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true));
-//		FillLayout fillLayout = new FillLayout();
-// 		fillLayout.type = SWT.VERTICAL;
-//		composite.setLayout(fillLayout);
-		//create controls
-		//Font boldFont = JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT);    
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		//GridData compositeLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);

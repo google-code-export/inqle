@@ -41,16 +41,24 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 //	}
 	
 	public void run() {
+		log.info("OpenNamedModelViewAction.run()...");
 		try {
 			INamedModelView view = (INamedModelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(viewId);
 			if (view==null) {
 				view = (INamedModelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
 			}
 			view.setNamedModel(namedModel);
+			view.setTitleText("Types in Dataset :" + namedModel);
+			log.info("Refreshing Dataset View with dataset: " + getNamedModel());
+			view.refreshView();
+			log.info("Got view for named model: " + namedModel);
+			theWindow.getActivePage().showView(viewId);
+			theWindow.getActivePage().bringToTop(view);
 		} catch (Exception e) {
 			log.error("Error running OpenDataViewAction", e);
 		}
-		super.run();
+		
+//		super.run();
 	}
 
 	public void setNamedModel(NamedModel namedModel) {

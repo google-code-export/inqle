@@ -9,7 +9,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -116,8 +115,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 
 	private void showForm() {
 		Composite formComposite = new Composite(composite, SWT.NONE);
-		RowLayout rowLayout = new RowLayout();
-		formComposite.setLayout(rowLayout);
+
+		formComposite.setLayout(new GridLayout(6, false));
 		
 		//select list for number of records to show
 		new Label(formComposite, SWT.NONE).setText("Number of rows");
@@ -129,13 +128,13 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		refreshButton = new Button(formComposite, SWT.PUSH);
 		refreshButton.setText("Refresh");
 		refreshButton.addSelectionListener(this);
-		
 	}
 
 	private void showResultDescription() {
 		Composite descriptionComposite = new Composite(composite, SWT.NONE);
-		RowLayout rowLayout = new RowLayout();
-		descriptionComposite.setLayout(rowLayout);
+//		RowLayout layout = new RowLayout();
+		GridLayout layout = new GridLayout(6, false);
+		descriptionComposite.setLayout(layout);
 		resultDescription = new Label(descriptionComposite, SWT.NONE);
 		resultDescription.setText("No results found.");
 		
@@ -350,8 +349,9 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	public void refreshView() {
 		log.info("refresh view...");
 		doQuery();
-		refreshForm();
+		
 		showTable();
+		refreshForm();
 //		resultSetTable.recomputeSize();
 		resultSetTable.layout(true, true);
 		resultSetTable.setVisible(false);
@@ -360,6 +360,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	}
 
 	private void refreshForm() {
+		log.info("refresh form...");
 		if (resultSet==null) return;
 		if (offset <= 0) {
 			log.trace("Disabled previousButton");
@@ -421,19 +422,6 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	public void setCurrentSortDirection(String currentSortDirection) {
 		this.currentSortDirection = currentSortDirection;
 	}
-
-//	/**
-//	 * Override to specify the property names of your implementation.  This prevents the 
-//	 * problem that optional fields might be missed in the first page
-//	 * @return
-//	 */
-//	public List<String> getPropertyNames() {
-//		return propertyNames;
-//	}
-//
-//	public void setPropertyNames(List<String> propertyNames) {
-//		this.propertyNames = propertyNames;
-//	}
 	
 	public void deleteSelectedItems() {
 		List<String> checkedItems = resultSetTable.getCheckedItems();

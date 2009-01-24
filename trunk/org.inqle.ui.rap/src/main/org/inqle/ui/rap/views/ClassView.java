@@ -50,14 +50,14 @@ public class ClassView extends SparqlView {
 		return sparql;
 	}
 	
-	@Override
-	public NamedModel getNamedModel() {
-		return namedModel;
-	}
-
-	public void setNamedModel(NamedModel namedModel) {
-		this.namedModel = namedModel;
-	}
+//	@Override
+//	public NamedModel getNamedModel() {
+//		return namedModel;
+//	}
+//
+//	public void setNamedModel(NamedModel namedModel) {
+//		this.namedModel = namedModel;
+//	}
 
 	public String getClassUri() {
 		return classUri;

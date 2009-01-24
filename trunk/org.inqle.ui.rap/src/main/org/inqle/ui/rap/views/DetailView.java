@@ -1,12 +1,18 @@
 package org.inqle.ui.rap.views;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -29,104 +35,38 @@ public class DetailView extends ViewPart implements ISelectionListener {
 
 	private Composite composite;
 
-	private Composite pageComposite;
+	private ScrolledComposite scrolledComposite;
+
+	private ActionsMenu actionsMenu;
+
+//	private Label l;
 	
 	@Override
 	public void createPartControl(Composite parent) {
 		getSite().getPage().addSelectionListener(this);
-		pageComposite = new Composite(parent, SWT.NONE);
-		pageComposite.setLayout(new GridLayout(1, true));
+		scrolledComposite = new ScrolledComposite(parent,  SWT.V_SCROLL | SWT.H_SCROLL);
+//		scrolledComposite.setLayout(new GridLayout(1, true));
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+//		GridData gridData = new GridData(GridData.FILL_BOTH);
+//		scrolledComposite.setLayoutData(gridData);
+		
 //		this.composite = parent;
-		composite = new Composite(pageComposite, SWT.NONE);
-		composite.setLayout(new GridLayout(1, true));
-//		beanViewer = new BeanViewer(parent);
+		 
+		scrolledComposite.addControlListener(new ControlAdapter() {
+			public void controlResized(ControlEvent e) {
+				scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			}
+		});
+		
+		scrolledComposite.setContent(composite);
+		scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 	
 	@Override
 	public void dispose() {
 		getSite().getPage().removeSelectionListener(this);
 	}
-	
-//	public void resetView(Object objectToDetail) {
-//		String clazz = objectToDetail.getClass().getName();
-//		String name = "[none]";
-//		String description = "";
-//		String detail = "";
-//		
-//		Composite composite = new Composite(parent, SWT.NONE);
-//		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true));
-//		
-//		if (objectToDetail instanceof INamedAndDescribed) {
-//			log.info("...is INamedAndDescribed");
-//			INamedAndDescribed namedAndDescribed = (INamedAndDescribed)objectToDetail;
-//			name = namedAndDescribed.getName();
-//			description = namedAndDescribed.getDescription();
-//			//MessageDialog.openInformation(composite.getShell(), "Selected object '" + namedAndDescribed.getName() + "'", "Description:\n" + namedAndDescribed.getDescription());
-//		}
-//		if (objectToDetail instanceof IBasicJenabean) {
-//			log.info("...is IBasicJenabean");
-//			detail = JenabeanWriter.toString(objectToDetail);
-//		  //MessageDialog.openInformation(composite.getShell(), "Detail=", JenabeanWriter.toString(objectToDetail));
-//		}
-//		
-//		composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true));
-////		GridLayout layout = new GridLayout();
-////		layout.marginHeight = 0;
-////		layout.marginWidth = 0;
-////		top.setLayout(layout);
-////		// top banner
-////		Composite banner = new Composite(top, SWT.NONE);
-////		banner.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true));
-////		layout = new GridLayout();
-////		layout.marginHeight = 5;
-////		layout.marginWidth = 10;
-////		layout.numColumns = 2;
-////		banner.setLayout(layout);
-////		
-////		// setup bold font
-//		Font boldFont = JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT);    
-//		
-//		Label l = new Label(composite, SWT.NONE);
-//		l.setText("Name");
-//		l.setFont(boldFont);
-//		Text nameWidget = new Text(composite, SWT.BORDER);
-//    GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
-//    nameWidget.setLayoutData(gridData);
-//    nameWidget.setText(name);
-//    
-//    l = new Label(composite, SWT.NONE);
-//		l.setText("Class");
-//		l.setFont(boldFont);
-//		Text classWidget = new Text(composite, SWT.BORDER);
-//    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
-//    classWidget.setLayoutData(gridData);
-//    classWidget.setText(clazz);
-//    
-//    l = new Label(composite, SWT.NONE);
-//		l.setText("Description");
-//		l.setFont(boldFont);
-//    Text descriptionWidget = new Text(composite, SWT.BORDER);
-//    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
-//    descriptionWidget.setLayoutData(gridData);
-//    descriptionWidget.setText(description);
-//    
-//    l = new Label(composite, SWT.NONE);
-//		l.setText("Detail");
-//		l.setFont(boldFont);
-//    Text detailWidget = new Text(composite, SWT.BORDER);
-//    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
-//    detailWidget.setLayoutData(gridData);
-//    detailWidget.setText(detail);
-//    
-//    log.info("\n\nName=" + name + "\nClass=" + clazz + "\nDescrption=" + description + "\nDetail=" + detail);
-//		
-//    //refresh
-////    Shell siteShell = getSite().getShell();
-////    getSite().getPage().hideView(this);
-////    siteShell.update();
-//    //composite.redraw();
-//		//l.setText(appInfoObj.getClass() + "; " + appInfoObj.toString());
-//	}
 
 	public void setFocus() {
 	}
@@ -134,6 +74,12 @@ public class DetailView extends ViewPart implements ISelectionListener {
 	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
 		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
 	  log.info("Selection Made in Tree" + iSelection.toString());
+	  if (composite != null) {
+	  	composite.dispose();
+	  }
+	  composite = new Composite(scrolledComposite, SWT.NONE);
+	  scrolledComposite.setContent(composite);
+		composite.setLayout(new GridLayout(1, true));
 		if(iSelection instanceof IStructuredSelection) {
 	     IStructuredSelection selection = (IStructuredSelection)iSelection;
 	     
@@ -151,35 +97,34 @@ public class DetailView extends ViewPart implements ISelectionListener {
 	    	 }
 	     	 viewer = selectedPart.getViewer(composite);
 	     	 
-	   	  Label l = new Label(composite, SWT.BOLD);
-	  		l.setText("Available Actions");
-	  		
-	     	 ActionsMenu actionsMenu = new ActionsMenu(pageComposite, SWT.BORDER, selectedPart.getActions(getSite().getWorkbenchWindow()));
-	     	 
+//	     	 if (l != null) {
+//	     		 l.dispose();
+//	     	 }
+//	     	 l = new Label(composite, SWT.BOLD);
+//	     	 l.setText("Available Actions");
+	  		 if (actionsMenu != null) {
+	  			 actionsMenu.dispose();
+	  		 }
+	  		 List<IAction> actions = selectedPart.getActions(getSite().getWorkbenchWindow());
+	  		 if (actions != null && actions.size()>0) {
+	  			 actionsMenu = new ActionsMenu(composite, SWT.BORDER, actions);
+	  		 }
+	  		 
 	     	 composite.pack();
 	     	 composite.redraw();
 	     	 composite.setVisible(true);
-//	     	 viewer.setInput(representedObject);
+	     	 scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	     	 log.trace("is an IPart");
-	     	 //resetView(representedObject);
 	     } else {
 	    	 log.trace("not an IPart");
 	    	 viewer.setInput(firstSelectedObject);
 	    	 composite.pack();
 	     	 composite.redraw();
 	     	 composite.setVisible(true);
+	     	 scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	     }
 	     
 	     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(this);
-//	     String msg = "Selected:\n";
-//	     for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-//	       Object selectedObj = iterator.next();
-//	       msg += selectedObj + ",\n";
-//	     }
-//	     MessageDialog.openInformation(shell.getShell(), "Selection Made in Tree", msg);
-	     
-	 		 //page.openEditor(editorInput, "org.eclipse.ui.DefaultTextEdtior");
 	  }
-		
 	}
 }

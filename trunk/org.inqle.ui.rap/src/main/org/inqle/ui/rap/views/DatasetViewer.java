@@ -6,32 +6,20 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.core.util.DateFormatter;
 import org.inqle.data.rdf.jena.Dataset;
-import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IDisposableViewer;
-import org.inqle.ui.rap.widgets.ActionsMenu;
-import org.inqle.ui.rap.widgets.ResultSetTable;
 
-import com.hp.hpl.jena.query.ResultSetRewindable;
 import com.hp.hpl.jena.rdf.model.Model;
 
 public class DatasetViewer extends Viewer implements IDisposableViewer {
@@ -128,12 +116,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 	public void refresh() {
 		composite.setVisible(true);
 		log.trace("Refreshing...");
-		
-//		nameWidget.setText("");
-//		classWidget.setText("");
-//		descriptionWidget.setText("");
-//		detailWidget.setText("");
-		
+
 		String clazz = "";
 		if (bean != null) {
 			clazz = bean.getClass().getName();
@@ -214,37 +197,6 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 	public void inputChanged(Object input, Object oldInput) {
 		log.trace("inputChanged(" + input + ", " + oldInput + ")");
 	}
-	
-//	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
-//		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
-//	  log.info("Selection Made in Tree" + iSelection.toString());
-//		if(iSelection instanceof IStructuredSelection) {
-//	     IStructuredSelection selection = (IStructuredSelection)iSelection;
-//	     
-//	     Object firstSelectedObject = selection.getFirstElement();
-//	     if (firstSelectedObject == null) {
-//	    	 log.info("firstSelectedObject is null");
-//	    	 return;
-//	     }
-//	     
-//	     if (firstSelectedObject instanceof IPart) {
-//	     	 Object representedObject = ((IPart) firstSelectedObject).getObject();
-//	     	 log.info("is an IPart");
-//	     	 setBean(representedObject);
-//	     } else {
-//	    	 log.info("not an IPart");
-//	     }
-////	     String msg = "Selected:\n";
-////	     for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-////	       Object selectedObj = iterator.next();
-////	       msg += selectedObj + ",\n";
-////	     }
-////	     MessageDialog.openInformation(shell.getShell(), "Selection Made in Tree", msg);
-//	     
-//	 		 //page.openEditor(editorInput, "org.eclipse.ui.DefaultTextEdtior");
-//	  }
-//		
-//	}
 
 	@Override
 	public Object getInput() {
