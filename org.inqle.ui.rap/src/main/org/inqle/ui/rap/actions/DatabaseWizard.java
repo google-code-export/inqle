@@ -10,7 +10,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
@@ -76,7 +76,7 @@ public class DatabaseWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 		Persister persister = Persister.getInstance();
-		DBConnector connector = new DBConnector(connection);
+		SDBConnector connector = new SDBConnector(connection);
 		boolean connectionSucceeds = connector.testConnection();
 		boolean confirmSave = true;
 		

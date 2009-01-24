@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.Delete_OntologyDataset;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
@@ -161,7 +161,7 @@ public class Delete_OntologyDatasetWizard extends Wizard {
 					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
 			return false;
 		}
-		DBConnector connector = new DBConnector(connection);
+		SDBConnector connector = new SDBConnector(connection);
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (! connectionSucceeds) {
