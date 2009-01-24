@@ -13,7 +13,7 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
-import org.inqle.data.rdf.jena.sdb.DBConnector;
+import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.junit.Test;
@@ -63,7 +63,7 @@ public class TestCreateStores {
 		//Connection repositoryConnection = persister.getConnection(metarepositoryDataset.getConnectionId());
 		Connection repositoryConnection = appInfo.getInternalConnection();
 		
-		DBConnector repositoryConnector = new DBConnector(repositoryConnection);
+		SDBConnector repositoryConnector = new SDBConnector(repositoryConnection);
 		//first delete
 		repositoryConnector.deleteSDBStore();
 		//then create
@@ -129,9 +129,9 @@ public class TestCreateStores {
 		//add the new test datamodel connection info
 		log.info("Try to create new DB Connection...");
 		int status = persister.createNewDBConnection(dataConnection);
-		//assertEquals(DBConnector.STORE_CREATED, status);
+		//assertEquals(SDBConnector.STORE_CREATED, status);
 		//status = persister.createNewDBConnection(testConnectionInfo);
-		assertEquals(DBConnector.STORE_IS_BLANK, status);
+		assertEquals(SDBConnector.STORE_IS_BLANK, status);
 		
 		//try to load the Connection from the database
 		log.info("Try to create DB Connection 3...");
