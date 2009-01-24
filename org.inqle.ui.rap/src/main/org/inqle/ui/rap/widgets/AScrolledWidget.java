@@ -1,18 +1,15 @@
 package org.inqle.ui.rap.widgets;
 
 
-import java.util.UUID;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 import com.hp.hpl.jena.ontology.OntModel;
  
@@ -104,11 +101,10 @@ public abstract class AScrolledWidget extends Composite {
 	}
 
 	public void recomputeSize() {
-//		container.changed(new Control[] {scrolledComposite});
 		scrolledComposite.setMinSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true));
-//		scrolledComposite.redraw();
-//		scrolledComposite.layout(true, true);
-//		scrolledComposite.setVisible(true);
+//		Point origSize = scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+//		Point newSize = new Point(origSize.x, origSize.y + 20);
+//		scrolledComposite.setMinSize(newSize);
 	}
     
 }

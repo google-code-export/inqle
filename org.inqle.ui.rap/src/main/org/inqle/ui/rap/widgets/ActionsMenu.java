@@ -7,8 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
@@ -21,15 +19,17 @@ public class ActionsMenu extends Composite implements SelectionListener {
 		super(parent, style);
 		setActions(actions);
 		Composite composite = this;
-		composite.setLayout(new RowLayout());
+		composite.setLayout(new GridLayout(1, true));
 		if (actions==null) return;
 		for (IAction action: actions) {
 			Link link = new Link(composite, SWT.NONE);
 			link.setText("<a>" + action.getText() + "</a>");
 			link.setData(action);
 			link.addSelectionListener(this);
+//			Label l = new Label(composite, SWT.NONE);
 			if (action.getDescription() != null && action.getDescription().length() > 0) {
 				link.setToolTipText(action.getDescription());
+//				l.setText(action.getDescription());
 			}
 		}
 	}
@@ -57,6 +57,11 @@ public class ActionsMenu extends Composite implements SelectionListener {
 		}
 	}
 	
+	@Override
+	public void dispose() {
+		super.dispose();
+		actions = null;
+	}
 	
 	
 }

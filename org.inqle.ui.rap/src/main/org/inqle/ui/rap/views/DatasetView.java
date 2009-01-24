@@ -6,9 +6,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.ui.rap.widgets.ResultSetTable;
+import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
 /**
  * @author David Donohue
@@ -26,14 +28,24 @@ public class DatasetView extends SparqlView {
 		currentSortColumn = ResultSetTable.URI_VARIABLE;
 		currentSortDirection = SparqlView.ASC;
 		hideUriColumn = false;
-		linkColumn = ResultSetTable.URI_VARIABLE;
+		linkColumn = SubjectClassLister.CLASS_URI_VAR;
 		linkUriOnly = true;
 	}
 	
-	//TODO optional fields will render the columns retrieved on any pass thru variable. Must extract columns from the query
 	@Override
 	public String getSparql() {
-		
+		String s = "PREFIX rdfs: <" + RDF.RDFS + "> \n" +
+		"SELECT DISTINCT " +
+		"?" + SubjectClassLister.CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
+		"?subject a ?" + SubjectClassLister.CLASS_URI_VAR + " ." +
+		"OPTIONAL { ?" + SubjectClassLister.CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
+		"OPTIONAL { ?" + SubjectClassLister.CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
+		 	Queryer.getSparqlClauseFilterCommonClasses("?" + SubjectClassLister.CLASS_URI_VAR) +
+		"\n} } \n" +
+		" ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n" +
+		" LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
+		log.info("SPARQL lookup subjects in dataset:" + s);
+		return s;
 //		String sparql = 
 //			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
 //			"SELECT ?" + ResultSetTable.URI_VARIABLE + " ?Name ?Description \n" +
@@ -45,7 +57,9 @@ public class DatasetView extends SparqlView {
 //			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 //		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
 //		return sparql;
-		return SubjectClassLister.getSparqlSelectUncommonClassesTable();
+//		String sparql = SubjectClassLister.getSparqlSelectUncommonClassesTable();
+		
+//		return sparql;
 	}
 	
 	public void widgetSelected(SelectionEvent event) {
@@ -54,33 +68,25 @@ public class DatasetView extends SparqlView {
 			Link link = (Link)source;
 			Object data = link.getData();
 			if (data==null) return;
-//			log.info(data + " clicked.");
-//			ClassView classView = new ClassView();
 			
-			ClassView classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ClassView.ID);
-			if (classView==null) {
-				try {
-					classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ClassView.ID);
-				} catch (PartInitException e) {
-					log.error("Error showing view: " + ClassView.ID, e);
+			if (data instanceof UriValData) {
+				ClassView classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ClassView.ID);
+				if (classView==null) {
+					try {
+						classView = (ClassView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ClassView.ID);
+					} catch (PartInitException e) {
+						log.error("Error showing view: " + ClassView.ID, e);
+					}
 				}
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
+				classView.setNamedModel(getNamedModel());
+				classView.setClassUri(data.toString());
+				classView.setTitleText("Things of type: <" + data.toString() + ">");
+				log.info("Refreshing Class View with dataset: " + getNamedModel() + " and class URI: " + data.toString());
+				classView.refreshView();
 			}
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
-			classView.setNamedModel(getNamedModel());
-			classView.setClassUri(data.toString());
-			classView.setTitleText("Things of type: <" + data.toString() + ">");
-			log.info("Refreshing Class View with dataset: " + getNamedModel() + " and class URI: " + data.toString());
-			classView.refreshView();
-//			classView.setFocus();
 		}
+		
+		super.widgetSelected(event);
 	}
 }
-
-/*
-//query for subjects
-ResultSetRewindable subjectsRS = SubjectClassLister.queryGetUncommonSubjectsRS(getDataset().getId());
-resultSetTable.setResultSet(subjectsRS);
-resultSetTable.setSortable(false);
-resultSetTable.setLinkColumn(SubjectClassLister.CLASS_URI_VAR);
-resultSetTable.renderTable(this);
-*/

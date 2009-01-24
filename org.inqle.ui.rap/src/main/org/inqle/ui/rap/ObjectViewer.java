@@ -4,15 +4,12 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -35,12 +32,6 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		//this.parentComposite = parentComposite;
 		
 		composite = new Composite(parentComposite, SWT.NONE);
-		//composite.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true));
-//		FillLayout fillLayout = new FillLayout();
-// 		fillLayout.type = SWT.VERTICAL;
-//		composite.setLayout(fillLayout);
-		//create controls
-		//Font boldFont = JFaceResources.getFontRegistry().getBold(JFaceResources.DEFAULT_FONT);    
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 2;
 		//GridData compositeLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -180,37 +171,6 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 	public void inputChanged(Object input, Object oldInput) {
 		log.trace("inputChanged(" + input + ", " + oldInput + ")");
 	}
-	
-//	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
-//		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
-//	  log.info("Selection Made in Tree" + iSelection.toString());
-//		if(iSelection instanceof IStructuredSelection) {
-//	     IStructuredSelection selection = (IStructuredSelection)iSelection;
-//	     
-//	     Object firstSelectedObject = selection.getFirstElement();
-//	     if (firstSelectedObject == null) {
-//	    	 log.info("firstSelectedObject is null");
-//	    	 return;
-//	     }
-//	     
-//	     if (firstSelectedObject instanceof IPart) {
-//	     	 Object representedObject = ((IPart) firstSelectedObject).getObject();
-//	     	 log.info("is an IPart");
-//	     	 setBean(representedObject);
-//	     } else {
-//	    	 log.info("not an IPart");
-//	     }
-////	     String msg = "Selected:\n";
-////	     for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
-////	       Object selectedObj = iterator.next();
-////	       msg += selectedObj + ",\n";
-////	     }
-////	     MessageDialog.openInformation(shell.getShell(), "Selection Made in Tree", msg);
-//	     
-//	 		 //page.openEditor(editorInput, "org.eclipse.ui.DefaultTextEdtior");
-//	  }
-//		
-//	}
 
 	@Override
 	public Object getInput() {
@@ -222,10 +182,6 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		this.bean = bean;
 		refresh();
 	}
-
-//	public void selectionChanged(IWorkbenchPart arg0, ISelection arg1) {
-//		
-//	}
 
 	public void clearData() {
 		idWidget.setText("");

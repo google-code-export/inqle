@@ -24,7 +24,6 @@ import org.inqle.core.util.ListMapUtil;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
-import org.inqle.data.rdf.RDF;
 import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
