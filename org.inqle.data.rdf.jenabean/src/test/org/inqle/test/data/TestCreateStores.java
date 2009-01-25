@@ -65,9 +65,9 @@ public class TestCreateStores {
 		
 		SDBConnector repositoryConnector = new SDBConnector(repositoryConnection);
 		//first delete
-		repositoryConnector.deleteSDBStore();
+		repositoryConnector.deleteDatabase();
 		//then create
-		repositoryConnector.createSDBStore();
+		repositoryConnector.formatDatabase();
 		
 		//Model repositoryModel = persister.createDBModel(repositoryConnectionInfo, AppInfo.getRepositoryModelName());
 		Model repositoryModel = persister.getMetarepositoryModel();

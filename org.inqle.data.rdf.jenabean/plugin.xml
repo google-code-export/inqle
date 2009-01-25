@@ -22,6 +22,13 @@
 			</dataset>
 			
 			<dataset
+           id="org.inqle.datasets.metaRepository"
+           weight="2000"
+           description="contains mappings from namespace abbreviations to their full URIs"
+					 cacheInMemory="true">
+			</dataset>
+			
+			<dataset
            id="org.inqle.datasets.mapping"
            weight="3000"
            description="contains DataMapping and related objects, which map CSV values to RDF attributes"

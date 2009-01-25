@@ -44,13 +44,13 @@ public class AppInfo extends UniqueJenabean {
 //		this.serverBaseUrl = serverBaseUrl;
 //	}
 
-	public InternalDataset getMetarepositoryDataset() {
-		return metarepositoryDataset;
-	}
-	
-	public void setMetarepositoryDataset(InternalDataset metarepositoryDataset) {
-		this.metarepositoryDataset = metarepositoryDataset;
-	}
+//	public InternalDataset getMetarepositoryDataset() {
+//		return metarepositoryDataset;
+//	}
+//	
+//	public void setMetarepositoryDataset(InternalDataset metarepositoryDataset) {
+//		this.metarepositoryDataset = metarepositoryDataset;
+//	}
 
 //	public NamedModel getLogNamedModel() {
 //		return logNamedModel;
@@ -62,7 +62,7 @@ public class AppInfo extends UniqueJenabean {
 	
 	public void clone(AppInfo objectToBeCloned) {
 //		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
-		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
+//		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
 		setInternalConnection(objectToBeCloned.getInternalConnection());
 		setSite(objectToBeCloned.getSite());
 		super.clone(objectToBeCloned);

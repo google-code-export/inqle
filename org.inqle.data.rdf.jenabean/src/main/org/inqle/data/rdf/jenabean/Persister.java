@@ -13,25 +13,25 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.LockObtainFailedException;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.Dataset;
 import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.IDBConnector;
+import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
-import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
 
@@ -105,8 +105,8 @@ public class Persister {
 	private Map<String, InternalConnection> internalConnections = null;
 //	private Map<String, CacheDataset> cacheDatasets = null;
 	private Map<String, IndexBuilderModel> indexBuilders;
-	private IndexLARQ schemaFilesSubjectIndex;
-	private OntModel schemaFilesOntModel;
+//	private IndexLARQ schemaFilesSubjectIndex;
+//	private OntModel schemaFilesOntModel;
 	private Model prefixesModel;
 	
 	
@@ -252,26 +252,13 @@ public class Persister {
 	 * @param dbModelName
 	 * @return
 	 */
-	public Model createDBModel(Connection connection, String dbModelName) {
+//	public static Model createDBModel(Connection connection, String dbModelName) {
+	public static Model createDBModel(IDatabase database, String dbModelName) {
 //		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
-		SDBConnector dbConnector = new SDBConnector(connection);
-		//DBConnection dbConnection = dbConnector.getJenaConnection();
-				
-		// create a model maker with the given connection parameters
-		//ModelMaker maker = ModelFactory.createModelRDBMaker(dbConnection);
+//		SDBConnector dbConnector = new SDBConnector(connection);
+		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(database);
 
 		log.debug("Creating Model of name '" + dbModelName + "'.");
-		//Model model = maker.createModel(dbModelName, true);
-		
-		//close opened connections
-		//maker.close();
-		/*try {
-			dbConnection.close();
-		} catch (SQLException e) {
-			//don't close if unable
-		}
-		dbConnector.close();
-		*/
 		
 		Model model = dbConnector.getModel(dbModelName);
 		return model;
@@ -289,28 +276,15 @@ public class Persister {
 	 * @return
 	 */
 	public Model createDBModel(Dataset dataset) {
-		Connection connection = getConnection(dataset.getConnectionId());
+//		Connection connection = getConnection(dataset.getConnectionId());
+		
 		//String dbModelName = rdbModel.getModelName();
 		String dbModelName = dataset.getId();
-		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
-		SDBConnector dbConnector = new SDBConnector(connection);
-		//DBConnection dbConnection = dbConnector.getJenaConnection();
-				
-		// create a model maker with the given connection parameters
-		//ModelMaker maker = ModelFactory.createModelRDBMaker(dbConnection);
+//		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
+//		SDBConnector dbConnector = new SDBConnector(connection);
+		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(dataset.getConnectionId());
 
 		log.debug("Creating Model of name '" + dbModelName + "'.");
-		//Model model = maker.createModel(dbModelName, true);
-		
-		//close opened connections
-		//maker.close();
-		/*try {
-			dbConnection.close();
-		} catch (SQLException e) {
-			//don't close if unable
-		}
-		dbConnector.close();
-		*/
 		
 		Model model = dbConnector.getModel(dbModelName);
 		
@@ -342,11 +316,11 @@ public class Persister {
 	 * @param datasetRoleId the role id of the internal Dataset
 	 * @return the model, or null if no model found in the metarepository
 	 */
-	public Model getInternalModel(String datasetRoleId) {
-		if (datasetRoleId.equals(METAREPOSITORY_DATASET)) {
-			return getMetarepositoryModel();
-		}
-		InternalDataset internalDataset = getInternalDataset(datasetRoleId);
+	public Model getInternalModel(String datasetId) {
+//		if (datasetRoleId.equals(METAREPOSITORY_DATASET)) {
+//			return getMetarepositoryModel();
+//		}
+		InternalDataset internalDataset = getInternalDataset(datasetId);
 		
 		if (internalDataset != null) {
 			return getIndexableModel(internalDataset);
@@ -355,9 +329,9 @@ public class Persister {
 	}
 	
 	public InternalDataset getInternalDataset(String datasetRoleId) {
-		if (datasetRoleId.equals(METAREPOSITORY_DATASET)) {
-			return getAppInfo().getMetarepositoryDataset();
-		}
+//		if (datasetRoleId.equals(METAREPOSITORY_DATASET)) {
+//			return getAppInfo().getMetarepositoryDataset();
+//		}
 		return getInternalDatasets().get(datasetRoleId);
 	}
 	
@@ -416,7 +390,8 @@ public class Persister {
 		} else {
 			//add each to the internalDatasets in-memory Map
 			for (InternalDataset savedInternalDataset: savedInternalDatasets) {
-				internalDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
+//				internalDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
+				internalDatasets.put(savedInternalDataset.getId(), savedInternalDataset);
 			}
 		}
 		
@@ -428,7 +403,8 @@ public class Persister {
 		Connection defaultInternalConnection = getAppInfo().getInternalConnection();
 		for (IExtensionSpec datasetExtension: datasetExtensions) {
 			
-			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+//			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String datasetId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String cacheModelString = datasetExtension.getAttribute(ATTRIBUTE_CACHE_MODEL);
 			String databaseRoleId = datasetExtension.getAttribute(DATABASE_ROLE_ID_ATTRIBUTE);
 			Connection theConnection = defaultInternalConnection;
@@ -436,30 +412,31 @@ public class Persister {
 			if (databaseRoleId != null) {
 				theConnection = getInternalConnections().get(databaseRoleId);
 				if (theConnection==null) {
-					log.error("Unable to find Database of role: " + databaseRoleId + ". Not creating dataset of role:" + datasetRoleId);
+					log.error("Unable to find Database of role: " + databaseRoleId + ". Not creating dataset of ID:" + datasetId);
 					continue;
 				}
 			}
 			
 			boolean cacheModel = Boolean.getBoolean(cacheModelString);
 			
-			if (internalDatasets.containsKey(datasetRoleId)) {
+			if (internalDatasets.containsKey(datasetId)) {
 				continue;
 			}
 			//create the Dataset
 			InternalDataset internalDataset = new InternalDataset();
-			internalDataset.setDatasetRole(datasetRoleId);
+//			internalDataset.setDatasetRole(datasetRoleId);
+			internalDataset.setId(datasetId);
 			internalDataset.setConnectionId(theConnection.getId());
 			persist(internalDataset);
-			log.trace("Created & stored new InternalDataset for role " + datasetRoleId + ":\n" + JenabeanWriter.toString(internalDataset));
-			internalDatasets.put(datasetRoleId, internalDataset);
+			log.trace("Created & stored new InternalDataset for role " + datasetId + ":\n" + JenabeanWriter.toString(internalDataset));
+			internalDatasets.put(datasetId, internalDataset);
 			
 			//create the underlying model in the SDB database
 			Model internalModel = createDBModel(defaultInternalConnection, internalDataset.getId());
-			log.trace("Created new Model for role " + datasetRoleId + " of size " + internalModel.size());
+			log.trace("Created new Model for role " + datasetId + " of size " + internalModel.size());
 			if (cacheModel) {
-				log.info("Caching model for role " + datasetRoleId);
-				cachedModels.put(datasetRoleId, internalModel);
+				log.info("Caching model for role " + datasetId);
+				cachedModels.put(datasetId, internalModel);
 			}
 		}
 		
@@ -483,6 +460,7 @@ public class Persister {
 		return internalConnections;
 	}
 
+	@Deprecated
 	public Map<String, Model> getCachedModels() {
 		if (cachedModels == null) {
 			getInternalDatasets();
@@ -654,8 +632,9 @@ public class Persister {
 	public void flushIndexes(NamedModel namedModel) {
 		if (namedModel instanceof InternalDataset) {
 			InternalDataset internalDataset = (InternalDataset) namedModel;
-			String datasetRole = internalDataset.getDatasetRole();
-			IndexBuilderModel builder = getIndexBuilder(datasetRole);
+//			String datasetRole = internalDataset.getDatasetRole();
+			String datasetId = internalDataset.getId();
+			IndexBuilderModel builder = getIndexBuilder(datasetId);
 			if (builder != null) {
 				//log.info("Flushing index builder: " + builder + " for dataset role:" + datasetRole + "...");
 				builder.flushWriter();
@@ -715,7 +694,8 @@ public class Persister {
 			}
 		} else if (indexableDataset instanceof InternalDataset) {
 			InternalDataset internalDataset = (InternalDataset)indexableDataset;
-			IndexBuilderModel builder = getIndexBuilder(internalDataset.getDatasetRole());
+//			IndexBuilderModel builder = getIndexBuilder(internalDataset.getDatasetRole());
+			IndexBuilderModel builder = getIndexBuilder(internalDataset.getId());
 			if (builder != null) {
 				model.register(builder);
 			}
@@ -728,68 +708,67 @@ public class Persister {
 	 * @return
 	 */
 	public Model getModel(NamedModel namedModel) {
-		assert(namedModel != null);
+//		assert(namedModel != null);
 		//Model repositoryModel = getMetarepositoryModel();
+		if (namedModel instanceof Dataset) {
+			IDBConnector connector = DBConnectorFactory.getDBConnector(((InternalDataset) namedModel).getConnectionId());
+			return connector.getModel(namedModel.getId());
+		}
+		
+		if (namedModel instanceof Datafile){
+			return Persister.getModelFromFile(((Datafile)namedModel).getFileUrl());
+		}
+		
+		//unknown type of NamedModel: return null
+		return null;
+		
+		//OLD CODE FOLLOWS:
 		
 		//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): get new model");
 		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
-		Model model = null;
-		if (namedModel instanceof InternalDataset) {
-			InternalDataset internalDataset = (InternalDataset)namedModel;
+//		Model model = null;
+//		if (namedModel instanceof InternalDataset) {
+//			InternalDataset internalDataset = (InternalDataset)namedModel;
 			//if the model being requested is the Metarepository, return this special model
-			if (internalDataset.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
-				return getMetarepositoryModel();
-			}
+//			if (internalDataset.getId().equals(getAppInfo().getMetarepositoryDataset().getId())) {
+//				return getMetarepositoryModel();
+//			}
 			
-			if (getCachedModels() != null && getCachedModels().containsKey(internalDataset.getDatasetRole())) {
-				return getCachedModels().get(namedModel.getId());
-			}
-			InternalDataset dataset = (InternalDataset)namedModel;
-			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
-			Connection theConnection;
-			if (dataset.getConnectionId().equals(getAppInfo().getInternalConnection().getId())) {
-				theConnection = getAppInfo().getInternalConnection();
-			} else {
-				
-				try {
-					theConnection = (InternalConnection)reader.load(InternalConnection.class, dataset.getConnectionId());
-				} catch (NotFoundException e) {
-					log.error("Unable to load Connection for Internal Dataset: " + dataset.getConnectionId());
-					return null;
-				}
-			}
-			SDBConnector connector = new SDBConnector(theConnection);
-			model = connector.getModel(namedModel.getId());
+//			if (getCachedModels() != null && getCachedModels().containsKey(internalDataset.getDatasetRole())) {
+//				return getCachedModels().get(namedModel.getId());
+//			}
+//			InternalDataset dataset = (InternalDataset)namedModel;
+//			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
+//			
+//			Connection theConnection;
+//			if (dataset.getConnectionId().equals(getAppInfo().getInternalConnection().getId())) {
+//				theConnection = getAppInfo().getInternalConnection();
+//			} else {
+//				
+//				try {
+//					theConnection = (InternalConnection)reader.load(InternalConnection.class, dataset.getConnectionId());
+//				} catch (NotFoundException e) {
+//					log.error("Unable to load Connection for Internal Dataset: " + dataset.getConnectionId());
+//					return null;
+//				}
+//			}
+//			SDBConnector connector = new SDBConnector(theConnection);
 			
-		} else if (namedModel instanceof ExternalDataset) {
-			ExternalDataset dataset = (ExternalDataset)namedModel;
-			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
-			Connection dbConnectionInfo;
-			try {
-				//dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
-				dbConnectionInfo = (Connection)reader.load(Connection.class, dataset.getConnectionId());
-			} catch (NotFoundException e) {
-				log.error("Unable to load Connection for External Dataset: " + getConnection(dataset.getConnectionId()).getId());
-				return null;
-			}
-			SDBConnector connector = new SDBConnector(dbConnectionInfo);
-			model = connector.getModel(namedModel.getId());
 			
-			/*if null, create a new model
-			if (model == null) {
-				log.debug("Creating Dataset '" + namedModel.getModelName() + "'...");
-				model = createDBModel(dbConnectionInfo, namedModel.getModelName());
-			}
-			*/
-			
-			//close
-			//connector.close();
-			
-		} else if (namedModel instanceof Datafile){
-			model = Persister.getModelFromFile(((Datafile)namedModel).getFileUrl());
-		}
-		
-		return model;
+//		} else if (namedModel instanceof ExternalDataset) {
+//			ExternalDataset dataset = (ExternalDataset)namedModel;
+//			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
+//			Connection dbConnectionInfo;
+//			try {
+//				//dbConnectionInfo = (Connection)reader.load(Connection.class, getConnection(rdbModel.getConnectionId()).getId());
+//				dbConnectionInfo = (Connection)reader.load(Connection.class, dataset.getConnectionId());
+//			} catch (NotFoundException e) {
+//				log.error("Unable to load Connection for External Dataset: " + getConnection(dataset.getConnectionId()).getId());
+//				return null;
+//			}
+//			SDBConnector connector = new SDBConnector(dbConnectionInfo);
+//			model = connector.getModel(namedModel.getId());
+//		return model;
 	}
 	
 	/**
@@ -913,22 +892,23 @@ public class Persister {
 //	}
 	
 	public Model getMetarepositoryModel() {
-		if (metarepositoryModel != null) {
-			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
-			return this.metarepositoryModel;
-		}
-		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
-		Dataset metarepositoryRDBModel = getAppInfo().getMetarepositoryDataset();
-		Connection metarepositoryConnection = getAppInfo().getInternalConnection();
-		
-		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
-		SDBConnector connector = new SDBConnector(metarepositoryConnection);
-		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
-		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
-
-		//worked: this.metarepositoryModel = connector.getMemoryOntModel(metarepositoryRDBModel.getId());
-		this.metarepositoryModel = connector.getModel(metarepositoryRDBModel.getId());
-		return this.metarepositoryModel;
+		return getInternalModel(METAREPOSITORY_DATASET);
+//		if (metarepositoryModel != null) {
+//			//log.info("#" + persisterId + ":getRepositoryModel(): return saved metarepository");
+//			return this.metarepositoryModel;
+//		}
+//		//log.info("#" + persisterId + ":getRepositoryModel(): get new metarepository");
+//		Dataset metarepositoryRDBModel = getAppInfo().getMetarepositoryDataset();
+//		Connection metarepositoryConnection = getAppInfo().getInternalConnection();
+//		
+//		//log.info("getRepositoryModel(): retrieved repositoryConnection: " + JenabeanWriter.toString(repositoryConnection));
+//		SDBConnector connector = new SDBConnector(metarepositoryConnection);
+//		//log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + repositoryNamedModel.getModelName());
+//		log.debug("#" + persisterId + ":getRepositoryModel(): getting model of name:" + metarepositoryConnection.getId());
+//
+//		//worked: this.metarepositoryModel = connector.getMemoryOntModel(metarepositoryRDBModel.getId());
+//		this.metarepositoryModel = connector.getModel(metarepositoryRDBModel.getId());
+//		return this.metarepositoryModel;
 	}
 	
 	
@@ -936,10 +916,10 @@ public class Persister {
 	 * *** CONNECTION METHODS
 	 * ********************************************************************* */
 	
-	public Connection getConnection(String connectionId) {
-		Object connectionObj = Persister.reconstitute(Connection.class, connectionId, getMetarepositoryModel(), true);
-		return (Connection)connectionObj;
-	}
+//	public Connection getConnection(String connectionId) {
+//		Object connectionObj = Persister.reconstitute(Connection.class, connectionId, getMetarepositoryModel(), true);
+//		return (Connection)connectionObj;
+//	}
 
 	/**
 	 * Store a new Connection object in the metarepository and
@@ -947,22 +927,23 @@ public class Persister {
 	 * TODO: handle connection problems
 	 * @param testConnectionInfo
 	 */
-	public int createNewDBConnection(Connection connection) {
+	public int createNewDBConnection(IDatabase database) {
 		//log.info("Will try to create a new Conection spec for test data:\n" + JenabeanWriter.toString(connection));
 		//first create the SDBConnector and use it to create the SDB store in the database
-		SDBConnector connector = new SDBConnector(connection);
+//		SDBConnector connector = new SDBConnector(connection);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
 		//int status = SDBConnector.STORE_CREATED;
-		int status = connector.tryToCreateSDBStore();
+		int status = connector.createDatabase();
 		//connector.createSDBStore();
-		log.debug("Tried to create new SDB store, with status=" + status);
+		log.debug("Tried to create new DB store, with status=" + status);
 		//next register the new DB in the repositories namedModel
 		//TODO: when deleting works, remove the below " || status == SDBConnector.STORE_IS_BLANK"
-		if (status == SDBConnector.STORE_CREATED || status == SDBConnector.STORE_IS_BLANK) {
+		if (status == IDBConnector.STORE_CREATED || status == IDBConnector.STORE_IS_BLANK) {
 			//log.info("Persisting new connectioninfo ... \n" + JenabeanWriter.toString(connectionInfo) + "\n...to the repository model...");
 			//worked: OntModel metarepositoryOntModel = getMetarepositoryModel();
 			//log.info("BEFORE: Repository model has " + metarepositoryOntModel.size() + " statements");
 			//worked: persist(connection, metarepositoryOntModel, true);
-			persist(connection);
+			persist(database);
 			//log.info("AFTER: Repository model has " + metarepositoryOntModel.size() + " statements");
 			//metarepositoryModel.commit();
 		}
@@ -1179,6 +1160,7 @@ public class Persister {
 		return reconstitutedObj;
 	}
 	
+	@Deprecated
 	public List<NamedModel> listNamedModels() {
 		List<NamedModel> namedModels = new ArrayList<NamedModel>();
 		namedModels.addAll((Collection<ExternalDataset>) reconstituteAll(ExternalDataset.class));
@@ -1225,10 +1207,10 @@ public class Persister {
 	 * TODO if the model ever has member Objects, would need to call method which recurses these members
 	 * TODO need to check for exceptions
 	 */
-	public boolean deleteConnection(Connection connection) {
+	public boolean deleteConnection(IDatabase database) {
 		//first remove the connection reference from the metarepository
-		log.debug("Removing connection: " + connection.getUri());
-		Persister.remove(connection, getMetarepositoryModel());
+		log.debug("Removing connection: " + database.getId());
+		Persister.remove(database, getMetarepositoryModel());
 		/*old way to remove:
 		 * 
 		 * Individual individualToRemove = getMetarepositoryModel().getIndividual(connectionUri);
@@ -1241,8 +1223,9 @@ public class Persister {
 		
 		//try to delete the connection
 		try {
-			SDBConnector connector = new SDBConnector(connection);
-			connector.deleteSDBStore();
+//			SDBConnector connector = new SDBConnector(connection);
+			IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+			connector.deleteDatabase();
 			connector.close();
 		} catch (Exception e) {
 			log.error("Unable to delete Jena SDB store", e);
@@ -1280,24 +1263,11 @@ public class Persister {
 		if (namedModel instanceof Dataset) {		
 			
 			//remove the model
-			SDBConnector connector = new SDBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
-			boolean successDeleting = connector.deleteSDBStore();
-			log.info("Success deleting the SDB store? " + successDeleting);
-			//DBConnection jenaConnection = connector.getJenaConnection();
-	    //ModelMaker maker = ModelFactory.createModelRDBMaker(jenaConnection);
-	    //try {
-				//maker.removeModel(namedModel.getModelName());
-			//} catch (Exception e) {
-				//log.error("Unable to delete dataset '" + namedModel.getModelName() + "'");
-			//}
-	    
-	    //close
-	    //maker.close();
-	    //try {
-				//jenaConnection.close();
-			//} catch (SQLException e) {
-				//do not close if unable
-			//}
+//			SDBConnector connector = new SDBConnector(getConnection(((Dataset)namedModel).getConnectionId()));
+			Dataset dataset = (Dataset)namedModel;
+			IDBConnector connector = DBConnectorFactory.getDBConnector(dataset.getConnectionId());
+			boolean successDeleting = connector.deleteDatabase();
+			log.info("Success deleting the DB store? " + successDeleting);
 	    connector.close();
 	    
 	    //invalidate the cache
