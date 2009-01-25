@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import com.hp.hpl.jena.db.DBConnection;
@@ -28,26 +29,7 @@ import com.hp.hpl.jena.sdb.sql.SDBConnection;
  * Jul 17, 2007
  * 
  */
-public class SDBConnector {
-	/**
-	 * This store already exists in the database, and has statements
-	 */
-	public static final int STORE_HAS_STATEMENTS = -2;
-	
-	/**
-	 * This store already exists in the database, and it is blank
-	 */
-	public static final int STORE_IS_BLANK = -1;
-	
-	/**
-	 * This store already exists in the database, and it is blank
-	 */
-	public static final int STORE_NOT_CREATED = 0;
-	
-	/**
-	 * A store was just created in the database
-	 */
-	public static final int STORE_CREATED = 1;
+public class SDBConnector implements IDBConnector {
 	
 	static Logger log = Logger.getLogger(SDBConnector.class);
 	private Store store = null;
@@ -63,7 +45,7 @@ public class SDBConnector {
 	private String dbPassword = null;
 	private String dbType = null;
 	
-	public SDBConnector(Connection connectionInfo) {
+	private SDBConnector(Connection connectionInfo) {
 		this.connectionInfo = connectionInfo;
 		initConnection();
 	}
@@ -75,6 +57,7 @@ public class SDBConnector {
 	 * Yes, this is a circular reference between Persister and SDBConnector
 	 * @return
 	 */
+	@Deprecated
 	public List<org.inqle.data.rdf.jena.Dataset> getExternalDatasets() {
 		Persister persister = Persister.getInstance();
 		Collection<?> datasetObjects = persister.reconstituteAll(Dataset.class);
@@ -132,7 +115,7 @@ public class SDBConnector {
 	 * Retrieves a com.hp.hpl.jena.query.Dataset object, representing 1 or more Jena models
 	 * @return
 	 */
-	public Store getStore() {
+	private Store getStore() {
 		if (store != null) {
 			return store;
 		}
@@ -169,6 +152,7 @@ public class SDBConnector {
 		return model;
 	}
 	
+	//just close the model instead
 	public void close() {
 		try {
 			store.getConnection().close();
@@ -230,7 +214,7 @@ public class SDBConnector {
 	 * This creates a new SDB store.
 	 * ** CAUTION: This deletes the store if it already exists! **
 	 */
-	public void createSDBStore() {
+	public void formatDatabase() {
 		log.info("createSDBStore()...");
 		try {
 			getStore().getTableFormatter().create();
@@ -241,9 +225,9 @@ public class SDBConnector {
 
 	/**
 	 * Create a new SDB store only if it does not yet exist
-	 * @return SDBConnector.status
+	 * @return IDBConnector.status
 	 */
-	public int tryToCreateSDBStore() {
+	public int createDatabase() {
 		log.info("Trying to create store...");
 		int status = STORE_NOT_CREATED;
 		Store store = getStore();
@@ -259,7 +243,7 @@ public class SDBConnector {
 			}
 		} catch (Exception e) {
 			log.error("Unable to connect to store " + connectionInfo.getDbUser() + "@" + connectionInfo.getDbURL() + "\nCreating this store...");
-			createSDBStore();
+			formatDatabase();
 			status = STORE_CREATED;
 		}
 		
@@ -270,7 +254,7 @@ public class SDBConnector {
 	 * 
 	 * @return true if successful; false if an error occurred
 	 */
-	public boolean deleteSDBStore() {
+	public boolean deleteDatabase() {
 		Store store = getStore();
 		try {
 			store.getTableFormatter().truncate();
@@ -281,11 +265,12 @@ public class SDBConnector {
 		}
 	}
 	
-	public ModelMaker getModelMaker() {
+	private ModelMaker getModelMaker() {
 		ModelMaker maker = ModelFactory.createModelRDBMaker(getJenaConnection());
 		return maker;
 	}
 	
+	@Deprecated
 	public OntModel getMemoryOntModel(String modelName) {
 		Model baseModel = getModel(modelName);
 		

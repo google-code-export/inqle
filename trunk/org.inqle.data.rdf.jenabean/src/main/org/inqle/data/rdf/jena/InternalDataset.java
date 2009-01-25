@@ -17,18 +17,18 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class InternalDataset extends Dataset {
 
-	private String datasetRole;
+//	private String datasetRole;
 
-	public String getDatasetRole() {
-		return datasetRole;
-	}
-	public void setDatasetRole(String datasetRole) {
-		this.datasetRole = datasetRole;
-	}
+//	public String getDatasetRole() {
+//		return datasetRole;
+//	}
+//	public void setDatasetRole(String datasetRole) {
+//		this.datasetRole = datasetRole;
+//	}
 	
 	public void clone(InternalDataset objectToBeCloned) {
 		super.clone(objectToBeCloned);
-		setDatasetRole(objectToBeCloned.getDatasetRole());
+//		setDatasetRole(objectToBeCloned.getDatasetRole());
 	}
 	
 	public void replicate(InternalDataset objectToBeCloned) {
