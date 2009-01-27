@@ -78,4 +78,8 @@ public class Connection extends UniqueJenabean implements IDatabase {
 		newObj.replicate(this);
 		return newObj;
 	}
+
+	public String getDisplayName() {
+		return getDbUser() + "@" + getDbURL();
+	}
 }

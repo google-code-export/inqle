@@ -45,7 +45,7 @@ public class SDBConnector implements IDBConnector {
 	private String dbPassword = null;
 	private String dbType = null;
 	
-	private SDBConnector(Connection connectionInfo) {
+	public SDBConnector(Connection connectionInfo) {
 		this.connectionInfo = connectionInfo;
 		initConnection();
 	}
@@ -279,5 +279,14 @@ public class SDBConnector implements IDBConnector {
     
 		OntModel ontModel = ModelFactory.createOntologyModel(modelSpec, baseModel);
 		return ontModel;
+	}
+
+	/**
+	 * list all available SDB databases.
+	 * TODO implement this method.  Requires a circular dependency
+	 */
+	public List<String> listDatabases() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
