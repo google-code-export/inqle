@@ -118,7 +118,7 @@ public class Delete_OntologyDatasetWizard extends Wizard {
 		this.mode = mode;
 		this.databasePart = databasePart;
 		this.startingDataset = startingDataset;
-		this.connection = databasePart.getConnection();
+		this.connection = databasePart.getDatabase();
 		resetModel();
 	}
 

@@ -1,6 +1,7 @@
 package org.inqle.ui.rap.tree.parts;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,14 +11,17 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.IDBConnector;
+import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
-import org.inqle.ui.rap.actions.DatabaseWizardAction;
+import org.inqle.ui.rap.actions.SDBDatabaseWizardAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
 import org.inqle.ui.rap.actions.DeleteDatabaseAction;
 
@@ -25,7 +29,7 @@ public class DatabasePart extends PartType {
 	
 	private static final String ICON_PATH = "org/inqle/ui/rap/images/db.gif";
 	
-	private Connection connection;
+	private IDatabase database;
 	private List<ModelPart> modelParts = new ArrayList<ModelPart>();
 	
 	static Logger log = Logger.getLogger(DatabasePart.class);
@@ -42,7 +46,7 @@ public class DatabasePart extends PartType {
 		" GRAPH ?g { \n " +
 		" ?datasetUri a inqle:ExternalDataset \n " +
 		" . ?datasetUri inqle:id ?datasetId \n " +
-		" . ?datasetUri inqle:connectionId \"" + connection.getId() + "\"^^xsd:string \n" +
+		" . ?datasetUri inqle:connectionId \"" + database.getId() + "\"^^xsd:string \n" +
 		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
 		//" . ?datasetUri inqle:connectionId ?anyConnectionId" +
 		//" . ?datasetUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
@@ -50,15 +54,16 @@ public class DatabasePart extends PartType {
 		return sparql;
 	}
 	
-	public DatabasePart(Connection connection) {
-		this.connection = connection;
+	public DatabasePart(IDatabase database) {
+		this.database = database;
 		//this.persister = persister;
 		modelParts = new ArrayList<ModelPart>();
 	}
 
 	@Override
 	public String getName() {
-		return connection.getDbUser() + "@" + connection.getDbURL();
+//		return database.getDbUser() + "@" + database.getDbURL();
+		return database.getDisplayName();
 	}
 	
 	@Override
@@ -83,49 +88,36 @@ public class DatabasePart extends PartType {
 		
 		//query for all ExternalDataset children
 		Persister persister = Persister.getInstance();
-		AppInfo appInfo = persister.getAppInfo();
-		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.setQuery(getSparqlToFindChildDatasets());
-		log.trace("SPARQL=" + getSparqlToFindChildDatasets());
-		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
-		//RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
-		log.trace("datasetIds=" + datasetIds);
+		
+//		AppInfo appInfo = persister.getAppInfo();
+//		QueryCriteria queryCriteria = new QueryCriteria();
+//		queryCriteria.setQuery(getSparqlToFindChildDatasets());
+//		log.trace("SPARQL=" + getSparqlToFindChildDatasets());
+//		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
+//		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
+//		log.trace("datasetIds=" + datasetIds);
+		
 //		SDBConnector dbConnector = new SDBConnector(getConnection());
 //		List<Dataset> datasets = dbConnector.getDatasets();
 //		log.trace("datasets=" + datasets);
 		
-		//for each item in resultTable, add a ModelPart
+		//for Dataset, add a ModelPart
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+		com.hp.hpl.jena.query.Dataset modelSet = connector.getDataset();
+		if (modelSet==null) return;
+		Iterator modelI = modelSet.listNames();
 		modelParts = new ArrayList<ModelPart>();
-		//for (QuerySolution row: resultTable.getResultList()) {
-//			Literal modelId = row.getLiteral("modelId");
-		for (String datasetId: datasetIds) {
+//		for (String datasetId: datasetIds) {
+		while (modelI.hasNext()) {
+			String datasetId = (String)modelI.next();
 			ExternalDataset dataset = (ExternalDataset)persister.reconstitute(ExternalDataset.class, datasetId, true);
-			dataset.setConnectionId(this.connection.getId());
+			dataset.setConnectionId(this.database.getId());
 //			log.info("DatabasePart Loaded ExternalDataset: " + JenabeanWriter.toString(dataset));
 			ModelPart modelPart = new ModelPart(dataset);
 			modelPart.setParent(this);
 			//modelPart.setPersister(this.persister);
 			modelParts.add(modelPart);
 		}
-		
-		//add ontology datasets
-//		queryCriteria = new QueryCriteria();
-//		queryCriteria.setQuery(getSparqlToFindChildOntologyDatasets());
-//		log.trace("SPARQL=" + getSparqlToFindChildOntologyDatasets());
-//		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
-//		//RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
-//		datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
-//		log.trace("ontology datasetIds=" + datasetIds);
-//		
-//		for (String datasetId: datasetIds) {
-//			OntologyDataset dataset = (OntologyDataset)persister.reconstitute(OntologyDataset.class, datasetId, false);
-//			dataset.setConnectionId(this.connection.getId());
-//			ModelPart modelPart = new ModelPart(dataset);
-//			modelPart.setParent(this);
-//			//modelPart.setPersister(this.persister);
-//			modelParts.add(modelPart);
-//		}
 		
 		this.childrenIntialized = true;
 	}
@@ -145,12 +137,12 @@ public class DatabasePart extends PartType {
 //		actions.add(newOntologyDatasetWizardAction);
 		
 		//"Edit this database" action
-		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow);
+		SDBDatabaseWizardAction editDatabaseWizardAction = new SDBDatabaseWizardAction(SDBDatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow);
 		editDatabaseWizardAction.setDatabasePart(this);
 		actions.add(editDatabaseWizardAction);
 		
 		//"Clone this database" action
-		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", this.getParent(), workbenchWindow);
+		SDBDatabaseWizardAction cloneDatabaseWizardAction = new SDBDatabaseWizardAction(SDBDatabaseWizardAction.MODE_CLONE, "Clone this database...", this.getParent(), workbenchWindow);
 		cloneDatabaseWizardAction.setDatabasePart(this);
 		actions.add(cloneDatabaseWizardAction);
 		
@@ -163,7 +155,7 @@ public class DatabasePart extends PartType {
 
 	private ExternalDataset getNewDataset() {
 		ExternalDataset newDataset = new ExternalDataset();
-		newDataset.setConnectionId(this.getConnection().getId());
+		newDataset.setConnectionId(this.getDatabase().getId());
 		return newDataset.createClone();
 	}
 	
@@ -173,8 +165,8 @@ public class DatabasePart extends PartType {
 //		return newDataset.createClone();
 //	}
 
-	public Connection getConnection() {
-		return this.connection;
+	public IDatabase getDatabase() {
+		return database;
 	}
 
 	/**
@@ -188,7 +180,7 @@ public class DatabasePart extends PartType {
 
 	@Override
 	public Object getObject() {
-		return connection;
+		return database;
 	}
 }
 

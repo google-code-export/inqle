@@ -5,13 +5,8 @@ package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -25,7 +20,7 @@ public class LoadRdfFileAction extends Action {
 	private IWorkbenchWindow window;
 	//private Persister persister = null;
 	private ModelPart modelPart = null;
-	private Connection connection = null;
+//	private IDatabase database = null;
 	
 	private static final Logger log = Logger.getLogger(LoadRdfFileAction.class);
 	
@@ -34,7 +29,7 @@ public class LoadRdfFileAction extends Action {
 		this.modelPart = modelPart;
 		this.window = window;
 		//this.persister = persister;
-		this.connection  = ((DatabasePart)modelPart.getParent()).getConnection();
+//		this.database  = ((DatabasePart)modelPart.getParent()).getDatabase();
 	}
 	
 	public ModelPart getModelPart() {
@@ -48,7 +43,7 @@ public class LoadRdfFileAction extends Action {
 	@Override
 	public void run() {
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		//LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelPart, connection);
+		//LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelPart, database);
 		try {
 			Persister persister = Persister.getInstance();
 			Model modelToImportInto = persister.getIndexableModel(modelPart.getDataset());

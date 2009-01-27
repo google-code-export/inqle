@@ -35,7 +35,7 @@ public class LoadCsvFileAction extends Action {
 		this.modelPart = modelPart;
 		this.window = window;
 		//this.persister = persister;
-		this.connection  = ((DatabasePart)modelPart.getParent()).getConnection();
+		this.connection  = ((DatabasePart)modelPart.getParent()).getDatabase();
 	}
 	
 	public ModelPart getModelPart() {

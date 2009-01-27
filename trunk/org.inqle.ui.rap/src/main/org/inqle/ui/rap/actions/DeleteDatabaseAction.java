@@ -9,6 +9,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
@@ -22,7 +23,7 @@ public class DeleteDatabaseAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
 	//private Persister persister;
-	private Connection connectionToDelete = null;
+	private IDatabase databaseToDelete = null;
 	private IPart databasePart = null;
 	
 	private static final Logger log = Logger.getLogger(DeleteDatabaseAction.class);
@@ -31,7 +32,7 @@ public class DeleteDatabaseAction extends Action {
 		this.window = window;
 		this.menuText = menuText;
 		this.databasePart = databasePart;
-		this.connectionToDelete  = databasePart.getConnection();
+		this.databaseToDelete  = databasePart.getDatabase();
 		//this.persister = persister;
 	}
 	
@@ -50,12 +51,12 @@ public class DeleteDatabaseAction extends Action {
 				return;
 			}
 		}
-		if (connectionToDelete != null) {
+		if (databaseToDelete != null) {
 			deleteObject = MessageDialog.openConfirm(window.getShell(), "Delete this database", "Are you sure you want to delete database\n'" + databasePart.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (deleteObject) {
 			Persister persister = Persister.getInstance();
-			persister.deleteConnection(connectionToDelete);
+			persister.deleteDatabase(databaseToDelete);
 			IPartType parentPart = databasePart.getParent();
 			parentPart.fireUpdate(parentPart);
 		}
