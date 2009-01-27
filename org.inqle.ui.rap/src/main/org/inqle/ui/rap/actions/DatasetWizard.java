@@ -23,7 +23,10 @@ import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.IDBConnector;
+import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -33,6 +36,8 @@ import org.inqle.ui.rap.widgets.TextFieldShower;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
+ * Creates a new dataset, in the specified IDatabase.  Supports 
+ * any type of IDatabase
  * @author David Donohue
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
@@ -42,7 +47,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class DatasetWizard extends Wizard {
 
 	public static final String DEFAULT_CHECKED_ATTRIBUTE = "checkedByDefault";
-	private Connection connection = null;
+	private IDatabase database = null;
 	//private Persister persister;
 	static Logger log = Logger.getLogger(DatasetWizard.class);
 	
@@ -59,7 +64,7 @@ public class DatasetWizard extends Wizard {
 	private DatasetFunctionsPage datasetFunctionsPage;
 	
 	/**
-	 * This generates the wizard page for creating a database connection
+	 * This generates the wizard page for creating a database database
 	 * @author David Donohue
 	 * Feb 8, 2008
 	 */
@@ -85,21 +90,6 @@ public class DatasetWizard extends Wizard {
 	    // create the desired layout for this wizard page
 			GridLayout gl = new GridLayout(2, false);
 			composite.setLayout(gl);
-	    
-	    
-	    //create the form
-			GridData gridData;
-			
-			/*
-			list.addListener (SWT.DefaultSelection, new Listener () {
-				public void handleEvent (Event e) {
-					String string = "";
-					int [] selection = list.getSelectionIndices ();
-					for (int i=0; i<selection.length; i++) string += selection [i] + " ";
-					System.out.println ("DefaultSelection={" + string + "}");
-				}
-			});
-			*/
 			
 			//cannot change the ID once created
 			int textFieldStyle = SWT.BORDER;
@@ -117,10 +107,6 @@ public class DatasetWizard extends Wizard {
 			if (mode != DatasetWizardAction.MODE_NEW && dataset!=null && dataset.getId() != null) {
 				datasetIdTextField.setTextValue(dataset.getId());
 			}
-//			new Label (composite, SWT.NONE).setText("Dataset ID (must be a unique name)");	
-//	    datasetIdText = new Text(composite, SWT.BORDER);
-//	    gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//	    datasetIdText.setLayoutData(gridData);
 			
 			datasetDescriptionTextField = new TextFieldShower(
 					composite,
@@ -210,13 +196,13 @@ public class DatasetWizard extends Wizard {
 		this.mode = mode;
 		this.databasePart = databasePart;
 		this.startingDataset = startingDataset;
-		this.connection = databasePart.getConnection();
+		this.database = databasePart.getDatabase();
 		resetModel();
 	}
 
 	/**
 	 * Optionally set a DatabasePart object which will be used as the base.
-	 * If this is not set, we will create a new connection afresh.
+	 * If this is not set, we will create a new database afresh.
 	 * @param databasePart
 	 */
 //	public void setModelPart(ModelPart modelPart) {
@@ -278,7 +264,7 @@ public class DatasetWizard extends Wizard {
 			dataset.setDatasetFunctions(null);
 		}
 		
-		SDBConnector connector = new SDBConnector(connection);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (! connectionSucceeds) {
@@ -290,7 +276,7 @@ public class DatasetWizard extends Wizard {
 		persister.persist(dataset); 
 		log.info("Saved dataset Dataset=" + JenabeanWriter.toString(dataset));
 		if (this.mode == DatasetWizardAction.MODE_NEW || this.mode == DatasetWizardAction.MODE_CLONE) {
-			Model newModel = persister.createDBModel(connection, dataset.getId());
+			Model newModel = persister.createDBModel(database, dataset.getId());
 			//persister.persist(dataset, newModel, false);
 			log.info("Created new model " + newModel);
 			databasePart.fireUpdate(databasePart);
