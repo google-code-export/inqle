@@ -13,7 +13,7 @@ public class DBConnectorFactory {
 	 */
 	public static IDBConnector getDBConnector(IDatabase database) {
 		if (database instanceof Connection) {
-			return new SDBConnector(database);
+			return new SDBConnector((Connection)database);
 		}
 		return new TDBConnector(database.getId());
 	}
@@ -25,5 +25,9 @@ public class DBConnectorFactory {
 	 */
 	public static IDBConnector getDBConnector(String databaseId) {
 		return new TDBConnector(databaseId);
+	}
+
+	public static IDBConnector getDBConnector() {
+		return new TDBConnector();
 	}
 }

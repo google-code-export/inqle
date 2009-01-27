@@ -26,8 +26,8 @@ public class AppInfo extends UniqueJenabean {
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
 	//private String serverId;
 //	private String serverBaseUrl;
-	private InternalDataset metarepositoryDataset;
-	private Connection internalConnection;
+//	private InternalDataset metarepositoryDataset;
+//	private Connection internalConnection;
 	private Site site;
 	private Collection<UserAccount> adminAccounts = new ArrayList<UserAccount>();
 	
@@ -63,7 +63,8 @@ public class AppInfo extends UniqueJenabean {
 	public void clone(AppInfo objectToBeCloned) {
 //		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
 //		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
-		setInternalConnection(objectToBeCloned.getInternalConnection());
+//		setInternalConnection(objectToBeCloned.getInternalConnection());
+		setAdminAccounts(objectToBeCloned.getAdminAccounts());
 		setSite(objectToBeCloned.getSite());
 		super.clone(objectToBeCloned);
 	}
@@ -86,13 +87,13 @@ public class AppInfo extends UniqueJenabean {
 		return newAppInfo;
 	}
 
-	public Connection getInternalConnection() {
-		return internalConnection;
-	}
-
-	public void setInternalConnection(Connection internalConnection) {
-		this.internalConnection = internalConnection;
-	}
+//	public Connection getInternalConnection() {
+//		return internalConnection;
+//	}
+//
+//	public void setInternalConnection(Connection internalConnection) {
+//		this.internalConnection = internalConnection;
+//	}
 
 	public Site getSite() {
 		return site;

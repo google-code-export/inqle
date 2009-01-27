@@ -21,7 +21,6 @@ import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.Dataset;
@@ -29,6 +28,7 @@ import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.InternalConnection;
+import org.inqle.data.rdf.jena.BasicDatabase;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
@@ -102,7 +102,7 @@ public class Persister {
 	
 	private Map<String, Model> cachedModels = null;
 	private Map<String, InternalDataset> internalDatasets = null;
-	private Map<String, InternalConnection> internalConnections = null;
+	private Map<String, IDatabase> internalDatabases = null;
 //	private Map<String, CacheDataset> cacheDatasets = null;
 	private Map<String, IndexBuilderModel> indexBuilders;
 //	private IndexLARQ schemaFilesSubjectIndex;
@@ -400,19 +400,22 @@ public class Persister {
 		
 		//find or create the Dataset for each.  Store models in cachedModels, where signalled to do so
 		cachedModels = new HashMap<String, Model>();
-		Connection defaultInternalConnection = getAppInfo().getInternalConnection();
+//		Connection defaultInternalConnection = getAppInfo().getInternalConnection();
+//		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.DEFAULT_INTERNAL_DATABASE_ID);
+		IDatabase defaultDatabase = new BasicDatabase();
+		defaultDatabase.setId(InqleInfo.DEFAULT_INTERNAL_DATABASE_ID);
 		for (IExtensionSpec datasetExtension: datasetExtensions) {
 			
 //			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String datasetId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String cacheModelString = datasetExtension.getAttribute(ATTRIBUTE_CACHE_MODEL);
-			String databaseRoleId = datasetExtension.getAttribute(DATABASE_ROLE_ID_ATTRIBUTE);
-			Connection theConnection = defaultInternalConnection;
+			String databaseId = datasetExtension.getAttribute(DATABASE_ROLE_ID_ATTRIBUTE);
+			IDatabase database = defaultDatabase;
 			
-			if (databaseRoleId != null) {
-				theConnection = getInternalConnections().get(databaseRoleId);
-				if (theConnection==null) {
-					log.error("Unable to find Database of role: " + databaseRoleId + ". Not creating dataset of ID:" + datasetId);
+			if (databaseId != null) {
+				database = getInternalDatabases().get(databaseId);
+				if (database==null) {
+					log.error("Unable to find Database: " + database + ". Not creating dataset of ID:" + datasetId);
 					continue;
 				}
 			}
@@ -426,14 +429,14 @@ public class Persister {
 			InternalDataset internalDataset = new InternalDataset();
 //			internalDataset.setDatasetRole(datasetRoleId);
 			internalDataset.setId(datasetId);
-			internalDataset.setConnectionId(theConnection.getId());
+			internalDataset.setConnectionId(database.getId());
 			persist(internalDataset);
 			log.trace("Created & stored new InternalDataset for role " + datasetId + ":\n" + JenabeanWriter.toString(internalDataset));
 			internalDatasets.put(datasetId, internalDataset);
 			
-			//create the underlying model in the SDB database
-			Model internalModel = createDBModel(defaultInternalConnection, internalDataset.getId());
-			log.trace("Created new Model for role " + datasetId + " of size " + internalModel.size());
+			//create the underlying model in the database
+			Model internalModel = createDBModel(database, internalDataset.getId());
+			log.trace("Created new Model of ID: " + datasetId + ", of size: " + internalModel.size());
 			if (cacheModel) {
 				log.info("Caching model for role " + datasetId);
 				cachedModels.put(datasetId, internalModel);
@@ -447,17 +450,19 @@ public class Persister {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Map<String, InternalConnection> getInternalConnections() {
-		if (internalConnections==null) {
+	private Map<String, IDatabase> getInternalDatabases() {
+		if (internalDatabases==null) {
 			log.info("Internal connections=null");
-			internalConnections = new HashMap<String, InternalConnection>();
-			Collection<InternalConnection> internalConnectionColl = (Collection<InternalConnection>)reconstituteAll(InternalConnection.class);
-			for (InternalConnection internalConnection: internalConnectionColl) {
-				log.info("Adding internalConnection=" + internalConnection);
-				internalConnections.put(internalConnection.getConnectionRole(), internalConnection);
+			internalDatabases = new HashMap<String, IDatabase>();
+//			Collection<InternalConnection> internalConnectionColl = (Collection<InternalConnection>)reconstituteAll(InternalConnection.class);
+			Collection<BasicDatabase> internalConnectionColl = (Collection<BasicDatabase>) reconstituteAll(BasicDatabase.class);
+
+			for (BasicDatabase basicDatabase: internalConnectionColl) {
+				log.info("Adding internalConnection=" + basicDatabase);
+				internalDatabases.put(basicDatabase.getId(), basicDatabase);
 			}
 		}
-		return internalConnections;
+		return internalDatabases;
 	}
 
 	@Deprecated
@@ -1207,19 +1212,10 @@ public class Persister {
 	 * TODO if the model ever has member Objects, would need to call method which recurses these members
 	 * TODO need to check for exceptions
 	 */
-	public boolean deleteConnection(IDatabase database) {
+	public boolean deleteDatabase(IDatabase database) {
 		//first remove the connection reference from the metarepository
 		log.debug("Removing connection: " + database.getId());
 		Persister.remove(database, getMetarepositoryModel());
-		/*old way to remove:
-		 * 
-		 * Individual individualToRemove = getMetarepositoryModel().getIndividual(connectionUri);
-		if (individualToRemove == null) {
-			log.warn("Unable to find or remove connection:" + connectionUri);
-			return false;
-		}
-		individualToRemove.remove();
-		*/
 		
 		//try to delete the connection
 		try {
@@ -1346,7 +1342,7 @@ public class Persister {
 
 	public void registerInternalConnection(InternalConnection aConnection) {
 		persist(aConnection);
-		internalConnections.put(aConnection.getConnectionRole(), aConnection);
+		internalDatabases.put(aConnection.getConnectionRole(), aConnection);
 		
 	}
 

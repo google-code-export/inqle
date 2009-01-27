@@ -1,5 +1,7 @@
 package org.inqle.data.rdf.jena;
 
+import java.util.List;
+
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -60,4 +62,11 @@ public interface IDBConnector {
 	 * Close the DB Connector, if necessary
 	 */
 	public void close();
+	
+	/**
+	 * Close the DB Connector, if necessary
+	 */
+	public boolean testConnection();
+
+	public List<String> listDatabases();
 }
