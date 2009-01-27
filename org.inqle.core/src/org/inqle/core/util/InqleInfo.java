@@ -114,4 +114,8 @@ public class InqleInfo {
 	public static String getUriPrefixesDirectory() {
 		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_PREFIXES_FOLDER + "/";
 	}
+
+	public static final String DEFAULT_INTERNAL_DATABASE_ID = "org.inqle.dbs.internal";
+
+	public static final String DEFAULT_METAREPOSITORY_DATASET_ID = "Metarepository";
 }
