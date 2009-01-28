@@ -8,11 +8,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.RdfTableWriter;
-import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
@@ -281,7 +281,7 @@ public class ArcLister {
 		String sparql = getSparqlSelectArcs(subjectClassUri, depth);
 		//log.info("Retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datasetIdList);
 		queryCriteria.setQuery(sparql);
 		
 		return queryGetArcs(queryCriteria);
@@ -291,7 +291,7 @@ public class ArcLister {
 		String sparql = getSparqlSelectFilteredArcs(subjectClassUri, depth);
 		log.info("queryGetFilteredArcs(): retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datasetIdList);
 		queryCriteria.setQuery(sparql);
 		
 		return queryGetArcs(queryCriteria);
@@ -307,7 +307,7 @@ public class ArcLister {
 	public static List<Arc> queryGetValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectValuedArcs(subjectClassUri, depth);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datasetIdList);
 		log.info("queryGetValuedArcs() using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
@@ -325,7 +325,7 @@ public class ArcLister {
 	public static List<Arc> queryGetFilteredValuedArcs(String datasetId, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectFilteredValuedArcs(subjectClassUri, depth);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(datasetId);
+		queryCriteria.addDatamodel(datasetId);
 		log.info("queryGetFilteredValuedArcs() using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
@@ -430,8 +430,8 @@ public class ArcLister {
 	@SuppressWarnings("unchecked")
 	public static void invalidateCache(String datasetId) {
 		Persister persister = Persister.getInstance();
-		Dataset targetDataset = persister.getTargetDataset(SubjectArcsCache.class);
-		Collection<SubjectArcsCache> arcCacheObjectsToRemove = (Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(targetDataset, SubjectArcsCache.class, RDF.INQLE + "datasetId", datasetId);
+		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectArcsCache.class);
+		Collection<SubjectArcsCache> arcCacheObjectsToRemove = (Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(targetDatamodel, SubjectArcsCache.class, RDF.INQLE + "datasetId", datasetId);
 		for (SubjectArcsCache arcCacheObject: arcCacheObjectsToRemove) {
 			persister.remove(arcCacheObject);
 		}

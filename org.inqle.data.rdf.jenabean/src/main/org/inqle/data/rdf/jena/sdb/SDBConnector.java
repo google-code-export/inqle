@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jenabean.Persister;
 
@@ -35,7 +35,7 @@ public class SDBConnector implements IDBConnector {
 	private Store store = null;
 	private Dataset dataset = null;
 	private boolean initialized = false;
-	private Connection connectionInfo = null;
+	private SDBDatabase connectionInfo = null;
 	
 	private String DEFAULT_DB_LAYOUT = "layout2/index";
 	private String dbLayout = DEFAULT_DB_LAYOUT;
@@ -45,7 +45,7 @@ public class SDBConnector implements IDBConnector {
 	private String dbPassword = null;
 	private String dbType = null;
 	
-	public SDBConnector(Connection connectionInfo) {
+	public SDBConnector(SDBDatabase connectionInfo) {
 		this.connectionInfo = connectionInfo;
 		initConnection();
 	}
@@ -58,14 +58,14 @@ public class SDBConnector implements IDBConnector {
 	 * @return
 	 */
 	@Deprecated
-	public List<org.inqle.data.rdf.jena.Dataset> getExternalDatasets() {
+	public List<org.inqle.data.rdf.jena.Datamodel> getExternalDatasets() {
 		Persister persister = Persister.getInstance();
 		Collection<?> datasetObjects = persister.reconstituteAll(Dataset.class);
-		List<org.inqle.data.rdf.jena.Dataset> datasets = new ArrayList<org.inqle.data.rdf.jena.Dataset>();
+		List<org.inqle.data.rdf.jena.Datamodel> datamodels = new ArrayList<org.inqle.data.rdf.jena.Datamodel>();
 		for (Object datasetObject: datasetObjects) {
-			datasets.add((org.inqle.data.rdf.jena.Dataset)datasetObject);
+			datamodels.add((org.inqle.data.rdf.jena.Datamodel)datasetObject);
 		}
-		return datasets;
+		return datamodels;
 	}
 	
 	/**
@@ -101,9 +101,10 @@ public class SDBConnector implements IDBConnector {
 
 	/**
 	 * Retrieves a com.hp.hpl.jena.query.Dataset object, representing 1 or more Jena models
+	 * datasetId should be null
 	 * @return
 	 */
-	public Dataset getDataset() {
+	public Dataset getDataset(String nullString) {
 		if (dataset != null) {
 			return dataset;
 		}
@@ -287,6 +288,13 @@ public class SDBConnector implements IDBConnector {
 	 */
 	public List<String> listDatabases() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * TODO implement this
+	 */
+	public List<String> listModels() {
 		return null;
 	}
 }

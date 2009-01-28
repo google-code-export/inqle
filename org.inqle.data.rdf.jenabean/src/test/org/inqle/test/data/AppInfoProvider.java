@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 import org.apache.log4j.Logger;
-import org.h2.tools.Server;
+//import org.h2.tools.Server;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.Dataset;
-import org.inqle.data.rdf.jena.InternalDataset;
+import org.inqle.data.rdf.jena.SDBDatabase;
+import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Bean2RDF;
@@ -33,7 +33,7 @@ public class AppInfoProvider {
 	private static final String DB_PASSWORD = "test_password";
 	
 	private static Logger log = Logger.getLogger(AppInfoProvider.class);
-	private static Server server;
+//	private static Server server;
 	
 	public static String getAppInfoFilePath() {
 		return APP_HOME + FILENAME_APPINFO;
@@ -41,17 +41,17 @@ public class AppInfoProvider {
 	
 	public static void createAppInfo() {
 		//create the connection object, containing db connection info for the repository namedmodel
-		Connection connection = new Connection();
-		connection.setDbClass(DB_DRIVER);
-		connection.setDbType(DB_TYPE);
-		connection.setDbURL(DB_URL);
-		connection.setDbUser(DB_USER);
-		connection.setDbPassword(DB_PASSWORD);
+		SDBDatabase sDBDatabase = new SDBDatabase();
+		sDBDatabase.setDbClass(DB_DRIVER);
+		sDBDatabase.setDbType(DB_TYPE);
+		sDBDatabase.setDbURL(DB_URL);
+		sDBDatabase.setDbUser(DB_USER);
+		sDBDatabase.setDbPassword(DB_PASSWORD);
 		
 		//Create the repository namedmodel, to contain info about data repositories
-		InternalDataset repositoryModel = new InternalDataset();
+		SystemDatamodel repositoryModel = new SystemDatamodel();
 		repositoryModel.setId(InqleInfo.REPOSITORY_MODEL_NAME);
-		repositoryModel.setConnectionId(connection.getId());
+		repositoryModel.setDatabaseId(sDBDatabase.getId());
 		
 		//create the AppInfo object
 		AppInfo appInfo = new AppInfo();
@@ -87,20 +87,20 @@ public class AppInfoProvider {
 				true);
 	}
 	
-	public static Server startDatabaseServer() throws SQLException {
-		if (server != null) {
-			return server;
-		}
-		
-		String[] args = { "-trace", "-tcp", "-web", "-pg", "-baseDir", "~" };
-		
-		server = Server.createTcpServer(args).start();
-	
-		log.info("Started H2 Database Server using these args:" + Arrays.asList(args));
-		return server;
-	}
-	
-	public static void stopDatabaseServer() {
-		server.stop();
-	}
+//	public static Server startDatabaseServer() throws SQLException {
+//		if (server != null) {
+//			return server;
+//		}
+//		
+//		String[] args = { "-trace", "-tcp", "-web", "-pg", "-baseDir", "~" };
+//		
+//		server = Server.createTcpServer(args).start();
+//	
+//		log.info("Started H2 Database Server using these args:" + Arrays.asList(args));
+//		return server;
+//	}
+//	
+//	public static void stopDatabaseServer() {
+//		server.stop();
+//	}
 }

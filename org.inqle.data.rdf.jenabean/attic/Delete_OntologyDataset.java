@@ -5,10 +5,10 @@ import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
+@TargetDatamodel(Persister.METAREPOSITORY_DATASET)
 @Namespace(RDF.INQLE)
 @Deprecated
-public class Delete_OntologyDataset extends Dataset {
+public class Delete_OntologyDataset extends Datamodel {
 
 	private String pathToOntology;
 	private String ontologyFilesHash;

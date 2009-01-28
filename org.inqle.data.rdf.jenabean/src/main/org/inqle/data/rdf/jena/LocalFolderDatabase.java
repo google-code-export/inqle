@@ -10,11 +10,11 @@ import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import thewebsemantic.Namespace;
 
 /**
- * A Connection, which contains internal INQLE data
+ * A SDBDatabase, which contains internal INQLE data
  * @author David Donohue
  * Jul 2, 2008
  */
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
+@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class LocalFolderDatabase extends UniqueJenabean implements IDatabase {
 	

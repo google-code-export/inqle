@@ -7,9 +7,9 @@ import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
-//public class Connection extends JenaAssemblerObject implements IDatabase {
-public class Connection extends UniqueJenabean implements IDatabase {
+@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
+//public class SDBDatabase extends JenaAssemblerObject implements IDatabase {
+public class SDBDatabase extends UniqueJenabean implements IDatabase {
 	
 	private String dbClass = null;	
 	private String dbPassword = null;
@@ -17,7 +17,7 @@ public class Connection extends UniqueJenabean implements IDatabase {
 	private String dbURL = null;	
 	private String dbUser = null;	
 	
-	public void clone(Connection oldConnection) {
+	public void clone(SDBDatabase oldConnection) {
 		super.clone(oldConnection);
 		setDbClass(oldConnection.getDbClass());
 		setDbPassword(oldConnection.getDbPassword());
@@ -26,7 +26,7 @@ public class Connection extends UniqueJenabean implements IDatabase {
 		setDbUser(oldConnection.getDbUser());
 	}
 	
-	public void replicate(Connection oldConnection) {
+	public void replicate(SDBDatabase oldConnection) {
 		clone(oldConnection);
 		setId(oldConnection.getId());
 		super.replicate(oldConnection);
@@ -67,14 +67,14 @@ public class Connection extends UniqueJenabean implements IDatabase {
 		this.dbUser = dbUser;
 	}
 	
-	public Connection createClone() {
-		Connection newObj = new Connection();
+	public SDBDatabase createClone() {
+		SDBDatabase newObj = new SDBDatabase();
 		newObj.clone(this);
 		return newObj;
 	}
 	
-	public Connection createReplica() {
-		Connection newObj = new Connection();
+	public SDBDatabase createReplica() {
+		SDBDatabase newObj = new SDBDatabase();
 		newObj.replicate(this);
 		return newObj;
 	}

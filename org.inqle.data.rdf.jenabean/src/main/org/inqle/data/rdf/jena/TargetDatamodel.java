@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Annotation for any classes which are intended to be persisted in an InternalDataset.
+ * Annotation for any classes which are intended to be persisted in an SystemDatamodel.
  * The value should be the role ID of the dataset, to which objects of this class should
  * be persisted.
  * 
@@ -17,7 +17,7 @@ import java.lang.annotation.ElementType;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TargetDataset {
+public @interface TargetDatamodel {
 
 	String value();
 

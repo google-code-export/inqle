@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 
 public class QueryCriteriaFactory {
@@ -44,19 +43,19 @@ public class QueryCriteriaFactory {
 //		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
 		
 		List<String> datasetIds = new ArrayList<String>();
-		Collection<?> allExternalDatasets = persister.reconstituteAll(ExternalDataset.class);
+		Collection<?> allExternalDatasets = persister.reconstituteAll(UserDatamodel.class);
 		if (allExternalDatasets == null || allExternalDatasets.size()==0) {
 			return returnQueryCriteria;
 		}
 		for (Object externalDatasetObj: allExternalDatasets) {
-			ExternalDataset externalDataset = (ExternalDataset)externalDatasetObj;
-			Collection<String> datasetFunctions = externalDataset.getDatasetFunctions();
+			UserDatamodel userDatamodel = (UserDatamodel)externalDatasetObj;
+			Collection<String> datasetFunctions = userDatamodel.getDatasetFunctions();
 			if (datasetFunctions != null && datasetFunctions.contains(datasetFunctionId)) {
-				datasetIds.add(externalDataset.getId());
+				datasetIds.add(userDatamodel.getId());
 			}
 		}
 		
-		returnQueryCriteria.addNamedModelIds(datasetIds);
+		returnQueryCriteria.addDatamodelIds(datasetIds);
 		
 		log.info("Returning QueryCriteria for function " + datasetFunctionId + ", with these models:" + datasetIds);
 		return returnQueryCriteria;
@@ -68,7 +67,7 @@ public class QueryCriteriaFactory {
 //		" SELECT ?datasetId \n " +
 //		" { \n " +
 //		" GRAPH ?g { \n " +
-//		" ?datasetUri a inqle:ExternalDataset \n " +
+//		" ?datasetUri a inqle:UserDatamodel \n " +
 ////		" . ?datasetUri inqle:datasetFunctions \"" + datasetFunctionId + "\"^^xsd:string \n" +
 //		" } }\n";
 //		return sparql;

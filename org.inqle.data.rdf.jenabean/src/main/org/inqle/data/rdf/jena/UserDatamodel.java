@@ -11,24 +11,24 @@ import org.inqle.data.rdf.RDF;
 import thewebsemantic.Namespace;
 
 /**
- * A Dataset, which contains external (minable) data
+ * A Datamodel, which contains external (minable) data
  * @author David Donohue
  * Jul 2, 2008
  */
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
+@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class ExternalDataset extends Dataset {
+public class UserDatamodel extends DatabaseBackedDatamodel {
 
 	private Collection<String> datasetFunctions = new ArrayList<String>();
 	
-	public ExternalDataset createClone() {
-		ExternalDataset newObj = new ExternalDataset();
+	public UserDatamodel createClone() {
+		UserDatamodel newObj = new UserDatamodel();
 		newObj.clone(this);
 		return newObj;
 	}
 
-	public ExternalDataset createReplica() {
-		ExternalDataset newObj = new ExternalDataset();
+	public UserDatamodel createReplica() {
+		UserDatamodel newObj = new UserDatamodel();
 		newObj.replicate(this);
 		return newObj;
 	}
@@ -45,13 +45,13 @@ public class ExternalDataset extends Dataset {
 		datasetFunctions.add(datasetFunction);
 	}
 	
-	public void clone(ExternalDataset objectToBeCloned) {
+	public void clone(UserDatamodel objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		//setConnection(objectToBeCloned.getConnection());
 		setDatasetFunctions(objectToBeCloned.getDatasetFunctions());
 	}
 	
-	public void replicate(ExternalDataset objectToClone) {
+	public void replicate(UserDatamodel objectToClone) {
 		clone(objectToClone);
 		setId(objectToClone.getId());
 	}

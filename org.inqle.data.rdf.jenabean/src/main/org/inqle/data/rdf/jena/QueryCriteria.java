@@ -24,7 +24,7 @@ import com.hp.hpl.jena.sdb.Store;
  * this to Queryer, as in
  * 
  *  QueryCriteria queryCriteria = new QueryCriteria(appInfo);
-		queryCriteria.addNamedModel(datamodel);
+		queryCriteria.addDatamodel(datamodel);
 		queryCriteria.setQuery(mySparql);
 		RdfTable resultTable = Queryer.querySelect(queryCriteria);
  * 
@@ -41,7 +41,7 @@ public class QueryCriteria {
 	private Store store;
 	
 //	private List<Model> models = new ArrayList<Model>();
-	private List<NamedModel> namedModels = new ArrayList<NamedModel>();
+	private List<Datamodel> namedModels = new ArrayList<Datamodel>();
 	private DataSource dataSource = null;
 	private String query = "";
 	private IndexLARQ textIndex = null;
@@ -62,28 +62,28 @@ public class QueryCriteria {
 	}
 	
 	/**
-	 * Add a NamedModel to the list of models to query, 
-	 * given the ID of the NamedModel
+	 * Add a Datamodel to the list of models to query, 
+	 * given the ID of the Datamodel
 	 * @param datamodelUri
 	 */
-	public void addNamedModel(String namedModelId) {
+	public void addDatamodel(String namedModelId) {
 		Persister persister = Persister.getInstance();
-		NamedModel namedModel = (NamedModel)persister.getNamedModel(namedModelId);
-		addNamedModel(namedModel);
+		Datamodel namedModel = (Datamodel)persister.getDatamodel(namedModelId);
+		addDatamodel(namedModel);
 	}
 	
 	/**
-	 * Add a NamedModel to the list of models to query
+	 * Add a Datamodel to the list of models to query
 	 * @param aModel
 	 */
-	public void addNamedModel(NamedModel namedModel) {
+	public void addDatamodel(Datamodel namedModel) {
 		log.trace("QueryCriteria.addModel(" + namedModel + ")");
 		Persister persister = Persister.getInstance();
 		namedModels.add(namedModel);
 		Model model = persister.getModel(namedModel);
 		log.debug("In QueryCriteria, adding model of size " + model.size());
 //		models.add(model);
-//		dataSource.addNamedModel(namedModel.getId(), model);
+//		dataSource.addDatamodel(namedModel.getId(), model);
 		addModel(namedModel.getId(), model);
 	}
 	
@@ -114,29 +114,29 @@ public class QueryCriteria {
 	@Deprecated
 	public void setSingleModel(Model model) {
 		this.singleModel = model;
-//		dataSource.addNamedModel(InqleInfo.DEFAULT_NAMED_MODEL_NAME, model);
+//		dataSource.addDatamodel(InqleInfo.DEFAULT_NAMED_MODEL_NAME, model);
 	}
 
 	/**
-	 * Add a List of NamedModel to be queried
+	 * Add a List of Datamodel to be queried
 	 * @param namedModelIds
 	 */
-	public void addNamedModelIds(Collection<String> namedModelIds) {
+	public void addDatamodelIds(Collection<String> namedModelIds) {
 		if (namedModelIds == null) return;
 		Persister persister = Persister.getInstance();
 		for (String namedModelId: namedModelIds) {
-			NamedModel datamodel = persister.getNamedModel(namedModelId);
-			addNamedModel(datamodel);
+			Datamodel datamodel = persister.getDatamodel(namedModelId);
+			addDatamodel(datamodel);
 		}
 	}
 	
 	/**
 	 * Add a List of AModels to query
-	 * @param addNamedModels
+	 * @param addDatamodels
 	 */
-	public void addNamedModels(List<NamedModel> addNamedModels) {
-		for (NamedModel aNamedModel: addNamedModels) {
-			addNamedModel(aNamedModel);
+	public void addDatamodels(List<Datamodel> addDatamodels) {
+		for (Datamodel aDatamodel: addDatamodels) {
+			addDatamodel(aDatamodel);
 		}
 	}
 	
@@ -144,7 +144,7 @@ public class QueryCriteria {
 	 * Get the list of AModels which have been added to this
 	 * @return
 	 */
-	public List<NamedModel> getNamedModels() {
+	public List<Datamodel> getDatamodels() {
 		return namedModels;
 	}
 	

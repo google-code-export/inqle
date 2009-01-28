@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
@@ -24,7 +24,7 @@ import thewebsemantic.Namespace;
  * 
  * TODO extend a base class, which does not have name & description fields
  */
-@TargetDataset(DataMapping.MAPPING_DATASET_ROLE_ID)
+@TargetDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 //public class TableMapping extends GlobalJenabean {
 public class TableMapping extends SubjectMapping {
