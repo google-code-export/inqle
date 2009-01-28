@@ -28,7 +28,7 @@ import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.InternalConnection;
-import org.inqle.data.rdf.jena.BasicDatabase;
+import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.TargetDataset;
@@ -402,8 +402,8 @@ public class Persister {
 		cachedModels = new HashMap<String, Model>();
 //		Connection defaultInternalConnection = getAppInfo().getInternalConnection();
 //		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.DEFAULT_INTERNAL_DATABASE_ID);
-		IDatabase defaultDatabase = new BasicDatabase();
-		defaultDatabase.setId(InqleInfo.DEFAULT_INTERNAL_DATABASE_ID);
+		IDatabase defaultDatabase = new LocalFolderDatabase();
+		defaultDatabase.setId(InqleInfo.SYSTEM_DATABASE_ROOT);
 		for (IExtensionSpec datasetExtension: datasetExtensions) {
 			
 //			String datasetRoleId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
@@ -455,11 +455,11 @@ public class Persister {
 			log.info("Internal connections=null");
 			internalDatabases = new HashMap<String, IDatabase>();
 //			Collection<InternalConnection> internalConnectionColl = (Collection<InternalConnection>)reconstituteAll(InternalConnection.class);
-			Collection<BasicDatabase> internalConnectionColl = (Collection<BasicDatabase>) reconstituteAll(BasicDatabase.class);
+			Collection<LocalFolderDatabase> internalConnectionColl = (Collection<LocalFolderDatabase>) reconstituteAll(LocalFolderDatabase.class);
 
-			for (BasicDatabase basicDatabase: internalConnectionColl) {
-				log.info("Adding internalConnection=" + basicDatabase);
-				internalDatabases.put(basicDatabase.getId(), basicDatabase);
+			for (LocalFolderDatabase localFolderDatabase: internalConnectionColl) {
+				log.info("Adding internalConnection=" + localFolderDatabase);
+				internalDatabases.put(localFolderDatabase.getId(), localFolderDatabase);
 			}
 		}
 		return internalDatabases;
