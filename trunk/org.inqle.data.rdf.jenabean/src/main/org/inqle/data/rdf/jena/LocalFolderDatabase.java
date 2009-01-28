@@ -16,35 +16,25 @@ import thewebsemantic.Namespace;
  */
 @TargetDataset(Persister.METAREPOSITORY_DATASET)
 @Namespace(RDF.INQLE)
-public class BasicDatabase extends UniqueJenabean implements IDatabase {
-
-//	private String role;
-//
-//	public String getRole() {
-//		return role;
-//	}
-//	public void setRole(String role) {
-//		this.role = role;
-//	}
+public class LocalFolderDatabase extends UniqueJenabean implements IDatabase {
 	
-	public void clone(BasicDatabase objectToBeCloned) {
+	public void clone(LocalFolderDatabase objectToBeCloned) {
 		super.clone(objectToBeCloned);
-//		setRole(objectToBeCloned.getRole());
 	}
 	
-	public void replicate(BasicDatabase objectToBeCloned) {
+	public void replicate(LocalFolderDatabase objectToBeCloned) {
 		clone(objectToBeCloned);
-//		setId(objectToBeCloned.getId());
+		setId(objectToBeCloned.getId());
 	}
 	
-	public BasicDatabase createClone() {
-		BasicDatabase newObj = new BasicDatabase();
+	public LocalFolderDatabase createClone() {
+		LocalFolderDatabase newObj = new LocalFolderDatabase();
 		newObj.clone(this);
 		return newObj;
 	}
 
-	public BasicDatabase createReplica() {
-		BasicDatabase newObj = new BasicDatabase();
+	public LocalFolderDatabase createReplica() {
+		LocalFolderDatabase newObj = new LocalFolderDatabase();
 		newObj.replicate(this);
 		return newObj;
 	}
