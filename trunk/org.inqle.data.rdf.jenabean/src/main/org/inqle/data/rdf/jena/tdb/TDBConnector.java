@@ -1,18 +1,23 @@
 package org.inqle.data.rdf.jena.tdb;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.IDBConnector;
-import org.inqle.data.rdf.jena.IDatabase;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.tdb.TDBFactory;
 
 public class TDBConnector implements IDBConnector {
 
 	private String databaseId;
 
+	private static Logger log = Logger.getLogger(TDBConnector.class);
+	
 	public TDBConnector(String databaseId) {
 		this.databaseId = databaseId;
 	}
@@ -21,35 +26,59 @@ public class TDBConnector implements IDBConnector {
 		
 	}
 
+	/**
+	 * Creates a new database (folder) withing the root database folder
+	 * Returns IDBConnector.STORE_CREATED if successful, otherwise 
+	 * IDBConnector.STORE_NOT_CREATED
+	 */
 	public int createDatabase() {
+		if (databaseId==null || databaseId.length()==0) {
+			log.error("Unable to create new database, as databaseId is blank or null");
+			return IDBConnector.STORE_NOT_CREATED;
+		}
 		
+		File newDBFolder = new File(getFilePath());
+		
+		boolean dirMade = newDBFolder.mkdir();
+		if (dirMade) {
+			return IDBConnector.STORE_CREATED;
+		} else {
+			return IDBConnector.STORE_NOT_CREATED;
+		}
 	}
 
 	public boolean deleteDatabase() {
+		if (databaseId==null || databaseId.length()==0) {
+			log.error("Unable to delete database: null");
+			return false;
+		}
 		
+		File folderToDelete = new File(getFilePath());
+		return folderToDelete.delete();
 	}
 
 	public void formatDatabase() {
-		
+		deleteDatabase();
+		createDatabase();
 	}
 
-	public Dataset getDataset() {
-		
+	public Dataset getDataset(String modelName) {
+		return TDBFactory.createDataset(getFilePath() + "/" + modelName);
 	}
 
 	public Model getModel(String modelName) {
-		// TODO Auto-generated method stub
-		return null;
+		log.info("Creating/loading model: " + getFilePath() + "/" + modelName);
+		return TDBFactory.createModel(getFilePath() + "/" + modelName);
 	}
 
+	/**
+	 * Cannot close a folder, so nothing to do
+	 */
 	public void close() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public boolean testConnection() {
-		// TODO Auto-generated method stub
-		return false;
+		return new File(getFilePath()).exists();
 	}
 
 	public String getDatabaseId() {
@@ -60,9 +89,44 @@ public class TDBConnector implements IDBConnector {
 		this.databaseId = databaseId;
 	}
 
+	/**
+	 * List all models for this database
+	 */
+	public List<String> listModels() {
+		List<String> modelIds = new ArrayList<String>();
+		String dbRootPath = getFilePath();
+		File dbRoot = new File(dbRootPath);
+		File[] databaseFolders = dbRoot.listFiles();
+		log.info("Listing models for database: " + getFilePath());
+		for (File databaseFolder: databaseFolders) {
+			if (databaseFolder.isDirectory()) {
+				log.info("Found model: " + databaseFolder.getName());
+				modelIds.add(databaseFolder.getName());
+			}
+		}
+		return modelIds;
+	}
+	
+	/**
+	 * list all databases, from the rootmost DB folder
+	 */
 	public List<String> listDatabases() {
 		List<String> databases = new ArrayList<String>();
-		
+		String dbRootPath = InqleInfo.getDatabaseRootFilePath();
+		File dbRoot = new File(dbRootPath);
+		File[] databaseFolders = dbRoot.listFiles();
+		for (File databaseFolder: databaseFolders) {
+			if (databaseFolder.isDirectory()) {
+				databases.add(databaseFolder.getName());
+			}
+		}
+		return databases;
 	}
+	
+	private String getFilePath() {
+		return InqleInfo.getDatabaseRootFilePath() + databaseId;
+	}
+
+	
 
 }

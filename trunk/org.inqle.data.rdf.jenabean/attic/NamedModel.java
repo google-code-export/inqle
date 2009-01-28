@@ -42,7 +42,7 @@ public abstract class NamedModel extends UniqueJenabean {
 //		setModelName(name);
 //	}
 //	
-//	public void clone(Dataset objectToBeCloned) {
+//	public void clone(Datamodel objectToBeCloned) {
 //		super.clone(objectToBeCloned);
 //		setModelName(objectToBeCloned.getModelName());
 //	}

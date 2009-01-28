@@ -6,8 +6,6 @@ package org.inqle.data.rdf.jenabean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.inqle.data.rdf.jena.NamedModel;
-
 import thewebsemantic.TypeWrapper;
 
 /**

@@ -9,13 +9,13 @@ import org.inqle.data.rdf.jenabean.Persister;
 import thewebsemantic.Namespace;
 
 /**
- * A Dataset, which contains internal INQLE data
+ * A Datamodel, which contains internal INQLE data
  * @author David Donohue
  * Jul 2, 2008
  */
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
+@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class InternalDataset extends Dataset {
+public class SystemDatamodel extends DatabaseBackedDatamodel {
 
 //	private String datasetRole;
 
@@ -26,24 +26,24 @@ public class InternalDataset extends Dataset {
 //		this.datasetRole = datasetRole;
 //	}
 	
-	public void clone(InternalDataset objectToBeCloned) {
+	public void clone(SystemDatamodel objectToBeCloned) {
 		super.clone(objectToBeCloned);
 //		setDatasetRole(objectToBeCloned.getDatasetRole());
 	}
 	
-	public void replicate(InternalDataset objectToBeCloned) {
+	public void replicate(SystemDatamodel objectToBeCloned) {
 		clone(objectToBeCloned);
 		setId(objectToBeCloned.getId());
 	}
 	
-	public InternalDataset createClone() {
-		InternalDataset newObj = new InternalDataset();
+	public SystemDatamodel createClone() {
+		SystemDatamodel newObj = new SystemDatamodel();
 		newObj.clone(this);
 		return newObj;
 	}
 
-	public InternalDataset createReplica() {
-		InternalDataset newObj = new InternalDataset();
+	public SystemDatamodel createReplica() {
+		SystemDatamodel newObj = new SystemDatamodel();
 		newObj.replicate(this);
 		return newObj;
 	}

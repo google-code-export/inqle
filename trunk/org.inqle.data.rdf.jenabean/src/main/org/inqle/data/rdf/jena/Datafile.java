@@ -12,9 +12,9 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Jan 9, 2008
  */
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
+@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class Datafile extends NamedModel {
+public class Datafile extends Datamodel {
 
 	private String fileUrl;
 	

@@ -3,8 +3,8 @@ package org.inqle.data.rdf;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.InternalDataset;
+import org.inqle.data.rdf.jena.SDBDatabase;
+import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.rdf.jenabean.UserAccount;
@@ -26,8 +26,8 @@ public class AppInfo extends UniqueJenabean {
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
 	//private String serverId;
 //	private String serverBaseUrl;
-//	private InternalDataset metarepositoryDataset;
-//	private Connection internalConnection;
+//	private SystemDatamodel metarepositoryDataset;
+//	private SDBDatabase internalConnection;
 	private Site site;
 	private Collection<UserAccount> adminAccounts = new ArrayList<UserAccount>();
 	
@@ -44,11 +44,11 @@ public class AppInfo extends UniqueJenabean {
 //		this.serverBaseUrl = serverBaseUrl;
 //	}
 
-//	public InternalDataset getMetarepositoryDataset() {
+//	public SystemDatamodel getMetarepositoryDataset() {
 //		return metarepositoryDataset;
 //	}
 //	
-//	public void setMetarepositoryDataset(InternalDataset metarepositoryDataset) {
+//	public void setMetarepositoryDataset(SystemDatamodel metarepositoryDataset) {
 //		this.metarepositoryDataset = metarepositoryDataset;
 //	}
 
@@ -87,11 +87,11 @@ public class AppInfo extends UniqueJenabean {
 		return newAppInfo;
 	}
 
-//	public Connection getInternalConnection() {
+//	public SDBDatabase getInternalConnection() {
 //		return internalConnection;
 //	}
 //
-//	public void setInternalConnection(Connection internalConnection) {
+//	public void setInternalConnection(SDBDatabase internalConnection) {
 //		this.internalConnection = internalConnection;
 //	}
 

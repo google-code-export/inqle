@@ -9,13 +9,13 @@ import org.inqle.data.rdf.jenabean.Persister;
 import thewebsemantic.Namespace;
 
 /**
- * A Connection, which contains internal INQLE data
+ * A SDBDatabase, which contains internal INQLE data
  * @author David Donohue
  * Jul 2, 2008
  */
-@TargetDataset(Persister.METAREPOSITORY_DATASET)
+@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class InternalConnection extends Connection {
+public class InternalConnection extends SDBDatabase {
 
 	private String connectionRole;
 

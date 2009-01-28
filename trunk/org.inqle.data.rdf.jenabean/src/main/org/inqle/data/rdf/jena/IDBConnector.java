@@ -28,17 +28,17 @@ public interface IDBConnector {
 	public static final int STORE_CREATED = 1;
 	
 	/**
-	 * Get the Jena Dataset object, representing a set of named graphs
+	 * Get the Jena Datamodel object, representing a set of named graphs
 	 * @return
 	 */
-	public Dataset getDataset();
+	public Dataset getDataset(String datasetId);
 	
 	/**
 	 * Get the Jenam model of the specified name
 	 * @param modelName
 	 * @return
 	 */
-	public Model getModel(String modelName);
+	public Model getModel(String modelId);
 	
 	/**
 	 * This creates a new database/store.
@@ -47,7 +47,7 @@ public interface IDBConnector {
 	public void formatDatabase();
 	
 	/**
-	 * Create a new SDB store only if it does not yet exist
+	 * Create a new database/store only if it does not yet exist
 	 * @return IDBConnector.status
 	 */
 	public int createDatabase();
@@ -69,4 +69,6 @@ public interface IDBConnector {
 	public boolean testConnection();
 
 	public List<String> listDatabases();
+
+	public List<String> listModels();
 }

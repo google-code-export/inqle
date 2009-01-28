@@ -55,7 +55,7 @@ inqle:dbUser
 inqle:InternalDataset
       a       rdfs:Class ;
       <http://thewebsemantic.com/javaclass>
-              "org.inqle.data.rdf.jena.InternalDataset" .
+              "org.inqle.data.rdf.jena.SystemDatamodel" .
 
 inqle:password
       a       rdf:Property .
@@ -118,7 +118,7 @@ inqle:adminAccounts
 inqle:Connection
       a       rdfs:Class ;
       <http://thewebsemantic.com/javaclass>
-              "org.inqle.data.rdf.jena.Connection" .
+              "org.inqle.data.rdf.jena.SDBDatabase" .
 
 inqle:datasetRole
       a       rdf:Property .

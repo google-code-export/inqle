@@ -8,9 +8,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Finder;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -120,21 +120,21 @@ public class SubjectClassLister {
 
 	public static List<String> queryGetAllSubjectClasses(Collection<String> datasetIdList) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datasetIdList);
 		queryCriteria.setQuery(SPARQL_SELECT_CLASSES);
 		return Queryer.selectUriList(queryCriteria);
 	}
 	
 	public static ResultSetRewindable queryGetAllSubjectsRS(String datasetId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(datasetId);
+		queryCriteria.addDatamodel(datasetId);
 		queryCriteria.setQuery(SPARQL_SELECT_CLASSES_TABLE);
 		return Queryer.selectResultSet(queryCriteria);
 	}
 	
 	public static ResultSetRewindable queryGetUncommonSubjectsRS(String datasetId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(datasetId);
+		queryCriteria.addDatamodel(datasetId);
 		queryCriteria.setQuery(getSparqlSelectUncommonClassesTable());
 		return Queryer.selectResultSet(queryCriteria);
 	}
@@ -143,7 +143,7 @@ public class SubjectClassLister {
 	
 	public static List<String> queryGetUncommonSubjectClasses(String datasetId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(datasetId);
+		queryCriteria.addDatamodel(datasetId);
 		queryCriteria.setQuery(getSparqlSelectUncommonClasses());
 		//log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
 		return Queryer.selectUriList(queryCriteria);
@@ -151,7 +151,7 @@ public class SubjectClassLister {
 	
 	public static List<String> queryGetUncommonSubjectClasses(Collection<String> datasetIdList) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datasetIdList);
 		queryCriteria.setQuery(getSparqlSelectUncommonClasses());
 		//log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
 		return Queryer.selectUriList(queryCriteria);
@@ -229,8 +229,8 @@ public class SubjectClassLister {
 	@SuppressWarnings("unchecked")
 	public static void invalidateCache(String datasetId) {
 		Persister persister = Persister.getInstance();
-		Dataset targetDataset = persister.getTargetDataset(SubjectClassCache.class);
-		Collection<SubjectClassCache> subjectClassCacheObjectsToRemove = (Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(targetDataset, SubjectClassCache.class, RDF.INQLE + "datasetId", datasetId);
+		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectClassCache.class);
+		Collection<SubjectClassCache> subjectClassCacheObjectsToRemove = (Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(targetDatamodel, SubjectClassCache.class, RDF.INQLE + "datasetId", datasetId);
 		for (SubjectClassCache cacheObject: subjectClassCacheObjectsToRemove) {
 			persister.remove(cacheObject);
 		}

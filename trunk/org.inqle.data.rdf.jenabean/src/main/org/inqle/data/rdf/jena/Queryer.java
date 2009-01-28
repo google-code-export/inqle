@@ -1,12 +1,10 @@
-package org.inqle.data.rdf.jena.sdb;
+package org.inqle.data.rdf.jena;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.RdfTable;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.Converter;
 import org.inqle.data.rdf.jenabean.ArcSet;
@@ -204,7 +202,7 @@ import com.hp.hpl.jena.sdb.SDB;
 //			return resultTable;
 //		}
 //		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
-//		Dataset dataset = queryCriteria.getDataset();
+//		Datamodel dataset = queryCriteria.getDataset();
 //		
 //		//log info about the dataset
 //		Iterator<?> datasetNamesI = dataset.listNames();
