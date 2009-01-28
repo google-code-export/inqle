@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.RDF;
 
@@ -20,7 +20,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Apr 18, 2008
  */
-@TargetDataset(ILearningCycle.LEARNING_CYCLES_DATASET)
+@TargetDatamodel(ILearningCycle.LEARNING_CYCLES_DATASET)
 @Namespace(RDF.INQLE)
 public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerExperiment {
 

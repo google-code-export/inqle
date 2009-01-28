@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
 import org.inqle.agent.IAgent;
 import org.inqle.core.util.RandomListChooser;
-import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.experiment.rapidminer.ExperimentResult;
@@ -16,7 +16,7 @@ import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
 
-@TargetDataset(IAgent.AGENT_DATASET)
+@TargetDatamodel(IAgent.AGENT_DATASET)
 @Namespace(RDF.INQLE)
 public class ExperimenterAgent extends AAgent {
 
