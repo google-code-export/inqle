@@ -13,14 +13,14 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.LocalFolderDatabase;
-import org.inqle.data.rdf.jena.InternalDataset;
+import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -33,6 +33,8 @@ import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.RadiosPage;
 import org.inqle.ui.rap.pages.ServerInfoPage;
 import org.inqle.ui.rap.pages.SingleTextPage;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * @author David Donohue
@@ -61,16 +63,15 @@ public class AppInfoWizard extends Wizard {
 //	private static final String DEFAULT_FIRSTDATA_DB_NAME = "inqle_data1";
 //	private static final String DEFAULT_FIRSTDATA_DB_USER_NAME = "inqle";
 	
-	private static final String DEFAULT_FIRSTDATA_DATABASE_ID = "database1";
-	private static final String DEFAULT_FIRSTDATA_DATASET_ID = "dataset1";
+	private static final String FIRSTDATA_DATAMODEL_ID = "data1";
 	
 	private AppInfo appInfo = new AppInfo();
 	private Shell shell;
 //	private IDatabase metarepositoryConnection;
-//	private InternalDataset metarepositoryDataset;
+//	private SystemDatamodel metarepositoryDataset;
 //	
 //	private IDatabase firstDataDatabase;
-//	private ExternalDataset firstDataDataset;
+//	private UserDatamodel firstDataDataset;
 	
 	private ServerInfoPage serverInfoPage;
 	private UserAccountPage userAccountPage;
@@ -129,17 +130,17 @@ public class AppInfoWizard extends Wizard {
 		
 //		metarepositoryDataset = appInfo.getMetarepositoryDataset();
 //		if (metarepositoryDataset == null) {
-//			metarepositoryDataset = new InternalDataset();
+//			metarepositoryDataset = new SystemDatamodel();
 //			//metarepositoryDataset.setModelName("Metarepository");
 //			metarepositoryDataset.setId(DEFAULT_METAREPOSITORY_ID);
 //		}
 //		metarepositoryConnection = appInfo.getInternalConnection();
 //		if (metarepositoryConnection == null) {
-//			metarepositoryConnection = new Connection();
+//			metarepositoryConnection = new SDBDatabase();
 //			metarepositoryConnection.setRandomId();
 //			metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
 //		}
-////		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
+////		SDBDatabase metarepositoryConnection = metarepositoryRdbModel.getConnection();
 //		metarepositoryConnectionPage = new ConnectionPage(
 //				"Specify database connection info for your INQLE server", 
 //				metarepositoryConnection, 
@@ -169,7 +170,7 @@ public class AppInfoWizard extends Wizard {
 //		cacheConnection.setConnectionRole(Persister.CACHE_CONNECTION);
 //		cacheConnection.setRandomId();
 		
-//		Connection metarepositoryConnection = metarepositoryRdbModel.getConnection();
+//		SDBDatabase metarepositoryConnection = metarepositoryRdbModel.getConnection();
 //		cacheConnectionPage = new ConnectionPage(
 //				"Specify database connection info for cached data", 
 //				cacheConnection, 
@@ -189,11 +190,11 @@ public class AppInfoWizard extends Wizard {
 //		addPage(embeddedFirstDataDBPage);
 //		log.info("added embeddedFirstDataDBPage");
 		
-//		firstDataDatabase = new Connection();
+//		firstDataDatabase = new SDBDatabase();
 //		firstDataDatabase.setRandomId();
 
 		
-//		Connection firstDataDatabase = firstDataRdbModel.getConnection();
+//		SDBDatabase firstDataDatabase = firstDataRdbModel.getConnection();
 //		firstDataConnectionPage = new ConnectionPage(
 //				"Specify database connection info for your for first dataset", 
 //				firstDataDatabase, 
@@ -316,6 +317,8 @@ public class AppInfoWizard extends Wizard {
 		//focus away from current item on current page, ensuring that databinding happens
 //		getContainer().getCurrentPage().getControl().forceFocus();
 		
+		Persister persister = Persister.getInstance();
+		
 		Site site = new Site();
 		site.setRandomId();
 		site.setOwnerEmail(serverInfoPage.getOwnerEmail());
@@ -347,36 +350,41 @@ public class AppInfoWizard extends Wizard {
 //		log.info("Tried to create new SDB store for Metarepository, with status=" + status);
 		IDatabase systemDatabase = new LocalFolderDatabase();
 		systemDatabase.setId(InqleInfo.SYSTEM_DATABASE_ROOT);
-		InternalDataset metarepositoryDataset = new InternalDataset();
-		metarepositoryDataset.setId(InqleInfo.DEFAULT_METAREPOSITORY_DATASET_ID);
-		metarepositoryDataset.setConnectionId(DEFAULT_FIRSTDATA_DATABASE_ID);
+		SystemDatamodel metarepositoryDatamodel = new SystemDatamodel();
+		metarepositoryDatamodel.setId(Persister.METAREPOSITORY_DATAMODEL);
+		metarepositoryDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ROOT);
 		
 		try {
 			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase);
 			int status = connector.createDatabase();
 			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ROOT + ": Status=" + status);
-			Persister persister = Persister.getInstance();
+			Model metarepositoryModel = connector.getModel(Persister.METAREPOSITORY_DATAMODEL);
 			persister.persist(systemDatabase);
-			persister.persist(metarepositoryDataset);
+			persister.persist(metarepositoryDatamodel);
+			log.info("CREATED user database and first user datamodel.");
+//			persister.createDBModel(metarepositoryDataset);
 		} catch (Exception e) {
-			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ROOT + " and dataset: " + InqleInfo.DEFAULT_METAREPOSITORY_DATASET_ID, e);
+			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ROOT + " and dataset: " + Persister.METAREPOSITORY_DATAMODEL, e);
 			//TODO show error to user
 			return false;
 		}
 		
-		ExternalDataset firstDataDataset = new ExternalDataset();
-		firstDataDataset.setId(DEFAULT_FIRSTDATA_DATASET_ID);
-		IDatabase firstDataDatabase = new LocalFolderDatabase();
-		firstDataDatabase.setId(DEFAULT_FIRSTDATA_DATABASE_ID);
-		firstDataDataset.setConnectionId(firstDataDatabase.getId());
+		UserDatamodel firstDataDataset = new UserDatamodel();
+		firstDataDataset.setId(FIRSTDATA_DATAMODEL_ID);
+		IDatabase userDatabase = new LocalFolderDatabase();
+		userDatabase.setId(InqleInfo.USER_DATABASE_ROOT);
+		firstDataDataset.setDatabaseId(userDatabase.getId());
 		firstDataDataset.addDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);
 		try {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(firstDataDatabase);
-			int status = connector.createDatabase();
-			log.info("Created data store for first dataset " + firstDataDataset + ": Status=" + status);
-			Persister persister = Persister.getInstance();
-			persister.persist(firstDataDatabase);
-			persister.persist(firstDataDataset);
+//			IDBConnector connector = DBConnectorFactory.getDBConnector(firstDataDatabase);
+//			int status = connector.createDatabase();
+//			log.info("Created data store for first dataset " + firstDataDataset + ": Status=" + status);
+//			Persister persister = Persister.getInstance();
+//			persister.persist(firstDataDatabase);
+//			persister.persist(firstDataDataset);
+			persister.createNewDatabase(userDatabase);
+			persister.createDatabaseBackedModel(firstDataDataset);
+			log.info("CREATED user database and first user datamodel.");
 		} catch (Exception e) {
 			log.error("Error creating/storing first dataset", e);
 		}

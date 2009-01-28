@@ -20,21 +20,21 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 /**
-	 * This generates the wizard page for creating a database connection
+	 * This generates the wizard page for creating a database sDBDatabase
 	 * @author David Donohue
 	 * Feb 8, 2008
 	 */
 	public class ConnectionPage extends WizardPage {
 		
 		private static Logger log = Logger.getLogger(ConnectionPage.class);
-		private Connection connection = null;
+		private SDBDatabase sDBDatabase = null;
 
 		private Shell shell;
 		private String pageTitle;
@@ -77,10 +77,10 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 			"jdbc:productname://localhost:1234/databasename" 
 		};
 		
-		public ConnectionPage(String pageTitle, Connection connection, Shell shell) {
+		public ConnectionPage(String pageTitle, SDBDatabase sDBDatabase, Shell shell) {
 			super(pageTitle);
 			this.pageTitle = pageTitle;
-			this.connection = connection;
+			this.sDBDatabase = sDBDatabase;
 			this.shell = shell;
 		}
 		
@@ -91,7 +91,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 		
 		public void createControl(Composite pageParent) {
 			
-//			log.info("createControl() using Connection:\n" + JenabeanWriter.toString(connection));
+//			log.info("createControl() using SDBDatabase:\n" + JenabeanWriter.toString(sDBDatabase));
 			Composite composite = new Composite(pageParent, SWT.NONE);
 	    // create the desired layout for this wizard page
 			GridLayout gl = new GridLayout(2, false);
@@ -110,7 +110,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 			//log.info("DBTYPES has " + DBTYPES.length);
 			for (int i=0; i<DBTYPES.length; i++) {
 				dbTypeList.add (DBTYPES[i]);
-				if (DBTYPES[i].equals(connection.getDbType())) {
+				if (DBTYPES[i].equals(sDBDatabase.getDbType())) {
 					dbTypeList.select(i);
 				}
 				//log.info("Adding DBType: " + DBTYPES[i]);
@@ -153,7 +153,7 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 	    dbPassword.setLayoutData(gridData);
 	    
 	    Button testConnection = new Button(composite, SWT.PUSH);
-	    testConnection.setText("Test Connection");
+	    testConnection.setText("Test SDBDatabase");
 
 	    testConnection.addListener(SWT.Selection, new Listener() {
 				public void handleEvent(Event e) {
@@ -197,35 +197,35 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 	    
 	    //TODO change BeansObservables to PojoObservables, when available:  http://fire-change-event.blogspot.com/2007/10/getting-rid-of-those-pesky-could-not.html
 	    IObservableValue dbTypeObserveWidget = SWTObservables.observeText(dbType, SWT.FocusOut);
-			IObservableValue dbTypeObserveValue = BeansObservables.observeValue(realm, connection, "dbType");
+			IObservableValue dbTypeObserveValue = BeansObservables.observeValue(realm, sDBDatabase, "dbType");
 			bindingContext.bindValue(dbTypeObserveWidget, dbTypeObserveValue, null, null);
 	    
 	    IObservableValue dbURLObserveWidget = SWTObservables.observeText(dbURL, SWT.FocusOut);
-			IObservableValue dbURLObserveValue = BeansObservables.observeValue(realm, connection, "dbURL");
+			IObservableValue dbURLObserveValue = BeansObservables.observeValue(realm, sDBDatabase, "dbURL");
 			bindingContext.bindValue(dbURLObserveWidget, dbURLObserveValue, null, null);
 			
 			IObservableValue dbClassObserveWidget = SWTObservables.observeText(dbClass, SWT.FocusOut);
-			IObservableValue dbClassObserveValue = BeansObservables.observeValue(realm, connection, "dbClass");
+			IObservableValue dbClassObserveValue = BeansObservables.observeValue(realm, sDBDatabase, "dbClass");
 			bindingContext.bindValue(dbClassObserveWidget, dbClassObserveValue, null, null);
 	    
 	    IObservableValue dbUserObserveWidget = SWTObservables.observeText(dbUser, SWT.FocusOut);
-			IObservableValue dbUserObserveValue = BeansObservables.observeValue(realm, connection, "dbUser");
+			IObservableValue dbUserObserveValue = BeansObservables.observeValue(realm, sDBDatabase, "dbUser");
 			bindingContext.bindValue(dbUserObserveWidget, dbUserObserveValue, null, null);
 
 			IObservableValue dbPasswordObserveWidget = SWTObservables.observeText(dbPassword, SWT.FocusOut);
-			IObservableValue dbPasswordObserveValue = BeansObservables.observeValue(realm, connection, "dbPassword");
+			IObservableValue dbPasswordObserveValue = BeansObservables.observeValue(realm, sDBDatabase, "dbPassword");
 			bindingContext.bindValue(dbPasswordObserveWidget, dbPasswordObserveValue, null, null);
 			
 	    setControl(composite);
 		}
 
 		private void showTestConnectionDialog() {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(connection);
+			IDBConnector connector = DBConnectorFactory.getDBConnector(sDBDatabase);
 			boolean connectionSucceeds = connector.testConnection();
-			String title = "Connection Succeeds";
+			String title = "SDBDatabase Succeeds";
 			String message = "Success connecting to the database.";
 			if (!connectionSucceeds) {
-				title = "Connection Fails";
+				title = "SDBDatabase Fails";
 				message = "Unable to connect to the database.";
 				MessageDialog.openWarning(shell, title, message);
 			} else {

@@ -16,11 +16,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.actions.INamedModelView;
+import org.inqle.ui.rap.actions.IDatamodelView;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.AScrolledTable.ColumnNameData;
 
@@ -34,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @author David Donohue
  * May 6, 2008
  */
-public abstract class SparqlView extends ViewPart implements SelectionListener, INamedModelView {
+public abstract class SparqlView extends ViewPart implements SelectionListener, IDatamodelView {
 
 	private static final Logger log = Logger.getLogger(SparqlView.class);
 	
@@ -68,7 +68,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 
 	private Button deleteButton;
 
-	protected NamedModel namedModel;
+	protected Datamodel datamodel;
 
 	private Button checkAllButton;
 
@@ -231,12 +231,12 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		log.info("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(sparql);
-		queryCriteria.addNamedModel(getNamedModel());
+		queryCriteria.addDatamodel(getDatamodel());
 		this.resultSet = Queryer.selectResultSet(queryCriteria);
 	}
 
-	public NamedModel getNamedModel() {
-		return namedModel;
+	public Datamodel getDatamodel() {
+		return datamodel;
 	}
 
 	public abstract String getSparql();
@@ -434,7 +434,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		boolean confirmDelete = MessageDialog.openConfirm(composite.getShell(), "Delete these items?", "Are you sure you want to delete these " + checkedItems.size() + " items?\nTHIS CANNOT BE UNDONE!\n" + checkedItems);
 		if (! confirmDelete) return;
 		
-		Model modelToDeleteFrom = persister.getModel(getNamedModel());
+		Model modelToDeleteFrom = persister.getModel(getDatamodel());
 		long sizeBeforeDelete = modelToDeleteFrom.size();
 		int deletedCount = 0;
 		log.info("Deleting these items: " + checkedItems);
@@ -467,8 +467,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		}
 	}
 
-	public void setNamedModel(NamedModel namedModel) {
-		this.namedModel = namedModel;
+	public void setDatamodel(Datamodel dataodel) {
+		this.datamodel = dataodel;
 	}
 
 	public String getTitleText() {

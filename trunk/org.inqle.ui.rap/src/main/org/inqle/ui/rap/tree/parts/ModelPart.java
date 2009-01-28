@@ -9,18 +9,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
-import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.ui.rap.ApplicationActionBarAdvisor;
 import org.inqle.ui.rap.IDisposableViewer;
 import org.inqle.ui.rap.Part;
 import org.inqle.ui.rap.actions.AddReasonerStatementsAction;
-import org.inqle.ui.rap.actions.DatasetWizardAction;
+import org.inqle.ui.rap.actions.DatamodelWizardAction;
 import org.inqle.ui.rap.actions.DeleteModelAction;
 import org.inqle.ui.rap.actions.EmptyModelAction;
 import org.inqle.ui.rap.actions.FileDataImporterAction;
 import org.inqle.ui.rap.actions.LoadRdfFileAction;
 import org.inqle.ui.rap.actions.OpenNamedModelViewAction;
-import org.inqle.ui.rap.views.DatasetView;
+import org.inqle.ui.rap.views.DatamodelView;
 import org.inqle.ui.rap.views.DatasetViewer;
 
 public class ModelPart extends Part {
@@ -28,16 +29,16 @@ public class ModelPart extends Part {
 	private static final String ICON_PATH_EXTERNAL_DATASET = "org/inqle/ui/rap/images/table.gif";
 //	private static final String EXTENSION_VIEW_BROWSE_DATA = "org.inqle.rap.ui.views.browseData";
 //	private static final String ICON_PATH_ONTOLOGY_DATASET = "org/inqle/ui/rap/images/ontology.gif";
-	private ExternalDataset dataset;
+	private Datamodel datamodel;
 	
 	private static final Logger log = Logger.getLogger(ModelPart.class);
 	
-	public ModelPart(ExternalDataset dataset) {
-		this.dataset = dataset;
+	public ModelPart(Datamodel datamodel) {
+		this.datamodel = datamodel;
 		//this.persister = persister;
 	}
 	public String getModelName() {
-		return dataset.getId();
+		return datamodel.getId();
 	}
 	
 	@Override
@@ -47,24 +48,24 @@ public class ModelPart extends Part {
 	
 	@Override
 	public String getIconPath() {
-//		if (dataset instanceof ExternalDataset) {
+//		if (datamodel instanceof UserDatamodel) {
 			return ICON_PATH_EXTERNAL_DATASET;
-//		} else if (dataset instanceof OntologyDataset) {
+//		} else if (datamodel instanceof OntologyDataset) {
 //			return ICON_PATH_ONTOLOGY_DATASET;
 //		} else {
 //			return null;
 //		}
 	}
-	public ExternalDataset getDataset() {
-		return this.dataset;
+	public Datamodel getDataset() {
+		return this.datamodel;
 	}
 	
 	@Override
 //public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
-		List<IAction> actions = new ArrayList<IAction>();		//"Edit this dataset" action
+		List<IAction> actions = new ArrayList<IAction>();		//"Edit this datamodel" action
 		
-		IExtensionSpec extensionSpec = ExtensionFactory.getExtensionSpec(ApplicationActionBarAdvisor.VIEWS, DatasetView.ID);
+		IExtensionSpec extensionSpec = ExtensionFactory.getExtensionSpec(ApplicationActionBarAdvisor.VIEWS, DatamodelView.ID);
 		
 		log.info("Displaying action: " + extensionSpec);
 		OpenNamedModelViewAction openNamedModelViewAction = new OpenNamedModelViewAction(
@@ -73,13 +74,13 @@ public class ModelPart extends Part {
   			extensionSpec.getAttribute(ApplicationActionBarAdvisor.ID), 
   			extensionSpec.getPluginId(), 
   			extensionSpec.getAttribute(ApplicationActionBarAdvisor.ICON));
-		openNamedModelViewAction.setDescription("Browse data in this dataset.");
-		openNamedModelViewAction.setNamedModel(dataset);
+		openNamedModelViewAction.setDescription("Browse data in this datamodel.");
+		openNamedModelViewAction.setDatamodel(datamodel);
 		actions.add(openNamedModelViewAction);
   	
-		DatasetWizardAction editModelWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_EDIT, "Edit this dataset...", (DatabasePart)this.getParent(), workbenchWindow);
+		DatamodelWizardAction editModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_EDIT, "Edit this datamodel...", (DatabasePart)this.getParent(), workbenchWindow);
 		//editModelWizardAction.setModelPart(this);
-		editModelWizardAction.setDataset(dataset);
+		editModelWizardAction.setDatamodel(datamodel);
 		actions.add(editModelWizardAction);
 		
 		//"Load RDF File" action
@@ -97,12 +98,12 @@ public class ModelPart extends Part {
 		AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
 		actions.add(addReasonerStatementsAction);
 		
-		//Clear dataset action
+		//Clear datamodel action
 		EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
 		actions.add(emptyDatasetAction);
 		
 		//Delete action
-		DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this dataset", this, workbenchWindow);
+		DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this datamodel", this, workbenchWindow);
 		actions.add(deleteDatasetAction);
 		
 		return actions;
@@ -110,7 +111,7 @@ public class ModelPart extends Part {
 	
 	@Override
 	public Object getObject() {
-		return dataset;
+		return datamodel;
 	}
 	
 	public IDisposableViewer getViewer(Composite composite) {

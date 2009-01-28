@@ -60,7 +60,7 @@ public class CreateHeaderPropertiesAction extends Action {
 		this.subjectClass = subjectClass;
 		this.subjectName = subjectName;
 		Persister persister = Persister.getInstance();
-		this.model = persister.getInternalModel(internalDatasetRoleId);
+		this.model = persister.getSystemModel(internalDatasetRoleId);
 	}
 	
 	public void run() {

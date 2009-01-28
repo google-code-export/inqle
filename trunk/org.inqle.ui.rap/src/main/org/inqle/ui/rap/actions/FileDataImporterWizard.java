@@ -14,7 +14,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
@@ -69,7 +69,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private AddSubjectPage addSubjectPage;
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
 	private DateTimeMapperPage dateTimeMapperPage;
-	private NamedModel namedModel;
+	private Datamodel datamodel;
 	private IPart part;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
@@ -145,7 +145,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	public boolean performFinish() {
 		
 		//show the "importing..." dialog
-		PopupDialog popup;
+//		PopupDialog popup;
 		TableMapping tableMapping = null;
 		try {
 //			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
@@ -180,14 +180,14 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		
 		MessageDialog.openInformation( getShell(), "Success importing data", "Successfully imported " + ontModel.size() + " statements."); 
 		
-		if (namedModel != null) {
+		if (datamodel != null) {
 			//flush any text indexes for the dataset
-			log.info("Flushing indexes for namedModel: " + namedModel + "...");
+			log.info("Flushing indexes for datamodel: " + datamodel + "...");
 			Persister persister = Persister.getInstance();
-			persister.flushIndexes(namedModel);
+			persister.flushIndexes(datamodel);
 			
 			//invalidate the cache for this dataset
-			CacheTool.invalidateDataCache(namedModel.getId());
+			CacheTool.invalidateDataCache(datamodel.getId());
 		}
 		
 		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
@@ -483,8 +483,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		return tableMapping;
 	}
 
-	public void setNamedModel(NamedModel namedModel) {
-		this.namedModel = namedModel;
+	public void setDatamodel(Datamodel namedModel) {
+		this.datamodel = namedModel;
 	}
 
 }

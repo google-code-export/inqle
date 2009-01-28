@@ -48,7 +48,7 @@ public class LoadRdfFileAction extends Action {
 			Persister persister = Persister.getInstance();
 			Model modelToImportInto = persister.getIndexableModel(modelPart.getDataset());
 			LoadRdfFileWizard wizard = new LoadRdfFileWizard(modelToImportInto, window.getShell());
-			wizard.setNamedModel(modelPart.getDataset());
+			wizard.setDatamodel(modelPart.getDataset());
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			//LoadDataWizardDialog dialog = new LoadDataWizardDialog(window.getShell(), wizard);
 			//UploadDialog dialog = new UploadDialog(window.getShell(), "Upload File", true);

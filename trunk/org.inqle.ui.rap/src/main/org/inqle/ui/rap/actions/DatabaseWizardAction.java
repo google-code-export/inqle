@@ -8,7 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
@@ -50,7 +50,7 @@ public class DatabaseWizardAction extends Action {
 	public void run() {
 		IWizard wizard = null;
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		if (database instanceof Connection) {
+		if (database instanceof SDBDatabase) {
 			wizard = new SDBDatabaseWizard(mode, parentPart, databasePart, window.getShell());
 			//wizard.setConnection(connection);
 		} else {

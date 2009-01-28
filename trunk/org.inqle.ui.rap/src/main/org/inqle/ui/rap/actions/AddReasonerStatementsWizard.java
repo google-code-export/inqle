@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.util.OntModelUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 
@@ -32,7 +32,7 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 	private Text reasonerText;
 	private static Logger log = Logger.getLogger(AddReasonerStatementsWizard.class);
 	Composite composite;
-	private Dataset dataset;
+	private Datamodel datamodel;
 //	private ModelPart modelPart = null;
 	private boolean successImporting = false;
 	
@@ -45,9 +45,9 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 
 		private static final String TITLE = "Add Reasoner Statements";
 		private static final String DESCRIPTION = "Specify RDF reasoner rules text, " +
-				"which will be applied to this dataset.  " +
+				"which will be applied to this datamodel.  " +
 				"The rules will be applied to the data set and any new statements that can be inferred " +
-				"will be inserted into the dataset.\n\n" +
+				"will be inserted into the datamodel.\n\n" +
 				"See http://jena.sourceforge.net/inference/#RULEsyntax for details on semantic inference.\n\n" +
 				"Example:\n" +
 				"    [umbelSubj1: (?a owl:equivalentClass ?b) (?p rdfs:domain ?b) -> (?p rdfs:domain ?a)]\n" +
@@ -98,7 +98,7 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 	
 	
 	
-//	public LoadRdfFileWizard(ModelPart modelPart,	Connection connection) {
+//	public LoadRdfFileWizard(ModelPart modelPart,	SDBDatabase connection) {
 //		Persister persister = Persister.getInstance();
 //		//this.persister = persister;
 //		this.modelPart = modelPart;
@@ -161,9 +161,9 @@ public class AddReasonerStatementsWizard extends DynaWizard {
     	successImporting  = true;
     	MessageDialog.openInformation( getShell(), "Success adding inferred statements", "Successfully added " + (postSize - preSize) + " statements."); 
     	log.info("Flushing text index...");
-			//flush any text indexes for the dataset
+			//flush any text indexes for the datamodel
 			Persister persister = Persister.getInstance();
-			persister.flushIndexes(dataset);
+			persister.flushIndexes(datamodel);
 			log.info("Finished flushing text index.");
     } else {
     	MessageDialog.openWarning( getShell(), "Loaded no data", "Failed to add any statements using reasoner rules:\n" + ruleText); 
@@ -172,12 +172,12 @@ public class AddReasonerStatementsWizard extends DynaWizard {
     return true;
 	}
 
-	public Dataset getDataset() {
-		return dataset;
+	public Datamodel getDataset() {
+		return datamodel;
 	}
 
-	public void setDataset(Dataset dataset) {
-		this.dataset = dataset;
+	public void setDataset(Datamodel datamodel) {
+		this.datamodel = datamodel;
 	}
 	
 	/**

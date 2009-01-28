@@ -17,17 +17,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.sdb.SDBConnector;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
@@ -36,7 +34,7 @@ import org.inqle.ui.rap.widgets.TextFieldShower;
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
- * Creates a new dataset, in the specified IDatabase.  Supports 
+ * Creates a new datamodel, in the specified IDatabase.  Supports 
  * any type of IDatabase
  * @author David Donohue
  * Feb 8, 2008
@@ -44,19 +42,19 @@ import com.hp.hpl.jena.rdf.model.Model;
  * 
  * TODO extend DynaWizard instead of Wizard
  */
-public class DatasetWizard extends Wizard {
+public class UserDatasetWizard extends Wizard {
 
 	public static final String DEFAULT_CHECKED_ATTRIBUTE = "checkedByDefault";
 	private IDatabase database = null;
 	//private Persister persister;
-	static Logger log = Logger.getLogger(DatasetWizard.class);
+	static Logger log = Logger.getLogger(UserDatasetWizard.class);
 	
 	int mode;
 
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
-	private ExternalDataset startingDataset;
-	private ExternalDataset dataset;
+	private UserDatamodel startingDataset;
+	private UserDatamodel datamodel;
 //	private Text datasetIdText;
 	Composite parent;
 	public List<Button> datasetFunctionCheckboxes = new ArrayList<Button>();
@@ -83,7 +81,7 @@ public class DatasetWizard extends Wizard {
 			log.trace("DatasetInfoPage.createControl()");
 //			parent = pageParent;
 			
-			//initialize the Dataset to the base starting Dataset
+			//initialize the Datamodel to the base starting Datamodel
 			resetModel();
 			
 			composite = new Composite(parent, SWT.NONE);
@@ -93,30 +91,30 @@ public class DatasetWizard extends Wizard {
 			
 			//cannot change the ID once created
 			int textFieldStyle = SWT.BORDER;
-			if (mode != DatasetWizardAction.MODE_NEW) {
+			if (mode != DatamodelWizardAction.MODE_NEW) {
 				textFieldStyle = textFieldStyle | SWT.READ_ONLY;
 			}
 			
 			datasetIdTextField = new TextFieldShower(
 					composite,
-					"Dataset ID",
+					"Datamodel ID",
 					"Must be a unique name for this server, and must not contain spaces or special characters.",
 					null,
 					textFieldStyle
 			);
-			if (mode != DatasetWizardAction.MODE_NEW && dataset!=null && dataset.getId() != null) {
-				datasetIdTextField.setTextValue(dataset.getId());
+			if (mode != DatamodelWizardAction.MODE_NEW && datamodel!=null && datamodel.getId() != null) {
+				datasetIdTextField.setTextValue(datamodel.getId());
 			}
 			
 			datasetDescriptionTextField = new TextFieldShower(
 					composite,
 					"Description",
-					"Describe the use of this dataset.",
+					"Describe the use of this datamodel.",
 					null,
 					SWT.MULTI | SWT.BORDER
 			);
-			if (dataset!=null && dataset.getDescription() != null) {
-				datasetDescriptionTextField.setTextValue(dataset.getDescription());
+			if (datamodel!=null && datamodel.getDescription() != null) {
+				datasetDescriptionTextField.setTextValue(datamodel.getDescription());
 			}
 			
 	    setControl(composite);
@@ -135,8 +133,8 @@ public class DatasetWizard extends Wizard {
 	
 	public class DatasetFunctionsPage extends WizardPage {
 
-		private static final String PAGE_NAME = "Dataset Functions";
-		private static final String PAGE_DESCRIPTION = "Select which functions this dataset will fulfill.";
+		private static final String PAGE_NAME = "Datamodel Functions";
+		private static final String PAGE_DESCRIPTION = "Select which functions this datamodel will fulfill.";
 		private Composite composite;
 		
 		protected DatasetFunctionsPage() {
@@ -179,8 +177,8 @@ public class DatasetWizard extends Wizard {
 				defaultChecked = true;
 			}
 			
-			Collection<String> datasetFunctions = dataset.getDatasetFunctions();
-			log.info("Compare dataset function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
+			Collection<String> datasetFunctions = datamodel.getDatasetFunctions();
+			log.info("Compare datamodel function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
 			log.info("Default checked=" + defaultChecked);
 			if (datasetFunctions != null && datasetFunctions.contains(extensionId)) {
 				checkbox.setSelection(true);
@@ -192,7 +190,7 @@ public class DatasetWizard extends Wizard {
 		}
 	}
 	
-	public DatasetWizard(int mode, ExternalDataset startingDataset, DatabasePart databasePart) {
+	public UserDatasetWizard(int mode, UserDatamodel startingDataset, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
 		this.startingDataset = startingDataset;
@@ -212,13 +210,13 @@ public class DatasetWizard extends Wizard {
 
 	@Override
 	public void addPages() {		
-//		log.info("Dataset Wizard: adding DatasetInfoPage...");
-		datasetInfoPage = new DatasetInfoPage("Dataset Info");
+//		log.info("Datamodel Wizard: adding DatasetInfoPage...");
+		datasetInfoPage = new DatasetInfoPage("Datamodel Info");
 		addPage(datasetInfoPage);
 		
-//		log.info("Dataset Wizard: creating DatasetFunctionsPage...");
+//		log.info("Datamodel Wizard: creating DatasetFunctionsPage...");
 		datasetFunctionsPage = new DatasetFunctionsPage();
-//		log.info("Dataset Wizard: adding DatasetFunctionsPage...");
+//		log.info("Datamodel Wizard: adding DatasetFunctionsPage...");
 		addPage(datasetFunctionsPage);
 	}
 	
@@ -233,54 +231,54 @@ public class DatasetWizard extends Wizard {
 	
 	@Override
 	public boolean performFinish() {
-//		dataset.setId(datasetIdText.getText());
-		dataset.setId(datasetInfoPage.getDatasetId());
-		dataset.setDescription(datasetInfoPage.getDatasetDescription());
-		if (dataset.getId() == null || dataset.getId().length() == 0) {
-			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Dataset ID", "");
+//		datamodel.setId(datasetIdText.getText());
+		datamodel.setId(datasetInfoPage.getDatasetId());
+		datamodel.setDescription(datasetInfoPage.getDatasetDescription());
+		if (datamodel.getId() == null || datamodel.getId().length() == 0) {
+			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Datamodel ID", "");
 			return false;
 		}
 		
 		Persister persister = Persister.getInstance();
 		
-		if (mode != DatasetWizardAction.MODE_EDIT && persister.externalDatasetExists(dataset.getId())) {
-			MessageDialog.openInformation(parent.getShell(), "Dataset name already exists", 
-					"This database already has a dataset named '" + dataset.getId() + "'.\nPlease choose a different name.");
+		if (mode != DatamodelWizardAction.MODE_EDIT && persister.externalDatasetExists(datamodel.getId())) {
+			MessageDialog.openInformation(parent.getShell(), "Datamodel name already exists", 
+					"This database already has a datamodel named '" + datamodel.getId() + "'.\nPlease choose a different name.");
 			return false;
 		}
 		
-		//get the dataset functions assigned to this dataset
+		//get the datamodel functions assigned to this datamodel
 		List<String> datasetFunctionIds = new ArrayList<String>();
 		for (Button checkbox: datasetFunctionCheckboxes) {
 			if (! checkbox.getSelection()) continue;
 			IExtensionSpec datasetFunctionSpec = (IExtensionSpec)checkbox.getData();
 			String datasetFunctionId = datasetFunctionSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			log.info("adding to dataset: function " + datasetFunctionId);
+			log.info("adding to datamodel: function " + datasetFunctionId);
 			datasetFunctionIds.add(datasetFunctionId);
 		}
 		if (datasetFunctionIds.size() > 0) {
-			dataset.setDatasetFunctions(datasetFunctionIds);
+			datamodel.setDatasetFunctions(datasetFunctionIds);
 		} else {
-			dataset.setDatasetFunctions(null);
+			datamodel.setDatasetFunctions(null);
 		}
 		
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (! connectionSucceeds) {
-			MessageDialog.openInformation(parent.getShell(), "Connection Fails", 
-					"Unable to connect to this database.  Cannot create new dataset in this database.");
+			MessageDialog.openInformation(parent.getShell(), "SDBDatabase Fails", 
+					"Unable to connect to this database.  Cannot create new datamodel in this database.");
 			return true;
 		}
 
-		persister.persist(dataset); 
-		log.info("Saved dataset Dataset=" + JenabeanWriter.toString(dataset));
-		if (this.mode == DatasetWizardAction.MODE_NEW || this.mode == DatasetWizardAction.MODE_CLONE) {
-			Model newModel = persister.createDBModel(database, dataset.getId());
-			//persister.persist(dataset, newModel, false);
+		persister.persist(datamodel); 
+		log.info("Saved datamodel Datamodel=" + JenabeanWriter.toString(datamodel));
+		if (this.mode == DatamodelWizardAction.MODE_NEW || this.mode == DatamodelWizardAction.MODE_CLONE) {
+			Model newModel = persister.createDBModel(database, datamodel.getId());
+			//persister.persist(datamodel, newModel, false);
 			log.info("Created new model " + newModel);
 			databasePart.fireUpdate(databasePart);
-		} else if (this.mode == DatasetWizardAction.MODE_EDIT) {
+		} else if (this.mode == DatamodelWizardAction.MODE_EDIT) {
 			databasePart.fireUpdatePart();
 		}
 		//close wizard regardless
@@ -288,16 +286,16 @@ public class DatasetWizard extends Wizard {
 	}
 	
 	public final void resetModel() {
-		if (mode == DatasetWizardAction.MODE_EDIT) {
-			dataset = startingDataset.createReplica();
-		//} else if (mode == DatasetWizardAction.MODE_CLONE) {
+		if (mode == DatamodelWizardAction.MODE_EDIT) {
+			datamodel = startingDataset.createReplica();
+		//} else if (mode == DatamodelWizardAction.MODE_CLONE) {
 		} else {
-			dataset = startingDataset.createClone();
+			datamodel = startingDataset.createClone();
 //		} else {
-//			dataset = new Dataset();
-//			dataset.setConnection(this.connection);
+//			datamodel = new Datamodel();
+//			datamodel.setConnection(this.connection);
 		}
-		assert(dataset != null);
+		assert(datamodel != null);
 	}
 
 }
