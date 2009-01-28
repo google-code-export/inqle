@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.sampling.IDataTable;
@@ -31,7 +31,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * Apr 16, 2008
  */
-@TargetDataset(ILearningCycle.LEARNING_CYCLES_DATASET)
+@TargetDatamodel(ILearningCycle.LEARNING_CYCLES_DATASET)
 @Namespace(RDF.INQLE)
 public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 //	public static final int USE_RANDOM_SAMPLER = 0;

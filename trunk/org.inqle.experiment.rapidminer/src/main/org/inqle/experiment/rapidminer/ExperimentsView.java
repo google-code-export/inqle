@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.InternalDataset;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.SystemDatamodel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.views.SparqlView;
 import org.inqle.ui.rap.views.SubjectStatementsView;
@@ -74,9 +74,9 @@ public class ExperimentsView extends SparqlView {
 	}
 	
 	@Override
-	public NamedModel getNamedModel() {
+	public Datamodel getDatamodel() {
 		Persister persister = Persister.getInstance();
-		InternalDataset dataset = persister.getInternalDataset(ExperimentResult.EXPERIMENTS_DATASET);
+		SystemDatamodel dataset = persister.getSystemDatamodel(ExperimentResult.EXPERIMENTS_DATASET);
 		return dataset;
 	}
 	
@@ -100,10 +100,10 @@ public class ExperimentsView extends SparqlView {
 					}
 				}
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(ssView);
-				ssView.setNamedModel(getNamedModel());
+				ssView.setDatamodel(getDatamodel());
 				ssView.setSubjectUri(uriValData.getUriVal());
 				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
-				log.info("Refreshing Subject Statements View with dataset: " + getNamedModel() + " and instance URI: " + data.toString());
+				log.info("Refreshing Subject Statements View with dataset: " + getDatamodel() + " and instance URI: " + data.toString());
 				ssView.refreshView();
 //				ssView.setFocus();
 				
