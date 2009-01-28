@@ -8,9 +8,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.JenabeanConverter;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
@@ -73,7 +73,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * Honor any existing fields, and otherwise make random decisions
 	 */
 	public ArcTable execute() {
-		Collection<String> modelsToUse = selectNamedModels();
+		Collection<String> modelsToUse = selectDatamodels();
 		log.info("modelsToUse=" + modelsToUse);
 		
 		Resource subjectClass = selectSubjectClass(modelsToUse);
@@ -150,7 +150,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 
 	/**
 	 * Select a List of Arcs to use as data columns in the table
-	 * @param modelsToUse the IDs of the NamedModels to query
+	 * @param modelsToUse the IDs of the Datamodels to query
 	 * @param numberToSelect the number of Arcs to select
 	 * @return
 	 */
@@ -171,25 +171,25 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	public abstract int selectNumberOfAttributes();
 
 	/**
-	 * Get the Collection of NamedModels from which to extract data.  Implementations should
+	 * Get the Collection of Datamodels from which to extract data.  Implementations should
 	 * return the user-specified values, if present.  Otherwise selects automatically 
 	 * from the provided list
 	 * @param datamodelOptions the Collection of available data models to consider
 	 * @return
 	 */
-	public Collection<String> selectAvailableNamedModels() {
+	public Collection<String> selectAvailableDatamodels() {
 		Persister persister = Persister.getInstance();
-		List<NamedModel> allNamedModels = persister.listNamedModels();
-		log.debug("allNamedModels=" + allNamedModels);
-		if (allNamedModels != null) {
-			List<String> allNamedModelIds = JenabeanConverter.getIds(allNamedModels);
-			return allNamedModelIds;
+		List<Datamodel> allDatamodels = persister.listDatamodels();
+		log.debug("allDatamodels=" + allDatamodels);
+		if (allDatamodels != null) {
+			List<String> allDatamodelIds = JenabeanConverter.getIds(allDatamodels);
+			return allDatamodelIds;
 		}
 		return new ArrayList<String>();
 	}
 
 	/**
-	 * Get the List of NamedModels from which to extract data.  Implementations should
+	 * Get the List of Datamodels from which to extract data.  Implementations should
 	 * return the user-specified values, if present.  Otherwise selects automatically 
 	 * from the provided list
 	 * @param datamodelOptions the List of available data models to consider
@@ -197,24 +197,24 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<String> selectNamedModels() {
-		log.debug("getSelectedNamedModels()=" + getSelectedNamedModels());
+	public Collection<String> selectDatamodels() {
+		log.debug("getSelectedDatamodels()=" + getSelectedDatamodels());
 		//if named models already selected, return
-		if (getSelectedNamedModels() != null && getSelectedNamedModels().size() > 0) {
-			log.debug("getSelectedNamedModels().size()=" + getSelectedNamedModels().size());
-			return getSelectedNamedModels();
+		if (getSelectedDatamodels() != null && getSelectedDatamodels().size() > 0) {
+			log.debug("getSelectedDatamodels().size()=" + getSelectedDatamodels().size());
+			return getSelectedDatamodels();
 		}
 		//...otherwise populate the list of available named models
-		Collection<String> choosableNamedModels = selectAvailableNamedModels();
-		log.debug("choosableNamedModels=" + choosableNamedModels);
+		Collection<String> choosableDatamodels = selectAvailableDatamodels();
+		log.debug("choosableDatamodels=" + choosableDatamodels);
 		
 		//we must select a subset of the choosable datamodels
 		//randomly remove datamodels until we reach the maximum acceptable number
-		int numberDatasetsToSelect = RandomListChooser.getRandomNumber(getMinimumNumberOfNamedModels(), getMaximumNumberOfNamedModels());
-		Collection<String> selectedNamedModels = (Collection<String>) RandomListChooser.chooseRandomItemsSubtractively(new ArrayList(choosableNamedModels), numberDatasetsToSelect);
+		int numberDatasetsToSelect = RandomListChooser.getRandomNumber(getMinimumNumberOfDatamodels(), getMaximumNumberOfDatamodels());
+		Collection<String> selectedDatamodels = (Collection<String>) RandomListChooser.chooseRandomItemsSubtractively(new ArrayList(choosableDatamodels), numberDatasetsToSelect);
 		
-		//if (selectedNamedModels != null) {
-		return selectedNamedModels;
+		//if (selectedDatamodels != null) {
+		return selectedDatamodels;
 		//}
 	}
 
@@ -225,7 +225,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 */
 	protected Model doQuery(Collection<String> namedModelsToUse, Collection<Arc> dataColumnsToUse, String sparql) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModelIds(namedModelsToUse);
+		queryCriteria.addDatamodelIds(namedModelsToUse);
 		queryCriteria.setQuery(sparql);
 		
 		Model resultModel = Queryer.constructRdf(queryCriteria);
@@ -258,7 +258,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * TODO Make this configurable
 	 * @return
 	 */
-	protected int getMaximumNumberOfNamedModels() {
+	protected int getMaximumNumberOfDatamodels() {
 		return DEFAULT_MAXIMUM_NUMBER_OF_DATAMODELS;
 	}
 
@@ -266,7 +266,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * TODO Make this configurable
 	 * @return
 	 */
-	protected int getMinimumNumberOfNamedModels() {
+	protected int getMinimumNumberOfDatamodels() {
 		return DEFAULT_MINIMUM_NUMBER_OF_DATAMODELS;
 	}
 

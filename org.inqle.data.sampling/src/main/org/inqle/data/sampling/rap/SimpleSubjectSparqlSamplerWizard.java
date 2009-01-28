@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
@@ -24,6 +24,8 @@ import org.inqle.ui.rap.pages.SimpleListSelectorPage;
 import org.inqle.ui.rap.table.BeanTableSelectorPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
+
+//import example.Datamodel;
 
 public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements IListProvider, IList2Provider, IValueUpdater {
 
@@ -52,10 +54,10 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
 		addPage(nameDescriptionPage);
 		
-		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedNamedModels", String.class, "Select dataset(s) for sampling", null);
+		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedDatamodels", String.class, "Select dataset(s) for sampling", null);
 		Persister persister = Persister.getInstance();
-		selectedModelsPage.setBeans(persister.listNamedModels());
-		selectedModelsPage.setTableBeanClass(NamedModel.class);
+		selectedModelsPage.setBeans(persister.listDatamodels());
+		selectedModelsPage.setTableBeanClass(Datamodel.class);
 		selectedModelsPage.setPropertyNames(Arrays.asList(new String[]{"name", "id", "class"}));
 		addPage(selectedModelsPage);
 		
@@ -144,12 +146,12 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	public List getList(IWizardPage page) {
 		if (bean == null) return null;
 		if (page.equals(subjectClassSelectorPage)) {
-			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedNamedModels();
+			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedDatamodels();
 			return SubjectClassLister.getUncommonSubjectClasses(selectedModelsCollection);
 		}
 		
 		if (page.equals(arcSelectorPage) || page.equals(labelSelectorPage)) {
-			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedNamedModels();
+			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedDatamodels();
 			URI subjectClass = ((SimpleSubjectSparqlSampler)bean).getSubjectClass();
 			if (selectedModelsCollection == null || selectedModelsCollection.size()==0 || subjectClass == null) {
 				log.info("Returning NULL for list of Arcs");

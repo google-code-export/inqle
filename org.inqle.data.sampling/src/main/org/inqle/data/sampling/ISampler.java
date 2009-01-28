@@ -40,17 +40,17 @@ public interface ISampler extends IUniqueJenabean {
 	public static final String SAMPLER_DATASET = "org.inqle.datasets.samplers";
 	
 	/**
-	 * Get the Collection of IDs of NamedModel which have been selected for 
+	 * Get the Collection of IDs of Datamodel which have been selected for 
 	 * this sampling run.
-	 * @return the list of selected NamedModels
+	 * @return the list of selected Datamodels
 	 */
-	public Collection<String> getSelectedNamedModels();
+	public Collection<String> getSelectedDatamodels();
 	
 	/**
-	 * Set the Collection of IDs of NamedModel from which to extract data.
-	 * @param the list of selected NamedModels
+	 * Set the Collection of IDs of Datamodel from which to extract data.
+	 * @param the list of selected Datamodels
 	 */
-	public void setSelectedNamedModels(Collection<String> selectedNamedModels);
+	public void setSelectedDatamodels(Collection<String> selectedDatamodels);
 
 	@Id
 	public String getId();
