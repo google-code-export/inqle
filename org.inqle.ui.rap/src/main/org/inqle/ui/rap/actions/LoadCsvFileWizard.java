@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.csv.CsvImporter;
@@ -65,11 +65,11 @@ public class LoadCsvFileWizard extends DynaWizard implements ICsvReaderWizard {
 	
 	private CsvImporter csvImporter;
 //	private ModelPart modelPart;
-//	private Connection connection;
+//	private SDBDatabase connection;
 	private CsvSubjectPage csvSubjectPage;
 	private CsvPredicatesPage csvPredicatesPage;
 	
-//	public LoadCsvFileWizard(ModelPart modelPart,	Connection connection) {
+//	public LoadCsvFileWizard(ModelPart modelPart,	SDBDatabase connection) {
 //		Persister persister = Persister.getInstance();
 //		this.modelPart = modelPart;
 //		this.connection = connection;

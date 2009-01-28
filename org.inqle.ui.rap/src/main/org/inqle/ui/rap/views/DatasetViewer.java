@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.core.util.DateFormatter;
-import org.inqle.data.rdf.jena.Dataset;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -38,9 +38,9 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 		setInput(bean);
 	}
 	
-	public Dataset getDataset() {
+	public Datamodel getDataset() {
 		if (bean == null) return null;
-		return (Dataset)bean;
+		return (Datamodel)bean;
 	}
 	
 	public Model getModel() {

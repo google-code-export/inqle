@@ -72,9 +72,9 @@ public class TDBDatabaseWizard extends Wizard {
 		resetConnection();
 		log.info("addPages() using Database:\n" + JenabeanWriter.toString(database));
 		if (mode == DatabaseWizardAction.MODE_NEW) {
-			databaseInfoPage = new DatabaseInfoPage("Database Connection Info", null, null);
+			databaseInfoPage = new DatabaseInfoPage("Database SDBDatabase Info", null, null);
 		} else {
-			databaseInfoPage = new DatabaseInfoPage("Database Connection Info", database.getName(), database.getDescription());
+			databaseInfoPage = new DatabaseInfoPage("Database SDBDatabase Info", database.getName(), database.getDescription());
 		}
 		addPage(databaseInfoPage);
 	}
@@ -98,7 +98,7 @@ public class TDBDatabaseWizard extends Wizard {
 				return false;
 			} else {
 //				connector.createDatabase();
-				persister.createNewDBConnection(database);
+				persister.createNewDatabase(database);
 				parentPart.fireUpdate(parentPart);
 				return true;
 			}
@@ -108,7 +108,7 @@ public class TDBDatabaseWizard extends Wizard {
 		boolean confirmSave = true;
 		
 		if (! connectionSucceeds) {
-			confirmSave = MessageDialog.openConfirm(shell.getShell(), "Connection Fails", "Unable to connect to this database.  Save it anyway?");
+			confirmSave = MessageDialog.openConfirm(shell.getShell(), "SDBDatabase Fails", "Unable to connect to this database.  Save it anyway?");
 		}
 		if (confirmSave) {
 //			if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {

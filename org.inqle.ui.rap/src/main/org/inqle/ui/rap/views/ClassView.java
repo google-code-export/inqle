@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
@@ -51,12 +51,12 @@ public class ClassView extends SparqlView {
 	}
 	
 //	@Override
-//	public NamedModel getNamedModel() {
-//		return namedModel;
+//	public Datamodel getDatamodel() {
+//		return datamodel;
 //	}
 //
-//	public void setNamedModel(NamedModel namedModel) {
-//		this.namedModel = namedModel;
+//	public void setDatamodel(Datamodel datamodel) {
+//		this.namedModel = datamodel;
 //	}
 
 	public String getClassUri() {
@@ -87,10 +87,10 @@ public class ClassView extends SparqlView {
 					}
 				}
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(ssView);
-				ssView.setNamedModel(getNamedModel());
+				ssView.setDatamodel(getDatamodel());
 				ssView.setSubjectUri(uriValData.getUriVal());
 				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
-				log.info("Refreshing Subject Statements View with dataset: " + getNamedModel() + " and instance URI: " + data.toString());
+				log.info("Refreshing Subject Statements View with dataset: " + getDatamodel() + " and instance URI: " + data.toString());
 				ssView.refreshView();
 //				ssView.setFocus();
 				

@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.SDBDatabase;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
@@ -41,13 +41,13 @@ public class LoadRdfFileWizard extends DynaWizard {
 	}
 
 	//private final File tempDir = Persister.getTempDirectory();
-	private Connection connection = null;
+	private SDBDatabase sDBDatabase = null;
 	//private Persister persister;
 	static Logger log = Logger.getLogger(LoadRdfFileWizard.class);
 	Composite composite;
 	//private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
-	private NamedModel namedModel;
+	private Datamodel datamodel;
 	
 	private ModelPart modelPart = null;
 	//LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
@@ -70,7 +70,7 @@ public class LoadRdfFileWizard extends DynaWizard {
   };
 	*/
 	/**
-	 * This generates the wizard page for creating a database connection
+	 * This generates the wizard page for creating a database sDBDatabase
 	 * @author David Donohue
 	 * Feb 8, 2008
 	 */
@@ -176,11 +176,11 @@ public class LoadRdfFileWizard extends DynaWizard {
 	
 	
 	
-//	public LoadRdfFileWizard(ModelPart modelPart,	Connection connection) {
+//	public LoadRdfFileWizard(ModelPart modelPart,	SDBDatabase sDBDatabase) {
 //		Persister persister = Persister.getInstance();
 //		//this.persister = persister;
 //		this.modelPart = modelPart;
-//		this.connection = connection;
+//		this.connection = sDBDatabase;
 //		this.modelToLoad = persister.getModel(modelPart.getRdbModel());
 //		//log.info("Temp Dir = " + tempDir.getAbsolutePath() + ": can write? " + tempDir.canWrite());
 //	}
@@ -221,16 +221,16 @@ public class LoadRdfFileWizard extends DynaWizard {
     waitingDialog.close();
     if (success) {
     	log.info("Success loading RDF file.");
-    	CacheTool.invalidateDataCache(namedModel.getId());
+    	CacheTool.invalidateDataCache(datamodel.getId());
     	if (loader.getCountLoaded() == 0) {
     		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
     	} else {
     		
-    		if (namedModel != null) {
+    		if (datamodel != null) {
     			log.info("Flushing text index...");
     			//flush any text indexes for the dataset
     			Persister persister = Persister.getInstance();
-    			persister.flushIndexes(namedModel);
+    			persister.flushIndexes(datamodel);
     			log.info("Finished flushing text index.");
     		}
     		
@@ -263,12 +263,12 @@ public class LoadRdfFileWizard extends DynaWizard {
 		}
 	}
 
-	public NamedModel getNamedModel() {
-		return namedModel;
+	public Datamodel getDatamodel() {
+		return datamodel;
 	}
 
-	public void setNamedModel(NamedModel namedModel) {
-		this.namedModel = namedModel;
+	public void setDatamodel(Datamodel namedModel) {
+		this.datamodel = namedModel;
 	}
 	
 	/**

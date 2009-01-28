@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
@@ -16,11 +16,11 @@ import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
  * @author David Donohue
  * May 6, 2008
  */
-public class DatasetView extends SparqlView {
+public class DatamodelView extends SparqlView {
 
-	private static final Logger log = Logger.getLogger(DatasetView.class);
+	private static final Logger log = Logger.getLogger(DatamodelView.class);
 
-	public static final String ID = "org.inqle.ui.rap.views.DatasetView";
+	public static final String ID = "org.inqle.ui.rap.views.DatamodelView";
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -79,10 +79,10 @@ public class DatasetView extends SparqlView {
 					}
 				}
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
-				classView.setNamedModel(getNamedModel());
+				classView.setDatamodel(getDatamodel());
 				classView.setClassUri(data.toString());
 				classView.setTitleText("Things of type: <" + data.toString() + ">");
-				log.info("Refreshing Class View with dataset: " + getNamedModel() + " and class URI: " + data.toString());
+				log.info("Refreshing Class View with dataset: " + getDatamodel() + " and class URI: " + data.toString());
 				classView.refreshView();
 			}
 		}

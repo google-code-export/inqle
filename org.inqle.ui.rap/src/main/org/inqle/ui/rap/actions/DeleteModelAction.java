@@ -8,8 +8,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Connection;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.SDBDatabase;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.ModelPart;
@@ -22,7 +22,7 @@ public class DeleteModelAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
 	//private Persister persister;
-	private NamedModel namedModelToDelete = null;
+	private Datamodel namedModelToDelete = null;
 	private ModelPart modelPart = null;
 	
 	private static final Logger log = Logger.getLogger(DeleteModelAction.class);

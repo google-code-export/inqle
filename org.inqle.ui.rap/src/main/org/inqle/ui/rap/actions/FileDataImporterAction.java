@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
@@ -50,7 +50,7 @@ public class FileDataImporterAction extends Action {
 			Model modelToImportInto = Persister.getInstance().getIndexableModel(modelPart.getDataset());
 			FileDataImporterWizard wizard = new FileDataImporterWizard(modelToImportInto, window.getShell());
 			wizard.setPart(modelPart);
-			wizard.setNamedModel(modelPart.getDataset());
+			wizard.setDatamodel(modelPart.getDataset());
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
 			dialog.open();
 		} catch (Exception e) {

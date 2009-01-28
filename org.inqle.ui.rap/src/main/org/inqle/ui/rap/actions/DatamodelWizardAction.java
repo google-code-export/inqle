@@ -8,15 +8,16 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Dataset;
-import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 
 /**
  * @author David Donohue
  * Feb 8, 2008
+ * TODO implement for SystemDatamodel
  */
-public class DatasetWizardAction extends Action {
+public class DatamodelWizardAction extends Action {
 	public static final int MODE_NEW = 0;
 	public static final int MODE_EDIT = 1;
 	public static final int MODE_CLONE = 2;
@@ -26,16 +27,16 @@ public class DatasetWizardAction extends Action {
 	private int mode = MODE_NEW;
 	//private ModelPart modelPart = null;
 	private DatabasePart databasePart;
-	private ExternalDataset dataset;
+	private Datamodel datamodel;
 	
-	private static final Logger log = Logger.getLogger(DatasetWizardAction.class);
+	private static final Logger log = Logger.getLogger(DatamodelWizardAction.class);
 	
-	public DatasetWizardAction(int mode, String menuText, DatabasePart databasePart, IWorkbenchWindow window) {
+	public DatamodelWizardAction(int mode, String menuText, DatabasePart databasePart, IWorkbenchWindow window) {
 		this.mode = mode;
 		this.menuText = menuText;
 		this.databasePart = databasePart;
 		this.window = window;
-		log.trace("Created DatasetWizardAction");
+		log.trace("Created DatamodelWizardAction");
 		//this.persister = persister;
 	}
 	
@@ -54,24 +55,24 @@ public class DatasetWizardAction extends Action {
 	
 	@Override
 	public void run() {
-		if (dataset instanceof ExternalDataset) {
+		if (datamodel instanceof UserDatamodel) {
 //			try {
-				DatasetWizard wizard = new DatasetWizard(mode, dataset, databasePart);
-				log.trace("Created DatasetWizard");
+				UserDatasetWizard wizard = new UserDatasetWizard(mode, (UserDatamodel)datamodel, databasePart);
+				log.trace("Created UserDatasetWizard");
 				WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 				dialog.open();
 				log.trace("Opened WizardDialog");
 //			} catch (Exception e) {
-//				log.error("Error running DatasetWizard", e);
+//				log.error("Error running UserDatasetWizard", e);
 //			}
 		} 
 	}
 
-//	public Dataset getDataset() {
-//		return dataset;
+//	public Datamodel getDataset() {
+//		return datamodel;
 //	}
 
-	public void setDataset(ExternalDataset dataset) {
-		this.dataset = dataset;
+	public void setDatamodel(Datamodel datamodel) {
+		this.datamodel = datamodel;
 	}
 }

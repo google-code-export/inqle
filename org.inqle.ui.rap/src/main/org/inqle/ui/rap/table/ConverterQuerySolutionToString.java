@@ -2,9 +2,7 @@ package org.inqle.ui.rap.table;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.databinding.conversion.IConverter;
-import org.inqle.data.rdf.jena.NamedModel;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
 
 import com.hp.hpl.jena.query.QuerySolution;
 

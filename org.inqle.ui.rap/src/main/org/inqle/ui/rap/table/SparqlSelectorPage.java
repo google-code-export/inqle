@@ -9,8 +9,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.sdb.Queryer;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 
 import com.hp.hpl.jena.query.QuerySolution;
@@ -18,8 +18,8 @@ import com.hp.hpl.jena.query.QuerySolution;
 /**
  * Abstract base class for Wizard Pages, which will perform a query at run time to populate a checkbox
  * table, permitting selection of 1 or more rows.  Implementing classes must implement the
- * <code>getQuery()</code> method to retrieve the SPARQL query, and the <code>getNamedModelIds()</code> method to 
- * retrieve the List of NamedModel IDs to query
+ * <code>getQuery()</code> method to retrieve the SPARQL query, and the <code>getDatamodelIds()</code> method to 
+ * retrieve the List of Datamodel IDs to query
  * @author David Donohue
  * Mar 18, 2008
  */
@@ -42,7 +42,7 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 		return resultRdfTable.getResultList();
 	}
 
-	protected abstract Collection<String> getNamedModelIds();
+	protected abstract Collection<String> getDatamodelIds();
 
 	protected abstract String getQuery();
 
@@ -60,8 +60,8 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 	private void updateRows() {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(getQuery());
-		queryCriteria.addNamedModelIds(getNamedModelIds());
-		log.info("Performing query:\n" + getQuery() + "\non these named models:\n" + getNamedModelIds());
+		queryCriteria.addDatamodelIds(getDatamodelIds());
+		log.info("Performing query:\n" + getQuery() + "\non these named models:\n" + getDatamodelIds());
 		resultRdfTable = Queryer.selectRdfTable(queryCriteria);
 		log.info("Retrieved " + resultRdfTable.getResultList());
 	}

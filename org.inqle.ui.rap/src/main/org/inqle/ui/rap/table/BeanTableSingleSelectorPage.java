@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.pages.BeanWizardPage;
@@ -46,8 +46,8 @@ import org.inqle.ui.rap.pages.DynaWizardPage;
  * Usage (from within your implementation of DynaWizard):
  * 
  * public void addPages() {
- * 	 BeanTableSingleSelectorPage availableModelsPage = new BeanTableSingleSelectorPage(bean, "availableNamedModels", String.class, "Select available datasets", null);
-		 availableModelsPage.setBeans(persister.listNamedModels());
+ * 	 BeanTableSingleSelectorPage availableModelsPage = new BeanTableSingleSelectorPage(bean, "availableDatamodels", String.class, "Select available datasets", null);
+		 availableModelsPage.setBeans(persister.listDatamodels());
 		 availableModelsPage.setPropertyNames(Arrays.asList(new String[]{"modelName", "id", "class"}));
 		 addPage(availableModelsPage);
  * }

@@ -30,7 +30,7 @@ public class Databases extends PartType {
 
 	private List<DatabasePart> dbList = new ArrayList<DatabasePart>();
 
-//	private List<Connection> connections = new ArrayList<Connection>();
+//	private List<SDBDatabase> connections = new ArrayList<SDBDatabase>();
 
 	private boolean childrenIntialized = false;
 
@@ -47,11 +47,11 @@ public class Databases extends PartType {
 			IDatabase database = (IDatabase) persister.reconstitute(baseDatabaseObject.getClass(), databaseId, true);
 			databases.add(database);
 		}
-//		Collection<?> connectionObjects = persister.reconstituteAll(Connection.class);
+//		Collection<?> connectionObjects = persister.reconstituteAll(SDBDatabase.class);
 //		for (Object connectionObject: connectionObjects) {
-//			connections.add((Connection)connectionObject);
+//			connections.add((SDBDatabase)connectionObject);
 //		}
-//		for (Connection connection: connections) {
+//		for (SDBDatabase connection: connections) {
 //			DatabasePart dbPart = new DatabasePart(connection);
 //			dbPart.setParent(this);
 //			dbPart.addListener(this.listener);
@@ -76,10 +76,10 @@ public class Databases extends PartType {
 		}
 		DatabasePart[] nullDBPart = {};
 		if (dbList.size() == 0) {
-			//log.info("No Connection objects found.");
+			//log.info("No SDBDatabase objects found.");
 			return nullDBPart;
 		}
-		//log.info("Found these Connection objects:" + dbList);
+		//log.info("Found these SDBDatabase objects:" + dbList);
 		return dbList.toArray(nullDBPart);
 	}
 	

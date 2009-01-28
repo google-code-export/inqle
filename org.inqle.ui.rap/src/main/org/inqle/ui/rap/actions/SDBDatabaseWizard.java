@@ -9,7 +9,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
@@ -30,8 +30,8 @@ import org.inqle.ui.rap.tree.parts.DatabasePart;
 public class SDBDatabaseWizard extends Wizard {
 
 	
-	private Connection startingConnection = null;
-	private Connection database = null;
+	private SDBDatabase startingConnection = null;
+	private SDBDatabase database = null;
 	//private Persister persister;
 	static Logger log = Logger.getLogger(SDBDatabaseWizard.class);
 	Composite composite;
@@ -59,7 +59,7 @@ public class SDBDatabaseWizard extends Wizard {
 	 */
 	public void setDatabasePart(DatabasePart databasePart) {
 		this.databasePart  = databasePart;
-		this.startingConnection = (Connection) databasePart.getDatabase();
+		this.startingConnection = (SDBDatabase) databasePart.getDatabase();
 		resetConnection();
 	}
 	
@@ -70,8 +70,8 @@ public class SDBDatabaseWizard extends Wizard {
 	public void addPages() {
 		
 		resetConnection();
-		log.info("addPages() using Connection:\n" + JenabeanWriter.toString(database));
-		ConnectionPage connectionPage = new ConnectionPage("Database Connection Info", database, shell);
+		log.info("addPages() using SDBDatabase:\n" + JenabeanWriter.toString(database));
+		ConnectionPage connectionPage = new ConnectionPage("Database SDBDatabase Info", database, shell);
 		addPage(connectionPage);
 	}
 	
@@ -87,11 +87,11 @@ public class SDBDatabaseWizard extends Wizard {
 		boolean confirmSave = true;
 		
 		if (! connectionSucceeds) {
-			confirmSave = MessageDialog.openConfirm(shell.getShell(), "Connection Fails", "Unable to connect to this database.  Save it anyway?");
+			confirmSave = MessageDialog.openConfirm(shell.getShell(), "SDBDatabase Fails", "Unable to connect to this database.  Save it anyway?");
 		}
 		if (confirmSave) {
 			if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {
-				persister.createNewDBConnection(database);
+				persister.createNewDatabase(database);
 				parentPart.fireUpdate(parentPart);
 			} else if (this.mode == DatabaseWizardAction.MODE_EDIT) {
 				persister.persist(database);
@@ -112,7 +112,7 @@ public class SDBDatabaseWizard extends Wizard {
 		} else if (mode == DatabaseWizardAction.MODE_CLONE) {
 			database = startingConnection.createClone();
 		} else {
-			database = new Connection().createClone();
+			database = new SDBDatabase().createClone();
 		}
 		assert(database != null);
 	}

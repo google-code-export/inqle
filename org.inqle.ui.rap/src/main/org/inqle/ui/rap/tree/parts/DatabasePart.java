@@ -9,14 +9,15 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.ExternalDataset;
+import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatabaseWizardAction;
-import org.inqle.ui.rap.actions.DatasetWizardAction;
+import org.inqle.ui.rap.actions.DatamodelWizardAction;
 import org.inqle.ui.rap.actions.DeleteDatabaseAction;
 
 public class DatabasePart extends PartType {
@@ -38,7 +39,7 @@ public class DatabasePart extends PartType {
 		" SELECT ?datasetId \n " +
 		" { \n " +
 		" GRAPH ?g { \n " +
-		" ?datasetUri a inqle:ExternalDataset \n " +
+		" ?datasetUri a inqle:UserDatamodel \n " +
 		" . ?datasetUri inqle:id ?datasetId \n " +
 		" . ?datasetUri inqle:connectionId \"" + database.getId() + "\"^^xsd:string \n" +
 		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
@@ -80,7 +81,7 @@ public class DatabasePart extends PartType {
 	
 	public void initChildren() {
 		
-		//query for all ExternalDataset children
+		//query for all UserDatamodel children
 		Persister persister = Persister.getInstance();
 		
 //		AppInfo appInfo = persister.getAppInfo();
@@ -92,26 +93,34 @@ public class DatabasePart extends PartType {
 //		log.trace("datasetIds=" + datasetIds);
 		
 //		SDBConnector dbConnector = new SDBConnector(getConnection());
-//		List<Dataset> datasets = dbConnector.getDatasets();
+//		List<Datamodel> datasets = dbConnector.getDatasets();
 //		log.trace("datasets=" + datasets);
 		
-		//for Dataset, add a ModelPart
+		//for Datamodel, add a ModelPart
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
-		com.hp.hpl.jena.query.Dataset modelSet = connector.getDataset();
-		if (modelSet==null) return;
-		Iterator modelI = modelSet.listNames();
-		modelParts = new ArrayList<ModelPart>();
-//		for (String datasetId: datasetIds) {
-		while (modelI.hasNext()) {
-			String datasetId = (String)modelI.next();
-			ExternalDataset dataset = (ExternalDataset)persister.reconstitute(ExternalDataset.class, datasetId, true);
-			dataset.setConnectionId(this.database.getId());
-//			log.info("DatabasePart Loaded ExternalDataset: " + JenabeanWriter.toString(dataset));
-			ModelPart modelPart = new ModelPart(dataset);
+		List<String> modelIds = connector.listModels();
+		for (String modelId: modelIds) {
+			Datamodel datamodel = persister.getDatamodel(modelId);
+			ModelPart modelPart = new ModelPart(datamodel);
 			modelPart.setParent(this);
 			//modelPart.setPersister(this.persister);
 			modelParts.add(modelPart);
 		}
+		
+//		com.hp.hpl.jena.query.Dataset modelSet = connector.getDataset();
+//		if (modelSet==null) return;
+//		Iterator modelI = modelSet.listNames();
+//		modelParts = new ArrayList<ModelPart>();
+//		while (modelI.hasNext()) {
+//			String datasetId = (String)modelI.next();
+//			UserDatamodel dataset = (UserDatamodel)persister.reconstitute(UserDatamodel.class, datasetId, true);
+//			dataset.setConnectionId(this.database.getId());
+////			log.info("DatabasePart Loaded UserDatamodel: " + JenabeanWriter.toString(dataset));
+//			ModelPart modelPart = new ModelPart(dataset);
+//			modelPart.setParent(this);
+//			//modelPart.setPersister(this.persister);
+//			modelParts.add(modelPart);
+//		}
 		
 		this.childrenIntialized = true;
 	}
@@ -121,12 +130,12 @@ public class DatabasePart extends PartType {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
 		List<IAction> actions = new ArrayList<IAction>();
 		//"Add a dataset" action
-		DatasetWizardAction newModelWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
-		newModelWizardAction.setDataset(getNewDataset());
+		DatamodelWizardAction newModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
+		newModelWizardAction.setDatamodel(getNewDataset());
 		actions.add(newModelWizardAction);
 		
 		//"Add an ontology dataset" action
-//		DatasetWizardAction newOntologyDatasetWizardAction = new DatasetWizardAction(DatasetWizardAction.MODE_NEW, "Add an ontology dataset...", this, workbenchWindow);
+//		DatamodelWizardAction newOntologyDatasetWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Add an ontology dataset...", this, workbenchWindow);
 //		newOntologyDatasetWizardAction.setDataset(getNewOntologyDataset());
 //		actions.add(newOntologyDatasetWizardAction);
 		
@@ -147,9 +156,9 @@ public class DatabasePart extends PartType {
 		return actions;
 	}
 
-	private ExternalDataset getNewDataset() {
-		ExternalDataset newDataset = new ExternalDataset();
-		newDataset.setConnectionId(this.getDatabase().getId());
+	private UserDatamodel getNewDataset() {
+		UserDatamodel newDataset = new UserDatamodel();
+		newDataset.setDatabaseId(this.getDatabase().getId());
 		return newDataset.createClone();
 	}
 	
@@ -179,10 +188,10 @@ public class DatabasePart extends PartType {
 }
 
 /*
-This retrieves all Dataset objects
-Collection<?> modelObjects = persister.reconstituteList(Dataset.class);
+This retrieves all Datamodel objects
+Collection<?> modelObjects = persister.reconstituteList(Datamodel.class);
 for (Object modelObject: modelObjects) {
-	Dataset rdbModel = (Dataset)modelObject;
+	Datamodel rdbModel = (Datamodel)modelObject;
 	ModelPart modelPart = new ModelPart(rdbModel, persister);
 	modelPart.addListener(this.listener);
 	modelPart.setParent(this);

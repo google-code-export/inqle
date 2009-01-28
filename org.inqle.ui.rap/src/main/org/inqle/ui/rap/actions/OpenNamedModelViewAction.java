@@ -3,11 +3,11 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.inqle.data.rdf.jena.NamedModel;
+import org.inqle.data.rdf.jena.Datamodel;
 
 /**
  * When run, this action will open another instance of a view.
- * That view should implement INamedModelView, so that we can pass
+ * That view should implement IDatamodelView, so that we can pass
  * the data into it.
  */
 public class OpenNamedModelViewAction extends OpenViewAction {
@@ -22,7 +22,7 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 		super(window, label, viewId, pluginId, iconPath);
 	}
 
-	private NamedModel namedModel;
+	private Datamodel datamodel;
 	
 	private static final Logger log = Logger.getLogger(OpenNamedModelViewAction.class);
 	
@@ -43,15 +43,15 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 	public void run() {
 		log.info("OpenNamedModelViewAction.run()...");
 		try {
-			INamedModelView view = (INamedModelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(viewId);
+			IDatamodelView view = (IDatamodelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(viewId);
 			if (view==null) {
-				view = (INamedModelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+				view = (IDatamodelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
 			}
-			view.setNamedModel(namedModel);
-			view.setTitleText("Types in Dataset :" + namedModel);
-			log.info("Refreshing Dataset View with dataset: " + getNamedModel());
+			view.setDatamodel(datamodel);
+			view.setTitleText("Types in Datamodel :" + datamodel);
+			log.info("Refreshing Datamodel View with dataset: " + getDatamodel());
 			view.refreshView();
-			log.info("Got view for named model: " + namedModel);
+			log.info("Got view for named model: " + datamodel);
 			theWindow.getActivePage().showView(viewId);
 			theWindow.getActivePage().bringToTop(view);
 		} catch (Exception e) {
@@ -61,11 +61,11 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 //		super.run();
 	}
 
-	public void setNamedModel(NamedModel namedModel) {
-		this.namedModel = namedModel;
+	public void setDatamodel(Datamodel datamodel) {
+		this.datamodel = datamodel;
 	}
 
-	public NamedModel getNamedModel() {
-		return namedModel;
+	public Datamodel getDatamodel() {
+		return datamodel;
 	}
 }

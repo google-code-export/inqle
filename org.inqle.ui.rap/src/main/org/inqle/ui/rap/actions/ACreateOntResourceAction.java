@@ -58,7 +58,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		this.shell = shell;
 		log.trace("Create ACreateOntResourceAction");
 		Persister persister = Persister.getInstance();
-		this.model = persister.getInternalModel(internalDatasetRoleId);
+		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
 		this.parentResourceUri = parentResourceUri;
 		this.actionType = actionType;
