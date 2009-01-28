@@ -6,22 +6,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Connection;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.sdb.Queryer;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
-import org.inqle.ui.rap.actions.SDBDatabaseWizardAction;
+import org.inqle.ui.rap.actions.DatabaseWizardAction;
 import org.inqle.ui.rap.actions.DatasetWizardAction;
 import org.inqle.ui.rap.actions.DeleteDatabaseAction;
 
@@ -137,12 +131,12 @@ public class DatabasePart extends PartType {
 //		actions.add(newOntologyDatasetWizardAction);
 		
 		//"Edit this database" action
-		SDBDatabaseWizardAction editDatabaseWizardAction = new SDBDatabaseWizardAction(SDBDatabaseWizardAction.MODE_EDIT, "Edit this database...", this.getParent(), workbenchWindow);
+		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", getDatabase(), this.getParent(), workbenchWindow);
 		editDatabaseWizardAction.setDatabasePart(this);
 		actions.add(editDatabaseWizardAction);
 		
 		//"Clone this database" action
-		SDBDatabaseWizardAction cloneDatabaseWizardAction = new SDBDatabaseWizardAction(SDBDatabaseWizardAction.MODE_CLONE, "Clone this database...", this.getParent(), workbenchWindow);
+		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", getDatabase(), this.getParent(), workbenchWindow);
 		cloneDatabaseWizardAction.setDatabasePart(this);
 		actions.add(cloneDatabaseWizardAction);
 		

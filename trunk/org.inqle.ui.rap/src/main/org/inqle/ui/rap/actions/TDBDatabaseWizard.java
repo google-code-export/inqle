@@ -9,16 +9,16 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
-import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.sdb.SDBConnector;
+import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
-import org.inqle.ui.rap.pages.ConnectionPage;
+import org.inqle.ui.rap.pages.BasicNameDescriptionPage;
+import org.inqle.ui.rap.pages.DatabaseInfoPage;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 
 /**
@@ -27,13 +27,13 @@ import org.inqle.ui.rap.tree.parts.DatabasePart;
  * Feb 8, 2008
  * @see http://jena.sourceforge.net/DB/index.html
  */
-public class SDBDatabaseWizard extends Wizard {
+public class TDBDatabaseWizard extends Wizard {
 
-	
-	private Connection startingConnection = null;
-	private Connection database = null;
+	private LocalFolderDatabase startingDatabase = null;
+	private LocalFolderDatabase database = null;
+	private DatabaseInfoPage databaseInfoPage = null;
 	//private Persister persister;
-	static Logger log = Logger.getLogger(SDBDatabaseWizard.class);
+	static Logger log = Logger.getLogger(TDBDatabaseWizard.class);
 	Composite composite;
 	int mode;
 	
@@ -41,7 +41,7 @@ public class SDBDatabaseWizard extends Wizard {
 	private IPartType parentPart = null;
 	private IPart databasePart = null;
 	
-	public SDBDatabaseWizard(int mode, IPartType parentPart, DatabasePart databasePart, Shell parentShell) {
+	public TDBDatabaseWizard(int mode, IPartType parentPart, DatabasePart databasePart, Shell parentShell) {
 		this.mode = mode;
 		this.parentPart = parentPart;
 		this.databasePart = databasePart;
@@ -59,7 +59,7 @@ public class SDBDatabaseWizard extends Wizard {
 	 */
 	public void setDatabasePart(DatabasePart databasePart) {
 		this.databasePart  = databasePart;
-		this.startingConnection = (Connection) databasePart.getDatabase();
+		this.startingDatabase = (LocalFolderDatabase) databasePart.getDatabase();
 		resetConnection();
 	}
 	
@@ -70,9 +70,13 @@ public class SDBDatabaseWizard extends Wizard {
 	public void addPages() {
 		
 		resetConnection();
-		log.info("addPages() using Connection:\n" + JenabeanWriter.toString(database));
-		ConnectionPage connectionPage = new ConnectionPage("Database Connection Info", database, shell);
-		addPage(connectionPage);
+		log.info("addPages() using Database:\n" + JenabeanWriter.toString(database));
+		if (mode == DatabaseWizardAction.MODE_NEW) {
+			databaseInfoPage = new DatabaseInfoPage("Database Connection Info", null, null);
+		} else {
+			databaseInfoPage = new DatabaseInfoPage("Database Connection Info", database.getName(), database.getDescription());
+		}
+		addPage(databaseInfoPage);
 	}
 	
 	/* (non-Javadoc)
@@ -80,23 +84,40 @@ public class SDBDatabaseWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
+		database.setName(databaseInfoPage.getName());
+		
+		
 		Persister persister = Persister.getInstance();
 //		SDBConnector connector = new SDBConnector(database);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
 		boolean connectionSucceeds = connector.testConnection();
+		
+		if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {
+			if (connectionSucceeds) {
+				MessageDialog.openConfirm(shell.getShell(), "Unable to Create Database", "There is already a database of the same ID.");
+				return false;
+			} else {
+//				connector.createDatabase();
+				persister.createNewDBConnection(database);
+				parentPart.fireUpdate(parentPart);
+				return true;
+			}
+		}
+		
+		//mode must = EDIT
 		boolean confirmSave = true;
 		
 		if (! connectionSucceeds) {
 			confirmSave = MessageDialog.openConfirm(shell.getShell(), "Connection Fails", "Unable to connect to this database.  Save it anyway?");
 		}
 		if (confirmSave) {
-			if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {
-				persister.createNewDBConnection(database);
-				parentPart.fireUpdate(parentPart);
-			} else if (this.mode == DatabaseWizardAction.MODE_EDIT) {
+//			if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {
+//				persister.createNewDBConnection(database);
+//				parentPart.fireUpdate(parentPart);
+//			} else if (this.mode == DatabaseWizardAction.MODE_EDIT) {
 				persister.persist(database);
 				databasePart.fireUpdatePart();
-			}
+//			}
 		}
 		//close wizard regardless
 		return true;
@@ -108,11 +129,11 @@ public class SDBDatabaseWizard extends Wizard {
 	 */
 	public final void resetConnection() {
 		if (mode == DatabaseWizardAction.MODE_EDIT) {
-			database = startingConnection.createReplica();
+			database = startingDatabase.createReplica();
 		} else if (mode == DatabaseWizardAction.MODE_CLONE) {
-			database = startingConnection.createClone();
+			database = startingDatabase.createClone();
 		} else {
-			database = new Connection().createClone();
+			database = new LocalFolderDatabase().createClone();
 		}
 		assert(database != null);
 	}

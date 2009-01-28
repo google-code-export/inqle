@@ -4,22 +4,19 @@
 package org.inqle.ui.rap.tree.parts;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.BasicDatabase;
-import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
-import org.inqle.ui.rap.actions.SDBDatabaseWizardAction;
+import org.inqle.ui.rap.actions.DatabaseWizardAction;
 
 /**
  * @author David Donohue
@@ -29,15 +26,15 @@ public class Databases extends PartType {
 
 	private static final String ICON_PATH = "org/inqle/ui/rap/images/monitor.gif";
 
-	private static final Class<?> DATABASE_CLASS = BasicDatabase.class;
+//	private static final Class<?> DATABASE_CLASS = LocalFolderDatabase.class;
 
 	private List<DatabasePart> dbList = new ArrayList<DatabasePart>();
 
-	private List<Connection> connections = new ArrayList<Connection>();
+//	private List<Connection> connections = new ArrayList<Connection>();
 
 	private boolean childrenIntialized = false;
 
-	private Class<?> databaseClass = DATABASE_CLASS;
+	private IDatabase baseDatabaseObject = new LocalFolderDatabase();;
 	
 	static Logger log = Logger.getLogger(Databases.class);
 	
@@ -47,14 +44,23 @@ public class Databases extends PartType {
 		List<String> databaseIds = connector.listDatabases();
 		List<IDatabase> databases = new ArrayList<IDatabase>();
 		for (String databaseId: databaseIds) {
-			persister.reconstitute(databaseClass, databaseId, true);
+			IDatabase database = (IDatabase) persister.reconstitute(baseDatabaseObject.getClass(), databaseId, true);
+			databases.add(database);
 		}
 //		Collection<?> connectionObjects = persister.reconstituteAll(Connection.class);
 //		for (Object connectionObject: connectionObjects) {
 //			connections.add((Connection)connectionObject);
 //		}
-		for (Connection connection: connections) {
-			DatabasePart dbPart = new DatabasePart(connection);
+//		for (Connection connection: connections) {
+//			DatabasePart dbPart = new DatabasePart(connection);
+//			dbPart.setParent(this);
+//			dbPart.addListener(this.listener);
+//			dbList.add(dbPart);
+//			//log.info("Added DatabasePart " + dbPart.getName());
+//		}
+		
+		for (IDatabase database: databases) {
+			DatabasePart dbPart = new DatabasePart(database);
 			dbPart.setParent(this);
 			dbPart.addListener(this.listener);
 			dbList.add(dbPart);
@@ -94,8 +100,8 @@ public class Databases extends PartType {
 //public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
 		List<IAction> actions = new ArrayList<IAction>();
-		SDBDatabaseWizardAction sDBDatabaseWizardAction = new SDBDatabaseWizardAction(SDBDatabaseWizardAction.MODE_NEW, "Create new database....", this, workbenchWindow);
-		actions.add(sDBDatabaseWizardAction);
+		DatabaseWizardAction databaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_NEW, "Create new database....", baseDatabaseObject, this, workbenchWindow);
+		actions.add(databaseWizardAction);
 		return actions;
 	}
 }
