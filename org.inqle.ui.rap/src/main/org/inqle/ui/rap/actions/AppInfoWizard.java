@@ -19,7 +19,7 @@ import org.inqle.data.rdf.jena.ExternalDataset;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.InternalConnection;
-import org.inqle.data.rdf.jena.BasicDatabase;
+import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jena.InternalDataset;
 import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
@@ -345,28 +345,28 @@ public class AppInfoWizard extends Wizard {
 //		SDBConnector connector = new SDBConnector(metarepositoryConnection);
 //		int status = connector.createDatabase();
 //		log.info("Tried to create new SDB store for Metarepository, with status=" + status);
-		IDatabase internalDatabase = new BasicDatabase();
-		internalDatabase.setId(InqleInfo.DEFAULT_INTERNAL_DATABASE_ID);
+		IDatabase systemDatabase = new LocalFolderDatabase();
+		systemDatabase.setId(InqleInfo.SYSTEM_DATABASE_ROOT);
 		InternalDataset metarepositoryDataset = new InternalDataset();
 		metarepositoryDataset.setId(InqleInfo.DEFAULT_METAREPOSITORY_DATASET_ID);
 		metarepositoryDataset.setConnectionId(DEFAULT_FIRSTDATA_DATABASE_ID);
 		
 		try {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(internalDatabase);
+			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase);
 			int status = connector.createDatabase();
-			log.info("Created database: " + InqleInfo.DEFAULT_INTERNAL_DATABASE_ID + ": Status=" + status);
+			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ROOT + ": Status=" + status);
 			Persister persister = Persister.getInstance();
-			persister.persist(internalDatabase);
+			persister.persist(systemDatabase);
 			persister.persist(metarepositoryDataset);
 		} catch (Exception e) {
-			log.error("Error creating/storing database: " + InqleInfo.DEFAULT_INTERNAL_DATABASE_ID + " and dataset: " + InqleInfo.DEFAULT_METAREPOSITORY_DATASET_ID, e);
+			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ROOT + " and dataset: " + InqleInfo.DEFAULT_METAREPOSITORY_DATASET_ID, e);
 			//TODO show error to user
 			return false;
 		}
 		
 		ExternalDataset firstDataDataset = new ExternalDataset();
 		firstDataDataset.setId(DEFAULT_FIRSTDATA_DATASET_ID);
-		IDatabase firstDataDatabase = new BasicDatabase();
+		IDatabase firstDataDatabase = new LocalFolderDatabase();
 		firstDataDatabase.setId(DEFAULT_FIRSTDATA_DATABASE_ID);
 		firstDataDataset.setConnectionId(firstDataDatabase.getId());
 		firstDataDataset.addDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);

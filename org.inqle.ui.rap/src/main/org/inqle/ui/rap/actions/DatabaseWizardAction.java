@@ -5,19 +5,19 @@ package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.ui.rap.IPart;
+import org.inqle.data.rdf.jena.Connection;
+import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
-import org.inqle.data.rdf.jena.Connection;
 
 /**
  * @author David Donohue
  * Feb 8, 2008
  */
-public class SDBDatabaseWizardAction extends Action {
+public class DatabaseWizardAction extends Action {
 	public static final int MODE_NEW = 0;
 	public static final int MODE_EDIT = 1;
 	public static final int MODE_CLONE = 2;
@@ -28,25 +28,17 @@ public class SDBDatabaseWizardAction extends Action {
 	private int mode = MODE_NEW;
 	private IPartType parentPart = null;
 	private DatabasePart databasePart;
-	private Connection connection;
+	private IDatabase database;
 	
-	private static final Logger log = Logger.getLogger(SDBDatabaseWizardAction.class);
+	private static final Logger log = Logger.getLogger(DatabaseWizardAction.class);
 	
-	public SDBDatabaseWizardAction(int mode, String menuText, IPartType parentPart, IWorkbenchWindow window) {
+	public DatabaseWizardAction(int mode, String menuText, IDatabase database, IPartType parentPart, IWorkbenchWindow window) {
 		this.mode = mode;
 		this.menuText = menuText;
-		this.parentPart = parentPart;
+		this.database = database;
 		this.window = window;
+		this.parentPart = parentPart;
 		//this.persister = persister;
-	}
-	
-	/**
-	 * Optionally set the DatabasePart which we are editing or cloning.
-	 * If this is not set, we will create a new connection afresh.
-	 * @param databasePart
-	 */
-	public void setDatabasePart(DatabasePart databasePart) {
-		this.databasePart  = databasePart;
 	}
 	
 	@Override
@@ -56,20 +48,28 @@ public class SDBDatabaseWizardAction extends Action {
 	
 	@Override
 	public void run() {
+		IWizard wizard = null;
 		//MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Opening new Wizard", event.toString());
-		SDBDatabaseWizard wizard = new SDBDatabaseWizard(mode, parentPart, window.getShell());
-		//wizard.setConnection(connection);
-		
-		//for MODE_NEW, do not add a starting base Connection
-		if (databasePart != null) {
-			wizard.setDatabasePart(databasePart);
+		if (database instanceof Connection) {
+			wizard = new SDBDatabaseWizard(mode, parentPart, databasePart, window.getShell());
+			//wizard.setConnection(connection);
+		} else {
+			wizard = new TDBDatabaseWizard(mode, parentPart, databasePart, window.getShell());
 		}
 		
 		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 		dialog.open();
 	}
 
-	public void setConnection(Connection connection) {
-		this.connection = connection;
+	public void setDatabase(IDatabase database) {
+		this.database = database;
+	}
+
+	public DatabasePart getDatabasePart() {
+		return databasePart;
+	}
+
+	public void setDatabasePart(DatabasePart databasePart) {
+		this.databasePart = databasePart;
 	}
 }
