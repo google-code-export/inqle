@@ -70,6 +70,7 @@ public class InqleInfo {
 	public static final String INDEXES_FOLDER = "indexes";
 
 	private static final String RDF_FOLDER = "rdf";
+	private static final String DB_FOLDER = "db/tdb";
 
 	
 	
@@ -117,8 +118,22 @@ public class InqleInfo {
 
 //	public static final String DEFAULT_INTERNAL_DATABASE_ID = "org.inqle.dbs.internal";
 
-	public static final String DEFAULT_METAREPOSITORY_DATASET_ID = "Metarepository";
+//	public static final String METAREPOSITORY_DATASET = "Metarepository";
 
 	public static final String USER_DATABASE_ROOT = "user";
 	public static final String SYSTEM_DATABASE_ROOT = "system";
+
+
+
+	public static String getDatabaseRootFilePath() {
+		return getAssetsDirectory() + DB_FOLDER + "/";
+	}
+	
+//	public static String getSystemDatabaseRootFilePath() {
+//		return getDatabaseRootFilePath() + SYSTEM_DATABASE_ROOT + "/";
+//	}
+//	
+//	public static String getUserDatabaseRootFilePath() {
+//		return getDatabaseRootFilePath() + USER_DATABASE_ROOT + "/";
+//	}
 }
