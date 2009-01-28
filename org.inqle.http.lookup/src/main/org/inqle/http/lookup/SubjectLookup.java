@@ -8,7 +8,7 @@ import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.QueryCriteriaFactory;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -216,7 +216,7 @@ public class SubjectLookup {
 			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(internalDatasetRoleId));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatasetRoleId));
 		IndexLARQ textIndex =  persister.getIndex(internalDatasetRoleId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
 		log.info("Searched " + internalDatasetRoleId + " index for '" + searchTermForRdfClass + "'...");
@@ -254,7 +254,7 @@ public class SubjectLookup {
 			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(internalDatasetRoleId));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatasetRoleId));
 		IndexLARQ textIndex =  persister.getIndex(internalDatasetRoleId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
 		log.info("Searched " + internalDatasetRoleId + " index for '" + searchTermForRdfClass + "'...");

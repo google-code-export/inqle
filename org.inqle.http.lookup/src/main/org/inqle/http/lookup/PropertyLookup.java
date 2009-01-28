@@ -6,7 +6,7 @@ import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.QueryCriteriaFactory;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
@@ -313,8 +313,8 @@ public class PropertyLookup {
 	public static String lookupDataPropertiesAboutSubject(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
-		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(Data.DATA_PROPERTY_DATASET_ROLE_ID));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindMappedDataPropertiesAboutSubject(subjectClassUri, countSearchResults, offset);
 //		log.info("Querying w/ this sparql:\n" + sparql);
@@ -334,8 +334,8 @@ public class PropertyLookup {
 	public static String lookupSubjectProperties(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
-		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(Data.DATA_PROPERTY_DATASET_ROLE_ID));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		String sparql = getSparqlFindMappedSubjectProperties(subjectClassUri, countSearchResults, offset);
 //		log.info("Querying w/ this sparql:\n" + sparql);
@@ -354,8 +354,8 @@ public class PropertyLookup {
 	public static String lookupAllDataProperties(String subjectClassUri, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addNamedModel(persister.getInternalDataset(Data.DATA_PROPERTY_DATASET_ROLE_ID));
-//		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(Data.DATA_PROPERTY_DATASET_ROLE_ID));
+//		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindDataAndSubjectProperties(subjectClassUri, countSearchResults, offset);
@@ -379,7 +379,7 @@ public class PropertyLookup {
 //		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
 		
-//		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);
@@ -402,7 +402,7 @@ public class PropertyLookup {
 //		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS, null);
 		
-//		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindPropertiesFromPreferredOntology(subjectClassUri, countSearchResults, offset);
@@ -430,7 +430,7 @@ public class PropertyLookup {
 //		log.info("querying model w/ " + theModel.size() + " statements.");
 //		queryCriteria.setSingleModel(theModel);
 //		
-////		queryCriteria.addNamedModel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+////		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
 ////		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 ////		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 //		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);

@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.QueryCriteria;
-import org.inqle.data.rdf.jena.sdb.Queryer;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.http.lookup.SubjectLookup;
 import org.junit.Test;
 
