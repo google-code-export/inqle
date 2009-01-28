@@ -141,7 +141,7 @@ public class Requestor {
 				}
 			}
 		} catch (Exception e) {
-			log.error("Connection error; Unable to connect to server at " + url, e);
+			log.error("Requestor error: Unable to connect to server at " + url, e);
 			success = false;
 		} finally {
 			if (urlc != null) {
@@ -223,7 +223,7 @@ public class Requestor {
 			
 	    document = builder.parse(in);
 		} catch (IOException e) {
-			log.error("Connection error; Unable to connect to server at " + url, e);
+			log.error("SDBDatabase error; Unable to connect to server at " + url, e);
 		} catch (Exception e) {
 			log.error("Error parsing XML from InputStream from URL " + url + " for parameters: " + params, e);
 			log.info("Offending input stream=" + InputStreamUtil.convertStreamToString(in));
