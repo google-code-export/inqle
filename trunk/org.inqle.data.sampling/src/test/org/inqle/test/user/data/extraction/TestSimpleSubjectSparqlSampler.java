@@ -34,8 +34,8 @@ public class TestSimpleSubjectSparqlSampler {
 		//get list of choosable datamodels
 		IDataTable resultTable = sss.execute();
 		assertNotNull(resultTable);
-		//assertNotNull(sss.getAvailableNamedModels());
-		assertNotNull(sss.getSelectedNamedModels());
+		//assertNotNull(sss.getAvailableDatamodels());
+		assertNotNull(sss.getSelectedDatamodels());
 		//Collection<String> availablePredicates = sss.getAvailablePredicates();
 		//assertEquals(true, availablePredicates.size() > 5);
 //		Collection<Arc> selectedArc = sss.get();

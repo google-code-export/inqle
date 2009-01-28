@@ -10,7 +10,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomUtil;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
@@ -22,8 +22,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 /** 
  * This sampler does the following:
- * (1) Select 1-2 NamedModels from which to extract data
- * (2) From those NamedModels, randomly select a subject class
+ * (1) Select 1-2 Datamodels from which to extract data
+ * (2) From those Datamodels, randomly select a subject class
  * (3) Randomly select 1 Arc, starting from this subject, to be the experimental label
  * (4) Randomly select 1 or more Arcs, starting from this subject
  * (5) Dynamically generate a SPARQL query which selects for all
@@ -39,7 +39,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * 
  * TODO add elements which define how to render the UI elements, for manual execution mode
  */
-@TargetDataset(ISampler.SAMPLER_DATASET)
+@TargetDatamodel(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 

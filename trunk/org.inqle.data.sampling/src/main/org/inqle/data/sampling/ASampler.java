@@ -3,7 +3,7 @@ package org.inqle.data.sampling;
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDataset;
+import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
@@ -26,13 +26,13 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Feb 29, 2008
  */
-@TargetDataset(ISampler.SAMPLER_DATASET)
+@TargetDatamodel(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public abstract class ASampler extends UniqueJenabean implements ISampler {
 
-//	protected Collection<String> availableNamedModels;
+//	protected Collection<String> availableDatamodels;
 
-	protected Collection<String> selectedNamedModels;
+	protected Collection<String> selectedDatamodels;
 
 	protected Arc labelArc;
 	
@@ -45,7 +45,7 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 	 * @param sampler the provided sampler
 	 */
 	public void clone(ISampler templateSampler) {
-		setSelectedNamedModels(templateSampler.getSelectedNamedModels());
+		setSelectedDatamodels(templateSampler.getSelectedDatamodels());
 		setLabelArc(templateSampler.getLabelArc());
 		super.clone(templateSampler);
 	}
@@ -55,8 +55,8 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 		setId(objectToClone.getId());
 	}
 
-//	public Collection<String> getAvailableNamedModels() {
-//		return availableNamedModels;
+//	public Collection<String> getAvailableDatamodels() {
+//		return availableDatamodels;
 //	}
 
 //	public DataColumn[] getDataColumns() {
@@ -75,8 +75,8 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //		return resultDataTable;
 //	}
 
-	public Collection<String> getSelectedNamedModels() {
-		return selectedNamedModels;
+	public Collection<String> getSelectedDatamodels() {
+		return selectedDatamodels;
 	}
 
 //	public DataColumn getSubjectDataColumn() {
@@ -87,13 +87,13 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //	 * (Called prior to saving the object).  Remove all values not desired when saving this object
 //	 */
 //	public void removeInterimData() {
-//		availableNamedModels = null;
+//		availableDatamodels = null;
 //		dataColumns = null;
 //		resultDataTable = null;
 //	}
 
-//	public void setAvailableNamedModels(Collection<String> availableNamedModels) {
-//		this.availableNamedModels = availableNamedModels;
+//	public void setAvailableDatamodels(Collection<String> availableDatamodels) {
+//		this.availableDatamodels = availableDatamodels;
 //	}
 
 //	public void setDataColumns(DataColumn[] dataColumns) {
@@ -108,8 +108,8 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //		this.resultDataTable = resultDataTable;
 //	}
 
-	public void setSelectedNamedModels(Collection<String> selectedNamedModels) {
-		this.selectedNamedModels = selectedNamedModels;
+	public void setSelectedDatamodels(Collection<String> selectedDatamodels) {
+		this.selectedDatamodels = selectedDatamodels;
 	}
 
 //	public void setSubjectDataColumn(DataColumn subjectDataColumn) {

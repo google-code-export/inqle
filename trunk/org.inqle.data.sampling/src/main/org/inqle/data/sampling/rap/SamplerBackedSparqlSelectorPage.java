@@ -26,12 +26,12 @@ public class SamplerBackedSparqlSelectorPage extends SparqlSelectorPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.inqle.ui.rap.table.SparqlSelectorPage#getNamedModelIds()
+	 * @see org.inqle.ui.rap.table.SparqlSelectorPage#getDatamodelIds()
 	 */
 	@Override
-	protected Collection<String> getNamedModelIds() {
+	protected Collection<String> getDatamodelIds() {
 		ISampler sampler = (ISampler)bean;
-		return sampler.getSelectedNamedModels();
+		return sampler.getSelectedDatamodels();
 	}
 
 	/* (non-Javadoc)
