@@ -115,7 +115,10 @@ public class InqleInfo {
 		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_PREFIXES_FOLDER + "/";
 	}
 
-	public static final String DEFAULT_INTERNAL_DATABASE_ID = "org.inqle.dbs.internal";
+//	public static final String DEFAULT_INTERNAL_DATABASE_ID = "org.inqle.dbs.internal";
 
 	public static final String DEFAULT_METAREPOSITORY_DATASET_ID = "Metarepository";
+
+	public static final String USER_DATABASE_ROOT = "user";
+	public static final String SYSTEM_DATABASE_ROOT = "system";
 }
