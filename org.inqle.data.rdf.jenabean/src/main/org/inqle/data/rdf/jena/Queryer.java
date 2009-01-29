@@ -82,7 +82,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			LARQ.setDefaultIndex(qe.getContext(), queryCriteria.getTextIndex());
 		}
 		
-		qe.getContext().set(SDB.unionDefaultGraph, true);
+//		qe.getContext().set(SDB.unionDefaultGraph, true);
 		return qe;
 	}
 	
