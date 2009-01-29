@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.osgi.framework.BundleContext;
 
 public class InqleUiActivator extends Plugin {
@@ -26,9 +27,6 @@ public class InqleUiActivator extends Plugin {
 		System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
 		System.setProperty("java.io.tmpdir", inqleHome + InqleInfo.TEMP_FOLDER);
 		log.info("Set system property '" + InqleInfo.INQLE_HOME + "' to " + inqleHome);
-	
-		//try to initialize the Persister
-//		PersisterInitializer.initialize();
 		
 		super.start(context);
 	}
