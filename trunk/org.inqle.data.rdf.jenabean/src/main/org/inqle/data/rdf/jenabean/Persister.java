@@ -25,12 +25,11 @@ import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.DatabaseBackedDatamodel;
 import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.SystemDatamodel;
-import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.TargetDatamodel;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
 
@@ -100,13 +99,14 @@ public class Persister {
 	public static int persisterId = 0;
 	
 //	private Map<String, Model> cachedModels = null;
-//	private Map<String, SystemDatamodel> internalDatasets = null;
+//	private Map<String, SystemDatamodel> systemDatasets = null;
 //	private Map<String, IDatabase> internalDatabases = null;
 //	private Map<String, CacheDataset> cacheDatasets = null;
 	private Map<String, IndexBuilderModel> indexBuilders;
 //	private IndexLARQ schemaFilesSubjectIndex;
 //	private OntModel schemaFilesOntModel;
 	private Model prefixesModel;
+	private boolean systemDatamodelsInitialized = false;
 	
 	
 	/* *********************************************************************
@@ -163,6 +163,15 @@ public class Persister {
 //		return persister;
 //	}
 
+	/* *********************************************************************
+	 * *** INITIALIZATION METHODS
+	 * ********************************************************************* */
+	public void initialize() {
+		if (! systemDatamodelsInitialized) {
+			initializeSystemDatamodels();
+		}
+	}
+	
 	/* *********************************************************************
 	 * *** APPINFO METHODS
 	 * ********************************************************************* */
@@ -268,20 +277,17 @@ public class Persister {
 	 */
 	public Model createDatabaseBackedModel(DatabaseBackedDatamodel datamodel) {
 		//first see if a datamodel of that ID already exists
-		try {Datamodel existingModel = getDatamodel(datamodel.getId());
-			if (existingModel != null) {
-				log.error("A Datamodel of ID: " + datamodel.getId() + " already exists.");
-				return null;
-			}
-		} catch (Exception e) {
-			log.info("Failed to find already-existing Datamodel of ID: " + datamodel.getId());
+		if (datamodelExists(datamodel.getId())) {
+			log.info("A Datamodel of ID: " + datamodel.getId() + " already exists.");
+			return null;
 		}
-		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
-		log.info("Creating Model of name '" + datamodel.getId() + "'.");
 		
+		//create the database-backed model
+		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
+		log.info("Creating Model of name '" + datamodel.getId() + "'...");
 		Model model = dbConnector.getModel(datamodel.getId());
 		
-		//store the Datamodel object
+		//store the associated Datamodel object
 		persist(datamodel, getMetarepositoryModel());
 		return model;
 	}
@@ -293,6 +299,7 @@ public class Persister {
 	 * @param namedModelId This could be the ID of a Datamodel or a Datafile object
 	 * @return the model, or null if no model found in the metarepository
 	 */
+	@Deprecated
 	public Model getModel(String namedModelId) {
 		assert(namedModelId != null && namedModelId.length() > 0);
 		Datamodel namedModel = getDatamodel(namedModelId);
@@ -327,9 +334,12 @@ public class Persister {
 //		if (datasetId.equals(METAREPOSITORY_DATAMODEL)) {
 //			return getAppInfo().getMetarepositoryDataset();
 //		}
-		SystemDatamodel dataset = (SystemDatamodel) reconstitute(SystemDatamodel.class, datasetId, true);
+		if (!systemDatamodelsInitialized) {
+			initializeSystemDatamodels();
+		}
+		SystemDatamodel datamodel = (SystemDatamodel) reconstitute(SystemDatamodel.class, datasetId, true);
 //		return getInternalDatasets().get(datasetId);
-		return dataset;
+		return datamodel;
 	}
 	
 	/**
@@ -356,6 +366,31 @@ public class Persister {
 		return indexBuilder.getIndex();
 	}
 	
+	public void initializeSystemDatamodels() {
+	//get all internal dataset extensions
+		List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
+		
+		//find or create the Datamodel for each.
+		for (IExtensionSpec datasetExtension: datasetExtensions) {
+			String datamodelId = datasetExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+
+			//create the Datamodel
+			SystemDatamodel systemDatamodel = new SystemDatamodel();
+//			internalDataset.setDatasetRole(datasetId);
+			systemDatamodel.setId(datamodelId);
+			systemDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ROOT);
+			createDatabaseBackedModel(systemDatamodel);
+//			persist(systemDataModel);
+			log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC Created & stored new SystemDatamodel of ID: " + datamodelId + ":\n" + JenabeanWriter.toString(systemDatamodel));
+		}
+		
+		//having created the Datasets and Models, make sure any text indexes have been created
+		getIndexBuilders();
+		
+		log.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSS System datamodels initialized");
+		systemDatamodelsInitialized  = true;
+	}
+	
 	/**
 	 * Get the map of internal datasets.  If this does not exist yet (i.e. on first execution
 	 * of this method) then create it.  To create it, first load what exists in the Metarepository.
@@ -365,19 +400,20 @@ public class Persister {
 	 * 
 	 * @return
 	 * 
-	 * TODO include a refresh persister method, which sets internalDatasets to null and therefore will reload
+	 * TODO include a refresh persister method, which sets systemDatasets to null and therefore will reload
 	 * this info.  This would allow new plugins to be found and their datasets to be created
 	 */
-//	public Map<String, SystemDatamodel> getInternalDatasets() {
-//		if (internalDatasets != null) {
-//			return internalDatasets;
+//	@Deprecated
+//	public Map<String, SystemDatamodel> getSystemDatasets() {
+//		if (systemDatasets != null) {
+//			return systemDatasets;
 //		}
 //		
 ////		if (internalConnections == null) {
 ////			getInternalConnections();
 ////		}
 //		
-//		internalDatasets = new HashMap<String, SystemDatamodel>();
+//		systemDatasets = new HashMap<String, SystemDatamodel>();
 //		//load all saved InternalDatasets
 //		RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
 //		Collection<SystemDatamodel> savedInternalDatasets = new ArrayList<SystemDatamodel>();
@@ -385,10 +421,10 @@ public class Persister {
 //		if (savedInternalDatasets == null || savedInternalDatasets.size()==0) {
 //			log.warn("Unable to load SystemDatamodel objects.  Perhaps they do not yet exist.");
 //		} else {
-//			//add each to the internalDatasets in-memory Map
+//			//add each to the systemDatasets in-memory Map
 //			for (SystemDatamodel savedInternalDataset: savedInternalDatasets) {
-////				internalDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
-//				internalDatasets.put(savedInternalDataset.getId(), savedInternalDataset);
+////				systemDatasets.put(savedInternalDataset.getDatasetRole(), savedInternalDataset);
+//				systemDatasets.put(savedInternalDataset.getId(), savedInternalDataset);
 //			}
 //		}
 //		
@@ -396,7 +432,7 @@ public class Persister {
 //		List<IExtensionSpec> datasetExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATASET);
 //		
 //		//find or create the Datamodel for each.  Store models in cachedModels, where signalled to do so
-//		cachedModels = new HashMap<String, Model>();
+////		cachedModels = new HashMap<String, Model>();
 ////		SDBDatabase defaultInternalConnection = getAppInfo().getInternalConnection();
 ////		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.DEFAULT_INTERNAL_DATABASE_ID);
 //		IDatabase defaultDatabase = new LocalFolderDatabase();
@@ -419,17 +455,17 @@ public class Persister {
 //			
 //			boolean cacheModel = Boolean.getBoolean(cacheModelString);
 //			
-//			if (internalDatasets.containsKey(datasetId)) {
+//			if (systemDatasets.containsKey(datasetId)) {
 //				continue;
 //			}
 //			//create the Datamodel
 //			SystemDatamodel internalDataset = new SystemDatamodel();
 ////			internalDataset.setDatasetRole(datasetId);
 //			internalDataset.setId(datasetId);
-//			internalDataset.setConnectionId(database.getId());
+//			internalDataset.setDatabaseId(database.getId());
 //			persist(internalDataset);
 //			log.trace("Created & stored new SystemDatamodel for role " + datasetId + ":\n" + JenabeanWriter.toString(internalDataset));
-//			internalDatasets.put(datasetId, internalDataset);
+//			systemDatasets.put(datasetId, internalDataset);
 //			
 //			//create the underlying model in the database
 //			Model internalModel = createDBModel(database, internalDataset.getId());
@@ -443,7 +479,7 @@ public class Persister {
 //		//having created the Datasets and Models, make sure any text indexes have been created
 //		getIndexBuilders();
 //		
-//		return internalDatasets;
+//		return systemDatasets;
 //	}
 	
 //	@SuppressWarnings("unchecked")
@@ -484,7 +520,7 @@ public class Persister {
 			
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
-				log.info("Creating IndexBuilder for internal datasetId=" + datasetId + "; textIndexType=" + textIndexType);
+				log.info("Creating IndexBuilder for datamodel of ID or function: " + datasetId + "; textIndexType=" + textIndexType);
 				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datasetId;
 				//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
 				
@@ -676,14 +712,14 @@ public class Persister {
 	/**
 	 * Given a Datamodel, retrieves a Model which has
 	 * had its text indexers registered
-	 * @param indexableDataset
+	 * @param indexableDatamodel
 	 * @return
 	 */
-	public Model getIndexableModel(Datamodel indexableDataset) {
+	public Model getIndexableModel(Datamodel indexableDatamodel) {
 //		log.info("Persister.getIndexableModel(Datamodel of ID=" + indexableDataset.getId() + ")...");
-		Model model = getModel(indexableDataset);
-		if (indexableDataset instanceof UserDatamodel) {
-			UserDatamodel userDatamodel = (UserDatamodel)indexableDataset;
+		Model model = getModel(indexableDatamodel);
+		if (indexableDatamodel instanceof UserDatamodel) {
+			UserDatamodel userDatamodel = (UserDatamodel)indexableDatamodel;
 			Collection<String> functions = userDatamodel.getDatasetFunctions();
 			if (functions != null) {
 				for (String function: functions) {
@@ -693,8 +729,8 @@ public class Persister {
 					model.register(builder);
 				}
 			}
-		} else if (indexableDataset instanceof SystemDatamodel) {
-			SystemDatamodel systemDatamodel = (SystemDatamodel)indexableDataset;
+		} else if (indexableDatamodel instanceof SystemDatamodel) {
+			SystemDatamodel systemDatamodel = (SystemDatamodel)indexableDatamodel;
 //			IndexBuilderModel builder = getIndexBuilder(internalDataset.getDatasetRole());
 			IndexBuilderModel builder = getIndexBuilder(systemDatamodel.getId());
 			if (builder != null) {
@@ -705,19 +741,19 @@ public class Persister {
 	}
 	/**
 	 * Given an instance of a Datamodel, retrieve the Jena model
-	 * @param namedModel
+	 * @param datamodel
 	 * @return
 	 */
-	public Model getModel(Datamodel namedModel) {
+	public Model getModel(Datamodel datamodel) {
 //		assert(namedModel != null);
 		//Model repositoryModel = getMetarepositoryModel();
-		if (namedModel instanceof Datamodel) {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(((SystemDatamodel) namedModel).getDatabaseId());
-			return connector.getModel(namedModel.getId());
+		if (datamodel instanceof DatabaseBackedDatamodel) {
+			IDBConnector connector = DBConnectorFactory.getDBConnector(((DatabaseBackedDatamodel) datamodel).getDatabaseId());
+			return connector.getModel(datamodel.getId());
 		}
 		
-		if (namedModel instanceof Datafile){
-			return Persister.getModelFromFile(((Datafile)namedModel).getFileUrl());
+		if (datamodel instanceof Datafile){
+			return Persister.getModelFromFile(((Datafile)datamodel).getFileUrl());
 		}
 		
 		//unknown type of Datamodel: return null
@@ -956,7 +992,7 @@ public class Persister {
 	}
 	
 	/* *********************************************************************
-	 * *** NAMEDMODEL METHODS
+	 * *** DATAMODEL METHODS
 	 * ********************************************************************* */
 	/**
 	 * Gets the Datamodel matching the provided URI
@@ -975,6 +1011,32 @@ public class Persister {
 		return null;
 	}
 	
+	public boolean datamodelExists(String namedModelId) {
+		//OntModel metarepositoryModel = getMetarepositoryModel();
+		for (Class<?> clazz: MODEL_CLASSES) {
+			boolean datamodelExists = exists(clazz, namedModelId, getMetarepositoryModel());
+			if (datamodelExists) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * List all datamodels for a given database
+	 * @param databaseId
+	 * @return
+	 */
+	public List<Datamodel> listDatamodels(String databaseId) {
+		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
+		List<String> datamodelIds = connector.listModels();
+		List<Datamodel> datamodels = new ArrayList<Datamodel>();
+		for (String datamodelId: datamodelIds) {
+			Datamodel datamodel = getDatamodel(datamodelId);
+			datamodels.add(datamodel);
+		}
+		return datamodels;
+	}
 	/* *********************************************************************
 	 * *** PERSISTING METHODS
 	 * ********************************************************************* */
@@ -1115,8 +1177,6 @@ public class Persister {
 	/* *********************************************************************
 	 * *** RECONSTITUTING METHODS
 	 * ********************************************************************* */
-	
-	
 	/**
 	 * reconstitue the object of the specified class, from the default TargetDatamodel (as indicated in
 	 * the classes annotation TargetDatamodel("org.whatever.dataset.role.id")
@@ -1130,6 +1190,19 @@ public class Persister {
 		}
 		Model targetModel = getSystemModel(targetDatasetRoleId);
 		return Persister.reconstitute(persistedClass, objectId, targetModel, reconstituteMembers);
+	}
+	
+	/**
+	 * tell whether the Jenabean exists
+	 * @param clazz the class of the object
+	 * @param objectId the ID or relative URI of the object to test
+	 * @param model which contains the object
+	 * @param reconstituteMembers if true, do deep reconstitute 
+	 * @return
+	 */
+	public static boolean exists(Class<?> clazz, String objectId, Model model) {
+		RDF2Bean reader = new RDF2Bean(model);
+		return reader.exists(clazz, objectId);
 	}
 	
 	/**
@@ -1161,14 +1234,6 @@ public class Persister {
 			log.error("Error reconstituting object of class " + clazz + " with ID of " + objectId, e);
 		}
 		return reconstitutedObj;
-	}
-	
-	@Deprecated
-	public List<Datamodel> listDatamodels() {
-		List<Datamodel> namedModels = new ArrayList<Datamodel>();
-		namedModels.addAll((Collection<UserDatamodel>) reconstituteAll(UserDatamodel.class));
-		namedModels.addAll((Collection<Datafile>) reconstituteAll(Datafile.class));
-		return namedModels;
 	}
 	
 	/**
