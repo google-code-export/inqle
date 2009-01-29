@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
@@ -56,7 +57,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		
 		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedDatamodels", String.class, "Select dataset(s) for sampling", null);
 		Persister persister = Persister.getInstance();
-		selectedModelsPage.setBeans(persister.listDatamodels());
+		selectedModelsPage.setBeans(persister.listDatamodels(InqleInfo.USER_DATABASE_ROOT));
 		selectedModelsPage.setTableBeanClass(Datamodel.class);
 		selectedModelsPage.setPropertyNames(Arrays.asList(new String[]{"name", "id", "class"}));
 		addPage(selectedModelsPage);
