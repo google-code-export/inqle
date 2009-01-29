@@ -6,9 +6,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Arc;
@@ -178,14 +181,16 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @return
 	 */
 	public Collection<String> selectAvailableDatamodels() {
-		Persister persister = Persister.getInstance();
-		List<Datamodel> allDatamodels = persister.listDatamodels();
-		log.debug("allDatamodels=" + allDatamodels);
-		if (allDatamodels != null) {
-			List<String> allDatamodelIds = JenabeanConverter.getIds(allDatamodels);
-			return allDatamodelIds;
-		}
-		return new ArrayList<String>();
+		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.USER_DATABASE_ROOT);
+		return connector.listModels();
+//		Persister persister = Persister.getInstance();
+//		List<Datamodel> allDatamodels = persister.listDatamodels();
+//		log.debug("allDatamodels=" + allDatamodels);
+//		if (allDatamodels != null) {
+//			List<String> allDatamodelIds = JenabeanConverter.getIds(allDatamodels);
+//			return allDatamodelIds;
+//		}
+//		return new ArrayList<String>();
 	}
 
 	/**
