@@ -424,15 +424,20 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	}
 	
 	public void deleteSelectedItems() {
+		
 		List<String> checkedItems = resultSetTable.getCheckedItems();
 		if (checkedItems.size()==0) {
 			MessageDialog.openWarning(composite.getShell(), "Unable to Delete Items", "No items are selected below for deletion.  Please check boxes next to any idem(s) you would like to delete.");
+			composite.forceFocus();
 			return;
 		}
 		Persister persister = Persister.getInstance();
 		
 		boolean confirmDelete = MessageDialog.openConfirm(composite.getShell(), "Delete these items?", "Are you sure you want to delete these " + checkedItems.size() + " items?\nTHIS CANNOT BE UNDONE!\n" + checkedItems);
-		if (! confirmDelete) return;
+		if (! confirmDelete) {
+			composite.forceFocus();
+			return;
+		}
 		
 		Model modelToDeleteFrom = persister.getModel(getDatamodel());
 		long sizeBeforeDelete = modelToDeleteFrom.size();
@@ -450,11 +455,15 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 				continue;
 			}
 			log.info("Deleting resource: " + resourceToDelete);
+//			DonohueUtil.removeAllStatements(modelToDeleteFrom, resourceToDelete, (Property)null, (RDFNode)null);
+//			DonohueUtil.removeAllStatements(modelToDeleteFrom, (Resource)null, (Property)null, resourceToDelete);
+			
 			modelToDeleteFrom.removeAll(resourceToDelete, (Property)null, (RDFNode)null);
 			modelToDeleteFrom.removeAll((Resource)null, (Property)null, resourceToDelete);
 			deletedCount++;
 		}
 		long sizeAfterDelete = modelToDeleteFrom.size();
+		modelToDeleteFrom.close();
 		long totalDeletedStatements = sizeBeforeDelete - sizeAfterDelete;
 		if (deletedCount == checkedItems.size() && totalDeletedStatements > 0) {
 			MessageDialog.openInformation(composite.getShell(), "Success Deleting", "Successfully deleted " + deletedCount + " items, " + totalDeletedStatements + " statements.");
@@ -465,6 +474,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		} else {
 			MessageDialog.openWarning(composite.getShell(), "Failed to Delete Any Items", "No items were deleted.");
 		}
+		composite.forceFocus();
 	}
 
 	public void setDatamodel(Datamodel dataodel) {
