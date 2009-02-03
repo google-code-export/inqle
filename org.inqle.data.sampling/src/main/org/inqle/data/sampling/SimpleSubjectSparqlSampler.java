@@ -58,6 +58,12 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSampler.class);
 
+	public void clone(SimpleSubjectSparqlSampler objectToBeCloned) {
+		setMaxLearnablePredicates(objectToBeCloned.getMaximumNumberOfDatamodels());
+		setMinLearnablePredicates(objectToBeCloned.getMinimumNumberOfDatamodels());
+		super.clone(objectToBeCloned);
+	}
+	
 	public SimpleSubjectSparqlSampler createClone() {
 		SimpleSubjectSparqlSampler newSampler = new SimpleSubjectSparqlSampler();
 		newSampler.clone(this);
