@@ -71,4 +71,6 @@ public interface IDBConnector {
 	public List<String> listDatabases();
 
 	public List<String> listModels();
+
+	public boolean deleteModel(String id);
 }

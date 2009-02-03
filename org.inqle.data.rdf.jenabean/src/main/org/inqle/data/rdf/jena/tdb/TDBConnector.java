@@ -52,9 +52,8 @@ public class TDBConnector implements IDBConnector {
 			log.error("Unable to delete database: null");
 			return false;
 		}
-		
 		File folderToDelete = new File(getFilePath());
-		return folderToDelete.delete();
+		return deleteDirectory(folderToDelete);
 	}
 
 	public void formatDatabase() {
@@ -127,6 +126,21 @@ public class TDBConnector implements IDBConnector {
 		return InqleInfo.getDatabaseRootFilePath() + databaseId;
 	}
 
-	
+	public boolean deleteDirectory(File dir) {
+		File[] children = dir.listFiles();
+		boolean success = true;
+		for (File child: children) {
+			if (child.isDirectory()) {
+				deleteDirectory(child);
+			}
+			success = success & child.delete();
+		}
+		return success;
+	}
+
+	public boolean deleteModel(String modelName) {
+		File dirToDelete = new File(getFilePath() + "/" + modelName);
+		return deleteDirectory(dirToDelete);
+	}
 
 }

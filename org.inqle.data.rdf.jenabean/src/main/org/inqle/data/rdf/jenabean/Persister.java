@@ -1301,8 +1301,9 @@ public class Persister {
 		
 		//remove all statements and all index info for the Datamodel
 		Model modelToBeDeleted = getIndexableModel(namedModel);
+
 		modelToBeDeleted.removeAll();
-		
+//		DonohueUtil.removeAllStatements(modelToBeDeleted, (Resource)null, (Property)null, (RDFNode)null);
 		return true;
 	}
 	
@@ -1315,7 +1316,8 @@ public class Persister {
 		//remove all statements and all index info for the Datamodel
 		Model modelToBeDeleted = getIndexableModel(datamodel);
 		modelToBeDeleted.removeAll();
-		
+//		DonohueUtil.removeAllStatements(modelToBeDeleted, (Resource)null, (Property)null, (RDFNode)null);
+		modelToBeDeleted.close();
 		//remove the reference to the Datamodel from the metarepository
 		log.info("Removing Datamodel: " + datamodel.getUri() + "...");
 		Persister.remove(datamodel, getMetarepositoryModel());
@@ -1326,7 +1328,7 @@ public class Persister {
 //			SDBConnector connector = new SDBConnector(getConnection(((Datamodel)namedModel).getConnectionId()));
 			DatabaseBackedDatamodel dbDatamodel = (DatabaseBackedDatamodel)datamodel;
 			IDBConnector connector = DBConnectorFactory.getDBConnector(dbDatamodel.getDatabaseId());
-			boolean successDeleting = connector.deleteDatabase();
+			boolean successDeleting = connector.deleteModel(datamodel.getId());
 			log.info("Success deleting the DB store? " + successDeleting);
 	    connector.close();
 	    
@@ -1337,7 +1339,8 @@ public class Persister {
 		} else if (datamodel instanceof Datafile) {
 			Model modelToDelete = getModel(datamodel);
 			modelToDelete.removeAll();
-			
+//			DonohueUtil.removeAllStatements(modelToDelete, (Resource)null, (Property)null, (RDFNode)null);
+			modelToDelete.close();
 			//delete the file
 			String filePath = FileUtils.toFilename(((Datafile)datamodel).getFileUrl());
 			File fileToDelete = new File(filePath);
@@ -1363,6 +1366,7 @@ public class Persister {
 		Bean2RDF deleter = new Bean2RDF(model);
 		deleter.delete(objectToDelete);
 		model.commit();
+		model.close();
 	}
 	
 	/**
