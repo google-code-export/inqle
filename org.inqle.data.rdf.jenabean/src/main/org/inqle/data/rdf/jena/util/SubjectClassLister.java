@@ -71,7 +71,7 @@ public class SubjectClassLister {
 		
 		//not in cache: query then cache it
 		subjectClasses = queryGetUncommonSubjectClasses(datasetId);
-		//log.info("Queried, got subjectClasses=" + subjectClasses);
+		log.info("Queried, got subjectClasses=" + subjectClasses);
 		cacheSubjectClasses(datasetId, subjectClasses);
 		return subjectClasses;
 	}
@@ -169,6 +169,7 @@ public class SubjectClassLister {
 	
 	private static Collection<String> getSubjectClassesFromCache(String datasetId) {
 		String cacheId = getSubjectClassCacheId(datasetId);
+		log.info("Getting from cache ID: " + cacheId);
 		Persister persister = Persister.getInstance();
 		SubjectClassCache subjectClassCache = null;
 		try {
@@ -176,8 +177,11 @@ public class SubjectClassLister {
 		} catch (Exception e) {
 			//unable to reconstitute; assume it does not exist
 		}
-		if (subjectClassCache == null) return null;
-		//log.info("getSubjectClassesFromCache() loaded from cache: " + JenabeanWriter.toString(subjectClassCache)); 
+		if (subjectClassCache == null) {
+			log.info("Unable tofind cache ID: " + cacheId);
+			return null;
+		}
+		log.info("getSubjectClassesFromCache() loaded from cache: " + JenabeanWriter.toString(subjectClassCache)); 
 		Collection<String> subjectClassUris = new ArrayList<String>();
 		Collection<URI> subjects =  subjectClassCache.getSubjectClasses();
 		if (subjects==null) return null;
@@ -224,16 +228,21 @@ public class SubjectClassLister {
 	
 	/**
 	 * Remove all SubjectClassCache objects, which have the provided datasetId
-	 * @param datasetId
+	 * @param datamodelId
 	 */
 	@SuppressWarnings("unchecked")
-	public static void invalidateCache(String datasetId) {
+	public static void invalidateCache(String datamodelId) {
 		Persister persister = Persister.getInstance();
 		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectClassCache.class);
-		Collection<SubjectClassCache> subjectClassCacheObjectsToRemove = (Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(targetDatamodel, SubjectClassCache.class, RDF.INQLE + "datasetId", datasetId);
+		Collection<SubjectClassCache> subjectClassCacheObjectsToRemove = 
+			(Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(
+					targetDatamodel, 
+					SubjectClassCache.class, 
+					RDF.INQLE + "datasetId", 
+					datamodelId);
+		log.info("Retrieved these cache objects: " + subjectClassCacheObjectsToRemove);
 		for (SubjectClassCache cacheObject: subjectClassCacheObjectsToRemove) {
 			persister.remove(cacheObject);
 		}
 	}
-
 }
