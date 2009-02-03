@@ -148,6 +148,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (bean == null) return null;
 		if (page.equals(subjectClassSelectorPage)) {
 			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedDatamodels();
+			log.info("GGGGGGGGGGGGGGGGGGG Get subjects for datasets: " + selectedModelsCollection );
 			return SubjectClassLister.getUncommonSubjectClasses(selectedModelsCollection);
 		}
 		
