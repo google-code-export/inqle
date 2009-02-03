@@ -87,7 +87,7 @@ public abstract class AScrolledTable extends AScrolledWidget {
 		
 		this.listener = listener;
 		
-		log.info("Recreating scrolled composite...");
+//		log.info("Recreating scrolled composite...");
 		recreateScrolledComposite();
 		
 //		log.info("Rendering table.  getColumnNames()=" + getColumnNames());
