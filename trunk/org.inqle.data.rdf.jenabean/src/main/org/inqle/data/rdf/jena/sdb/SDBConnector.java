@@ -297,4 +297,9 @@ public class SDBConnector implements IDBConnector {
 	public List<String> listModels() {
 		return null;
 	}
+
+	public boolean deleteModel(String id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
