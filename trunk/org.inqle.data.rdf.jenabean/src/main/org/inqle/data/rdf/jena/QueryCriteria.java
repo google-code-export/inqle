@@ -41,7 +41,7 @@ public class QueryCriteria {
 	private Store store;
 	
 //	private List<Model> models = new ArrayList<Model>();
-	private List<Datamodel> namedModels = new ArrayList<Datamodel>();
+	private List<Datamodel> datamodels = new ArrayList<Datamodel>();
 	private DataSource dataSource = null;
 	private String query = "";
 	private IndexLARQ textIndex = null;
@@ -76,15 +76,15 @@ public class QueryCriteria {
 	 * Add a Datamodel to the list of models to query
 	 * @param aModel
 	 */
-	public void addDatamodel(Datamodel namedModel) {
-		log.trace("QueryCriteria.addModel(" + namedModel + ")");
+	public void addDatamodel(Datamodel datamodel) {
+		log.trace("QueryCriteria.addModel(" + datamodel + ")");
 		Persister persister = Persister.getInstance();
-		namedModels.add(namedModel);
-		Model model = persister.getModel(namedModel);
-		log.debug("In QueryCriteria, adding model of size " + model.size());
+		datamodels.add(datamodel);
+		Model model = persister.getModel(datamodel);
+		log.info("In QueryCriteria, for datamodel: " + datamodel.getId() + ", adding model of size " + model.size());
 //		models.add(model);
 //		dataSource.addDatamodel(namedModel.getId(), model);
-		addModel(namedModel.getId(), model);
+		addModel(datamodel.getId(), model);
 	}
 	
 	public void addModel(String id, Model model) {
@@ -145,7 +145,7 @@ public class QueryCriteria {
 	 * @return
 	 */
 	public List<Datamodel> getDatamodels() {
-		return namedModels;
+		return datamodels;
 	}
 	
 	/**

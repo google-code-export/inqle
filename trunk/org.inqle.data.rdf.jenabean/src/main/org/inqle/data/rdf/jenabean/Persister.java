@@ -334,9 +334,9 @@ public class Persister {
 //		if (datasetId.equals(METAREPOSITORY_DATAMODEL)) {
 //			return getAppInfo().getMetarepositoryDataset();
 //		}
-		if (!systemDatamodelsInitialized) {
-			initializeSystemDatamodels();
-		}
+//		if (!systemDatamodelsInitialized) {
+//			initializeSystemDatamodels();
+//		}
 		SystemDatamodel datamodel = (SystemDatamodel) reconstitute(SystemDatamodel.class, datasetId, true);
 //		return getInternalDatasets().get(datasetId);
 		return datamodel;
@@ -1078,9 +1078,10 @@ public class Persister {
 		}
 		
 		public Datamodel getTargetDatamodel(Class<?> persistableClass) {
-			String datasetId = getTargetDatamodelId(persistableClass);
+			String datamodelId = getTargetDatamodelId(persistableClass);
+			log.info("getTargetDatamodelId() = " + datamodelId);
 //			return getSystemDataset(roleId);
-			return getSystemDatamodel(datasetId);
+			return getSystemDatamodel(datamodelId);
 		}
 		
 		public static String getTargetDatamodelId(Class<?> persistableClass) {

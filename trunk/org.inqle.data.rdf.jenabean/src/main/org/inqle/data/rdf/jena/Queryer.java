@@ -71,7 +71,7 @@ import com.hp.hpl.jena.sdb.SDB;
 			log.error("Error parsing SPARQL query:" + queryCriteria.getQuery(), e);
 			return null;
 		}
-		log.debug("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
+		log.info("Querying w/ SPARQL:\n" + queryCriteria.getQuery());
 		
 		QueryExecution qe = null;
 		
@@ -278,7 +278,6 @@ import com.hp.hpl.jena.sdb.SDB;
 	}
 	
 	public static List<String> selectUriList(QueryCriteria queryCriteria) {
-		Query query;
 		List<String> resultList = new ArrayList<String>();
 		QueryExecution qe = getQueryExecution(queryCriteria);
 		
@@ -304,7 +303,6 @@ import com.hp.hpl.jena.sdb.SDB;
 	}
 	
 	public static List<String> selectSimpleList(QueryCriteria queryCriteria, String varName) {
-		Query query;
 		List<String> resultList = new ArrayList<String>();
 		QueryExecution qe = getQueryExecution(queryCriteria);
 		
@@ -312,10 +310,10 @@ import com.hp.hpl.jena.sdb.SDB;
 		ResultSet resultSet;
 		try {
 			resultSet = qe.execSelect() ;
-			log.trace("Got results? " + resultSet.hasNext() + "; Has these vars: " + resultSet.getResultVars());
+			log.info("Got results? " + resultSet.hasNext() + "; Has these vars: " + resultSet.getResultVars());
 			//this sets resultSet.hasNext() to false: ResultSetFormatter.out(resultSet) ;
 			resultList = Converter.resultSetToSimpleList(resultSet, varName);
-			log.trace("Retrieved simple List w/ " + resultList.size() + " results");
+			log.info("Retrieved simple List w/ " + resultList.size() + " results");
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 

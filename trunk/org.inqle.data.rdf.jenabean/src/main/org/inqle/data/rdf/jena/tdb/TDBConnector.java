@@ -67,7 +67,7 @@ public class TDBConnector implements IDBConnector {
 	}
 
 	public Model getModel(String modelName) {
-		log.info("Creating/loading model: " + getFilePath() + "/" + modelName);
+//		log.info("Creating/loading model: " + getFilePath() + "/" + modelName);
 		return TDBFactory.createModel(getFilePath() + "/" + modelName);
 	}
 
@@ -97,7 +97,7 @@ public class TDBConnector implements IDBConnector {
 		String dbRootPath = getFilePath();
 		File dbRoot = new File(dbRootPath);
 		File[] databaseFolders = dbRoot.listFiles();
-		log.info("Listing models for database: " + getFilePath());
+//		log.info("Listing models for database: " + getFilePath());
 		for (File databaseFolder: databaseFolders) {
 			if (databaseFolder.isDirectory()) {
 				log.info("Found model: " + databaseFolder.getName());
