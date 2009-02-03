@@ -92,8 +92,9 @@ public class ExperimenterAgent extends AAgent {
 		cycleCount = 0;
 		//run each test until interrupted or (cycleCount >= stoppingPoint OR stopping point set to 0 or less [meaning cycle continuously])
 		while ((stoppingPoint <= 0 || cycleCount < stoppingPoint) && getMode() == RUNNING) {
-			log.info("############### Running Cycle #" + (cycleCount + 1) + " of " + stoppingPoint);
+			long cycleStartTime = System.currentTimeMillis();
 			cycleCount++;
+			log.info("############### Running Cycle #" + (cycleCount) + " of " + stoppingPoint);
 			
 			//select the learning cycle
 			LearningCycle learningCycleToRun = selectLearningCycle();
@@ -106,6 +107,8 @@ public class ExperimenterAgent extends AAgent {
 //			log.trace("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
 			log.info("Storing experiment result");
 			persister.persist(experimentResult);
+			long cycleTime = (System.currentTimeMillis() - cycleStartTime) / 1000;
+			log.info("Cycle # " + cycleCount + ": completed in " + cycleTime + " seconds.");
 		}
 		long stoptime = System.currentTimeMillis();
 		long runseconds = (stoptime - starttime) / 1000;
