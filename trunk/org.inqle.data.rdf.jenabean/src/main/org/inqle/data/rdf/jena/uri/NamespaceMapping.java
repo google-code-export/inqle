@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class NamespaceMapping extends GlobalJenabean {
 
-	private static final String NAMESPACE_MAPPING_DATASET = "org.inqle.datasets.ns";
+	private static final String NAMESPACE_MAPPING_DATASET = "org.inqle.datamodels.ns";
 	private String namespaceAbbrev;
 	private String namespaceUri;
 

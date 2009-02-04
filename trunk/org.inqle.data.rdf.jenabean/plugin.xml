@@ -1,109 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="org.inqle.data.datasets" name="Internal Dataset Role" schema="schema/org.inqle.data.datasets.exsd"/>
+   <extension-point id="org.inqle.data.datamodels" name="Internal Datamodel Role" schema="schema/org.inqle.data.datamodels.exsd"/>
    <!--extension-point id="org.inqle.data.databases" name="Database Role" schema="schema/org.inqle.data.databases.exsd"/-->
-   <extension-point id="org.inqle.data.datasetFunctions" name="External Dataset Function" schema="schema/org.inqle.data.datasetFunctions.exsd"/>
+   <extension-point id="org.inqle.data.datamodelFunctions" name="External Datamodel Function" schema="schema/org.inqle.data.datamodelFunctions.exsd"/>
    <extension
-         point="org.inqle.data.datasets">
+         point="org.inqle.data.datamodels">
       
-      <!-- dataset
-           id="org.inqle.datasets.log"
+      <!-- datamodel
+           id="org.inqle.datamodels.log"
            weight="1000"
            description="contains log entries."
 					 cacheInMemory="false">
-			</dataset-->
+			</datamodel-->
 			 
-			<dataset
-           id="org.inqle.datasets.ns"
+			<datamodel
+           id="org.inqle.datamodels.ns"
            weight="2000"
            description="contains mappings from namespace abbreviations to their full URIs"
 					 cacheInMemory="true">
-			</dataset>
+			</datamodel>
 			
-			<dataset
-           id="org.inqle.datasets.metaRepository"
+			<datamodel
+           id="org.inqle.datamodels.metaRepository"
            weight="2000"
            description="contains mappings from namespace abbreviations to their full URIs"
 					 cacheInMemory="true">
-			</dataset>
+			</datamodel>
 			
-			<dataset
-           id="org.inqle.datasets.mapping"
+			<datamodel
+           id="org.inqle.datamodels.mapping"
            weight="3000"
            description="contains DataMapping and related objects, which map CSV values to RDF attributes"
 					 cacheInMemory="false"
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
+			</datamodel>
 			
-			<dataset
-           id="org.inqle.datasets.dataSubject"
+			<datamodel
+           id="org.inqle.datamodels.dataSubject"
            weight="4000"
            description="contains subclasses of the OWL class inqle:DataSubject.  These subclasses can be any native OWL class.  They are used as subjects of data."
 					 cacheInMemory="true"
 					 textIndexType="subject"
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
+			</datamodel>
 			
-			<dataset
-           id="org.inqle.datasets.dataProperty"
+			<datamodel
+           id="org.inqle.datamodels.dataProperty"
            weight="5000"
            description="contains RDF properties used for INQLE data, including their rdfs:label and rdfs:comment."
 					 cacheInMemory="true"
 					 textIndexType="subject"
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
+			</datamodel>
 			
-			<dataset
-           id="org.inqle.datasets.cache.subjectClass"
+			<datamodel
+           id="org.inqle.datamodels.cache.subjectClass"
            weight="6000"
-           description="contains objects which store info about which RDF subject classes are available, per dataset."
+           description="contains objects which store info about which RDF subject classes are available, per datamodel."
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
+			</datamodel>
 			
-			<dataset
-           id="org.inqle.datasets.cache.arc"
+			<datamodel
+           id="org.inqle.datamodels.cache.arc"
            weight="7000"
-           description="contains objects which store info about which RDF arcs are available, per dataset per RDF subject class."
+           description="contains objects which store info about which RDF arcs are available, per datamodel per RDF subject class."
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
+			</datamodel>
    </extension>
 
 	<!--extension
-         point="org.inqle.data.cacheDatasets">
+         point="org.inqle.data.cacheDatamodels">
       
-      <cacheDataset
-           id="org.inqle.cacheDatasets.subjectClass"
+      <cacheDatamodel
+           id="org.inqle.cacheDatamodels.subjectClass"
            weight="1000"
            description="contains RDF subject classes."
 					 cacheInMemory="false">
-			</cacheDataset>
+			</cacheDatamodel>
 			
-			<cacheDataset
-           id="org.inqle.cacheDatasets.arc"
+			<cacheDatamodel
+           id="org.inqle.cacheDatamodels.arc"
            weight="1000"
            description="contains RDF Arcs, from a given subject class."
 					 cacheInMemory="false">
-			</cacheDataset>
+			</cacheDatamodel>
 			
 	</extension-->
 
 	<extension
-         point="org.inqle.data.datasetFunctions">
+         point="org.inqle.data.datamodelFunctions">
       
-      <datasetFunction
-           id="org.inqle.datasetFunctions.data"
+      <datamodelFunction
+           id="org.inqle.datamodelFunctions.data"
            name="General Data"
            weight="1000"
            description="General purpose data, usable for learning experiments."
 					 checkedByDefault="true">
-			</datasetFunction>
-			<datasetFunction
-           id="org.inqle.datasetFunctions.schemas"
+			</datamodelFunction>
+			<datamodelFunction
+           id="org.inqle.datamodelFunctions.schemas"
            name="Schemas, Ontologies"
            weight="2000"
            textIndexType="subject"
            description="RDFS or OWL ontology, containing semantic types and properties for classifying General Data to be imported.">
-			</datasetFunction>
+			</datamodelFunction>
 	</extension>
 </plugin>

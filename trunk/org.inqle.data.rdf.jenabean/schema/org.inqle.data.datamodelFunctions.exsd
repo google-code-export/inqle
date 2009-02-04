@@ -3,10 +3,10 @@
 <schema targetNamespace="org.inqle.data">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.inqle.data" id="datasetFunctions" name="External Dataset Functions"/>
+         <meta.schema plugin="org.inqle.data" id="datamodelFunctions" name="External Datamodel Functions"/>
       </appInfo>
       <documentation>
-         This specifies a dataset function, which external datasets may be designated as filling
+         This specifies a datamodel function, which external datamodels may be designated as filling
       </documentation>
    </annotation>
 
@@ -39,12 +39,12 @@
       </complexType>
    </element>
 
-   <element name="datasetFunction">
+   <element name="datamodelFunction">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  the ID of the dataset function, e.g. org.myDomain.inqle.datasetFunctions.myFunction
+                  the ID of the datamodel function, e.g. org.myDomain.inqle.datamodelFunctions.myFunction
                </documentation>
             </annotation>
          </attribute>
@@ -65,14 +65,14 @@
          <attribute name="checkedByDefault" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
-                  If true, then upon creating new datasets, the checkbox for selecting this function will be checked.
+                  If true, then upon creating new datamodels, the checkbox for selecting this function will be checked.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="textIndexType" type="string">
             <annotation>
                <documentation>
-                  the type of text index, if any.  Leave blank if no text index is to be created for this dataset function.  
+                  the type of text index, if any.  Leave blank if no text index is to be created for this datamodel function.  
                   Allowed values include &apos;subject&apos; (index text by subject,
                   more compact) or &apos;literal&apos; (index text by literal)
                   cacheInMemory should probably be set to &apos;true&apos; if you are using this attribute

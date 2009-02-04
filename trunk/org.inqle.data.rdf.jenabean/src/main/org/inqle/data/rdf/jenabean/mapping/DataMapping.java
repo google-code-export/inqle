@@ -34,7 +34,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 	
-	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datasets.mapping";
+	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datamodels.mapping";
 	private String mapsHeader;
 	private URI mapsPredicate;
 	private URI mapsPropertyType;

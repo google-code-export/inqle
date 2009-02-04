@@ -4,12 +4,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import lib.FileOps;
+
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.IDBConnector;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 public class TDBConnector implements IDBConnector {
@@ -128,7 +131,6 @@ public class TDBConnector implements IDBConnector {
 
 	public boolean deleteDirectory(File dir) {
 		File[] children = dir.listFiles();
-//		boolean success = true;
 		for (File child: children) {
 			if (child.isDirectory()) {
 				deleteDirectory(child);
@@ -139,13 +141,17 @@ public class TDBConnector implements IDBConnector {
 				log.info("deleted file:" + fileName + "?  " + success + "; writable=" + writable);
 			}
 		}
-		String dirName = dir.getAbsolutePath();
+//		FileOps.clearDirectory(dir.getAbsolutePath());
 		boolean success = dir.delete();
-		log.info("deleted folder:" + dirName + "?  " + success);
+		log.info("deleted folder:" + dir + "?  " + success);
 		return success;
 	}
 
 	public boolean deleteModel(String modelName) {
+		Dataset datasetToDelete = getDataset(modelName);
+		datasetToDelete.getDefaultModel().removeAll();
+		TDB.sync(datasetToDelete) ;
+		datasetToDelete.close();
 		File dirToDelete = new File(getFilePath() + "/" + modelName);
 		return deleteDirectory(dirToDelete);
 	}

@@ -71,15 +71,15 @@ public class Persister {
 	public static final Class<?>[] MODEL_CLASSES = {SystemDatamodel.class, UserDatamodel.class, Datafile.class};
 	
 	public static final String EXTENSION_POINT_DATASET = "org.inqle.data.datasets";
-	public static final String METAREPOSITORY_DATAMODEL = "Metarepository";
+	public static final String METAREPOSITORY_DATAMODEL = "org.inqle.datamodels.metaRepository";
 
 //	public static final String EXTENSION_POINT_CACHE_DATASET = "org.inqle.data.cacheDatasets";
 //	public static final String EXTENSION_SUBJECT_CLASS_CACHE = "org.inqle.cacheDatasets.subjectClass";
 //	public static final String EXTENSION_ARC_CACHE = "org.inqle.cacheDatasets.arc";
 	
 	public static final String EXTENSION_POINT_DATASET_FUNCTIONS = "org.inqle.data.datasetFunctions";
-	public static final String EXTENSION_DATASET_FUNCTION_DATA = "org.inqle.datasetFunctions.data";
-	public static final String EXTENSION_DATASET_FUNCTION_SCHEMAS = "org.inqle.datasetFunctions.schemas";
+	public static final String EXTENSION_DATASET_FUNCTION_DATA = "org.inqle.datamodelFunctions.data";
+	public static final String EXTENSION_DATASET_FUNCTION_SCHEMAS = "org.inqle.datamodelFunctions.schemas";
 	
 	public static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
 	public static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
@@ -88,8 +88,8 @@ public class Persister {
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
 //	private static final String EXTENSION_POINT_CONNECTION = "org.inqle.data.connection";
 	public static final String CACHE_CONNECTION = "org.inqle.data.databases.cache";
-	public static final String DATASET_SUBJECT_CLASSES_CACHE = "org.inqle.datasets.cache.subjectClass";
-	public static final String DATASET_ARCS_CACHE = "org.inqle.datasets.cache.arc";
+	public static final String DATASET_SUBJECT_CLASSES_CACHE = "org.inqle.datamodels.cache.subjectClass";
+	public static final String DATASET_ARCS_CACHE = "org.inqle.datamodels.cache.arc";
 	
 	private AppInfo appInfo = null;
 //	private OntModel metarepositoryModel = null;
@@ -1003,6 +1003,9 @@ public class Persister {
 	public Datamodel getDatamodel(String namedModelId) {
 		//OntModel metarepositoryModel = getMetarepositoryModel();
 		for (Class<?> clazz: MODEL_CLASSES) {
+			if (! exists(clazz, namedModelId, getMetarepositoryModel())) {
+				continue;
+			}
 			Datamodel namedModel = (Datamodel)reconstitute(clazz, namedModelId, getMetarepositoryModel(), true);
 			if (namedModel != null) {
 				return namedModel;
@@ -1312,25 +1315,24 @@ public class Persister {
 	 * @return successDeleting true if the SDB store was deleted
 	 */
 	public boolean deleteModel(Datamodel datamodel) {
+//		//remove all statements and all index info for the Datamodel
+//		Model modelToBeDeleted = getIndexableModel(datamodel);
+//		modelToBeDeleted.removeAll();
+//		//remove the reference to the Datamodel from the metarepository
+		log.info("RRRRRRRRRRRRRRRRRRRRRRRR Removing model: " + datamodel.getUri() + "...");
+//		
+//		modelToBeDeleted.close();
 		
-		//remove all statements and all index info for the Datamodel
-		Model modelToBeDeleted = getIndexableModel(datamodel);
-		modelToBeDeleted.removeAll();
-//		DonohueUtil.removeAllStatements(modelToBeDeleted, (Resource)null, (Property)null, (RDFNode)null);
-		
-		//remove the reference to the Datamodel from the metarepository
-		log.info("RRRRRRRRRRRRRRRRRRRRRRRR Removed model: " + datamodel.getUri() + ".  It now has " + modelToBeDeleted.size() + " statements.  Now removing associated Datamodel...");
-		modelToBeDeleted.close();
-		Persister.remove(datamodel, getMetarepositoryModel());
-		
+		boolean successDeleting = false;
 		if (datamodel instanceof DatabaseBackedDatamodel) {		
 			
 			//remove the model
 //			SDBConnector connector = new SDBConnector(getConnection(((Datamodel)namedModel).getConnectionId()));
 			DatabaseBackedDatamodel dbDatamodel = (DatabaseBackedDatamodel)datamodel;
 			IDBConnector connector = DBConnectorFactory.getDBConnector(dbDatamodel.getDatabaseId());
-			boolean successDeleting = connector.deleteModel(datamodel.getId());
-			log.info("Success deleting the DB store? " + successDeleting);
+			
+			successDeleting = connector.deleteModel(datamodel.getId());
+			log.info("Success deleting the DB model? " + successDeleting);
 	    connector.close();
 	    
 	    //invalidate the cache
@@ -1345,9 +1347,12 @@ public class Persister {
 			//delete the file
 			String filePath = FileUtils.toFilename(((Datafile)datamodel).getFileUrl());
 			File fileToDelete = new File(filePath);
-			return fileToDelete.delete();
+			successDeleting = fileToDelete.delete();
 		}
-		return false;
+		if (successDeleting) {
+			Persister.remove(datamodel, getMetarepositoryModel());
+		}
+		return successDeleting;
 	}
 	
 	/**
