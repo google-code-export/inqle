@@ -326,7 +326,7 @@ public class Persister {
 //			return getIndexableModel(internalDataset);
 //		}
 		Model systemModel = connector.getModel(datamodelId);
-		log.info("Retrieved system model '" + datamodelId + "' of size: " + systemModel.size());
+//		log.info("Retrieved system model '" + datamodelId + "' of size: " + systemModel.size());
 		return systemModel;
 	}
 	
@@ -1317,9 +1317,10 @@ public class Persister {
 		Model modelToBeDeleted = getIndexableModel(datamodel);
 		modelToBeDeleted.removeAll();
 //		DonohueUtil.removeAllStatements(modelToBeDeleted, (Resource)null, (Property)null, (RDFNode)null);
-		modelToBeDeleted.close();
+		
 		//remove the reference to the Datamodel from the metarepository
-		log.info("Removing Datamodel: " + datamodel.getUri() + "...");
+		log.info("RRRRRRRRRRRRRRRRRRRRRRRR Removed model: " + datamodel.getUri() + ".  It now has " + modelToBeDeleted.size() + " statements.  Now removing associated Datamodel...");
+		modelToBeDeleted.close();
 		Persister.remove(datamodel, getMetarepositoryModel());
 		
 		if (datamodel instanceof DatabaseBackedDatamodel) {		

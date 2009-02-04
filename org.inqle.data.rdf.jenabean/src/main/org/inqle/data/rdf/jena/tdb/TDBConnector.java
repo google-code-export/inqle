@@ -128,13 +128,20 @@ public class TDBConnector implements IDBConnector {
 
 	public boolean deleteDirectory(File dir) {
 		File[] children = dir.listFiles();
-		boolean success = true;
+//		boolean success = true;
 		for (File child: children) {
 			if (child.isDirectory()) {
 				deleteDirectory(child);
+			}	else {
+				String fileName = child.getAbsolutePath();
+				boolean success = child.delete();
+				boolean writable = child.canWrite();
+				log.info("deleted file:" + fileName + "?  " + success + "; writable=" + writable);
 			}
-			success = success & child.delete();
 		}
+		String dirName = dir.getAbsolutePath();
+		boolean success = dir.delete();
+		log.info("deleted folder:" + dirName + "?  " + success);
 		return success;
 	}
 
