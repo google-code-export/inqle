@@ -18,7 +18,7 @@ import org.inqle.data.rdf.jenabean.IUniqueJenabean;
  */
 public interface IAgent extends IUniqueJenabean, Runnable {
 
-	public static final String AGENT_DATASET = "org.inqle.datasets.agents";
+	public static final String AGENT_DATASET = "org.inqle.datamodels.agents";
 	
 	public static final int STOPPED = 0;
 	public static final int STOPPING = 1;
