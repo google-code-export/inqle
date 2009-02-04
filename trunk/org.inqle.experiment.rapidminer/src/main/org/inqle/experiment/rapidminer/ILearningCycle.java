@@ -17,7 +17,7 @@ public interface ILearningCycle extends IBasicJenabean{
 	 */
 	String ID = "org.inqle.experiment.rapidminer.ILearningCycle";
 
-	public static final String LEARNING_CYCLES_DATASET = "org.inqle.datasets.learningCycles";
+	public static final String LEARNING_CYCLES_DATASET = "org.inqle.datamodels.learningCycles";
 	public ISampler getSampler();
 
 	public void setSampler(ISampler sampler);
