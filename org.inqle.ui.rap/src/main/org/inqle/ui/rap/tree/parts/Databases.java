@@ -100,8 +100,8 @@ public class Databases extends PartType {
 //public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
 		List<IAction> actions = new ArrayList<IAction>();
-		DatabaseWizardAction databaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_NEW, "Create new database....", baseDatabaseObject, this, workbenchWindow);
-		actions.add(databaseWizardAction);
+//		DatabaseWizardAction databaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_NEW, "Create new database....", baseDatabaseObject, this, workbenchWindow);
+//		actions.add(databaseWizardAction);
 		return actions;
 	}
 }

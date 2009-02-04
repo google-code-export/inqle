@@ -129,29 +129,24 @@ public class DatabasePart extends PartType {
 //	public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
 		List<IAction> actions = new ArrayList<IAction>();
-		//"Add a dataset" action
-		DatamodelWizardAction newModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Add a dataset...", this, workbenchWindow);
+		//"Create a datamodel" action
+		DatamodelWizardAction newModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Create new datamodel...", this, workbenchWindow);
 		newModelWizardAction.setDatamodel(getNewDataset());
 		actions.add(newModelWizardAction);
 		
-		//"Add an ontology dataset" action
-//		DatamodelWizardAction newOntologyDatasetWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Add an ontology dataset...", this, workbenchWindow);
-//		newOntologyDatasetWizardAction.setDataset(getNewOntologyDataset());
-//		actions.add(newOntologyDatasetWizardAction);
-		
 		//"Edit this database" action
-		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", getDatabase(), this.getParent(), workbenchWindow);
-		editDatabaseWizardAction.setDatabasePart(this);
-		actions.add(editDatabaseWizardAction);
-		
-		//"Clone this database" action
-		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", getDatabase(), this.getParent(), workbenchWindow);
-		cloneDatabaseWizardAction.setDatabasePart(this);
-		actions.add(cloneDatabaseWizardAction);
-		
-		//Delete action
-		DeleteDatabaseAction deleteDatabaseAction = new DeleteDatabaseAction("Delete", this, workbenchWindow);
-		actions.add(deleteDatabaseAction);
+//		DatabaseWizardAction editDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_EDIT, "Edit this database...", getDatabase(), this.getParent(), workbenchWindow);
+//		editDatabaseWizardAction.setDatabasePart(this);
+//		actions.add(editDatabaseWizardAction);
+//		
+//		//"Clone this database" action
+//		DatabaseWizardAction cloneDatabaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_CLONE, "Clone this database...", getDatabase(), this.getParent(), workbenchWindow);
+//		cloneDatabaseWizardAction.setDatabasePart(this);
+//		actions.add(cloneDatabaseWizardAction);
+//		
+//		//Delete action
+//		DeleteDatabaseAction deleteDatabaseAction = new DeleteDatabaseAction("Delete", this, workbenchWindow);
+//		actions.add(deleteDatabaseAction);
 		
 		return actions;
 	}

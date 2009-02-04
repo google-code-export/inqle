@@ -40,7 +40,7 @@
             class="org.inqle.ui.rap.views.SubjectStatementsView"
             id="org.inqle.ui.rap.views.SubjectStatementsView"/>
        <view
-            name="Browse Dataset"
+            name="Browse data"
             class="org.inqle.ui.rap.views.DatamodelView"
             id="org.inqle.ui.rap.views.DatamodelView"/>
             
