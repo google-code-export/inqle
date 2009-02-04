@@ -10,6 +10,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.ui.rap.ApplicationActionBarAdvisor;
 import org.inqle.ui.rap.IDisposableViewer;
@@ -67,7 +68,7 @@ public class ModelPart extends Part {
 		
 		IExtensionSpec extensionSpec = ExtensionFactory.getExtensionSpec(ApplicationActionBarAdvisor.VIEWS, DatamodelView.ID);
 		
-		log.info("Displaying action: " + extensionSpec);
+//		log.info("Displaying action: " + extensionSpec);
 		OpenNamedModelViewAction openNamedModelViewAction = new OpenNamedModelViewAction(
   			workbenchWindow, 
   			extensionSpec.getAttribute(ApplicationActionBarAdvisor.NAME), 
@@ -78,34 +79,35 @@ public class ModelPart extends Part {
 		openNamedModelViewAction.setDatamodel(datamodel);
 		actions.add(openNamedModelViewAction);
   	
-		DatamodelWizardAction editModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_EDIT, "Edit this datamodel...", (DatabasePart)this.getParent(), workbenchWindow);
-		//editModelWizardAction.setModelPart(this);
-		editModelWizardAction.setDatamodel(datamodel);
-		actions.add(editModelWizardAction);
-		
-		//"Load RDF File" action
-		LoadRdfFileAction loadRdfFileAction = new LoadRdfFileAction("Load data from RDF File...", this, workbenchWindow);
-		actions.add(loadRdfFileAction);
-		
-//		Legacy CSV loader
-//		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
-//		actions.add(loadCsvFileAction);
-		
-		FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from delimited text (CSV) file...", this, workbenchWindow);
-		actions.add(fileDataImporterAction);
-		
-		//"Add inferred statements" action
-		AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
-		actions.add(addReasonerStatementsAction);
-		
-		//Clear datamodel action
-		EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
-		actions.add(emptyDatasetAction);
-		
-		//Delete action
-		DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this datamodel", this, workbenchWindow);
-		actions.add(deleteDatasetAction);
-		
+		if (! (datamodel instanceof SystemDatamodel)) {
+			DatamodelWizardAction editModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_EDIT, "Edit this datamodel...", (DatabasePart)this.getParent(), workbenchWindow);
+			//editModelWizardAction.setModelPart(this);
+			editModelWizardAction.setDatamodel(datamodel);
+			actions.add(editModelWizardAction);
+			
+			//"Load RDF File" action
+			LoadRdfFileAction loadRdfFileAction = new LoadRdfFileAction("Load data from RDF file...", this, workbenchWindow);
+			actions.add(loadRdfFileAction);
+			
+	//		Legacy CSV loader
+	//		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
+	//		actions.add(loadCsvFileAction);
+			
+			FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from delimited text (CSV) file...", this, workbenchWindow);
+			actions.add(fileDataImporterAction);
+			
+			//"Add inferred statements" action
+			AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
+			actions.add(addReasonerStatementsAction);
+			
+			//Clear datamodel action
+			EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
+			actions.add(emptyDatasetAction);
+			
+			//Delete action
+//			DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this datamodel", this, workbenchWindow);
+//			actions.add(deleteDatasetAction);
+		}
 		return actions;
 	}
 	
