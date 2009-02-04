@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class Site extends UniqueJenabean {
 
-	public static final String SITE_DATASET_ROLE_ID = "org.inqle.datasets.site";
+	public static final String SITE_DATASET_ROLE_ID = "org.inqle.datamodels.site";
 	
 	private String url;
 	private String ip;

@@ -3,10 +3,10 @@
 <schema targetNamespace="org.inqle.data">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.inqle.data" id="datasets" name="Internal Dataset Roles"/>
+         <meta.schema plugin="org.inqle.data" id="datamodels" name="Internal Datamodel Roles"/>
       </appInfo>
       <documentation>
-         This specifies a dataset role, for storing internal INQLE data
+         This specifies a datamodel role, for storing internal INQLE data
       </documentation>
    </annotation>
 
@@ -39,15 +39,15 @@
       </complexType>
    </element>
 
-   <element name="dataset">
+   <element name="datamodel">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  the ID of the dataset role, e.g. org.inqle.datasets.ns
-                  Java classes which are intended to be stored in this dataset
+                  the ID of the datamodel role, e.g. org.inqle.datamodels.ns
+                  Java classes which are intended to be stored in this datamodel
                   should have the annotation pointing to this ID, e.g.
-                  @TargetDataset(&quot;org.inqle.datasets.ns&quot;)
+                  @TargetDatamodel(&quot;org.inqle.datamodels.ns&quot;)
                </documentation>
             </annotation>
          </attribute>
@@ -68,8 +68,8 @@
          <attribute name="cacheInMemory" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
-                  if true, the data in this dataset will be cached in memory.
-                  Set to true for smaller dataset with frequent need for lookups
+                  if true, the data in this datamodel will be cached in memory.
+                  Set to true for smaller datamodel with frequent need for lookups
                   Default = false
                </documentation>
             </annotation>
