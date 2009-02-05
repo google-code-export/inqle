@@ -16,13 +16,13 @@
            weight="5000"/>
   </extension>
   <extension
-         point="org.inqle.data.datasets">
-    <dataset
-         id="org.inqle.datasets.agents"
+         point="org.inqle.data.datamodels">
+    <datamodel
+         id="org.inqle.datamodels.agents"
          weight="10000"
          description="contains agents.">
 				 cacheInMemory="false"
-		</dataset>
+		</datamodel>
 	</extension>
   <extension
          point="org.inqle.agent.rap.IAgentFactory">
