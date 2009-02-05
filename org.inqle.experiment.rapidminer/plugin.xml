@@ -17,21 +17,21 @@
 			</part-type>
    </extension>
     <extension
-         point="org.inqle.data.datasets">
-      <dataset
-           id="org.inqle.datasets.learningCycles"
+         point="org.inqle.data.datamodels">
+      <datamodel
+           id="org.inqle.datamodels.learningCycles"
            weight="7000"
            description="contains customized Learning Cycles"
 					 cacheInMemory="false"
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
-			<dataset
-           id="org.inqle.datasets.experiments"
+			</datamodel>
+			<datamodel
+           id="org.inqle.datamodels.experiments"
            weight="8000"
            description="contains experiment results"
 					 cacheInMemory="false"
 					 targetDatabase="org.inqle.data.databases.cache">
-			</dataset>
+			</datamodel>
 	</extension>
    <extension
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
