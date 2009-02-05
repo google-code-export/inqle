@@ -39,6 +39,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	//protected SimpleSubjectSparqlSampler bean;
 	private SimpleListSelectorPage labelSelectorPage;
 	private NameDescriptionPage nameDescriptionPage;
+	private MinMaxPage minMaxPage;
 	
 	public SimpleSubjectSparqlSamplerWizard(Model saveToModel, Shell shell) {
 		super(saveToModel, shell);
@@ -62,13 +63,31 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		selectedModelsPage.setPropertyNames(Arrays.asList(new String[]{"name", "id", "class"}));
 		addPage(selectedModelsPage);
 		
-		subjectClassSelectorPage = new SimpleListSelectorPage("Select Class of Subject", "Select the class of the subject, with which to build the sample data set.", "Select subject:", SWT.SINGLE);
+		subjectClassSelectorPage = new SimpleListSelectorPage("Select Class of Subject", 
+				"Optionally select the class of the subject, with which to build the sample data set.  If no subject class is selected, then each run, it will be randomly selected.", 
+				"Select subject:", 
+				SWT.SINGLE);
 		addPage(subjectClassSelectorPage);
 		
-		labelSelectorPage = new SimpleListSelectorPage("Select property to be predicted", "Select the property to be used in the data set, as the 'experimental label'.  That is, the value to be predicted.", "Select properties:", SWT.SINGLE);
+		labelSelectorPage = new SimpleListSelectorPage(
+				"Select property to be predicted", 
+				"Optionally select the property to be used in the data set, as the 'Experimental Label'.  That is, the value to be predicted.  If no selection is made, then each run, the Experimental Label will be randomly selected.", 
+				"Select properties:", SWT.SINGLE);
 		addPage(labelSelectorPage);
 		
-		arcSelectorPage = new SimpleListSelectorPage("Select properties for learning", "Select the properties to use in the data set.", "Select properties:", SWT.MULTI);
+		minMaxPage = new MinMaxPage(
+				"Number of Attributes", 
+				"Enter the number of attributes to test each run.  Specify the minimum and maximum number of attributes to select.  Each run, a random number will be selected in this range.",
+				sampler.getMinLearnablePredicates(),
+				sampler.getMaxLearnablePredicates()
+		);
+		addPage(minMaxPage);
+		
+		arcSelectorPage = new SimpleListSelectorPage(
+				"Select properties for learning", 
+				"Optionally, select the properties to use in the data set.  If no properties are selected, then each run, properties will be randomly selected from the entire set.", 
+				"Select properties:", 
+				SWT.MULTI);
 		addPage(arcSelectorPage);
 		
 //		selectPredicatesPage = new SamplerBackedSparqlSelectorPage(sampler, "arcList", Arc.class, "Select properties for learning", null);
@@ -122,21 +141,15 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	
 	@Override
 	public boolean performFinish() {
-		//ISampler sampler = (ISampler) bean;
-		//sampler.removeInterimData();
-		
-		//first work around a jena or Jenabean bug, and store all _1, _2, _3 properties for the sequences.
-//		String datamodelRoleId = Persister.getDatasetRoleId(getBean());
-//		Persister persister = Persister.getInstance();
-//		Model model = persister.getInternalModel(datamodelRoleId);
-//		long statementCount = model.size();
-//		model.begin();
-//		model.add(RDF.li(1), RDF.type, RDF.Property);
-//		model.add(RDF.li(2), RDF.type, RDF.Property);
-//		model.add(RDF.li(3), RDF.type, RDF.Property);
-//		model.commit();
-//		log.info("AAAAAAAAAAAAAAAAAA Added " + (model.size()-statementCount) + " statements before adding sampler.");
-		//store the sampler Jenabean
+		SimpleSubjectSparqlSampler sampler = (SimpleSubjectSparqlSampler) bean;
+		Integer minAttributes = minMaxPage.getMinVal();
+		if (minAttributes != null) {
+			sampler.setMinLearnablePredicates(minAttributes);
+		}
+		Integer maxAttributes = minMaxPage.getMaxVal();
+		if (maxAttributes != null) {
+			sampler.setMaxLearnablePredicates(maxAttributes);
+		}
 		return super.performFinish();
 	}
 

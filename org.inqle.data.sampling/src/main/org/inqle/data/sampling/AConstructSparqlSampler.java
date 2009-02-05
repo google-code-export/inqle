@@ -8,16 +8,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.RandomListChooser;
+import org.inqle.core.util.RandomUtil;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.JenabeanConverter;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
-import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
@@ -54,7 +52,11 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	//TODO permit implementing Sampler to specify minimum and maximum number of datamodels
 	protected static final int DEFAULT_MINIMUM_NUMBER_OF_DATAMODELS = 1;
 	protected static final int DEFAULT_MAXIMUM_NUMBER_OF_DATAMODELS = 2;
-
+	private static final int DEFAULT_MAXIMUM_LEARNABLE_PREDICATES = 3;
+	private static final int DEFAULT_MINIMUM_LEARNABLE_PREDICATES = 2;
+	private int maxLearnablePredicates = DEFAULT_MAXIMUM_LEARNABLE_PREDICATES;
+	private int minLearnablePredicates = DEFAULT_MINIMUM_LEARNABLE_PREDICATES;
+	
 	//protected Persister persister;
 
 	//protected String query;
@@ -65,7 +67,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 
 	private Collection<Arc> arcs;
 
-	private int numberOfAttributes;
+//	private int numberOfAttributes = -1;
 	
 //	public void setPersister(Persister persister) {
 //		this.persister = persister;
@@ -94,9 +96,10 @@ public abstract class AConstructSparqlSampler extends ASampler {
 			log.warn("Retrieved no learnable attributes from Jena model.  returning null.");
 			return null;
 		}
-		if (learnableArcs.size() < getNumberOfAttributes()) {
-			log.warn("Retrieved only " + learnableArcs.size() + " learnable attributes.  Supposet to get " + getNumberOfAttributes() + ".  Proceeding.");
-		}
+//		int selectedNumberOfAttributes = selectNumberOfAttributes();
+//		if (learnableArcs.size() < selectedNumberOfAttributes) {
+//			log.warn("Retrieved only " + learnableArcs.size() + " learnable attributes.  Supposet to get " + selectedNumberOfAttributes + ".  Proceeding.");
+//		}
 		List<Arc> allArcs = new ArrayList<Arc>();
 		allArcs.add(labelArc);
 		allArcs.addAll(learnableArcs);
@@ -148,7 +151,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 
 	public Collection<Arc> getLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, Collection<Arc> arcsToExclude) {
 		if (arcs != null && arcs.size() > 0) return arcs;
-		return decideLearnableArcs(modelsToUse, subjectClass, getNumberOfAttributes(), arcsToExclude);
+		return decideLearnableArcs(modelsToUse, subjectClass, selectNumberOfAttributes(), arcsToExclude);
 	}
 
 	/**
@@ -159,19 +162,40 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 */
 	protected abstract Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude);
 
-	/**
-	 * How many learnable attributes to use 
-	 * (exclusing ID or label attributes)?
-	 * @return
-	 */
-	public int getNumberOfAttributes() {
-		if (numberOfAttributes < 1) {
-			return selectNumberOfAttributes();
-		}
-		return numberOfAttributes;
+//	/**
+//	 * How many learnable attributes to use 
+//	 * (exclusing ID or label attributes)?
+//	 * @return
+//	 */
+//	public int getNumberOfAttributes() {
+//		if (numberOfAttributes < 1) {
+//			return selectNumberOfAttributes();
+//		}
+//		return numberOfAttributes;
+//	}
+
+	public int selectNumberOfAttributes() {
+		int randomInt = new RandomUtil().getRandomInt(minLearnablePredicates, maxLearnablePredicates);
+		log.info("RRRRRRRRRRRRRRRRRRRRRRR Random number from " + minLearnablePredicates + " to " + maxLearnablePredicates + " = " + randomInt);
+		return randomInt;
 	}
 
-	public abstract int selectNumberOfAttributes();
+	public int getMaxLearnablePredicates() {
+		return maxLearnablePredicates;
+	}
+
+	public void setMaxLearnablePredicates(int maxLearnablePredicates) {
+		this.maxLearnablePredicates = maxLearnablePredicates;
+	}
+
+	public int getMinLearnablePredicates() {
+		return minLearnablePredicates;
+	}
+
+	public void setMinLearnablePredicates(int minLearnablePredicates) {
+		this.minLearnablePredicates = minLearnablePredicates;
+	}
+
 
 	/**
 	 * Get the Collection of Datamodels from which to extract data.  Implementations should
@@ -291,14 +315,16 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	public void clone(AConstructSparqlSampler templateSampler) {
 		setSubjectClass(templateSampler.getSubjectClass());
 		setArcs(templateSampler.getArcs());
-		setNumberOfAttributes(templateSampler.getNumberOfAttributes());
+//		setNumberOfAttributes(templateSampler.getNumberOfAttributes());
+		setMinLearnablePredicates(templateSampler.getMinLearnablePredicates());
+		setMaxLearnablePredicates(templateSampler.getMaxLearnablePredicates());
 		super.clone(templateSampler);
 //		setQuery(((ASelectSparqlSampler)templateSampler).getQuery());
 	}
 
-	public void setNumberOfAttributes(int numberOfAttributes) {
-		this.numberOfAttributes = numberOfAttributes;
-	}
+//	public void setNumberOfAttributes(int numberOfAttributes) {
+//		this.numberOfAttributes = numberOfAttributes;
+//	}
 
 	public URI getSubjectClass() {
 		return subjectClass;
