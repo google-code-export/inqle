@@ -34,7 +34,7 @@ import com.hp.hpl.jena.rdf.model.ResourceFactory;
  * final IDataTable (e.g., ArcTable) by generating a SPARQL query to define the data to pull.
  * 
  * This helper class assists with creating Sampler which do the following:
- * (1) Select a set of datasets to mine.  This class supports mining of 
+ * (1) Select a set of datamodels to mine.  This class supports mining of 
  * datamodels which are registered in the metarepository
  * (2) Generate a SPARQL CONSTRUCT query, which will create a minable Model of data
  * (3) Execute the SPARQL against the set of datamodels.
