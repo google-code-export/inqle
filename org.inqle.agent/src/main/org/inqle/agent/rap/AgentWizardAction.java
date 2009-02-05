@@ -59,7 +59,7 @@ public class AgentWizardAction extends Action {
 			//wizard = new AgentRunnerWizard(agent, window.getShell());
 		} else if (mode == MODE_OPEN) {
 			log.info("Creating wizard w/ part:" + JenabeanWriter.toString(agentPart));
-			//create wizard for storing bean into default target dataset
+			//create wizard for storing bean into default target datamodel
 			wizard = agentFactory.createWizardForReplica(null, window.getShell());
 			wizard.setPart(agentPart);
 			DynaWizardDialog dialog = new DynaWizardDialog(window.getShell(), wizard);
