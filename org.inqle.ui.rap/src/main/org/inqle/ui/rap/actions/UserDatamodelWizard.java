@@ -42,43 +42,43 @@ import com.hp.hpl.jena.rdf.model.Model;
  * 
  * TODO extend DynaWizard instead of Wizard
  */
-public class UserDatasetWizard extends Wizard {
+public class UserDatamodelWizard extends Wizard {
 
 	public static final String DEFAULT_CHECKED_ATTRIBUTE = "checkedByDefault";
 	private IDatabase database = null;
 	//private Persister persister;
-	static Logger log = Logger.getLogger(UserDatasetWizard.class);
+	static Logger log = Logger.getLogger(UserDatamodelWizard.class);
 	
 	int mode;
 
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
-	private UserDatamodel startingDataset;
+	private UserDatamodel startingDatamodel;
 	private UserDatamodel datamodel;
 //	private Text datasetIdText;
 	Composite parent;
 	public List<Button> datasetFunctionCheckboxes = new ArrayList<Button>();
-	private DatasetInfoPage datasetInfoPage;
-	private DatasetFunctionsPage datasetFunctionsPage;
+	private DatamodelInfoPage datasetInfoPage;
+	private DatamodelFunctionsPage datasetFunctionsPage;
 	
 	/**
 	 * This generates the wizard page for creating a database database
 	 * @author David Donohue
 	 * Feb 8, 2008
 	 */
-	public class DatasetInfoPage extends WizardPage {
+	public class DatamodelInfoPage extends WizardPage {
 
 		private Composite composite;
 		private TextFieldShower datasetIdTextField;
 		private TextFieldShower datasetDescriptionTextField;
 		
-		DatasetInfoPage(String pageName) {
+		DatamodelInfoPage(String pageName) {
 			super(pageName);
 		}
 		
 		public void createControl(Composite parentComposite) {
 			parent = parentComposite;
-			log.trace("DatasetInfoPage.createControl()");
+			log.trace("DatamodelInfoPage.createControl()");
 //			parent = pageParent;
 			
 			//initialize the Datamodel to the base starting Datamodel
@@ -121,23 +121,23 @@ public class UserDatasetWizard extends Wizard {
 
 		}
 		
-		String getDatasetId() {
+		String getDatamodelId() {
 			return datasetIdTextField.getValue();
 		}
 		
-		String getDatasetDescription() {
+		String getDatamodelDescription() {
 			return datasetDescriptionTextField.getValue();
 		}
 
 	}
 	
-	public class DatasetFunctionsPage extends WizardPage {
+	public class DatamodelFunctionsPage extends WizardPage {
 
 		private static final String PAGE_NAME = "Datamodel Functions";
 		private static final String PAGE_DESCRIPTION = "Select which functions this datamodel will fulfill.";
 		private Composite composite;
 		
-		protected DatasetFunctionsPage() {
+		protected DatamodelFunctionsPage() {
 			super(PAGE_NAME);
 			setMessage(PAGE_DESCRIPTION);
 		}
@@ -153,13 +153,13 @@ public class UserDatasetWizard extends Wizard {
 //	    log.info("Got datasetFunctionExtensions of size: " + datasetFunctionExtensions.size());
 	    //add the checkboxes
 			for (IExtensionSpec datasetFunctionExtension: datasetFunctionExtensions) {
-				addDatasetFunctionCheckbox(datasetFunctionExtension, composite);
+				addDatamodelFunctionCheckbox(datasetFunctionExtension, composite);
 			}
 			setControl(composite);
 		}
 
-		private void addDatasetFunctionCheckbox(IExtensionSpec datasetFunctionExtension, Composite composite) {
-//			log.info("addDatasetFunctionCheckbox()...");
+		private void addDatamodelFunctionCheckbox(IExtensionSpec datasetFunctionExtension, Composite composite) {
+//			log.info("addDatamodelFunctionCheckbox()...");
 			Button checkbox = new Button(composite, SWT.CHECK);
 			String extensionId = datasetFunctionExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 			String extensionName = datasetFunctionExtension.getAttribute(InqleInfo.NAME_ATTRIBUTE);
@@ -177,7 +177,7 @@ public class UserDatasetWizard extends Wizard {
 				defaultChecked = true;
 			}
 			
-			Collection<String> datasetFunctions = datamodel.getDatasetFunctions();
+			Collection<String> datasetFunctions = datamodel.getDatamodelFunctions();
 			log.info("Compare datamodel function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
 			log.info("Default checked=" + defaultChecked);
 			if (datasetFunctions != null && datasetFunctions.contains(extensionId)) {
@@ -190,10 +190,10 @@ public class UserDatasetWizard extends Wizard {
 		}
 	}
 	
-	public UserDatasetWizard(int mode, UserDatamodel startingDataset, DatabasePart databasePart) {
+	public UserDatamodelWizard(int mode, UserDatamodel startingDatamodel, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
-		this.startingDataset = startingDataset;
+		this.startingDatamodel = startingDatamodel;
 		this.database = databasePart.getDatabase();
 		resetModel();
 	}
@@ -210,13 +210,13 @@ public class UserDatasetWizard extends Wizard {
 
 	@Override
 	public void addPages() {		
-//		log.info("Datamodel Wizard: adding DatasetInfoPage...");
-		datasetInfoPage = new DatasetInfoPage("Datamodel Info");
+//		log.info("Datamodel Wizard: adding DatamodelInfoPage...");
+		datasetInfoPage = new DatamodelInfoPage("Datamodel Info");
 		addPage(datasetInfoPage);
 		
-//		log.info("Datamodel Wizard: creating DatasetFunctionsPage...");
-		datasetFunctionsPage = new DatasetFunctionsPage();
-//		log.info("Datamodel Wizard: adding DatasetFunctionsPage...");
+//		log.info("Datamodel Wizard: creating DatamodelFunctionsPage...");
+		datasetFunctionsPage = new DatamodelFunctionsPage();
+//		log.info("Datamodel Wizard: adding DatamodelFunctionsPage...");
 		addPage(datasetFunctionsPage);
 	}
 	
@@ -232,8 +232,8 @@ public class UserDatasetWizard extends Wizard {
 	@Override
 	public boolean performFinish() {
 //		datamodel.setId(datasetIdText.getText());
-		datamodel.setId(datasetInfoPage.getDatasetId());
-		datamodel.setDescription(datasetInfoPage.getDatasetDescription());
+		datamodel.setId(datasetInfoPage.getDatamodelId());
+		datamodel.setDescription(datasetInfoPage.getDatamodelDescription());
 		if (datamodel.getId() == null || datamodel.getId().length() == 0) {
 			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Datamodel ID", "");
 			return false;
@@ -241,7 +241,7 @@ public class UserDatasetWizard extends Wizard {
 		
 		Persister persister = Persister.getInstance();
 		
-		if (mode != DatamodelWizardAction.MODE_EDIT && persister.externalDatasetExists(datamodel.getId())) {
+		if (mode != DatamodelWizardAction.MODE_EDIT && persister.externalDatamodelExists(datamodel.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Datamodel name already exists", 
 					"This database already has a datamodel named '" + datamodel.getId() + "'.\nPlease choose a different name.");
 			return false;
@@ -257,9 +257,9 @@ public class UserDatasetWizard extends Wizard {
 			datasetFunctionIds.add(datasetFunctionId);
 		}
 		if (datasetFunctionIds.size() > 0) {
-			datamodel.setDatasetFunctions(datasetFunctionIds);
+			datamodel.setDatamodelFunctions(datasetFunctionIds);
 		} else {
-			datamodel.setDatasetFunctions(null);
+			datamodel.setDatamodelFunctions(null);
 		}
 		
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
@@ -287,10 +287,10 @@ public class UserDatasetWizard extends Wizard {
 	
 	public final void resetModel() {
 		if (mode == DatamodelWizardAction.MODE_EDIT) {
-			datamodel = startingDataset.createReplica();
+			datamodel = startingDatamodel.createReplica();
 		//} else if (mode == DatamodelWizardAction.MODE_CLONE) {
 		} else {
-			datamodel = startingDataset.createClone();
+			datamodel = startingDatamodel.createClone();
 //		} else {
 //			datamodel = new Datamodel();
 //			datamodel.setConnection(this.connection);

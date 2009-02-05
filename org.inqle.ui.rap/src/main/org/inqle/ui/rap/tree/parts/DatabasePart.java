@@ -36,15 +36,15 @@ public class DatabasePart extends PartType {
 	private String getSparqlToFindChildDatasets() {
 		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
 		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
-		" SELECT ?datasetId \n " +
+		" SELECT ?datamodelId \n " +
 		" { \n " +
 		" GRAPH ?g { \n " +
-		" ?datasetUri a inqle:UserDatamodel \n " +
-		" . ?datasetUri inqle:id ?datasetId \n " +
-		" . ?datasetUri inqle:connectionId \"" + database.getId() + "\"^^xsd:string \n" +
-		//" . ?datasetUri inqle:connectionId " + literal + " \n " +
-		//" . ?datasetUri inqle:connectionId ?anyConnectionId" +
-		//" . ?datasetUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
+		" ?datamodelUri a inqle:UserDatamodel \n " +
+		" . ?datamodelUri inqle:id ?datamodelId \n " +
+		" . ?datamodelUri inqle:connectionId \"" + database.getId() + "\"^^xsd:string \n" +
+		//" . ?datamodelUri inqle:connectionId " + literal + " \n " +
+		//" . ?datamodelUri inqle:connectionId ?anyConnectionId" +
+		//" . ?datamodelUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
 		" } }\n";
 		return sparql;
 	}
@@ -89,12 +89,12 @@ public class DatabasePart extends PartType {
 //		queryCriteria.setQuery(getSparqlToFindChildDatasets());
 //		log.trace("SPARQL=" + getSparqlToFindChildDatasets());
 //		queryCriteria.addNamedModel(appInfo.getMetarepositoryDataset());
-//		List<String> datasetIds = Queryer.selectSimpleList(queryCriteria, "datasetId");
-//		log.trace("datasetIds=" + datasetIds);
+//		List<String> datamodelIds = Queryer.selectSimpleList(queryCriteria, "datamodelId");
+//		log.trace("datamodelIds=" + datamodelIds);
 		
 //		SDBConnector dbConnector = new SDBConnector(getConnection());
-//		List<Datamodel> datasets = dbConnector.getDatasets();
-//		log.trace("datasets=" + datasets);
+//		List<Datamodel> datamodels = dbConnector.getDatasets();
+//		log.trace("datamodels=" + datamodels);
 		
 		//for Datamodel, add a ModelPart
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
@@ -112,11 +112,11 @@ public class DatabasePart extends PartType {
 //		Iterator modelI = modelSet.listNames();
 //		modelParts = new ArrayList<ModelPart>();
 //		while (modelI.hasNext()) {
-//			String datasetId = (String)modelI.next();
-//			UserDatamodel dataset = (UserDatamodel)persister.reconstitute(UserDatamodel.class, datasetId, true);
-//			dataset.setConnectionId(this.database.getId());
-////			log.info("DatabasePart Loaded UserDatamodel: " + JenabeanWriter.toString(dataset));
-//			ModelPart modelPart = new ModelPart(dataset);
+//			String datamodelId = (String)modelI.next();
+//			UserDatamodel datamodel = (UserDatamodel)persister.reconstitute(UserDatamodel.class, datamodelId, true);
+//			datamodel.setConnectionId(this.database.getId());
+////			log.info("DatabasePart Loaded UserDatamodel: " + JenabeanWriter.toString(datamodel));
+//			ModelPart modelPart = new ModelPart(datamodel);
 //			modelPart.setParent(this);
 //			//modelPart.setPersister(this.persister);
 //			modelParts.add(modelPart);

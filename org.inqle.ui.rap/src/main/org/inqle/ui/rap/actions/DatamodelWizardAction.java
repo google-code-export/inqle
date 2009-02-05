@@ -57,18 +57,18 @@ public class DatamodelWizardAction extends Action {
 	public void run() {
 		if (datamodel instanceof UserDatamodel) {
 //			try {
-				UserDatasetWizard wizard = new UserDatasetWizard(mode, (UserDatamodel)datamodel, databasePart);
-				log.trace("Created UserDatasetWizard");
+				UserDatamodelWizard wizard = new UserDatamodelWizard(mode, (UserDatamodel)datamodel, databasePart);
+				log.trace("Created UserDatamodelWizard");
 				WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 				dialog.open();
 				log.trace("Opened WizardDialog");
 //			} catch (Exception e) {
-//				log.error("Error running UserDatasetWizard", e);
+//				log.error("Error running UserDatamodelWizard", e);
 //			}
 		} 
 	}
 
-//	public Datamodel getDataset() {
+//	public Datamodel getDatamodel() {
 //		return datamodel;
 //	}
 

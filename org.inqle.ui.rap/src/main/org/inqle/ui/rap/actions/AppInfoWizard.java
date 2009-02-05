@@ -3,36 +3,23 @@
  */
 package org.inqle.ui.rap.actions;
 
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.InternalConnection;
 import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jena.SystemDatamodel;
-import org.inqle.data.rdf.jena.sdb.SDBConnector;
+import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.UserAccount;
-import org.inqle.ui.rap.pages.ConnectionPage;
-import org.inqle.ui.rap.pages.EmbeddedDBPage;
 import org.inqle.ui.rap.pages.InfoPage;
-import org.inqle.ui.rap.pages.RadiosPage;
 import org.inqle.ui.rap.pages.ServerInfoPage;
-import org.inqle.ui.rap.pages.SingleTextPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -115,190 +102,13 @@ public class AppInfoWizard extends Wizard {
 		
 		userAccountPage = new UserAccountPage();
 		addPage(userAccountPage);
-		
-//		//Add pages for capturing the internal database connection and metarepository dataset
-//		embeddedOrExternalMetarepositoryDBPage = new RadiosPage("We will create the internal database used by your INQLE server.", "Select whether to use an embedded database to use for the internal database.");
-//		embeddedOrExternalMetarepositoryDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
-//		addPage(embeddedOrExternalMetarepositoryDBPage);
-////		log.info("added embeddedOrExternalMetarepositoryDBPage");
-//		
-//		embeddedMetarepositoryDBPage = new EmbeddedDBPage("Internal INQLE Database", "Specify connection info for the embedded H2 database, which will contain internal INQLE information.");
-//		embeddedMetarepositoryDBPage.setDefaultDBName(DEFAULT_INTERNAL_DB_NAME);
-//		embeddedMetarepositoryDBPage.setDefaultUserName(DEFAULT_INTERNAL_DB_USER_NAME);
-//		addPage(embeddedMetarepositoryDBPage);
-//		log.info("added embeddedMetarepositoryDBPage");
-		
-//		metarepositoryDataset = appInfo.getMetarepositoryDataset();
-//		if (metarepositoryDataset == null) {
-//			metarepositoryDataset = new SystemDatamodel();
-//			//metarepositoryDataset.setModelName("Metarepository");
-//			metarepositoryDataset.setId(DEFAULT_METAREPOSITORY_ID);
-//		}
-//		metarepositoryConnection = appInfo.getInternalConnection();
-//		if (metarepositoryConnection == null) {
-//			metarepositoryConnection = new SDBDatabase();
-//			metarepositoryConnection.setRandomId();
-//			metarepositoryDataset.setConnectionId(metarepositoryConnection.getId());
-//		}
-////		SDBDatabase metarepositoryConnection = metarepositoryRdbModel.getConnection();
-//		metarepositoryConnectionPage = new ConnectionPage(
-//				"Specify database connection info for your INQLE server", 
-//				metarepositoryConnection, 
-//				shell
-//		);
-//		addPage(metarepositoryConnectionPage);
-		
-//		metarepositoryDatasetPage = new SingleTextPage(
-//				metarepositoryDataset, 
-//				"id", 
-//				"Enter a name for your Metarepository Model.", 
-//				null
-//		);
-//		addPage(metarepositoryDatasetPage);
-//		log.info("added metarepositoryDatasetPage");
-		
-//		embeddedOrExternalCacheDBPage = new RadiosPage("We will create the CACHE database used by your INQLE server.", "Select whether to use an embedded database to use for the INQLE CACHE database.");
-//		embeddedOrExternalCacheDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
-//		addPage(embeddedOrExternalCacheDBPage);
-		
-//		embeddedCacheDBPage = new EmbeddedDBPage("INQLE Cache Database", "Specify connection info for the embedded H2 database, which will contain INQLE caching information.");
-//		embeddedCacheDBPage.setDefaultDBName(DEFAULT_CACHE_DB_NAME);
-//		embeddedCacheDBPage.setDefaultUserName(DEFAULT_CACHE_DB_USER_NAME);
-//		addPage(embeddedCacheDBPage);
-		
-//		cacheConnection = new InternalConnection();
-//		cacheConnection.setConnectionRole(Persister.CACHE_CONNECTION);
-//		cacheConnection.setRandomId();
-		
-//		SDBDatabase metarepositoryConnection = metarepositoryRdbModel.getConnection();
-//		cacheConnectionPage = new ConnectionPage(
-//				"Specify database connection info for cached data", 
-//				cacheConnection, 
-//				shell
-//		);
-//		addPage(cacheConnectionPage);
-		
-//		//add form elements for the first external dataset
-//		embeddedOrExternalFirstDataDBPage = new RadiosPage("Next, we will create a database for storing your data.", "Select whether to use an embedded database, in which to store your data.");
-//		embeddedOrExternalFirstDataDBPage.setRadioOptionTexts(Arrays.asList(OPTIONS_EMBEDDED_OR_NOT));
-//		addPage(embeddedOrExternalFirstDataDBPage);
-//		log.info("added embeddedOrExternalFirstDataDBPage");
-		
-//		embeddedFirstDataDBPage = new EmbeddedDBPage("Database for storing your data", "Specify connection info for the embedded database, in which to store your data.");
-//		embeddedFirstDataDBPage.setDefaultDBName(DEFAULT_FIRSTDATA_DB_NAME);
-//		embeddedFirstDataDBPage.setDefaultUserName(DEFAULT_FIRSTDATA_DB_USER_NAME);
-//		addPage(embeddedFirstDataDBPage);
-//		log.info("added embeddedFirstDataDBPage");
-		
-//		firstDataDatabase = new SDBDatabase();
-//		firstDataDatabase.setRandomId();
-
-		
-//		SDBDatabase firstDataDatabase = firstDataRdbModel.getConnection();
-//		firstDataConnectionPage = new ConnectionPage(
-//				"Specify database connection info for your for first dataset", 
-//				firstDataDatabase, 
-//				shell
-//		);
-//		addPage(firstDataConnectionPage);
-		
-//		firstDataDatasetPage = new SingleTextPage(
-//				firstDataDataset, 
-//				"id", 
-//				"Enter a unique name for your first dataset, e.g. " + DEFAULT_FIRSTDATA_DATASET_ID, 
-//				null
-//		);
-//		addPage(firstDataDatasetPage);
-//		log.info("added firstDataDatasetPage");
 	}
-
-//	@Override
-//	public IWizardPage getNextPage(IWizardPage page) {
-//		log.trace("getNextPage(" + page + ")");
-//		if (page == embeddedOrExternalMetarepositoryDBPage) {
-//			if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-//				return embeddedMetarepositoryDBPage;
-//			} else {
-//				return metarepositoryConnectionPage;
-//			}
-//		}
-//		
-//		if (page == embeddedMetarepositoryDBPage || page == metarepositoryConnectionPage) {
-//			return metarepositoryDatasetPage;
-//		}
-//
-//		if (page == embeddedOrExternalCacheDBPage) {
-//			if (embeddedOrExternalCacheDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-//				return embeddedCacheDBPage;
-//			} else {
-//				return cacheConnectionPage;
-//			}
-//		}
-//		
-//		if (page == embeddedCacheDBPage || page == cacheConnectionPage) {
-//			return embeddedOrExternalFirstDataDBPage;
-//		}
-//		
-//		if (page == embeddedOrExternalFirstDataDBPage) {
-//			if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-//				return embeddedFirstDataDBPage;
-//			} else {
-//				return firstDataConnectionPage;
-//			}
-//		}
-//		
-//		if (page == embeddedFirstDataDBPage || page == firstDataConnectionPage) {
-//			return firstDataDatasetPage;
-//		}
-//		return super.getNextPage(page);
-//	}
 
 	@Override
 	public boolean canFinish() {
 		//getContainer().getCurrentPage().getControl().forceFocus();
 		//TODO test that prefix & subjectclass are URIs
-		try {
-			//First data dataset forms
-//			if (embeddedOrExternalFirstDataDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-//				//embedded database:
-//				if (embeddedFirstDataDBPage.getDbName().length()==0) return false;
-//				if (embeddedFirstDataDBPage.getDbLogin().length()==0) return false;
-//				if (embeddedFirstDataDBPage.getDbPassword().length()==0) return false;
-//			} else {
-//				//external database:
-//				if (firstDataConnectionPage.getDbType().length()==0) return false;
-//				if (firstDataConnectionPage.getDbURL().length()==0) return false;
-//				if (firstDataConnectionPage.getDbClass().length()==0) return false;
-//			}
-//			
-//			//Cache forms
-//			if (embeddedOrExternalCacheDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-//				//embedded database:
-//				if (embeddedCacheDBPage.getDbName().length()==0) return false;
-//				if (embeddedCacheDBPage.getDbLogin().length()==0) return false;
-//				if (embeddedCacheDBPage.getDbPassword().length()==0) return false;
-//			} else {
-//				//external database:
-//				if (cacheConnectionPage.getDbType().length()==0) return false;
-//				if (cacheConnectionPage.getDbURL().length()==0) return false;
-//				if (cacheConnectionPage.getDbClass().length()==0) return false;
-//			}
-//			
-//			//Metarepository forms
-//			if (embeddedOrExternalMetarepositoryDBPage.getSelectedIndex() == EMBEDDED_H2_DATABASE) {
-//				//embedded database:
-//				if (embeddedMetarepositoryDBPage.getDbName().length()==0) return false;
-//				if (embeddedMetarepositoryDBPage.getDbLogin().length()==0) return false;
-//				if (embeddedMetarepositoryDBPage.getDbPassword().length()==0) return false;
-//			} else {
-//				//external database:
-//				if (metarepositoryConnectionPage.getDbType().length()==0) return false;
-//				if (metarepositoryConnectionPage.getDbURL().length()==0) return false;
-//				if (metarepositoryConnectionPage.getDbClass().length()==0) return false;
-//			}
-			
-//			if (! userAccountPage.canFlipToNextPage()) return false;
-			
+		try {			
 			//Server Info form
 			if (serverInfoPage.getSiteName()==null || serverInfoPage.getSiteName().length()==0) return false;
 			if (serverInfoPage.getOwnerEmail()==null) return false;
@@ -343,7 +153,7 @@ public class AppInfoWizard extends Wizard {
 			log.error("Unable to save AppInfo to " + Persister.getAppInfoFilePath(), e);
 		}
 		
-		//create necessary databases & datasets
+		//create necessary databases & datamodels
 		
 //		SDBConnector connector = new SDBConnector(metarepositoryConnection);
 //		int status = connector.createDatabase();

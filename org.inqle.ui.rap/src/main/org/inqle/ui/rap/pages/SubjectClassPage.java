@@ -1,6 +1,5 @@
 package org.inqle.ui.rap.pages;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,13 +26,11 @@ import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapper;
-import org.inqle.http.lookup.LookupInfo;
 import org.inqle.http.lookup.LookupServlet;
-import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.http.lookup.Requestor;
+import org.inqle.http.lookup.SubjectLookup;
 import org.inqle.ui.rap.actions.CreateSubclassAction;
 import org.inqle.ui.rap.table.ListMapTableLabelProvider;
-import org.inqle.ui.rap.table.SparqlXmlTableLabelProvider;
 import org.inqle.ui.rap.widgets.SearchBox;
 import org.w3c.dom.Document;
 
@@ -242,8 +239,8 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		} else {
 			//log.info("Clicked search button");
 
-			//this looks up subclasses of DataSubject, in this internal dataset: Data.DATA_SUBJECT_DATASET_ROLE_ID
-			String localDataSubjectXml = SubjectLookup.lookupSubjectsInSubjectsDataset(
+			//this looks up subclasses of DataSubject, in this system datamodel: Data.DATA_SUBJECT_DATASET_ROLE_ID
+			String localDataSubjectXml = SubjectLookup.lookupSubjectsInSubjectsDatamodel(
 					getSearchTextValue(), 
 					10, 
 					0);
@@ -251,7 +248,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Document localDataSubjectDocument = XmlDocumentUtil.getDocument(localDataSubjectXml);;
 
 			//this looks up all RDF classes
-			String localRdfClassXml = SubjectLookup.lookupSubclassesInSchemaDatasets(
+			String localRdfClassXml = SubjectLookup.lookupSubclassesInSchemaDatamodels(
 					getSearchTextValue(), 
 					10, 
 					0);

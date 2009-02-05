@@ -26,7 +26,7 @@ import org.inqle.ui.rap.pages.BeanWizardPage;
  * Usage (from within your implementation of DynaWizard):
  * 
  * public void addPages() {
- * 	 BeanTableSelectorPage availableModelsPage = new BeanTableSelectorPage(bean, "availableNamedModels", String.class, "Select available datasets", null);
+ * 	 BeanTableSelectorPage availableModelsPage = new BeanTableSelectorPage(bean, "availableNamedModels", String.class, "Select available datamodels", null);
 		 availableModelsPage.setBeans(persister.listNamedModels());
 		 availableModelsPage.setBeanClass(NamedModel.class);
 		 availableModelsPage.setPropertyNames(Arrays.asList(new String[]{"modelName", "id", "class"}));

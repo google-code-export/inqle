@@ -223,12 +223,12 @@ public class LoadRdfFileWizard extends DynaWizard {
     	log.info("Success loading RDF file.");
     	CacheTool.invalidateDataCache(datamodel.getId());
     	if (loader.getCountLoaded() == 0) {
-    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
+    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this datamodel."); 
     	} else {
     		
     		if (datamodel != null) {
     			log.info("Flushing text index...");
-    			//flush any text indexes for the dataset
+    			//flush any text indexes for the datamodel
     			Persister persister = Persister.getInstance();
     			persister.flushIndexes(datamodel);
     			log.info("Finished flushing text index.");

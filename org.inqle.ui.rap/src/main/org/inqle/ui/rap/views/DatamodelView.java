@@ -44,7 +44,7 @@ public class DatamodelView extends SparqlView {
 		"\n} } \n" +
 		" ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n" +
 		" LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
-		log.info("SPARQL lookup subjects in dataset:" + s);
+		log.info("SPARQL lookup subjects in datamodel:" + s);
 		return s;
 //		String sparql = 
 //			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -82,7 +82,7 @@ public class DatamodelView extends SparqlView {
 				classView.setDatamodel(getDatamodel());
 				classView.setClassUri(data.toString());
 				classView.setTitleText("Things of type: <" + data.toString() + ">");
-				log.info("Refreshing Class View with dataset: " + getDatamodel() + " and class URI: " + data.toString());
+				log.info("Refreshing Class View with datamodel: " + getDatamodel() + " and class URI: " + data.toString());
 				classView.refreshView();
 			}
 		}

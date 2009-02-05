@@ -23,7 +23,7 @@ public class CreateInstanceAction extends ACreateOntResourceAction {
 	
 	/**
 	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
-	 * owlClassUri.  Import into the internal dataset of the specified role.
+	 * owlClassUri.  Import into the system datamodel of the specified role.
 	 * This constructor supports updating the LARQ text index, if applicable.
 	 * @param shell
 	 * @param internalDatasetRoleId
@@ -36,9 +36,9 @@ public class CreateInstanceAction extends ACreateOntResourceAction {
 	
 	/**
 	 * Create a dialog, to import a new OWL resource, which is an instance of the class specified by
-	 * owlClassUri.  Import into the internal dataset of the specified role/
+	 * owlClassUri.  Import into the system datamodel of the specified role/
 	 * This constructor does not support updating the LARQ text index.  However, it can
-	 * be used for importing into an external dataset
+	 * be used for importing into an external datamodel
 	 * @param shell
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri

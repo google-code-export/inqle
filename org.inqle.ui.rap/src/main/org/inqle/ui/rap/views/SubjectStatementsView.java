@@ -92,7 +92,7 @@ public class SubjectStatementsView extends SparqlView {
 				ssView.setDatamodel(getDatamodel());
 				ssView.setSubjectUri(uriValData.getUriVal());
 				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
-				log.info("Refreshing Subject Statements View with dataset: " + getDatamodel() + " and instance URI: " + data.toString());
+				log.info("Refreshing Subject Statements View with datamodel: " + getDatamodel() + " and instance URI: " + data.toString());
 				ssView.refreshView();
 //				ssView.setFocus();
 				

@@ -120,7 +120,7 @@ public class LoadCsvFileWizard extends DynaWizard implements ICsvReaderWizard {
     //show success
     if (success) {
     	if (csvImporter.getCountSavedStatements() == 0) {
-    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + csvImporter.getCsvReader().getFile().getName() + ", however imported no records.\nPerhaps this file was already loaded into this dataset."); 
+    		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + csvImporter.getCsvReader().getFile().getName() + ", however imported no records.\nPerhaps this file was already loaded into this datamodel."); 
     	} else {
     		MessageDialog.openInformation( getShell(), "Success loading data", "Successfully loaded " + csvImporter.getCountSavedStatements() + " statements, " + csvImporter.getCountSavedRows() + " rows, from file " + csvImporter.getCsvReader().getFile().getName()); 
     	}
