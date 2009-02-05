@@ -120,13 +120,13 @@ public class SubjectLookup {
 //	}
 	
 	/**
-	 * Query the scheman datasets for subjects
+	 * Query the scheman datamodels for subjects
 	 * @param searchTerm
 	 * @param limit
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlSearchSchemaDatasetsForSubjects(String searchTerm, int limit, int offset) {
+	public static String getSparqlSearchSchemaDatamodelsForSubjects(String searchTerm, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -150,13 +150,13 @@ public class SubjectLookup {
 	}
 	
 	/**
-	 * Query the scheman datasets for subjects
+	 * Query the scheman datamodels for subjects
 	 * @param searchTerm
 	 * @param limit
 	 * @param offset
 	 * @return
 	 */
-	public static String getSparqlSearchPreferredOntologyDatasetsForSubjects(String searchTerm, int limit, int offset) {
+	public static String getSparqlSearchPreferredOntologyDatamodelsForSubjects(String searchTerm, int limit, int offset) {
 		String sparql = 
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 
@@ -181,18 +181,18 @@ public class SubjectLookup {
 	}
 	
 	/**
-	 * Lookup subclasses of inqle:Subject in the rg.inqle.datasets.dataSubject
-	 * internal dataset
+	 * Lookup subclasses of inqle:Subject in the rg.inqle.datamodels.dataSubject
+	 * internal datamodel
 	 * @param searchTermForRdfClass
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupSubjectsInSubjectsDataset (
+	public static String lookupSubjectsInSubjectsDatamodel (
 		String searchTermForRdfClass, 
 		int countSearchResults, 
 		int offset) {
-		return lookupSubclassesInInternalDataset(
+		return lookupSubclassesInInternalDatamodel(
 				searchTermForRdfClass,
 				RDF.SUBJECT,
 				Data.DATA_SUBJECT_DATASET_ROLE_ID, 
@@ -200,26 +200,26 @@ public class SubjectLookup {
 				offset);
 	}
 	/**
-	 *  Lookup in the specified internal dataset any resource, of the provided OWL class URI, which matches the provided search term.
+	 *  Lookup in the specified internal datamodel any resource, of the provided OWL class URI, which matches the provided search term.
 	 * @param searchTermForRdfClass
 	 * @param superClassUri the OWL superclass of the subjects to find.  Leave null to search RDFS classes (i.e. subclasses of rdfs:Class)
-	 * @param internalDatasetRoleId the role of the internal dataset to search
+	 * @param internalDatamodelRoleId the role of the internal datamodel to search
 	 * @param countSearchResults
 	 * @param offset usually = 0
 	 * @return
 	 */
-	public static String lookupSubclassesInInternalDataset (
+	public static String lookupSubclassesInInternalDatamodel (
 			String searchTermForRdfClass, 
 			String superClassUri, 
-			String internalDatasetRoleId, 
+			String internalDatamodelRoleId, 
 			int countSearchResults, 
 			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatasetRoleId));
-		IndexLARQ textIndex =  persister.getIndex(internalDatasetRoleId);
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatamodelRoleId));
+		IndexLARQ textIndex =  persister.getIndex(internalDatamodelRoleId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("Searched " + internalDatasetRoleId + " index for '" + searchTermForRdfClass + "'...");
+		log.info("Searched " + internalDatamodelRoleId + " index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -231,33 +231,33 @@ public class SubjectLookup {
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
-		log.info("lookupSubclassesInInternalDataset(): Queried and got these matching results:\n" + matchingClassesXml);
+		log.info("lookupSubclassesInInternalDatamodel(): Queried and got these matching results:\n" + matchingClassesXml);
 		return matchingClassesXml;
 	}
 
 	/**
-	 * Search the specified internal dataset for subclasses of rdfs:Class UNION 
+	 * Search the specified internal datamodel for subclasses of rdfs:Class UNION 
 	 * the specified class URI
 	 * 
 	 * @param searchTermForRdfClass
 	 * @param superClassUri
-	 * @param internalDatasetRoleId
+	 * @param internalDatamodelRoleId
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupRdfsAndSpecifiedSubclassesInInternalDataset (
+	public static String lookupRdfsAndSpecifiedSubclassesInInternalDatamodel (
 			String searchTermForRdfClass, 
 			String superClassUri, 
-			String internalDatasetRoleId, 
+			String internalDatamodelRoleId, 
 			int countSearchResults, 
 			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatasetRoleId));
-		IndexLARQ textIndex =  persister.getIndex(internalDatasetRoleId);
+		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatamodelRoleId));
+		IndexLARQ textIndex =  persister.getIndex(internalDatamodelRoleId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("Searched " + internalDatasetRoleId + " index for '" + searchTermForRdfClass + "'...");
+		log.info("Searched " + internalDatamodelRoleId + " index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -269,7 +269,7 @@ public class SubjectLookup {
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
-		log.info("lookupSubclassesInInternalDataset(): Queried and got these matching results:\n" + matchingClassesXml);
+		log.info("lookupSubclassesInInternalDatamodel(): Queried and got these matching results:\n" + matchingClassesXml);
 		return matchingClassesXml;
 	}
 
@@ -319,10 +319,10 @@ public class SubjectLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupSubclassesInSchemaDatasets(String searchTermForRdfClass, int countSearchResults, int offset) {
+	public static String lookupSubclassesInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");
@@ -331,7 +331,7 @@ public class SubjectLookup {
 		if (textIndex==null) return null;
 		
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.trace("Searched Schema Datasets index for '" + searchTermForRdfClass + "'...");
+		log.trace("Searched Schema Datamodels index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.trace("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -343,11 +343,11 @@ public class SubjectLookup {
 		log.trace("Get/Create OntModel...");
 //		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
 		
-		String sparql = getSparqlSearchSchemaDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
+		String sparql = getSparqlSearchSchemaDatamodelsForSubjects(searchTermForRdfClass, countSearchResults, offset);
 		log.trace("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
-		log.trace("Queried Schema Datasets and got these matching results:\n" + matchingClassesXml);
+		log.trace("Queried Schema Datamodels and got these matching results:\n" + matchingClassesXml);
 		return matchingClassesXml;
 	}
 	
@@ -359,10 +359,10 @@ public class SubjectLookup {
 	 * @param offset
 	 * @return
 	 */
-	public static String lookupPreferredOntologySubjectsInSchemaDatasets(String searchTermForRdfClass, int countSearchResults, int offset) {
+	public static String lookupPreferredOntologySubjectsInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");
@@ -371,7 +371,7 @@ public class SubjectLookup {
 		if (textIndex==null) return null;
 		
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.trace("Searched Schema Datasets index for '" + searchTermForRdfClass + "'...");
+		log.trace("Searched Schema Datamodels index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.trace("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -383,11 +383,11 @@ public class SubjectLookup {
 		log.info("Get/Create OntModel...");
 //		queryCriteria.setSingleModel(persister.getSchemaFilesOntModel());
 		
-		String sparql = getSparqlSearchPreferredOntologyDatasetsForSubjects(searchTermForRdfClass, countSearchResults, offset);
+		String sparql = getSparqlSearchPreferredOntologyDatamodelsForSubjects(searchTermForRdfClass, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
-		log.info("Queried Schema Datasets and got these matching results:\n" + matchingClassesXml);
+		log.info("Queried Schema Datamodels and got these matching results:\n" + matchingClassesXml);
 		Model matchingClassesModel = Queryer.selectRdf(queryCriteria);
 		log.info("Here are results as Jena model:\n" + JenabeanWriter.modelToString(matchingClassesModel));
 		return matchingClassesXml;
