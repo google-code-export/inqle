@@ -76,8 +76,8 @@ public class ExperimentsView extends SparqlView {
 	@Override
 	public Datamodel getDatamodel() {
 		Persister persister = Persister.getInstance();
-		SystemDatamodel dataset = persister.getSystemDatamodel(ExperimentResult.EXPERIMENTS_DATASET);
-		return dataset;
+		SystemDatamodel datamodel = persister.getSystemDatamodel(ExperimentResult.EXPERIMENTS_DATASET);
+		return datamodel;
 	}
 	
 	@Override
@@ -103,7 +103,7 @@ public class ExperimentsView extends SparqlView {
 				ssView.setDatamodel(getDatamodel());
 				ssView.setSubjectUri(uriValData.getUriVal());
 				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
-				log.info("Refreshing Subject Statements View with dataset: " + getDatamodel() + " and instance URI: " + data.toString());
+				log.info("Refreshing Subject Statements View with datamodel: " + getDatamodel() + " and instance URI: " + data.toString());
 				ssView.refreshView();
 //				ssView.setFocus();
 				
