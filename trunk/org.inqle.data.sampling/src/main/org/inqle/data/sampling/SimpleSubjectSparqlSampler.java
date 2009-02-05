@@ -48,13 +48,9 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 //	public static final String MAXIMUM_ROWS_DATATABLE = "1000";
 	
 	//TODO permit these to be configurable
-	public static final int DEFAULT_MAXIMUM_LEARNABLE_PREDICATES = 3;
-	public static final int DEFAULT_MINIMUM_LEARNABLE_PREDICATES = 2;
+
 	public static final int MAX_NUMBER_OF_ROWS = 1000;
 	public static final int MAX_PROPERTY_ARC_DEPTH = 2;
-	
-	private int maxLearnablePredicates = DEFAULT_MAXIMUM_LEARNABLE_PREDICATES;
-	private int minLearnablePredicates = DEFAULT_MINIMUM_LEARNABLE_PREDICATES;
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSampler.class);
 
@@ -130,25 +126,5 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 		return builder.generateSparqlConstruct(subjectClass, true, 0, MAX_NUMBER_OF_ROWS);
 	}
 
-	@Override
-	public int selectNumberOfAttributes() {
-		return RandomUtil.getRandomInt(minLearnablePredicates + 1, maxLearnablePredicates + 1);
-	}
-
-	public int getMaxLearnablePredicates() {
-		return maxLearnablePredicates;
-	}
-
-	public void setMaxLearnablePredicates(int maxLearnablePredicates) {
-		this.maxLearnablePredicates = maxLearnablePredicates;
-	}
-
-	public int getMinLearnablePredicates() {
-		return minLearnablePredicates;
-	}
-
-	public void setMinLearnablePredicates(int minLearnablePredicates) {
-		this.minLearnablePredicates = minLearnablePredicates;
-	}
-
+	
 }
