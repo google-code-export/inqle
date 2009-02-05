@@ -105,6 +105,7 @@ public class ModelPart extends Part {
 			actions.add(emptyDatasetAction);
 			
 			//Delete action
+			//TODO add this functionality back some day (removed due to difficulty doing this in TDB)
 //			DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this datamodel", this, workbenchWindow);
 //			actions.add(deleteDatasetAction);
 		}

@@ -53,7 +53,6 @@ public class AppInfoWizard extends Wizard {
 	private static final String FIRSTDATA_DATAMODEL_ID = "data1";
 	
 	private AppInfo appInfo = new AppInfo();
-	private Shell shell;
 //	private IDatabase metarepositoryConnection;
 //	private SystemDatamodel metarepositoryDataset;
 //	
@@ -78,7 +77,7 @@ public class AppInfoWizard extends Wizard {
 	
 	
 	public AppInfoWizard(Shell parentShell) {
-		this.shell = parentShell;
+//		this.shell = parentShell;
 	}
 	
 	private static Logger log = Logger.getLogger(AppInfoWizard.class);
