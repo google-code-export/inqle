@@ -44,12 +44,12 @@ public class EmptyModelAction extends Action {
 		if (this.modelPart instanceof IPartType) {
 			IPartType thisPartType = (IPartType)modelPart;
 //			if (thisPartType.hasChildren()) {
-//				MessageDialog.openInformation(window.getShell(), "Unable to delete", "Please remove all child objects before deleting this dataset");
+//				MessageDialog.openInformation(window.getShell(), "Unable to delete", "Please remove all child objects before deleting this datamodel");
 //				return;
 //			}
 		}
 		if (namedModelToEmpty != null) {
-			deleteObject = MessageDialog.openConfirm(window.getShell(), "Clear this database", "Are you sure you want to delete all data in this dataset\n'" + modelPart.getName() + "'?\nTHIS CANNOT BE UNDONE!");
+			deleteObject = MessageDialog.openConfirm(window.getShell(), "Clear this database", "Are you sure you want to delete all data in this datamodel\n'" + modelPart.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (deleteObject) {
 			Persister persister = Persister.getInstance();

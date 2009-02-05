@@ -54,7 +54,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 		java.util.List<String> allOptions = new ArrayList<String>();
 		allOptions.add("");
 		//create a list of lower case version of the options
-		java.util.List lcOptions = new ArrayList<String>();
+		java.util.List<String> lcOptions = new ArrayList<String>();
 		
 		if (options != null) {
 			allOptions.addAll(Arrays.asList(options));

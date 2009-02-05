@@ -176,7 +176,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 				0);
 		Document dataAndSubjectPropertiesDocument = XmlDocumentUtil.getDocument(dataAndSubjectPropertiesXml);
 		log.trace("dataAndSubjectPropertiesXml=" + dataAndSubjectPropertiesXml);
-		String otherSubjectPropertiesXml = PropertyLookup.lookupPropertiesInSchemaDatasets(
+		String otherSubjectPropertiesXml = PropertyLookup.lookupPropertiesInSchemaDatamodels(
 				subjectClassUri, 
 				100, 
 				0);
