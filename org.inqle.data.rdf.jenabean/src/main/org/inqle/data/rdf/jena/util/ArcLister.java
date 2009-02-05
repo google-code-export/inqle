@@ -12,12 +12,10 @@ import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jena.RdfTableWriter;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcStep;
 import org.inqle.data.rdf.jenabean.Finder;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.SubjectArcsCache;
 
@@ -27,7 +25,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 /**
  * Retrieves collections of Arcs.  When possible, retrieves from the cache.
  * Cache objects are of class SubjectArcsClass.  A distinct cache object is
- * stored, per dataset, per subject class, per depth, per type.
+ * stored, per datamodel, per subject class, per depth, per type.
  * 
  * At present, we will only support caching of filtered valued arcs.
  * iltered valued arcs are arcs, excluding those that
@@ -42,8 +40,8 @@ public class ArcLister {
 	
 	/**
 	 * Get a random collection of filtered valued Arcs for the provided 
-	 * of dataset & subject class & depth.
-	 * @param datasetId
+	 * of datamodel & subject class & depth.
+	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @param depth
 	 * @param size - the size of the collection to return
@@ -51,8 +49,8 @@ public class ArcLister {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<Arc> getRandomFilteredValuedArcs(String datasetId, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
-		Collection<Arc> availableArcs = getFilteredValuedArcs(datasetId, subjectClassUri, depth);
+	public static Collection<Arc> getRandomFilteredValuedArcs(String datamodelId, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
+		Collection<Arc> availableArcs = getFilteredValuedArcs(datamodelId, subjectClassUri, depth);
 		if (availableArcs == null) return null;
 		
 		Collection<Arc> randomArcs = (Collection<Arc>)RandomListChooser.chooseRandomItemsAdditively(availableArcs, arcsToExclude, size);
@@ -61,8 +59,8 @@ public class ArcLister {
 	
 	/**
 	 * Get a random collection of filtered valued Arcs for the provided 
-	 * collection of datasets & subject class & depth.
-	 * @param datasetId
+	 * collection of datamodels & subject class & depth.
+	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @param depth
 	 * @param size - the size of the collection to return
@@ -70,8 +68,8 @@ public class ArcLister {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<Arc> getRandomFilteredValuedArcs(Collection<String> datasetIds, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
-		Collection<Arc> availableArcs = getFilteredValuedArcs(datasetIds, subjectClassUri, depth);
+	public static Collection<Arc> getRandomFilteredValuedArcs(Collection<String> datamodelIds, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
+		Collection<Arc> availableArcs = getFilteredValuedArcs(datamodelIds, subjectClassUri, depth);
 		if (availableArcs == null) return null;
 		
 		Collection<Arc> randomArcs = (Collection<Arc>)RandomListChooser.chooseRandomItemsAdditively(availableArcs, arcsToExclude, size);
@@ -79,39 +77,39 @@ public class ArcLister {
 	}
 	
 	/**
-	 * Get the collection of filtered valued Arcs for the provided dataset 
+	 * Get the collection of filtered valued Arcs for the provided datamodel 
 	 * & subject class & depth. Filtered valued arcs are arcs, excluding those that
 	 * use common predicates like rdf:type, and ending with a literal value.
 	 * First try to retrieve from cache.  If not present, query the result and cache it
-	 * @param datasetId
+	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @return
 	 */
-	public static Collection<Arc> getFilteredValuedArcs(String datasetId, String subjectClassUri, int depth) {
-		Collection<Arc> arcs = getArcsFromCache(datasetId, subjectClassUri, depth, FILTERED_VALUED_ARCS);
+	public static Collection<Arc> getFilteredValuedArcs(String datamodelId, String subjectClassUri, int depth) {
+		Collection<Arc> arcs = getArcsFromCache(datamodelId, subjectClassUri, depth, FILTERED_VALUED_ARCS);
 		if (arcs != null) return arcs;
 		
 		//not in cache: query then cache it
-		arcs = queryGetFilteredValuedArcs(datasetId, subjectClassUri, depth);
-		cacheArcs(datasetId, subjectClassUri, depth, FILTERED_VALUED_ARCS, arcs);
+		arcs = queryGetFilteredValuedArcs(datamodelId, subjectClassUri, depth);
+		cacheArcs(datamodelId, subjectClassUri, depth, FILTERED_VALUED_ARCS, arcs);
 //		log.info("Retrieved arcs from cache:" + arcs);
 		return arcs;
 	}
 	
 	/**
 	 * Get the collection of filtered valued Arcs for the provided collection
-	 * of datasets & subject class & depth. 
+	 * of datamodels & subject class & depth. 
 	 * Filtered valued arcs are arcs, excluding those that
 	 * use common predicates like rdf:type, and ending with a literal value.
 	 * First try to retrieve from cache.  If not present, query the result and cache it
-	 * @param datasetId
+	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @return
 	 */
-	public static Collection<Arc> getFilteredValuedArcs(Collection<String> datasetIds, String subjectClassUri, int depth) {
+	public static Collection<Arc> getFilteredValuedArcs(Collection<String> datamodelIds, String subjectClassUri, int depth) {
 		Collection<Arc> masterCollection = new ArrayList<Arc>();
-		for (String datasetId: datasetIds) {
-			masterCollection.addAll(getFilteredValuedArcs(datasetId, subjectClassUri, depth));
+		for (String datamodelId: datamodelIds) {
+			masterCollection.addAll(getFilteredValuedArcs(datamodelId, subjectClassUri, depth));
 		}
 		return masterCollection;
 	}
@@ -272,26 +270,26 @@ public class ArcLister {
 	
 	/**
 	 * Get a list of all arcs matching the list of collections
-	 * @param datasetIdList
+	 * @param datamodelIdList
 	 * @param subjectClassUri
 	 * @param depth
 	 * @return
 	 */
-	public static List<Arc> queryGetAllArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
+	public static List<Arc> queryGetAllArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectArcs(subjectClassUri, depth);
 		//log.info("Retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datamodelIdList);
 		queryCriteria.setQuery(sparql);
 		
 		return queryGetArcs(queryCriteria);
 	}
 	
-	public static List<Arc> queryGetFilteredArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
+	public static List<Arc> queryGetFilteredArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectFilteredArcs(subjectClassUri, depth);
 		log.info("queryGetFilteredArcs(): retrieving Arcs using this query: " + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datamodelIdList);
 		queryCriteria.setQuery(sparql);
 		
 		return queryGetArcs(queryCriteria);
@@ -299,15 +297,15 @@ public class ArcLister {
 	
 	/**
 	 * Generate a list of arcs, which terminate with a Literal value
-	 * @param datasetIdList a list of dataset IDs to query
+	 * @param datamodelIdList a list of datamodel IDs to query
 	 * @param subjectClassUri the URI of the subject class, from which to walk
 	 * @param depth max number of steps to take from the subject
 	 * @return a list of selected arcs, terminating with a literal value
 	 */
-	public static List<Arc> queryGetValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth) {
+	public static List<Arc> queryGetValuedArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectValuedArcs(subjectClassUri, depth);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datamodelIdList);
 		log.info("queryGetValuedArcs() using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
@@ -316,16 +314,16 @@ public class ArcLister {
 	
 	/**
 	 * Generate a list of all filtered arcs, which terminate with a Literal value
-	 * @param datasetIdList a list of dataset IDs to query
+	 * @param datamodelIdList a list of datamodel IDs to query
 	 * @param subjectClassUri the URI of the subject class, from which to walk
 	 * @param depth max number of steps to take from the subject
 	 * @param numberToSelect number of Arcs to select
 	 * @return a list of selected arcs, terminating with a literal value
 	 */
-	public static List<Arc> queryGetFilteredValuedArcs(String datasetId, String subjectClassUri, int depth) {
+	public static List<Arc> queryGetFilteredValuedArcs(String datamodelId, String subjectClassUri, int depth) {
 		String sparql = getSparqlSelectFilteredValuedArcs(subjectClassUri, depth);
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(datasetId);
+		queryCriteria.addDatamodel(datamodelId);
 		log.info("queryGetFilteredValuedArcs() using SPARQL:" + sparql);
 		queryCriteria.setQuery(sparql);
 		
@@ -371,13 +369,13 @@ public class ArcLister {
 
 	/**
 	 * Store the collection of Arcs in the appropriate cache
-	 * @param datasetId
+	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @param arcs
 	 */
-	public static void cacheArcs(String datasetId, String subjectClassUri, int depth, String type, Collection<Arc> arcs) {
+	public static void cacheArcs(String datamodelId, String subjectClassUri, int depth, String type, Collection<Arc> arcs) {
 		//first retrieve the appropriate arc
-		String arcCacheId = getArcCacheId(datasetId, subjectClassUri, depth, type);
+		String arcCacheId = getArcCacheId(datamodelId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
 		SubjectArcsCache arcsCache = null;
 		try {
@@ -388,18 +386,18 @@ public class ArcLister {
 		if (arcsCache == null) {
 			arcsCache = new SubjectArcsCache();
 			arcsCache.setId(arcCacheId);
-			arcsCache.setDatasetId(datasetId);
+			arcsCache.setDatamodelId(datamodelId);
 			arcsCache.setSubjectClass(URI.create(subjectClassUri));
 			arcsCache.setDepth(depth);
 			arcsCache.setType(FILTERED_VALUED_ARCS);
 		}
 		arcsCache.setArcs(arcs);
-		log.info("Caching list of " + arcs.size() + " arcs for datasetId=" + datasetId + "; subjectClassUri=" + subjectClassUri + ".");
+		log.info("Caching list of " + arcs.size() + " arcs for datamodelId=" + datamodelId + "; subjectClassUri=" + subjectClassUri + ".");
 		persister.persist(arcsCache);
 	}
 
-	public static Collection<Arc> getArcsFromCache(String datasetId, String subjectClassUri, int depth, String type) {
-		String arcCacheId = getArcCacheId(datasetId, subjectClassUri, depth, type);
+	public static Collection<Arc> getArcsFromCache(String datamodelId, String subjectClassUri, int depth, String type) {
+		String arcCacheId = getArcCacheId(datamodelId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
 		SubjectArcsCache arcsCache = (SubjectArcsCache)persister.reconstitute(SubjectArcsCache.class, arcCacheId, true);
 		if (arcsCache == null) return null;
@@ -409,29 +407,29 @@ public class ArcLister {
 	}
 	
 	/**
-	 * Generate the ID of the SubjectArcsCache object, given the ID of the dataset and
+	 * Generate the ID of the SubjectArcsCache object, given the ID of the datamodel and
 	 * the URI of the subject class
-	 * @param datasetId
+	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @param type 
 	 * @param depth 
 	 * @return
 	 */
-	public static String getArcCacheId(String datasetId, String subjectClassUri, int depth, String type) {
-		String cacheId = "ArcCacheId_" + datasetId + "_" + subjectClassUri + "_" + depth + "_" + type;
-//		log.info("getArcCacheId(" + datasetId + ")=" + cacheId);
+	public static String getArcCacheId(String datamodelId, String subjectClassUri, int depth, String type) {
+		String cacheId = "ArcCacheId_" + datamodelId + "_" + subjectClassUri + "_" + depth + "_" + type;
+//		log.info("getArcCacheId(" + datamodelId + ")=" + cacheId);
 		return cacheId;
 	}
 	
 	/**
-	 * Remove all SubjectArcCache objects, which have the provided datasetId
-	 * @param datasetId
+	 * Remove all SubjectArcCache objects, which have the provided datamodelId
+	 * @param datamodelId
 	 */
 	@SuppressWarnings("unchecked")
-	public static void invalidateCache(String datasetId) {
+	public static void invalidateCache(String datamodelId) {
 		Persister persister = Persister.getInstance();
 		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectArcsCache.class);
-		Collection<SubjectArcsCache> arcCacheObjectsToRemove = (Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(targetDatamodel, SubjectArcsCache.class, RDF.INQLE + "datasetId", datasetId);
+		Collection<SubjectArcsCache> arcCacheObjectsToRemove = (Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(targetDatamodel, SubjectArcsCache.class, RDF.INQLE + "datamodelId", datamodelId);
 		for (SubjectArcsCache arcCacheObject: arcCacheObjectsToRemove) {
 			persister.remove(arcCacheObject);
 		}
@@ -440,16 +438,16 @@ public class ArcLister {
 
 ///**
 //* Generate a list of randomly selected arcs, which terminate with a Literal value
-//* @param datasetIdList a list of dataset IDs to query
+//* @param datamodelIdList a list of datamodel IDs to query
 //* @param subjectClassUri the URI of the subject class, from which to walk
 //* @param depth max number of steps to take from the subject
 //* @param numberToSelect number of Arcs to select
 //* @return a list of selected arcs, terminating with a literal value
 //*/
-//public static List<Arc> listFilteredRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//public static List<Arc> listFilteredRandomValuedArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
 //String baseSparql = getSparqlSelectFilteredValuedArcs(subjectClassUri, depth);
 //QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datasetIdList);
+//queryCriteria.addNamedModelIds(datamodelIdList);
 //String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
 //log.info("listFilteredRandomValuedArcs() using SPARQL:" + sparql);
 //queryCriteria.setQuery(sparql);
@@ -461,16 +459,16 @@ public class ArcLister {
 
 ///**
 //* Generate a list of randomly selected arcs
-//* @param datasetIdList a list of dataset IDs to query
+//* @param datamodelIdList a list of datamodel IDs to query
 //* @param subjectClassUri the URI of the subject class, from which to walk
 //* @param depth max number of steps to take from the subject
 //* @param numberToSelect number of Arcs to select
 //* @return a list of selected arcs
 //*/
-//public static List<Arc> listFilteredRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//public static List<Arc> listFilteredRandomArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
 //String baseSparql = getSparqlSelectFilteredArcs(subjectClassUri, depth);
 //QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datasetIdList);
+//queryCriteria.addNamedModelIds(datamodelIdList);
 //String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
 //log.info("listFilteredRandomArcs() using SPARQL:" + sparql);
 //queryCriteria.setQuery(sparql);
@@ -480,16 +478,16 @@ public class ArcLister {
 
 ///**
 //* Generate a list of randomly selected arcs, which terminate with a Literal value
-//* @param datasetIdList a list of dataset IDs to query
+//* @param datamodelIdList a list of datamodel IDs to query
 //* @param subjectClassUri the URI of the subject class, from which to walk
 //* @param depth max number of steps to take from the subject
 //* @param numberToSelect number of Arcs to select
 //* @return a list of selected arcs, terminating with a literal value
 //*/
-//public static List<Arc> listRandomValuedArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//public static List<Arc> listRandomValuedArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
 //String baseSparql = getSparqlSelectValuedArcs(subjectClassUri, depth);
 //QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datasetIdList);
+//queryCriteria.addNamedModelIds(datamodelIdList);
 //String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
 //log.info("listRandomValuedArcs() using SPARQL:" + sparql);
 //queryCriteria.setQuery(sparql);
@@ -500,16 +498,16 @@ public class ArcLister {
 
 ///**
 //* Generate a list of randomly selected arcs
-//* @param datasetIdList a list of dataset IDs to query
+//* @param datamodelIdList a list of datamodel IDs to query
 //* @param subjectClassUri the URI of the subject class, from which to walk
 //* @param depth max number of steps to take from the subject
 //* @param numberToSelect number of Arcs to select
 //* @return a list of selected arcs
 //*/
-//public static List<Arc> listRandomArcs(Collection<String> datasetIdList, String subjectClassUri, int depth, int numberToSelect) {
+//public static List<Arc> listRandomArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
 //String baseSparql = getSparqlSelectArcs(subjectClassUri, depth);
 //QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datasetIdList);
+//queryCriteria.addNamedModelIds(datamodelIdList);
 //String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
 ////log.info("Finding random Arcs using SPARQL:" + sparql);
 //queryCriteria.setQuery(sparql);

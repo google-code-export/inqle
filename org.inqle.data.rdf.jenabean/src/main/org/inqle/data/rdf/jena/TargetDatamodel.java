@@ -8,7 +8,7 @@ import java.lang.annotation.ElementType;
 
 /**
  * Annotation for any classes which are intended to be persisted in an SystemDatamodel.
- * The value should be the role ID of the dataset, to which objects of this class should
+ * The value should be the role ID of the datamodel, to which objects of this class should
  * be persisted.
  * 
  * @author David Donohue

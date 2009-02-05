@@ -23,7 +23,6 @@ import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.query.larq.LARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.sdb.SDB;
 
 /**
  * This class is capable of querying 1 or more models.  

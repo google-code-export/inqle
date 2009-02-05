@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class UserDatamodel extends DatabaseBackedDatamodel {
 
-	private Collection<String> datasetFunctions = new ArrayList<String>();
+	private Collection<String> datamodelFunctions = new ArrayList<String>();
 	
 	public UserDatamodel createClone() {
 		UserDatamodel newObj = new UserDatamodel();
@@ -33,22 +33,22 @@ public class UserDatamodel extends DatabaseBackedDatamodel {
 		return newObj;
 	}
 
-	public Collection<String> getDatasetFunctions() {
-		return datasetFunctions;
+	public Collection<String> getDatamodelFunctions() {
+		return datamodelFunctions;
 	}
 
-	public void setDatasetFunctions(Collection<String> datasetFunctions) {
-		this.datasetFunctions = datasetFunctions;
+	public void setDatamodelFunctions(Collection<String> datamodelFunctions) {
+		this.datamodelFunctions = datamodelFunctions;
 	}
 	
-	public void addDatasetFunction(String datasetFunction) {
-		datasetFunctions.add(datasetFunction);
+	public void addDatasetFunction(String datamodelFunction) {
+		datamodelFunctions.add(datamodelFunction);
 	}
 	
 	public void clone(UserDatamodel objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		//setConnection(objectToBeCloned.getConnection());
-		setDatasetFunctions(objectToBeCloned.getDatasetFunctions());
+		setDatamodelFunctions(objectToBeCloned.getDatamodelFunctions());
 	}
 	
 	public void replicate(UserDatamodel objectToClone) {

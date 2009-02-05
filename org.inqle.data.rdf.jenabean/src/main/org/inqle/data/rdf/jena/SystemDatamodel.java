@@ -16,15 +16,6 @@ import thewebsemantic.Namespace;
 @TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class SystemDatamodel extends DatabaseBackedDatamodel {
-
-//	private String datasetRole;
-
-//	public String getDatasetRole() {
-//		return datasetRole;
-//	}
-//	public void setDatasetRole(String datasetRole) {
-//		this.datasetRole = datasetRole;
-//	}
 	
 	public void clone(SystemDatamodel objectToBeCloned) {
 		super.clone(objectToBeCloned);

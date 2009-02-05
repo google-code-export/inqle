@@ -6,7 +6,7 @@
          <meta.schema plugin="org.inqle.data" id="databases" name="Database Connection Roles"/>
       </appInfo>
       <documentation>
-         This specifies a database role, for containing datasets, which store internal INQLE data
+         This specifies a database role, for containing datamodels, which store internal INQLE data
       </documentation>
    </annotation>
 
@@ -68,8 +68,8 @@
          <attribute name="cacheInMemory" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
-                  if true, the data in this dataset will be cached in memory.
-                  Set to true for smaller dataset with frequent need for lookups
+                  if true, the data in this datamodel will be cached in memory.
+                  Set to true for smaller datamodel with frequent need for lookups
                   Default = false
                </documentation>
             </annotation>

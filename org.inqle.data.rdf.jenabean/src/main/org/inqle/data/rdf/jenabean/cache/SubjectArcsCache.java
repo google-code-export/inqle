@@ -15,7 +15,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class SubjectArcsCache extends BasicJenabean {
 
-	private String datasetId;
+	private String datamodelId;
 	private URI subjectClass;
 	private Collection<Arc> arcs;
 	private int depth;
@@ -25,7 +25,7 @@ public class SubjectArcsCache extends BasicJenabean {
 		String s = getClass().toString() + " {\n";
 		s += "[type=" + type + "]\n";
 		s += "[depth=" + depth + "]\n";
-		s += "[datasetId=" + datasetId + "]\n";
+		s += "[datamodelId=" + datamodelId + "]\n";
 		s += "[subjectClass=" + subjectClass.toString() + "]\n";
 		s += "[arcs=" + arcs.toString() + "]\n";
 		s += "}";
@@ -34,7 +34,7 @@ public class SubjectArcsCache extends BasicJenabean {
 	
 	public void clone(SubjectArcsCache objectToBeCloned) {
 		setSubjectClass(objectToBeCloned.getSubjectClass());
-		setDatasetId(objectToBeCloned.getDatasetId());
+		setDatamodelId(objectToBeCloned.getDatamodelId());
 		setArcs(objectToBeCloned.getArcs());
 		setType(objectToBeCloned.getType());
 		setDepth(objectToBeCloned.getDepth());
@@ -53,12 +53,12 @@ public class SubjectArcsCache extends BasicJenabean {
 		return subjectClass;
 	}
 
-	public void setDatasetId(String datasetId) {
-		this.datasetId = datasetId;
+	public void setDatamodelId(String datamodelId) {
+		this.datamodelId = datamodelId;
 	}
 
-	public String getDatasetId() {
-		return datasetId;
+	public String getDatamodelId() {
+		return datamodelId;
 	}
 
 	public SubjectArcsCache createClone() {

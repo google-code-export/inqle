@@ -40,7 +40,7 @@ public class UriMapper {
 		//add namespaces stored in the prefixes directory, including UMBEL and some related schemas
 		addMappings(persister.getPrefixesModel());
 		
-		//add any NamespaceMapping objects stored in the corresponding internal dataset
+		//add any NamespaceMapping objects stored in the corresponding system datamodel
 		Collection<?> namespaces = persister.reconstituteAll(NamespaceMapping.class);
 		for (Object namespaceObj: namespaces) {
 			NamespaceMapping namespaceMapping = (NamespaceMapping) namespaceObj;
