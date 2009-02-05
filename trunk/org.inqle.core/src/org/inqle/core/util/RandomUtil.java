@@ -12,7 +12,7 @@ public class RandomUtil {
 	 * @param max the maximum random number
 	 * @return returnset the Set of random numbers
 	 */
-	public static Set getRandomNumberSet(int count, int max) {
+	public static Set<Integer> getRandomNumberSet(int count, int max) {
 		TreeSet<Integer> returnset = new TreeSet<Integer>();
 		if (count > max) return returnset;
 		
@@ -33,7 +33,7 @@ public class RandomUtil {
 	 * @param end
 	 * @return
 	 */
-	public static int getRandomInt(int start, int end) {
+	public int getRandomInt(int start, int end) {
 		int span = end-start;
 		Random r = new Random();
 		int randint = r.nextInt(span + 1);
