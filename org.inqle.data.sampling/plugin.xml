@@ -13,13 +13,13 @@
 			</part-type>
    </extension>
    <extension
-         point="org.inqle.data.datasets">
-      <dataset
-           id="org.inqle.datasets.samplers"
+         point="org.inqle.data.datamodels">
+      <datamodel
+           id="org.inqle.datamodels.samplers"
            weight="5000"
            description="contains samplers.">
 					 cacheInMemory="false"
-			</dataset>
+			</datamodel>
 	</extension>
   <extension
          point="org.inqle.data.sampling.rap.ISamplerFactory">
@@ -27,7 +27,7 @@
       		 class="org.inqle.data.sampling.rap.SimpleSubjectSparqlSamplerFactory"
            weight="1000"
            name="SimpleSubjectSparqlSampler"
-           description="From 1 or more datasets, this Sampler selects a subject class, then 2-3 Arcs as columns/attributes.  It then attempts to assemble the corresponding data into an ArcTable.">
+           description="From 1 or more datamodels, this Sampler selects a subject class, then 2-3 Arcs as columns/attributes.  It then attempts to assemble the corresponding data into an ArcTable.">
       </sampler-factory>
    </extension>
 

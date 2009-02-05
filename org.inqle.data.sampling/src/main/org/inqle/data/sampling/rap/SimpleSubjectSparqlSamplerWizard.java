@@ -55,7 +55,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
 		addPage(nameDescriptionPage);
 		
-		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedDatamodels", String.class, "Select dataset(s) for sampling", null);
+		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedDatamodels", String.class, "Select datamodel(s) for sampling", null);
 		Persister persister = Persister.getInstance();
 		selectedModelsPage.setBeans(persister.listDatamodels(InqleInfo.USER_DATABASE_ROOT));
 		selectedModelsPage.setTableBeanClass(Datamodel.class);
@@ -126,9 +126,9 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		//sampler.removeInterimData();
 		
 		//first work around a jena or Jenabean bug, and store all _1, _2, _3 properties for the sequences.
-//		String datasetRoleId = Persister.getDatasetRoleId(getBean());
+//		String datamodelRoleId = Persister.getDatasetRoleId(getBean());
 //		Persister persister = Persister.getInstance();
-//		Model model = persister.getInternalModel(datasetRoleId);
+//		Model model = persister.getInternalModel(datamodelRoleId);
 //		long statementCount = model.size();
 //		model.begin();
 //		model.add(RDF.li(1), RDF.type, RDF.Property);
@@ -148,7 +148,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (bean == null) return null;
 		if (page.equals(subjectClassSelectorPage)) {
 			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedDatamodels();
-			log.info("GGGGGGGGGGGGGGGGGGG Get subjects for datasets: " + selectedModelsCollection );
+			log.info("GGGGGGGGGGGGGGGGGGG Get subjects for datamodels: " + selectedModelsCollection );
 			return SubjectClassLister.getUncommonSubjectClasses(selectedModelsCollection);
 		}
 		
