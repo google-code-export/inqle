@@ -355,7 +355,7 @@ public class PropertyLookup {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addDatamodel(persister.getSystemDatamodel(Data.DATA_PROPERTY_DATASET_ROLE_ID));
-//		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindDataAndSubjectProperties(subjectClassUri, countSearchResults, offset);
@@ -375,18 +375,18 @@ public class PropertyLookup {
 	 * @param offset generally = 0
 	 * @return
 	 */
-	public static String lookupPropertiesInSchemaDatasets(String subjectClassUri, int countSearchResults, int offset) {
+	public static String lookupPropertiesInSchemaDatamodels(String subjectClassUri, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
 		
-//		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);
-		log.info("lookupPropertiesInSchemaDatasets(): Querying w/ this sparql:\n" + sparql);
+		log.info("lookupPropertiesInSchemaDatamodels(): Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
 		String resultXml = Queryer.selectXml(queryCriteria);
-		log.info("lookupPropertiesInSchemaDatasets(): got these properties:\n" + resultXml);
+		log.info("lookupPropertiesInSchemaDatamodels(): got these properties:\n" + resultXml);
 		return resultXml;
 	}
 	
@@ -398,11 +398,11 @@ public class PropertyLookup {
 	 * @param offset generally = 0
 	 * @return
 	 */
-	public static String lookupPropertiesInPreferredOntologyDatasets(String subjectClassUri, int countSearchResults, int offset) {
+	public static String lookupPropertiesInPreferredOntologyDatamodels(String subjectClassUri, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS, null);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS, null);
 		
-//		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+//		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 //		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 		String sparql = getSparqlFindPropertiesFromPreferredOntology(subjectClassUri, countSearchResults, offset);
@@ -430,7 +430,7 @@ public class PropertyLookup {
 //		log.info("querying model w/ " + theModel.size() + " statements.");
 //		queryCriteria.setSingleModel(theModel);
 //		
-////		queryCriteria.addDatamodel(persister.getInternalDataset(DataMapping.MAPPING_DATASET_ROLE_ID));
+////		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 ////		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 ////		String sparql = getSparqlFindAllMappedProperties(subjectClassUri, countSearchResults, offset);
 //		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);
