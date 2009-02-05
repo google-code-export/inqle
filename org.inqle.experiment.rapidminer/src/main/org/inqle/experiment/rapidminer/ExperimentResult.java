@@ -16,6 +16,7 @@ import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
+import com.rapidminer.operator.performance.PerformanceCriterion;
 import com.rapidminer.operator.performance.PerformanceVector;
 
 /**
@@ -109,22 +110,38 @@ public class ExperimentResult extends UniqueJenabean {
 	public void setPerformanceVector(PerformanceVector performanceVector) {
 		//this.performanceVector = performanceVector;
 		//set key fields
-		this.correlation = performanceVector.getCriterion("correlation").getAverage();
-		this.root_mean_squared_error = performanceVector.getCriterion("root_mean_squared_error").getAverage();
-		this.setSpearman_rho(performanceVector.getCriterion("spearman_rho").getAverage());
-		this.setKendall_tau(performanceVector.getCriterion("kendall_tau").getAverage());
-		this.setAbsolute_error(performanceVector.getCriterion("absolute_error").getAverage());
-		this.setRelative_error(performanceVector.getCriterion("relative_error").getAverage());
-		this.setRelative_error_lenient(performanceVector.getCriterion("relative_error_lenient").getAverage());
-		this.setRelative_error_strict(performanceVector.getCriterion("relative_error_strict").getAverage());
-		this.setNormalized_absolute_error(performanceVector.getCriterion("normalized_absolute_error").getAverage());
-		this.setRoot_relative_squared_error(performanceVector.getCriterion("root_relative_squared_error").getAverage());
-		this.setSquared_error(performanceVector.getCriterion("squared_error").getAverage());
-		this.setSquared_correlation(performanceVector.getCriterion("squared_correlation").getAverage());
-		this.setCross_entropy(performanceVector.getCriterion("cross-entropy").getAverage());
-		this.setMargin(performanceVector.getCriterion("margin").getAverage());
-		this.setSoft_margin_loss(performanceVector.getCriterion("soft_margin_loss").getAverage());
-		this.setLogistic_loss(performanceVector.getCriterion("logistic_loss").getAverage());
+		PerformanceCriterion criterion = performanceVector.getCriterion("correlation");
+		if (criterion != null) this.correlation = criterion.getAverage();
+		criterion = performanceVector.getCriterion("root_mean_squared_error");
+		if (criterion != null) this.root_mean_squared_error = criterion.getAverage();
+		criterion = performanceVector.getCriterion("spearman_rho");
+		if (criterion != null) this.setSpearman_rho(criterion.getAverage());
+		criterion = performanceVector.getCriterion("kendall_tau");
+		if (criterion != null) this.setKendall_tau(criterion.getAverage());
+		criterion = performanceVector.getCriterion("absolute_error");
+		if (criterion != null) this.setAbsolute_error(criterion.getAverage());
+		criterion = performanceVector.getCriterion("relative_error");
+		if (criterion != null) this.setRelative_error(criterion.getAverage());
+		criterion = performanceVector.getCriterion("relative_error_lenient");
+		if (criterion != null) this.setRelative_error_lenient(criterion.getAverage());
+		criterion = performanceVector.getCriterion("relative_error_strict");
+		if (criterion != null) this.setRelative_error_strict(criterion.getAverage());
+		criterion = performanceVector.getCriterion("normalized_absolute_error");
+		if (criterion != null) this.setNormalized_absolute_error(criterion.getAverage());
+		criterion = performanceVector.getCriterion("root_relative_squared_error");
+		if (criterion != null) this.setRoot_relative_squared_error(criterion.getAverage());
+		criterion = performanceVector.getCriterion("squared_error");
+		if (criterion != null) this.setSquared_error(criterion.getAverage());
+		criterion = performanceVector.getCriterion("squared_correlation");
+		if (criterion != null) this.setSquared_correlation(criterion.getAverage());
+		criterion = performanceVector.getCriterion("cross-entropy");
+		if (criterion != null) this.setCross_entropy(criterion.getAverage());
+		criterion = performanceVector.getCriterion("margin");
+		if (criterion != null) this.setMargin(criterion.getAverage());
+		criterion = performanceVector.getCriterion("soft_margin_loss");
+		if (criterion != null) this.setSoft_margin_loss(criterion.getAverage());
+		criterion = performanceVector.getCriterion("logistic_loss");
+		if (criterion != null) this.setLogistic_loss(criterion.getAverage());
 	}
 	
 	public void clone(ExperimentResult copyFieldsFrom) {
