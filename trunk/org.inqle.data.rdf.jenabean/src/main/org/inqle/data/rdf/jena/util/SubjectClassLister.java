@@ -27,13 +27,13 @@ public class SubjectClassLister {
 	 * randomly select a number of values.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
-	 * @param datasetId the dataset to query
+	 * @param datamodelId the datamodel to query
 	 * @param size the size of the collection to return
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<String> getRandomUncommonSubjectClasses(String datasetId, int size, Collection<String> subjectClassesToExclude) {
-		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datasetId);
+	public static Collection<String> getRandomUncommonSubjectClasses(String datamodelId, int size, Collection<String> subjectClassesToExclude) {
+		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datamodelId);
 		if (availableSubjectClasses == null) return null;
 		
 		Collection<String> randomSubjectClasses = (Collection<String>)RandomListChooser.chooseRandomItemsAdditively(availableSubjectClasses, subjectClassesToExclude, size);
@@ -45,13 +45,13 @@ public class SubjectClassLister {
 	 * randomly select a number of values.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
-	 * @param datasetId the dataset to query
+	 * @param datamodelId the datamodel to query
 	 * @param size the size of the collection to return
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<String> getRandomUncommonSubjectClasses(Collection<String> datasetIds, int size, Collection<String> subjectClassesToExclude) {
-		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datasetIds);
+	public static Collection<String> getRandomUncommonSubjectClasses(Collection<String> datamodelIds, int size, Collection<String> subjectClassesToExclude) {
+		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datamodelIds);
 		if (availableSubjectClasses == null) return null;
 		
 		Collection<String> randomSubjectClasses = (Collection<String>)RandomListChooser.chooseRandomItemsAdditively(availableSubjectClasses, subjectClassesToExclude, size);
@@ -62,17 +62,17 @@ public class SubjectClassLister {
 	 * Get a collection of the URIs of uncommon RDF subject classes.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
-	 * @param datasetId the dataset to query
+	 * @param datamodelId the datamodel to query
 	 * @return
 	 */
-	public static Collection<String> getUncommonSubjectClasses(String datasetId) {
-		Collection<String> subjectClasses = getSubjectClassesFromCache(datasetId);
+	public static Collection<String> getUncommonSubjectClasses(String datamodelId) {
+		Collection<String> subjectClasses = getSubjectClassesFromCache(datamodelId);
 		if (subjectClasses != null) return subjectClasses;
 		
 		//not in cache: query then cache it
-		subjectClasses = queryGetUncommonSubjectClasses(datasetId);
+		subjectClasses = queryGetUncommonSubjectClasses(datamodelId);
 		log.info("Queried, got subjectClasses=" + subjectClasses);
-		cacheSubjectClasses(datasetId, subjectClasses);
+		cacheSubjectClasses(datamodelId, subjectClasses);
 		return subjectClasses;
 	}
 	
@@ -80,13 +80,13 @@ public class SubjectClassLister {
 	 * Get a collection of the URIs of uncommon RDF subject classes.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
-	 * @param datasetIds the datasets to query
+	 * @param datamodelIds the datamodels to query
 	 * @return
 	 */
-	public static List<String> getUncommonSubjectClasses(Collection<String> datasetIds) {
+	public static List<String> getUncommonSubjectClasses(Collection<String> datamodelIds) {
 		List<String> masterCollection = new ArrayList<String>();
-		for (String datasetId: datasetIds) {
-			masterCollection.addAll(getUncommonSubjectClasses(datasetId));
+		for (String datamodelId: datamodelIds) {
+			masterCollection.addAll(getUncommonSubjectClasses(datamodelId));
 		}
 		return masterCollection;
 	}
@@ -118,40 +118,40 @@ public class SubjectClassLister {
 		return s;
 	}
 
-	public static List<String> queryGetAllSubjectClasses(Collection<String> datasetIdList) {
+	public static List<String> queryGetAllSubjectClasses(Collection<String> datamodelIdList) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datamodelIdList);
 		queryCriteria.setQuery(SPARQL_SELECT_CLASSES);
 		return Queryer.selectUriList(queryCriteria);
 	}
 	
-	public static ResultSetRewindable queryGetAllSubjectsRS(String datasetId) {
+	public static ResultSetRewindable queryGetAllSubjectsRS(String datamodelId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(datasetId);
+		queryCriteria.addDatamodel(datamodelId);
 		queryCriteria.setQuery(SPARQL_SELECT_CLASSES_TABLE);
 		return Queryer.selectResultSet(queryCriteria);
 	}
 	
-	public static ResultSetRewindable queryGetUncommonSubjectsRS(String datasetId) {
+	public static ResultSetRewindable queryGetUncommonSubjectsRS(String datamodelId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(datasetId);
+		queryCriteria.addDatamodel(datamodelId);
 		queryCriteria.setQuery(getSparqlSelectUncommonClassesTable());
 		return Queryer.selectResultSet(queryCriteria);
 	}
 
 
 	
-	public static List<String> queryGetUncommonSubjectClasses(String datasetId) {
+	public static List<String> queryGetUncommonSubjectClasses(String datamodelId) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(datasetId);
+		queryCriteria.addDatamodel(datamodelId);
 		queryCriteria.setQuery(getSparqlSelectUncommonClasses());
 		//log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
 		return Queryer.selectUriList(queryCriteria);
 	}
 	
-	public static List<String> queryGetUncommonSubjectClasses(Collection<String> datasetIdList) {
+	public static List<String> queryGetUncommonSubjectClasses(Collection<String> datamodelIdList) {
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodelIds(datasetIdList);
+		queryCriteria.addDatamodelIds(datamodelIdList);
 		queryCriteria.setQuery(getSparqlSelectUncommonClasses());
 		//log.info("queryGetUncommonSubjectClasses() querying with: " + getSparqlSelectUncommonClasses());
 		return Queryer.selectUriList(queryCriteria);
@@ -167,8 +167,8 @@ public class SubjectClassLister {
 		return s;
 	}
 	
-	private static Collection<String> getSubjectClassesFromCache(String datasetId) {
-		String cacheId = getSubjectClassCacheId(datasetId);
+	private static Collection<String> getSubjectClassesFromCache(String datamodelId) {
+		String cacheId = getSubjectClassCacheId(datamodelId);
 		log.info("Getting from cache ID: " + cacheId);
 		Persister persister = Persister.getInstance();
 		SubjectClassCache subjectClassCache = null;
@@ -192,15 +192,15 @@ public class SubjectClassLister {
 		return subjectClassUris;
 	}
 
-	private static String getSubjectClassCacheId(String datasetId) {
-//		String cacheId = JavaHasher.hashSha256(datasetId);
-		String cacheId = "SCCacheId_" + datasetId;
-//		log.info("getSubjectClassCacheId(" + datasetId + ")=" + cacheId);
+	private static String getSubjectClassCacheId(String datamodelId) {
+//		String cacheId = JavaHasher.hashSha256(datamodelId);
+		String cacheId = "SCCacheId_" + datamodelId;
+//		log.info("getSubjectClassCacheId(" + datamodelId + ")=" + cacheId);
 		return cacheId;
 	}
 	
-	private static void cacheSubjectClasses(String datasetId, Collection<String> subjectClasses) {
-		String cacheId = getSubjectClassCacheId(datasetId);
+	private static void cacheSubjectClasses(String datamodelId, Collection<String> subjectClasses) {
+		String cacheId = getSubjectClassCacheId(datamodelId);
 		Persister persister = Persister.getInstance();
 		SubjectClassCache subjectClassCache = null;
 		try {
@@ -211,7 +211,7 @@ public class SubjectClassLister {
 		if (subjectClassCache == null) {
 			subjectClassCache = new SubjectClassCache();
 			subjectClassCache.setId(cacheId);
-			subjectClassCache.setDatasetId(datasetId);
+			subjectClassCache.setDatasetId(datamodelId);
 		}
 		List<URI> subjectClassURIs = new ArrayList<URI>();
 		for (String subjectClass: subjectClasses) {
@@ -220,14 +220,14 @@ public class SubjectClassLister {
 			subjectClassURIs.add(subjectClassURI);
 		}
 		subjectClassCache.setSubjectClasses(subjectClassURIs);
-		//log.info("Caching list of " + subjectClasses.size() + " subject classes for: datasetId=" + datasetId +
+		//log.info("Caching list of " + subjectClasses.size() + " subject classes for: datamodelId=" + datamodelId +
 //				"\n" + JenabeanWriter.toString(subjectClassCache));
 		persister.persist(subjectClassCache);
 		
 	}
 	
 	/**
-	 * Remove all SubjectClassCache objects, which have the provided datasetId
+	 * Remove all SubjectClassCache objects, which have the provided datamodelId
 	 * @param datamodelId
 	 */
 	@SuppressWarnings("unchecked")
@@ -238,7 +238,7 @@ public class SubjectClassLister {
 			(Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(
 					targetDatamodel, 
 					SubjectClassCache.class, 
-					RDF.INQLE + "datasetId", 
+					RDF.INQLE + "datamodelId", 
 					datamodelId);
 		log.info("Retrieved these cache objects: " + subjectClassCacheObjectsToRemove);
 		for (SubjectClassCache cacheObject: subjectClassCacheObjectsToRemove) {

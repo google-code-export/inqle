@@ -33,7 +33,7 @@
            weight="3000"
            description="contains DataMapping and related objects, which map CSV values to RDF attributes"
 					 cacheInMemory="false"
-					 targetDatabase="org.inqle.data.databases.cache">
+					 > <!-- targetDatabase="org.inqle.data.databases.cache" -->
 			</datamodel>
 			
 			<datamodel
@@ -42,7 +42,7 @@
            description="contains subclasses of the OWL class inqle:DataSubject.  These subclasses can be any native OWL class.  They are used as subjects of data."
 					 cacheInMemory="true"
 					 textIndexType="subject"
-					 targetDatabase="org.inqle.data.databases.cache">
+					 > <!-- targetDatabase="org.inqle.data.databases.cache" -->
 			</datamodel>
 			
 			<datamodel
@@ -51,21 +51,22 @@
            description="contains RDF properties used for INQLE data, including their rdfs:label and rdfs:comment."
 					 cacheInMemory="true"
 					 textIndexType="subject"
-					 targetDatabase="org.inqle.data.databases.cache">
+					 >
+					 <!-- targetDatabase="org.inqle.data.databases.cache" -->
 			</datamodel>
 			
 			<datamodel
            id="org.inqle.datamodels.cache.subjectClass"
            weight="6000"
            description="contains objects which store info about which RDF subject classes are available, per datamodel."
-					 targetDatabase="org.inqle.data.databases.cache">
+					 > <!-- targetDatabase="org.inqle.data.databases.cache" -->
 			</datamodel>
 			
 			<datamodel
            id="org.inqle.datamodels.cache.arc"
            weight="7000"
            description="contains objects which store info about which RDF arcs are available, per datamodel per RDF subject class."
-					 targetDatabase="org.inqle.data.databases.cache">
+					 > <!-- targetDatabase="org.inqle.data.databases.cache" -->
 			</datamodel>
    </extension>
 

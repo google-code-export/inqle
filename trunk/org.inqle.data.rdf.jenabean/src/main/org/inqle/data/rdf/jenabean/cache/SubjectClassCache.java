@@ -14,12 +14,12 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class SubjectClassCache extends BasicJenabean {
 
-	private String datasetId;
+	private String datamodelId;
 	private Collection<URI> subjectClasses;
 
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
-		s += "[datasetId=" + datasetId + "]\n";
+		s += "[datamodelId=" + datamodelId + "]\n";
 		s += "[subjectClasses=" + subjectClasses.toString() + "]\n";
 		s += "}";
 		return s;
@@ -39,12 +39,12 @@ public class SubjectClassCache extends BasicJenabean {
 		return subjectClasses;
 	}
 
-	public void setDatasetId(String datasetId) {
-		this.datasetId = datasetId;
+	public void setDatasetId(String datamodelId) {
+		this.datamodelId = datamodelId;
 	}
 
 	public String getDatasetId() {
-		return datasetId;
+		return datamodelId;
 	}
 
 	public SubjectClassCache createClone() {
