@@ -5,14 +5,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionListener {
 
 	private static final String PAGE_TITLE = "Add a Caption or a Subject or Finish and Import";
 	private static final String PAGE_DESCRIPTION = null;
-	private static final String FINISH_WIZARD_TEXT = "Finished adding subjects.  Ready to finish wizard and import the data.";
-
+	private static final String FINISH_WIZARD_TEXT = "Finished Adding Subjects";
+	private static final String FINISH_WIZARD_DESCRIPTION = "Ready to finish wizard and import the data.";
+	
 	private static Logger log = Logger.getLogger(AddSubjectOrFinishPage.class);
 	
 	public AddSubjectOrFinishPage() {
@@ -30,7 +32,7 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 		finishWizardButton = new Button (selfComposite, SWT.PUSH);
 		finishWizardButton.setText(FINISH_WIZARD_TEXT);
 		finishWizardButton.addSelectionListener(this);
-		
+		new Label(selfComposite, SWT.WRAP).setText(FINISH_WIZARD_DESCRIPTION);
 	}
 
 	public void widgetDefaultSelected(SelectionEvent selectionEvent) {
