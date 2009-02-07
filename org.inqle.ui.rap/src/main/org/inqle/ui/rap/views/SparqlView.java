@@ -297,13 +297,11 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		}
 		
 		if (event.getSource() == checkAllButton) {
-//			log.info("Delete clicked");
 			checkAllItems(true);
 			return;
 		}
 		
 		if (event.getSource() == uncheckAllButton) {
-//		log.info("Delete clicked");
 		checkAllItems(false);
 		return;
 	}
@@ -441,7 +439,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		}
 		Persister persister = Persister.getInstance();
 		
-		boolean confirmDelete = MessageDialog.openConfirm(composite.getShell(), "Delete these items?", "Are you sure you want to delete these " + checkedItems.size() + " items?\nTHIS CANNOT BE UNDONE!\n" + checkedItems);
+		boolean confirmDelete = MessageDialog.openConfirm(composite.getShell(), "Delete these items?", "Are you sure you want to delete these " + checkedItems.size() + " items?\nTHIS CANNOT BE UNDONE!");
 		if (! confirmDelete) {
 			composite.forceFocus();
 			return;
