@@ -27,8 +27,12 @@ public class QuerySolutionValueExtractor {
 	 * @return
 	 */
 	public static String getDisplayable(QuerySolution querySolution, String fieldName) {
-		
-		RDFNode node = querySolution.get(fieldName);
+		RDFNode node = null;
+		try {
+			node = querySolution.get(fieldName);
+		} catch (Exception e) {
+			//leave as null
+		}
 		if (node instanceof Literal) {
 			Literal literalObj = (Literal)node;
 			Object literalVal = null;
