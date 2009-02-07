@@ -352,6 +352,14 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		
 		showTable();
 		refreshForm();
+		
+		try {
+			//try to close the ResultSetRewindable's model
+			this.resultSet.getResourceModel().close();
+		} catch (Exception e) {
+			//never mind
+		}
+		
 //		resultSetTable.recomputeSize();
 		resultSetTable.layout(true, true);
 		resultSetTable.setVisible(false);

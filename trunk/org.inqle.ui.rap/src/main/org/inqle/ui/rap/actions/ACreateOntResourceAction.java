@@ -43,6 +43,8 @@ public abstract class ACreateOntResourceAction extends Action {
 	private OntResource ontResource;
 
 	private String actionType;
+
+	private String internalDatasetRoleId;
 	
 	private static final Logger log = Logger.getLogger(ACreateOntResourceAction.class);
 	
@@ -57,6 +59,7 @@ public abstract class ACreateOntResourceAction extends Action {
 	public ACreateOntResourceAction(Shell shell, String internalDatasetRoleId, String parentResourceUri, String actionType) {
 		this.shell = shell;
 		log.trace("Create ACreateOntResourceAction");
+		this.internalDatasetRoleId = internalDatasetRoleId;
 		Persister persister = Persister.getInstance();
 		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
@@ -112,6 +115,8 @@ public abstract class ACreateOntResourceAction extends Action {
 //			model.unregister(textIndexBuilder);
 //		}
 		long sizeDifference = model.size() - sizeBefore;
+		//close the model
+		model.close();
 		log.info("Registered new type locally: Added " + sizeDifference + " new statements to the model.");
 		
 		//send the new statements to the central INQLE server

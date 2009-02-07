@@ -178,8 +178,8 @@ public class UserDatamodelWizard extends Wizard {
 			}
 			
 			Collection<String> datasetFunctions = datamodel.getDatamodelFunctions();
-			log.info("Compare datamodel function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
-			log.info("Default checked=" + defaultChecked);
+//			log.info("Compare datamodel function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
+//			log.info("Default checked=" + defaultChecked);
 			if (datasetFunctions != null && datasetFunctions.contains(extensionId)) {
 				checkbox.setSelection(true);
 			} else if ((datasetFunctions==null || datasetFunctions.size()==0) && defaultChecked) {
@@ -274,9 +274,9 @@ public class UserDatamodelWizard extends Wizard {
 		persister.persist(datamodel); 
 		log.info("Saved datamodel Datamodel=" + JenabeanWriter.toString(datamodel));
 		if (this.mode == DatamodelWizardAction.MODE_NEW || this.mode == DatamodelWizardAction.MODE_CLONE) {
-			Model newModel = persister.createDBModel(database, datamodel.getId());
+			Persister.createDBModel(database, datamodel.getId());
 			//persister.persist(datamodel, newModel, false);
-			log.info("Created new model " + newModel);
+			log.info("Created new model ");
 			databasePart.fireUpdate(databasePart);
 		} else if (this.mode == DatamodelWizardAction.MODE_EDIT) {
 			databasePart.fireUpdatePart();
