@@ -388,8 +388,8 @@ public class SubjectLookup {
 		queryCriteria.setQuery(sparql);
 		String matchingClassesXml = Queryer.selectXml(queryCriteria);
 		log.info("Queried Schema Datamodels and got these matching results:\n" + matchingClassesXml);
-		Model matchingClassesModel = Queryer.selectRdf(queryCriteria);
-		log.info("Here are results as Jena model:\n" + JenabeanWriter.modelToString(matchingClassesModel));
+//		Model matchingClassesModel = Queryer.selectRdf(queryCriteria);
+//		log.info("Here are results as Jena model:\n" + JenabeanWriter.modelToString(matchingClassesModel));
 		return matchingClassesXml;
 	}
 }
