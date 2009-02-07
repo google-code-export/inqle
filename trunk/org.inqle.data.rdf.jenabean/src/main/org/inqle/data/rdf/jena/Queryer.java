@@ -105,6 +105,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally {
 			if (qe != null) qe.close();
+			queryCriteria.close();
 		}
 		
 		return resultXml;
@@ -129,7 +130,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			if (qe != null) qe.close(); 
+			if (qe != null) qe.close();
+			queryCriteria.close();
 		}
 		
 		return resultText;
@@ -137,7 +139,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 	/**
 	 * Query a dataset and return results as RDF
-
+	 * 
+	 * If you call this method, you should close the Model when finished with it
 	 * @param queryCriteria the QueryCriteria object containing all info about the query
 	 * @return an ResultSet object
 	 */
@@ -154,7 +157,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			if (qe != null) qe.close(); 
+			if (qe != null) qe.close();
+//			this causes the resultset to be unreadable: queryCriteria.close();
 		}
 		
 		return resultModel;
@@ -177,6 +181,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			if (qe != null) qe.close(); 
+			queryCriteria.close();
 		}
 		
 		return resultModel;
@@ -241,7 +246,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 			resultTable.setError(e);
 		} finally { 
-			if (qe != null) qe.close(); 
+			if (qe != null) qe.close();
+			queryCriteria.close();
 		}
 		
 		
@@ -252,7 +258,10 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 	}
 	
 	/**
-	 * Query an ARQ dataset.
+	 * Query an ARQ dataset.  If you call this method, you should close the 
+	 * model like this:
+	 * 
+	 * resultSet.getResourceModel().close();
 
 	 * @param queryCriteria the QueryCriteria object containing all info about the query
 	 * @return an RdfTable object
@@ -270,7 +279,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			if (qe != null) qe.close(); 
+			if (qe != null) qe.close();
+//			this causes the result set to be unreadable: squeryCriteria.close();
 		}
 		
 		return resultSetRewindable;
@@ -292,7 +302,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			if (qe != null) qe.close(); 
+			if (qe != null) qe.close();
+			queryCriteria.close();
 		}
 		
 		//close the models in the QueryCriteria object
@@ -316,7 +327,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 		} catch (Exception e) {
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
-			if (qe != null) qe.close(); 
+			if (qe != null) qe.close();
+			queryCriteria.close();
 		}
 		
 		return resultList;

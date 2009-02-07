@@ -261,7 +261,7 @@ public class Persister {
 	 * @return
 	 */
 //	public static Model createDBModel(SDBDatabase connection, String dbModelName) {
-	public static Model createDBModel(IDatabase database, String dbModelName) {
+	public static void createDBModel(IDatabase database, String dbModelName) {
 //		assert(connection != null && dbModelName != null && dbModelName.length() > 0);
 //		SDBConnector dbConnector = new SDBConnector(connection);
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(database);
@@ -269,27 +269,31 @@ public class Persister {
 		log.debug("Creating Model of name '" + dbModelName + "'.");
 		
 		Model model = dbConnector.getModel(dbModelName);
-		return model;
+		model.close();
+//		return model;
 	}
 	
 	/**
 	 * Creates a new database-backed model
 	 */
-	public Model createDatabaseBackedModel(DatabaseBackedDatamodel datamodel) {
+	public void createDatabaseBackedModel(DatabaseBackedDatamodel datamodel) {
 		//first see if a datamodel of that ID already exists
 		if (datamodelExists(datamodel.getId())) {
 			log.info("A Datamodel of ID: " + datamodel.getId() + " already exists.");
-			return null;
+			return;
 		}
 		
 		//create the database-backed model
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
 		log.info("Creating Model of name '" + datamodel.getId() + "'...");
 		Model model = dbConnector.getModel(datamodel.getId());
+		model.close();
 		
 		//store the associated Datamodel object
-		persist(datamodel, getMetarepositoryModel());
-		return model;
+		Model metarepositoryModel = getMetarepositoryModel();
+		persist(datamodel, metarepositoryModel);
+		metarepositoryModel.close();
+		return;
 	}
 	
 	/**
@@ -299,15 +303,15 @@ public class Persister {
 	 * @param namedModelId This could be the ID of a Datamodel or a Datafile object
 	 * @return the model, or null if no model found in the metarepository
 	 */
-	@Deprecated
-	public Model getModel(String namedModelId) {
-		assert(namedModelId != null && namedModelId.length() > 0);
-		Datamodel namedModel = getDatamodel(namedModelId);
-		if (namedModel != null) {
-			return getModel(namedModel);
-		}
-		return null;
-	}
+//	@Deprecated
+//	public Model getModel(String namedModelId) {
+//		assert(namedModelId != null && namedModelId.length() > 0);
+//		Datamodel namedModel = getDatamodel(namedModelId);
+//		if (namedModel != null) {
+//			return getModel(namedModel);
+//		}
+//		return null;
+//	}
 	
 	/**
 	 * Given the URI or ID of a Datamodel in the System database, get the Jena Model object.
@@ -431,8 +435,8 @@ public class Persister {
 				textIndexType = textIndexType.toLowerCase();
 				IndexBuilderModel larqBuilder = null;
 				
-				Model internalModel = getSystemModel(datamodelId);
-				log.info("got internalmodel for " + datamodelId + ".  Is null?" + (internalModel==null));
+//				Model internalModel = getSystemModel(datamodelId);
+//				log.info("got internalmodel for " + datamodelId + ".  Is null?" + (internalModel==null));
 				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 //					larqBuilder = new IndexBuilderSubject(indexFilePath);
 					larqBuilder = new IndexBuilderSubject(indexWriter);
@@ -780,7 +784,9 @@ public class Persister {
 	public boolean externalDatamodelExists(String externalDatamodelId) {
 		boolean hasDatamodelId = false;
 		try {
-			Object existingDatamodel = reconstitute(UserDatamodel.class, externalDatamodelId, getMetarepositoryModel(), false);
+			Model metarepositoryModel = getMetarepositoryModel();
+			Object existingDatamodel = reconstitute(UserDatamodel.class, externalDatamodelId, metarepositoryModel, false);
+			metarepositoryModel.close();
 			if (existingDatamodel != null) {
 				hasDatamodelId = true;
 			}
@@ -888,26 +894,31 @@ public class Persister {
 	 */
 	public Datamodel getDatamodel(String namedModelId) {
 		//OntModel metarepositoryModel = getMetarepositoryModel();
+		Model metarepositoryModel = getMetarepositoryModel();
 		for (Class<?> clazz: MODEL_CLASSES) {
-			if (! exists(clazz, namedModelId, getMetarepositoryModel())) {
+			if (! exists(clazz, namedModelId, metarepositoryModel)) {
 				continue;
 			}
-			Datamodel namedModel = (Datamodel)reconstitute(clazz, namedModelId, getMetarepositoryModel(), true);
+			Datamodel namedModel = (Datamodel)reconstitute(clazz, namedModelId, metarepositoryModel, true);
 			if (namedModel != null) {
 				return namedModel;
 			}
 		}
+		metarepositoryModel.close();
 		return null;
 	}
 	
 	public boolean datamodelExists(String namedModelId) {
 		//OntModel metarepositoryModel = getMetarepositoryModel();
+		Model metarepositoryModel = getMetarepositoryModel();
 		for (Class<?> clazz: MODEL_CLASSES) {
-			boolean datamodelExists = exists(clazz, namedModelId, getMetarepositoryModel());
+			boolean datamodelExists = exists(clazz, namedModelId, metarepositoryModel);
 			if (datamodelExists) {
+				metarepositoryModel.close();
 				return true;
 			}
 		}
+		metarepositoryModel.close();
 		return false;
 	}
 	
@@ -1138,7 +1149,10 @@ public class Persister {
 		if (datamodelId == null) {
 			return null;
 		}
-		return reconstituteAll(persistableClass, getSystemModel(datamodelId));
+		Model model = getSystemModel(datamodelId);
+		Collection<?> results = reconstituteAll(persistableClass, model);
+		model.close();
+		return results;
 	}
 	
 	/**
@@ -1168,8 +1182,9 @@ public class Persister {
 	public boolean deleteDatabase(IDatabase database) {
 		//first remove the connection reference from the metarepository
 		log.debug("Removing connection: " + database.getId());
-		Persister.remove(database, getMetarepositoryModel());
-		
+		Model metarepositoryModel = getMetarepositoryModel();
+		Persister.remove(database, metarepositoryModel);
+		metarepositoryModel.close();
 		//try to delete the connection
 		try {
 //			SDBConnector connector = new SDBConnector(connection);
@@ -1199,6 +1214,7 @@ public class Persister {
 	/**
 	 * Delete a model and all its statements.
 	 * @return successDeleting true if the SDB store was deleted
+	 * TODO this does not work in TDB
 	 */
 	public boolean deleteModel(Datamodel datamodel) {
 //		//remove all statements and all index info for the Datamodel
@@ -1236,7 +1252,9 @@ public class Persister {
 			successDeleting = fileToDelete.delete();
 		}
 		if (successDeleting) {
-			Persister.remove(datamodel, getMetarepositoryModel());
+			Model metarepositoryModel = getMetarepositoryModel();
+			Persister.remove(datamodel, metarepositoryModel);
+			metarepositoryModel.close();
 		}
 		return successDeleting;
 	}

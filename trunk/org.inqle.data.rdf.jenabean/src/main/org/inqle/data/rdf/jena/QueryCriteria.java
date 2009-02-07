@@ -3,7 +3,6 @@ package org.inqle.data.rdf.jena;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -174,15 +173,16 @@ public class QueryCriteria {
 	/**
 	 * Close any open objects, if any
 	 */
-//	public void close() {
-//		//call close method for each ARepository object
+	public void close() {
+		//call close method for each ARepository object
 //		Iterator<Model> modelsI = models.iterator();
 //		while (modelsI.hasNext()) {
 //			Model model = (Model)modelsI.next();
 //			if (!model.isClosed()) model.close();
 //		}
-//		if (store != null) store.close();
-//	}
+		dataSource.close();
+		if (store != null) store.close();
+	}
 
 	/**
 	 * If a single model has been added to this object, return it.  Otherwise
