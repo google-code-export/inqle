@@ -107,41 +107,92 @@ public class ExperimentResult extends UniqueJenabean {
 //		return performanceVector;
 //	}
 	
+	/**
+	 * this extracts all performance criteria from a RapidMiner PerformanceVector, if they are valid values
+	 */
 	public void setPerformanceVector(PerformanceVector performanceVector) {
 		//this.performanceVector = performanceVector;
 		//set key fields
 		PerformanceCriterion criterion = performanceVector.getCriterion("correlation");
-		if (criterion != null) this.correlation = criterion.getAverage();
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.correlation = dblVal;
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("root_mean_squared_error");
-		if (criterion != null) this.root_mean_squared_error = criterion.getAverage();
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.root_mean_squared_error = criterion.getAverage();
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("spearman_rho");
-		if (criterion != null) this.setSpearman_rho(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setSpearman_rho(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("kendall_tau");
-		if (criterion != null) this.setKendall_tau(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setKendall_tau(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("absolute_error");
-		if (criterion != null) this.setAbsolute_error(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setAbsolute_error(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("relative_error");
-		if (criterion != null) this.setRelative_error(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setRelative_error(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("relative_error_lenient");
-		if (criterion != null) this.setRelative_error_lenient(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setRelative_error_lenient(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("relative_error_strict");
-		if (criterion != null) this.setRelative_error_strict(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setRelative_error_strict(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("normalized_absolute_error");
-		if (criterion != null) this.setNormalized_absolute_error(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setNormalized_absolute_error(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("root_relative_squared_error");
-		if (criterion != null) this.setRoot_relative_squared_error(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setRoot_relative_squared_error(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("squared_error");
-		if (criterion != null) this.setSquared_error(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setSquared_error(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("squared_correlation");
-		if (criterion != null) this.setSquared_correlation(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setSquared_correlation(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("cross-entropy");
-		if (criterion != null) this.setCross_entropy(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setCross_entropy(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("margin");
-		if (criterion != null) this.setMargin(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setMargin(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("soft_margin_loss");
-		if (criterion != null) this.setSoft_margin_loss(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setSoft_margin_loss(dblVal);
+		} catch (Exception e) { }
 		criterion = performanceVector.getCriterion("logistic_loss");
-		if (criterion != null) this.setLogistic_loss(criterion.getAverage());
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setLogistic_loss(dblVal);
+		} catch (Exception e) { }
 	}
 	
 	public void clone(ExperimentResult copyFieldsFrom) {
