@@ -1,0 +1,11 @@
+#summary Describes results of testing against standard data sets
+
+=Benchmarking Tests=
+Many of these tests were derived from the [http://archive.ics.uci.edu/ml/datasets.html Machine Learning Repository], at the UC Irvine [http://cml.ics.uci.edu/ Center for Machine Learning and Intelligent Systems].  This is a commonly used source of benchmarking data.
+
+The below INQLE tests were run on a 1.6 GHz laptop computer running Windows XP.
+
+|| *Test* || *Benchmark Results* || *INQLE Results* || *INQLE Conditions* || *INQLE Duration* ||
+|| [http://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic) Breast Cancer Wisconsin (Diagnostic) Data Set] || best predictive accuracy obtained using one separating plane in the 3-D space of *Worst Area, Worst Smoothness and Mean Texture*.  Estimated accuracy 97.5% using repeated 10-fold crossvalidations.  Classifier has correctly diagnosed 176 consecutive new patients as of November 1995. || INQLE v0.2.6 found 91.8% correlation, between the diagnosis (of cancer vs. benign), using these attributes: *Worst Concavity, Mean Area, and Mean Smoothness* || Setup & import of data: 10 minutes
+Configure custom sampler to predict breast tumor diagnosis, randomly selecting from 1 to 3 other attributes to build correlative model: 5 minutes
+Random experimentation: Completed 4654 experiments in 7 hours. (6 seconds per experiment) ||
