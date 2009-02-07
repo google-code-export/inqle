@@ -781,20 +781,9 @@ public class Persister {
 	 * @param datamodelId
 	 * @return
 	 */
-	public boolean externalDatamodelExists(String externalDatamodelId) {
-		boolean hasDatamodelId = false;
-		try {
-			Model metarepositoryModel = getMetarepositoryModel();
-			Object existingDatamodel = reconstitute(UserDatamodel.class, externalDatamodelId, metarepositoryModel, false);
-			metarepositoryModel.close();
-			if (existingDatamodel != null) {
-				hasDatamodelId = true;
-			}
-		} catch (Exception e) {
-			//not found, leave as false
-		}
-		
-		return hasDatamodelId;
+	public boolean userDatamodelExists(String userDatamodelId) {
+		Model metarepositoryModel = getMetarepositoryModel();
+		return exists(UserDatamodel.class, userDatamodelId, metarepositoryModel);
 	}
 	
 	/* *********************************************************************
