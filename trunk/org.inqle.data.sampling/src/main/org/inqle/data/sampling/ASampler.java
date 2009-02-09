@@ -142,5 +142,25 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 //	public DataTable execute(Persister persister) {
 //		return null;
 //	}
+	
+	/**
+	 * This basic implementation does nothing.  
+	 * Custom subclasses of ASampler can use this method to enable samplers to 
+	 * preserve state info.  To do so, override this method and extract some info from the custom sampler.
+	 * First check that it is an instance of the same class.  Avoid storing the sampler as a field,
+	 * as this would lead to chaining of samplers in memory, and perhaps Stack Overflow Error or the like.
+	 */
+	public void setPreviousSampler(ISampler previousSampler) {
+		//do nothing
+	}
+	
+	/**
+	 * Custom sampler classes can override this method, to support the ability to complete a broader
+	 * sampling strategy.  Default: there is no strategy, except to sample repeatedly, so always return false
+	 * 
+	 */
+	public boolean isFinishedSamplingStrategy() {
+		return false;
+	}
 
 }
