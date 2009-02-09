@@ -22,8 +22,8 @@ public class LearningCycleLister {
 		return learningCycles;
 	}
 	
-	public static List<LearningCycle> listAllLearningCycles() {
-		List<LearningCycle> learningCycles = new ArrayList<LearningCycle>();
+	public static List<ILearningCycle> listAllLearningCycles() {
+		List<ILearningCycle> learningCycles = new ArrayList<ILearningCycle>();
 		//add the base (uncustomized) LearningCycle
 		LearningCycle baseLC = new LearningCycle();
 		learningCycles.add(baseLC);

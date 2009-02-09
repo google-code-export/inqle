@@ -10,6 +10,7 @@ import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.experiment.rapidminer.ExperimentResult;
+import org.inqle.experiment.rapidminer.ILearningCycle;
 import org.inqle.experiment.rapidminer.LearningCycle;
 import org.inqle.experiment.rapidminer.LearningCycleLister;
 import org.inqle.data.rdf.RDF;
@@ -24,7 +25,7 @@ public class ExperimenterAgent extends AAgent {
 	public static final int USE_BASE_LEARNING_CYCLE = 1;
 	public static final int USE_SELECTED_LEARNING_CYCLE = 2;
 	
-	private LearningCycle learningCycle;
+	private ILearningCycle learningCycle;
 	private static Logger log = Logger.getLogger(ExperimenterAgent.class);
 	private int learningCycleMode = USE_RANDOM_LEARNING_CYCLE;
 	
@@ -52,15 +53,15 @@ public class ExperimenterAgent extends AAgent {
 		return newAgent;
 	}
 
-	public LearningCycle getLearningCycle() {
+	public ILearningCycle getLearningCycle() {
 		return learningCycle;
 	}
 
-	public void setLearningCycle(LearningCycle learningCycle) {
+	public void setLearningCycle(ILearningCycle learningCycle) {
 		this.learningCycle = learningCycle;
 	}
 
-	public LearningCycle selectLearningCycle() {
+	public ILearningCycle selectLearningCycle() {
 		if (learningCycleMode == USE_RANDOM_LEARNING_CYCLE) {
 			//log.info("Selecting random learning cycle...");
 			return selectRandomLearningCycle();
@@ -69,11 +70,8 @@ public class ExperimenterAgent extends AAgent {
 			//log.info("Selecting the base learning cycle...");
 			return new LearningCycle();
 		}
-		if (learningCycle != null) {
-			//otherwise, return the learnin//log.info(ield
-			//log.info("Selecting pre-selected learning cycle...");
-		} else {
-			// the learning cycle field is null, so select a random learning cycle
+		if (learningCycle == null) {
+			//select a random learning cycle
 			return selectRandomLearningCycle();
 		}
 		return learningCycle;
@@ -97,7 +95,7 @@ public class ExperimenterAgent extends AAgent {
 			log.info("############### Running Cycle #" + (cycleCount) + " of " + stoppingPoint);
 			
 			//select the learning cycle
-			LearningCycle learningCycleToRun = selectLearningCycle();
+			ILearningCycle learningCycleToRun = selectLearningCycle();
 			log.info("Running this LearningCycle: " + learningCycleToRun);
 			ExperimentResult experimentResult = learningCycleToRun.execute();
 			if (experimentResult == null) {
@@ -109,6 +107,8 @@ public class ExperimenterAgent extends AAgent {
 			persister.persist(experimentResult);
 			long cycleTime = (System.currentTimeMillis() - cycleStartTime) / 1000;
 			log.info("Cycle # " + cycleCount + ": completed in " + cycleTime + " seconds.");
+			
+			if (learningCycleToRun.isReadyToStopCycling()) break;
 		}
 		long stoptime = System.currentTimeMillis();
 		long runseconds = (stoptime - starttime) / 1000;
@@ -118,8 +118,8 @@ public class ExperimenterAgent extends AAgent {
 		
 	}
 
-	private LearningCycle selectRandomLearningCycle() {
-		List<LearningCycle> allLearningCycles = LearningCycleLister.listAllLearningCycles();
+	private ILearningCycle selectRandomLearningCycle() {
+		List<ILearningCycle> allLearningCycles = LearningCycleLister.listAllLearningCycles();
 		int randomIndex = RandomListChooser.chooseRandomIndex(allLearningCycles.size());
 		return allLearningCycles.get(randomIndex);
 	}
