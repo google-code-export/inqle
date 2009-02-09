@@ -26,6 +26,8 @@ import com.hp.hpl.jena.rdf.model.Model;
 /**
  * @author David Donohue
  * Apr 15, 2008
+ * 
+ * TODO permit selection of the RapidMiner experiment to use.
  */
 public class LearningCycleWizard extends DynaWizard implements IListProvider, IList2Provider, IValueUpdater {
 

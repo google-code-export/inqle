@@ -31,4 +31,8 @@ public interface ILearningCycle extends IBasicJenabean{
 	public IRapidMinerExperiment getRapidMinerExperiment();
 	
 	public void setRapidMinerExperiment(IRapidMinerExperiment rapidMinerExperiment);
+
+	public ExperimentResult execute();
+
+	public boolean isReadyToStopCycling();
 }

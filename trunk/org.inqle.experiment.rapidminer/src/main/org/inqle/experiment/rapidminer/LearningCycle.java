@@ -27,7 +27,18 @@ import com.rapidminer.operator.MissingIOObjectException;
 import com.rapidminer.operator.performance.PerformanceVector;
 
 /**
- * Contains the results of an experiment
+ * Executes a cycle of learning.  This cycle consists of:
+ * (1) Find a sampler to use.  A LearningCycle object may
+ * be configured to use a particular ISampler object.  If not then if
+ * a single customized sampler exists, it will select that one.  Otherwise
+ * it will randomly select one.  State information is preserved from
+ * 1 cycle to the next, unless a random selection of sampler is made, switching samplers.
+ * In the latter case, state info is lost.
+ * (2) Run this sampler.
+ * (3) Select a RapidMiner experiment to use.
+ * (4) Apply the sampled data to the selected RapidMiner experiment
+ * (4) Store the resulting ExperimentResult.
+ * 
  * @author David Donohue
  * Apr 16, 2008
  */
@@ -43,6 +54,9 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	private IRapidMinerExperiment rapidMinerExperiment;
 	//private Persister persister;
 
+	private ISampler lastSampler;
+	private transient boolean readyToStopCycling = false;
+	
 	private static Logger log = Logger.getLogger(LearningCycle.class);
 	
 //	public void setPersister(Persister persister) {
@@ -112,7 +126,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	 * Finally, run the ExampleSet through the experiment.
 	 */
 	public ExperimentResult execute() {
-		ISampler samplerToUse = selectSampler();
+		ISampler samplerToUse = selectSampler(lastSampler);
 		if (samplerToUse == null) {
 			log.warn("Unable to retrieve any sampler.");
 			return null;
@@ -124,15 +138,6 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 					" to retrieve a DataTable of results.");
 			return null;
 		}
-//		int labelDataColumnIndex = selectLabelColumnIndex(resultDataTable);
-		//log.info("LLLLL Selected label DataColumn =" + labelDataColumn + " of data type " + labelDataColumn.getDataType());
-		
-		//assign data type to this data column
-//		int labelDataColumnIndex = resultDataTable.getColumns().indexOf(labelDataColumn);
-//		resultDataTable.setLabelColumnIndex(labelDataColumnIndex);
-		
-//		DataPreparer preparer = new DataPreparer(resultDataTable);
-//		preparer.assignDataType(labelDataColumnIndex);
 		
 		IRapidMinerExperiment experimentToUse = selectRapidMinerExperiment(resultDataTable);
 		if (experimentToUse == null) {
@@ -152,20 +157,24 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 		experimentResult.setRapidMinerExperimentId(experimentToUse.getId());
 		List<Arc> learnableArcs = resultDataTable.getLearnableColumns();
 		experimentResult.setExperimentAttributeArcs(learnableArcs);
+		
+		this.readyToStopCycling = samplerToUse.isFinishedSamplingStrategy();
 		//experimentResult.setExperimentSubject(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()).getColumnUri());
 //		log.trace("&&&&&&&&&&&&&&& idColumn.getArc()=" + idColumn.getArc());
 		//log.info("resultDataTable.getLearnableColumns()=" + resultDataTable.getLearnableColumns());
 		return experimentResult;
 	}
 
-	private ISampler selectSampler() {
+	private ISampler selectSampler(ISampler previousSampler) {
 //		if (samplerMode == USE_RANDOM_SAMPLER || getSampler() == null) {
 //			return selectRandomSampler();
 //		}
 		if (getSampler()==null) {
-			return selectRandomSampler();
+			return selectRandomSampler(previousSampler);
 		}
-		return getSampler();
+		ISampler theSampler = getSampler();
+		theSampler.setPreviousSampler(previousSampler);
+		return theSampler;
 	}
 	
 	/**
@@ -173,7 +182,7 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 	 * exist, choose among all base (uncustomized) samplers
 	 * @return
 	 */
-	public ISampler selectRandomSampler() {
+	public ISampler selectRandomSampler(ISampler sampler) {
 		List<ISampler> availableSamplers = SamplerLister.listSamplers(false);
 		log.info("LC.selectRandomSampler(): availableSamplers(false)=" + availableSamplers);
 		if (availableSamplers==null || availableSamplers.size()==0) {
@@ -289,6 +298,14 @@ public class LearningCycle extends UniqueJenabean implements ILearningCycle {
 			//no PerformanceVector present
 		}
 		return experimentResult;
+	}
+
+	/** 
+	 * Is it time to quit?  Subclasses may override and halt execution under some circumstances.
+	 * @return
+	 */
+	public boolean isReadyToStopCycling() {
+		return readyToStopCycling ;
 	}
 
 //	public int getSamplerMode() {
