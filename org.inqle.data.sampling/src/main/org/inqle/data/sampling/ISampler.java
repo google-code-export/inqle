@@ -74,4 +74,8 @@ public interface ISampler extends IUniqueJenabean {
 	public IDataTable execute();
 	
 	public ISampler createClone();
+
+	public void setPreviousSampler(ISampler previousSampler);
+
+	public boolean isFinishedSamplingStrategy();
 }
