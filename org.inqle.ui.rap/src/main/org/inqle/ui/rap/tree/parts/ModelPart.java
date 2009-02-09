@@ -79,6 +79,10 @@ public class ModelPart extends Part {
 		openNamedModelViewAction.setDatamodel(datamodel);
 		actions.add(openNamedModelViewAction);
   	
+		//Clear datamodel action
+		EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
+		actions.add(emptyDatasetAction);
+		
 		if (! (datamodel instanceof SystemDatamodel)) {
 			DatamodelWizardAction editModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_EDIT, "Edit this datamodel...", (DatabasePart)this.getParent(), workbenchWindow);
 			//editModelWizardAction.setModelPart(this);
@@ -99,10 +103,6 @@ public class ModelPart extends Part {
 			//"Add inferred statements" action
 			AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
 			actions.add(addReasonerStatementsAction);
-			
-			//Clear datamodel action
-			EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
-			actions.add(emptyDatasetAction);
 			
 			//Delete action
 			//TODO add this functionality back some day (removed due to difficulty doing this in TDB)
