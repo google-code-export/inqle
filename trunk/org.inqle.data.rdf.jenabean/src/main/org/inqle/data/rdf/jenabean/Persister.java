@@ -328,7 +328,13 @@ public class Persister {
 	 * @return the model, or null if no model found in the metarepository
 	 */
 	public Model getSystemModel(String datamodelId) {
-		return cachedModels.get(datamodelId);
+		Model systemModel = cachedModels.get(datamodelId);
+		if (systemModel == null) {
+			IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.SYSTEM_DATABASE_ROOT);
+			systemModel = connector.getModel(Persister.METAREPOSITORY_DATAMODEL);
+			cachedModels.put(datamodelId, systemModel);
+		}
+		return systemModel;
 //		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.SYSTEM_DATABASE_ROOT);
 //		Model systemModel = connector.getModel(datamodelId);
 //		log.info("Retrieved system model '" + datamodelId + "' of size: " + systemModel.size());
@@ -372,6 +378,11 @@ public class Persister {
 		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
 			String datamodelId = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 
+			//if the model is already cached, do not recreate it
+			if (cachedModels.containsKey(datamodelId)) {
+				continue;
+			}
+			
 			//create the Datamodel
 			SystemDatamodel systemDatamodel = new SystemDatamodel();
 //			internalDatamodel.setDatamodelRole(datamodelId);
