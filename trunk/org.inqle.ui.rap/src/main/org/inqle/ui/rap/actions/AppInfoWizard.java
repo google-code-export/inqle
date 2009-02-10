@@ -167,9 +167,9 @@ public class AppInfoWizard extends Wizard {
 			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase);
 			int status = connector.createDatabase();
 			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ROOT + ": Status=" + status);
-			Model metarepositoryModel = connector.getModel(Persister.METAREPOSITORY_DATAMODEL);
-			persister.persist(systemDatabase);
-			persister.persist(metarepositoryDatamodel);
+			Model metarepositoryModel = persister.getMetarepositoryModel();
+			persister.persist(systemDatabase, metarepositoryModel);
+			persister.persist(metarepositoryDatamodel, metarepositoryModel);
 			log.info("CREATED user database and first user datamodel.");
 //			persister.createDBModel(metarepositoryDataset);
 		} catch (Exception e) {
