@@ -116,7 +116,8 @@ public abstract class ACreateOntResourceAction extends Action {
 //		}
 		long sizeDifference = model.size() - sizeBefore;
 		//close the model
-		model.close();
+//		model.close();
+		model.commit();
 		log.info("Registered new type locally: Added " + sizeDifference + " new statements to the model.");
 		
 		//send the new statements to the central INQLE server
