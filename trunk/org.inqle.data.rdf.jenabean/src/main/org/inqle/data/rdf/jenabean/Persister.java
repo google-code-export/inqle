@@ -98,6 +98,7 @@ public class Persister {
 	private static Logger log = Logger.getLogger(Persister.class);
 	public static int persisterId = 0;
 	
+	private Map<String, Model> cachedModels = new HashMap<String, Model>();
 //	private Map<String, Model> cachedModels = null;
 //	private Map<String, SystemDatamodel> systemDatamodels = null;
 //	private Map<String, IDatabase> internalDatabases = null;
@@ -269,7 +270,7 @@ public class Persister {
 		log.debug("Creating Model of name '" + dbModelName + "'.");
 		
 		Model model = dbConnector.getModel(dbModelName);
-		model.close();
+//		model.close();
 //		return model;
 	}
 	
@@ -277,22 +278,28 @@ public class Persister {
 	 * Creates a new database-backed model
 	 */
 	public void createDatabaseBackedModel(DatabaseBackedDatamodel datamodel) {
-		//first see if a datamodel of that ID already exists
-		if (datamodelExists(datamodel.getId())) {
-			log.info("A Datamodel of ID: " + datamodel.getId() + " already exists.");
-			return;
-		}
 		
 		//create the database-backed model
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
 		log.info("Creating Model of name '" + datamodel.getId() + "'...");
 		Model model = dbConnector.getModel(datamodel.getId());
-		model.close();
+		cachedModels.put(datamodel.getId(), model);
+		log.info("Created and cached Model of name '" + datamodel.getId() + "'...");
+		
+		//see if a datamodel of that ID already exists
+		if (datamodelExists(datamodel.getId())) {
+			log.info("A Datamodel of ID: " + datamodel.getId() + " already exists.");
+			return;
+		}
+		
+		
+//		model.close();
 		
 		//store the associated Datamodel object
-		Model metarepositoryModel = getMetarepositoryModel();
-		persist(datamodel, metarepositoryModel);
-		metarepositoryModel.close();
+//		Model metarepositoryModel = getMetarepositoryModel();
+//		persist(datamodel, metarepositoryModel);
+		persist(datamodel);
+		log.info("Persisted datamodel: " + datamodel.getId());
 		return;
 	}
 	
@@ -321,28 +328,15 @@ public class Persister {
 	 * @return the model, or null if no model found in the metarepository
 	 */
 	public Model getSystemModel(String datamodelId) {
-//		if (datamodelId.equals(METAREPOSITORY_DATAMODEL)) {
-//			return getMetarepositoryModel();
-//		}
-//		SystemDatamodel internalDatamodel = getSystemDatamodel(datamodelId);
-		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.SYSTEM_DATABASE_ROOT);
-//		if (internalDatamodel != null) {
-//			return getIndexableModel(internalDatamodel);
-//		}
-		Model systemModel = connector.getModel(datamodelId);
+		return cachedModels.get(datamodelId);
+//		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.SYSTEM_DATABASE_ROOT);
+//		Model systemModel = connector.getModel(datamodelId);
 //		log.info("Retrieved system model '" + datamodelId + "' of size: " + systemModel.size());
-		return systemModel;
+//		return systemModel;
 	}
 	
 	public SystemDatamodel getSystemDatamodel(String datamodelId) {
-//		if (datamodelId.equals(METAREPOSITORY_DATAMODEL)) {
-//			return getAppInfo().getMetarepositoryDatamodel();
-//		}
-//		if (!systemDatamodelsInitialized) {
-//			initializeSystemDatamodels();
-//		}
 		SystemDatamodel datamodel = (SystemDatamodel) reconstitute(SystemDatamodel.class, datamodelId, true);
-//		return getInternalDatamodels().get(datamodelId);
 		return datamodel;
 	}
 	
@@ -385,13 +379,13 @@ public class Persister {
 			systemDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ROOT);
 			createDatabaseBackedModel(systemDatamodel);
 //			persist(systemDataModel);
-			log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC Created & stored new SystemDatamodel of ID: " + datamodelId + ":\n" + JenabeanWriter.toString(systemDatamodel));
+			log.info("Created & stored new SystemDatamodel of ID: " + datamodelId + ":\n" + JenabeanWriter.toString(systemDatamodel));
 		}
 		
 		//having created the Datamodels and Models, make sure any text indexes have been created
 		getIndexBuilders();
 		
-		log.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSS System datamodels initialized");
+		log.info("System datamodels initialized");
 		systemDatamodelsInitialized  = true;
 	}
 	
@@ -637,9 +631,14 @@ public class Persister {
 	public Model getModel(Datamodel datamodel) {
 //		assert(namedModel != null);
 		//Model repositoryModel = getMetarepositoryModel();
+		if (cachedModels.containsKey(datamodel.getId())) {
+			return cachedModels.get(datamodel.getId());
+		}
 		if (datamodel instanceof DatabaseBackedDatamodel) {
 			IDBConnector connector = DBConnectorFactory.getDBConnector(((DatabaseBackedDatamodel) datamodel).getDatabaseId());
-			return connector.getModel(datamodel.getId());
+			Model model = connector.getModel(datamodel.getId());
+			cachedModels.put(datamodel.getId(), model);
+			return model;
 		}
 		
 		if (datamodel instanceof Datafile){
@@ -893,7 +892,7 @@ public class Persister {
 				return namedModel;
 			}
 		}
-		metarepositoryModel.close();
+//		metarepositoryModel.close();
 		return null;
 	}
 	
@@ -903,11 +902,11 @@ public class Persister {
 		for (Class<?> clazz: MODEL_CLASSES) {
 			boolean datamodelExists = exists(clazz, namedModelId, metarepositoryModel);
 			if (datamodelExists) {
-				metarepositoryModel.close();
+//				metarepositoryModel.close();
 				return true;
 			}
 		}
-		metarepositoryModel.close();
+//		metarepositoryModel.close();
 		return false;
 	}
 	
@@ -1020,7 +1019,8 @@ public class Persister {
 		} else {
 			writer.save(persistableObj);
 		}
-		model.close();
+//		model.close();
+		model.commit();
 		//log.info("Saved");
 	}
 
@@ -1140,7 +1140,7 @@ public class Persister {
 		}
 		Model model = getSystemModel(datamodelId);
 		Collection<?> results = reconstituteAll(persistableClass, model);
-		model.close();
+//		model.close();
 		return results;
 	}
 	
@@ -1173,7 +1173,7 @@ public class Persister {
 		log.debug("Removing connection: " + database.getId());
 		Model metarepositoryModel = getMetarepositoryModel();
 		Persister.remove(database, metarepositoryModel);
-		metarepositoryModel.close();
+//		metarepositoryModel.close();
 		//try to delete the connection
 		try {
 //			SDBConnector connector = new SDBConnector(connection);
@@ -1211,7 +1211,7 @@ public class Persister {
 //		Model modelToBeDeleted = getIndexableModel(datamodel);
 //		modelToBeDeleted.removeAll();
 //		//remove the reference to the Datamodel from the metarepository
-		log.info("RRRRRRRRRRRRRRRRRRRRRRRR Removing model: " + datamodel.getUri() + "...");
+		log.info("Removing model: " + datamodel.getUri() + "...");
 //		
 //		modelToBeDeleted.close();
 		
@@ -1227,8 +1227,14 @@ public class Persister {
 			log.info("Success deleting the DB model? " + successDeleting);
 	    connector.close();
 	    
-	    //invalidate the cache
-	    CacheTool.invalidateDataCache(dbDatamodel.getId());
+	    if (successDeleting) {
+	    	//invalidate the cache
+	    	CacheTool.invalidateDataCache(dbDatamodel.getId());
+	    	
+	    	if (cachedModels.containsKey(datamodel.getId())) {
+	    		cachedModels.remove(datamodel.getId());
+	    	}
+	    }
 	    
 	    return successDeleting;
 		} else if (datamodel instanceof Datafile) {
@@ -1244,7 +1250,7 @@ public class Persister {
 		if (successDeleting) {
 			Model metarepositoryModel = getMetarepositoryModel();
 			Persister.remove(datamodel, metarepositoryModel);
-			metarepositoryModel.close();
+//			metarepositoryModel.close();
 		}
 		return successDeleting;
 	}
@@ -1266,7 +1272,7 @@ public class Persister {
 		Bean2RDF deleter = new Bean2RDF(model);
 		deleter.delete(objectToDelete);
 		model.commit();
-		model.close();
+//		model.close();
 	}
 	
 	/**
@@ -1291,11 +1297,11 @@ public class Persister {
 	/**
 	 * Close the  repository model and any other open models, which this persister is managing
 	 */
-	public void close() {
-		if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
-			metarepositoryModel.close();
-		}
-	}
+//	public void close() {
+//		if (metarepositoryModel != null && ! metarepositoryModel.isClosed()) {
+//			metarepositoryModel.close();
+//		}
+//	}
 	
 	/**
 	 * Does a resource exist of the provided URI, in the provided model?
