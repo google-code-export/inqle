@@ -111,7 +111,7 @@ public class ExperimenterAgent extends AAgent {
 			if (learningCycleToRun.isReadyToStopCycling()) break;
 		}
 		long stoptime = System.currentTimeMillis();
-		long runseconds = (stoptime - starttime) / 1000;
+		double runseconds = (stoptime - starttime) / 1000;
 		log.info("Exiting.  Completed " + cycleCount + " cycles, in " + runseconds + " seconds." +
 				"  Average time per cycle is " + (runseconds / cycleCount) + " seconds.");
 		setStopped();
