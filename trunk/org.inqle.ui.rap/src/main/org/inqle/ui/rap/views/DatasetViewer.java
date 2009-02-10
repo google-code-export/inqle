@@ -168,7 +168,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 		if (model != null) {
 			sizeWidget.setText(String.valueOf(model.size()));
 		}
-		model.close();
+//		model.close();
 		if (getDataset() != null) {
 			Date creationDate = getDataset().getCreationDate();
 			if (creationDate != null) {

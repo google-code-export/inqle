@@ -469,7 +469,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 			deletedCount++;
 		}
 		long sizeAfterDelete = modelToDeleteFrom.size();
-		modelToDeleteFrom.close();
+//		modelToDeleteFrom.close();
+		modelToDeleteFrom.commit();
 		long totalDeletedStatements = sizeBeforeDelete - sizeAfterDelete;
 		if (deletedCount == checkedItems.size() && totalDeletedStatements > 0) {
 			MessageDialog.openInformation(composite.getShell(), "Success Deleting", "Successfully deleted " + deletedCount + " items, " + totalDeletedStatements + " statements.");

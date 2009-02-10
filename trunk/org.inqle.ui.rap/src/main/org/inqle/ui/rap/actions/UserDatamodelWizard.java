@@ -271,14 +271,16 @@ public class UserDatamodelWizard extends Wizard {
 			return true;
 		}
 
-		persister.persist(datamodel); 
-		log.info("Saved datamodel Datamodel=" + JenabeanWriter.toString(datamodel));
+//		persister.persist(datamodel); 
+//		log.info("Saved datamodel Datamodel=" + JenabeanWriter.toString(datamodel));
 		if (this.mode == DatamodelWizardAction.MODE_NEW || this.mode == DatamodelWizardAction.MODE_CLONE) {
-			Persister.createDBModel(database, datamodel.getId());
+//			Persister.createDBModel(database, datamodel.getId());
 			//persister.persist(datamodel, newModel, false);
+			persister.createDatabaseBackedModel(datamodel);
 			log.info("Created new model ");
 			databasePart.fireUpdate(databasePart);
 		} else if (this.mode == DatamodelWizardAction.MODE_EDIT) {
+			persister.persist(datamodel);
 			databasePart.fireUpdatePart();
 		}
 		//close wizard regardless
