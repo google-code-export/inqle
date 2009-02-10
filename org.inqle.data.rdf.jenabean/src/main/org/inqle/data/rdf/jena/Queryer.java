@@ -105,7 +105,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally {
 			if (qe != null) qe.close();
-			queryCriteria.close();
+			//queryCriteria.close();
 		}
 		
 		return resultXml;
@@ -131,7 +131,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			if (qe != null) qe.close();
-			queryCriteria.close();
+			//queryCriteria.close();
 		}
 		
 		return resultText;
@@ -181,7 +181,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			if (qe != null) qe.close(); 
-			queryCriteria.close();
+			//queryCriteria.close();
 		}
 		
 		return resultModel;
@@ -247,13 +247,12 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			resultTable.setError(e);
 		} finally { 
 			if (qe != null) qe.close();
-			queryCriteria.close();
+			//queryCriteria.close();
 		}
 		
 		
 		//close the models in the QueryCriteria object
-		//queryCriteria.close();
-		
+		//queryCriteria.close()	
 		return resultTable;
 	}
 	
@@ -303,7 +302,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			if (qe != null) qe.close();
-			queryCriteria.close();
+			//queryCriteria.close();
 		}
 		
 		//close the models in the QueryCriteria object
@@ -328,7 +327,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 			log.error("Error performing query " + queryCriteria.getQuery(), e);
 		} finally { 
 			if (qe != null) qe.close();
-			queryCriteria.close();
+			//queryCriteria.close();
 		}
 		
 		return resultList;
