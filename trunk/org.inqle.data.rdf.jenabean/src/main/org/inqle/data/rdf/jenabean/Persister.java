@@ -1207,7 +1207,7 @@ public class Persister {
 		Model modelToBeDeleted = getIndexableModel(namedModel);
 
 		modelToBeDeleted.removeAll();
-		modelToBeDeleted.close();
+//		modelToBeDeleted.close();
 //		DonohueUtil.removeAllStatements(modelToBeDeleted, (Resource)null, (Property)null, (RDFNode)null);
 		return true;
 	}
