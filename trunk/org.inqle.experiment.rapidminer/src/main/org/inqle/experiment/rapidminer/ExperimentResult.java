@@ -55,6 +55,7 @@ public class ExperimentResult extends UniqueJenabean {
 	private String experimentSubjectClass;
 	//private IRapidMinerExperiment rapidMinerExperiment;
 	private String rapidMinerExperimentId;
+   
 	private double correlation;
 	private double root_mean_squared_error;
 	private double spearman_rho;
@@ -72,6 +73,12 @@ public class ExperimentResult extends UniqueJenabean {
 	private double soft_margin_loss;
 	private double logistic_loss;
 	
+	private double accuracy;
+	private double classification_error;
+	private double kappa;
+	private double weighted_mean_precision;
+	private double weighted_mean_recall;
+  
 	public String toString() {
 		String s = getClass().toString() + " {";
 		s += super.toString();
@@ -98,6 +105,11 @@ public class ExperimentResult extends UniqueJenabean {
 		s += "[margin=" + margin + "]\n";
 		s += "[soft_margin_loss=" + soft_margin_loss + "]\n";
 		s += "[logistic_loss=" + logistic_loss + "]\n";
+		s += "[accuracy=" + accuracy + "]\n";
+		s += "[classification_error=" + classification_error + "]\n";
+		s += "[kappa=" + kappa + "]\n";
+		s += "[weighted_mean_precision=" + weighted_mean_precision + "]\n";
+		s += "[weighted_mean_recall=" + weighted_mean_recall + "]\n";
 		
 		s += "}";
 		return s;
@@ -193,6 +205,32 @@ public class ExperimentResult extends UniqueJenabean {
 			double dblVal = criterion.getAverage();
 			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setLogistic_loss(dblVal);
 		} catch (Exception e) { }
+		
+		criterion = performanceVector.getCriterion("accuracy");
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setAccuracy(dblVal);
+		} catch (Exception e) { }
+		criterion = performanceVector.getCriterion("classification_error");
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setClassification_error(dblVal);
+		} catch (Exception e) { }
+		criterion = performanceVector.getCriterion("kappa");
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setKappa(dblVal);
+		} catch (Exception e) { }
+		criterion = performanceVector.getCriterion("weighted_mean_precision");
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setWeighted_mean_precision(dblVal);
+		} catch (Exception e) { }
+		criterion = performanceVector.getCriterion("weighted_mean_recall");
+		try {
+			double dblVal = criterion.getAverage();
+			if (!(Double.isNaN(dblVal)) && (!(Double.isInfinite(dblVal)))) this.setWeighted_mean_recall(dblVal);
+		} catch (Exception e) { }
 	}
 	
 	public void clone(ExperimentResult copyFieldsFrom) {
@@ -215,6 +253,12 @@ public class ExperimentResult extends UniqueJenabean {
 		setMargin(copyFieldsFrom.getMargin());
 		setSoft_margin_loss(copyFieldsFrom.getSoft_margin_loss());
 		setLogistic_loss(copyFieldsFrom.getLogistic_loss());
+		
+		setAccuracy(copyFieldsFrom.getAccuracy());
+		setClassification_error(copyFieldsFrom.getClassification_error());
+		setKappa(copyFieldsFrom.getKappa());
+		setWeighted_mean_precision(copyFieldsFrom.getWeighted_mean_precision());
+		setWeighted_mean_recall(copyFieldsFrom.getWeighted_mean_recall());
 		super.clone(copyFieldsFrom);
 	}
 	
@@ -455,6 +499,46 @@ public class ExperimentResult extends UniqueJenabean {
 
 	public double getLogistic_loss() {
 		return logistic_loss;
+	}
+
+	public void setAccuracy(double accuracy) {
+		this.accuracy = accuracy;
+	}
+
+	public double getAccuracy() {
+		return accuracy;
+	}
+
+	public void setClassification_error(double classification_error) {
+		this.classification_error = classification_error;
+	}
+
+	public double getClassification_error() {
+		return classification_error;
+	}
+
+	public void setKappa(double kappa) {
+		this.kappa = kappa;
+	}
+
+	public double getKappa() {
+		return kappa;
+	}
+
+	public void setWeighted_mean_precision(double weighted_mean_precision) {
+		this.weighted_mean_precision = weighted_mean_precision;
+	}
+
+	public double getWeighted_mean_precision() {
+		return weighted_mean_precision;
+	}
+
+	public void setWeighted_mean_recall(double weighted_mean_recall) {
+		this.weighted_mean_recall = weighted_mean_recall;
+	}
+
+	public double getWeighted_mean_recall() {
+		return weighted_mean_recall;
 	}
 
 
