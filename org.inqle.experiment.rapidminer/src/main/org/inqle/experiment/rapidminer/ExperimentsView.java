@@ -49,7 +49,7 @@ public class ExperimentsView extends SparqlView {
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?" + ResultSetTable.URI_VARIABLE + " ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Root_Mean_Squared_Error\n" +
+			"SELECT ?" + ResultSetTable.URI_VARIABLE + " ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Accuracy\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
 			"?" + ResultSetTable.URI_VARIABLE + " a ?classUri\n" +
@@ -66,7 +66,7 @@ public class ExperimentsView extends SparqlView {
 //			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
 //			"  . ?experimentAttributeArcs inqle:qnameRepresentation ?Experiment_Attributes}\n" +
 			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:correlation ?Correlation }\n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:root_mean_squared_error ?Root_Mean_Squared_Error }\n" +
+			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:accuracy ?Accuracy }\n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
 		log.info("SPARQL=" + sparql);
