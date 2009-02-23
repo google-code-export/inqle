@@ -1,0 +1,10 @@
+#summary describes the 2 types of data stores that INQLE employs
+
+An INQLE server uses 2 types of datamodels.  Below we compare and contrast these.
+|| *Feature* || *User Datamodel* || *System Datamodel* ||
+|| What it stores || RDF data that the user has loaded || RDF objects used by INQLE to function, such as databases, datamodels, samplers.  Includes cached data about user datamodels ||
+|| Architecture || Currently supports using only a local TDB database to store user data, though plan to support remote/shared/network TDB databases as well. || INQLE server points to a single database, which is not shared. ||
+|| How to create one || User creates in INQLE Administration web interface || Plug-in contributor creates ||
+||
+|| Extension Point || org.inqle.data.datamodelFunctions - can be used to create a new 'purpose' for user-loaded data.  Example: we have created the dataset function org.inqle.datamodelFunctions.schemas.  Datamodels that are designated to fulfill this function can be used by the program to look up RDF ontology/schema information || org.inqle.data.datamodels - can be used to declare a new !SystemDatamodel, which will contain objects for INQLE to work.  Examples of such objects include datamodels, databases, customizations of samplers, learning agents. ||
+|| Java annotations || None || @!TargetDatamodel - targets the Java class to a particular System Datamodel by default. ||
