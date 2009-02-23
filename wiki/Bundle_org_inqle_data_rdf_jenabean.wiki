@@ -26,9 +26,9 @@ Examples of Persistable objects which contributors might wish to create include:
 BlogPost - to contain blog posts, discussion thread, etc. for a Content Management System plugin
 LaboratoryReport - to contain a set of laboratory data, from a medical study
 
-This bundle specifies a number of Jenabeans classes, that it uses to store and retrieve datasets as Jena Models.  It also contains the AppInfo class.  AppInfo contains configuration for an INQLE server., including administrative account info, the location of the Metarepository dataset (i.e., the data model which contains infor and location of all other Dataset and Connection objects).
+This bundle specifies a number of Jenabean classes, that it uses to store and retrieve datasets as Jena Models.  
 
-See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to create and work with Jenabeans.
+See the [http://code.google.com/p/jenabean/w/list Jenabean documentation] on how to create and work with Jenabean.
 
 Example of how to create, store, and load an persistable object in INQLE:
 
@@ -65,14 +65,13 @@ public class BlogPost {
 
 }}}
 
-*(2) To your plugin's plugin.xml file, declare the dataset to which you want these objects to be saved.*  You can opt to save them to other datasets, but by default they will be saved to this dataset.
+*(2) To your plugin's plugin.xml file, declare the datamodel to which you want these objects to be saved.*  You can opt to save them to other datamodels, but by default they will be saved to this datamodel.
 {{{
-<dataset
+<datamodel
            id="org.myorg.myapp.blogPosts"
            weight="1000"
            description="contains blog posts.">
-					 cacheInMemory="false"
-			</dataset>
+			</datamodel>
 }}}
 *(3) In your Java code, create instance of this class.* Each persistable javabean must have a unique ID, which must be a valid URI:
 {{{
@@ -93,29 +92,33 @@ blogPost.setBody("Here is the body of the first blog post.");
 //get Persister singleton object
 Persister persister = Persister.getInstance();
 
-//save the blog post to its target Dataset, of role "org.myorg.myapp.blogPosts"
+//save the blog post to its target datamodel.  INQLE knows the name and location of this datamodel
 persister.persist(blogPost);
 
 }}}
 *(6) Later retrieve this object.*
 {{{
+//get Persister singleton object
+Persister persister = Persister.getInstance();
+
 BlogPost blogPost = (BlogPost)persister.reconstitute(BlogPost.class, blogPostId);
 }}}
 
 ===2. SPARQL Querying===
-The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datasets, represented in a relational database and/or by a RDF data file. 
+The [http://www.w3.org/TR/rdf-sparql-query/ SPARQL] query language is an emerging standard of the semantic web. It is a powerful way of selecting related data from disparate data sources. This bundle supports query across 1 or more datamodels, represented in a relational database and/or by a RDF data file. 
 
 *Usage:*
-Simply create a QueryCriteria object, add as many Datamodel objects as desired, add the SPARQL query, and call querySelect method
+Simply create a QueryCriteria object, add as many D\datamodel objects as desired, add the SPARQL query, and call querySelect method
 {{{
 QueryCriteria queryCriteria = new QueryCriteria();
 queryCriteria.addNamedModel(namedModel1);
 queryCriteria.addNamedModel(namedModel2);
 queryCriteria.setQuery(mySparql);
-RdfTable resultTable = Queryer.selectRdfTable(queryCriteria);
+//you can retrieve the result as a variety of classes
+ResultSetRewindable resultSet = Queryer.selectResultSet(queryCriteria);
 }}}
 
-When a single, database-backed datamodel is added, then a faster SDB query will be done. Otherwise, a slower Jena ARQ query will be done.
+Queries are faster when they are issued against a single datamodel.  However, the Jena TDB engine within INQLE does support querying across many datamodels at once.
 
 ===3. Bulk Loading of RDF Data from a File===
 This bundle supports loading RDF data from a file with any of these RDF syntaxes:
@@ -126,7 +129,7 @@ This bundle supports loading RDF data from a file with any of these RDF syntaxes
 
 To load data, your code can do the following:
 {{{
-//loadIntoThisModel is the Jena Model to load the data into
+Model loadIntoThisModel = ModelFactory.createDefaultModel();
 Loader loader = new Loader(loadIntoThisModel);
 
 //fullFilepath = the path to the file to load
