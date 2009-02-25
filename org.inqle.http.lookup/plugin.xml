@@ -10,5 +10,18 @@
 			load-on-startup="true">
 		</servlet>
 		
+		<servlet
+			alias="/export"
+			class="org.inqle.http.lookup.ExportServlet"
+			httpcontextId="org.eclipse.rap.httpcontext"
+			load-on-startup="true">
+		</servlet>
+		
+		<servlet
+			alias="/datamodel"
+			class="org.inqle.http.lookup.PublishDatamodelServlet"
+			httpcontextId="org.eclipse.rap.httpcontext"
+			load-on-startup="true">
+		</servlet>
 	</extension>
 </plugin>
