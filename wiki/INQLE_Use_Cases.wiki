@@ -1,0 +1,4 @@
+#summary Describes examples of functions INQLE can be used for
+
+|| *Minimum INQLE Version* || *Use Case* || *Description* ||
+|| 0.2.7 || Data mining of local data set || You seek to find what is causing your frequent hives.   You keep a personal diary of activities you do every day, including foods you eat.  You record such data in a spreadsheet, and save the file.  You import it into INQLE and run INQLE's Learning Agent for a few hours.   You return to INQLE and find that hives episodes tend to correlate with mornings in which you floss your teeth.  You try getting a new brand of tooth floss, and you live happily ever after, in a blissful hives-free state.  It's just that easy, folks. ||
