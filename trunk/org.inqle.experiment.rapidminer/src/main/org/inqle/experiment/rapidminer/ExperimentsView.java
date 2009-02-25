@@ -27,7 +27,6 @@ public class ExperimentsView extends SparqlView {
 	private static final Logger log = Logger.getLogger(ExperimentsView.class);
 
 	public static final String ID = "org.inqle.experiment.rapidminer.experimentsView";
-
 	@Override
 	/**
 	 * This view is ready to display upon creation, so refresh (and show) the view

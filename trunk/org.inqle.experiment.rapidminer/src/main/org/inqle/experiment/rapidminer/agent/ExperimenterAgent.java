@@ -6,14 +6,13 @@ import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
 import org.inqle.agent.IAgent;
 import org.inqle.core.util.RandomListChooser;
+import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.experiment.rapidminer.ExperimentResult;
 import org.inqle.experiment.rapidminer.ILearningCycle;
 import org.inqle.experiment.rapidminer.LearningCycle;
 import org.inqle.experiment.rapidminer.LearningCycleLister;
-import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
 
@@ -105,7 +104,7 @@ public class ExperimenterAgent extends AAgent {
 //			log.trace("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
 			log.info("Storing experiment result");
 			persister.persist(experimentResult);
-			long cycleTime = (System.currentTimeMillis() - cycleStartTime) / 1000;
+			double cycleTime = (System.currentTimeMillis() - cycleStartTime) / 1000;
 			log.info("Cycle # " + cycleCount + ": completed in " + cycleTime + " seconds.");
 			
 			if (learningCycleToRun.isReadyToStopCycling()) break;
