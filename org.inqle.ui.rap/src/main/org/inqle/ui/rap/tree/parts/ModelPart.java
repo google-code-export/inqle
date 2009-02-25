@@ -12,6 +12,7 @@ import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.http.lookup.PublishDatamodelServlet;
 import org.inqle.ui.rap.ApplicationActionBarAdvisor;
 import org.inqle.ui.rap.IDisposableViewer;
 import org.inqle.ui.rap.Part;
@@ -21,6 +22,7 @@ import org.inqle.ui.rap.actions.DeleteModelAction;
 import org.inqle.ui.rap.actions.EmptyModelAction;
 import org.inqle.ui.rap.actions.FileDataImporterAction;
 import org.inqle.ui.rap.actions.LoadRdfFileAction;
+import org.inqle.ui.rap.actions.NewBrowserAction;
 import org.inqle.ui.rap.actions.OpenNamedModelViewAction;
 import org.inqle.ui.rap.views.DatamodelView;
 import org.inqle.ui.rap.views.DatasetViewer;
@@ -79,6 +81,19 @@ public class ModelPart extends Part {
 		openNamedModelViewAction.setDatamodel(datamodel);
 		actions.add(openNamedModelViewAction);
   	
+		
+		//browse this model action
+		String url = PublishDatamodelServlet.PATH + "?" + PublishDatamodelServlet.PARAM_EXPORT_FROM_DATAMODEL + "=" + datamodel.getId();
+		NewBrowserAction newBrowserAction = new NewBrowserAction(
+			url,
+			"View RDF Page",
+			ApplicationActionBarAdvisor.PLUGIN_ID,
+			null,
+			"_blank"
+		);
+		newBrowserAction.setDescription("View this model as an RDF file, in a separate browser.  Only works for smaller models.");
+		actions.add(newBrowserAction);
+		
 		//Clear datamodel action
 		EmptyModelAction emptyDatasetAction = new EmptyModelAction("Empty data", this, workbenchWindow);
 		actions.add(emptyDatasetAction);
@@ -93,10 +108,6 @@ public class ModelPart extends Part {
 			LoadRdfFileAction loadRdfFileAction = new LoadRdfFileAction("Load data from RDF file...", this, workbenchWindow);
 			actions.add(loadRdfFileAction);
 			
-	//		Legacy CSV loader
-	//		LoadCsvFileAction loadCsvFileAction = new LoadCsvFileAction("Load data from Delimited Text (CSV) File...", this, workbenchWindow);
-	//		actions.add(loadCsvFileAction);
-			
 			FileDataImporterAction fileDataImporterAction = new FileDataImporterAction("Load data from delimited text (CSV) file...", this, workbenchWindow);
 			actions.add(fileDataImporterAction);
 			
@@ -104,11 +115,13 @@ public class ModelPart extends Part {
 			AddReasonerStatementsAction addReasonerStatementsAction = new AddReasonerStatementsAction("Add inferred statements...", this, workbenchWindow);
 			actions.add(addReasonerStatementsAction);
 			
+
 			//Delete action
 			//TODO add this functionality back some day (removed due to difficulty doing this in TDB)
 //			DeleteModelAction deleteDatasetAction = new DeleteModelAction("Delete this datamodel", this, workbenchWindow);
 //			actions.add(deleteDatasetAction);
 		}
+		
 		return actions;
 	}
 	
