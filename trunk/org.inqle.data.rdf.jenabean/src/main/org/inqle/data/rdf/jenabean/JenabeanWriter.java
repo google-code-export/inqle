@@ -14,7 +14,7 @@ import com.hp.hpl.jena.util.PrintUtil;
 
 public class JenabeanWriter {
 
-	private static final String DEFAULT_RDF_LANG = Loader.LANG_N3;
+	public static final String DEFAULT_RDF_LANG = Loader.LANG_N3;
 
 	public static String toString(Object bean) {
 		return toString(bean, DEFAULT_RDF_LANG);	

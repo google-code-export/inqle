@@ -709,6 +709,27 @@ public class Persister {
 	}
 	
 	/**
+	 * Get the database-backed model from the database directly, without using cache
+	 * @param databaseId
+	 * @param datamodelId
+	 * @return
+	 * 
+	 * @deprecated - always use cache when possible
+	 */
+	public Model getDbModel(String databaseId, String datamodelId) {
+		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(databaseId);
+
+		log.debug("Creating Model of name '" + datamodelId + "'.");
+		
+		Model model = dbConnector.getModel(datamodelId);
+		return model;
+	}
+	
+	public Model getCachedModel(String datamodelId) {
+		return cachedModels.get(datamodelId);
+	}
+	
+	/**
 	 * Loads an RDF file from local filesystem or remote (HTTP) source
 	 * @param filePath the file path or URL
 	 * @return the resulting Model
