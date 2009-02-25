@@ -1,5 +1,7 @@
 package org.inqle.ui.rap.views;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,7 +22,10 @@ import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.http.lookup.ExportServlet;
+import org.inqle.ui.rap.ApplicationActionBarAdvisor;
 import org.inqle.ui.rap.actions.IDatamodelView;
+import org.inqle.ui.rap.actions.NewBrowserAction;
 import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.AScrolledTable.ColumnNameData;
 
@@ -60,13 +65,14 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	protected Combo recordCountCombo;
 	protected Button previousButton;
 	protected Button nextButton;
+	protected Button deleteButton;
+	protected Button exportButton;
 	protected Label resultDescription;
 	
 	private int offset = 0;
 
 	private ResultSetRewindable resultSet;
 
-	private Button deleteButton;
 
 	protected Datamodel datamodel;
 
@@ -82,6 +88,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	public boolean linkUriOnly = true;
 
 	private Text title;
+
+	
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -158,6 +166,10 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		deleteButton.setText("Delete");
 		deleteButton.addSelectionListener(this);
 		deleteButton.setEnabled(false);
+		exportButton = new Button(descriptionComposite, SWT.PUSH);
+		exportButton.setText("Export");
+		exportButton.addSelectionListener(this);
+		exportButton.setEnabled(false);
 	}
 	
 	public void createTable() {
@@ -312,6 +324,12 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 			return;
 		}
 		
+		if (event.getSource() == exportButton) {
+//		log.info("Delete clicked");
+		exportSelectedItems();
+		return;
+	}
+		
 		//was a column header clicked?
 		if (event.getSource() instanceof Link) {
 			Link clickedLink = (Link)event.getSource();
@@ -386,10 +404,12 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 			checkAllButton.setEnabled(true);
 			uncheckAllButton.setEnabled(true);
 			deleteButton.setEnabled(true);
+			exportButton.setEnabled(true);
 		} else {
 			checkAllButton.setEnabled(false);
 			uncheckAllButton.setEnabled(false);
 			deleteButton.setEnabled(false);
+			exportButton.setEnabled(false);
 		}
 	}
 
@@ -484,8 +504,37 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		composite.forceFocus();
 	}
 
-	public void setDatamodel(Datamodel dataodel) {
-		this.datamodel = dataodel;
+	public void exportSelectedItems() {
+			
+		List<String> checkedItems = resultSetTable.getCheckedItems();
+		String checkedUriList = "";
+		int i=0;
+		for (String checkedItem: checkedItems) {
+			if (i>0) checkedUriList += ",";
+			i++;
+			checkedUriList += checkedItem;
+		}
+		
+		String encodedUriList = checkedUriList;
+		try {
+			encodedUriList = URLEncoder.encode(checkedUriList, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			log.error("Error endocing list of URIs:" + checkedUriList, e);
+			return;
+		}
+		String url = ExportServlet.PATH + "?" + ExportServlet.PARAM_EXPORT_FROM_DATAMODEL + "=" + getDatamodel().getId() +
+			"&" + ExportServlet.PARAM_URI_LIST + "=" + encodedUriList;
+		NewBrowserAction newBrowserAction = new NewBrowserAction(
+			url,
+			"View RDF Page",
+			ApplicationActionBarAdvisor.PLUGIN_ID,
+			null,
+			"_blank"
+		);
+		newBrowserAction.run();
+	}
+	public void setDatamodel(Datamodel datamodel) {
+		this.datamodel = datamodel;
 	}
 
 	public String getTitleText() {

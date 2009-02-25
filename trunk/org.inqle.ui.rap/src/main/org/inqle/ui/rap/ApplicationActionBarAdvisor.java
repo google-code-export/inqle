@@ -37,10 +37,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     public static final String NAME = "name";
 		public static final String ID = "id";
 		public static final String ICON = "icon";
-		private static final String H2_ADMIN_URL = "http://localhost:8082";
-		private static final String H2_ADMIN_TEXT = "Administer Embedded H2 Server";
-		private static final String PLUGIN_ID = "org.inqle.ui.rap";
-		private static final String H2_ADMIN_ICON_PATH = "icons/h2.jpeg";
+//		private static final String H2_ADMIN_URL = "http://localhost:8082";
+//		private static final String H2_ADMIN_TEXT = "Administer Embedded H2 Server";
+		public static final String PLUGIN_ID = "org.inqle.ui.rap";
+//		private static final String H2_ADMIN_ICON_PATH = "icons/h2.jpeg";
 		// Actions - important to allocate these only in makeActions, and then use them
     // in the fill methods.  This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
@@ -69,8 +69,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         aboutAction = new AboutAction(window);
         register(aboutAction);
         
-        h2AdminAction = new NewBrowserAction(H2_ADMIN_URL, H2_ADMIN_TEXT, PLUGIN_ID, H2_ADMIN_ICON_PATH);
-        register(h2AdminAction);
+//        h2AdminAction = new NewBrowserAction(H2_ADMIN_URL, H2_ADMIN_TEXT, PLUGIN_ID, H2_ADMIN_ICON_PATH);
+//        register(h2AdminAction);
         
         //Create a new OpenViewAction for each view plugin
         List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(VIEWS);
@@ -117,7 +117,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         }
         
         //Tools
-        toolsMenu.add(h2AdminAction);
+//        toolsMenu.add(h2AdminAction);
         
         // Help
         helpMenu.add(aboutAction);
