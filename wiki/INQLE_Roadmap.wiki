@@ -101,6 +101,11 @@ Improved usability, without need to enter URIs.
   * Caching Jena Models, with big performance gains. INQLE is now running "like a top" -  3.7 seconds per cycle (against 550 records, 3 learnable attributes + label), whereas it was taking 11 seconds using previous database (Jena SDB).
   * Central INQLE Server is now running more reliably.  Faster performance there as well, so lookups of classes and properties will return quicker
 
+==Version 0.2.9==
+(25 February, 2009)
+  * Exporting of selected RDF subjects as RDF
+  * Publishing of smaller datamodels as RDF files
+
 ==Version 0.3==
 (expected end of May, 2009)
 
