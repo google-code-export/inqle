@@ -185,15 +185,6 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		tableViewer.refresh();
 		//this.getShell().pack(true);
 	}
-
-	/**
-	 * Set the rows of data in the table.  The class of items should be set in the setRowItemClass() method
-	 * @param beans
-	 */
-//	public void setXmlDocument(Document xmlDocument) {
-//		//this.rdfTable = rdfTable;
-//		this.xmlDocument = xmlDocument;
-//	}
 	
 	public String getSearchTextValue() {
 		return searchBox.getSearchText();
@@ -208,13 +199,6 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		if (clickedObject.equals(enterNewClassButton)) {
 			//log.info("Clicked 'new resource' button");
 			table.deselectAll();
-//			OntModel ontModel = ModelFactory.createOntologyModel();
-//			OntClass ontClass = ontModel.createClass(RDF.SUBJECT);
-//			AOntResourceDialog resourceDialog = new AOntResourceDialog(selfComposite.getShell(), ontClass);
-//			resourceDialog.open();
-//			if (resourceDialog.getReturnCode() == Window.OK) {
-//				log.info("Created new <" + RDF.SUBJECT + ">:\n" + JenabeanWriter.modelToString(ontModel));
-//			}
 
 			CreateSubclassAction createSubclassAction = new CreateSubclassAction(
 					selfComposite.getShell(), 
@@ -283,26 +267,6 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			
 			dataRecords = ListMapUtil.merge(localRecords, remoteRecords);
 			log.info("Merged 2 documents into:\n" + dataRecords);
-			
-//			Document mergedDocument = SparqlXmlUtil.merge(localDocument, remoteDocument);
-//			log.info("Merged 2 documents into:\n" + XmlDocumentUtil.xmlToString(mergedDocument));
-			
-			//if insufficient results, do an additional query of the remote RDF Schema datafiles
-//		  if (interimRecords.size() <= THRESHOLD_DO_REMOTE_SCHEMA_LOOKUP) {
-//				//log.info("Doing remote RDF classes lookup...");
-//				params = new HashMap<String, String>();
-//				params.put(InqleInfo.PARAM_SEARCH_RDF_CLASS, getSearchTextValue());
-//				Document remoteRdfClassesDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-//				//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteRdfClassesDocument));
-////				mergedDocument = SparqlXmlUtil.merge(mergedDocument, remoteRdfClassesDocument);
-//				List<SortedMap<String, String>> remoteRdfClassesRecords = SparqlXmlUtil.getRowValues(remoteRdfClassesDocument);
-//				dataRecords = ListMapUtil.merge(interimRecords, remoteRdfClassesRecords);
-//		  } else {
-//		  	dataRecords = interimRecords;
-//		  }			
-			
-//			setXmlDocument(mergedDocument);
-//			List<SortedMap<String, String>> records = SparqlXmlUtil.getRowValues(mergedDocument);
 			
 			refreshTableData();
 		}
