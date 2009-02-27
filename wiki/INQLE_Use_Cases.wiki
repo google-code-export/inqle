@@ -1,4 +1,4 @@
-#summary Describes examples of what INQLE can be used for
+#summary Examples of what INQLE can be used for
 
 || *Minimum INQLE Version* || *You want to...* || *Description* ||
 || 0.2.7 || Convert regular data to semantic data (RDF) || You want to convert your soon-to-be-famous spreadsheet of Dishwasher Observations (DO), to semantic data.  To do this, you use INQLE's File Data Importer Wizard, which walks you through the process of naming and structuring the new RDF.  You are finished in minutes.  ||
