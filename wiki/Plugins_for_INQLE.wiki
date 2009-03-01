@@ -10,8 +10,8 @@ INQLE provides the following extension types
 || Agents || [Agent_Extensions org.inqle.agent.rap.IAgentFactory] || Agents perform automated tasks.  Most notably, the Experimenter Agent performs releated Learning Cycles.  Other agents could do activities like polling local databases for irregularities, or crawling external RDF databases, looking for data of interest.  To make your own agent, you write Java code that implements interface IAgentFactory or extends class AAgentFactory.  Agent factories, in turn, provide agents that do the work of the automated agent, and optionally an Agent Wizard, which allows the user to customize of the agent in the user interface. ||
 || 
 ||Part Types || [Part_Type_Extensions org.inqle.ui.rap.IPartType] || Part Types are types of things which can appear in the application's left navigation window.  Your part type will appear listed and navigable, just as Samplers, Learnng Cycles, and Agents. ||
-|| Internal Datasets || [Internal_Dataset_Extensions org.inqle.data.datasets] || When you create an extension of this type, you are defining an internal dataset that you would like to use within INQLE.  INQLE will ensure this dataset is created upon startup.  Your plugin code can then store objects/data in this dataset, query it, etc.  Users cannot directly work with such datasets.  INQLE uses such datasets to store things like dataset objects, sampler objects, experiment result objects.  ||
-|| Dataset Functions (or Purposes) || [Dataset_Function_Extensions org.inqle.data.datasetFunctions] || When you create an extension of this type, you are defining a dataset function that you would like to use within INQLE.  INQLE will permit users to designate datasets as fulfilling this function.  Your plugin code can then query or work with such datasets.  INQLE uses an extension of this type to allow users to load data for lookup of subjects and predicated upon import. ||
+|| Internal Datamodels || [Internal_Datamodel_Extensions org.inqle.data.datamodels] || When you create an extension of this type, you are defining an internal datamodel that you would like to use within INQLE.  INQLE will ensure this datamodel is created upon startup.  Your plugin code can then store objects/data in this datamodel, query it, etc.  Users cannot directly work with such datamodels.  INQLE uses such datamodels to store things like datamodel objects, sampler objects, experiment result objects.  ||
+|| Datamodel Functions (or Purposes) || [Datamodel_Function_Extensions org.inqle.data.datamodelFunctions] || When you create an extension of this type, you are defining a datamodel function that you would like to use within INQLE.  INQLE will permit users to designate datamodels as fulfilling this function.  Your plugin code can then query or work with such datamodels.  INQLE uses an extension of this type to allow users to load data for lookup of subjects and predicated upon import. ||
 || JUnit Tests || [JUnit_Test_Extensions org.inqle.testing.IJUnitTests] || If you have JUnit test code which you would like to run within your running INQLE server, you can declare them using this extension type.  This is a convenient way to test how your plugin will interact with other running parts of INQLE.  ||
 || Views || [Eclipse_View_Extensions org.eclipse.ui.views] || Views are an Eclipse concept.  They are a way to provide a page or form or report, which can be rendered in INQLE's user interface.  A View that you provide in this way will show up in the main menu, under the "Window" menu option. ||
 || Servlets || [Eclipse_Servlet_Extensions org.eclipse.equinox.http.registry.servlets] || Servlets are an Equinox extension type.  You can create an extension of this type if you need to add a servlet to your inqle server, listening and responding to requests for whatever reason. ||
@@ -22,23 +22,23 @@ Here are examples of plugins that could be built for INQLE.
 
 ===Data Monitoring Module===
 Let's say you wanted INQLE to monitor data file for some condition.  You could accomplish this by adding the following extensions.
-  * an Internal Dataset, for storing Alert objects
-  * an "Alert" Part type, and an associated wizard which lets users design alerts, by specifying the dataset(s) to monitor, the SPARQL query to send, and the email(s) to contact.
+  * an Internal Datamodel, for storing Alert objects
+  * an "Alert" Part type, and an associated wizard which lets users design alerts, by specifying the datamodel(s) to monitor, the SPARQL query to send, and the email(s) to contact.
 
 ===Quiz Module===
 Let's say you wanted INQLE to function as an educational tool.  Such a tool would benefit from INQLE's capabilities for working with semantic data.  You could add a plugin, named something like org.my.uri.quiz.  This module would provide the following extensions:
-  * an  Internal Dataset, for storing quiz results
-  * a Servlet, for rendering a simple login, then displaying a form with random questions from the database.  The servlet would capture the results into the Internal Dataset.
+  * an  Internal Datamodel, for storing quiz results
+  * a Servlet, for rendering a simple login, then displaying a form with random questions from the database.  The servlet would capture the results into the Internal Datamodel.
   * a View, which queries the database and shows the results of the quiz
 
 ===Survey Module===
 Let's say you wanted to extend your INQLE server to be able to not only process data that has been collected, but also to collect the data itself.  You could achieve this by adding a plugin with these extensions:
-  * an Internal Dataset, for storing survey results.
+  * an Internal Datamodel, for storing survey results.
   * a Servlet, for rendering a simple login, then displaying a form with questions from the database.  The servlet would capture the results.
   * a View, which queries the database and shows the results of the quiz
   * a Survey Part Type.  This would permit users to design new surveys.
 
 ===Research Module===
 INQLE could be extended to assist with more aspects of the lifecycle of a research trial.  Toward this, you could provide these extensions:
-  * an Internal Dataset, for storing research study objects.
+  * an Internal Datamodel, for storing research study objects.
   * a "Study" Part Type and associated wizard for designing research study objects.
