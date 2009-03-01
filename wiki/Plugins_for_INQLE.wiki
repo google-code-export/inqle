@@ -1,6 +1,6 @@
-#summary Describes what types of plugins are available for INQLE.
+#summary Describes what types of extensions are available for INQLE.
 
-INQLE runs within an Eclipse OSGi container.  This means it was developed to have maximal friendliness for plug-ins.  Where possible, INQLE's functionality has been abstracted into extension types.  Thus, most of the functions that INQLE performs can be expanded in new directions.
+INQLE runs within an Eclipse OSGi container.  This means it was developed to have maximal friendliness for plug-ins or extensions.  Where possible, INQLE's functionality has been abstracted into extension types.  Thus, most of the functions that INQLE performs can be expanded in new directions.
 
 INQLE provides the following extension types
 
@@ -22,23 +22,23 @@ Here are examples of plugins that could be built for INQLE.
 
 ===Data Monitoring Module===
 Let's say you wanted INQLE to monitor data file for some condition.  You could accomplish this by adding the following extensions.
-  * an Internal Datamodel, for storing Alert objects
+  * a System Datamodel, for storing Alert objects
   * an "Alert" Part type, and an associated wizard which lets users design alerts, by specifying the datamodel(s) to monitor, the SPARQL query to send, and the email(s) to contact.
 
 ===Quiz Module===
 Let's say you wanted INQLE to function as an educational tool.  Such a tool would benefit from INQLE's capabilities for working with semantic data.  You could add a plugin, named something like org.my.uri.quiz.  This module would provide the following extensions:
-  * an  Internal Datamodel, for storing quiz results
+  * a System Datamodel, for storing quiz results
   * a Servlet, for rendering a simple login, then displaying a form with random questions from the database.  The servlet would capture the results into the Internal Datamodel.
   * a View, which queries the database and shows the results of the quiz
 
 ===Survey Module===
 Let's say you wanted to extend your INQLE server to be able to not only process data that has been collected, but also to collect the data itself.  You could achieve this by adding a plugin with these extensions:
-  * an Internal Datamodel, for storing survey results.
+  * a System Datamodel, for storing survey results.
   * a Servlet, for rendering a simple login, then displaying a form with questions from the database.  The servlet would capture the results.
   * a View, which queries the database and shows the results of the quiz
   * a Survey Part Type.  This would permit users to design new surveys.
 
 ===Research Module===
 INQLE could be extended to assist with more aspects of the lifecycle of a research trial.  Toward this, you could provide these extensions:
-  * an Internal Datamodel, for storing research study objects.
+  * a System Datamodel, for storing research study objects.
   * a "Study" Part Type and associated wizard for designing research study objects.
