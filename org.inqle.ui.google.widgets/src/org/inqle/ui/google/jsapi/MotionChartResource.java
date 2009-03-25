@@ -29,8 +29,6 @@ public class MotionChartResource implements IResource {
 
   public String getLocation() {
     return "org/inqle/ui/google/jsapi/MotionChart.js";
-//    return "http://localhost:7500/web_files/loadGoogleAPI.js";
-//    return "http://localhost:7500/web_files/MotionChart.js";
   }
 
   public boolean isJSLibrary() {
@@ -39,6 +37,5 @@ public class MotionChartResource implements IResource {
 
   public boolean isExternal() {
     return true;
-//    return true;
   }
 }
