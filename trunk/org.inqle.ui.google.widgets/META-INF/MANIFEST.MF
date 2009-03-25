@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Google Widgets for Eclipse RAP
+Bundle-SymbolicName: org.inqle.ui.google.widgets;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.rap.rwt
+Import-Package: javax.servlet;version="2.4.0",
+ javax.servlet.http;version="2.4.0"
+Export-Package: 
+ org.inqle.ui.google.jsapi
