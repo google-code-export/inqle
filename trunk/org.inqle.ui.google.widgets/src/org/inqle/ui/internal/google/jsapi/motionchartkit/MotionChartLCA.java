@@ -24,10 +24,6 @@ import org.inqle.ui.google.jsapi.MotionChart;
 
 public class MotionChartLCA extends AbstractWidgetLCA {
 
-  private static final String PARAM_CENTER = "centerLocation";
-//  private static final String JS_PROP_ADDRESS = "address";
-//  private static final String PROP_ADDRESS = "address";
-
   public void preserveValues( final Widget widget ) {
     ControlLCAUtil.preserveValues( ( Control )widget );
     IWidgetAdapter adapter = WidgetUtil.getAdapter( widget );
