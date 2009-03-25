@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="org.eclipse.equinox.http.registry.resources">
+    <resource
+      alias="/web_files"
+      base-name="/web_files"/>
+  </extension>
+	
+  <extension
+      id="org.inqle.ui.google.jsapi"
+      point="org.eclipse.rap.ui.resources">
+    <resource class="org.inqle.ui.google.jsapi.GoogleAPIResource"/>
+    <!--resource class="org.inqle.ui.google.jsapi.MotionChartAPIResource"/-->
+    <resource class="org.inqle.ui.google.jsapi.MotionChartResource"/>
+  </extension>
+</plugin>
