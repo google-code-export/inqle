@@ -21,10 +21,7 @@ import org.inqle.ui.rap.IDisposableViewer;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.widgets.ActionsMenu;
 
-/**
- * This view shows a &quot;mail message&quot;. This class is contributed through
- * the plugin.xml.
- */
+
 public class DetailView extends ViewPart implements ISelectionListener {
 
 	private static final Logger log = Logger.getLogger(DetailView.class);

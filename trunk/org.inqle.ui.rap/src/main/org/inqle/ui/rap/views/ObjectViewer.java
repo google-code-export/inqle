@@ -1,4 +1,4 @@
-package org.inqle.ui.rap;
+package org.inqle.ui.rap.views;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.ui.google.jsapi.MotionChart;
+import org.inqle.ui.rap.IDisposableViewer;
 
 public class ObjectViewer extends Viewer implements IDisposableViewer {
 
@@ -65,16 +67,23 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 	  gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
 	  descriptionWidget.setLayoutData(gridData);
 	  
+	  //testing custom widgets
+	  l = new Label(composite, SWT.NONE);
+		l.setText("Motion Chart");
+		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
+		motionChart.setWidgetData("1");
+    composite.setVisible(false);
+    gridData = new GridData(800,600);
+    motionChart.setLayoutData(gridData);
+    
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
 		//l.setFont(boldFont);
 	  detailWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
-	  //gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL | SWT.WRAP);
-	  //gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL, GridData.VERTICAL_ALIGN_BEGINNING, true, true);
 	  gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 	  detailWidget.setLayoutData(gridData);
 	  
-	  composite.setVisible(false);
+	  
 	}
 	
 	//private ISelection selection;
