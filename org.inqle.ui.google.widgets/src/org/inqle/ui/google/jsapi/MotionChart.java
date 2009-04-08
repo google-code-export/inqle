@@ -13,38 +13,49 @@ package org.inqle.ui.google.jsapi;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
+/**
+ * Renders a Google Motion Chart.
+ * 
+ * @See http://code.google.com/apis/visualization/documentation/gallery/motionchart.html
+ * @author David Donohue
+ * 2009/4/8
+ */
 public class MotionChart extends Composite {
-
-  private String address = "";
-  private String centerLocation;
+  
+  private String widgetData;
 
   public MotionChart( final Composite parent, final int style ) {
     super( parent, style );
   }
 
-  public String getAddress() {
-    return address;
+  public String getWidgetData() {
+    return widgetData;
   }
 
-  public void setAddress( final String address ) {
-    if( address == null ) {
-      this.address = "";
-    } else {
-      this.address = address;
-    }
-  }
-
-  public void setCenterLocation( String location ) {
-    this.centerLocation = location;
-  }
-
-  public String getCenterLocation() {
-    return this.centerLocation;
-  }
+//  public void setAddress( final String address ) {
+//    if( address == null ) {
+//      this.address = "";
+//    } else {
+//      this.address = address;
+//    }
+//  }
+//
+//  public void setCenterLocation( String location ) {
+//    this.centerLocation = location;
+//  }
+//
+//  public String getCenterLocation() {
+//    return this.centerLocation;
+//  }
 
   /*
-   * Intentionally commented out as a map cannot have a layout
+   * Intentionally commented out as a Motion Chart cannot have a layout
    */
   public void setLayout( final Layout layout ) {
+  }
+
+  
+  public void setWidgetData( String widgetData ) {
+    this.widgetData = widgetData;
   }
 }

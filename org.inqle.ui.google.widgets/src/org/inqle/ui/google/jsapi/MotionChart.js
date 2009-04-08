@@ -23,24 +23,28 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         this.addEventListener( "changeHeight", this._doResize, this );
         this.addEventListener( "changeWidth", this._doResize, this );
         
-        google.load('visualization', '1', {'packages':['motionchart']});
-        google.setOnLoadCallback(this.onLoadCallback);
+//        google.load('visualization', '1', {'packages':['motionchart']});
+//        google.setOnLoadCallback(this.onLoadCallback);
+//        google.setOnLoadCallback(this.drawMotionChart);
 //        function drawChart() {
 //        	this._chart = new google.visualization.MotionChart(document.getElementById(id));
 //	        this.addEventListener( "changeHeight", this._doResize, this );
 //	        this.addEventListener( "changeWidth", this._doResize, this );
 //        }
 //      }
-        this.info('Constructed');
-//        this.drawMotionChart();
+//        alert('MotionChart.construct() finished.');
+//        this.info('Constructed');
+//        this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
+//        this._chart = new google.visualization.MotionChart(this.getElement());
+//        this.load();
     },
     
-//    properties : {
-//        address : {
-//            init : "",
-//            apply : "load"
-//        }
-//    },
+    properties : {
+        widgetData : {
+            init : "",
+            apply : "load"
+        }
+    },
     
     members : {
         _doActivate : function() {
@@ -57,18 +61,16 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
             }
         },
         
-        onLoadCallback : function() {
-        	alert('onLoadCallback() called');
-        	this.drawMotionChart();
-        },
-        
-        drawMotionChart : function() {
-        	this.info('drawMotionChart...');
+        load : function() {
+        	qx.ui.core.Widget.flushGlobalQueues();
+        	alert('load() called');
+//        	this.info('drawMotionChart...');
 //            var current = this.getAddress();
 //            if( GBrowserIsCompatible() && current != null && current != "" ) {
                 qx.ui.core.Widget.flushGlobalQueues();
                 if( this._chart == null ) {
                     this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
+//                	this._chart = new google.visualization.MotionChart(this.getElement());
 //                    this._chart.addControl( new GSmallMapControl() );
 //                    this._chart.addControl( new GMapTypeControl() );
 //                    GEvent.bind( this._chart, "click", this, this._doActivate );
@@ -115,15 +117,20 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
                 data.setValue(5, 4, "West");
                 
                 var chart = this._chart;
-                this.chart.draw(data, {width: 600, height:300});
+                chart.draw(data, {width: 600, height:300});
 //            }
         },
         
+        onLoadCallback : function() {
+        	alert('onLoadCallback() called');
+        	drawMotionChart();
+        },
+        
         _doResize : function() {
-            qx.ui.core.Widget.flushGlobalQueues();
-            if( this._chart != null ) {
-                this._chart.checkResize();
-            }
+//            qx.ui.core.Widget.flushGlobalQueues();
+//            if( this._chart != null ) {
+//                this._chart.checkResize();
+//            }
         }
     }
     

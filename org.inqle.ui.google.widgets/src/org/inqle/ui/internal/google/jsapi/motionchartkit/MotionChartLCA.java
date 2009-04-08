@@ -24,10 +24,13 @@ import org.inqle.ui.google.jsapi.MotionChart;
 
 public class MotionChartLCA extends AbstractWidgetLCA {
 
+  private static final String PROP_DATA = "widgetData";
+  private static final String JS_PROP_DATA = "widgetData";
+
   public void preserveValues( final Widget widget ) {
     ControlLCAUtil.preserveValues( ( Control )widget );
     IWidgetAdapter adapter = WidgetUtil.getAdapter( widget );
-//    adapter.preserve( PROP_ADDRESS, ( ( MotionChart )widget ).getAddress() );
+    adapter.preserve( PROP_DATA, ( ( MotionChart )widget ).getWidgetData() );
     
     // only needed for custom variants (theming)
 //    WidgetLCAUtil.preserveCustomVariant( widget );
@@ -60,10 +63,10 @@ public class MotionChartLCA extends AbstractWidgetLCA {
     MotionChart motionChart = ( MotionChart )widget;
     ControlLCAUtil.writeChanges( motionChart );
     JSWriter writer = JSWriter.getWriterFor( widget );
-//    writer.set( PROP_ADDRESS, JS_PROP_ADDRESS, motionChart.getAddress() );
+    writer.set( PROP_DATA, JS_PROP_DATA, motionChart.getWidgetData() );
     
     // only needed for custom variants (theming)
-    WidgetLCAUtil.writeCustomVariant( widget );
+//    WidgetLCAUtil.writeCustomVariant( widget );
   }
 
   public void renderDispose( final Widget widget ) throws IOException {
