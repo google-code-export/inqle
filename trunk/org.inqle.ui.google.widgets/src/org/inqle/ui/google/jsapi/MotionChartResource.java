@@ -36,6 +36,6 @@ public class MotionChartResource implements IResource {
   }
 
   public boolean isExternal() {
-    return true;
+    return false;
   }
 }
