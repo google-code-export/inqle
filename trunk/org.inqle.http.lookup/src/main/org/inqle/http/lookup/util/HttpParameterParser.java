@@ -9,7 +9,8 @@ public class HttpParameterParser {
 	public static String getParam(HttpServletRequest request, String paramName) {
 		String val = request.getParameter(paramName);
 		if (val==null) {
-			val = (String)request.getAttribute(InqleInfo.PARAM_REGISTER_RDF);
+//			val = (String)request.getAttribute(InqleInfo.PARAM_REGISTER_RDF);
+			val = (String)request.getAttribute(paramName);
 		}
 		return val;
 	}
