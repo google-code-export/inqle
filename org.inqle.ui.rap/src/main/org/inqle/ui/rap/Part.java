@@ -14,6 +14,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.ui.rap.tree.IDeltaListener;
 import org.inqle.ui.rap.tree.NullDeltaListener;
+import org.inqle.ui.rap.views.ObjectViewer;
 
 public abstract class Part implements IPart {
 

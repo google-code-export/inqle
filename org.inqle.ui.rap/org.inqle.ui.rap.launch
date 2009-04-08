@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<launchConfiguration type="org.eclipse.rap.ui.launch.RAPLauncher">
+<launchConfiguration type="org.inqle.ui.ui.launch.RAPLauncher">
 <booleanAttribute key="append.args" value="true"/>
 <booleanAttribute key="automaticAdd" value="false"/>
 <booleanAttribute key="automaticValidate" value="false"/>
@@ -14,16 +14,16 @@
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.ignoreApp=true -Dosgi.noShutdown=true"/>
-<stringAttribute key="org.eclipse.rap.launch.browserMode" value="INTERNAL"/>
-<stringAttribute key="org.eclipse.rap.launch.entryPoint" value="mail"/>
-<stringAttribute key="org.eclipse.rap.launch.libraryVariant" value="STANDARD"/>
-<stringAttribute key="org.eclipse.rap.launch.logLevel" value="OFF"/>
-<intAttribute key="org.eclipse.rap.launch.port" value="10080"/>
-<stringAttribute key="org.eclipse.rap.launch.servletName" value="rap"/>
-<booleanAttribute key="org.eclipse.rap.launch.terminatePrevious" value="true"/>
-<booleanAttribute key="org.eclipse.rap.launch.useManualPort" value="false"/>
+<stringAttribute key="org.inqle.ui.launch.browserMode" value="INTERNAL"/>
+<stringAttribute key="org.inqle.ui.launch.entryPoint" value="mail"/>
+<stringAttribute key="org.inqle.ui.launch.libraryVariant" value="STANDARD"/>
+<stringAttribute key="org.inqle.ui.launch.logLevel" value="OFF"/>
+<intAttribute key="org.inqle.ui.launch.port" value="10080"/>
+<stringAttribute key="org.inqle.ui.launch.servletName" value="rap"/>
+<booleanAttribute key="org.inqle.ui.launch.terminatePrevious" value="true"/>
+<booleanAttribute key="org.inqle.ui.launch.useManualPort" value="false"/>
 <stringAttribute key="pde.version" value="3.3"/>
-<stringAttribute key="target_bundles" value="javax.servlet@default:default,org.apache.commons.logging@default:default,org.eclipse.core.commands@default:default,org.eclipse.core.contenttype@default:default,org.eclipse.core.expressions@default:default,org.eclipse.core.jobs@default:default,org.eclipse.core.runtime@default:default,org.eclipse.equinox.app@default:default,org.eclipse.equinox.common@default:default,org.eclipse.equinox.http.jetty@default:default,org.eclipse.equinox.http.registry@default:default,org.eclipse.equinox.http.servlet@default:default,org.eclipse.equinox.preferences@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.osgi@default:default,org.eclipse.osgi.services@default:default,org.eclipse.rap.core.databinding@default:default,org.eclipse.rap.core.databinding.beans@default:default,org.eclipse.rap.demo@default:default,org.eclipse.rap.demo.databinding@default:default,org.eclipse.rap.jface@default:default,org.eclipse.rap.jface.databinding@default:default,org.eclipse.rap.rwt@default:default,org.eclipse.rap.source@default:default,org.eclipse.rap.ui@default:default,org.eclipse.rap.ui.forms@default:default,org.eclipse.rap.ui.views@default:default,org.eclipse.rap.ui.workbench@default:default,org.mortbay.jetty@default:default"/>
+<stringAttribute key="target_bundles" value="javax.servlet@default:default,org.apache.commons.logging@default:default,org.eclipse.core.commands@default:default,org.eclipse.core.contenttype@default:default,org.eclipse.core.expressions@default:default,org.eclipse.core.jobs@default:default,org.eclipse.core.runtime@default:default,org.eclipse.equinox.app@default:default,org.eclipse.equinox.common@default:default,org.eclipse.equinox.http.jetty@default:default,org.eclipse.equinox.http.registry@default:default,org.eclipse.equinox.http.servlet@default:default,org.eclipse.equinox.preferences@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.osgi@default:default,org.eclipse.osgi.services@default:default,org.inqle.ui.core.databinding@default:default,org.inqle.ui.core.databinding.beans@default:default,org.inqle.ui.demo@default:default,org.inqle.ui.demo.databinding@default:default,org.inqle.ui.jface@default:default,org.inqle.ui.jface.databinding@default:default,org.inqle.ui.rwt@default:default,org.inqle.ui.source@default:default,org.inqle.ui.ui@default:default,org.inqle.ui.ui.forms@default:default,org.inqle.ui.ui.views@default:default,org.inqle.ui.ui.workbench@default:default,org.mortbay.jetty@default:default"/>
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
 <stringAttribute key="workspace_bundles" value="org.inqle.user.ui.rap2@default:default"/>
