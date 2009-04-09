@@ -63,7 +63,8 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         
         load : function() {
         	qx.ui.core.Widget.flushGlobalQueues();
-        	alert('load() called');
+        	var theData = this.getWidgetData();
+//        	alert('load() called');
 //        	this.info('drawMotionChart...');
 //            var current = this.getAddress();
 //            if( GBrowserIsCompatible() && current != null && current != "" ) {
@@ -77,44 +78,45 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
 //                    GEvent.bind( this._chart, "moveend", this, this._onMapMove );
                     
                 }
-    	        
-                var data = new google.visualization.DataTable();
-                data.addRows(6);
-                data.addColumn('string', 'Fruit');
-                data.addColumn('date', 'Date');
-                data.addColumn('number', 'Sales');
-                data.addColumn('number', 'Expenses');
-                data.addColumn('string', 'Location');
-                data.setValue(0, 0, 'Apples');
-                data.setValue(0, 1, new Date (1988,0,1));
-                data.setValue(0, 2, 1000);
-                data.setValue(0, 3, 300);
-                data.setValue(0, 4, 'East');
-                data.setValue(1, 0, 'Oranges');
-                data.setValue(1, 1, new Date (1988,0,1));
-                data.setValue(1, 2, 950);
-                data.setValue(1, 3, 200);
-                data.setValue(1, 4, 'West');
-                data.setValue(2, 0, 'Bananas');
-                data.setValue(2, 1, new Date (1988,0,1));
-                data.setValue(2, 2, 300);
-                data.setValue(2, 3, 250);
-                data.setValue(2, 4, 'West');
-                data.setValue(3, 0, 'Apples');
-                data.setValue(3, 1, new Date(1988,1,1));
-                data.setValue(3, 2, 1200);
-                data.setValue(3, 3, 400);
-                data.setValue(3, 4, "East");
-                data.setValue(4, 0, 'Oranges');
-                data.setValue(4, 1, new Date(1988,1,1));
-                data.setValue(4, 2, 900);
-                data.setValue(4, 3, 150);
-                data.setValue(4, 4, "West");
-                data.setValue(5, 0, 'Bananas');
-                data.setValue(5, 1, new Date(1988,1,1));
-                data.setValue(5, 2, 788);
-                data.setValue(5, 3, 617);
-                data.setValue(5, 4, "West");
+    	        alert('Widget data:' + theData);
+                var data  = new google.visualization.DataTable(theData);
+//                var data = new google.visualization.DataTable();
+//                data.addRows(6);
+//                data.addColumn('string', 'Fruit');
+//                data.addColumn('date', 'Date');
+//                data.addColumn('number', 'Sales');
+//                data.addColumn('number', 'Expenses');
+//                data.addColumn('string', 'Location');
+//                data.setValue(0, 0, 'Apples');
+//                data.setValue(0, 1, new Date (1988,0,1));
+//                data.setValue(0, 2, 1000);
+//                data.setValue(0, 3, 300);
+//                data.setValue(0, 4, 'East');
+//                data.setValue(1, 0, 'Oranges');
+//                data.setValue(1, 1, new Date (1988,0,1));
+//                data.setValue(1, 2, 950);
+//                data.setValue(1, 3, 200);
+//                data.setValue(1, 4, 'West');
+//                data.setValue(2, 0, 'Bananas');
+//                data.setValue(2, 1, new Date (1988,0,1));
+//                data.setValue(2, 2, 300);
+//                data.setValue(2, 3, 250);
+//                data.setValue(2, 4, 'West');
+//                data.setValue(3, 0, 'Apples');
+//                data.setValue(3, 1, new Date(1988,1,1));
+//                data.setValue(3, 2, 1200);
+//                data.setValue(3, 3, 400);
+//                data.setValue(3, 4, "East");
+//                data.setValue(4, 0, 'Oranges');
+//                data.setValue(4, 1, new Date(1988,1,1));
+//                data.setValue(4, 2, 900);
+//                data.setValue(4, 3, 150);
+//                data.setValue(4, 4, "West");
+//                data.setValue(5, 0, 'Bananas');
+//                data.setValue(5, 1, new Date(1988,1,1));
+//                data.setValue(5, 2, 788);
+//                data.setValue(5, 3, 617);
+//                data.setValue(5, 4, "West");
                 
                 var chart = this._chart;
                 chart.draw(data, {width: 600, height:300});
