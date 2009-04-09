@@ -1,0 +1,106 @@
+package org.inqle.ui.google.json;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * Java object for creating Javascript/JSON objects of class google.visualization.DataTable.
+ * 
+ * @see http://code.google.com/apis/visualization/documentation/reference.html#DataTable
+ * @author David Donohue
+ * 2009/4/9
+ */
+public class JSONGoogleDataTable {
+  
+  private static final String JSON_NAME_TABLE = "table";
+  
+  private static final String JSON_NAME_COLUMNS = "cols";
+  private static final String JSON_NAME_COLUMNS_ID = "id";
+  private static final String JSON_NAME_COLUMNS_LABEL = "label";
+  private static final String JSON_NAME_COLUMNS_TYPE = "type";
+  private static final String JSON_NAME_COLUMNS_PATTERN = "pattern";
+  
+  private static final String JSON_NAME_ROWS = "rows";
+  private static final String JSON_NAME_ROWS_V = "v";
+  private static final String JSON_NAME_ROWS_F = "f";
+
+  private JSONArray columns = new JSONArray();
+  private JSONArray rows = new JSONArray();
+  
+  public JSONObject createTable() throws JSONException{
+    JSONObject table = new JSONObject();
+    table.put(JSON_NAME_COLUMNS, columns);
+    table.put(JSON_NAME_ROWS, rows);    
+    return table;
+  }
+  
+  private JSONObject createCell(String v, String f) throws JSONException{
+    JSONObject cell = new JSONObject();
+    cell.put(JSON_NAME_ROWS_V, v);
+    if(f != null)
+      cell.put(JSON_NAME_ROWS_F, f);
+    return cell;
+  }
+  
+  /**
+   * Add a column of data.
+   * id is required and it must be unique, the rest are optional
+   * 
+   * type should be one of
+   * 'boolean' - JavaScript boolean value ('true' or 'false'). Example value: v:'true'
+   * 'number' - JavaScript number value. Example values: v:7 , v:3.14, v:-55
+   * 'string' - JavaScript string value. Example value: v:'hello'
+   * 'date' - JavaScript Date object (zero-based month), with the time truncated. Example value: v:new Date(2008, 0, 15)
+   * 'datetime' - JavaScript Date object including the time. Example value: v:new Date(2008, 0, 15, 14, 30, 45)
+   * 'timeofday' - Array of three numbers and an optional fourth, representing hour (0 indicates midnight), minute, second, and optional millisecond. Example values: v:[8, 15, 0], v: [6, 12, 1, 144]
+   */
+  public void addColumn(String id, String label, String type, String pattern) throws JSONException {
+    JSONObject column = new JSONObject();
+    column.put(JSON_NAME_COLUMNS_ID, id);
+    if (label != null) column.put(JSON_NAME_COLUMNS_LABEL, label);
+    column.put(JSON_NAME_COLUMNS_TYPE, type);
+    column.put(JSON_NAME_COLUMNS_PATTERN, pattern);
+    columns.put( column );
+  }
+  
+  /**
+   * Add a row of data.  Each row is an array of Strings.
+   * If hasFormattedValues is true, then each column is represented by
+   * a pair of values: the first is the value, and the second
+   * is that should be displayed.  Otherwise each colimn should be 
+   * represented by a single value in the array.
+   * The number of columns in the array should correspond to the
+   * number of columns added to this object. 
+   * @throws JSONException 
+   */
+  public void addRow(String[] vals, boolean hasFormattedValues) throws JSONException {
+    JSONArray row = new JSONArray();
+    for (int i=0; i<vals.length; i++) {
+      String v = vals[i];
+      String f = null;
+      if (hasFormattedValues && i+1 < vals.length) {
+        f = vals[i+1];
+        i++;
+      }
+      JSONObject cell = createCell(v, f);
+      row.put( cell );
+    }
+    rows.put( row );
+  }
+  
+  public String toString() {
+    JSONObject json = new JSONObject();
+    try {
+      
+      json.put("requestId", "0");
+      json.put("status", "ok");
+//      json.put("signature", "6173382439516707022");
+      json.put(JSON_NAME_TABLE, this.createTable());
+      return json.toString();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+}
