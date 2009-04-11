@@ -68,7 +68,7 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
 //        	this.info('drawMotionChart...');
 //            var current = this.getAddress();
 //            if( GBrowserIsCompatible() && current != null && current != "" ) {
-                qx.ui.core.Widget.flushGlobalQueues();
+//                qx.ui.core.Widget.flushGlobalQueues();
                 if( this._chart == null ) {
                     this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
 //                	this._chart = new google.visualization.MotionChart(this.getElement());
@@ -78,8 +78,9 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
 //                    GEvent.bind( this._chart, "moveend", this, this._onMapMove );
                     
                 }
-    	        alert('Widget data:' + theData);
-                var data  = new google.visualization.DataTable(theData);
+//                alert('Before: Widget data:' + theData);
+                var dataTable  = new google.visualization.DataTable(theData);
+                alert('After creating dataTable:' + dataTable.getDistinctValues(1));
 //                var data = new google.visualization.DataTable();
 //                data.addRows(6);
 //                data.addColumn('string', 'Fruit');
@@ -119,7 +120,7 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
 //                data.setValue(5, 4, "West");
                 
                 var chart = this._chart;
-                chart.draw(data, {width: 600, height:300});
+                chart.draw(dataTable, {width: 600, height:300});
 //            }
         },
         

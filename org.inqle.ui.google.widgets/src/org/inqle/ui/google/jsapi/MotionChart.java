@@ -32,22 +32,6 @@ public class MotionChart extends Composite {
     return widgetData;
   }
 
-//  public void setAddress( final String address ) {
-//    if( address == null ) {
-//      this.address = "";
-//    } else {
-//      this.address = address;
-//    }
-//  }
-//
-//  public void setCenterLocation( String location ) {
-//    this.centerLocation = location;
-//  }
-//
-//  public String getCenterLocation() {
-//    return this.centerLocation;
-//  }
-
   /*
    * Intentionally commented out as a Motion Chart cannot have a layout
    */
