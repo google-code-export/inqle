@@ -1,0 +1,40 @@
+<html>
+ <head>
+   <script type="text/javascript" src="http://www.google.com/jsapi
+"></script>
+   <script type="text/javascript">
+     google.load("visualization", "1", {packages:["columnchart"]});
+     google.setOnLoadCallback(drawChart);
+     function drawChart() {
+       var json =
+       {
+    		   cols:[
+    		   {id:"Model",type:"string"},
+    		   {id:"Date",type:"date"},
+    		   {id:"CO2",type:"number"},
+    		   {id:"Temperature",type:"number"}
+    		   ],
+
+    		   rows:[
+    		   {c:[
+    		   	{v:"Model1"},
+    		   	{v:new Date(1970,0,14,16,5,45)},
+    		   	{v:377},
+    		   	{v:22}
+    		   ]},
+    		   {c:[{v:"Model1"},{v:new Date(2009,3,10,21,59,19)},{v:400},{v:24}]}]};
+//{"cols":[{"id":"application","label":"Application","type":"string"},{"id":"app_duration","label":"Duration(Secs)","type":"number"}],"rows":[{"c":[{"v":"firefox.exe","f":"firefox.exe"},{"v":3417,"f":"3417"}]},{"c":[{"v":"eclipse.exe","f":"eclipse.exe"},{"v":2499,"f":"2499"}]},{"c":[{"v":"msnmsgr.exe","f":"msnmsgr.exe"},{"v":2138,"f":"2138"}]},{"c":[{"v":"chrome.exe","f":"chrome.exe"},{"v":1061,"f":"1061"}]},{"c":[{"v":"VyChat.exe","f":"VyChat.exe"},{"v":990,"f":"990"}]},{"c":[{"v":"Explorer.EXE","f":"Explorer.EXE"},{"v":849,"f":"849"}]},{"c":[{"v":"msvs.exe","f":"msvs.exe"},{"v":555,"f":"555"}]},{"c":[{"v":"postbox.exe","f":"postbox.exe"},{"v":198,"f":"198"}]},{"c":[{"v":"googletalk.exe","f":"googletalk.exe"},{"v":169,"f":"169"}]},{"c":[{"v":"iexplore.exe","f":"iexplore.exe"},{"v":140,"f":"140"}]},{"c":[{"v":"java.exe","f":"java.exe"},{"v":119,"f":"119"}]},{"c":[{"v":"thunderbird.exe","f":"thunderbird.exe"},{"v":109,"f":"109"}]},{"c":[{"v":"notepad++.exe","f":"notepad++.exe"},{"v":91,"f":"91"}]},{"c":[{"v":"taskmgr.exe","f":"taskmgr.exe"},{"v":25,"f":"25"}]},{"c":[{"v":"Skype.exe","f":"Skype.exe"},{"v":15,"f":"15"}]},{"c":[{"v":"notepad.exe","f":"notepad.exe"},{"v":8,"f":"8"}]},{"c":[{"v":"SnagIt32.exe","f":"SnagIt32.exe"},{"v":8,"f":"8"}]},{"c":[{"v":"LogMeInSystray.exe","f":"LogMeInSystray.exe"},{"v":8,"f":"8"}]},{"c":[{"v":"IDMan.exe","f":"IDMan.exe"},{"v":4,"f":"4"}]},{"c":[{"v":"WinRAR.exe","f":"WinRAR.exe"},{"v":4,"f":"4"}]},{"c":[{"v":"wuauclt.exe","f":"wuauclt.exe"},{"v":3,"f":"3"}]}]};
+       var dt= new google.visualization.DataTable(json);
+       var chart = new
+google.visualization.ColumnChart(document.getElementById('chart_div'));
+       chart.draw(dt, {width: 400, height: 240, is3D: true, title:
+'Application Usage'});
+
+     }
+   </script>
+ </head>
+
+ <body>
+   <div id="chart_div"></div>
+ </body>
+</html> 
