@@ -1,5 +1,7 @@
 package org.inqle.ui.rap.views;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.Viewer;
@@ -14,6 +16,7 @@ import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.google.jsapi.MotionChart;
+import org.inqle.ui.google.json.JSONGoogleDataTable;
 import org.inqle.ui.rap.IDisposableViewer;
 
 public class ObjectViewer extends Viewer implements IDisposableViewer {
@@ -71,8 +74,18 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Motion Chart");
 		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
-		motionChart.setWidgetData("1");
-    composite.setVisible(false);
+		JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("Model", "Model", "string", null);
+		dataTable.addColumn("thedate", "Date", "date", null);
+		dataTable.addColumn("CO2", "CO2", "number", null);
+		dataTable.addColumn("Temperature", "Temperature", "number", null);
+		dataTable.addRow(new Object[] {"Model1", new Date(1199145600), 377, 22}, false);
+		dataTable.addRow(new Object[] {"Model1", new Date(), 400, 24}, false);
+//		dataTable.addRow(new Object[] {"Model2", new Date(1199145600), 277, 12}, false);
+//		dataTable.addRow(new Object[] {"Model2", new Date(), 500, 34}, false);
+		String widgetData = dataTable.toString();
+		motionChart.setWidgetData(widgetData);
+//    composite.setVisible(false);
     gridData = new GridData(800,600);
     motionChart.setLayoutData(gridData);
     
