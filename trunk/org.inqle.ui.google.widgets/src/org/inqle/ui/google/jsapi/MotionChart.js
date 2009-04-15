@@ -22,21 +22,6 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         
         this.addEventListener( "changeHeight", this._doResize, this );
         this.addEventListener( "changeWidth", this._doResize, this );
-        
-//        google.load('visualization', '1', {'packages':['motionchart']});
-//        google.setOnLoadCallback(this.onLoadCallback);
-//        google.setOnLoadCallback(this.drawMotionChart);
-//        function drawChart() {
-//        	this._chart = new google.visualization.MotionChart(document.getElementById(id));
-//	        this.addEventListener( "changeHeight", this._doResize, this );
-//	        this.addEventListener( "changeWidth", this._doResize, this );
-//        }
-//      }
-//        alert('MotionChart.construct() finished.');
-//        this.info('Constructed');
-//        this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
-//        this._chart = new google.visualization.MotionChart(this.getElement());
-//        this.load();
     },
     
     properties : {
@@ -63,7 +48,9 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         
         load : function() {
         	qx.ui.core.Widget.flushGlobalQueues();
-        	var theData = this.getWidgetData();
+        	var _inqlegv_theData = this.getWidgetData();
+//        	alert('Before: Widget data:' + _inqlegv_theData);
+        	
 //        	alert('load() called');
 //        	this.info('drawMotionChart...');
 //            var current = this.getAddress();
@@ -78,9 +65,10 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
 //                    GEvent.bind( this._chart, "moveend", this, this._onMapMove );
                     
                 }
-//                alert('Before: Widget data:' + theData);
-                var dataTable  = new google.visualization.DataTable(theData);
-                alert('After creating dataTable:' + dataTable.getDistinctValues(1));
+                
+                var _inqlegv_dataTable  = new google.visualization.DataTable(eval('(' + _inqlegv_theData + ')'));
+//                alert('Created dataTable');
+//                alert('After creating dataTable:' + dataTable.getDistinctValues(1));
 //                var data = new google.visualization.DataTable();
 //                data.addRows(6);
 //                data.addColumn('string', 'Fruit');
@@ -119,8 +107,11 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
 //                data.setValue(5, 3, 617);
 //                data.setValue(5, 4, "West");
                 
-                var chart = this._chart;
-                chart.draw(dataTable, {width: 600, height:300});
+//                var chart = this._chart;
+                var _inqlegv_options = {"xZoomedIn":false,"orderedByY":false,"xZoomedDataMax":400,"sizeOption":"_UNISIZE","dimensions":{"iconDimensions":["dim0"]},"xZoomedDataMin":377,"yZoomedDataMin":22,"yZoomedIn":false,"yLambda":1,"iconKeySettings":[],"colorOption":"_UNICOLOR","duration":{"multiplier":1,"timeUnit":"D"},"xLambda":1,"stateVersion":3,"yAxisOption":"3","showTrails":true,"iconType":"BUBBLE","yZoomedDataMax":24,"xAxisOption":"2","playDuration":15,"nonSelectedAlpha":0.4,"time":"1970-01-14","orderedByX":false};
+                //var _inqlegv_options = {width: 500, height: 500, title: 'Application Usage'};
+                this._chart.draw(_inqlegv_dataTable, _inqlegv_options);
+                alert('drew chart');
 //            }
         },
         
