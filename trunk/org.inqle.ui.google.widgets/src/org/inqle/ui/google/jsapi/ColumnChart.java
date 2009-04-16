@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
 /**
- * Renders a Google Motion Chart.
+ * Renders a Google Column Chart.
  * 
- * @See http://code.google.com/apis/visualization/documentation/gallery/motionchart.html
+ * @See http://code.google.com/apis/visualization/documentation/gallery/columnchart.html
  * @author David Donohue
  * 2009/4/8
  */
