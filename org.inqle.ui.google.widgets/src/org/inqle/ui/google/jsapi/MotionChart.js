@@ -17,8 +17,6 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         this.setHtmlAttribute( "id", id );
         this._id = id;
         this._chart = null;
-//        if( GBrowserIsCompatible() ) {
-//            this._geocoder = new GClientGeocoder();
         
         this.addEventListener( "changeHeight", this._doResize, this );
         this.addEventListener( "changeWidth", this._doResize, this );
@@ -48,14 +46,7 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         
         load : function() {
         	qx.ui.core.Widget.flushGlobalQueues();
-        	var _inqlegv_theData = this.getWidgetData();
-//        	alert('Before: Widget data:' + _inqlegv_theData);
-        	
-//        	alert('load() called');
-//        	this.info('drawMotionChart...');
-//            var current = this.getAddress();
-//            if( GBrowserIsCompatible() && current != null && current != "" ) {
-//                qx.ui.core.Widget.flushGlobalQueues();
+        	var _inqlegv_theData = eval('(' + this.getWidgetData() + ')');
                 if( this._chart == null ) {
                     this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
 //                	this._chart = new google.visualization.MotionChart(this.getElement());
@@ -66,59 +57,17 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
                     
                 }
                 
-                var _inqlegv_dataTable  = new google.visualization.DataTable(eval('(' + _inqlegv_theData + ')'));
-//                alert('Created dataTable');
-//                alert('After creating dataTable:' + dataTable.getDistinctValues(1));
-//                var data = new google.visualization.DataTable();
-//                data.addRows(6);
-//                data.addColumn('string', 'Fruit');
-//                data.addColumn('date', 'Date');
-//                data.addColumn('number', 'Sales');
-//                data.addColumn('number', 'Expenses');
-//                data.addColumn('string', 'Location');
-//                data.setValue(0, 0, 'Apples');
-//                data.setValue(0, 1, new Date (1988,0,1));
-//                data.setValue(0, 2, 1000);
-//                data.setValue(0, 3, 300);
-//                data.setValue(0, 4, 'East');
-//                data.setValue(1, 0, 'Oranges');
-//                data.setValue(1, 1, new Date (1988,0,1));
-//                data.setValue(1, 2, 950);
-//                data.setValue(1, 3, 200);
-//                data.setValue(1, 4, 'West');
-//                data.setValue(2, 0, 'Bananas');
-//                data.setValue(2, 1, new Date (1988,0,1));
-//                data.setValue(2, 2, 300);
-//                data.setValue(2, 3, 250);
-//                data.setValue(2, 4, 'West');
-//                data.setValue(3, 0, 'Apples');
-//                data.setValue(3, 1, new Date(1988,1,1));
-//                data.setValue(3, 2, 1200);
-//                data.setValue(3, 3, 400);
-//                data.setValue(3, 4, "East");
-//                data.setValue(4, 0, 'Oranges');
-//                data.setValue(4, 1, new Date(1988,1,1));
-//                data.setValue(4, 2, 900);
-//                data.setValue(4, 3, 150);
-//                data.setValue(4, 4, "West");
-//                data.setValue(5, 0, 'Bananas');
-//                data.setValue(5, 1, new Date(1988,1,1));
-//                data.setValue(5, 2, 788);
-//                data.setValue(5, 3, 617);
-//                data.setValue(5, 4, "West");
-                
-//                var chart = this._chart;
-                var _inqlegv_options = {"xZoomedIn":false,"orderedByY":false,"xZoomedDataMax":400,"sizeOption":"_UNISIZE","dimensions":{"iconDimensions":["dim0"]},"xZoomedDataMin":377,"yZoomedDataMin":22,"yZoomedIn":false,"yLambda":1,"iconKeySettings":[],"colorOption":"_UNICOLOR","duration":{"multiplier":1,"timeUnit":"D"},"xLambda":1,"stateVersion":3,"yAxisOption":"3","showTrails":true,"iconType":"BUBBLE","yZoomedDataMax":24,"xAxisOption":"2","playDuration":15,"nonSelectedAlpha":0.4,"time":"1970-01-14","orderedByX":false};
-                //var _inqlegv_options = {width: 500, height: 500, title: 'Application Usage'};
+                var _inqlegv_dataTable  = new google.visualization.DataTable(_inqlegv_theData);
+//                var _inqlegv_options = {"xZoomedIn":false,"orderedByY":false,"xZoomedDataMax":400,"sizeOption":"_UNISIZE","dimensions":{"iconDimensions":["dim0"]},"xZoomedDataMin":377,"yZoomedDataMin":22,"yZoomedIn":false,"yLambda":1,"iconKeySettings":[],"colorOption":"_UNICOLOR","duration":{"multiplier":1,"timeUnit":"D"},"xLambda":1,"stateVersion":3,"yAxisOption":"3","showTrails":true,"iconType":"BUBBLE","yZoomedDataMax":24,"xAxisOption":"2","playDuration":15,"nonSelectedAlpha":0.4,"time":"1970-01-14","orderedByX":false};
+//                var _inqlegv_options = {width: 500, height: 500};
+                var _inqlegv_options = {};
                 this._chart.draw(_inqlegv_dataTable, _inqlegv_options);
-                alert('drew chart');
-//            }
         },
         
-        onLoadCallback : function() {
-        	alert('onLoadCallback() called');
-        	drawMotionChart();
-        },
+//        onLoadCallback : function() {
+//        	alert('onLoadCallback() called');
+//        	drawMotionChart();
+//        },
         
         _doResize : function() {
 //            qx.ui.core.Widget.flushGlobalQueues();
