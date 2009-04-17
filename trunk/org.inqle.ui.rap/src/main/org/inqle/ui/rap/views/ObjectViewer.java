@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.ui.google.jsapi.ColumnChart;
 import org.inqle.ui.google.jsapi.MotionChart;
 import org.inqle.ui.google.json.JSONGoogleDataTable;
 import org.inqle.ui.rap.IDisposableViewer;
@@ -71,24 +72,44 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 	  descriptionWidget.setLayoutData(gridData);
 	  
 	  //testing custom widgets
-	  l = new Label(composite, SWT.NONE);
-		l.setText("Motion Chart");
-		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
-		JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
+	  JSONGoogleDataTable dataTable = null;
+	  String widgetData = null;
+	  
+	  //MOTION CHART:
+		dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("Model", "Model", "string", null);
 		dataTable.addColumn("thedate", "Date", "date", null);
 		dataTable.addColumn("CO2", "CO2", "number", null);
 		dataTable.addColumn("Temperature", "Temperature", "number", null);
-		dataTable.addRow(new Object[] {"Model1", new Date(1199145600), 377, 22}, false);
-		dataTable.addRow(new Object[] {"Model1", new Date(), 400, 24}, false);
-//		dataTable.addRow(new Object[] {"Model2", new Date(1199145600), 277, 12}, false);
-//		dataTable.addRow(new Object[] {"Model2", new Date(), 500, 34}, false);
-		String widgetData = dataTable.toString();
+		dataTable.addRow(new Object[] {"Model1", new Date(1199145600), 377, 22});
+		dataTable.addRow(new Object[] {"Model1", new Date(), 400, 24});
+		dataTable.addRow(new Object[] {"Model2", new Date(1199145600), 377, 22});
+		dataTable.addRow(new Object[] {"Model2", new Date(), 500, 26});
+		widgetData = dataTable.toString();
+	    
+	  l = new Label(composite, SWT.NONE);
+		l.setText("Motion Chart");
+		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
 		motionChart.setWidgetData(widgetData);
-//    composite.setVisible(false);
     gridData = new GridData(800,600);
     motionChart.setLayoutData(gridData);
     
+	  //COLUMN CHART:
+    dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("theyear", "Date", "string", null);
+		dataTable.addColumn("CO2", "CO2", "number", null);
+		dataTable.addColumn("Temperature", "Temperature", "number", null);
+		dataTable.addRow(new Object[] {"1970", 377, 22});
+		dataTable.addRow(new Object[] {"2009", 400, 24});
+		widgetData = dataTable.toString();
+		
+    l = new Label(composite, SWT.NONE);
+		l.setText("Column Chart");
+		ColumnChart chart = new ColumnChart( composite, SWT.NONE );
+		chart.setWidgetData(widgetData);
+	  gridData = new GridData(800,600);
+	  chart.setLayoutData(gridData);
+	    
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
 		//l.setFont(boldFont);
