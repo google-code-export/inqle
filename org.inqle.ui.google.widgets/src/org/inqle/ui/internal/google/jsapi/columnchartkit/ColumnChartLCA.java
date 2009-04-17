@@ -8,7 +8,7 @@
  * Contributors:
  *     Innoopract Informationssysteme GmbH - initial API and implementation
  ******************************************************************************/
-package org.inqle.ui.internal.google.jsapi.columnchart;
+package org.inqle.ui.internal.google.jsapi.columnchartkit;
 
 import java.io.IOException;
 

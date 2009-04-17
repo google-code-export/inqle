@@ -68,6 +68,13 @@ public class JSONGoogleDataTable {
   }
   
   /**
+   * Add a row of data
+   */
+  public void addRow(Object[] vals) {
+    addRow(vals, false);
+  }
+  
+  /**
    * Add a row of data.  Each row is an array of Strings.
    * If hasFormattedValues is true, then each column is represented by
    * a pair of values: the first is the value (an Object, should be one of:
