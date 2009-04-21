@@ -16,11 +16,9 @@ import org.eclipse.rwt.lifecycle.AbstractWidgetLCA;
 import org.eclipse.rwt.lifecycle.ControlLCAUtil;
 import org.eclipse.rwt.lifecycle.IWidgetAdapter;
 import org.eclipse.rwt.lifecycle.JSWriter;
-import org.eclipse.rwt.lifecycle.WidgetLCAUtil;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
-import org.inqle.ui.google.jsapi.MotionChart;
 
 public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
 
@@ -30,8 +28,8 @@ public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
   public void preserveValues( final Widget widget ) {
     ControlLCAUtil.preserveValues( ( Control )widget );
     IWidgetAdapter adapter = WidgetUtil.getAdapter( widget );
-    adapter.preserve( PROP_DATA, ( ( MotionChart )widget ).getWidgetData() );
-    adapter.preserve( PROP_OPTIONS, ( ( MotionChart )widget ).getWidgetOptions() );
+    adapter.preserve( PROP_DATA, ( ( VisualizationWidget )widget ).getWidgetData() );
+    adapter.preserve( PROP_OPTIONS, ( ( VisualizationWidget )widget ).getWidgetOptions() );
     // only needed for custom variants (theming)
 //    WidgetLCAUtil.preserveCustomVariant( widget );
   }
