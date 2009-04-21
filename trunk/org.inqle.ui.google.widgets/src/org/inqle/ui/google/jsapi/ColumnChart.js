@@ -15,6 +15,10 @@ qx.Class.define( "org.inqle.ui.google.jsapi.ColumnChart", {
         widgetData : {
             init : "",
             apply : "load"
+        },
+        widgetOptions : {
+            init : "",
+            apply : ""
         }
     },
     
