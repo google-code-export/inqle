@@ -91,7 +91,7 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		l.setText("Motion Chart");
 		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
 		motionChart.setWidgetData(widgetData);
-    gridData = new GridData(800,600);
+    gridData = new GridData(800, 600);
     motionChart.setLayoutData(gridData);
     
 	  //COLUMN CHART:
@@ -107,7 +107,7 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		l.setText("Column Chart");
 		ColumnChart chart = new ColumnChart( composite, SWT.NONE );
 		chart.setWidgetData(widgetData);
-	  gridData = new GridData(800,600);
+	  gridData = new GridData(600, 600);
 	  chart.setLayoutData(gridData);
 	    
 	  l = new Label(composite, SWT.NONE);
