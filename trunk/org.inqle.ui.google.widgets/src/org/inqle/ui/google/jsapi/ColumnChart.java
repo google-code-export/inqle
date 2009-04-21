@@ -20,26 +20,10 @@ import org.eclipse.swt.widgets.Layout;
  * @author David Donohue
  * 2009/4/8
  */
-public class ColumnChart extends Composite {
-  
-  private String widgetData;
+public class ColumnChart extends VisualizationWidget {
 
   public ColumnChart( final Composite parent, final int style ) {
     super( parent, style );
   }
 
-  public String getWidgetData() {
-    return widgetData;
-  }
-
-  /*
-   * Intentionally commented out as a Column Chart cannot have a layout
-   */
-  public void setLayout( final Layout layout ) {
-  }
-
-  
-  public void setWidgetData( String widgetData ) {
-    this.widgetData = widgetData;
-  }
 }
