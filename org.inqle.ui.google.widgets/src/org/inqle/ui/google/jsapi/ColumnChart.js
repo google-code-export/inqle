@@ -48,7 +48,7 @@ qx.Class.define( "org.inqle.ui.google.jsapi.ColumnChart", {
 	        var _inqlegv_dataTable  = new google.visualization.DataTable(_inqlegv_theData);
 	        
 	        var _inqlegv_chart = this._chart;
-	        var _inqlegv_options = {is3D: true};
+	        var _inqlegv_options = {is3D: true, width: 300, height: 300};
 	        _inqlegv_chart.draw(_inqlegv_dataTable, _inqlegv_options);
         },
         

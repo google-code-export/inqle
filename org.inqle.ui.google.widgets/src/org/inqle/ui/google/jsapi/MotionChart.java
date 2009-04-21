@@ -20,26 +20,10 @@ import org.eclipse.swt.widgets.Layout;
  * @author David Donohue
  * 2009/4/8
  */
-public class MotionChart extends Composite {
-  
-  private String widgetData;
+public class MotionChart extends VisualizationWidget {
 
-  public MotionChart( final Composite parent, final int style ) {
+  public MotionChart( Composite parent, int style ) {
     super( parent, style );
   }
-
-  public String getWidgetData() {
-    return widgetData;
-  }
-
-  /*
-   * Intentionally commented out as a Motion Chart cannot have a layout
-   */
-  public void setLayout( final Layout layout ) {
-  }
-
   
-  public void setWidgetData( String widgetData ) {
-    this.widgetData = widgetData;
-  }
 }

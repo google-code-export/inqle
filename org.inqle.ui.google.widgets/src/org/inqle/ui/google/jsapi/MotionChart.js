@@ -15,6 +15,10 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         widgetData : {
             init : "",
             apply : "load"
+        },
+        widgetOptions : {
+            init : "",
+            apply : ""
         }
     },
     
@@ -48,8 +52,11 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
                 
                 var _inqlegv_dataTable  = new google.visualization.DataTable(_inqlegv_theData);
 //                var _inqlegv_options = {"xZoomedIn":false,"orderedByY":false,"xZoomedDataMax":400,"sizeOption":"_UNISIZE","dimensions":{"iconDimensions":["dim0"]},"xZoomedDataMin":377,"yZoomedDataMin":22,"yZoomedIn":false,"yLambda":1,"iconKeySettings":[],"colorOption":"_UNICOLOR","duration":{"multiplier":1,"timeUnit":"D"},"xLambda":1,"stateVersion":3,"yAxisOption":"3","showTrails":true,"iconType":"BUBBLE","yZoomedDataMax":24,"xAxisOption":"2","playDuration":15,"nonSelectedAlpha":0.4,"time":"1970-01-14","orderedByX":false};
-//                var _inqlegv_options = {width: 500, height: 500};
+//                var _inqlegv_options = {width: 400, height: 400};
                 var _inqlegv_options = {};
+                if (this.getWidgetOptions()) {
+                	_inqlegv_options = eval('(' + this.getWidgetOptions() + ')');
+                }
                 this._chart.draw(_inqlegv_dataTable, _inqlegv_options);
         },
         
