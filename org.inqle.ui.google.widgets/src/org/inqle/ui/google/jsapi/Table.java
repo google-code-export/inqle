@@ -13,20 +13,20 @@ package org.inqle.ui.google.jsapi;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Renders a Google Visualization Motion Chart.
+ * Renders a Google Visualization Table widget.
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
  * using method setWidgetOptions, before calling setWidgetData.
  * 
- * @See http://code.google.com/apis/visualization/documentation/gallery/motionchart.html
+ * @See http://code.google.com/apis/visualization/documentation/gallery/table.html
  * @author David Donohue
- * 2009/4/8
+ * 2009/4/21
  */
-public class MotionChart extends VisualizationWidget {
+public class Table extends VisualizationWidget {
 
-  public MotionChart( Composite parent, int style ) {
+  public Table( final Composite parent, final int style ) {
     super( parent, style );
   }
-  
+
 }

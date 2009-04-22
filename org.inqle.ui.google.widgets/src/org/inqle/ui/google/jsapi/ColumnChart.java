@@ -11,10 +11,13 @@
 package org.inqle.ui.google.jsapi;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Layout;
 
 /**
- * Renders a Google Column Chart.
+ * Renders a Google Visualization Column Chart.
+ * 
+ * Note that this widget is rendered upon calling the setWidgetData method.  
+ * So if you wish to set options like width, height, colors, etc., you must do this 
+ * using method setWidgetOptions, before calling setWidgetData.
  * 
  * @See http://code.google.com/apis/visualization/documentation/gallery/columnchart.html
  * @author David Donohue
