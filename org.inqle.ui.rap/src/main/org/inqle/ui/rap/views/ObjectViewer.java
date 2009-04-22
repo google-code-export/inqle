@@ -118,8 +118,8 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		Table table = new Table( composite, SWT.NONE );
 //		table.setWidgetOptions("{width: 300, height: 400}");
 		table.setWidgetData(widgetData);
-//	  gridData = new GridData(300, 400);
-//	  table.setLayoutData(gridData);
+	  gridData = new GridData(300, 300);
+	  table.setLayoutData(gridData);
 	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
