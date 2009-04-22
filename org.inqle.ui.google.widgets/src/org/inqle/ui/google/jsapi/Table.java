@@ -19,6 +19,23 @@ import org.eclipse.swt.widgets.Composite;
  * So if you wish to set options like width, height, colors, etc., you must do this 
  * using method setWidgetOptions, before calling setWidgetData.
  * 
+ * Usage:
+ * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
+    dataTable.addColumn("theyear", "Date", "string", null);
+    dataTable.addColumn("CO2", "CO2", "number", null);
+    dataTable.addColumn("Temperature", "Temperature", "number", null);
+    dataTable.addRow(new Object[] {"1970", 300, 22});
+    dataTable.addRow(new Object[] {"2009", 400, 24});
+    String serializedData = dataTable.toString();
+    
+ * l = new Label(composite, SWT.NONE);
+    l.setText("Table");
+    Table table = new Table( composite, SWT.NONE );
+    table.setWidgetOptions("{width: 300, height: 400}");
+    table.setWidgetData(serializedData);
+    gridData = new GridData(300, 300);
+    table.setLayoutData(gridData);
+    
  * @See http://code.google.com/apis/visualization/documentation/gallery/table.html
  * @author David Donohue
  * 2009/4/21
