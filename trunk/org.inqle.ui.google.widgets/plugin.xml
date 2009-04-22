@@ -17,5 +17,8 @@
     
     <resource class="org.inqle.ui.google.jsapi.ColumnChartAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.ColumnChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.TableAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.TableResource"/>
   </extension>
 </plugin>

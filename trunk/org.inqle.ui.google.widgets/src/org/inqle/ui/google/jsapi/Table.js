@@ -1,4 +1,4 @@
-qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
+qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
     extend: qx.ui.layout.CanvasLayout,
     
     construct: function( id ) {
@@ -38,30 +38,24 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         },
         
         load : function() {
-        	qx.ui.core.Widget.flushGlobalQueues();
-        	var data = eval('(' + this.getWidgetData() + ')');
-                if( this._chart == null ) {
-                    this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
-//                	this._chart = new google.visualization.MotionChart(this.getElement());
-//                    this._chart.addControl( new GSmallMapControl() );
-//                    this._chart.addControl( new GMapTypeControl() );
-//                    GEvent.bind( this._chart, "click", this, this._doActivate );
-//                    GEvent.bind( this._chart, "moveend", this, this._onMapMove );
-                    
-                }
-                
-                var dataTable  = new google.visualization.DataTable(data);
-                var options = {};
-                if (this.getWidgetOptions()) {
-                	options = eval('(' + this.getWidgetOptions() + ')');
-                }
-                this._chart.draw(dataTable, options);
+	    	qx.ui.core.Widget.flushGlobalQueues();
+	    	var data = eval('(' + this.getWidgetData() + ')');
+	        if( this._chart == null ) {
+	            this._chart = new google.visualization.Table(document.getElementById(this._id));
+	            google.visualization.events.addListener(this._chart, 'select', function() {
+	            	var row = table.getSelection()[0].row;
+	                alert('You selected ' + data.getValue(row, 0));
+	              });
+	        }
+	        var dataTable  = new google.visualization.DataTable(data);
+	        
+	        var chart = this._chart;
+	        var options = {};
+            if (this.getWidgetOptions()) {
+            	options = eval('(' + this.getWidgetOptions() + ')');
+            }
+	        chart.draw(dataTable, options);
         },
-        
-//        onLoadCallback : function() {
-//        	alert('onLoadCallback() called');
-//        	drawMotionChart();
-//        },
         
         _doResize : function() {
 //            qx.ui.core.Widget.flushGlobalQueues();
