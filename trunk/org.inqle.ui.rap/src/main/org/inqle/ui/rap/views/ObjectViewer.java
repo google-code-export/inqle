@@ -17,6 +17,7 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.google.jsapi.ColumnChart;
 import org.inqle.ui.google.jsapi.MotionChart;
+import org.inqle.ui.google.jsapi.Table;
 import org.inqle.ui.google.json.JSONGoogleDataTable;
 import org.inqle.ui.rap.IDisposableViewer;
 
@@ -90,9 +91,9 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Motion Chart");
 		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
-		motionChart.setWidgetOptions("{width: 600, height: 400}");
+		motionChart.setWidgetOptions("{width: 500, height: 300}");
 		motionChart.setWidgetData(widgetData);
-    gridData = new GridData(800, 600);
+    gridData = new GridData(500, 300);
     motionChart.setLayoutData(gridData);
     
 	  //COLUMN CHART:
@@ -107,11 +108,19 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
     l = new Label(composite, SWT.NONE);
 		l.setText("Column Chart");
 		ColumnChart chart = new ColumnChart( composite, SWT.NONE );
-		chart.setWidgetOptions("{width: 300, height: 200}");
+		chart.setWidgetOptions("{width: 300, height: 300}");
 		chart.setWidgetData(widgetData);
-	  gridData = new GridData(400, 300);
+	  gridData = new GridData(300, 300);
 	  chart.setLayoutData(gridData);
-	    
+	  
+	  l = new Label(composite, SWT.NONE);
+		l.setText("Table");
+		Table table = new Table( composite, SWT.NONE );
+//		table.setWidgetOptions("{width: 300, height: 400}");
+		table.setWidgetData(widgetData);
+//	  gridData = new GridData(300, 400);
+//	  table.setLayoutData(gridData);
+	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
 		//l.setFont(boldFont);
