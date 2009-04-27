@@ -10,7 +10,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
@@ -21,7 +23,7 @@ import org.inqle.ui.google.jsapi.Table;
 import org.inqle.ui.google.json.JSONGoogleDataTable;
 import org.inqle.ui.rap.IDisposableViewer;
 
-public class ObjectViewer extends Viewer implements IDisposableViewer {
+public class ObjectViewer extends Viewer implements IDisposableViewer, Listener {
 
 	private Composite composite;
 	private Text idWidget;
@@ -101,7 +103,7 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		dataTable.addColumn("theyear", "Date", "string", null);
 		dataTable.addColumn("CO2", "CO2", "number", null);
 		dataTable.addColumn("Temperature", "Temperature", "number", null);
-		dataTable.addRow(new Object[] {"1970", 377, 22});
+		dataTable.addRow(new Object[] {"1970", 300, 22});
 		dataTable.addRow(new Object[] {"2009", 400, 24});
 		widgetData = dataTable.toString();
 		
@@ -120,7 +122,7 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		table.setWidgetData(widgetData);
 	  gridData = new GridData(300, 300);
 	  table.setLayoutData(gridData);
-	  
+	  table.addListener(SWT.Selection, this);
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
 		//l.setFont(boldFont);
@@ -252,5 +254,10 @@ public class ObjectViewer extends Viewer implements IDisposableViewer {
 		descriptionWidget.dispose();
 		detailWidget.dispose();
 		composite.dispose();
+	}
+
+	public void handleEvent(Event arg0) {
+		log.info("Event: " + arg0);
+		
 	}
 }
