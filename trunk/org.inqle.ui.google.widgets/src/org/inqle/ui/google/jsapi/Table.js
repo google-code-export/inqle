@@ -19,6 +19,10 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
         widgetOptions : {
             init : "",
             apply : ""
+        },
+        selectedItem : {
+        	init : "",
+            apply : ""
         }
     },
     
@@ -42,10 +46,6 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
 	    	var data = eval('(' + this.getWidgetData() + ')');
 	        if( this._chart == null ) {
 	            this._chart = new google.visualization.Table(document.getElementById(this._id));
-	            google.visualization.events.addListener(this._chart, 'select', function() {
-	            	var row = table.getSelection()[0].row;
-	                alert('You selected ' + data.getValue(row, 0));
-	              });
 	        }
 	        var dataTable  = new google.visualization.DataTable(data);
 	        
@@ -55,6 +55,18 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
             	options = eval('(' + this.getWidgetOptions() + ')');
             }
 	        chart.draw(dataTable, options);
+	        
+	        google.visualization.events.addListener(chart, 'select', function() {
+            	var row = chart.getSelection()[0].row;
+//                alert('You selected ' + dataTable.getValue(row, 0));
+            	this.setSelectedItem(dataTable.getValue(row, 0));
+            	
+            	//fire selection event
+            	var req = org.eclipse.swt.Request.getInstance();
+            	var id = widgetManager.findIdByWidget( this );  
+            	req.addEvent( "org.eclipse.swt.events.widgetSelected", id );
+            	req.send();
+              });
         },
         
         _doResize : function() {
