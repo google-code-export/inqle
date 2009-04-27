@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.rwt.lifecycle.ControlLCAUtil;
 import org.eclipse.rwt.lifecycle.JSWriter;
+import org.eclipse.rwt.lifecycle.WidgetLCAUtil;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.widgets.Widget;
 import org.inqle.ui.google.jsapi.Table;
@@ -23,5 +24,12 @@ public class TableLCA extends VisualizationWidgetLCA {
     writer.set( "appearance", "composite" );
     writer.set( "overflow", "hidden" );
     ControlLCAUtil.writeStyleFlags( ( Table )widget );
+  }
+  
+  public void readData( final Widget widget ) {
+    Table table = ( Table )widget;
+    String selectedItem = WidgetLCAUtil.readPropertyValue( table, "selectedItem" );
+    table.setSelectedItem( selectedItem );
+    ControlLCAUtil.processSelection( table, null, true );
   }
 }

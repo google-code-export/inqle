@@ -42,8 +42,58 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class Table extends VisualizationWidget {
 
+  private String selectedItem;
+//  private List<SelectionListener> listeners = new ArrayList<SelectionListener>();
+  
   public Table( final Composite parent, final int style ) {
     super( parent, style );
   }
 
+  public void setSelectedItem( String selectedItem ) {
+    this.selectedItem = selectedItem;
+//    selectionChanged();
+  }
+
+  public String getSelectedItem() {
+    return selectedItem;
+  }
+
+//  public void addSelectionListener(SelectionListener listener) {
+//    listeners.add(listener);
+//  }
+  
+//  public void addSelectionListener (SelectionListener listener) {
+//    checkWidget ();
+//    TypedListener typedListener = new TypedListener (listener);
+//    addListener (SWT.Selection,typedListener);
+//    addListener (SWT.DefaultSelection,typedListener);
+//  }
+  
+//  public void removeSelectionListener(SelectionListener listener) {
+//    listeners.remove(listener);
+//  }
+  
+//  public void removeSelectionListener (SelectionListener listener) {
+//    checkWidget();
+//    TypedListener typedListener = new TypedListener(listener);
+//    removeListener(SWT.Selection,typedListener);
+//    removeListener(SWT.DefaultSelection,typedListener);
+//  }
+  
+//  private void selectionChanged() {
+//    Event event = new Event();
+//    event.data = selectedItem;
+//    event.text = selectedItem;
+//    event.widget = this;
+//    VisualizationSelectionEvent selectionEvent = new VisualizationSelectionEvent(event);
+//    selectionEvent.setWidget(this);
+//    selectionEvent.setSource(this);
+//    selectionEvent.data = selectedItem;
+//    selectionEvent.text = selectedItem;
+//    for (SelectionListener listener: listeners) {
+//      listener.widgetSelected( selectionEvent );
+//    }
+//  }
+  
+  
 }
