@@ -10,7 +10,9 @@
  ******************************************************************************/
 package org.inqle.ui.google.jsapi;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Composite;
+import org.inqle.ui.internal.google.jsapi.tablekit.TableLCA;
 
 /**
  * Renders a Google Visualization Table widget.
@@ -42,6 +44,8 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class Table extends VisualizationWidget {
 
+  private static final Logger log = Logger.getLogger(TableLCA.class);
+  
   private String selectedItem;
 //  private List<SelectionListener> listeners = new ArrayList<SelectionListener>();
   
@@ -52,6 +56,7 @@ public class Table extends VisualizationWidget {
   public void setSelectedItem( String selectedItem ) {
     this.selectedItem = selectedItem;
 //    selectionChanged();
+//    log.info( "Selection changed to: " + selectedItem );
   }
 
   public String getSelectedItem() {

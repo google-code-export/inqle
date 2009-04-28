@@ -58,14 +58,17 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
 	        
 	        google.visualization.events.addListener(chart, 'select', function() {
             	var row = chart.getSelection()[0].row;
-//                alert('You selected ' + dataTable.getValue(row, 0));
-            	this.setSelectedItem(dataTable.getValue(row, 0));
+                
+            	this.selectedItem = dataTable.getValue(row, 0);
             	
             	//fire selection event
             	var req = org.eclipse.swt.Request.getInstance();
-            	var id = widgetManager.findIdByWidget( this );  
-            	req.addEvent( "org.eclipse.swt.events.widgetSelected", id );
+//            	var id = widgetManager.findIdByWidget( this );  
+//            	req.addEvent( "org.eclipse.swt.events.widgetSelected", id );
+            	req.addParameter("selectedItem", this.selectedItem);
+            	req.addEvent( "org.eclipse.swt.events.widgetSelected", this._id );
             	req.send();
+            	alert('Sent event for selection of: ' + this.selectedItem);
               });
         },
         
