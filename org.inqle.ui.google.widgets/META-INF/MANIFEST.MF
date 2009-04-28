@@ -7,7 +7,8 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.rap.ui,
  org.eclipse.rap.rwt
 Import-Package: javax.servlet;version="2.4.0",
- javax.servlet.http;version="2.4.0"
+ javax.servlet.http;version="2.4.0",
+ org.apache.log4j
 Export-Package: 
  org.inqle.ui.google.jsapi,
  org.inqle.ui.google.json
