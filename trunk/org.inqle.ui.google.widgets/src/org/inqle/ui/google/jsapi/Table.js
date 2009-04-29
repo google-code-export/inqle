@@ -42,6 +42,8 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
         },
         
         load : function() {
+        	alert('this._id=' + this._id);
+        	
 	    	qx.ui.core.Widget.flushGlobalQueues();
 	    	var data = eval('(' + this.getWidgetData() + ')');
 	        if( this._chart == null ) {
@@ -56,20 +58,18 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
             }
 	        chart.draw(dataTable, options);
 	        
+	        var widgetId = this._id;
+	        
 	        google.visualization.events.addListener(chart, 'select', function() {
             	var row = chart.getSelection()[0].row;
-                
             	this.selectedItem = dataTable.getValue(row, 0);
-            	
             	//fire selection event
             	var req = org.eclipse.swt.Request.getInstance();
-//            	var id = widgetManager.findIdByWidget( this );  
-//            	req.addEvent( "org.eclipse.swt.events.widgetSelected", id );
-            	req.addParameter("selectedItem", this.selectedItem);
-            	req.addEvent( "org.eclipse.swt.events.widgetSelected", this._id );
+            	req.addParameter(widgetId + ".selectedItem", this.selectedItem);
+            	req.addEvent( "org.eclipse.swt.events.widgetSelected", widgetId );
+//            	alert('Widget ID: ' + widgetId + '; Sent event for selection of: ' + this.selectedItem);
             	req.send();
-            	alert('Sent event for selection of: ' + this.selectedItem);
-              });
+	        });
         },
         
         _doResize : function() {

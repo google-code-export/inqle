@@ -12,19 +12,24 @@ package org.inqle.ui.google.jsapi;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.eclipse.rwt.lifecycle.AbstractWidgetLCA;
 import org.eclipse.rwt.lifecycle.ControlLCAUtil;
 import org.eclipse.rwt.lifecycle.IWidgetAdapter;
 import org.eclipse.rwt.lifecycle.JSWriter;
+import org.eclipse.rwt.lifecycle.WidgetLCAUtil;
 import org.eclipse.rwt.lifecycle.WidgetUtil;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
+import org.inqle.ui.internal.google.jsapi.tablekit.TableLCA;
 
 public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
 
   protected static final String PROP_DATA = "widgetData";
   protected static final String PROP_OPTIONS = "widgetOptions";
 
+  private static final Logger log = Logger.getLogger(VisualizationWidgetLCA.class);
+  
   public void preserveValues( final Widget widget ) {
     ControlLCAUtil.preserveValues( ( Control )widget );
     IWidgetAdapter adapter = WidgetUtil.getAdapter( widget );
@@ -54,12 +59,18 @@ public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
     return null;
   }
   
-  /*
-   * Override this (which does nothing) to read the parameters transfered from the client.  
+  /**
+   * Respond to selection events, set the value of selectedItem on the widget Java object,
+   * and broadcast a SWT.Selection event to any listeners  
    */
   public void readData( final Widget widget ) {
-//    MotionChart motionChart = ( MotionChart )widget;
-//    String location = WidgetLCAUtil.readPropertyValue( motionChart, PARAM_CENTER );
-//    motionChart.setCenterLocation( location );
+    if (widget==null) return;
+    VisualizationWidget visWidget = ( VisualizationWidget )widget;
+    String selectedItem = WidgetLCAUtil.readPropertyValue( visWidget, "selectedItem" );
+    if (selectedItem!=null) {
+      visWidget.setSelectedItem( selectedItem );
+      log.info( "VisualizationWidgetLCA.readData(): widget=" + widget + "; selectedItem=" + selectedItem);
+      ControlLCAUtil.processSelection( visWidget, null, true );
+    }
   }
 }

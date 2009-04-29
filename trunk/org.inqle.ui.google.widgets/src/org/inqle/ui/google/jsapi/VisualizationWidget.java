@@ -22,8 +22,9 @@ import org.eclipse.swt.widgets.Layout;
  */
 public abstract class VisualizationWidget extends Composite {
   
-  private String widgetData;
-  private String widgetOptions;
+  private String widgetData = "";
+  private String widgetOptions = "";
+  private String selectedItem = "";
 
   public VisualizationWidget( final Composite parent, final int style ) {
     super( parent, style );
@@ -41,14 +42,31 @@ public abstract class VisualizationWidget extends Composite {
 
   
   public void setWidgetData( String widgetData ) {
-    this.widgetData = widgetData;
+    if (widgetData==null) {
+      this.widgetData = "";
+    } else {
+      this.widgetData = widgetData;
+    }
   }
 
   public void setWidgetOptions( String widgetOptions ) {
-    this.widgetOptions = widgetOptions;
+    if (widgetOptions==null) {
+      widgetOptions = "";
+    } else {
+      this.widgetOptions = widgetOptions;
+    }
   }
 
   public String getWidgetOptions() {
     return widgetOptions;
   }
+  
+  public void setSelectedItem( String selectedItem ) {
+    this.selectedItem  = selectedItem;
+  }
+
+  public String getSelectedItem() {
+    return selectedItem;
+  }
+  
 }

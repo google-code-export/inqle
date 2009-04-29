@@ -53,16 +53,6 @@ public class Table extends VisualizationWidget {
     super( parent, style );
   }
 
-  public void setSelectedItem( String selectedItem ) {
-    this.selectedItem = selectedItem;
-//    selectionChanged();
-//    log.info( "Selection changed to: " + selectedItem );
-  }
-
-  public String getSelectedItem() {
-    return selectedItem;
-  }
-
 //  public void addSelectionListener(SelectionListener listener) {
 //    listeners.add(listener);
 //  }
