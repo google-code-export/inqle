@@ -20,8 +20,10 @@ import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.google.jsapi.ColumnChart;
 import org.inqle.ui.google.jsapi.LineChart;
 import org.inqle.ui.google.jsapi.MotionChart;
+import org.inqle.ui.google.jsapi.PieChart;
 import org.inqle.ui.google.jsapi.ScatterChart;
 import org.inqle.ui.google.jsapi.Table;
+import org.inqle.ui.google.jsapi.VisualizationWidget;
 import org.inqle.ui.google.json.JSONGoogleDataTable;
 import org.inqle.ui.rap.IDisposableViewer;
 
@@ -33,6 +35,11 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	private Text classWidget;
 	private Text descriptionWidget;
 	private Text detailWidget;
+	
+	//private ISelection selection;
+	private Object bean;
+
+	private static final Logger log = Logger.getLogger(ObjectViewer.class);
 	
 	public ObjectViewer(Composite parentComposite, Object bean) {
 		this(parentComposite);
@@ -111,11 +118,12 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 		
     l = new Label(composite, SWT.NONE);
 		l.setText("Column Chart");
-		ColumnChart chart = new ColumnChart( composite, SWT.NONE );
-		chart.setWidgetOptions("{width: 300, height: 300}");
-		chart.setWidgetData(widgetData);
+		ColumnChart columnChart = new ColumnChart( composite, SWT.NONE );
+		columnChart.setWidgetOptions("{width: 300, height: 300}");
+		columnChart.setWidgetData(widgetData);
 	  gridData = new GridData(300, 300);
-	  chart.setLayoutData(gridData);
+	  columnChart.setLayoutData(gridData);
+	  columnChart.addListener(SWT.Selection, this);
 	  
 	  dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("CO2", "CO2", "number", null);
@@ -148,7 +156,7 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 		l = new Label(composite, SWT.NONE);
 		l.setText("Line Chart");
 		LineChart lineChart = new LineChart( composite, SWT.NONE );
-		lineChart.setWidgetOptions("{width: 300, height: 400}");
+		lineChart.setWidgetOptions("{width: 300, height: 300}");
 		lineChart.setWidgetData(widgetData);
 	  gridData = new GridData(300, 300);
 	  lineChart.setLayoutData(gridData);
@@ -157,13 +165,28 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Table");
 		Table table = new Table( composite, SWT.NONE );
-//		table.setWidgetOptions("{width: 300, height: 400}");
+		table.setWidgetOptions("{width: 300, height: 200}");
 		table.setWidgetData(widgetData);
 	  gridData = new GridData(300, 200);
 	  table.setLayoutData(gridData);
 	  table.addListener(SWT.Selection, this);
 	  
-	  
+	  dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("Activity", "Activity", "string", null);
+		dataTable.addColumn("Hours", "Hours per Week", "number", null);
+		dataTable.addRow(new Object[] {"software architect", 40});
+		dataTable.addRow(new Object[] {"primary care medicine", 9});
+		dataTable.addRow(new Object[] {"open source development", 10});
+		widgetData = dataTable.toString();
+		
+		l = new Label(composite, SWT.NONE);
+		l.setText("Pie Chart");
+		PieChart pieChart = new PieChart( composite, SWT.NONE );
+		pieChart.setWidgetOptions("{width: 400, height: 400}");
+		pieChart.setWidgetData(widgetData);
+	  gridData = new GridData(400, 400);
+	  pieChart.setLayoutData(gridData);
+	  pieChart.addListener(SWT.Selection, this);
 	  
 	  
 	  l = new Label(composite, SWT.NONE);
@@ -172,13 +195,8 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  detailWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
 	  gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 	  detailWidget.setLayoutData(gridData);
-
-	}
 	
-	//private ISelection selection;
-	private Object bean;
-
-	private static final Logger log = Logger.getLogger(ObjectViewer.class);
+	}
 	
 	@Override
 	public Control getControl() {
@@ -300,7 +318,9 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 
 	public void handleEvent(Event event) {
 		log.info("Event: " + event);
-		Table table = (Table)event.widget;
-		log.info("Selected value=" + table.getSelectedItem());
+		VisualizationWidget widget = (VisualizationWidget)event.widget;
+		log.info( "Selected row=" + widget.getSelectedRow() +
+				"; Selected column=" + widget.getSelectedColumn() +
+				"; Selected value=" + widget.getSelectedValue());
 	}
 }
