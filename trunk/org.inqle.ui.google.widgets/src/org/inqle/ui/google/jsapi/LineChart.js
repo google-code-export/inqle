@@ -1,4 +1,4 @@
-qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
+qx.Class.define( "org.inqle.ui.google.jsapi.LineChart", {
     extend: qx.ui.layout.CanvasLayout,
     
     construct: function( id ) {
@@ -42,23 +42,22 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
         },
         
         load : function() {
-	    	qx.ui.core.Widget.flushGlobalQueues();
-	    	var data = eval('(' + this.getWidgetData() + ')');
-	        if( this._chart == null ) {
-	            this._chart = new google.visualization.Table(document.getElementById(this._id));
-	        }
-	        var dataTable  = new google.visualization.DataTable(data);
-	        
-	        var chart = this._chart;
-	        var options = {};
+        	qx.ui.core.Widget.flushGlobalQueues();
+        	var data = eval('(' + this.getWidgetData() + ')');
+            if( this._chart == null ) {
+                this._chart = new google.visualization.LineChart(document.getElementById(this._id));
+            }
+            
+            var dataTable  = new google.visualization.DataTable(data);
+            var options = {};
             if (this.getWidgetOptions()) {
             	options = eval('(' + this.getWidgetOptions() + ')');
             }
-	        chart.draw(dataTable, options);
-	        
-	        var widgetId = this._id;
-	        
-	        google.visualization.events.addListener(chart, 'select', function() {
+            this._chart.draw(dataTable, options);
+            
+            var widgetId = this._id;
+            
+            google.visualization.events.addListener(this._chart, 'select', function() {
             	var row = chart.getSelection()[0].row;
             	this.selectedItem = dataTable.getValue(row, 0);
             	//fire selection event

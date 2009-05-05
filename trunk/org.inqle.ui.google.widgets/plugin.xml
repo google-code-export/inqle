@@ -20,5 +20,11 @@
     
     <resource class="org.inqle.ui.google.jsapi.TableAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.TableResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.ScatterChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.ScatterChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.LineChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.LineChartResource"/>
   </extension>
 </plugin>
