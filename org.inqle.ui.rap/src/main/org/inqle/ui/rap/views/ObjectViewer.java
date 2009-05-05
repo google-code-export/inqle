@@ -18,7 +18,9 @@ import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.google.jsapi.ColumnChart;
+import org.inqle.ui.google.jsapi.LineChart;
 import org.inqle.ui.google.jsapi.MotionChart;
+import org.inqle.ui.google.jsapi.ScatterChart;
 import org.inqle.ui.google.jsapi.Table;
 import org.inqle.ui.google.json.JSONGoogleDataTable;
 import org.inqle.ui.rap.IDisposableViewer;
@@ -115,22 +117,62 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  gridData = new GridData(300, 300);
 	  chart.setLayoutData(gridData);
 	  
+	  dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("CO2", "CO2", "number", null);
+		dataTable.addColumn("CH4", "CH4", "number", null);
+		dataTable.addColumn("Temperature", "Temperature", "number", null);
+		dataTable.addRow(new Object[] {350, 10, 22});
+		dataTable.addRow(new Object[] {375, 12, 23});
+		dataTable.addRow(new Object[] {400, 16, 25});
+		widgetData = dataTable.toString();
+		
+		l = new Label(composite, SWT.NONE);
+		l.setText("Scatter Chart");
+		ScatterChart scatterChart = new ScatterChart( composite, SWT.NONE );
+		scatterChart.setWidgetOptions("{width: 300, height: 400}");
+		scatterChart.setWidgetData(widgetData);
+	  gridData = new GridData(300, 300);
+	  scatterChart.setLayoutData(gridData);
+	  scatterChart.addListener(SWT.Selection, this);
+	  
+	  dataTable = new JSONGoogleDataTable();
+	  dataTable.addColumn("Month", "Month", "string", null);
+		dataTable.addColumn("Provider1", "Provider 1", "number", null);
+		dataTable.addColumn("Provider2", "Provider 2", "number", null);
+		dataTable.addColumn("Provider3", "Provider 3", "number", null);
+		dataTable.addRow(new Object[] {"May", 10, 15, 20});
+		dataTable.addRow(new Object[] {"June", 12, 23, 33});
+		dataTable.addRow(new Object[] {"July", 11, 25, 50});
+		widgetData = dataTable.toString();
+		
+		l = new Label(composite, SWT.NONE);
+		l.setText("Line Chart");
+		LineChart lineChart = new LineChart( composite, SWT.NONE );
+		lineChart.setWidgetOptions("{width: 300, height: 400}");
+		lineChart.setWidgetData(widgetData);
+	  gridData = new GridData(300, 300);
+	  lineChart.setLayoutData(gridData);
+	  lineChart.addListener(SWT.Selection, this);
+	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Table");
 		Table table = new Table( composite, SWT.NONE );
 //		table.setWidgetOptions("{width: 300, height: 400}");
 		table.setWidgetData(widgetData);
-	  gridData = new GridData(300, 300);
+	  gridData = new GridData(300, 200);
 	  table.setLayoutData(gridData);
 	  table.addListener(SWT.Selection, this);
+	  
+	  
+	  
+	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
 		//l.setFont(boldFont);
 	  detailWidget = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.READ_ONLY);
 	  gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 	  detailWidget.setLayoutData(gridData);
-	  
-	  
+
 	}
 	
 	//private ISelection selection;
@@ -256,8 +298,9 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 		composite.dispose();
 	}
 
-	public void handleEvent(Event arg0) {
-		log.info("Event: " + arg0);
-		
+	public void handleEvent(Event event) {
+		log.info("Event: " + event);
+		Table table = (Table)event.widget;
+		log.info("Selected value=" + table.getSelectedItem());
 	}
 }
