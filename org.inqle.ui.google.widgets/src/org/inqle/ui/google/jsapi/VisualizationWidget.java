@@ -25,7 +25,10 @@ public abstract class VisualizationWidget extends Composite {
   private String widgetData = "";
   private String widgetOptions = "";
   private String selectedItem = "";
-
+  private String selectedRow = "";
+  private String selectedColumn = "";
+  private String selectedValue = "";
+  
   public VisualizationWidget( final Composite parent, final int style ) {
     super( parent, style );
   }
@@ -67,6 +70,30 @@ public abstract class VisualizationWidget extends Composite {
 
   public String getSelectedItem() {
     return selectedItem;
+  }
+
+  public void setSelectedRow( String selectedRow ) {
+    this.selectedRow = selectedRow;
+  }
+
+  public String getSelectedRow() {
+    return selectedRow;
+  }
+
+  public void setSelectedColumn( String selectedColumn ) {
+    this.selectedColumn = selectedColumn;
+  }
+
+  public String getSelectedColumn() {
+    return selectedColumn;
+  }
+
+  public void setSelectedValue( String selectedValue ) {
+    this.selectedValue = selectedValue;
+  }
+
+  public String getSelectedValue() {
+    return selectedValue;
   }
   
 }

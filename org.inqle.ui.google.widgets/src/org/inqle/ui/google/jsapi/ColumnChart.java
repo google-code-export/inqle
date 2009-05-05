@@ -10,11 +10,7 @@
  ******************************************************************************/
 package org.inqle.ui.google.jsapi;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.inqle.ui.google.json.JSONGoogleDataTable;
 
 /**
  * Renders a Google Visualization Column Chart.

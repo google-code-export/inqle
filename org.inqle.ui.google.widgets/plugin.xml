@@ -26,5 +26,8 @@
     
     <resource class="org.inqle.ui.google.jsapi.LineChartAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.LineChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.PieChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.PieChartResource"/>
   </extension>
 </plugin>

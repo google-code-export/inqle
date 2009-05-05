@@ -67,8 +67,14 @@ public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
     if (widget==null) return;
     VisualizationWidget visWidget = ( VisualizationWidget )widget;
     String selectedItem = WidgetLCAUtil.readPropertyValue( visWidget, "selectedItem" );
+    String selectedRow = WidgetLCAUtil.readPropertyValue( visWidget, "selectedRow" );
+    String selectedColumn = WidgetLCAUtil.readPropertyValue( visWidget, "selectedColumn" );
+    String selectedValue = WidgetLCAUtil.readPropertyValue( visWidget, "selectedValue" );
     if (selectedItem!=null) {
       visWidget.setSelectedItem( selectedItem );
+      visWidget.setSelectedRow( selectedRow );
+      visWidget.setSelectedColumn( selectedColumn );
+      visWidget.setSelectedValue( selectedValue );
       log.info( "VisualizationWidgetLCA.readData(): widget=" + widget + "; selectedItem=" + selectedItem);
       ControlLCAUtil.processSelection( visWidget, null, true );
     }
