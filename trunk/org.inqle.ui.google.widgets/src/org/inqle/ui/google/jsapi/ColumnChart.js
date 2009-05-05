@@ -19,6 +19,18 @@ qx.Class.define( "org.inqle.ui.google.jsapi.ColumnChart", {
         widgetOptions : {
             init : "",
             apply : ""
+        },
+        selectedRow : {
+        	init : "",
+            apply : ""
+        },
+        selectedColumn : {
+        	init : "",
+            apply : ""
+        },
+        selectedValue : {
+        	init : "",
+            apply : ""
         }
     },
     
@@ -55,6 +67,27 @@ qx.Class.define( "org.inqle.ui.google.jsapi.ColumnChart", {
             	options = eval('(' + this.getWidgetOptions() + ')');
             }
 	        chart.draw(dataTable, options);
+	        
+	        var widgetId = this._id;
+	        
+            google.visualization.events.addListener(chart, 'select', function() {
+            	var selArray = chart.getSelection();
+            	var selObj = selArray[0];
+            	var selection = dataTable.getValue(selObj.row, 0) + "," + dataTable.getColumnId(selObj.column) + "," + dataTable.getValue(selObj.row, selObj.column);
+            	this.selectedItem = selection;
+            	this.selectedRow = dataTable.getValue(selObj.row, 0);
+            	this.selectedColumn = dataTable.getColumnId(selObj.column);
+            	this.selectedValue = dataTable.getValue(selObj.row, selObj.column);
+
+            	//fire selection event
+            	var req = org.eclipse.swt.Request.getInstance();
+            	req.addParameter(widgetId + ".selectedItem", this.selectedItem);
+            	req.addParameter(widgetId + ".selectedRow", this.selectedRow);
+            	req.addParameter(widgetId + ".selectedColumn", this.selectedColumn);
+            	req.addParameter(widgetId + ".selectedValue", this.selectedValue);
+            	req.addEvent( "org.eclipse.swt.events.widgetSelected", widgetId );
+            	req.send();
+	        });
         },
         
         _doResize : function() {

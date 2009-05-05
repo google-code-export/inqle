@@ -1,4 +1,4 @@
-qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
+qx.Class.define( "org.inqle.ui.google.jsapi.PieChart", {
     extend: qx.ui.layout.CanvasLayout,
     
     construct: function( id ) {
@@ -54,30 +54,38 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Table", {
         },
         
         load : function() {
-	    	qx.ui.core.Widget.flushGlobalQueues();
-	    	var data = eval('(' + this.getWidgetData() + ')');
-	        if( this._chart == null ) {
-	            this._chart = new google.visualization.Table(document.getElementById(this._id));
-	        }
-	        var dataTable  = new google.visualization.DataTable(data);
-	        
-	        var chart = this._chart;
-	        var options = {};
+        	qx.ui.core.Widget.flushGlobalQueues();
+        	var data = eval('(' + this.getWidgetData() + ')');
+            if( this._chart == null ) {
+                this._chart = new google.visualization.PieChart(document.getElementById(this._id));
+            }
+            
+            var dataTable  = new google.visualization.DataTable(data);
+            
+            var chart = this._chart;
+            var options = {};
             if (this.getWidgetOptions()) {
             	options = eval('(' + this.getWidgetOptions() + ')');
             }
-	        chart.draw(dataTable, options);
-	        
-	        var widgetId = this._id;
-	        
-	        google.visualization.events.addListener(chart, 'select', function() {
-            	var row = chart.getSelection()[0].row;
-            	this.selectedItem = dataTable.getValue(row, 0);
-            	this.selectedRow = dataTable.getValue(row, 0);
+            chart.draw(dataTable, options);
+            
+            var widgetId = this._id;
+            
+            google.visualization.events.addListener(chart, 'select', function() {
+            	var selArray = chart.getSelection();
+            	var selObj = selArray[0];
+            	var selection = dataTable.getValue(selObj.row, 0) + "," + dataTable.getColumnId(selObj.column) + "," + dataTable.getValue(selObj.row, selObj.column);
+            	this.selectedItem = selection;
+            	this.selectedRow = dataTable.getValue(selObj.row, 0);
+            	this.selectedColumn = dataTable.getColumnId(selObj.column);
+            	this.selectedValue = dataTable.getValue(selObj.row, selObj.column);
+
             	//fire selection event
             	var req = org.eclipse.swt.Request.getInstance();
             	req.addParameter(widgetId + ".selectedItem", this.selectedItem);
             	req.addParameter(widgetId + ".selectedRow", this.selectedRow);
+            	req.addParameter(widgetId + ".selectedColumn", this.selectedColumn);
+            	req.addParameter(widgetId + ".selectedValue", this.selectedValue);
             	req.addEvent( "org.eclipse.swt.events.widgetSelected", widgetId );
             	req.send();
 	        });
