@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.ui.google.jsapi.AnnotatedTimeLine;
 import org.inqle.ui.google.jsapi.ColumnChart;
 import org.inqle.ui.google.jsapi.LineChart;
 import org.inqle.ui.google.jsapi.MotionChart;
@@ -107,6 +108,25 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
     gridData = new GridData(500, 300);
     motionChart.setLayoutData(gridData);
     
+    //Annotated Timeline
+    dataTable = new JSONGoogleDataTable();
+	  dataTable.addColumn("Date", "Date", "date", null);
+		dataTable.addColumn("CO2", "CO2", "number", null);
+		dataTable.addColumn("CH4", "CH4", "number", null);
+		dataTable.addRow(new Object[] {new Date(1199145600), 377, "CO2 on the rise", 2, "Methane flat"});
+		dataTable.addRow(new Object[] {new Date(1210000000), 385, "CO2 up", 3});
+		dataTable.addRow(new Object[] {new Date(), 400, "CO2 Accelerating", 3, "Methane begins to rise"});
+		widgetData = dataTable.toString();
+		
+		l = new Label(composite, SWT.NONE);
+		l.setText("Annotated Time Line");
+		AnnotatedTimeLine timeLine = new AnnotatedTimeLine( composite, SWT.NONE );
+		timeLine.setWidgetOptions("{width: 500, height: 300, displayAnnotations: true}");
+		timeLine.setWidgetData(widgetData);
+	  gridData = new GridData(500, 300);
+	  timeLine.setLayoutData(gridData);
+	  timeLine.addListener(SWT.Selection, this);
+	  
 	  //COLUMN CHART:
     dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("theyear", "Date", "string", null);
@@ -137,11 +157,28 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 		l = new Label(composite, SWT.NONE);
 		l.setText("Scatter Chart");
 		ScatterChart scatterChart = new ScatterChart( composite, SWT.NONE );
-		scatterChart.setWidgetOptions("{width: 300, height: 400}");
+		scatterChart.setWidgetOptions("{width: 300, height: 300}");
 		scatterChart.setWidgetData(widgetData);
 	  gridData = new GridData(300, 300);
 	  scatterChart.setLayoutData(gridData);
 	  scatterChart.addListener(SWT.Selection, this);
+	  
+	  dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("Activity", "Activity", "string", null);
+		dataTable.addColumn("Hours", "Hours per Week", "number", null);
+		dataTable.addRow(new Object[] {"software architect", 40});
+		dataTable.addRow(new Object[] {"primary care medicine", 9});
+		dataTable.addRow(new Object[] {"open source development", 10});
+		widgetData = dataTable.toString();
+		
+		l = new Label(composite, SWT.NONE);
+		l.setText("Pie Chart");
+		PieChart pieChart = new PieChart( composite, SWT.NONE );
+		pieChart.setWidgetOptions("{width: 300, height: 300}");
+		pieChart.setWidgetData(widgetData);
+	  gridData = new GridData(300, 300);
+	  pieChart.setLayoutData(gridData);
+	  pieChart.addListener(SWT.Selection, this);
 	  
 	  dataTable = new JSONGoogleDataTable();
 	  dataTable.addColumn("Month", "Month", "string", null);
@@ -170,24 +207,6 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  gridData = new GridData(300, 200);
 	  table.setLayoutData(gridData);
 	  table.addListener(SWT.Selection, this);
-	  
-	  dataTable = new JSONGoogleDataTable();
-		dataTable.addColumn("Activity", "Activity", "string", null);
-		dataTable.addColumn("Hours", "Hours per Week", "number", null);
-		dataTable.addRow(new Object[] {"software architect", 40});
-		dataTable.addRow(new Object[] {"primary care medicine", 9});
-		dataTable.addRow(new Object[] {"open source development", 10});
-		widgetData = dataTable.toString();
-		
-		l = new Label(composite, SWT.NONE);
-		l.setText("Pie Chart");
-		PieChart pieChart = new PieChart( composite, SWT.NONE );
-		pieChart.setWidgetOptions("{width: 400, height: 400}");
-		pieChart.setWidgetData(widgetData);
-	  gridData = new GridData(400, 400);
-	  pieChart.setLayoutData(gridData);
-	  pieChart.addListener(SWT.Selection, this);
-	  
 	  
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Detail");
