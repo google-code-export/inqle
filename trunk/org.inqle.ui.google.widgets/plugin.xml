@@ -32,5 +32,14 @@
     
     <resource class="org.inqle.ui.google.jsapi.AnnotatedTimeLineAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.AnnotatedTimeLineResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.BarChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.BarChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.GaugeAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.GaugeResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.GeomapAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.GeomapResource"/>
   </extension>
 </plugin>
