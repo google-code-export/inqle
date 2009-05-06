@@ -18,7 +18,10 @@ import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.google.jsapi.AnnotatedTimeLine;
+import org.inqle.ui.google.jsapi.BarChart;
 import org.inqle.ui.google.jsapi.ColumnChart;
+import org.inqle.ui.google.jsapi.Gauge;
+import org.inqle.ui.google.jsapi.Geomap;
 import org.inqle.ui.google.jsapi.LineChart;
 import org.inqle.ui.google.jsapi.MotionChart;
 import org.inqle.ui.google.jsapi.PieChart;
@@ -108,13 +111,14 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
     gridData = new GridData(500, 300);
     motionChart.setLayoutData(gridData);
     
-    //Annotated Timeline
+    /*Annotated Timeline not working
     dataTable = new JSONGoogleDataTable();
 	  dataTable.addColumn("Date", "Date", "date", null);
 		dataTable.addColumn("CO2", "CO2", "number", null);
 		dataTable.addColumn("CH4", "CH4", "number", null);
 		dataTable.addRow(new Object[] {new Date(1199145600), 377, "CO2 on the rise", 2, "Methane flat"});
 		dataTable.addRow(new Object[] {new Date(1210000000), 385, "CO2 up", 3});
+		dataTable.addRow(new Object[] {new Date(1230809560), 395, "CO2 Accelerating", 3});
 		dataTable.addRow(new Object[] {new Date(), 400, "CO2 Accelerating", 3, "Methane begins to rise"});
 		widgetData = dataTable.toString();
 		
@@ -126,7 +130,27 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  gridData = new GridData(500, 300);
 	  timeLine.setLayoutData(gridData);
 	  timeLine.addListener(SWT.Selection, this);
-	  
+	  */
+    
+    //GEOMAP
+    dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("Country", "Country", "string", null);
+		dataTable.addColumn("Happiness", "Happiness", "number", null);
+//		dataTable.addColumn("Income", "Income", "number", null);
+		
+		dataTable.addRow(new Object[] {"Tanzania", 25});
+		dataTable.addRow(new Object[] {"US", 40});
+		widgetData = dataTable.toString();
+		
+    l = new Label(composite, SWT.NONE);
+		l.setText("Geomap");
+		Geomap geomap = new Geomap( composite, SWT.NONE );
+		geomap.setWidgetOptions("{width: 500, height: 500}");
+		geomap.setWidgetData(widgetData);
+	  gridData = new GridData(500, 500);
+	  geomap.setLayoutData(gridData);
+	  geomap.addListener(SWT.Selection, this);
+    
 	  //COLUMN CHART:
     dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("theyear", "Date", "string", null);
@@ -145,6 +169,34 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  columnChart.setLayoutData(gridData);
 	  columnChart.addListener(SWT.Selection, this);
 	  
+	  //BAR CHART
+	  l = new Label(composite, SWT.NONE);
+		l.setText("Bar Chart");
+		BarChart barChart = new BarChart( composite, SWT.NONE );
+		barChart.setWidgetOptions("{width: 300, height: 300}");
+		barChart.setWidgetData(widgetData);
+	  gridData = new GridData(300, 300);
+	  barChart.setLayoutData(gridData);
+	  barChart.addListener(SWT.Selection, this);
+	  
+	  //GAGUE
+	  dataTable = new JSONGoogleDataTable();
+		dataTable.addColumn("CO2", "CO2", "number", null);
+		dataTable.addColumn("CH4", "CH4", "number", null);
+		dataTable.addColumn("Temperature", "Temperature", "number", null);
+		dataTable.addRow(new Object[] {389, 1800, 14});
+		widgetData = dataTable.toString();
+	  
+	//BAR CHART
+	  l = new Label(composite, SWT.NONE);
+		l.setText("Gauge");
+		Gauge gauge = new Gauge( composite, SWT.NONE );
+		gauge.setWidgetOptions("{width: 300, height: 300}");
+		gauge.setWidgetData(widgetData);
+	  gridData = new GridData(300, 300);
+	  gauge.setLayoutData(gridData);
+	  
+	  //SCATTER CHART
 	  dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("CO2", "CO2", "number", null);
 		dataTable.addColumn("CH4", "CH4", "number", null);
@@ -338,8 +390,9 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	public void handleEvent(Event event) {
 		log.info("Event: " + event);
 		VisualizationWidget widget = (VisualizationWidget)event.widget;
-		log.info( "Selected row=" + widget.getSelectedRow() +
-				"; Selected column=" + widget.getSelectedColumn() +
-				"; Selected value=" + widget.getSelectedValue());
+		log.info( "Selected item=" + widget.getSelectedItem() + 
+				"; row=" + widget.getSelectedRow() +
+				"; column=" + widget.getSelectedColumn() +
+				"; value=" + widget.getSelectedValue());
 	}
 }
