@@ -29,5 +29,8 @@
     
     <resource class="org.inqle.ui.google.jsapi.PieChartAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.PieChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.AnnotatedTimeLineAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.AnnotatedTimeLineResource"/>
   </extension>
 </plugin>
