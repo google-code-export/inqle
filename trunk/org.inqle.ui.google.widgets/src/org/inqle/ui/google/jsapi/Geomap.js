@@ -54,10 +54,6 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Geomap", {
 	    	var data = eval('(' + this.getWidgetData() + ')');
 	        if( this._chart == null ) {
 	            this._chart = new google.visualization.GeoMap(document.getElementById(this._id));
-//	            google.visualization.events.addListener(this._chart, 'select', function() {
-//	                var selection = this._chart.getSelection();
-//	                alert('You selected ' + selection);
-//	              });
 	        }
 	        var dataTable  = new google.visualization.DataTable(data);
 	        
@@ -70,9 +66,10 @@ qx.Class.define( "org.inqle.ui.google.jsapi.Geomap", {
 	        
 	        var widgetId = this._id;
 	        
-            google.visualization.events.addListener(chart, 'regionClick', function() {
+            google.visualization.events.addListener(chart, 'regionClick', function(clickedObj) {
             	var selObj = chart.getSelection();
-            	var selection = chart.region;
+//            	var selection = selObj.region;
+            	var selection = clickedObj.region;
             	this.selectedItem = selection;
 
             	//fire selection event
