@@ -18,10 +18,12 @@ import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.google.jsapi.AnnotatedTimeLine;
+import org.inqle.ui.google.jsapi.AreaChart;
 import org.inqle.ui.google.jsapi.BarChart;
 import org.inqle.ui.google.jsapi.ColumnChart;
 import org.inqle.ui.google.jsapi.Gauge;
 import org.inqle.ui.google.jsapi.Geomap;
+import org.inqle.ui.google.jsapi.IntensityMap;
 import org.inqle.ui.google.jsapi.LineChart;
 import org.inqle.ui.google.jsapi.MotionChart;
 import org.inqle.ui.google.jsapi.PieChart;
@@ -111,33 +113,34 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
     gridData = new GridData(500, 300);
     motionChart.setLayoutData(gridData);
     
-    /*Annotated Timeline not working
+    //ANNOTATED TIMELINE
     dataTable = new JSONGoogleDataTable();
-	  dataTable.addColumn("Date", "Date", "date", null);
-		dataTable.addColumn("CO2", "CO2", "number", null);
-		dataTable.addColumn("CH4", "CH4", "number", null);
-		dataTable.addRow(new Object[] {new Date(1199145600), 377, "CO2 on the rise", 2, "Methane flat"});
-		dataTable.addRow(new Object[] {new Date(1210000000), 385, "CO2 up", 3});
-		dataTable.addRow(new Object[] {new Date(1230809560), 395, "CO2 Accelerating", 3});
-		dataTable.addRow(new Object[] {new Date(), 400, "CO2 Accelerating", 3, "Methane begins to rise"});
-		widgetData = dataTable.toString();
-		
-		l = new Label(composite, SWT.NONE);
-		l.setText("Annotated Time Line");
-		AnnotatedTimeLine timeLine = new AnnotatedTimeLine( composite, SWT.NONE );
-		timeLine.setWidgetOptions("{width: 500, height: 300, displayAnnotations: true}");
-		timeLine.setWidgetData(widgetData);
-	  gridData = new GridData(500, 300);
-	  timeLine.setLayoutData(gridData);
-	  timeLine.addListener(SWT.Selection, this);
-	  */
+    dataTable.addColumn("Date", "Date", "date", null);
+    dataTable.addColumn("AverageGPA", "Average GPA", "number", null);
+//    dataTable.addColumn("Description", "Description", "string", null);
+//    dataTable.addColumn("Description2", "Description2", "string", null);
+    
+//    dataTable.addRow(new Object[] {new Date(1210000000), 3, "First course", "traditional teaching method used"});
+//    dataTable.addRow(new Object[] {new Date(1230809560), 3.5, "new course", "newer teaching method used"});
+//    dataTable.addRow(new Object[] {new Date(), 2.85});
+    dataTable.addRow(new Object[] {new Date(1210000000), 3});
+    dataTable.addRow(new Object[] {new Date(1230809560), 3.5});
+    dataTable.addRow(new Object[] {new Date(), 2.85});
+    widgetData = dataTable.toString();
+    
+    l = new Label(composite, SWT.NONE);
+    l.setText("Annotated Time Line");
+    AnnotatedTimeLine timeLine = new AnnotatedTimeLine( composite, SWT.NONE );
+    timeLine.setWidgetOptions("{width: 500, height: 300, displayAnnotations: true}");
+    timeLine.setWidgetData(widgetData);
+    gridData = new GridData(500, 300);
+    timeLine.setLayoutData(gridData);
+    timeLine.addListener(SWT.Selection, this);
     
     //GEOMAP
     dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("Country", "Country", "string", null);
 		dataTable.addColumn("Happiness", "Happiness", "number", null);
-//		dataTable.addColumn("Income", "Income", "number", null);
-		
 		dataTable.addRow(new Object[] {"Tanzania", 25});
 		dataTable.addRow(new Object[] {"US", 40});
 		widgetData = dataTable.toString();
@@ -150,14 +153,33 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  gridData = new GridData(500, 500);
 	  geomap.setLayoutData(gridData);
 	  geomap.addListener(SWT.Selection, this);
+	  
+	  //INTENSITYMAP - renders in upper left of panel
+//    dataTable = new JSONGoogleDataTable();
+//		dataTable.addColumn("Country", "Country", "string", null);
+//		dataTable.addColumn("Happiness", "Happiness", "number", null);
+//		dataTable.addColumn("Income", "Income", "number", null);
+//		dataTable.addRow(new Object[] {"TZ", 25, 3});
+//		dataTable.addRow(new Object[] {"US", 40, 40});
+//		dataTable.addRow(new Object[] {"UK", 38, 35});
+//		widgetData = dataTable.toString();
+//		
+//    l = new Label(composite, SWT.NONE);
+//		l.setText("Intensity Map");
+//		IntensityMap intensityMap = new IntensityMap( composite, SWT.NONE );
+//		intensityMap.setWidgetOptions("{width: 440, height: 220}");
+//		intensityMap.setWidgetData(widgetData);
+//	  gridData = new GridData(440, 220);
+//	  intensityMap.setLayoutData(gridData);
+//	  intensityMap.addListener(SWT.Selection, this);
     
 	  //COLUMN CHART:
     dataTable = new JSONGoogleDataTable();
 		dataTable.addColumn("theyear", "Date", "string", null);
 		dataTable.addColumn("CO2", "CO2", "number", null);
 		dataTable.addColumn("Temperature", "Temperature", "number", null);
-		dataTable.addRow(new Object[] {"1970", 300, 22});
-		dataTable.addRow(new Object[] {"2009", 400, 24});
+		dataTable.addRow(new Object[] {"1970", 325, 14.1});
+		dataTable.addRow(new Object[] {"2009", 389, 14.7});
 		widgetData = dataTable.toString();
 		
     l = new Label(composite, SWT.NONE);
@@ -178,6 +200,16 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  gridData = new GridData(300, 300);
 	  barChart.setLayoutData(gridData);
 	  barChart.addListener(SWT.Selection, this);
+	  
+	  //AREA CHART
+	  l = new Label(composite, SWT.NONE);
+		l.setText("Area Chart");
+		AreaChart areaChart = new AreaChart( composite, SWT.NONE );
+		areaChart.setWidgetOptions("{width: 300, height: 300}");
+		areaChart.setWidgetData(widgetData);
+	  gridData = new GridData(300, 300);
+	  areaChart.setLayoutData(gridData);
+	  areaChart.addListener(SWT.Selection, this);
 	  
 	  //GAGUE
 	  dataTable = new JSONGoogleDataTable();
