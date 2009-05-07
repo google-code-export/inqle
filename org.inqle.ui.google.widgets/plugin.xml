@@ -41,5 +41,8 @@
     
     <resource class="org.inqle.ui.google.jsapi.GeomapAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.GeomapResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.IntensityMapAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.IntensityMapResource"/>
   </extension>
 </plugin>
