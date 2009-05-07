@@ -13,7 +13,10 @@ package org.inqle.ui.google.jsapi;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Renders a Google Visualization Motion Chart.
+ * Renders a Google Visualization Motion Chart.  This originally appeared at gapminder.org
+ * as Gapminder's Trendalyzer.
+ * @see http://code.google.com/apis/visualization/documentation/gallery/scatterchart.html
+ * @see http://www.ted.com/index.php/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen.html
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
@@ -26,21 +29,18 @@ import org.eclipse.swt.widgets.Composite;
     dataTable.addColumn("thedate", "Date", "date", null);
     dataTable.addColumn("CO2", "CO2", "number", null);
     dataTable.addColumn("Temperature", "Temperature", "number", null);
-    dataTable.addRow(new Object[] {"Model1", new Date(1199145600), 377, 22});
-    dataTable.addRow(new Object[] {"Model1", new Date(), 400, 24});
-    dataTable.addRow(new Object[] {"Model2", new Date(1199145600), 377, 22});
-    dataTable.addRow(new Object[] {"Model2", new Date(), 500, 26});
+    dataTable.addRow(new Object[] {"Model1", new Date(), 389, 14.8});
+    dataTable.addRow(new Object[] {"Model1", new Date(4070908800), 450, 19});
+    dataTable.addRow(new Object[] {"Model2", new Date(), 389, 14.8});
+    dataTable.addRow(new Object[] {"Model2", new Date(4070908800), 700, 23});
     String serializedData = dataTable.toString();
-      
-    l = new Label(composite, SWT.NONE);
-    l.setText("Motion Chart");
+     
     MotionChart motionChart = new MotionChart( composite, SWT.NONE );
     motionChart.setWidgetOptions("{width: 500, height: 300}");
     motionChart.setWidgetData(serializedData);
     GridData gridData = new GridData(500, 300);
     motionChart.setLayoutData(gridData);
     </code>
- * @See http://code.google.com/apis/visualization/documentation/gallery/motionchart.html
  * @author David Donohue
  * 2009/4/8
  */

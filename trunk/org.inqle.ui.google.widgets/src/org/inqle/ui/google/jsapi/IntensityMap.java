@@ -13,30 +13,46 @@ package org.inqle.ui.google.jsapi;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Renders a Google Visualization Bar Chart.
+ * Renders a Google Visualization Intensity Map.
+ * @See http://code.google.com/apis/visualization/documentation/gallery/intensitymap.html
+ * 
+ * Note that this widget does not work properly in my testing.  
+ * It always renders in the upper left corner of the composite to
+ * which it is added.  In addition, this widget is not fully tested.
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
  * using method setWidgetOptions, before calling setWidgetData.
  * 
  * Usage:
+ * <code>
  * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
-    dataTable.addBar("theyear", "Date", "string", null);
-    dataTable.addBar("CO2", "CO2", "number", null);
-    dataTable.addBar("Temperature", "Temperature", "number", null);
-    dataTable.addRow(new Object[] {"1970", 300, 22});
-    dataTable.addRow(new Object[] {"2009", 400, 24});
-    String serializedData = dataTable.toString();
+    dataTable.addColumn("Country", "Country", "string", null);
+    dataTable.addColumn("Happiness", "Happiness", "number", null);
+    dataTable.addColumn("Income", "Income", "number", null);
+    dataTable.addRow(new Object[] {"TZ", 25, 3});
+    dataTable.addRow(new Object[] {"US", 40, 40});
+    dataTable.addRow(new Object[] {"UK", 38, 35});
+    widgetData = dataTable.toString();
     
-    l = new Label(composite, SWT.NONE);
-    l.setText("Bar Chart");
-    IntensityMap chart = new IntensityMap( composite, SWT.NONE );
-    chart.setWidgetOptions("{width: 300, height: 300}");
-    chart.setWidgetData(serializedData);
-    gridData = new GridData(300, 300);
-    chart.setLayoutData(gridData);
+    IntensityMap intensityMap = new IntensityMap( composite, SWT.NONE );
+    intensityMap.setWidgetOptions("{width: 440, height: 220}");
+    intensityMap.setWidgetData(widgetData);
+    gridData = new GridData(440, 220);
+    intensityMap.setLayoutData(gridData);
+    intensityMap.addListener(SWT.Selection, this);
+    </code>
     
- * @See http://code.google.com/apis/visualization/documentation/gallery/columnchart.html
+    <code>
+    public void handleEvent(Event event) {
+    log.info("Event: " + event);
+    VisualizationWidget widget = (VisualizationWidget)event.widget;
+    log.info( "Selected item=" + widget.getSelectedItem() + 
+        "; row=" + widget.getSelectedRow() +
+        "; column=" + widget.getSelectedColumn() +
+        "; value=" + widget.getSelectedValue());
+    </code>
+ * 
  * @author David Donohue
  * 2009/4/8
  */
