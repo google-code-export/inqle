@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * Renders a Google Visualization Scatter Chart.
+ * @see http://code.google.com/apis/visualization/documentation/gallery/scatterchart.html
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
@@ -21,9 +22,32 @@ import org.eclipse.swt.widgets.Composite;
  * 
  * Usage:
  * <code>
- * 
+ * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
+    dataTable.addColumn("CO2", "CO2", "number", null);
+    dataTable.addColumn("CH4", "CH4", "number", null);
+    dataTable.addColumn("Temperature", "Temperature", "number", null);
+    dataTable.addRow(new Object[] {350, 10, 22});
+    dataTable.addRow(new Object[] {375, 12, 23});
+    dataTable.addRow(new Object[] {400, 16, 25});
+    widgetData = dataTable.toString();
+    
+    ScatterChart scatterChart = new ScatterChart( composite, SWT.NONE );
+    scatterChart.setWidgetOptions("{width: 300, height: 300}");
+    scatterChart.setWidgetData(widgetData);
+    gridData = new GridData(300, 300);
+    scatterChart.setLayoutData(gridData);
+    scatterChart.addListener(SWT.Selection, this);
     </code>
- * @See http://code.google.com/apis/visualization/documentation/gallery/scatterchart.html
+    
+    <code>
+    public void handleEvent(Event event) {
+    log.info("Event: " + event);
+    VisualizationWidget widget = (VisualizationWidget)event.widget;
+    log.info( "Selected item=" + widget.getSelectedItem() + 
+        "; row=" + widget.getSelectedRow() +
+        "; column=" + widget.getSelectedColumn() +
+        "; value=" + widget.getSelectedValue());
+    </code>
  * @author David Donohue
  * 2009/4/29
  */

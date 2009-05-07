@@ -11,9 +11,15 @@
 package org.inqle.ui.google.jsapi;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 
 /**
- * Renders a Google Visualization Scatter Chart.
+ * Renders a Google Visualization Annotated Timeline.
+ * @See http://code.google.com/apis/visualization/documentation/gallery/annotatedtimeline.html
+ * 
+ * Note that although the documentation on this widget suggest you
+ * can add columns to contain annotations of the points on the timeline,
+ * I have received an error when i try to add such string columns of data.
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
@@ -21,9 +27,33 @@ import org.eclipse.swt.widgets.Composite;
  * 
  * Usage:
  * <code>
- * 
+ * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
+    dataTable.addColumn("Date", "Date", "date", null);
+    dataTable.addColumn("AverageGPA", "Average GPA", "number", null);
+    dataTable.addRow(new Object[] {new Date(1210000000), 3});
+    dataTable.addRow(new Object[] {new Date(1230809560), 3.5});
+    dataTable.addRow(new Object[] {new Date(), 2.85});
+    widgetData = dataTable.toString();
+    
+    AnnotatedTimeLine timeLine = new AnnotatedTimeLine( composite, SWT.NONE );
+    timeLine.setWidgetOptions("{width: 500, height: 300, displayAnnotations: true}");
+    timeLine.setWidgetData(widgetData);
+    gridData = new GridData(500, 300);
+    timeLine.setLayoutData(gridData);
+    timeLine.addListener(SWT.Selection, this);
     </code>
- * @See http://code.google.com/apis/visualization/documentation/gallery/scatterchart.html
+    
+    <code>
+    public void handleEvent(Event event) {
+    log.info("Event: " + event);
+    VisualizationWidget widget = (VisualizationWidget)event.widget;
+    log.info( "Selected item=" + widget.getSelectedItem() + 
+        "; row=" + widget.getSelectedRow() +
+        "; column=" + widget.getSelectedColumn() +
+        "; value=" + widget.getSelectedValue());
+    </code>
+  }
+ * 
  * @author David Donohue
  * 2009/4/29
  */

@@ -11,34 +11,45 @@
 package org.inqle.ui.google.jsapi;
 
 import org.apache.log4j.Logger;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.inqle.ui.internal.google.jsapi.tablekit.TableLCA;
 
 /**
  * Renders a Google Visualization Table widget.
+ * @See http://code.google.com/apis/visualization/documentation/gallery/table.html
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
  * using method setWidgetOptions, before calling setWidgetData.
  * 
  * Usage:
+ * <code>
  * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
     dataTable.addColumn("theyear", "Date", "string", null);
     dataTable.addColumn("CO2", "CO2", "number", null);
-    dataTable.addColumn("Temperature", "Temperature", "number", null);
-    dataTable.addRow(new Object[] {"1970", 300, 22});
-    dataTable.addRow(new Object[] {"2009", 400, 24});
+    dataTable.addColumn("Temperature", "Temperature (C)", "number", null);
+    dataTable.addRow(new Object[] {"1970", 325, 14.1});
+    dataTable.addRow(new Object[] {"2009", 389, 14.8});
     String serializedData = dataTable.toString();
     
- * l = new Label(composite, SWT.NONE);
-    l.setText("Table");
     Table table = new Table( composite, SWT.NONE );
-    table.setWidgetOptions("{width: 300, height: 400}");
+    table.setWidgetOptions("{width: 300, height: 300}");
     table.setWidgetData(serializedData);
     gridData = new GridData(300, 300);
     table.setLayoutData(gridData);
+    table.addListener(SWT.Selection, this);
+    </code>
     
- * @See http://code.google.com/apis/visualization/documentation/gallery/table.html
+    <code>
+    public void handleEvent(Event event) {
+    log.info("Event: " + event);
+    VisualizationWidget widget = (VisualizationWidget)event.widget;
+    log.info( "Selected item=" + widget.getSelectedItem() + 
+        "; row=" + widget.getSelectedRow() +
+        "; column=" + widget.getSelectedColumn() +
+        "; value=" + widget.getSelectedValue());
+    </code>
  * @author David Donohue
  * 2009/4/21
  */

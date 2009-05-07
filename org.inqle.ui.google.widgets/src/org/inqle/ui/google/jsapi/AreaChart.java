@@ -13,30 +13,29 @@ package org.inqle.ui.google.jsapi;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Renders a Google Visualization Pie Chart.
- * @See http://code.google.com/apis/visualization/documentation/gallery/piechart.html
+ * Renders a Google Visualization Area Chart.
+ * @See http://code.google.com/apis/visualization/documentation/gallery/barchart.html
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
  * using method setWidgetOptions, before calling setWidgetData.
  * 
- * Usage:
- * <code>
+ * Usage:<code>
  * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
-    dataTable.addColumn("Activity", "Activity", "string", null);
-    dataTable.addColumn("Hours", "Hours per Week", "number", null);
-    dataTable.addRow(new Object[] {"software architect", 40});
-    dataTable.addRow(new Object[] {"primary care medicine", 9});
-    dataTable.addRow(new Object[] {"open source development", 10});
+    dataTable.addColumn("theyear", "Date", "string", null);
+    dataTable.addColumn("CO2", "CO2", "number", null);
+    dataTable.addColumn("Temperature", "Temperature", "number", null);
+    dataTable.addRow(new Object[] {"1970", 325, 14.1});
+    dataTable.addRow(new Object[] {"2009", 389, 14.7});
     widgetData = dataTable.toString();
     
-    PieChart pieChart = new PieChart( composite, SWT.NONE );
-    pieChart.setWidgetOptions("{width: 300, height: 300}");
-    pieChart.setWidgetData(widgetData);
+    AreaChart barChart = new AreaChart( composite, SWT.NONE );
+    barChart.setWidgetOptions("{width: 300, height: 300}");
+    barChart.setWidgetData(widgetData);
     gridData = new GridData(300, 300);
-    pieChart.setLayoutData(gridData);
-    pieChart.addListener(SWT.Selection, this);
-    </code>
+    barChart.setLayoutData(gridData);
+    barChart.addListener(SWT.Selection, this);
+ * </code>
     
     <code>
     public void handleEvent(Event event) {
@@ -47,13 +46,15 @@ import org.eclipse.swt.widgets.Composite;
         "; column=" + widget.getSelectedColumn() +
         "; value=" + widget.getSelectedValue());
     </code>
+    
+ * 
  * @author David Donohue
- * 2009/4/29
+ * 2009/4/8
  */
-public class PieChart extends VisualizationWidget {
+public class AreaChart extends VisualizationWidget {
 
-  public PieChart( Composite parent, int style ) {
+  public AreaChart( final Composite parent, final int style ) {
     super( parent, style );
   }
-  
+
 }

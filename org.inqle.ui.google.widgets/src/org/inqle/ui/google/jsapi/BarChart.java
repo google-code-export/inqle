@@ -14,29 +14,40 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * Renders a Google Visualization Bar Chart.
+ * @See http://code.google.com/apis/visualization/documentation/gallery/barchart.html
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
  * using method setWidgetOptions, before calling setWidgetData.
  * 
- * Usage:
+ * Usage:<code>
  * JSONGoogleDataTable dataTable = new JSONGoogleDataTable();
-    dataTable.addBar("theyear", "Date", "string", null);
-    dataTable.addBar("CO2", "CO2", "number", null);
-    dataTable.addBar("Temperature", "Temperature", "number", null);
-    dataTable.addRow(new Object[] {"1970", 300, 22});
-    dataTable.addRow(new Object[] {"2009", 400, 24});
-    String serializedData = dataTable.toString();
+    dataTable.addColumn("theyear", "Date", "string", null);
+    dataTable.addColumn("CO2", "CO2", "number", null);
+    dataTable.addColumn("Temperature", "Temperature", "number", null);
+    dataTable.addRow(new Object[] {"1970", 325, 14.1});
+    dataTable.addRow(new Object[] {"2009", 389, 14.7});
+    widgetData = dataTable.toString();
     
-    l = new Label(composite, SWT.NONE);
-    l.setText("Bar Chart");
-    BarChart chart = new BarChart( composite, SWT.NONE );
-    chart.setWidgetOptions("{width: 300, height: 300}");
-    chart.setWidgetData(serializedData);
+    BarChart barChart = new BarChart( composite, SWT.NONE );
+    barChart.setWidgetOptions("{width: 300, height: 300}");
+    barChart.setWidgetData(widgetData);
     gridData = new GridData(300, 300);
-    chart.setLayoutData(gridData);
+    barChart.setLayoutData(gridData);
+    barChart.addListener(SWT.Selection, this);
+ * </code>
     
- * @See http://code.google.com/apis/visualization/documentation/gallery/columnchart.html
+    <code>
+    public void handleEvent(Event event) {
+    log.info("Event: " + event);
+    VisualizationWidget widget = (VisualizationWidget)event.widget;
+    log.info( "Selected item=" + widget.getSelectedItem() + 
+        "; row=" + widget.getSelectedRow() +
+        "; column=" + widget.getSelectedColumn() +
+        "; value=" + widget.getSelectedValue());
+    </code>
+    
+ * 
  * @author David Donohue
  * 2009/4/8
  */

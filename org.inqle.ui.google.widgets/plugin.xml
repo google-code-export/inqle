@@ -44,5 +44,8 @@
     
     <resource class="org.inqle.ui.google.jsapi.IntensityMapAPIResource"/>
     <resource class="org.inqle.ui.google.jsapi.IntensityMapResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.AreaChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.AreaChartResource"/>
   </extension>
 </plugin>
