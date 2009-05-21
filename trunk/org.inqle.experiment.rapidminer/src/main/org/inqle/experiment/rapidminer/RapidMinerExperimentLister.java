@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.IDataTable;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 public class RapidMinerExperimentLister {
 
@@ -17,7 +17,7 @@ public class RapidMinerExperimentLister {
 		List<IRapidMinerExperiment> experiments = new ArrayList<IRapidMinerExperiment>();
 		
 		List<IExtensionSpec> extensionSpecs = 
-			ExtensionFactory.getExtensionSpecs(IRapidMinerExperiment.ID);
+			ExtensionSecurityManager.getPermittedExtensionSpecs(IRapidMinerExperiment.ID);
 		
 		for (IExtensionSpec extensionSpec: extensionSpecs) {
 			if (extensionSpec == null) continue;
