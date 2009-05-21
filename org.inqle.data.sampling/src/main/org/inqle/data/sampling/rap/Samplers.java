@@ -9,6 +9,7 @@ import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.sampling.SamplerFactoryFactory;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 /**
  * @author David Donohue
@@ -28,7 +29,7 @@ public class Samplers extends PartType {
 	 */
 	public IPart[] getChildren() {
 		//List<Object> objects =  ExtensionFactory.getExtensions(ISamplerFactory.ID);
-		List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(ISamplerFactory.ID);
+		List<IExtensionSpec> extensionSpecs = ExtensionSecurityManager.getPermittedExtensionSpecs(ISamplerFactory.ID);
 		IPart[] nullIPartArr = new IPart[] {};
 		if (extensionSpecs == null) {
 			return nullIPartArr;

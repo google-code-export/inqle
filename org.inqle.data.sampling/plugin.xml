@@ -9,7 +9,8 @@
          point="org.inqle.ui.rap.IPartType">
 			<part-type
            class="org.inqle.data.sampling.rap.Samplers"
-           weight="1000">
+           weight="1000"
+           access="admin">
 			</part-type>
    </extension>
    <extension
