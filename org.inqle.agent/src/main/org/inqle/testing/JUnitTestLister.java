@@ -3,8 +3,8 @@ package org.inqle.testing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 public class JUnitTestLister {
 
@@ -12,7 +12,7 @@ public class JUnitTestLister {
 		List<IJUnitTest> junitTests = new ArrayList<IJUnitTest>();
 		
 		List<IExtensionSpec> extensionSpecs = 
-			ExtensionFactory.getExtensionSpecs(IJUnitTest.ID);
+			ExtensionSecurityManager.getPermittedExtensionSpecs(IJUnitTest.ID);
 		
 		for (IExtensionSpec extensionSpec: extensionSpecs) {
 			if (extensionSpec == null) continue;
