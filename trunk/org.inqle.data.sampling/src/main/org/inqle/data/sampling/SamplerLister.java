@@ -9,6 +9,7 @@ import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.rap.ISamplerFactory;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 public class SamplerLister {
 
@@ -48,7 +49,7 @@ public class SamplerLister {
 		List<ISampler> samplers = new ArrayList<ISampler>();
 		
 		//first add the base plugins
-		List<Object> objects =  ExtensionFactory.getExtensions(ISamplerFactory.ID);
+		List<Object> objects =  ExtensionSecurityManager.getPermittedExtensions(ISamplerFactory.ID);
 		for (Object object: objects) {
 			if (object == null) continue;
 			ISamplerFactory samplerFactory = (ISamplerFactory)object;
