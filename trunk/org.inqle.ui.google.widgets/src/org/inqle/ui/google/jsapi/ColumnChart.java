@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
         "; row=" + widget.getSelectedRow() +
         "; column=" + widget.getSelectedColumn() +
         "; value=" + widget.getSelectedValue());
+    }
     </code>
  * @author David Donohue
  * 2009/4/8
