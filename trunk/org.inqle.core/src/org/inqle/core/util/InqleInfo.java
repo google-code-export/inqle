@@ -3,6 +3,7 @@
  */
 package org.inqle.core.util;
 
+
 /**
  * Contains constants and other core static functions.
  * @author David Donohue
@@ -122,6 +123,8 @@ public class InqleInfo {
 
 	public static final String USER_DATABASE_ROOT = "user";
 	public static final String SYSTEM_DATABASE_ROOT = "system";
+
+	public static final String ACCESS_ATTRIBUTE = "access";
 
 
 
