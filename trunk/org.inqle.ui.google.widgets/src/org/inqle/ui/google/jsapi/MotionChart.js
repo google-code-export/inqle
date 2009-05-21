@@ -41,13 +41,7 @@ qx.Class.define( "org.inqle.ui.google.jsapi.MotionChart", {
         	qx.ui.core.Widget.flushGlobalQueues();
         	var data = eval('(' + this.getWidgetData() + ')');
                 if( this._chart == null ) {
-                    this._chart = new google.visualization.MotionChart(document.getElementById(this._id));
-//                	this._chart = new google.visualization.MotionChart(this.getElement());
-//                    this._chart.addControl( new GSmallMapControl() );
-//                    this._chart.addControl( new GMapTypeControl() );
-//                    GEvent.bind( this._chart, "click", this, this._doActivate );
-//                    GEvent.bind( this._chart, "moveend", this, this._onMapMove );
-                    
+                    this._chart = new google.visualization.MotionChart(document.getElementById(this._id));                    
                 }
                 
                 var dataTable  = new google.visualization.DataTable(data);

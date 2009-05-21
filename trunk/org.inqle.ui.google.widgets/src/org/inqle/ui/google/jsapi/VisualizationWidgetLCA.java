@@ -33,8 +33,8 @@ public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
   public void preserveValues( final Widget widget ) {
     ControlLCAUtil.preserveValues( ( Control )widget );
     IWidgetAdapter adapter = WidgetUtil.getAdapter( widget );
-    adapter.preserve( PROP_DATA, ( ( VisualizationWidget )widget ).getWidgetData() );
     adapter.preserve( PROP_OPTIONS, ( ( VisualizationWidget )widget ).getWidgetOptions() );
+    adapter.preserve( PROP_DATA, ( ( VisualizationWidget )widget ).getWidgetData() );
     // only needed for custom variants (theming)
 //    WidgetLCAUtil.preserveCustomVariant( widget );
   }
@@ -43,8 +43,8 @@ public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
     VisualizationWidget vWidget = ( VisualizationWidget )widget;
     ControlLCAUtil.writeChanges( vWidget );
     JSWriter writer = JSWriter.getWriterFor( vWidget );
-    writer.set( PROP_DATA, PROP_DATA, vWidget.getWidgetData() );
     writer.set( PROP_OPTIONS, PROP_OPTIONS, vWidget.getWidgetOptions() );
+    writer.set( PROP_DATA, PROP_DATA, vWidget.getWidgetData() );
   }
 
   public void renderDispose( final Widget widget ) throws IOException {
@@ -75,7 +75,7 @@ public abstract class VisualizationWidgetLCA extends AbstractWidgetLCA {
       visWidget.setSelectedRow( selectedRow );
       visWidget.setSelectedColumn( selectedColumn );
       visWidget.setSelectedValue( selectedValue );
-      log.info( "VisualizationWidgetLCA.readData(): widget=" + widget + "; selectedItem=" + selectedItem);
+      log.debug( "VisualizationWidgetLCA.readData(): widget=" + widget + "; selectedItem=" + selectedItem);
       ControlLCAUtil.processSelection( visWidget, null, true );
     }
   }
