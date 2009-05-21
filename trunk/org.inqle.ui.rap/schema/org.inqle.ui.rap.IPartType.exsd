@@ -48,6 +48,15 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="access" type="string">
+            <annotation>
+               <documentation>
+                  a comma-delimited list of user roles to which this is restricted.
+                  Leave blank if all unauthenticated can access.
+                  Available roles include "admin"
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="weight" type="string" use="required">
             <annotation>
                <documentation>

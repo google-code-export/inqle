@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
-import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.PartType;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 /**
  * @author David Donohue
@@ -32,7 +32,7 @@ public class AllParts extends PartType {
 	 * @see org.inqle.ui.rap.IPartType#getChildren()
 	 */
 	public IPart[] getChildren() {
-		List<Object> topLevelPartObjects =  ExtensionFactory.getExtensions(IPartType.ID);
+		List<Object> topLevelPartObjects =  ExtensionSecurityManager.getPermittedExtensions(IPartType.ID);
 		IPart[] nullIPartArr = new IPart[] {};
 		if (topLevelPartObjects == null) {
 			return nullIPartArr;
