@@ -15,7 +15,7 @@ import org.inqle.ui.rap.actions.LoginAction;
  */
 public class Application implements IEntryPoint {
 
-	private static final int ALLOWED_NUMBER_OF_LOGIN_ATTEMPTS = 5;
+//	private static final int ALLOWED_NUMBER_OF_LOGIN_ATTEMPTS = 5;
 	private Logger log = Logger.getLogger(Application.class);
 	
 	public int createUI() {
@@ -41,23 +41,23 @@ public class Application implements IEntryPoint {
 		}
 		
 		//display login dialog until logged in.
-		boolean loggedIn = false;
-		int numberOfAttempts = 0;
-		while (loggedIn == false && numberOfAttempts < ALLOWED_NUMBER_OF_LOGIN_ATTEMPTS) {
-			LoginAction loginAction = new LoginAction(display.getActiveShell());
-			loginAction.run();
-			loggedIn = loginAction.wasLoginSuccessful();
-			numberOfAttempts++;
-		}
-		
-		if (loggedIn) {
+//		boolean loggedIn = false;
+//		int numberOfAttempts = 0;
+//		while (loggedIn == false && numberOfAttempts < ALLOWED_NUMBER_OF_LOGIN_ATTEMPTS) {
+//			LoginAction loginAction = new LoginAction(display.getActiveShell());
+//			loginAction.run();
+//			loggedIn = loginAction.isAdminUser();
+//			numberOfAttempts++;
+//		}
+//		
+//		if (loggedIn) {
 			//initialize the (singleton) Persister
 			Persister.getInstance().initialize();
 			
 			PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
 			return PlatformUI.RETURN_OK;
-		} else {
-			return PlatformUI.RETURN_EMERGENCY_CLOSE;
-		}
+//		} else {
+//			return PlatformUI.RETURN_EMERGENCY_CLOSE;
+//		}
 	}
 }

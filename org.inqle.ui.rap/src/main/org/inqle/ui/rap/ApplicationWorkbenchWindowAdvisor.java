@@ -29,6 +29,8 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowStatusLine(true);
         configurer.setTitle(InqleInfo.APPLICATION_TITLE);
         configurer.setShellStyle( SWT.TITLE );
+        configurer.setShowPerspectiveBar(false);
+
     }
     
     public void postWindowCreate() {

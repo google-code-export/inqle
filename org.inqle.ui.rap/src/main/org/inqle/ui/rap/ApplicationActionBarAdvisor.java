@@ -14,8 +14,10 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -23,8 +25,10 @@ import org.eclipse.ui.application.IActionBarConfigurer;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.ui.rap.actions.AboutAction;
+import org.inqle.ui.rap.actions.LoginAction;
 import org.inqle.ui.rap.actions.NewBrowserAction;
 import org.inqle.ui.rap.actions.OpenViewAction;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 /**
  * An action bar advisor is responsible for creating, adding, and disposing of the
@@ -73,7 +77,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 //        register(h2AdminAction);
         
         //Create a new OpenViewAction for each view plugin
-        List<IExtensionSpec> extensionSpecs = ExtensionFactory.getExtensionSpecs(VIEWS);
+        List<IExtensionSpec> extensionSpecs = ExtensionSecurityManager.getPermittedExtensionSpecs(VIEWS);
         for(IExtensionSpec extensionSpec: extensionSpecs) {
 //        	OpenViewAction openViewAction = new OpenViewAction(window, extensionSpec.getAttribute(NAME), extensionSpec.getAttribute(ID), extensionSpec.getPluginId(), extensionSpec.getAttribute(ICON));
 //        	openViewActions.add(openViewAction);
@@ -96,14 +100,20 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         MenuManager fileMenu = new MenuManager("&File", IWorkbenchActionConstants.M_FILE);
         MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
         MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
-        MenuManager toolsMenu = new MenuManager("&Tools", IWorkbenchActionConstants.M_LAUNCH);
+//        MenuManager toolsMenu = new MenuManager("&Tools", IWorkbenchActionConstants.M_LAUNCH);
+        MenuManager loginMenu = new MenuManager("&Login", IWorkbenchActionConstants.M_EDIT);
         
         menuBar.add(fileMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(windowMenu);
-        menuBar.add(toolsMenu);
+//        menuBar.add(toolsMenu);
+        menuBar.add(loginMenu);
         menuBar.add(helpMenu);
+        
+        Display display = PlatformUI.createDisplay();
+        LoginAction loginAction = new LoginAction(display.getActiveShell());
+        loginMenu.add(loginAction);
         
         // File
         //fileMenu.add(messagePopupAction);

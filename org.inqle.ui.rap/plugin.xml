@@ -15,11 +15,12 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            name="RAP Perspective"
-            class="org.inqle.ui.rap.Perspective"
-            id="org.inqle.ui.rap.perspective">
+        name="INQLE Perspective"
+        class="org.inqle.ui.rap.Perspective"
+        id="org.inqle.ui.rap.perspective">
       </perspective>
    </extension>
+   
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -45,32 +46,30 @@
             id="org.inqle.ui.rap.views.DatamodelView"/>
             
    </extension>
-   <!--extension
-         point="org.eclipse.ui.commands">
-      <category
-            name="Mail"
-            id="org.inqle.ui.rap.category">
-      </category>
-      <command
-            name="Open Mailbox"
-            description="Opens a mailbox"
-            categoryId="org.inqle.ui.rap.category"
-            id="org.inqle.ui.rap.open">
-      </command>
-      <command
-            name="Open Message Dialog"
-            description="Opens a message dialog"
-            categoryId="org.inqle.ui.rap.category"
-            id="org.inqle.ui.rap.openMessage">
-      </command>
-   </extension-->
    
    <extension
          point="org.inqle.ui.rap.IPartType">
      <part-type
            class="org.inqle.ui.rap.tree.parts.Databases"
-           weight="100">
+           weight="100"
+           access="admin">
      </part-type>
    </extension>
 
+	<!--Add activities, for security purposes-->
+	<extension point="org.eclipse.ui.activities">
+    <activity id="org.inqle.activities.AdminAccess" name="Admin access to the secured resources">
+      <enabledWhen>
+        <with variable="org.inqle.userRoles">
+          <iterate ifEmpty="true" operator="or">
+            <equals value="admin">
+            </equals>
+          </iterate>
+        </with>
+      </enabledWhen>
+    </activity>
+    <!--<activityPatternBinding activityId="org.inqle.activities.AdminAccess"
+      pattern=".*/org\.inqle\.ui\.rap\.tree\.parts\.Databases">
+    </activityPatternBinding>-->
+  </extension>
 </plugin>

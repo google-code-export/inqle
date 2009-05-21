@@ -10,14 +10,15 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
  */
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	
-	private static final String PERSPECTIVE_ID = "org.inqle.ui.rap.perspective";
-
-    public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
-        return new ApplicationWorkbenchWindowAdvisor(configurer);
-    }
+	public static final String ADMIN_PERSPECTIVE_ID = "org.inqle.ui.rap.perspective";
+//	public static final String WIKI_PERSPECTIVE_ID = "org.inqle.ui.rap.WikiPerspective";
+    
+	public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
+    return new ApplicationWorkbenchWindowAdvisor(configurer);
+  }
 
 	public String getInitialWindowPerspectiveId() {
-		return PERSPECTIVE_ID;
+		return ADMIN_PERSPECTIVE_ID;
 	} 
 	
 }
