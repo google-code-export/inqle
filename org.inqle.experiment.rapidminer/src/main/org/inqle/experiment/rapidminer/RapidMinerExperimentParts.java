@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 /**
  * @author David Donohue
@@ -29,7 +29,7 @@ public class RapidMinerExperimentParts extends PartType {
 	 * @see org.inqle.ui.rap.IPartType#getChildren()
 	 */
 	public IPart[] getChildren() {
-		List<IExtensionSpec> extensionSpecs =  ExtensionFactory.getExtensionSpecs(IRapidMinerExperiment.ID);
+		List<IExtensionSpec> extensionSpecs =  ExtensionSecurityManager.getPermittedExtensionSpecs(IRapidMinerExperiment.ID);
 		IPart[] nullIPartArr = new IPart[] {};
 		if (extensionSpecs == null) {
 			return nullIPartArr;
