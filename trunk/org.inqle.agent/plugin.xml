@@ -13,7 +13,8 @@
          point="org.inqle.ui.rap.IPartType">
 		<part-type
            class="org.inqle.agent.rap.AgentParts"
-           weight="5000"/>
+           weight="5000"
+           access="admin,access_agents"/>
   </extension>
   <extension
          point="org.inqle.data.datamodels">
@@ -30,7 +31,8 @@
            class="org.inqle.testing.JUnitTestRunnerAgentFactory"
            name="JUnit Tester Agent"
            description="This agent runs all available JUnit Test plugins"
-           weight="90000"/>
+           weight="90000"
+           access="admin"/>
   </extension>
   <extension
          point="org.inqle.testing.IJUnitTest">

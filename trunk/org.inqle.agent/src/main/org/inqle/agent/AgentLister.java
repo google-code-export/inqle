@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.inqle.agent.rap.IAgentFactory;
-import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.ui.rap.util.ExtensionSecurityManager;
 
 public class AgentLister {
 
@@ -19,7 +19,7 @@ public class AgentLister {
 		List<IAgent> agents = new ArrayList<IAgent>();
 		
 		//first add the base plugins
-		List<Object> objects =  ExtensionFactory.getExtensions(IAgentFactory.ID);
+		List<Object> objects =  ExtensionSecurityManager.getPermittedExtensions(IAgentFactory.ID);
 		for (Object object: objects) {
 			if (object == null) continue;
 			IAgentFactory agentFactory = (IAgentFactory)object;
@@ -34,7 +34,7 @@ public class AgentLister {
 	public static List<IAgentFactory> listAgentFactories() {
 		List<IAgentFactory> agentFactories = new ArrayList<IAgentFactory>();
 		
-		List<Object> objects =  ExtensionFactory.getExtensions(IAgentFactory.ID);
+		List<Object> objects =  ExtensionSecurityManager.getPermittedExtensions(IAgentFactory.ID);
 		for (Object object: objects) {
 			if (object == null) continue;
 			IAgentFactory agentFactory = (IAgentFactory)object;
