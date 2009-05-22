@@ -73,10 +73,6 @@ public class Persister {
 	public static final String EXTENSION_POINT_DATASET = "org.inqle.data.datamodels";
 	public static final String METAREPOSITORY_DATAMODEL = "org.inqle.datamodels.metaRepository";
 
-//	public static final String EXTENSION_POINT_CACHE_DATASET = "org.inqle.data.cacheDatamodels";
-//	public static final String EXTENSION_SUBJECT_CLASS_CACHE = "org.inqle.cacheDatamodels.subjectClass";
-//	public static final String EXTENSION_ARC_CACHE = "org.inqle.cacheDatamodels.arc";
-	
 	public static final String EXTENSION_POINT_DATASET_FUNCTIONS = "org.inqle.data.datamodelFunctions";
 	public static final String EXTENSION_DATASET_FUNCTION_DATA = "org.inqle.datamodelFunctions.data";
 	public static final String EXTENSION_DATASET_FUNCTION_SCHEMAS = "org.inqle.datamodelFunctions.schemas";
@@ -93,7 +89,7 @@ public class Persister {
 	
 	private AppInfo appInfo = null;
 //	private OntModel metarepositoryModel = null;
-	private Model metarepositoryModel = null;
+//	private Model metarepositoryModel = null;
 	//private OntModel logModel = null;
 	private static Logger log = Logger.getLogger(Persister.class);
 	public static int persisterId = 0;
@@ -907,7 +903,7 @@ public class Persister {
 	 * *** DATAMODEL METHODS
 	 * ********************************************************************* */
 	/**
-	 * Gets the Datamodel matching the provided URI
+	 * Gets the Datamodel matching the provided ID
 	 * @return the Datamodel
 	 * 
 	 * TODO add support fo any other Datamodel subclasses e.g. UrlModel
@@ -954,6 +950,25 @@ public class Persister {
 		for (String datamodelId: datamodelIds) {
 			Datamodel datamodel = getDatamodel(datamodelId);
 			datamodels.add(datamodel);
+		}
+		return datamodels;
+	}
+	
+	/**
+	 * List all datamodels for a given database
+	 * @param databaseId
+	 * @return
+	 */
+	public List<UserDatamodel> listUserDatamodelsOfFunction(String functionId) {
+		List<UserDatamodel> datamodels = new ArrayList<UserDatamodel>();
+		List<Datamodel> allUserDatamodels = listDatamodels(InqleInfo.USER_DATABASE_ROOT);
+		for (Datamodel datamodel: allUserDatamodels) {
+			UserDatamodel userDatamodel = (UserDatamodel)datamodel;
+			Collection<String> functions = userDatamodel.getDatamodelFunctions();
+			if (functions==null) continue;
+			if (functions.contains(functionId)) {
+				datamodels.add(userDatamodel);
+			}
 		}
 		return datamodels;
 	}
