@@ -57,7 +57,7 @@ public class UserDatamodelWizard extends Wizard {
 	private UserDatamodel datamodel;
 //	private Text datasetIdText;
 	Composite parent;
-	public List<Button> datasetFunctionCheckboxes = new ArrayList<Button>();
+	public List<Button> datamodelFunctionCheckboxes = new ArrayList<Button>();
 	private DatamodelInfoPage datasetInfoPage;
 	private DatamodelFunctionsPage datasetFunctionsPage;
 	
@@ -70,6 +70,7 @@ public class UserDatamodelWizard extends Wizard {
 
 		private Composite composite;
 		private TextFieldShower datasetIdTextField;
+		private TextFieldShower datasetNameTextField;
 		private TextFieldShower datasetDescriptionTextField;
 		
 		DatamodelInfoPage(String pageName) {
@@ -106,6 +107,17 @@ public class UserDatamodelWizard extends Wizard {
 				datasetIdTextField.setTextValue(datamodel.getId());
 			}
 			
+			datasetNameTextField = new TextFieldShower(
+					composite,
+					"Datamodel Name",
+					"Enter a descriptive name.",
+					null,
+					SWT.BORDER
+			);
+			if (mode != DatamodelWizardAction.MODE_NEW && datamodel!=null && datamodel.getName() != null) {
+				datasetNameTextField.setTextValue(datamodel.getId());
+			}
+			
 			datasetDescriptionTextField = new TextFieldShower(
 					composite,
 					"Description",
@@ -123,6 +135,10 @@ public class UserDatamodelWizard extends Wizard {
 		
 		String getDatamodelId() {
 			return datasetIdTextField.getValue();
+		}
+		
+		String getDatamodelName() {
+			return datasetNameTextField.getValue();
 		}
 		
 		String getDatamodelDescription() {
@@ -186,7 +202,7 @@ public class UserDatamodelWizard extends Wizard {
 				checkbox.setSelection(true);
 			}
 //			log.info("Add checkbox:" + extensionId + "...");
-			datasetFunctionCheckboxes.add(checkbox);
+			datamodelFunctionCheckboxes.add(checkbox);
 		}
 	}
 	
@@ -233,6 +249,7 @@ public class UserDatamodelWizard extends Wizard {
 	public boolean performFinish() {
 //		datamodel.setId(datasetIdText.getText());
 		datamodel.setId(datasetInfoPage.getDatamodelId());
+		datamodel.setName(datasetInfoPage.getDatamodelName());
 		datamodel.setDescription(datasetInfoPage.getDatamodelDescription());
 		if (datamodel.getId() == null || datamodel.getId().length() == 0) {
 			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Datamodel ID", "");
@@ -242,14 +259,14 @@ public class UserDatamodelWizard extends Wizard {
 		Persister persister = Persister.getInstance();
 		
 		if (mode != DatamodelWizardAction.MODE_EDIT && persister.userDatamodelExists(datamodel.getId())) {
-			MessageDialog.openInformation(parent.getShell(), "Datamodel name already exists", 
-					"This database already has a datamodel named '" + datamodel.getId() + "'.\nPlease choose a different name.");
+			MessageDialog.openInformation(parent.getShell(), "Datamodel ID already exists", 
+					"This database already has a datamodel with ID '" + datamodel.getId() + "'.\nPlease choose a different ID.");
 			return false;
 		}
 		
 		//get the datamodel functions assigned to this datamodel
 		List<String> datasetFunctionIds = new ArrayList<String>();
-		for (Button checkbox: datasetFunctionCheckboxes) {
+		for (Button checkbox: datamodelFunctionCheckboxes) {
 			if (! checkbox.getSelection()) continue;
 			IExtensionSpec datasetFunctionSpec = (IExtensionSpec)checkbox.getData();
 			String datasetFunctionId = datasetFunctionSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
@@ -266,7 +283,7 @@ public class UserDatamodelWizard extends Wizard {
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (! connectionSucceeds) {
-			MessageDialog.openInformation(parent.getShell(), "SDBDatabase Fails", 
+			MessageDialog.openInformation(parent.getShell(), "Database Fails", 
 					"Unable to connect to this database.  Cannot create new datamodel in this database.");
 			return true;
 		}

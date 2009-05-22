@@ -54,8 +54,24 @@
            weight="100"
            access="admin">
      </part-type>
+     <part-type
+           class="org.inqle.ui.rap.wiki.parts.Wikis"
+           weight="50">
+     </part-type>
    </extension>
 
+	<extension
+         point="org.inqle.data.datamodelFunctions">
+      
+      <datamodelFunction
+           id="org.inqle.datamodelFunctions.wiki"
+           name="Wiki"
+           weight="1000"
+           description="Publish to the public as a wiki."
+					 checkedByDefault="true">
+			</datamodelFunction>
+	</extension>
+	
 	<!--Add activities, for security purposes-->
 	<extension point="org.eclipse.ui.activities">
     <activity id="org.inqle.activities.AdminAccess" name="Admin access to the secured resources">

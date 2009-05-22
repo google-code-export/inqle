@@ -70,7 +70,7 @@ public class DetailView extends ViewPart implements ISelectionListener {
 
 	public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
 		//MessageDialog.openInformation(parent.getShell(), "Selection Made in Tree", iSelection.toString());
-	  log.info("Selection Made in Tree" + iSelection.toString());
+//	  log.info("Selection Made in Tree" + iSelection.toString());
 	  if (composite != null) {
 	  	composite.dispose();
 	  }
@@ -82,7 +82,7 @@ public class DetailView extends ViewPart implements ISelectionListener {
 	     
 	     Object firstSelectedObject = selection.getFirstElement();
 	     if (firstSelectedObject == null) {
-	    	 log.info("firstSelectedObject is null");
+	    	 log.info("Nothing was selected");
 	    	 return;
 	     }
 	     
