@@ -46,7 +46,8 @@ public class ModelPart extends Part {
 	
 	@Override
 	public String getName() {
-		return getModelName();
+//		return getModelName();
+		return datamodel.getName();
 	}
 	
 	@Override

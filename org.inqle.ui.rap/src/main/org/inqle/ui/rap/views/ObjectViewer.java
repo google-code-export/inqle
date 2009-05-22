@@ -108,24 +108,24 @@ public class ObjectViewer extends Viewer implements IDisposableViewer, Listener 
 	  l = new Label(composite, SWT.NONE);
 		l.setText("Motion Chart");
 		MotionChart motionChart = new MotionChart( composite, SWT.NONE );
-		motionChart.setWidgetOptions("{width: 500, height: 300}");
+		motionChart.setWidgetOptions("{width: 400, height: 500}");
 		motionChart.setWidgetData(widgetData);
-    gridData = new GridData(500, 300);
+    gridData = new GridData(400, 500);
     motionChart.setLayoutData(gridData);
     
     //ANNOTATED TIMELINE
     dataTable = new JSONGoogleDataTable();
     dataTable.addColumn("Date", "Date", "date", null);
     dataTable.addColumn("AverageGPA", "Average GPA", "number", null);
-//    dataTable.addColumn("Description", "Description", "string", null);
-//    dataTable.addColumn("Description2", "Description2", "string", null);
+    dataTable.addColumn("Description", "Description", "string", null);
+    dataTable.addColumn("Description2", "Description2", "string", null);
     
-//    dataTable.addRow(new Object[] {new Date(1210000000), 3, "First course", "traditional teaching method used"});
-//    dataTable.addRow(new Object[] {new Date(1230809560), 3.5, "new course", "newer teaching method used"});
-//    dataTable.addRow(new Object[] {new Date(), 2.85});
-    dataTable.addRow(new Object[] {new Date(1210000000), 3});
-    dataTable.addRow(new Object[] {new Date(1230809560), 3.5});
+    dataTable.addRow(new Object[] {new Date(1210000000), 3, "First course", "traditional teaching method used"});
+    dataTable.addRow(new Object[] {new Date(1230809560), 3.5, "new course", "newer teaching method used"});
     dataTable.addRow(new Object[] {new Date(), 2.85});
+//    dataTable.addRow(new Object[] {new Date(1210000000), 3});
+//    dataTable.addRow(new Object[] {new Date(1230809560), 3.5});
+//    dataTable.addRow(new Object[] {new Date(), 2.85});
     widgetData = dataTable.toString();
     
     l = new Label(composite, SWT.NONE);
