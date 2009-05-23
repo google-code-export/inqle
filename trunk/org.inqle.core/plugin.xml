@@ -9,8 +9,10 @@
            id="org.inqle.core.branding"
            servletName="inqle"
            title="INQLE Server"
-           exitConfirmation="Do you really want to exit INQLE?">
+           exitConfirmation="Do you really want to exit INQLE?"
+           body="body.html"
+           favicon="favicon.png"
+           >
      </branding>
-  </extension>
-
+   </extension>
 </plugin>
