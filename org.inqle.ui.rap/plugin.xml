@@ -9,8 +9,7 @@
             parameter="default"
             id="org.inqle.ui.rap.Application">
       </entrypoint>
-   </extension>
-   
+   </extension>   
    
    <extension
          point="org.eclipse.ui.perspectives">
