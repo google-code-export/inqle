@@ -1,5 +1,7 @@
 package org.inqle.ui.rap.wiki.parts;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -18,6 +20,7 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.IDisposableViewer;
 import org.inqle.ui.rap.views.ObjectViewer;
+import org.inqle.ui.rap.widgets.PropertiesLinker;
 
 public class WikiPageViewer extends Viewer implements IDisposableViewer {
 
@@ -28,6 +31,7 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 	private Datamodel datamodel;
 	private Text typeText;
 	private Text relationshipsText;
+	private PropertiesLinker propertiesLinker;
 	
 	private static final Logger log = Logger.getLogger(WikiPageViewer.class);
 	
@@ -52,10 +56,13 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 		descriptionText = new Text(composite, SWT.READ_ONLY);
 		descriptionText.setText(dataExtractor.getDescription());
 		
-		relationshipsText = new Text(composite, SWT.READ_ONLY | SWT.MULTI);
-		relationshipsText.setText(String.valueOf(dataExtractor.getStatements()));
-		relationshipsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+//		relationshipsText = new Text(composite, SWT.READ_ONLY | SWT.MULTI);
+//		relationshipsText.setText(String.valueOf(dataExtractor.getStatements()));
+//		relationshipsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
 		
+		Map<String, Object> properties = dataExtractor.getProperties();
+		propertiesLinker = new PropertiesLinker(composite, SWT.READ_ONLY);
+		propertiesLinker.setProperties(properties);
 		refresh();
 	}
 	
@@ -64,13 +71,14 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 		titleText.setText("");
 		descriptionText.setText("");
 		relationshipsText.setText("");
+		propertiesLinker.clearData();
 	}
 
 	public void dispose() {
 		typeText.dispose();
 		titleText.dispose();
 		descriptionText.dispose();
-		relationshipsText.dispose();
+		propertiesLinker.dispose();
 	}
 
 	@Override

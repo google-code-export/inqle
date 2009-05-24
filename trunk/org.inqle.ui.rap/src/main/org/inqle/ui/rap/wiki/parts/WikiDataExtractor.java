@@ -1,7 +1,7 @@
 package org.inqle.ui.rap.wiki.parts;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.domain.INamedAndDescribed;
@@ -17,18 +17,18 @@ public class WikiDataExtractor {
 	private Datamodel datamodel;
 	private String classUri;
 	private String objectUri;
-	private List<String> statements;
+	private Map<String, Object> properties;
 
 	private static final Logger log = Logger.getLogger(WikiDataExtractor.class);
 	
 	public WikiDataExtractor(Datamodel datamodel, Object obj) {
 		this.datamodel = datamodel;
-		log.info("obj=" + obj);
-		statements = new ArrayList<String>();
+//		log.info("obj=" + obj);
+		properties = new HashMap<String, Object>();
 		if (obj instanceof INamedAndDescribed) {
 			INamedAndDescribed namedObj = (INamedAndDescribed)obj;
 			setTitle(namedObj.getName());
-			log.info("INamedAndDescribed title=" + namedObj.getName());
+//			log.info("INamedAndDescribed title=" + namedObj.getName());
 			setDescription(namedObj.getDescription());
 			
 //			Model model = persister.getModel(datamodel);
@@ -39,10 +39,10 @@ public class WikiDataExtractor {
 			for (ValuesContext context: contexts) {
 				String propertyUri = context.uri();
 				Object value = context.invokeGetter();
-				statements.add("<" + propertyUri + "> " + value);
+				properties.put(propertyUri, value);
 			}
 		}
-		log.info("Statements =" + statements);
+		log.trace("Properties = " + properties);
 	}
 
 	public void setTitle(String title) {
@@ -84,12 +84,12 @@ public class WikiDataExtractor {
 		return getObjectUri();
 	}
 
-	public List<String> getStatements() {
-		return statements;
+	public Map<String, Object> getProperties() {
+		return properties;
 	}
 
-	public void setStatements(List<String> statements) {
-		this.statements = statements;
+	public void setProperties(Map<String, Object> properties) {
+		this.properties = properties;
 	}
 
 }
