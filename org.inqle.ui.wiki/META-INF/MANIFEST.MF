@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Wiki Plug-in
+Bundle-SymbolicName: org.inqle.ui.wiki;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: INQLING, LLC
+Import-Package: javax.servlet,
+ javax.servlet.http
+Require-Bundle: org.eclipse.equinox.http.registry,
+ org.eclipse.equinox.jsp.jasper,
+ org.eclipse.equinox.jsp.jasper.registry
+Eclipse-LazyStart: false
+Bundle-ClassPath: .
