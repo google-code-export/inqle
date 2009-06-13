@@ -17,9 +17,9 @@ import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.rdf.model.Model;
 
-public class SubjectLookup {
+public class SubjectsSearcher {
 
-	private static final Logger log = Logger.getLogger(SubjectLookup.class);
+	private static final Logger log = Logger.getLogger(SubjectsSearcher.class);
 	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 	
 	/**
