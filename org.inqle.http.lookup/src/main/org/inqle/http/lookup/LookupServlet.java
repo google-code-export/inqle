@@ -104,7 +104,7 @@ public class LookupServlet extends HttpServlet {
 //		if (searchTermForDataSubjectClass != null) {
 //			
 //			//this looks up all RDF classes
-//			String matchingClassesXml = SubjectLookup.lookupSubclassesInInternalDatamodel(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+//			String matchingClassesXml = SubjectsSearcher.lookupSubclassesInInternalDatamodel(searchTermForDataSubjectClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 //
 //			respondOK(matchingClassesXml);
 //			return;
@@ -114,8 +114,8 @@ public class LookupServlet extends HttpServlet {
 //		String searchTermForRdfClass = HttpParameterParser.getParam(request, PARAM_SEARCH_RDF_CLASS);
 //		if (searchTermForRdfClass != null) {
 //			
-////			String matchingClassesXml = SubjectLookup.lookupSubclassesInSchemaDatamodels(searchTermForRdfClass, countResults, startIndex);
-//			String matchingClassesXml = SubjectLookup.lookupUmbelSubjectsInSchemaDatamodels(searchTermForRdfClass, countResults, startIndex);
+////			String matchingClassesXml = SubjectsSearcher.lookupSubclassesInSchemaDatamodels(searchTermForRdfClass, countResults, startIndex);
+//			String matchingClassesXml = SubjectsSearcher.lookupUmbelSubjectsInSchemaDatamodels(searchTermForRdfClass, countResults, startIndex);
 //			respondOK(matchingClassesXml);
 //			return;
 //		}
@@ -124,7 +124,7 @@ public class LookupServlet extends HttpServlet {
 //		String searchTermForPreferredOntologyClass = HttpParameterParser.getParam(request, PARAM_SEARCH_PREFERRED_ONTOLOGY_CLASS);
 //		if (searchTermForPreferredOntologyClass != null) {
 //			
-//			String matchingClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatamodels(searchTermForPreferredOntologyClass, countResults, startIndex);
+//			String matchingClassesXml = SubjectsSearcher.lookupPreferredOntologySubjectsInSchemaDatamodels(searchTermForPreferredOntologyClass, countResults, startIndex);
 //			respondOK(matchingClassesXml);
 //			return;
 //		}
@@ -133,10 +133,10 @@ public class LookupServlet extends HttpServlet {
 		String searchTermDataUmbelClass = HttpParameterParser.getParam(request, PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS);
 		if (searchTermDataUmbelClass != null) {
 			
-			String matchingDataClassesXml = SubjectLookup.lookupSubclassesInInternalDatamodel(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			String matchingDataClassesXml = SubjectsSearcher.lookupSubclassesInInternalDatamodel(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
 			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
 
-			String matchingUmbelClassesXml = SubjectLookup.lookupPreferredOntologySubjectsInSchemaDatamodels(searchTermDataUmbelClass, countResults, startIndex);
+			String matchingUmbelClassesXml = SubjectsSearcher.lookupPreferredOntologySubjectsInSchemaDatamodels(searchTermDataUmbelClass, countResults, startIndex);
 			Document matchingUmbelClassesDoc = XmlDocumentUtil.getDocument(matchingUmbelClassesXml);
 			
 			Document mergedDocument = SparqlXmlUtil.merge(matchingDataClassesDoc, matchingUmbelClassesDoc);
