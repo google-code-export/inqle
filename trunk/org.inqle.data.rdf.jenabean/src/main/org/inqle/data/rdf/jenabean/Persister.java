@@ -630,6 +630,12 @@ public class Persister {
 		}
 		return model;
 	}
+	
+	public Model getModel(String datamodelId) {
+		Datamodel datamodel = getDatamodel(datamodelId);
+		return getModel(datamodel);
+	}
+	
 	/**
 	 * Given an instance of a Datamodel, retrieve the Jena model
 	 * @param datamodel
