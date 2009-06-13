@@ -65,6 +65,9 @@ public class InqleInfo {
 	public static final String ACTION_REGISTER_SUBJECTS = "regSubj";
 	public static final String ACTION_REGISTER_TABLEMAPPING = "regTMap";
 	public static final String PARAM_INQLE_VERSION = "ver";
+	public static final String PARAM_RDF_CLASS = "rdfClass";
+	public static final String PARAM_DATAMODEL = "datamodel";
+	public static final String PARAM_RDF_SUBJECT = "rdfSubj";
 	
 	public static final String DEFAULT_NAMED_MODEL_NAME = "org.inqle.models.defaultNamedModel";
 
@@ -73,8 +76,6 @@ public class InqleInfo {
 	private static final String RDF_FOLDER = "rdf";
 	private static final String DB_FOLDER = "db/tdb";
 
-	
-	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
 	}
@@ -125,6 +126,8 @@ public class InqleInfo {
 	public static final String SYSTEM_DATABASE_ROOT = "system";
 
 	public static final String ACCESS_ATTRIBUTE = "access";
+
+	public static final String PARAM_MODEL = "model";
 
 
 
