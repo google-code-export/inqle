@@ -38,4 +38,4 @@ We would like our customized sampler to randomly select attributes to correlate 
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/CustomSampler/07_CustomizedSampler.png]
 
-We can see our new sampler in the INQLE administration.  It will be available for learning cycles to use.  When custom sampler(s) have been created, the base learning cycle will select from among them.  Since this is our first custom sampler, if we [How_to_Run_Experimenter_Agent run the experimenter agent], it will use this sampler repeatedly every cycle.
+We can see our new sampler in the INQLE administration.  It will be available for learning cycles to use.  When custom sampler(s) have been created, the base learning cycle will select from among them.  Since this is our first custom sampler, when we [How_to_Run_Experimenter_Agent run the experimenter agent], it will use this sampler repeatedly every cycle.
