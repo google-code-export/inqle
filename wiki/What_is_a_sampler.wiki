@@ -4,7 +4,7 @@ INQLE introduces the concept of a _sampler_ to perform the duty of gathering a s
 
   * Identify the data source(s) to pull data from.  A sampler might be preconfigured to always use 1 or more datamodels, or, if none is preconfigured, the sampler might make a random selection from among available datamodels.
   * Decide what is the *subject* of the experiment.  This generally represent the rows in the example set to be mined.
-  * Decide on the *label* of the experiment.  This is the attribute fo the subject, which will be studied/predicted.
+  * Decide on the *label* of the experiment.  This is the attribute of the subject, which will be studied/predicted.
   * Decide which other attributes will be studied, looking for correlation with the label.
   * Extract a set of data from the data source(s).
   * If necessary, combine the data from multiple data sources into a single example set.
