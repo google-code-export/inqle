@@ -1,0 +1,7 @@
+#summary Explains briefly how to browse your data
+
+Data in INQLE is semantic, RDF, in structure.  Thus it is _faceted_, meaning it consists of objects, with many properties that link to other ojects.  
+
+To browse the data that you have loaded into an INQLE database, navigate in the navigation tree (at left) to:
+Databases -> user -> [datamodel name]
+Select "Browse data".  You will see the classes of objects in your database.  Select a class, and you will see a list of the objects of that class.  You can paginate through this list.  Select an object and you will see all the _facets_ of this object.
