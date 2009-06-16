@@ -1,3 +1,6 @@
 #summary Describes what is an INQLE sampler
 
-INQLE uses
+INQLE introduces the concept of a _sampler_ to perform the duty of gathering a set of data, for use in the learning cycle.  Samplers are INQLE [Plugins_for_INQLE plugins], and are contributed by extending the extension point org.inqle.data.sampling.rap.ISamplerFactory.  A sampler performs the following steps
+
+  # Identify the data source(s) to pull data from.  A sampler might be preconfigured to always use 1 or more datamodels, or, if none is preconfigured, the sampler might make a random selection from among available datamodels.
+  #
