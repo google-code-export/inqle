@@ -1,8 +1,8 @@
 #summary Describes what is an INQLE sampler
 
-INQLE introduces the concept of a _sampler_ to perform the duty of gathering a set of data, for use in the learning cycle.  Samplers are INQLE [Plugins_for_INQLE plugins], and are contributed by extending the extension point *org.inqle.data.sampling.rap.ISamplerFactory*.  A sampler performs the following steps, not necessarily in this order.
+INQLE introduces the concept of a _sampler_ to perform the duty of gathering a set of data, for use in the learning cycle.  Samplers are [Plugins_for_INQLE INQLE plugins], and are contributed by extending the extension point *org.inqle.data.sampling.rap.ISamplerFactory*.  A sampler performs the following steps, not necessarily in this order.
 
-  * Identify the data source(s) to pull data from.  A sampler might be preconfigured to always use 1 or more datamodels, or, if none is preconfigured, the sampler might make a random selection from among available datamodels.
+  * Identify the data source(s) to pull data from.  A sampler might be configured/customized to always use 1 or more datamodels, or, if none is configured, the sampler might make a random selection from among available datamodels.
   * Decide what is the *subject* of the experiment.  This generally represent the rows in the example set to be mined.
   * Decide on the *label* of the experiment.  This is the attribute of the subject, which will be studied/predicted.
   * Decide which other attributes will be studied, looking for correlation with the label.
@@ -12,4 +12,7 @@ INQLE introduces the concept of a _sampler_ to perform the duty of gathering a s
 So the output of each sampler is an example set of data, ready for machine learning.
 
 Samplers can perform more advanced activities, such as
+  * Poll the Central INQLE Server for available data sets relating to a particular subject class
   * Look at the results of past experiments, and decide data source(s), a subject, a label, and attributes, on the basis of past results.  Thus, the sampler could repeat past experiments of interest, using different data sets or looking at parent or child subject types or labels.  So a sampler can effect generization, analogizing, or other strategies typically performed by humans.
+
+The first sampler implementation is the Simple Sparql Subject Sampler (SiSSS).  This sampler can be customized using a wizard, or it makes random selections for dataset(s) to pull from, subject class, label, and learnable predicates.  Each cycle it makes a random selection for each of these, if not already configured.  
