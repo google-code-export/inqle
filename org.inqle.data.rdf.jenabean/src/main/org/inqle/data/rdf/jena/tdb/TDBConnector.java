@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import lib.FileOps;
-
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.IDBConnector;

@@ -29,16 +29,9 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * @author David Donohue
  * Jul 16, 2007
  * 
- * TODO rename to SDBQueryer, implementing IQueryer interface.
- * TODO add a QueryerFactory, which creates appropriate queryer implementation
- * TODO consider remove any SDB dependence (? might have no effect)
- * @see http://jena.hpl.hp.com/wiki/SDB/JavaAPI
- * 
  */
 	public class Queryer {
 	
-	
-
 	private static Logger log = Logger.getLogger(Queryer.class);
 	
 	private static final String[] COMMON_CLASSES_TO_FILTER = { 
