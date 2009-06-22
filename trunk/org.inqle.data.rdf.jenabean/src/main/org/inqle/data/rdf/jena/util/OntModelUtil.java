@@ -35,10 +35,11 @@ public class OntModelUtil {
 	 * @param rulesText
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static OntModel asOntModel(Model model, String rulesText) {
 		OntModelSpec spec = new OntModelSpec(OntModelSpec.OWL_MEM);
 	
-		List<?> rules = getRulesList(rulesText);
+		List rules = getRulesList(rulesText);
 		
 	  GenericRuleReasoner reasoner = new GenericRuleReasoner(rules);
 	  reasoner.setParameter(ReasonerVocabulary.PROPtraceOn, Boolean.TRUE);
