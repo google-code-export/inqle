@@ -10,6 +10,7 @@
 <body>
 <%
 WikiController controller = new WikiController(request);
+WikiData wikiData = controller.getWikiData();
 %>
 </body>
 </html>
