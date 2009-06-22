@@ -18,26 +18,31 @@ import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.IBasicJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IDisposableViewer;
 import org.inqle.ui.rap.views.ObjectViewer;
-import org.inqle.ui.rap.widgets.PropertiesLinker;
+import org.inqle.ui.rap.widgets.PropertiesTable;
+import org.inqle.ui.rap.wiki.WikiData;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 public class WikiPageViewer extends Viewer implements IDisposableViewer {
 
 	private Composite composite;
-	private Object pageObject;
+	private String pageResourceUri;
 	private Text titleText;
 	private Text descriptionText;
-	private Datamodel datamodel;
+//	private Datamodel datamodel;
 	private Text typeText;
 	private Text relationshipsText;
-	private PropertiesLinker propertiesLinker;
+	private PropertiesTable propertiesTable;
+	private WikiData wikiData;
 	
 	private static final Logger log = Logger.getLogger(WikiPageViewer.class);
 	
-	public WikiPageViewer(Composite parentComposite, Datamodel datamodel, Object bean) {
-		this.datamodel = datamodel;
-		this.pageObject = bean;
+	public WikiPageViewer(Composite parentComposite, Datamodel datamodel, String resourceUri) {
+//		this.datamodel = datamodel;
+		this.pageResourceUri = resourceUri;
 	
 		composite = new Composite(parentComposite, SWT.NONE);
 		GridLayout gridLayout = new GridLayout();
@@ -45,25 +50,23 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 		composite.setLayout(gridLayout);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		WikiDataExtractor dataExtractor = new WikiDataExtractor(datamodel, pageObject);
+		Persister persister = Persister.getInstance();
+		Model model = persister.getModel(datamodel);
+		wikiData = new WikiData(model, pageResourceUri);
 		
 		typeText = new Text(composite, SWT.READ_ONLY);
-		typeText.setText(dataExtractor.getType());
+		typeText.setText(wikiData.getClassUri());
 		
 		titleText = new Text(composite, SWT.READ_ONLY);
-		titleText.setText(dataExtractor.getTitle());
+		titleText.setText(wikiData.getTitle());
 		
 		descriptionText = new Text(composite, SWT.READ_ONLY);
-		descriptionText.setText(dataExtractor.getDescription());
+		descriptionText.setText(wikiData.getDescription());
 		
-//		relationshipsText = new Text(composite, SWT.READ_ONLY | SWT.MULTI);
-//		relationshipsText.setText(String.valueOf(dataExtractor.getStatements()));
-//		relationshipsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
-		
-		Map<String, Object> properties = dataExtractor.getProperties();
-		propertiesLinker = new PropertiesLinker(composite, SWT.READ_ONLY);
-		propertiesLinker.setProperties(properties);
-		refresh();
+//		Map<String, Object> properties = wikiData.getProperties();
+//		propertiesTable = new PropertiesTable(composite, SWT.READ_ONLY);
+//		propertiesTable.setProperties(properties);
+//		refresh();
 	}
 	
 	public void clearData() {
@@ -71,14 +74,14 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 		titleText.setText("");
 		descriptionText.setText("");
 		relationshipsText.setText("");
-		propertiesLinker.clearData();
+		propertiesTable.clearData();
 	}
 
 	public void dispose() {
 		typeText.dispose();
 		titleText.dispose();
 		descriptionText.dispose();
-		propertiesLinker.dispose();
+		propertiesTable.dispose();
 	}
 
 	@Override
@@ -110,13 +113,15 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 
 	@Override
 	public Object getInput() {
-		return pageObject;
+		return wikiData;
 	}
 
 	@Override
 	public void setInput(Object pageObject) {
-		this.pageObject = pageObject;
-		refresh();
+		if (pageObject instanceof WikiData) {
+			this.wikiData = (WikiData)pageObject;
+			refresh();
+		}
 	}
 
 }

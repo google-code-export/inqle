@@ -28,7 +28,7 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.Requestor;
-import org.inqle.http.lookup.SubjectLookup;
+import org.inqle.http.lookup.SubjectsSearcher;
 import org.inqle.ui.rap.actions.CreateSubclassAction;
 import org.inqle.ui.rap.table.ListMapTableLabelProvider;
 import org.inqle.ui.rap.widgets.SearchBox;
@@ -224,7 +224,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Clicked search button");
 
 			//this looks up subclasses of DataSubject, in this system datamodel: Data.DATA_SUBJECT_DATASET_ROLE_ID
-			String localDataSubjectXml = SubjectLookup.lookupSubjectsInSubjectsDatamodel(
+			String localDataSubjectXml = SubjectsSearcher.lookupSubjectsInSubjectsDatamodel(
 					getSearchTextValue(), 
 					10, 
 					0);
@@ -232,7 +232,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			Document localDataSubjectDocument = XmlDocumentUtil.getDocument(localDataSubjectXml);;
 
 			//this looks up all RDF classes
-			String localRdfClassXml = SubjectLookup.lookupSubclassesInSchemaDatamodels(
+			String localRdfClassXml = SubjectsSearcher.lookupSubclassesInSchemaDatamodels(
 					getSearchTextValue(), 
 					10, 
 					0);

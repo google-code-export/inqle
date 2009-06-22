@@ -50,7 +50,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     // when fillActionBars is called with FILL_PROXY.
     private IWorkbenchAction exitAction;
     private IAction aboutAction;
-    private IAction h2AdminAction;
+//    private IAction h2AdminAction;
     //private OpenViewAction openViewAction;
     //private Action messagePopupAction;
 		private List<OpenViewAction> openViewActions = new ArrayList<OpenViewAction>();
@@ -101,19 +101,19 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         MenuManager helpMenu = new MenuManager("&Help", IWorkbenchActionConstants.M_HELP);
         MenuManager windowMenu = new MenuManager("&Window", IWorkbenchActionConstants.M_WINDOW);
 //        MenuManager toolsMenu = new MenuManager("&Tools", IWorkbenchActionConstants.M_LAUNCH);
-        MenuManager loginMenu = new MenuManager("&Login", IWorkbenchActionConstants.M_EDIT);
+//        MenuManager loginMenu = new MenuManager("&Login", IWorkbenchActionConstants.M_EDIT);
         
         menuBar.add(fileMenu);
         // Add a group marker indicating where action set menus will appear.
         menuBar.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         menuBar.add(windowMenu);
 //        menuBar.add(toolsMenu);
-        menuBar.add(loginMenu);
+//        menuBar.add(loginMenu);
         menuBar.add(helpMenu);
         
-        Display display = PlatformUI.createDisplay();
-        LoginAction loginAction = new LoginAction(display.getActiveShell());
-        loginMenu.add(loginAction);
+//        Display display = PlatformUI.createDisplay();
+//        LoginAction loginAction = new LoginAction(display.getActiveShell());
+//        loginMenu.add(loginAction);
         
         // File
         //fileMenu.add(messagePopupAction);

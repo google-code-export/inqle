@@ -96,6 +96,6 @@ public class WikiPart extends Part {
 	public IDisposableViewer getViewer(Composite composite) {
 //		return new WikiPageViewer(composite, datamodel, new DatamodelPage(datamodel));
 		log.info("Creating WikiPageViewer w/ datamodel: " + datamodel);
-		return new WikiPageViewer(composite, datamodel, datamodel);
+		return new WikiPageViewer(composite, datamodel, null);
 	}
 }
