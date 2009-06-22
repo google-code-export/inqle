@@ -82,7 +82,7 @@ org.inqle.ui.wiki
 
 [http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].  You must also set up your Eclipse IDE to use the RAP 1.1 or above as the target platform.  
 
-you will need to configure your Eclipse to use the Eclipse RAP target platform. This is described here.
+you will need to configure your Eclipse to use the Eclipse RAP target platform. [http://www.eclipse.org/rap/gettingstarted.php This is described here].
 
 ===Building and Deploying INQLE===
 We deploy INQLE, by right clicking the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
