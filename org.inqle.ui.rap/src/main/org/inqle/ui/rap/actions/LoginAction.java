@@ -57,11 +57,12 @@ public class LoginAction extends Action {
 		}
 		
 		session.setAttribute(LoginAction.USER_ROLE_ATTRIBUTE, roles);
-		new AuthenticationProvider().updateRights();
+//		uncomment if we use authentication provider:
+//		new AuthenticationProvider().updateRights();
 		
 		//refresh the navigation tree menu
 		try {
-			IViewPart treeView = PlatformUI.getWorkbench().getActiveWorkbenchWindow ().getActivePage().showView(PartsView.ID);
+			IViewPart treeView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(PartsView.ID);
 			PartsView partsView = (PartsView)treeView;
 			partsView.refresh();
 		} catch (PartInitException e) {

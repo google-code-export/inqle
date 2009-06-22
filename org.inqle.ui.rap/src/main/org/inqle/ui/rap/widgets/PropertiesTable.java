@@ -15,15 +15,15 @@ import org.eclipse.swt.widgets.Text;
  * @author David Donohue
  * May 23, 2009
  */
-public class PropertiesLinker extends Composite {
+public class PropertiesTable extends Composite {
 
 	private Map<String, Object> properties;
 	private int _style;
-	private PropertiesLinker composite;
+	private Composite composite;
 	private List<Label> labels;
 	private List<Text> values;
 
-	public PropertiesLinker(Composite parent, int style) {
+	public PropertiesTable(Composite parent, int style) {
 		super(parent, style);
 		composite = this;
 		composite.setLayout(new GridLayout(2, false));
