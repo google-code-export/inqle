@@ -22,7 +22,7 @@ import org.inqle.ui.rap.widgets.LoginDialog;
 
 public class LoginAction extends Action {
 
-	private Shell shell;
+	private Shell _shell;
 
 	private LoginDialog loginDialog;
 
@@ -33,16 +33,16 @@ public class LoginAction extends Action {
 	public static final String USER_ROLE_ATTRIBUTE = "org.inqle.userRole";
 
 	private static Logger log = Logger.getLogger(LoginAction.class);
-	public LoginAction(Shell shell) { 
+	public LoginAction(Shell _shell) { 
 		super("Login");
 		//this.window = window;
-		this.shell = shell;
+		this._shell = _shell;
 	}
 	
 	@Override
 	public void run() {
 		try {
-			loginDialog = new LoginDialog(shell);
+			loginDialog = new LoginDialog(_shell);
 			loginDialog.open();
 		} catch (Exception e) {
 			log.error("Error running the LoginDialog", e);
@@ -61,14 +61,15 @@ public class LoginAction extends Action {
 //		new AuthenticationProvider().updateRights();
 		
 		//refresh the navigation tree menu
-		try {
-			IViewPart treeView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(PartsView.ID);
-			PartsView partsView = (PartsView)treeView;
-			partsView.refresh();
-		} catch (PartInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		//Uncomment this if we return to the menu method of logging in
+//		try {
+//			IViewPart treeView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(PartsView.ID);
+//			PartsView partsView = (PartsView)treeView;
+//			partsView.refresh();
+//		} catch (PartInitException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} 
 	}
 
 	public boolean isAdminUser() {

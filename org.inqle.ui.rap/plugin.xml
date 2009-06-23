@@ -60,7 +60,8 @@
      </part-type>
      -->
    </extension>
-
+	
+	<!--Reinstate this to add the RAP-based wiki part type
 	<extension
          point="org.inqle.data.datamodelFunctions">
       
@@ -72,6 +73,7 @@
 					 checkedByDefault="true">
 			</datamodelFunction>
 	</extension>
+	-->
 	
 	<!--Add activities, for security purposes-->
 	<!--
