@@ -72,27 +72,27 @@ https://inqle.googlecode.com/svn/trunk/
 Each bundle must be checked out as a separate Eclipse project.  It should appear in your Eclipse IDE as a "Plug-In Project".  
 At present, here are the bundles which must be checked out.
 
-https://inqle.googlecode.com/svn/trunk/InqleFeature
-https://inqle.googlecode.com/svn/trunk/org.apache.commons.fileupload
-https://inqle.googlecode.com/svn/trunk/org.apache.commons.io
-https://inqle.googlecode.com/svn/trunk/org.eclipse.rwt.widgets.upload
-https://inqle.googlecode.com/svn/trunk/org.inqle.agent
-https://inqle.googlecode.com/svn/trunk/org.inqle.core
-https://inqle.googlecode.com/svn/trunk/org.inqle.core.extensions
-https://inqle.googlecode.com/svn/trunk/org.inqle.data.rdf.jenabean
-https://inqle.googlecode.com/svn/trunk/org.inqle.data.sampling
-https://inqle.googlecode.com/svn/trunk/org.inqle.experiment.rapidminer
-https://inqle.googlecode.com/svn/trunk/org.inqle.http.lookup
-https://inqle.googlecode.com/svn/trunk/org.inqle.log4j.properties
-https://inqle.googlecode.com/svn/trunk/org.inqle.ui.rap
+  * https://inqle.googlecode.com/svn/trunk/InqleFeature
+  * https://inqle.googlecode.com/svn/trunk/org.apache.commons.fileupload
+  * https://inqle.googlecode.com/svn/trunk/org.apache.commons.io
+  * https://inqle.googlecode.com/svn/trunk/org.eclipse.rwt.widgets.upload
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.agent
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.core
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.core.extensions
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.data.rdf.jenabean
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.data.sampling
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.experiment.rapidminer
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.http.lookup
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.log4j.properties
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.rap
 
 In addition, these bundles might be used at a future date but not needed for the core INQLE application.
-https://inqle.googlecode.com/svn/trunk/org.inqle.ui.google.widgets
-org.inqle.ui.wiki
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.google.widgets
+  * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.wiki
 
 [http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].  You must also set up your Eclipse IDE to use the RAP 1.1 or above as the target platform.  
 
-you will need to configure your Eclipse to use the Eclipse RAP target platform. [http://www.eclipse.org/rap/gettingstarted.php This is described here].
+You will need to configure your Eclipse to use the Eclipse RAP target platform. [http://www.eclipse.org/rap/gettingstarted.php This is described here].
 
 ===Building and Deploying INQLE===
 This is the way to do a full build of INQLE.  This build will erase any INQLE files that might have existed before, such as databases you might have previously created.
