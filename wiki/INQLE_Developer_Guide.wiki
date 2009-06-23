@@ -59,6 +59,16 @@ See [Scenarios_and_Use_Cases Scenarios and Use Cases] for some example ideas of 
 
 ===Setting up your INQLE development environment===
 To work on the INQLE core code, you must check out all INQLE bundles from the INQLE Subversion repository.
+
+We recommend you use Eclipse 3.4 or above, with the Subclipse plug-in.
+ This has problems working behind a firewall.  Check out each of the
+required bundles as follows:
+In Eclipse, go to File -> New -> Project... ->
+Checkout projects from SVN ->
+Create a new repository location ->
+Enter INQLE's subversion location
+https://inqle.googlecode.com/svn/trunk/
+
 Each bundle must be checked out as a separate Eclipse project.  It should appear in your Eclipse IDE as a "Plug-In Project".  
 At present, here are the bundles which must be checked out.
 
@@ -85,4 +95,11 @@ org.inqle.ui.wiki
 you will need to configure your Eclipse to use the Eclipse RAP target platform. [http://www.eclipse.org/rap/gettingstarted.php This is described here].
 
 ===Building and Deploying INQLE===
-We deploy INQLE, by right clicking the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
+This is the way to do a full build of INQLE.  This build will erase any INQLE files that might have existed before, such as databases you might have previously created.
+To deploy INQLE, right click the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
+
+===Testing Code and Deploying Individual Bundle(s)===
+If you are developing on some INQLE bundles, and wish to do a quicker deploy, you can select in Eclipse Packages View, the bundle you wish to export.  Select 
+Export... -> Deployable Plug-ins and fragments -> Next ->
+Select the bundle(s) to export, and ensure the "Directory" is set to the root of your INQLE folder, e.g. C:\my_apps\INQLE.  Click Finish.
+The bundle(s) will be compiled and placed in the proper directory ("plugins") within your INQLE application folder.  Next you can stop and start INQLE, by closing the INQLE console, then run inqle-console.sh (Mac, Linux) or inqle-console.bat (Windows).
