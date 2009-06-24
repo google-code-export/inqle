@@ -29,7 +29,7 @@ public class SamplerBackedSparqlSelectorPage extends SparqlSelectorPage {
 	 * @see org.inqle.ui.rap.table.SparqlSelectorPage#getDatamodelIds()
 	 */
 	@Override
-	protected Collection<String> getDatamodelIds() {
+	public Collection<String> getDatamodelIds() {
 		ISampler sampler = (ISampler)bean;
 		return sampler.getSelectedDatamodels();
 	}
@@ -38,7 +38,7 @@ public class SamplerBackedSparqlSelectorPage extends SparqlSelectorPage {
 	 * @see org.inqle.ui.rap.table.SparqlSelectorPage#getQuery()
 	 */
 	@Override
-	protected String getQuery() {
+	public String getQuery() {
 		return query;
 	}
 
