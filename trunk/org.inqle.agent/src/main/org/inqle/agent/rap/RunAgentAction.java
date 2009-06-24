@@ -12,16 +12,13 @@ import org.inqle.agent.IAgent;
 public class RunAgentAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
-	//private Persister persister;
 	private IAgent agentToRun = null;
 	private AgentPart agentPart = null;
 	
 	private static final Logger log = Logger.getLogger(RunAgentAction.class);
 	
-	//public DeleteAgentAction(String menuText, CustomizedAgentPart agentPart, IAgent agentToRun, IWorkbenchWindow window, Persister persister) {
-		
 	public RunAgentAction(String menuText, AgentPart agentPart, IWorkbenchWindow window) {
-		this.window = window;
+//		this.window = window;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
 		this.agentToRun  = agentPart.getAgentFactory().getBaseAgent();

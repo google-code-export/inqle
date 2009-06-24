@@ -7,17 +7,16 @@ Bundle-Vendor: INQLING, LLC
 Require-Bundle: org.inqle.core,
  org.inqle.core.extensions,
  org.eclipse.rap.jface,
+ org.eclipse.rap.ui,
  org.inqle.ui.rap,
- org.inqle.data.rdf.jenabean
+ org.inqle.data.rdf.jenabean,
+ org.eclipse.rap.ui;bundle-version="1.2.0"
 Import-Package: com.hp.hpl.jena.rdf.model,
- org.apache.log4j,
  org.eclipse.jface.action,
  org.eclipse.jface.wizard,
  org.eclipse.swt.widgets,
- org.eclipse.ui,
  org.junit.runner
-Bundle-ClassPath: bin/main/,
- .
+Bundle-ClassPath: bin/main/
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
  org.inqle.data.rdf.jenabean,
  org.inqle.ui.rap
