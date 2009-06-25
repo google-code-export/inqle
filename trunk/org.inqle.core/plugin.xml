@@ -3,16 +3,4 @@
 <plugin>
    <extension-point id="org.inqle.core.factory" name="INQLE Core Factory Service" schema="schema/org.inqle.core.factory.exsd"/>
 
-	<extension
-        point="org.eclipse.rap.ui.branding">
-     <branding
-           id="org.inqle.core.branding"
-           servletName="inqle"
-           title="INQLE Server"
-           exitConfirmation="Do you really want to exit INQLE?"
-           favicon="favicon.png"
-           body="body.html"
-           >
-     </branding>
-   </extension>
 </plugin>
