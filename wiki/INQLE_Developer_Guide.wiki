@@ -58,12 +58,17 @@ Please contact me (David Donohue) if you are ready to do this.
 See [Scenarios_and_Use_Cases Scenarios and Use Cases] for some example ideas of what a contributor might want to build and how she would do it.
 
 ===Setting up your INQLE development environment===
-To work on the INQLE core code, you must check out all INQLE bundles from the INQLE Subversion repository.
+To work on the INQLE core code, you can follow these steps.
 
-We recommend you use Eclipse 3.4 or above, with the Subclipse plug-in.
- This has problems working behind a firewall.  Check out each of the
-required bundles as follows:
-In Eclipse, go to File -> New -> Project... ->
+(1) Download *Eclipse for RCP/Plug-in Developers, version 3.5 (Galileo)*.
+from http://www.eclipse.org/downloads/
+
+(2) Add the Eclipse RAP plugin, and set up your Eclipse to use RAP as the target platform.
+[http://www.eclipse.org/rap/gettingstarted.php This is described here].
+
+(3) Add the Subclipse plugin to Eclipse, [http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA as described here].
+
+(4) In Eclipse, go to File -> New -> Project... ->
 Checkout projects from SVN ->
 Create a new repository location ->
 Enter INQLE's subversion location
@@ -73,8 +78,6 @@ Each bundle must be checked out as a separate Eclipse project.  It should appear
 At present, here are the bundles which must be checked out.
 
   * https://inqle.googlecode.com/svn/trunk/InqleFeature
-  * https://inqle.googlecode.com/svn/trunk/org.apache.commons.fileupload
-  * https://inqle.googlecode.com/svn/trunk/org.apache.commons.io
   * https://inqle.googlecode.com/svn/trunk/org.eclipse.rwt.widgets.upload
   * https://inqle.googlecode.com/svn/trunk/org.inqle.agent
   * https://inqle.googlecode.com/svn/trunk/org.inqle.core
@@ -86,17 +89,11 @@ At present, here are the bundles which must be checked out.
   * https://inqle.googlecode.com/svn/trunk/org.inqle.log4j.properties
   * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.rap
 
-In addition, these bundles might be used at a future date but not needed for the core INQLE application.
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.google.widgets
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.wiki
-
-[http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].  You must also set up your Eclipse IDE to use the RAP 1.1 or above as the target platform.  
-
-You will need to configure your Eclipse to use the Eclipse RAP target platform. [http://www.eclipse.org/rap/gettingstarted.php This is described here].
+[http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].
 
 ===Building and Deploying INQLE===
 This is the way to do a full build of INQLE.  This build will erase any INQLE files that might have existed before, such as databases you might have previously created.
-To deploy INQLE, right click the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.
+To deploy INQLE, right click the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.  Next you start INQLE, by running inqle-console.sh (Mac, Linux) or inqle-console.bat (Windows).
 
 ===Testing Code and Deploying Individual Bundle(s)===
 If you are developing on some INQLE bundles, and wish to do a quicker deploy, you can select in Eclipse Packages View, the bundle you wish to export.  Select 
