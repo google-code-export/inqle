@@ -3,19 +3,6 @@
 <plugin>
    <extension-point id="org.inqle.ui.rap.IPartType" name="Class of Application Parts" schema="schema/org.inqle.ui.rap.IPartType.exsd"/>
    
-   	<extension
-        point="org.eclipse.rap.ui.branding">
-     <branding
-           id="org.inqle.core.branding"
-           servletName="inqle"
-           title="INQLE Server"
-           exitConfirmation="Do you really want to exit INQLE?"
-           favicon="favicon.png"
-           body="body.html"
-           >
-     </branding>
-   </extension>
-   
    <extension
          point="org.eclipse.rap.ui.entrypoint">
       <entrypoint
@@ -73,6 +60,18 @@
            weight="50">
      </part-type>
      -->
+   </extension>
+   <extension
+         id="InqleProductId"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ui.ide.workbench"
+            name="INQLE Product">
+         <property
+               name="appName"
+               value="INQLE Product">
+         </property>
+      </product>
    </extension>
 	
 	<!--Reinstate this to add the RAP-based wiki part type
