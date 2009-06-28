@@ -54,9 +54,11 @@ Other such common properties will be defined, to specify the source of the data 
 (8) Data subjects, in turn, have the inverse property
 
 *inqle:hasData*, which identifies the inqle:Data measurement about it.
----
+
+___
 You could stop here if you like.  For the brave ontologists who wish to know some more gory (and powerful?) details, read on...
----
+___
+
 (9) The semantic class inqle:Data has a super class, 
 
 *inqle:!DataTable*.  When importing a table of data, INQLE creates a new subclass of inqle:!DataTable, and adds any global properties about the data table.  For instance, if the entire table of data pertains to a particular moment in time, then the sublcass representing the data table will have the property inqle:data with a particular static value.
