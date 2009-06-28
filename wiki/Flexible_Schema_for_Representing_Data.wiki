@@ -14,6 +14,12 @@ Here are the particulars of this schema.
 
 (4) Each data subject has _identifying_ attributes.  Such attributes are those that generally do NOT change.   Most notably, it has a URI, which identifies it globally.  _Identifying_ attributes are represented by already-existing semantic properties of the subject's semantic class, when available.  If the subject's semantic class lacks the needed property, then a new _identifying_ attribute can be declared to be a property of the subject's semantic class.  In either case, the _identifying_ attribute values are properties of the data subject.
 
+For example, if the subject is this:
+http://www.geonames.org/countries/CA
+then it might have these identifying attributes: 
+<http://www.w3.org/2000/01/rdf-schema#label> = "Canada"
+<http://www.geonames.org/ontology#P> = "Ottowa"
+
 (5) Each data subject has _measurement_ attributes.  Such attributes are values which DO change.  These are the types of attributes which contain minable information.  _Measurement_ attributes are NOT properties of the subject itself.  Rather, they are properties of a new semantic class, called:
 http://ns.inqle.org/Data
 which is abbreviated to
@@ -21,10 +27,17 @@ inqle:Data
 
 An instance of inqle:Data is analogous to a row of data in a table of data like a spreadsheet.  Each attribute value it has is analogous to a cell in that row.  Each attribute it has is analogous to a column in that table.  
 
+For example, if the subject is still Canada, whose URI is:
+http://www.geonames.org/countries/CA
+it might have a _measurement_ attribute like this
+inqle:hasData = <http://www.geonames.org/countries/CA_A1B2C3E4F5678901>
+[By convention, for human readability, an instance of inqle:Data has a URI which begins with the URI of the subject and ends with underscore followed by a UUID.]
+This data measurement, in turn might have multiple attribute values, to represent all the data captured by that measurement.
+
 (6) The property inqle:Data can contain any type of property suited to the subject it is about.  If a particular inqle:Data instance is about a person, the that inqle:data instance might have attributes
-  * hasHeight
-  * hasAge
-  * isInPhaseOfSleep
+my:hasHeight
+my:hasAge
+my:isInPhaseOfSleep
 
 (7) Some properties are common among all or most instances of inqle:Data.  These properties include
   * *inqle:hasSubject* - identifies the data subject.
@@ -38,10 +51,3 @@ Other such common properties will be defined, to specify the source of the data 
 
 (9) The semantic class inqle:Data has a super class, 
 inqle:DataTable.  When importing a table of data, INQLE creates a new subclass of inqle:DataTable, and adds any global properties about the data table.  For instance, if the entire table of data pertains to a particular moment in time, then the sublcass representing the data table will have the property inqle:data with a particular static value.
-
-Each .  The above properties (in #7) are also applicable to the inqle:DataTable.
-
-
-Some instances of inqle:Data will be subclasses of a inqle:DataTable instance.
-
-If that subject represents a group of multiple individuals (like a married couple), then the subject is the group itself (like the URI of the couple object, which in turn has
