@@ -6,10 +6,31 @@ INQLE stores and works with semantic, RDF data.  It seeks to handle most any str
 
 Here are the particulars of this schema.
 
-(1) All data has a single subject.  
+(1) Each datum has a single *subject*.  
 
-(2) Each data subject is identified by a semantic class (RDFS or OWL).  Where possible, an existing semantic class is used.
+(2) Each data subject is identified by a URI.  Where possible, URIs of known entities are used. 
 
-(3) Each subject might have a number of _identifying_ attributes.  Such attributes are those that generally do not change.  They generally 
+(3) Each data subject is an instance of a particular semantic class (RDFS or OWL).  Where possible, an existing semantic class is used.
 
-If that subject represents a group of multiple individuals (like a married couple), then the subject is the group itself (like the URI of the couple object, which in turn has 
+(4) Each data subject has _identifying_ attributes.  Such attributes are those that generally do NOT change.   Most notably, it has a URI, which identifies it globally.  _Identifying_ attributes are represented by already-existing semantic properties of the subject's semantic class, when available.  If the subject's semantic class lacks the needed property, then a new _identifying_ attribute can be declared to be a property of the subject's semantic class.  In either case, the _identifying_ attribute values are properties of the data subject.
+
+(5) Each data subject has _measurement_ attributes.  Such attributes are values which DO change.  These are the types of attributes which contain minable information.  _Measurement_ attributes are NOT properties of the subject itself.  Rather, they are properties of a new semantic class, called:
+http://ns.inqle.org/Data
+which is abbreviated to
+inqle:Data
+
+(6) The property inqle:Data can contain any type of property suited to the subject it is about.  If a particular inqle:Data instance is about a person, the that inqle:data instance might have attributes
+hasHeight
+hasAge
+isInPhaseOfSleep
+
+(7) Some properties are common among most instances of inqle:Data.  These properties include
+inqle:hasSubject - identifies the data subject.
+inqle:date - identifies the date and time of the measurement
+
+date
+
+
+
+
+If that subject represents a group of multiple individuals (like a married couple), then the subject is the group itself (like the URI of the couple object, which in turn has
