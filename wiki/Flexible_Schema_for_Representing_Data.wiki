@@ -1,6 +1,6 @@
 #summary INQLE uses a flexible schema for representing any type of data.
 
-This page describes INQLE's generic schema, which can be used to represent any experimental data or other data with a time component.
+This page describes INQLE's generic schema, which can be used to represent any experimental data or other data, with the ability to store rich metadata about the data (time and location of collection, institution, etc.).
 
 INQLE stores and works with semantic, RDF data.  It seeks to handle most any structure (schema) of RDF data.  When INQLE creates semantic data (by importing from a non-semantic spreadsheet, by survey data it collects, or by other means), INQLE uses a flexible schema for representing any type of data.  This schema enables INQLE to ensure that the data it creates is identified by existing semantic classes, while containing maximal information about each datum.  This schema could be used to represent any data semantically, whether for use in data mining or any other purpose.
 
