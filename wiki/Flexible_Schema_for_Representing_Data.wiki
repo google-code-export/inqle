@@ -31,7 +31,7 @@ For example, if the subject is still Canada, whose URI is:
 http://www.geonames.org/countries/CA
 it might have a _measurement_ attribute like this
 inqle:hasData = <http://www.geonames.org/countries/CA_A1B2C3E4F5678901>
-[By convention, for human readability, an instance of inqle:Data has a URI which begins with the URI of the subject and ends with underscore followed by a UUID.]
+(By convention, for human readability, an instance of inqle:Data has a URI which begins with the URI of the subject and ends with underscore followed by a UUID.)
 This data measurement, in turn might have multiple attribute values, to represent all the data captured by that measurement.
 
 (6) The property inqle:Data can contain any type of property suited to the subject it is about.  If a particular inqle:Data instance is about a person, the that inqle:data instance might have attributes
@@ -42,12 +42,16 @@ my:isInPhaseOfSleep
 (7) Some properties are common among all or most instances of inqle:Data.  These properties include
   * *inqle:hasSubject* - identifies the data subject.
   * *inqle:date* - identifies the date and time of the measurement, when appropriate
-  * [location properties].  These identify the city, country, latitude, longitude of the measurement, when appropriate.
+  * (location properties).  These identify the city, country, latitude, longitude of the measurement, when appropriate.
 
 Other such common properties will be defined, to specify the source of the data (institution, research lab, INQLE server).
 
 (8) Data subjects, in turn, have the inverse property
 *inqle:hasData*, which identifies the inqle:Data measurement about it.
-
+---
+You could stop here if you like.  For the brave ontologists who wish to know some more gory (and powerful?) details, read on...
+---
 (9) The semantic class inqle:Data has a super class, 
-inqle:DataTable.  When importing a table of data, INQLE creates a new subclass of inqle:DataTable, and adds any global properties about the data table.  For instance, if the entire table of data pertains to a particular moment in time, then the sublcass representing the data table will have the property inqle:data with a particular static value.
+*inqle:DataTable*.  When importing a table of data, INQLE creates a new subclass of inqle:DataTable, and adds any global properties about the data table.  For instance, if the entire table of data pertains to a particular moment in time, then the sublcass representing the data table will have the property inqle:data with a particular static value.
+
+(10) Each row of data within a data table can be declared to be an instance of the inqle:DataTable subclass that represents the table.  So a instance of inqle:Data might be declared to be an instance of a table's class, which in turn is a sublcass of inqle:DataTable.  This allows each inqle:Data object (each row and cell of a data table) to inherit the global attributes describing the entire table (such as a location, if the data table pertains to a single location, or such as the person who collected the data, if all data in the table was collected by a particular person.  This feature of the specification allows each piece of data in a table to be richly annotated with abundant descriptive metadata, without requiring each row to be explicitly tagged with that metadata.
