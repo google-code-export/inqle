@@ -55,9 +55,9 @@ Other such common properties will be defined, to specify the source of the data 
 
 *inqle:hasData*, which identifies the inqle:Data measurement about it.
 
-___
+_
 You could stop here if you like.  For the brave ontologists who wish to know some more gory (and powerful?) details, read on...
-___
+_
 
 (9) The semantic class inqle:Data has a super class, 
 
