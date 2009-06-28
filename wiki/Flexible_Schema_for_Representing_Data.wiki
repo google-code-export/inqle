@@ -19,18 +19,29 @@ http://ns.inqle.org/Data
 which is abbreviated to
 inqle:Data
 
+An instance of inqle:Data is analogous to a row of data in a table of data like a spreadsheet.  Each attribute value it has is analogous to a cell in that row.  Each attribute it has is analogous to a column in that table.  
+
 (6) The property inqle:Data can contain any type of property suited to the subject it is about.  If a particular inqle:Data instance is about a person, the that inqle:data instance might have attributes
-hasHeight
-hasAge
-isInPhaseOfSleep
+  * hasHeight
+  * hasAge
+  * isInPhaseOfSleep
 
-(7) Some properties are common among most instances of inqle:Data.  These properties include
-inqle:hasSubject - identifies the data subject.
-inqle:date - identifies the date and time of the measurement
+(7) Some properties are common among all or most instances of inqle:Data.  These properties include
+  * *inqle:hasSubject* - identifies the data subject.
+  * *inqle:date* - identifies the date and time of the measurement, when appropriate
+  * [location properties].  These identify the city, country, latitude, longitude of the measurement, when appropriate.
 
-date
+Other such common properties will be defined, to specify the source of the data (institution, research lab, INQLE server).
+
+(8) Data subjects, in turn, have the inverse property
+*inqle:hasData*, which identifies the inqle:Data measurement about it.
+
+(9) The semantic class inqle:Data has a super class, 
+inqle:DataTable.  When importing a table of data, INQLE creates a new subclass of inqle:DataTable, and adds any global properties about the data table.  For instance, if the entire table of data pertains to a particular moment in time, then the sublcass representing the data table will have the property inqle:data with a particular static value.
+
+Each .  The above properties (in #7) are also applicable to the inqle:DataTable.
 
 
-
+Some instances of inqle:Data will be subclasses of a inqle:DataTable instance.
 
 If that subject represents a group of multiple individuals (like a married couple), then the subject is the group itself (like the URI of the couple object, which in turn has
