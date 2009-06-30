@@ -23,7 +23,7 @@ public class RDF {
 	public static final String UMBEL_SC = "http://umbel.org/umbel/sc/";
 	public static final String UMBEL_AC = "http://umbel.org/umbel/ac/";
 	public static final String UMBEL_NE = "http://umbel.org/umbel/ne/";
-	public static final String INQLE = "http://ns.inqle.org/1/";
+	public static final String INQLE = "http://ns.inqle.org/";
 	
 	public static final String SDB = "http://jena.hpl.hp.com/2007/sdb#";	
 	public static final String THEWEBSEMANTIC = "http://thewebsemantic.com/";
@@ -41,8 +41,8 @@ public class RDF {
 	public static final Property COMMENT_PROPERTY = ResourceFactory.createProperty(DESCRIPTION_PREDICATE);
 	public static final String DATA = INQLE + "Data";
 	public static final String SUBJECT = INQLE + "Subject";
-	public static final String HAS_SUBJECT = INQLE + "subject";
-	public static final String HAS_DATA = INQLE + "data";
+	public static final String HAS_SUBJECT = INQLE + "hasSubject";
+	public static final String HAS_DATA = INQLE + "hasData";
 	public static final String DATA_PROPERTY = INQLE + "DataProperty";
 	public static final String SUBJECT_PROPERTY = INQLE + "SubjectProperty";
 	public static final String DATE_PROPERTY = INQLE + "date";
