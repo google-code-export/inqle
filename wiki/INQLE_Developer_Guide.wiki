@@ -68,28 +68,17 @@ from http://www.eclipse.org/downloads/
 
 (3) Add the Subclipse plugin to Eclipse, [http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA as described here].
 
-(4) In Eclipse, go to File -> New -> Project... ->
-Checkout projects from SVN ->
-Create a new repository location ->
-Enter INQLE's subversion location
-https://inqle.googlecode.com/svn/trunk/
+(4) Download the latest team project file from here
+http://inqle.org/downloads/
+It is of the format:
 
-Each bundle must be checked out as a separate Eclipse project.  It should appear in your Eclipse IDE as a "Plug-In Project".  
-At present, here are the bundles which must be checked out.
+inqle_team_project_set_x.x.x.psf
 
-  * https://inqle.googlecode.com/svn/trunk/InqleFeature
-  * https://inqle.googlecode.com/svn/trunk/org.eclipse.rwt.widgets.upload
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.agent
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.core
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.core.extensions
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.data.rdf.jenabean
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.data.sampling
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.experiment.rapidminer
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.http.lookup
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.log4j.properties
-  * https://inqle.googlecode.com/svn/trunk/org.inqle.ui.rap
+(5) In Eclipse, go to *File* -> *Import* -> *Team* -> *Team Project Set* -> *Next*
+Select the team project set file you downloaded, and click *Finish*.
 
-[http://code.google.com/p/inqle/source/checkout The process of checking out code from Subversion is described here].
+Each of the bundles that comprise INQLE will be checked out as a separate Eclipse project.  
+Your development environment should now be ready to go!
 
 ===Building and Deploying INQLE===
 This is the way to do a full build of INQLE.  This build will erase any INQLE files that might have existed before, such as databases you might have previously created.
