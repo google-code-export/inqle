@@ -352,6 +352,12 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		return DEFAULT_THING_CLASS;
 	}
 	
+	/**
+	 * This is invoked upon submit.  It creates the TableMapping object
+	 * (which is a Jenabean and can be persisted and reused).  This TableMapping
+	 * will be used by the FileDataimporter to import the data as RDF.
+	 * @return
+	 */
 	public TableMapping getTableMapping() {
 		TableMapping tableMapping = new TableMapping();
 		

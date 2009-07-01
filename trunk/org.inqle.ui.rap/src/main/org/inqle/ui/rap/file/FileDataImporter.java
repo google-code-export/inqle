@@ -103,18 +103,6 @@ public class FileDataImporter {
 			importRowValues(subjectMapping, row, subjectInstance, rowDataInstance);
 		}
 		
-//	dataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), subjectInstance);
-////subjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), dataInstance);
-//
-//importStaticValues(subjectMapping, subjectInstance, dataInstance);
-//
-////loop thru each row and add values from appropriate column to appropriate individual
-//String[][] rows = csvReader.getRawData();
-//for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
-//	String[] row = rows[i];
-//	importRowValues(subjectMapping, row, subjectInstance, dataInstance);
-//}
-		
 	}
 	
 	/**
