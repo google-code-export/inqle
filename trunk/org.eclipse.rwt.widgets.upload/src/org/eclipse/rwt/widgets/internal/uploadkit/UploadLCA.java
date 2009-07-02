@@ -96,7 +96,7 @@ public class UploadLCA extends AbstractWidgetLCA {
     } );
     writer.set( "appearance", "composite" );
     writer.set( "overflow", "hidden" );
-    ControlLCAUtil.writeStyleFlags( ( Upload )widget );
+//    ControlLCAUtil.writeStyleFlags( ( Upload )widget );
   }
 
   /**
@@ -155,7 +155,7 @@ public class UploadLCA extends AbstractWidgetLCA {
     throws IOException
   {
     ControlLCAUtil.resetChanges();
-    ControlLCAUtil.resetStyleFlags();
+//    ControlLCAUtil.resetStyleFlags();
   }
 
   /**
