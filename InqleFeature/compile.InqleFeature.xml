@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Compile InqleFeature" default="main">
 	<target name="main">
+		<ant antfile="build.xml" dir="../org.apache.commons.io" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.apache.commons.fileupload" target="build.jars"/>
 		<ant antfile="build.xml" dir="../org.inqle.core" target="build.jars"/>
 		<ant antfile="build.xml" dir="../org.inqle.log4j.properties" target="build.jars"/>
 		<ant antfile="build.xml" dir="../org.eclipse.rwt.widgets.upload" target="build.jars"/>
