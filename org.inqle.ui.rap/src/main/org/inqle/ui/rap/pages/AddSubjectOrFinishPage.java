@@ -27,8 +27,6 @@ public class AddSubjectOrFinishPage extends AddSubjectPage implements SelectionL
 	public void addElements() {
 		super.addElements();
 		
-		new Text(selfComposite, SWT.NONE);
-		
 		finishWizardButton = new Button (selfComposite, SWT.PUSH);
 		finishWizardButton.setText(FINISH_WIZARD_TEXT);
 		finishWizardButton.addSelectionListener(this);
