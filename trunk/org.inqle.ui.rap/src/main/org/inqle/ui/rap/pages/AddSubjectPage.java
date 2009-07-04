@@ -42,8 +42,6 @@ public class AddSubjectPage extends DynaWizardPage implements SelectionListener 
 //		newTableSubjectButton.setSelection(true);
 		newTableSubjectButton.addSelectionListener(this);
 		new Label(selfComposite, SWT.WRAP).setText(TABLE_SUBJECT_DESCRIPTION);
-		
-		new Text(selfComposite, SWT.NONE);
 				
 		newRowSubjectButton = new Button (selfComposite, SWT.PUSH);
 		newRowSubjectButton.setText(ROW_SUBJECT_BUTTON_TEXT);
