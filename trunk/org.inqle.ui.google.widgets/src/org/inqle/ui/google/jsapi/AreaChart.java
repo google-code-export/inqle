@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * Renders a Google Visualization Area Chart.
- * @See http://code.google.com/apis/visualization/documentation/gallery/barchart.html
+ * @See http://code.google.com/apis/visualization/documentation/gallery/areachart.html
  * 
  * Note that this widget is rendered upon calling the setWidgetData method.  
  * So if you wish to set options like width, height, colors, etc., you must do this 
