@@ -8,7 +8,9 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
@@ -20,8 +22,11 @@ import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.IPart;
+import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.file.FileDataImporter;
+import org.inqle.ui.rap.pages.AddSubjectOrFinishPage;
+import org.inqle.ui.rap.pages.AddSubjectPage;
 import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
@@ -61,15 +66,11 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private LoadFilePage loadFilePage;
 	private CsvReader csvReader;
 	
-//	private AddSubjectPage addSubjectPage;
+	private AddSubjectPage addSubjectPage;
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
 	private DateTimeMapperPage dateTimeMapperPage;
 	private Datamodel datamodel;
 	private IPart part;
-	private RowSubjectClassPage subjectClassPage;
-	private RowSubjectUriPage subjectUriPage;
-	private RowSubjectPropertyMappingsPage propertyMappingsPage;
-	private RowSubjectPropertyValuesPage propertyValuesPage;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -132,20 +133,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
 		addPage(dateTimeMapperPage);
 		
-//		addSubjectPage = new AddSubjectPage();
-//		addPage(addSubjectPage);
+		addSubjectPage = new AddSubjectPage();
+		addPage(addSubjectPage);
 		
-		subjectClassPage = new RowSubjectClassPage();
-		addPage(subjectClassPage);
-		subjectUriPage = new RowSubjectUriPage();
-		addPage(subjectUriPage);
-		propertyMappingsPage = new RowSubjectPropertyMappingsPage();
-		addPage(propertyMappingsPage);
-		propertyValuesPage = new RowSubjectPropertyValuesPage();
-		addPage(propertyValuesPage);
-		
-		saveMappingLoadDataPage = new SaveMappingLoadDataPage();
-		addPage(saveMappingLoadDataPage);
 	}
 	
 	/* (non-Javadoc)
@@ -155,12 +145,16 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	public boolean performFinish() {
 		
 		//show the "importing..." dialog
+//		PopupDialog popup;
 		TableMapping tableMapping = null;
 		try {
+//			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Saving Mapping", "Saving Your Table Mapping" );
+//			popup.open();
 			tableMapping = getTableMapping();
 			log.info("Saving new TableMapping:\n" + JenabeanWriter.toString(tableMapping));
 			Persister persister = Persister.getInstance();
 			persister.persist(tableMapping);
+//			popup.close();
 		} catch (RuntimeException e) {
 			log.error("Error saving mapping", e);
 		}
@@ -168,9 +162,13 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		OntModel ontModel = ModelFactory.createOntologyModel();
 		
 		try {
+//			popup = new PopupDialog(getShell(), SWT.NONE, false, false, false, false, "Importing Data", "Importing your data..." );
+//			popup.open();
 			log.info("Importing data...");
 			FileDataImporter importer = new FileDataImporter(csvReader, tableMapping, ontModel);
 			importer.doImport();
+//			log.info("Data for import=\n" + JenabeanWriter.modelToString(ontModel));
+//			popup.close();
 		} catch (RuntimeException e) {
 			log.error("Error importing data from file", e);
 		}
@@ -198,24 +196,23 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		}
 		return true;
 	}
+
+//	public void closeUploader() {
+//		loadFilePage.closeUploader();
+//	}
 	
 	@Override
 	public boolean canFinish() {
-//		IWizardPage[] pages = getPages();
-//		if (pages.length < 1) {
-//			return false;
-//		}
-//		IWizardPage lastPage = pages[pages.length - 1];
-//		if (lastPage instanceof SaveMappingLoadDataPage) {
-//			return true;
-//		}
-//		return false;
-		
-		if (getContainer().getCurrentPage().equals(saveMappingLoadDataPage)) {
-			return true;
-		} else {
+		IWizardPage[] pages = getPages();
+		if (pages.length < 1) {
 			return false;
 		}
+		IWizardPage lastPage = pages[pages.length - 1];
+		if (lastPage instanceof SaveMappingLoadDataPage) {
+//			return ((SaveMappingLoadDataPage)lastPage).isComplete();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -251,58 +248,66 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		}
 	}
 
-//	public AddSubjectOrFinishPage getLastAddSubjectOrFinishPage() {
-//		//loop back thru the wizard, and get the first instance of AddSubjectPage which is not the very first
-//		IWizardPage[] wizardPages = getPages();
-//		for (int i=wizardPages.length; i>0; i--) {
-//			IWizardPage page = wizardPages[i];
-//			if (page instanceof AddSubjectOrFinishPage) {
-//				return (AddSubjectOrFinishPage)page;
-//			}
+	public AddSubjectOrFinishPage getLastAddSubjectOrFinishPage() {
+		//loop back thru the wizard, and get the first instance of AddSubjectPage which is not the very first
+		IWizardPage[] wizardPages = getPages();
+		for (int i=wizardPages.length; i>0; i--) {
+			IWizardPage page = wizardPages[i];
+			if (page instanceof AddSubjectOrFinishPage) {
+				return (AddSubjectOrFinishPage)page;
+			}
+		}
+		return null;
+	}
+	
+//	public void disableLastAddSubjectPage() {
+//		AddSubjectPage lastAddSubjectPage = getLastAddSubjectPage();
+//		if (lastAddSubjectPage != null) {
+//			lastAddSubjectPage.disableForm();
 //		}
-//		return null;
 //	}
 	
-//	public void addTableSubjectPages() {
-//		TableSubjectClassPage subjectClassPage = new TableSubjectClassPage();
-//		addPage(subjectClassPage);
-//		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
-//		addPage(subjectUriPage);
-//		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
-//		addPage(propertyValuesPage);
-//		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
-//		addPage(propertyMappingsPage);
-//		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
-//		addPage(addSubjectOrFinishPage);
-//		getContainer().updateButtons();
-//	}
+	public void addTableSubjectPages() {
+		TableSubjectClassPage subjectClassPage = new TableSubjectClassPage();
+		addPage(subjectClassPage);
+		TableSubjectUriPage subjectUriPage = new TableSubjectUriPage();
+		addPage(subjectUriPage);
+		TableSubjectPropertyValuesPage propertyValuesPage = new TableSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
+		TableSubjectPropertyMappingsPage propertyMappingsPage = new TableSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
+		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
+		addPage(addSubjectOrFinishPage);
+		getContainer().updateButtons();
+	}
 
-//	public void addRowSubjectPages() {
-//		RowSubjectClassPage subjectClassPage = new RowSubjectClassPage();
-//		addPage(subjectClassPage);
-//		RowSubjectUriPage subjectUriPage = new RowSubjectUriPage();
-//		addPage(subjectUriPage);
-//		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
-//		addPage(propertyMappingsPage);
-//		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
-//		addPage(propertyValuesPage);
-//		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
-//		addPage(addSubjectOrFinishPage);
-//		getContainer().updateButtons();
-//	}
+	public void addRowSubjectPages() {
+		RowSubjectClassPage subjectClassPage = new RowSubjectClassPage();
+		addPage(subjectClassPage);
+		RowSubjectUriPage subjectUriPage = new RowSubjectUriPage();
+		addPage(subjectUriPage);
+		RowSubjectPropertyMappingsPage propertyMappingsPage = new RowSubjectPropertyMappingsPage();
+		addPage(propertyMappingsPage);
+		RowSubjectPropertyValuesPage propertyValuesPage = new RowSubjectPropertyValuesPage();
+		addPage(propertyValuesPage);
+		AddSubjectOrFinishPage addSubjectOrFinishPage = new AddSubjectOrFinishPage();
+		addPage(addSubjectOrFinishPage);
+		getContainer().updateButtons();
+		
+	}
 
-//	public void addSaveMappingLoadDataPage() {
-//		log.info("Adding saveMappingLoadDataPage...");
-//		saveMappingLoadDataPage = new SaveMappingLoadDataPage();
-//		addPage(saveMappingLoadDataPage);
-//		log.info("Added saveMappingLoadDataPage.  Refreshing buttons...");
-//		try {
-//			getContainer().updateButtons();
-//		} catch (RuntimeException e) {
-//			log.error("error calling getContainer().updateButtons()", e);
-//		}
-//		log.info("Finished addSaveMappingLoadDataPage()");
-//	}
+	public void addSaveMappingLoadDataPage() {
+		log.info("Adding saveMappingLoadDataPage...");
+		saveMappingLoadDataPage = new SaveMappingLoadDataPage();
+		addPage(saveMappingLoadDataPage);
+		log.info("Added saveMappingLoadDataPage.  Refreshing buttons...");
+		try {
+			getContainer().updateButtons();
+		} catch (RuntimeException e) {
+			log.error("error calling getContainer().updateButtons()", e);
+		}
+		log.info("Finished addSaveMappingLoadDataPage()");
+	}
 
 	/**
 	 * Get the subject class URI of the most recent SubjectClassPage, preceding the one passed 
@@ -311,16 +316,15 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	 * @return
 	 */
 	public String getSubjectClassUri(IWizardPage pageAfterSubjectClassPage) {
-		return subjectClassPage.getSubjectUri();
-//		IWizardPage thePage = pageAfterSubjectClassPage;
-//		while (thePage.getPreviousPage() != null) {
-//			thePage = thePage.getPreviousPage();
-//			if (thePage instanceof SubjectClassPage) {
-//				SubjectClassPage subjectClassPage = (SubjectClassPage)thePage;
-//				return subjectClassPage.getSubjectUri();
-//			}
-//		}
-//		return null;
+		IWizardPage thePage = pageAfterSubjectClassPage;
+		while (thePage.getPreviousPage() != null) {
+			thePage = thePage.getPreviousPage();
+			if (thePage instanceof SubjectClassPage) {
+				SubjectClassPage subjectClassPage = (SubjectClassPage)thePage;
+				return subjectClassPage.getSubjectUri();
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -352,9 +356,6 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	 * This is invoked upon submit.  It creates the TableMapping object
 	 * (which is a Jenabean and can be persisted and reused).  This TableMapping
 	 * will be used by the FileDataimporter to import the data as RDF.
-	 * 
-	 * Loops thru pages in the wizard.  This method supports a wizard with variable number of pages,
-	 * though current implementation does not require this.
 	 * @return
 	 */
 	public TableMapping getTableMapping() {
@@ -379,11 +380,9 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		for (int i=0; i<getPages().length; ) {
 			IWizardPage page = getPages()[i];
 			
-			//IMPORT CAPTION (DEPRECATED)
 			if (page instanceof TableSubjectClassPage) {
 				SubjectMapping subjectMapping = new SubjectMapping();
 				subjectMapping.setInstanceMapping(true);
-				subjectMapping.addDataMapping(dateTimeDataMapping);
 				
 				TableSubjectClassPage subjectClassPage = (TableSubjectClassPage)page;
 				i++;
@@ -440,11 +439,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				tableMapping.addSubjectMapping(subjectMapping);
 			}
 
-			//IMPORT SUBJECT
 			if (page instanceof RowSubjectClassPage) {
 				SubjectMapping subjectMapping = new SubjectMapping();
-				subjectMapping.addDataMapping(dateTimeDataMapping);
-				
 				subjectMapping.setInstanceMapping(false);
 				
 				RowSubjectClassPage subjectClassPage = (RowSubjectClassPage)page;
