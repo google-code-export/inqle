@@ -70,7 +70,7 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		uriCreationArea.setLayout(gl);
 		
 		instanceUriPrefixField = new TextField(uriCreationArea, "URI prefix", "Enter the first part of a URI, which will be appended with a value.");
-		instanceUriPrefixField.setVisible(false);
+//		instanceUriPrefixField.setVisible(false);
 		if (getUriPrefix() != null) {
 			instanceUriPrefixField.setTextValue(getUriPrefix());
 		}

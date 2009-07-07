@@ -42,7 +42,7 @@ public class FileDataImporter {
 	 */
 	public void doImport() {
 //		ontModel.begin();
-		tableDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
+		tableDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.TABLE_DATA));
 		tableDataClass.setSuperClass(dataSuperClass);
 		
 		//import the static mappings at the table level (especially the date, if has a single date)
@@ -66,19 +66,18 @@ public class FileDataImporter {
 
 	/**
 	 * do all data import for a single subject instance
-	 * This method is used for importing table Captions, which are being removed from the 
-	 * importer.
 	 * 
 	 * TODO add date info to each tableClass or rowInstance
 	 */
-	@Deprecated
 	private void importInstanceSubjectMapping(SubjectMapping subjectMapping) {
 		String dataTableClassPrefix = subjectMapping.getSubjectClass().toString();
 		dataTableClassPrefix += "/DataTable";
 		//create a data (class) representing the subject's data at the table level
+//		OntClass subjectDataClass = ontModel.createClass(RDF.randomInstanceUri(RDF.DATA));
 		OntClass subjectDataClass = ontModel.createClass(RDF.randomInstanceUri(dataTableClassPrefix));
 		subjectDataClass.setSuperClass(tableDataClass);
 		
+//		Individual dataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 		Individual subjectInstance;
 		if (subjectMapping.getSubjectInstance()!=null) {
 			String subjectInstanceUri = subjectMapping.getSubjectInstance().toString();
@@ -95,6 +94,7 @@ public class FileDataImporter {
 		importStaticValues(subjectMapping, subjectInstance, subjectDataClass);
 		
 		String[][] rows = csvReader.getRawData();
+//		OntClass subjectClass = ontModel.createClass(subjectMapping.getSubjectClass().toString());
 		String rowDataBaseUri = subjectDataClass.toString() + "/Row";
 		for (int i = csvReader.getHeaderIndex()+1; i<rows.length; i++) {
 			//for each row, create a inqle:Data, an inqle:Subject, and add mapped values to each
@@ -106,8 +106,7 @@ public class FileDataImporter {
 	}
 	
 	/**
-	 * import a SubjectMapping which specifies creating new instance of inqle:Data and inqle:Subject 
-	 * for each row
+	 * import a SubjectMapping which specifyies creating new instance of inqle:Data and inqle:Subject for each row
 	 * @param subjectMapping
 	 * @param ontModel
 	 * @param dataSuperClass
@@ -126,7 +125,9 @@ public class FileDataImporter {
 				rowSubjectInstance = ontModel.createIndividual(rowSubjectInstanceUri, subjectClass);
 			}
 			
+			//wrong? Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), dataSuperClass);
 			String rowDataBaseUri = subjectClass.toString() + "/Row";
+//			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(RDF.DATA), tableDataClass);
 			Individual rowDataInstance = ontModel.createIndividual(RDF.randomInstanceUri(rowDataBaseUri), tableDataClass);
 			rowDataInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_SUBJECT), rowSubjectInstance);
 			rowSubjectInstance.addProperty(ResourceFactory.createProperty(RDF.HAS_DATA), rowDataInstance);
