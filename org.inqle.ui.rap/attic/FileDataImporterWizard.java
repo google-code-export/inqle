@@ -380,9 +380,11 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		for (int i=0; i<getPages().length; ) {
 			IWizardPage page = getPages()[i];
 			
+			//IMPORT CAPTION (DEPRECATED)
 			if (page instanceof TableSubjectClassPage) {
 				SubjectMapping subjectMapping = new SubjectMapping();
 				subjectMapping.setInstanceMapping(true);
+				subjectMapping.addDataMapping(dateTimeDataMapping);
 				
 				TableSubjectClassPage subjectClassPage = (TableSubjectClassPage)page;
 				i++;
@@ -439,8 +441,11 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				tableMapping.addSubjectMapping(subjectMapping);
 			}
 
+			//IMPORT SUBJECT
 			if (page instanceof RowSubjectClassPage) {
 				SubjectMapping subjectMapping = new SubjectMapping();
+				subjectMapping.addDataMapping(dateTimeDataMapping);
+				
 				subjectMapping.setInstanceMapping(false);
 				
 				RowSubjectClassPage subjectClassPage = (RowSubjectClassPage)page;

@@ -31,11 +31,7 @@ import org.inqle.ui.rap.pages.RowSubjectPropertyValuesPage;
 import org.inqle.ui.rap.pages.RowSubjectUriPage;
 import org.inqle.ui.rap.pages.SaveMappingLoadDataPage;
 import org.inqle.ui.rap.pages.SubjectClassPage;
-import org.inqle.ui.rap.pages.TableSubjectPropertyMappingsPage;
-import org.inqle.ui.rap.pages.TableSubjectPropertyValuesPage;
-import org.inqle.ui.rap.pages.TableSubjectUriPage;
 import org.inqle.ui.rap.table.RowSubjectClassPage;
-import org.inqle.ui.rap.table.TableSubjectClassPage;
 import org.inqle.ui.rap.widgets.IDataFieldShower;
 
 import com.hp.hpl.jena.ontology.OntModel;
@@ -352,10 +348,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	 * This is invoked upon submit.  It creates the TableMapping object
 	 * (which is a Jenabean and can be persisted and reused).  This TableMapping
 	 * will be used by the FileDataimporter to import the data as RDF.
-	 * 
-	 * Loops thru pages in the wizard.  This method supports a wizard with variable number of pages,
-	 * though current implementation does not require this.
-	 * @return
+	 * @return a TableMapping object, containing all info to import a single subject
+	 * and its data
 	 */
 	public TableMapping getTableMapping() {
 		TableMapping tableMapping = new TableMapping();
@@ -376,120 +370,47 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		tableMapping.setMappedText(headerString);
 		tableMapping.setName(saveMappingLoadDataPage.getTableMappingName());
 		tableMapping.setDescription(saveMappingLoadDataPage.getTableMappingDescription());
-		for (int i=0; i<getPages().length; ) {
-			IWizardPage page = getPages()[i];
-			
-			//IMPORT CAPTION (DEPRECATED)
-			if (page instanceof TableSubjectClassPage) {
-				SubjectMapping subjectMapping = new SubjectMapping();
-				subjectMapping.setInstanceMapping(true);
-				subjectMapping.addDataMapping(dateTimeDataMapping);
-				
-				TableSubjectClassPage subjectClassPage = (TableSubjectClassPage)page;
-				i++;
-				TableSubjectUriPage subjectUriPage = (TableSubjectUriPage)getPages()[i];
-				i++;
-				TableSubjectPropertyValuesPage propertyValuesPage = (TableSubjectPropertyValuesPage)getPages()[i];
-				i++;
-				TableSubjectPropertyMappingsPage propertyMappingsPage = (TableSubjectPropertyMappingsPage)getPages()[i];
-				String subjectClass = subjectClassPage.getSubjectUri();
-				String subjectUri = subjectUriPage.getInstanceUri();
-				
-				if (subjectUri != null) {
-					subjectMapping.setSubjectInstance(URI.create(subjectUri));
-				}
-				
-				if (dateTimeDataMapping.getMapsHeader() != null) {
-					subjectMapping.addDataMapping(dateTimeDataMapping);
-				}
-				
-				subjectMapping.setSubjectClass(URI.create(subjectClass));
-				
-				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
-					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
-					//Create a DataMapping for each property
-					DataMapping dataMapping = new DataMapping();
-					try {
-						log.info("Value shower.getFieldUri()=" + shower.getFieldUri());
-						log.info("Value shower.getValue()=" + shower.getValue());
-						dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
-						dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
-					} catch (RuntimeException e) {
-						log.error("Error adding property values to DataMapping", e);
-					}
-					dataMapping.setMapsValue(shower.getValue());
-					subjectMapping.addDataMapping(dataMapping);
-				}
-				
-				for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
-					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
-					//Create a DataMapping for each property
-					DataMapping dataMapping = new DataMapping();
-					try {
-						log.info("Mapping shower.getFieldUri()=" + shower.getFieldUri());
-						log.info("Mapping shower.getValue()=" + shower.getValue());
-						dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
-						dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
-					} catch (RuntimeException e) {
-						log.error("Error adding property mappings to DataMapping", e);
-					}
-					dataMapping.setMapsHeader(shower.getValue());
-					subjectMapping.addDataMapping(dataMapping);
-				}
-				
-				tableMapping.addSubjectMapping(subjectMapping);
-			}
-
-			//IMPORT SUBJECT
-			if (page instanceof RowSubjectClassPage) {
-				SubjectMapping subjectMapping = new SubjectMapping();
-				subjectMapping.addDataMapping(dateTimeDataMapping);
-				
-				subjectMapping.setInstanceMapping(false);
-				
-				RowSubjectClassPage subjectClassPage = (RowSubjectClassPage)page;
-				i++;
-				RowSubjectUriPage subjectUriPage = (RowSubjectUriPage)getPages()[i];
-				i++;
-				RowSubjectPropertyMappingsPage propertyMappingsPage = (RowSubjectPropertyMappingsPage)getPages()[i];
-				i++;
-				RowSubjectPropertyValuesPage propertyValuesPage = (RowSubjectPropertyValuesPage)getPages()[i];
-				
-				String subjectClass = subjectClassPage.getSubjectUri();
-				String subjectUriPrefix = subjectUriPage.getInstancePrefixUri();
-				int subjectUriType = subjectUriPage.getSubjectCreationMethodIndex();
-				String subjectHeader = subjectUriPage.getUriSuffixColumnHeader();
-				
-				subjectMapping.setSubjectClass(URI.create(subjectClass));
-				subjectMapping.setSubjectUriPrefix(URI.create(subjectUriPrefix));
-				subjectMapping.setSubjectUriType(subjectUriType);
-				subjectMapping.setSubjectHeader(subjectHeader);
-				
-				for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
-					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
-					//Create a DataMapping for each property
-					DataMapping dataMapping = new DataMapping();
-					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
-					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
-					dataMapping.setMapsValue(shower.getValue());
-					subjectMapping.addDataMapping(dataMapping);
-				}
-				
-				for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
-					if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
-					//Create a DataMapping for each property
-					DataMapping dataMapping = new DataMapping();
-					dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
-					dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
-					dataMapping.setMapsHeader(shower.getValue());
-					subjectMapping.addDataMapping(dataMapping);
-				}
-				
-				tableMapping.addSubjectMapping(subjectMapping);
-			}
-
-			i++;
+	
+		//IMPORT SUBJECT
+	
+		SubjectMapping subjectMapping = new SubjectMapping();
+		subjectMapping.addDataMapping(dateTimeDataMapping);
+		
+		subjectMapping.setInstanceMapping(false);
+		
+		String subjectClass = subjectClassPage.getSubjectUri();
+		String subjectUriPrefix = subjectUriPage.getInstancePrefixUri();
+		int subjectUriType = subjectUriPage.getSubjectCreationMethodIndex();
+		String subjectHeader = subjectUriPage.getUriSuffixColumnHeader();
+		
+		subjectMapping.setSubjectClass(URI.create(subjectClass));
+		subjectMapping.setSubjectUriPrefix(URI.create(subjectUriPrefix));
+		subjectMapping.setSubjectUriType(subjectUriType);
+		subjectMapping.setSubjectHeader(subjectHeader);
+		
+		for (IDataFieldShower shower: propertyValuesPage.getDataFields()) {
+			if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
+			//Create a DataMapping for each property
+			DataMapping dataMapping = new DataMapping();
+			dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+			dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
+			dataMapping.setMapsValue(shower.getValue());
+			subjectMapping.addDataMapping(dataMapping);
 		}
+		
+		for (IDataFieldShower shower: propertyMappingsPage.getDataFields()) {
+			if (shower.getValue()==null || shower.getValue().trim().length()==0) continue;
+			//Create a DataMapping for each property
+			DataMapping dataMapping = new DataMapping();
+			log.info("FFFFFFFFFFFFFFFFFF Field: " + shower.getFieldUri() + "\nProperty Type=" + shower.getFieldPropertyType());
+			dataMapping.setMapsPredicate(URI.create(shower.getFieldUri()));
+			dataMapping.setMapsPropertyType(URI.create(shower.getFieldPropertyType()));
+			dataMapping.setMapsHeader(shower.getValue());
+			subjectMapping.addDataMapping(dataMapping);
+		}
+		
+		tableMapping.addSubjectMapping(subjectMapping);
+	
 		return tableMapping;
 	}
 
