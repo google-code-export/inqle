@@ -44,13 +44,12 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 			
 	public RowSubjectUriPage(String title, ImageDescriptor titleImage, String description) {
 		super(title, titleImage);
-		// TODO Auto-generated constructor stub
 		setDescription(description);
 	}
 
 	@Override
 	public void addElements() {
-		log.info("RowSubjectUriPage.addElements()...");
+		log.info("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR RowSubjectUriPage.addElements()...");
 		GridLayout gl = new GridLayout(1, true);
 		selfComposite.setLayout(gl);
 		GridData gridData;
@@ -70,10 +69,8 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		uriCreationArea.setLayout(gl);
 		
 		instanceUriPrefixField = new TextField(uriCreationArea, "URI prefix", "Enter the first part of a URI, which will be appended with a value.");
-//		instanceUriPrefixField.setVisible(false);
-		if (getUriPrefix() != null) {
-			instanceUriPrefixField.setTextValue(getUriPrefix());
-		}
+		instanceUriPrefixField.setVisible(false);
+		refreshUriPrefixField();
 		
 		gl = new GridLayout(1, true);
 		Composite columnSelectionArea = new Composite(uriCreationArea, SWT.NONE);
@@ -93,9 +90,16 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		refreshTableData();
 	}
 
+	private void refreshUriPrefixField() {
+		if (getUriPrefix() != null) {
+			instanceUriPrefixField.setTextValue(getUriPrefix());
+		}
+	}
+
 	@Override
 	public void onEnterPageFromPrevious() {
-//		log.info("Entering RowSubjectUriPage...");
+		log.info("Entering RowSubjectUriPage.  getUriPrefix()=" + getUriPrefix());
+		refreshUriPrefixField();
 		refreshTableData();
 	}
 	
@@ -197,9 +201,9 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		} else {
 			FileDataImporterWizard wizard = (FileDataImporterWizard)getWizard();
 			String subjectClassUri = wizard.getSubjectClassUri(this);
-//			Persister persister = Persister.getInstance();
+			Persister persister = Persister.getInstance();
 //			return persister.getAppInfo().getSite().getUriPrefix().getNamespaceUri();
-			return subjectClassUri + "/";
+			return subjectClassUri + "/inqle_" + persister.getAppInfo().getSite().getId() + "/";
 		}
 	}
 
