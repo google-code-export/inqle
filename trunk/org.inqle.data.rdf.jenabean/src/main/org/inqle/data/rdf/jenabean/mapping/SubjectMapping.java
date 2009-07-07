@@ -47,7 +47,7 @@ public class SubjectMapping extends UniqueJenabean {
 	public static final String URI_TYPE_COLUMN_VALUE = "URI prefix + value from specified column";
 	
 	public static final String[] SUBJECT_URI_CREATION_METHODS = {
-		URI_TYPE_UNKNOWN,
+//		URI_TYPE_UNKNOWN,
 		URI_TYPE_INQLE_GENERATED,
 		URI_TYPE_RANDOM_UUID,
 		URI_TYPE_COLUMN_VALUE

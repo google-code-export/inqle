@@ -48,6 +48,7 @@ public class RDF {
 	public static final String DATE_PROPERTY = INQLE + "date";
 	public static final String IDENTIFIER_PROPERTY = INQLE + "identifier";
 	public static final String IS_DATA_PROPERTY_OF = INQLE + "isDataPropertyOf";
+	public static final String TABLE_DATA = INQLE + "TableData";
 	
 	
 	/**
