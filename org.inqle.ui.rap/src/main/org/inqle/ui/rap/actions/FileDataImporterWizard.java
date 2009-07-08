@@ -84,12 +84,6 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				"Before using this wizard, you should acquire your data into a delimited text \n" +
 				"format, such as CSV.  You can generate such a file from your spreadsheet program.\n\n" +
 				
-				"This wizard captures 2 types of information about your data file:\n" +
-				"  * information about the data file as a whole\n" +
-				"    e.g. 'All rows of data in this file concern this city.'\n " +
-				"  * information about each of row of data within the file.\n" +
-				"    e.g. 'Each row of data contains a distinct Weather data measurement.'\n\n" +
-				
 				"The data is imported into your database in a format called semantic or \n" +
 				"Resource Description Framework (RDF) data.  This means that data is imported as \n" +
 				"objects.  \n" +
