@@ -5,13 +5,22 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 
 public class DateUtil {
 
+	private static Logger log = Logger.getLogger(DateUtil.class);
+	
 	private static final String[] DATE_FORMATS_TO_TRY = {
-		"yyyy/MM/dd HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "yyyy.MM.dd HH:mm:ss",
-		"yyyy/MM/dd", "yyyy-MM-dd", "yyyy.MM.dd"
+		"M/d/y",
+		"yyyy/MM/dd HH:mm:ss", 
+		"yyyy-MM-dd HH:mm:ss", 
+		"yyyy.MM.dd HH:mm:ss",
+		"yyyy/MM/dd", 
+		"yyyy-MM-dd", 
+		"yyyy.MM.dd"
 	};
 	
 	public static XSDDateTime tryToParseDate(String putativeDateString) {
@@ -24,7 +33,7 @@ public class DateUtil {
 				parsedDate = dateFormat.parse(putativeDateString);
 			} catch (ParseException e) {}
 			if (parsedDate==null) continue;
-			
+			log.info("Parsed date: " + putativeDateString + " using mask: " + dateMask);
 			Calendar calendarVal = Calendar.getInstance();
 			calendarVal.setTime(parsedDate);
 			xsdDate = new XSDDateTime(calendarVal);
