@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
+import org.inqle.data.rdf.RDF;
 
 public class DropdownFieldShower implements IDataFieldShower {
 
@@ -21,7 +22,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 	private Combo list;
 	private Text descriptionText;
 	private String fieldUri;
-	private String fieldPropertyType;
+	private String fieldPropertyType = RDF.DATA_PROPERTY;
 	private static final Logger log = Logger.getLogger(DropdownFieldShower.class);
 	
 	public DropdownFieldShower (
@@ -69,8 +70,6 @@ public class DropdownFieldShower implements IDataFieldShower {
 		
 		
 		GridData gridData;
-//		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		//GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		
 		//create the controls
 		Label label = new Label(composite, SWT.NONE);
@@ -78,9 +77,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 			label.setText(labelString);
 		}
 
-//		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-//		list = new List(composite, listStyle);
 		list = new Combo(composite, listStyle | SWT.READ_ONLY);
 		list.setLayoutData(gridData);
 		if (toolTipString != null) {
@@ -93,7 +90,6 @@ public class DropdownFieldShower implements IDataFieldShower {
 		try {
 			String matchLabel = labelString.toLowerCase().trim();
 			if (lcOptions.indexOf(matchLabel) >= 0) {
-//				list.setSelection(lcOptions.indexOf(matchLabel) + 1);
 				list.select(lcOptions.indexOf(matchLabel) + 1);
 			}
 		} catch (RuntimeException e) {
@@ -161,8 +157,6 @@ public class DropdownFieldShower implements IDataFieldShower {
 	public void setFieldUri(String fieldUri) {
 		if (fieldUri != null) {
 			this.fieldUri = fieldUri.trim();
-		} else {
-			this.fieldUri = fieldUri;
 		}
 	}
 	
@@ -182,6 +176,5 @@ public class DropdownFieldShower implements IDataFieldShower {
 		} else {
 			this.fieldPropertyType = fieldPropertyType;
 		}
-		this.fieldPropertyType = fieldPropertyType;
 	}
 }
