@@ -165,23 +165,20 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		removePropertyFormElements();
 		
 		subjectClassUri = currentSubjectClassUri;
-//		enterNewDataPropertyButtonExplanation.setText(getEnterNewDataPropertyButtonLabel());
-//		enterNewSubjectPropertyButtonExplanation.setText(getEnterNewSubjectPropertyButtonLabel());
 		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
-//		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
 		
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				100, 
 				0);
 		Document dataAndSubjectPropertiesDocument = XmlDocumentUtil.getDocument(dataAndSubjectPropertiesXml);
-		log.trace("dataAndSubjectPropertiesXml=" + dataAndSubjectPropertiesXml);
+		log.info("dataAndSubjectPropertiesXml=" + dataAndSubjectPropertiesXml);
 		String otherSubjectPropertiesXml = PropertyLookup.lookupPropertiesInSchemaDatamodels(
 				subjectClassUri, 
 				100, 
 				0);
 		Document otherSubjectPropertiesDocument = XmlDocumentUtil.getDocument(otherSubjectPropertiesXml);
-		log.trace("otherSubjectPropertiesDocument=" + otherSubjectPropertiesDocument);
+		log.info("otherSubjectPropertiesDocument=" + otherSubjectPropertiesDocument);
 		Document allLocalPropertiesDocument = SparqlXmlUtil.merge(dataAndSubjectPropertiesDocument, otherSubjectPropertiesDocument);
 		
 		log.trace("Looking up remote Data & Subject & preferred ontology properties for class <" + subjectClassUri + "> from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
@@ -201,13 +198,13 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		
 //		Document allRemotePropertiesDocument = SparqlXmlUtil.merge(remoteDataAndSubjectPropertiesDocument, remotePropertiesFromSchemaFilesDocument);
 				
-//		log.info("Merging all LOCAL results:\n" + XmlDocumentUtil.xmlToString(allLocalPropertiesDocument));
+		log.info("Merging all LOCAL results:\n" + XmlDocumentUtil.xmlToString(allLocalPropertiesDocument));
 		List<SortedMap<String, String>> localRowValues = SparqlXmlUtil.getRowValues(allLocalPropertiesDocument);
 		
-//		log.info("...with all REMOTE results:\n" + XmlDocumentUtil.xmlToString(allRemotePropertiesDocument));
+		log.info("...with all REMOTE results:\n" + XmlDocumentUtil.xmlToString(allRemotePropertiesDocument));
 		List<SortedMap<String, String>> remoteRowValues = SparqlXmlUtil.getRowValues(allRemotePropertiesDocument);
 //		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
-//		log.info("Merged all results into:\n" + XmlDocumentUtil.xmlToString(allPropertiesDocument));
+		log.info("Merged all results into:\n" + remoteRowValues);
 
 		List<SortedMap<String, String>> rowValues = ListMapUtil.merge(localRowValues, remoteRowValues);
 		
