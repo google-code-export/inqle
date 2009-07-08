@@ -106,8 +106,13 @@ Improved usability, without need to enter URIs.
   * Exporting of selected RDF subjects as RDF
   * Publishing of smaller datamodels as RDF files
 
+==Version 0.3.2==
+(7 July, 2009)
+  * Simplified file data importer wizard
+  * Upgraded to Jena TDB version 0.8.1, and Eclipse RAP version 1.2.
+
 ==Version 0.4==
-(expected end of June, 2009)
+(expected end of October, 2009)
 
 Enhanced connectivity to data.
   * Use of SPARQL endpoints as INQLE datasets
