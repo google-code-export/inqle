@@ -33,7 +33,7 @@ public class InqleInfo {
 	public static final String ID_ATTRIBUTE = "id";
 	public static final String DESCRIPTION_ATTRIBUTE = "description";
 	
-	public static final String INQLE_VERSION = "0.3.2";
+	public static final String INQLE_VERSION = "0.3.3";
 
 	public static final String PROJECT_WEBSITE = "http://code.google.com/p/inqle/";
 
