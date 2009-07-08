@@ -215,9 +215,10 @@ public class PropertyLookup {
 			"SELECT DISTINCT ?Property_URI ?Property_Type ?Label ?Comment \n" +
 			"{ GRAPH ?g {\n" +
 					"{ ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
+					". LET(?Property_Type := inqle:DataProperty) \n" +
 					"} UNION { \n" +
 					"?Property_URI rdfs:domain <" + RDF.SUBJECT + "> } \n" +
-					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
+					". LET(?Property_Type := inqle:SubjectProperty) \n" +
 					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
 					". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 			"} } ORDER BY ASC(?Label) \n" +
@@ -252,7 +253,7 @@ public class PropertyLookup {
 //					". { { ?externalClass owl:equivalentClass <" + preferredSubjectClassUri + "> } \n" +
 //							"UNION \n" +
 //							"{ ?externalClass rdfs:subClassOf <" + preferredSubjectClassUri + "> } } \n" +
-					". LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
+					". LET(?Property_Type := inqle:SubjectProperty) \n" +
 					". OPTIONAL { ?Property_URI rdfs:label ?Label }\n" +
 					". OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
 			"} } ORDER BY ASC(?Label) \n" +
@@ -282,7 +283,7 @@ public class PropertyLookup {
 				"{ GRAPH ?g {\n" +
 						"{ ?Property_URI rdfs:subPropertyOf inqle:DataProperty \n" +
 //						". ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
-						"  . LET(?Property_Type := str(inqle:DataProperty)) \n" +
+						"  . LET(?Property_Type := inqle:DataProperty) \n" +
 //						"  . ?Property_URI rdfs:domain ?DataSubjectAnonClass \n" +
 //						"  . ?DataSubjectAnonClass inqle:subject <" + subjectClassUri + "> \n" +
 						"  . ?Property_URI inqle:isDataPropertyOf <" + subjectClassUri + "> \n" +
@@ -291,7 +292,7 @@ public class PropertyLookup {
 					"} UNION {\n" +
 						"  ?Property_URI rdfs:subPropertyOf inqle:SubjectProperty \n" +
 //						"  . ?Property_URI rdfs:subPropertyOf ?Property_Type \n" +
-						"  . LET(?Property_Type := str(inqle:SubjectProperty)) \n" +
+						"  . LET(?Property_Type := inqle:SubjectProperty) \n" +
 						"  . ?Property_URI rdfs:domain <" + subjectClassUri + "> \n" +
 						"  . OPTIONAL { ?Property_URI rdfs:label ?Label } \n" +
 						"  . OPTIONAL { ?Property_URI rdfs:comment ?Comment } \n" +
