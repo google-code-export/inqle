@@ -43,15 +43,11 @@ Alternatively, if each row of data pertains to a different date, then specify be
 
 Click *Next*.  The remaining steps of the wizard will specify the _things_ that your data is about, plus the _attributes_ of those things.  
 
-[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/07_FDIW_p5.png]
+*_Subjects_* are things that describe a single row in the table.  When importing subjects, you must specify what type of thing each subject is a member of.  Example: we are importing a spreadsheet of companies.  The subject type is "company", and each row represents a different instance of that type (i.e., each row is a different company).
 
-For the purposes of this wizard, there are 2 types of _things_.
-  # *_Subjects_* are things that describe a single row in the table.  When importing subjects, you must specify what type of thing each subject is a member of.  Example: we are importing a spreadsheet of companies.  The subject type is "company", and each row represents a different instance of that type (i.e., each row is a different company).
-  # *_Captions_* are things that describe the entire table.  Each row does not represent a new thing of some common type.  Rather, the caption represents a single thing.  Example: the above table of companies is our company's list of suppliers.  So we might add a caption of the type "company", with an identifier of "Our Company".  This says that the entire table is about "Our Company".  Another example: we are importing prices of the S&P 500 Index.  We define a single caption, of type "stock index", and identify it as "the S&P 500 Index".
+OK, so how do we import these things and their attributes?  First, decide which _subject_ your data is about.  In general, start with your table.  What does each row represent?  You need to add a subject of each thing's type.
 
-OK, so how do we import these things and their attributes?  First, decide which _subject(s)_ and _caption(s)_ your data is about.  In general, start with your table.  What does each row represent?  If it represents a thing, then chances you need to add a subject of each thing's type.  If each row represents a collection of measurements about the same thing, then you need to add a _caption_ of that type.  Regardless of what each row is about, you may need to add additional captions, describing things about the table.  For example, if you are importing a table of laboratory data from your lab, you might add a caption of type "Laboratory", identified as your own laboratory.
-
-Clicking "Add a Subject" or "Add a Caption" will add 4 pages to the wizard, for capturing information about the subject or caption respectively.  For this tutorial, we are importing a table of data about breast tumors biopsy specimens.  So we will add a subject of type "Breast Tumor".  
+For this tutorial, we will add a subject of type "Breast Tumor".  
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/08_FDIW_p6.png]
 
@@ -59,7 +55,7 @@ First we can search to see if others have defined the type "Breast Tumor".  We t
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/09_FDIW_p7.png]
 
-In this page, we seek to identify the subject (thing) of each row.  Specifcally, we need to understand how to create the unique identifier (URI) for each subject.  You can select that the URI is "unknown".  However, if you do this, you will not be able to browse or delete this data, after it has been imported.  It is generally a good idea to select something other than "unknown".
+In this page, we seek to identify the subject (thing) of each row.  Specifcally, we need to understand how to create the unique identifier (URI) for each subject.
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/10_FDIW_p8.png]
 
@@ -73,17 +69,14 @@ In this dialog, we will create new properties for the Breast Tumor type.  We hav
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/12_FDIW_p8withProperties.png]
 
-Now our Breast Tumor properties page has selectors for our nely entered properties.  For each property, select which column (if any) contains the value for that property.  The form automatically assumes that a if a column's header matches the property name, then that column's values should populate the matching property.
+Now our Breast Tumor properties page has selectors for our newly-entered properties.  For each property, select which column (if any) contains the value for that property.  The form automatically assumes that a if a column's header matches the property name, then that column's values should populate the matching property.
 
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/13_FDIW_p9.png]
 In this page, we capture static values, which all subjects (rows in the table) share.  For instance, if this dataset were about breast tumors in women who were positive for the BRCA gene, then we might add a property "BRCA Status", and specify here that the static value (for all rows) is "positive".
 
 In this case, we can skip this page.  Click *Next*.
-----
-[http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/13a_FDIW_p9a.png]
 
-Next, you could add more subjects and/or captions.  For now, we will click *Finished adding subjects*.
 ----
 [http://inqle.googlecode.com/svn/trunk/InqleDocuments/images/FileDataImporterWizard/14_FDIW_p10.png]
 
