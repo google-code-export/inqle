@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.impl.RDFReaderFImpl;
 
 public class Loader {
 
@@ -119,16 +120,21 @@ public class Loader {
 	}
 	
 	public boolean loadStream(InputStream in, String defaultUri, String lang) {
+		RDFReaderFImpl.setBaseReaderClassName
+		("N3",
+		com.hp.hpl.jena.n3.turtle.TurtleReader.class.getName() ) ;
 		boolean success = false;
+		int available = -1;
 		try {
+			available = in.available();
   		log.info("Trying to read input stream using " + lang + " format...");
   		//Read the triples from the input stream into the model
 //  		model = model.read(in, defaultUri, lang);
   		model.read(in, defaultUri, lang);
   		success = true;
   	} catch (Exception e) {
-//  		log.error("Unable to read stream using " + lang + " format.", e);
-  		log.info("Unable to read stream using " + lang + " format.");
+  		log.error("Unable to read stream (w/ in.available()=" + available + ") using " + lang + " format.", e);
+//  		log.info("Unable to read stream using " + lang + " format.");
   	}
   	return success;
 	}
