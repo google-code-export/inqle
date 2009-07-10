@@ -37,7 +37,7 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		selfComposite.setLayout(gl);
 		
 		selectGlobalDateTime = new Button(selfComposite, SWT.RADIO);
-		selectGlobalDateTime.setText("All data being imported has the same date and time.");
+		selectGlobalDateTime.setText("All data being imported has the same primary date and time.");
 		selectGlobalDateTime.addSelectionListener(this);
 
 		globalDateTextShower = new TextFieldShower(
@@ -52,7 +52,7 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		globalDateTextShower.setEnabled(false);
 		
 		selectRowDateTime = new Button(selfComposite, SWT.RADIO);
-		selectRowDateTime.setText("Different rows of data have different dates and/or times.");
+		selectRowDateTime.setText("Different rows of data have different primary dates and/or times.");
 		selectRowDateTime.setSelection(true);
 		selectRowDateTime.addSelectionListener(this);
 		

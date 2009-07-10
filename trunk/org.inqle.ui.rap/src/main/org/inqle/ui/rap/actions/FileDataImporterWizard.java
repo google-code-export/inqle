@@ -118,8 +118,10 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		dateTimeMapperPage = new DateTimeMapperPage(
 				"Specify Date & Time of the Data",
 				null);
-		dateTimeMapperPage.setDescription("All data pertains to a particular date and time.  " +
-				"Specify whether all the rows of data have the same date & time or whether each row has a different date and time.");
+		dateTimeMapperPage.setDescription("All data pertains to a particular date and time.  We call this the PRIMARY date and time.  " +
+				"Specify whether all the rows of data have the same primary date & time or whether each row has a different date and time.  " +
+				"Note that your data may contain more than one date/time fields.  The one specified below will be stored as the PRIMARY " +
+				"date and time of the data, and this will have some implications for how the data is displayed or processed.");
 		addPage(dateTimeMapperPage);
 		
 //		addSubjectPage = new AddSubjectPage();
