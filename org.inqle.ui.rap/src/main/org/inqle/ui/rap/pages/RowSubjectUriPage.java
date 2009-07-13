@@ -114,9 +114,14 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 //			String[][] data = csvImporter.getRawData();
 //			//log.info("data= " + data);
 //			String[] headers = data[csvImporter.getHeaderIndex()];
-			headers = csvImporter.getHeaders();
-			uriSuffixColumnList.removeAll();
-			uriSuffixColumnList.setItems(headers);
+			if (csvImporter != null) {
+				headers = csvImporter.getHeaders();
+				uriSuffixColumnList.removeAll();
+				uriSuffixColumnList.setItems(headers);
+			} else {
+				headers = null;
+			}
+			
 //			log.info("Set headers list to:" + Arrays.asList(headers));
 		} catch (Exception e) {
 			log.error("Error refreshing table data", e);
