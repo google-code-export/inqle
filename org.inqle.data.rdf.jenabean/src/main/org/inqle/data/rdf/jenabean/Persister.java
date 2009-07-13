@@ -614,6 +614,7 @@ public class Persister {
 			Collection<String> functions = userDatamodel.getDatamodelFunctions();
 			if (functions != null) {
 				for (String function: functions) {
+					//TODO make new IndexBuilder subclass which allows indexing of skos:altLabel
 					IndexBuilderModel builder = getIndexBuilder(function);
 					if (builder == null) continue;
 					log.info("Registering index builder: " + builder + " for function:" + function);
