@@ -78,6 +78,8 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 		
+//		log.info("LLLLLLLLLLLLLLLLLLLLLLLLLLL LookupServlet: Received request from site: " + siteId);
+		
 		String startIndexString = HttpParameterParser.getParam(request, PARAM_SEARCH_START_INDEX);
 		int startIndex = 0;
 		try {
@@ -129,8 +131,13 @@ public class LookupServlet extends HttpServlet {
 //			return;
 //		}
 		
-		//lookup Class URI from both subjects which have been used by other INQLE servers (in an system datamodel) and UMBEL schemas (in Schema datamodel)
-		String searchTermDataUmbelClass = HttpParameterParser.getParam(request, PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS);
+		/*
+		 * lookup Class URI from both subjects which have been used by other INQLE servers 
+		 * (in a system datamodel) and UMBEL schemas (in Schema datamodel)
+		 */
+		String searchTermDataUmbelClass = HttpParameterParser.getParam(
+				request, PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS);
+//		log.info("LLLLLLLLLLLLLLLLLLLLLLLLLLLLL LOOKUP searchTermDataUmbelClass=" + searchTermDataUmbelClass);
 		if (searchTermDataUmbelClass != null) {
 			
 			String matchingDataClassesXml = SubjectsSearcher.lookupSubclassesInInternalDatamodel(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
@@ -171,38 +178,42 @@ public class LookupServlet extends HttpServlet {
 //			return;
 //		}
 	
-//lookup Class URI from both subjects which have been used by other INQLE servers (in an system datamodel) and UMBEL schemas (in Schema datamodel)
-	String propertiesForDataAndSubjectAndPreferredOntology = HttpParameterParser.getParam(request, PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY);
-	if (propertiesForDataAndSubjectAndPreferredOntology != null) {
-		
-		String matchingDSPropertiesXml = PropertyLookup.lookupAllDataProperties(
-				propertiesForDataAndSubjectAndPreferredOntology, 
-				countResults, 
-				startIndex);
-		Document matchingDSPropertiesDoc = XmlDocumentUtil.getDocument(matchingDSPropertiesXml);
-
-		String matchingPreferredOntologyPropertiesXml = PropertyLookup.lookupPropertiesInPreferredOntologyDatamodels(
-				propertiesForDataAndSubjectAndPreferredOntology, 
-				countResults, 
-				startIndex);
-		Document matchingPreferredOntologyPropertiesDoc = XmlDocumentUtil.getDocument(matchingPreferredOntologyPropertiesXml);
-		
-		Document mergedDocument = SparqlXmlUtil.merge(matchingDSPropertiesDoc, matchingPreferredOntologyPropertiesDoc);
-		String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
-		respondOK(mergedDocumentXml);
-		return;
-	}
+		/*
+		 * lookup Property URIs from both subjects which have been used by other INQLE servers 
+		 * (in an system datamodel) and UMBEL schemas (in Schema datamodel)
+		 */		
+		String propertiesForDataAndSubjectAndPreferredOntology = HttpParameterParser.getParam(
+				request, PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY);
+//		log.info("LOOKUP propertiesForDataAndSubjectAndPreferredOntology=" + propertiesForDataAndSubjectAndPreferredOntology);
+		if (propertiesForDataAndSubjectAndPreferredOntology != null) {
+			String matchingDSPropertiesXml = PropertyLookup.lookupAllDataProperties(
+					propertiesForDataAndSubjectAndPreferredOntology, 
+					countResults, 
+					startIndex);
+			Document matchingDSPropertiesDoc = XmlDocumentUtil.getDocument(matchingDSPropertiesXml);
+	
+			String matchingPreferredOntologyPropertiesXml = PropertyLookup.lookupPropertiesInPreferredOntologyDatamodels(
+					propertiesForDataAndSubjectAndPreferredOntology, 
+					countResults, 
+					startIndex);
+			Document matchingPreferredOntologyPropertiesDoc = XmlDocumentUtil.getDocument(matchingPreferredOntologyPropertiesXml);
+			
+			Document mergedDocument = SparqlXmlUtil.merge(matchingDSPropertiesDoc, matchingPreferredOntologyPropertiesDoc);
+			String mergedDocumentXml = XmlDocumentUtil.xmlToString(mergedDocument);
+			respondOK(mergedDocumentXml);
+			return;
+		}
 	
 	}
 	
 	private void respondOK(String message) {
-//		log.info(message);
+		log.info(message);
 		response.setStatus(HttpURLConnection.HTTP_OK);
 		out.println(message);
 	}
 	
 	private void respondIrregularity(int status, String message) {
-//		log.info(message);
+		log.warn(message);
 		response.setStatus(status);
 		out.println(message);
 	}

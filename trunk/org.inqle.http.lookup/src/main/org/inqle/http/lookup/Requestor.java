@@ -81,6 +81,8 @@ public class Requestor {
 	* @throws Exception
 	*/
 	public static boolean sendData(String urlStr, String method, Map<String, String> params, Writer outWriter) {
+		log.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSSS send data to " + urlStr);
+		
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
 		params.put(InqleInfo.PARAM_SITE_ID, persister.getAppInfo().getSite().getId());
@@ -120,7 +122,7 @@ public class Requestor {
 					requestParams += key + "=" + value;
 				}
 				urlc.setRequestProperty("Content-Length", String.valueOf(requestParams.length()));
-				log.info("Sending request params of length: " + requestParams.length());
+				log.info("Sending request to: " + urlc.toString());
 				OutputStreamWriter outStream = new OutputStreamWriter(new BufferedOutputStream(urlc.getOutputStream()));
 				outStream.write(requestParams);
 				outStream.close();
@@ -166,6 +168,7 @@ public class Requestor {
 	* @throws Exception
 	*/
 	public static Document retrieveXml(String urlStr, Map<String, String> params, String method) {
+		log.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSSS send data to " + urlStr);
 		Document document = null;
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
