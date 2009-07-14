@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.ListMapUtil;
@@ -104,13 +105,23 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		});		
 		
 		enterNewPropertyButton = new Button(formComposite, SWT.PUSH);
-		enterNewPropertyButton.setText("Add new properties for " + getThingClass().toUpperCase());
+//		enterNewPropertyButton.setText("Add new properties for " + getThingClass().toUpperCase());
+		enterNewPropertyButton.setText("Add new properties");
 		enterNewPropertyButton.addSelectionListener(this);
 		enterNewPropertyButtonExplanation = new Text(formComposite, SWT.WRAP | SWT.READ_ONLY | SWT.MULTI);
 		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		enterNewPropertyButtonExplanation.setLayoutData(gridData);
 		
+		Label spacer1 = new Label(formComposite, SWT.NONE);
+		spacer1.setText(" ");
+		Label spacer2 = new Label(formComposite, SWT.NONE);
+		spacer2.setText(" ");
+		
+		Label columnHeader1 = new Label(formComposite, SWT.NONE);
+		columnHeader1.setText("KNOWN PROPERTY");
+		Label columnHeader2 = new Label(formComposite, SWT.NONE);
+		columnHeader2.setText("COLUMN THAT CONTAINS THIS VALUE (IF ANY)");
 		setControl(scrolledComposite);
 		onEnterPageFromPrevious();
 	}
