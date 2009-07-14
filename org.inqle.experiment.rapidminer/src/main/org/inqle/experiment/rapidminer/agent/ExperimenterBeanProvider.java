@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.pages.IRadioBeanProvider;
 
+@Deprecated
 public class ExperimenterBeanProvider implements IRadioBeanProvider {
 
 	private ExperimenterAgent experimenterAgent;
