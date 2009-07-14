@@ -8,7 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +39,7 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 		private String message;
 		private String title;
 		private Composite pageComposite;
+		private Composite container;
 		
 		private static Logger log = Logger.getLogger(AScrolledOntResourceDialog.class);
 		
@@ -49,31 +49,40 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
 		protected AScrolledOntResourceDialog(Shell parentShell, String title, String description) {
 			super(parentShell);
 			setTitle(title);
-			setMessage(description);
+			this.message = description;
 		}
 		
 		
 		@Override
     protected Control createDialogArea(Composite parent) {
-    	Composite container = (Composite) super.createDialogArea(parent);
+    	container = (Composite) super.createDialogArea(parent);
     	container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     	container.setLayout(new GridLayout());
-			
-			Shell shell = parent.getShell();
-			shell.setText(getTitle());
-
-			ScrolledComposite scrolled = new ScrolledComposite(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-			scrolled.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			scrolled.setLayout(new GridLayout());
-			scrolled.setExpandVertical(true);
-			scrolled.setExpandHorizontal(true);
-			
+		
+		Shell shell = parent.getShell();
+		shell.setText(getTitle());
+		
+		messageText = new Text(container, SWT.WRAP | SWT.READ_ONLY | SWT.BORDER);
+		if (message != null) {
+			messageText.setText(getMessage());
+		}
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		messageText.setLayoutData(gridData);
+		
+//		setMessage(message);
+		
+//		ScrolledComposite scrolled = new ScrolledComposite(container, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+//		scrolled.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//		scrolled.setLayout(new GridLayout());
+//		scrolled.setExpandVertical(true);
+//		scrolled.setExpandHorizontal(true);
+		
     	scrolledComposite = new ScrolledComposite(container, SWT.V_SCROLL | SWT.H_SCROLL);
   		GridLayout gl = new GridLayout();
   		scrolledComposite.setLayout(gl);
   		scrolledComposite.setExpandHorizontal(true);
   		scrolledComposite.setExpandVertical(true);
-  		GridData gridData = new GridData(GridData.FILL_BOTH);
+  		gridData = new GridData(GridData.FILL_BOTH);
   		scrolledComposite.setLayoutData(gridData);
   		
   		pageComposite = new Composite(scrolledComposite, SWT.NONE);
@@ -82,12 +91,12 @@ public abstract class AScrolledOntResourceDialog extends Dialog {
   		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
   		pageComposite.setLayoutData(gridData);
   		
-  		messageText = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
-			if (getMessage() != null) {
-				messageText.setText(getMessage());
-			}
-			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-			messageText.setLayoutData(gridData);
+//  		messageText = new Text(pageComposite, SWT.WRAP | SWT.READ_ONLY);
+//			if (getMessage() != null) {
+//				messageText.setText(getMessage());
+//			}
+//			gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//			messageText.setLayoutData(gridData);
   		
   		formComposite = new Composite(pageComposite, SWT.NONE);
   		
