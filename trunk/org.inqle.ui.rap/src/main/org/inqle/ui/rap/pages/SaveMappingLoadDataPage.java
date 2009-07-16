@@ -1,5 +1,6 @@
 package org.inqle.ui.rap.pages;
 
+
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -9,19 +10,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.mapping.TableMapping;
+import org.eclipse.swt.widgets.Label;
 import org.inqle.ui.rap.widgets.TextFieldShower;
 
-public class SaveMappingLoadDataPage extends DynaWizardPage {
+public class SaveMappingLoadDataPage extends DynaWizardPage implements SelectionListener {
 
 	private static final String TITLE = "Save Mapping and Import Data";
 	private static final String DESCRIPTION = "Enter a name and description for your data mapping.  You can reuse this mapping in the future, when you import data files with a similar structure.";
 	private TextFieldShower nameTextField;
 	private TextFieldShower descriptionTextField;
-//	private Button importButton;
-//	private boolean saved = false;
+	private Button dontSaveMappingButton;
+	private Button saveMappingButton;
 
 	private static Logger log = Logger.getLogger(SaveMappingLoadDataPage.class);
 	public SaveMappingLoadDataPage(String title, ImageDescriptor titleImage) {
@@ -52,6 +51,17 @@ public class SaveMappingLoadDataPage extends DynaWizardPage {
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		formComposite.setLayoutData(gridData);
 
+		saveMappingButton = new Button(formComposite, SWT.RADIO);
+		saveMappingButton.setText("Save this import strategy");
+		saveMappingButton.addSelectionListener(this);
+		saveMappingButton.setSelection(true);
+		
+		Label saveMappingDescription = new Label(formComposite, SWT.NONE);
+		saveMappingDescription.setText(
+				"If selected, the strategy for importing data will be saved.  " +
+				"Select this option if you or someone might want to import CSV " +
+				"text files of identical structure.");
+		
 		nameTextField = new TextFieldShower(
 				formComposite,
 				"Name of Table Mapping",
@@ -67,6 +77,11 @@ public class SaveMappingLoadDataPage extends DynaWizardPage {
 				null,
 				SWT.BORDER
 		);
+		
+		dontSaveMappingButton = new Button(formComposite, SWT.RADIO);
+		saveMappingButton.setText("Do not save this import strategy");
+		dontSaveMappingButton.addSelectionListener(this);
+		
 //		importButton = new Button(selfComposite, SWT.PUSH | SWT.BORDER);
 //		importButton.addSelectionListener(this);
 	}
@@ -81,16 +96,61 @@ public class SaveMappingLoadDataPage extends DynaWizardPage {
 		return descriptionTextField.getValue();
 	}
 	
-	@Deprecated
 	public boolean isComplete() {
 		boolean complete = false;
+		if (dontSaveMappingButton.getSelection()) {
+			complete = true;
+		}
 		if (getTableMappingName()!=null && 
 				getTableMappingName().length()>0 &&
 				getTableMappingDescription()!=null && 
 				getTableMappingDescription().length()>0) {
 			complete = true;
 		}
+		
 		return complete;
+	}
+
+	@Override
+	public void widgetDefaultSelected(SelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void widgetSelected(SelectionEvent event) {
+		Object source = event.getSource();
+		if (source.equals(saveMappingButton)) {
+			dontSaveMappingButton.setSelection(false);
+			nameTextField.setEnabled(true);
+			descriptionTextField.setEnabled(true);
+		}
+		if (source.equals(dontSaveMappingButton)) {
+			saveMappingButton.setSelection(false);
+			nameTextField.setEnabled(false);
+			descriptionTextField.setEnabled(false);
+		}
+	}
+
+	public boolean shouldSaveMapping() {
+		if (saveMappingButton.getSelection()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void setShouldSaveMapping(boolean shouldSave) {
+		if (! shouldSave) {
+			dontSaveMappingButton.setSelection(true);
+			saveMappingButton.setSelection(false);
+			nameTextField.setEnabled(false);
+			descriptionTextField.setEnabled(false);
+		} else {
+			dontSaveMappingButton.setSelection(false);
+			saveMappingButton.setSelection(true);
+			nameTextField.setEnabled(true);
+			descriptionTextField.setEnabled(true);
+		}
 	}
 
 //	public void widgetDefaultSelected(SelectionEvent event) {
