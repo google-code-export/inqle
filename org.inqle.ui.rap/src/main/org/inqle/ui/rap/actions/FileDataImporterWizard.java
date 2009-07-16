@@ -112,6 +112,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 				"'Comma-Separated Values (CSV)' and then import the CSV file here.");
 		addPage(loadFilePage);
 		
+		
+		
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
 		addPage(csvDisplayPage);
 		
@@ -150,11 +152,13 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		TableMapping tableMapping = null;
 		try {
 			tableMapping = getTableMapping();
-			log.info("Saving new TableMapping:\n" + JenabeanWriter.toString(tableMapping));
-			Persister persister = Persister.getInstance();
-			persister.persist(tableMapping);
+			if (saveMappingLoadDataPage.shouldSaveMapping()) {
+				log.info("Saving new TableMapping:\n" + JenabeanWriter.toString(tableMapping));
+				Persister persister = Persister.getInstance();
+				persister.persist(tableMapping);
+			}
 		} catch (RuntimeException e) {
-			log.error("Error saving mapping", e);
+			log.error("Error getting/saving mapping", e);
 		}
 		
 		OntModel ontModel = ModelFactory.createOntologyModel();
