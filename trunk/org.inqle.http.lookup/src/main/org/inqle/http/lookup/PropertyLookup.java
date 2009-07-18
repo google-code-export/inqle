@@ -25,10 +25,12 @@ import com.hp.hpl.jena.ontology.OntModel;
 public class PropertyLookup {
 
 	private static final Logger log = Logger.getLogger(PropertyLookup.class);
-	public static final Object QUERY_HEADER_URI = "Property_URI";
-	public static final Object QUERY_HEADER_LABEL = "Label";
-	public static final Object QUERY_HEADER_COMMENT = "Comment";
-	public static final Object QUERY_HEADER_PROPERTY_TYPE = "Property_Type";
+	public static final String QUERY_HEADER_URI = "Property_URI";
+	public static final String QUERY_HEADER_LABEL = "Label";
+	public static final String QUERY_HEADER_COMMENT = "Comment";
+	public static final String QUERY_HEADER_PROPERTY_TYPE = "Property_Type";
+	public static final String QUERY_HEADER_PROPERTY_HEADER = "Header";
+	public static final String QUERY_HEADER_PROPERTY_VALUE = "Value";
 //	private static final String UMBEL_PROPERTY_INFERENCE_RULES = "[umbelSubj1: (?a owl:equivalentClass ?b) (?p rdfs:domain ?b) -> (?p rdfs:domain ?a)]\n[umbelSubj2: (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?c) (?c <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?d) -> (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?d)]\n[umbelSubj3: (?p rdfs:domain ?a) (?a <http://www.w3.org/2004/02/skos/core#narrowerTransitive> ?c) -> (?p rdfs:domain ?c)]";
 	/**
 	 * Generates SPARQL, to find all properties of all instances of all 
