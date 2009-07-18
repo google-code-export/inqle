@@ -20,7 +20,12 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public class TableMappingsSearcher {
 
-	private static final Logger log = Logger.getLogger(TableMappingsSearcher.class);
+	public static final Logger log = Logger.getLogger(TableMappingsSearcher.class);
+	public static final String MAPPING_URI = "Mapping_URI";
+	public static final String MAPPING_NAME = "Mapping_Name";
+	public static final String MAPPING_DATE = "Mapping_Date";
+	public static final String MAPPING_ID = "Mapping_ID";
+	public static final String MAPPING_DESCRIPTION = "Mapping_Description";
 
 	public static String lookupMappings(String headerText, int countSearchResults, int offset) {
 		QueryCriteria queryCriteria = new QueryCriteria();
@@ -34,7 +39,7 @@ public class TableMappingsSearcher {
 			int countSearchResults, int offset) {
 		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
 			" PREFIX xsd: <" + RDF.XSD + "> \n " + 
-			" SELECT ?Mapping_Date ?Mapping_URI ?Mapping_ID ?Mapping_Name ?Mapping_Description\n " +
+			" SELECT ?" + MAPPING_DATE + " ?" + MAPPING_URI + " ?" + MAPPING_ID + " ?" + MAPPING_NAME + " ?" + MAPPING_DESCRIPTION + "\n " +
 			" { \n " +
 			" GRAPH ?g { \n " +
 			" ?Mapping_URI a inqle:TableMapping \n " +
