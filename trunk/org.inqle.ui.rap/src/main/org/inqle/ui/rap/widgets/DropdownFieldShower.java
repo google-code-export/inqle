@@ -23,6 +23,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 	private Text descriptionText;
 	private String fieldUri;
 	private String fieldPropertyType = RDF.DATA_PROPERTY;
+	private ArrayList<String> allOptions;
 	private static final Logger log = Logger.getLogger(DropdownFieldShower.class);
 	
 	public DropdownFieldShower (
@@ -52,7 +53,7 @@ public class DropdownFieldShower implements IDataFieldShower {
 			String descriptionString, 
 			String toolTipString, 
 			int listStyle) {
-		java.util.List<String> allOptions = new ArrayList<String>();
+		allOptions = new ArrayList<String>();
 		allOptions.add("");
 		//create a list of lower case version of the options
 		java.util.List<String> lcOptions = new ArrayList<String>();
@@ -176,5 +177,12 @@ public class DropdownFieldShower implements IDataFieldShower {
 		} else {
 			this.fieldPropertyType = fieldPropertyType;
 		}
+	}
+	public void select(String header) {
+		int headerIndex = allOptions.indexOf(header);
+		if (headerIndex >= 0) {
+			list.select(headerIndex);
+		}
+		
 	}
 }

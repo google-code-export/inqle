@@ -14,6 +14,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.mapping.DataMapping;
+import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.widgets.TextFieldShower;
@@ -24,6 +27,7 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 	private Button selectRowDateTime;
 	private TextFieldShower globalDateTextShower;
 	private List dateColumnList;
+	private TableMapping tableMapping;
 	private static Logger log = Logger.getLogger(DateTimeMapperPage.class);
 
 	public DateTimeMapperPage(String title, ImageDescriptor titleImage) {
@@ -66,6 +70,25 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 	public void onEnterPageFromPrevious() {
 		log.info("Entering DateTimeMapperPage...");
 		refreshTableData();
+		if (tableMapping != null) {
+			selectGlobalDateTime.setSelection(false);
+			DataMapping dateTimeDataMapping = tableMapping.findMappingByPredicate(RDF.DATE_PROPERTY);
+			String mappedHeader = dateTimeDataMapping.getMapsHeader();
+			if (mappedHeader != null) {
+				selectRowDateTime.setSelection(true);
+				for (int i=0; i< dateColumnList.getItems().length; i++) {
+					String header = dateColumnList.getItem(i);
+					if (mappedHeader.equals(header)) {
+						dateColumnList.setSelection(i);
+						break;
+					}
+				} 
+			} else {
+				selectGlobalDateTime.setSelection(true);
+				String mappedValue = dateTimeDataMapping.getMapsValue();
+				globalDateTextShower.setTextValue(mappedValue);
+			}
+		}
 	}
 	
 	public void refreshTableData() {
@@ -153,5 +176,9 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 	public String getRowDateColumnHeader() {
 		if (getRowDateColumnIndex()<0) return null;
 		return dateColumnList.getItem(getRowDateColumnIndex());
+	}
+
+	public void setTableMapping(TableMapping tableMapping) {
+		this.tableMapping = tableMapping;		
 	}
 }

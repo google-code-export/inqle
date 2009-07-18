@@ -18,7 +18,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 
-public class FileDataImporter {
+public class FileDataImporter_multipleSubjectMappings {
 
 	private CsvReader csvReader;
 	private TableMapping tableMapping;
@@ -49,8 +49,16 @@ public class FileDataImporter {
 		importStaticValues(tableMapping, null, tableDataClass);
 		//TODO add date and other top level data (place, investigator)
 		
-		//import the SubjectMappings which represent 1 row per individual
-		importRowSubjectMapping(tableMapping.getSubjectMapping());
+		for (SubjectMapping subjectMapping: tableMapping.getSubjectMappings()) {
+			//if the subject mapping identifies an individual, import values into this instance
+			if (subjectMapping.isInstanceMapping()) {
+				//import the SubjectMappings which represent specific individuals
+				importInstanceSubjectMapping(subjectMapping);
+			} else {
+				//import the SubjectMappings which represent 1 row per individual
+				importRowSubjectMapping(subjectMapping);
+			}
+		}
 		
 		//next loop thru each row and create subject, add values from mapping and from appropriate column
 //		ontModel.commit();

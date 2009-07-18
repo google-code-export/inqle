@@ -33,6 +33,7 @@ import org.inqle.http.lookup.Requestor;
 import org.inqle.http.lookup.SubjectsSearcher;
 import org.inqle.http.lookup.TableMappingsSearcher;
 import org.inqle.ui.rap.actions.CreateSubclassAction;
+import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
 import org.inqle.ui.rap.table.ListMapTableLabelProvider;
@@ -45,7 +46,7 @@ import org.w3c.dom.Document;
  * @author David Donohue
  * Feb 20, 2008
  */
-public abstract class MappingLookupPage extends DynaWizardPage implements SelectionListener{
+public class MappingLookupPage extends DynaWizardPage implements SelectionListener{
 	
 	/**
 	 * the class of items in the table's List field.
@@ -79,6 +80,10 @@ public abstract class MappingLookupPage extends DynaWizardPage implements Select
 	private static String DESCRIPTION = "If your text table has columns which match a saved import strategy, " +
 			"you can reuse that strategy in this import.";
 	
+	public MappingLookupPage() {
+		this(TITLE, DESCRIPTION);
+	}
+	
 	/**
 	 * Create a new page.
 	 * @param modelBean the model bean to receive the checkbox selections
@@ -103,7 +108,7 @@ public abstract class MappingLookupPage extends DynaWizardPage implements Select
 		newImportButton.setText("New import: do not use a matching import strategy.");
 		newImportButton.setSelection(true);
 		
-		new Label(selfComposite, SWT.NONE).setText("Choose a matching import strategy...");
+		new Label(selfComposite, SWT.NONE).setText("Or reuse a matching import strategy (select below)");
 		table = new Table(selfComposite, SWT.WRAP);
 		
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -230,6 +235,12 @@ public abstract class MappingLookupPage extends DynaWizardPage implements Select
 	
 	@Override
 	public boolean onNextPage() {
+		FileDataImporterWizard wizard = (FileDataImporterWizard)getWizard();
+		if (isTableMappingSelected()) {
+			wizard.setTableMapping(getSelectedTableMapping());
+		} else {
+			wizard.setTableMapping(null);
+		}
 		return true;
 	}
 
@@ -237,7 +248,11 @@ public abstract class MappingLookupPage extends DynaWizardPage implements Select
 		return dataRecords;
 	}
 
-	public TableMapping getSelectedTableMapping() {
+	public boolean isTableMappingSelected() {
+		return (! newImportButton.getSelection());
+	}
+	
+	private TableMapping getSelectedTableMapping() {
 		if (newImportButton.getSelection()) {
 			return null;
 		} else {

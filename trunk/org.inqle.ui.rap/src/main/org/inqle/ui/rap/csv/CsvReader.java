@@ -190,7 +190,7 @@ public class CsvReader {
 			str += header;
 			i++;
 		}
-		return str;
+		return str.toLowerCase();
 	}
 	
 	public int getColumnIndex(String header) {

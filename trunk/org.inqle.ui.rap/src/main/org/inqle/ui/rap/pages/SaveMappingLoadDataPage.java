@@ -75,11 +75,11 @@ public class SaveMappingLoadDataPage extends DynaWizardPage implements Selection
 				"Description of Table Mapping",
 				null,
 				null,
-				SWT.BORDER
+				SWT.BORDER | SWT.MULTI
 		);
 		
 		dontSaveMappingButton = new Button(formComposite, SWT.RADIO);
-		saveMappingButton.setText("Do not save this import strategy");
+		dontSaveMappingButton.setText("Do not save this import strategy");
 		dontSaveMappingButton.addSelectionListener(this);
 		
 //		importButton = new Button(selfComposite, SWT.PUSH | SWT.BORDER);
@@ -121,11 +121,13 @@ public class SaveMappingLoadDataPage extends DynaWizardPage implements Selection
 	public void widgetSelected(SelectionEvent event) {
 		Object source = event.getSource();
 		if (source.equals(saveMappingButton)) {
+			saveMappingButton.setSelection(true);
 			dontSaveMappingButton.setSelection(false);
 			nameTextField.setEnabled(true);
 			descriptionTextField.setEnabled(true);
 		}
 		if (source.equals(dontSaveMappingButton)) {
+			dontSaveMappingButton.setSelection(true);
 			saveMappingButton.setSelection(false);
 			nameTextField.setEnabled(false);
 			descriptionTextField.setEnabled(false);
