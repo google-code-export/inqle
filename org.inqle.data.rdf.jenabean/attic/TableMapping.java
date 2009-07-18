@@ -14,11 +14,10 @@ import thewebsemantic.Namespace;
 
 /**
  * This class is used for importing Data.  It maps terms (like a string of comma-separated 
- * headers in a CSV file) to a SubjectMapping and to the collection of DataMappings which map to the table.
+ * headers in a CSV file) to the collection of DataMappings which map to the table.
  * 
  * A TableMapping object maps to the header line from a CSV file.  
- * It contains 1 SubjectMapping and 1 or more DataMappings, 
- * each specifying how to map the data from a single column.
+ * It contains 1 or more DataMappings, each specifying how to map the data from a single column.
  * 
  * @author David Donohue
  * Jul 12, 2008
@@ -32,7 +31,7 @@ public class TableMapping extends SubjectMapping {
 	
 	private String mappedText;
 	
-	private SubjectMapping subjectMapping = null;
+	private List<SubjectMapping> subjectMappings = new ArrayList<SubjectMapping>();
 	
 //	public String getStringRepresentation() {
 //		String s = getClass().toString() + " {\n";
@@ -48,7 +47,7 @@ public class TableMapping extends SubjectMapping {
 
 	public void clone(TableMapping objectToBeCloned) {
 		setMappedText(objectToBeCloned.getMappedText());
-		setSubjectMapping(objectToBeCloned.getSubjectMapping());
+		setSubjectMappings(objectToBeCloned.getSubjectMappings());
 		super.clone(objectToBeCloned);
 	}
 	
@@ -66,12 +65,17 @@ public class TableMapping extends SubjectMapping {
 		this.mappedText = mappedText;
 	}
 
-	public SubjectMapping getSubjectMapping() {
-		return subjectMapping;
+	public Collection<SubjectMapping> getSubjectMappings() {
+		return subjectMappings;
 	}
 
-	public void setSubjectMapping(SubjectMapping subjectMapping) {
-		this.subjectMapping = subjectMapping;
+	public void setSubjectMappings(Collection<SubjectMapping> subjectMappings) {
+		this.subjectMappings = new ArrayList<SubjectMapping>();
+		this.subjectMappings.addAll(subjectMappings);
+	}
+	
+	public void addSubjectMapping(SubjectMapping subjectMapping) {
+		subjectMappings.add(subjectMapping);
 	}
 
 	public void replicate(TableMapping objectToBeReplicated) {

@@ -20,7 +20,7 @@ import thewebsemantic.Namespace;
  * into INQLE as RDF.  Each SubjectMapping can generate a single instance of inqle:Data and an 
  * associated instance of inqle:Subject.
  * 
- * SubjectMappings may have a subjectInstance, in which case the mapping points to a single instance.
+ * SubjectMappings may have a subjectInstance, in which case the mapping points to a single instance [Deprecated].
  * Alternatively, SubjectMappings will point to a new instance for each row of the data table.
  * 
  * subjectInstance is populated with the URI of the instance of this subject class,
