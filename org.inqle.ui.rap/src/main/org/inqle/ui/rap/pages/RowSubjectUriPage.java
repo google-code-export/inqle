@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
+import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.actions.FileDataImporterWizard;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
@@ -37,6 +38,8 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	private String[] headers;
 
 	private String uriPrefix;
+
+	private TableMapping tableMapping;
 	
 	public RowSubjectUriPage() {
 		this(DEFAULT_TITLE, null, DEFAULT_DESCRIPTION);
@@ -101,6 +104,27 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		log.info("Entering RowSubjectUriPage.  getUriPrefix()=" + getUriPrefix());
 		refreshUriPrefixField();
 		refreshTableData();
+		if (tableMapping != null) {
+			SubjectMapping subjectMapping = tableMapping.getSubjectMapping();
+			subjectUriCreationMethodList.select(subjectMapping.getSubjectUriType());
+			
+			if (subjectMapping.getSubjectUriPrefix() != null) {
+				instanceUriPrefixField.setTextValue(subjectMapping.getSubjectUriPrefix().toString());
+			}
+			
+			if (subjectMapping.getSubjectHeader() != null) {
+				String[] listedItems = uriSuffixColumnList.getItems();
+				for (int i=0; i < listedItems.length; i++) {
+					String listedString = listedItems[i];
+					if (subjectMapping.getSubjectHeader().equals(listedString)) {
+						uriSuffixColumnList.select(i);
+						break;
+					}
+				}
+			}
+
+			updateFormControls();
+		}
 	}
 	
 	public void refreshTableData() {
@@ -135,6 +159,10 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	public void widgetSelected(SelectionEvent selectionEvent) {
 //		Object clickedObject = selectionEvent.getSource();
 		
+		updateFormControls();
+	}
+	
+	private void updateFormControls() {
 		if (getSubjectCreationMethod().equals(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
 			instanceUriPrefixField.setVisible(false);
 		} else {
@@ -148,8 +176,9 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 			uriSuffixColumnLabel.setVisible(false);
 			uriSuffixColumnList.setVisible(false);
 		}
+		
 	}
-	
+
 	public String getInstancePrefixUri() {
 //		if (selectPertainsToSomeRows.getSelection()) {
 			return instanceUriPrefixField.getTextValue();
@@ -214,5 +243,10 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 
 	public void setUriPrefix(String uriPrefix) {
 		this.uriPrefix = uriPrefix;
+	}
+
+	public void setTableMapping(TableMapping tableMapping) {
+		this.tableMapping = tableMapping;
+		
 	}
 }

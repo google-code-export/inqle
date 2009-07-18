@@ -1,5 +1,6 @@
 package org.inqle.ui.rap.table;
 
+import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.pages.SubjectClassPage;
 
 

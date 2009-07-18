@@ -26,6 +26,7 @@ import org.inqle.ui.rap.pages.CsvDisplayPage;
 import org.inqle.ui.rap.pages.DateTimeMapperPage;
 import org.inqle.ui.rap.pages.InfoPage;
 import org.inqle.ui.rap.pages.LoadFilePage;
+import org.inqle.ui.rap.pages.MappingLookupPage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyMappingsPage;
 import org.inqle.ui.rap.pages.RowSubjectPropertyValuesPage;
 import org.inqle.ui.rap.pages.RowSubjectUriPage;
@@ -66,6 +67,8 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private RowSubjectUriPage subjectUriPage;
 	private RowSubjectPropertyMappingsPage propertyMappingsPage;
 	private RowSubjectPropertyValuesPage propertyValuesPage;
+	private MappingLookupPage mappingLookupPage;
+	private TableMapping tableMapping;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -78,44 +81,45 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	@Override
 	public void addPages() {
 		InfoPage firstPage = new InfoPage(
-				"Import Data From Text File",
-				"This wizard assists you in importing data from a delimited text file such as " +
-				"comma-separated values files (CSV).",
-				"Before using this wizard, you should acquire your data into a delimited text \n" +
-				"format, such as CSV.  You can generate such a file from your spreadsheet program.\n\n" +
-				
-				"The data is imported into your database in a format called semantic or \n" +
-				"Resource Description Framework (RDF) data.  This means that data is imported as \n" +
-				"objects.  \n" +
-				"  * Each data object has a unique identifier, called a Uniform Resource Identifier (URI).\n" +
-				"    URIs look a lot like web addresses (URLs)\n" +
-				"    e.g. the person David Donohue is represented by this URI:\n" +
-				"    'http://daviddonohue.com/DD'\n" +
-				"  * Each data object has a type (or class), which itself has a URI.\n" +
-				"    e.g. David Donohue is of type Person, and the type Person has this URI\n" +
-				"    http://xmlns.com/foaf/0.1/Person \n" +
-				"  * Data objects have Attributes, which are also identified by a URI.\n" +
-				"    Attributes have values- either literal values like '42' or other data\n" +
-				"    objects, like 'http://daviddonohue.com/DD'." +
-				"    For example, the Person type has an attribute\n" +
-				"    http://xmlns.com/foaf/0.1/interest \n" +
-				"    The value of this attribute is a website which interests the person.\n\n" +
-				
-				"" +
-				""
+			"Import Data From Text File",
+			"This wizard assists you in importing data from a delimited text file such as " +
+			"comma-separated values files (CSV).",
+			"Before using this wizard, you should acquire your data into a delimited text \n" +
+			"format, such as CSV.  You can generate such a file from your spreadsheet program.\n\n" +
+			
+			"The data is imported into your database in a format called semantic or \n" +
+			"Resource Description Framework (RDF) data.  This means that data is imported as \n" +
+			"objects.  \n" +
+			"  * Each data object has a unique identifier, called a Uniform Resource Identifier (URI).\n" +
+			"    URIs look a lot like web addresses (URLs)\n" +
+			"    e.g. the person David Donohue is represented by this URI:\n" +
+			"    'http://daviddonohue.com/DD'\n" +
+			"  * Each data object has a type (or class), which itself has a URI.\n" +
+			"    e.g. David Donohue is of type Person, and the type Person has this URI\n" +
+			"    http://xmlns.com/foaf/0.1/Person \n" +
+			"  * Data objects have Attributes, which are also identified by a URI.\n" +
+			"    Attributes have values- either literal values like '42' or other data\n" +
+			"    objects, like 'http://daviddonohue.com/DD'." +
+			"    For example, the Person type has an attribute\n" +
+			"    http://xmlns.com/foaf/0.1/interest \n" +
+			"    The value of this attribute is a website which interests the person.\n\n" +
+			
+			"" +
+			""
 		);
 		addPage(firstPage);
 		
 		loadFilePage = new LoadFilePage("Specify the delimited text file to load.");
 		loadFilePage.setDescription("This wizard is capable of importing many different formats of " +
-				"delimited text files.  In general, you could save your spreadsheet of data as " +
-				"'Comma-Separated Values (CSV)' and then import the CSV file here.");
+			"delimited text files.  In general, you could save your spreadsheet of data as " +
+			"'Comma-Separated Values (CSV)' and then import the CSV file here.");
 		addPage(loadFilePage);
-		
-		
 		
 		CsvDisplayPage csvDisplayPage = new CsvDisplayPage("View data to be imported.", null);
 		addPage(csvDisplayPage);
+		
+		mappingLookupPage = new MappingLookupPage();
+		addPage(mappingLookupPage);
 		
 		dateTimeMapperPage = new DateTimeMapperPage(
 				"Specify Date & Time of the Data",
@@ -151,7 +155,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		//show the "importing..." dialog
 		TableMapping tableMapping = null;
 		try {
-			tableMapping = getTableMapping();
+			tableMapping = createTableMapping();
 			if (saveMappingLoadDataPage.shouldSaveMapping()) {
 				log.info("Saving new TableMapping:\n" + JenabeanWriter.toString(tableMapping));
 				Persister persister = Persister.getInstance();
@@ -207,6 +211,14 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 //		}
 //		return false;
 		
+		if (mappingLookupPage.isTableMappingSelected()) {
+			saveMappingLoadDataPage.setShouldSaveMapping(false);
+			return true;
+		} else {
+			tableMapping = null;
+			saveMappingLoadDataPage.setShouldSaveMapping(false);
+		}
+		
 		if (getContainer().getCurrentPage().equals(saveMappingLoadDataPage)) {
 			return true;
 		} else {
@@ -247,6 +259,19 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		}
 	}
 
+	/**
+	 * This is called by MappingLookupPage, after the user has selected a mapping and gone to next page.
+	 * set each page to use the values from the mapping
+	 * @param tableMapping
+	 */
+	public void setTableMapping(TableMapping tableMapping) {
+		this.tableMapping = tableMapping;
+		dateTimeMapperPage.setTableMapping(tableMapping);
+		subjectClassPage.setTableMapping(tableMapping);
+		subjectUriPage.setTableMapping(tableMapping);
+		propertyMappingsPage.setTableMapping(tableMapping);
+		propertyValuesPage.setTableMapping(tableMapping);
+	}
 //	public AddSubjectOrFinishPage getLastAddSubjectOrFinishPage() {
 //		//loop back thru the wizard, and get the first instance of AddSubjectPage which is not the very first
 //		IWizardPage[] wizardPages = getPages();
@@ -351,7 +376,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	 * @return a TableMapping object, containing all info to import a single subject
 	 * and its data
 	 */
-	public TableMapping getTableMapping() {
+	public TableMapping createTableMapping() {
 		TableMapping tableMapping = new TableMapping();
 		
 		DataMapping dateTimeDataMapping = new DataMapping();
@@ -409,7 +434,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			subjectMapping.addDataMapping(dataMapping);
 		}
 		
-		tableMapping.addSubjectMapping(subjectMapping);
+		tableMapping.setSubjectMapping(subjectMapping);
 	
 		return tableMapping;
 	}

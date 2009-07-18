@@ -1,5 +1,7 @@
 package org.inqle.ui.rap.pages;
 
+import org.inqle.data.rdf.jenabean.mapping.TableMapping;
+
 
 /**
  * A page that captures the literal values for a subject, for each row

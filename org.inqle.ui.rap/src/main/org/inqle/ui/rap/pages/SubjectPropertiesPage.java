@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -25,6 +26,9 @@ import org.inqle.core.util.ListMapUtil;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
+import org.inqle.data.rdf.jenabean.mapping.DataMapping;
+import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
+import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.PropertyLookup;
 import org.inqle.http.lookup.Requestor;
@@ -60,6 +64,8 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	protected Text enterNewPropertyButtonExplanation;
 	
 	private ScrolledComposite scrolledComposite;
+
+	private TableMapping tableMapping;
 
 //	private boolean pageInitialized = false;
 
@@ -146,6 +152,27 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		subjectClassUri = currentSubjectClassUri;
 		enterNewPropertyButtonExplanation.setText(getEnterNewPropertyButtonLabel());
 		
+		//is a TableMapping already identified?  If so, get any properties listed therein
+		List<SortedMap<String, String>> rowValuesFromMapping = new ArrayList<SortedMap<String, String>>();
+		if (tableMapping != null) {
+			SubjectMapping subjectMapping = tableMapping.getSubjectMapping();
+			for (DataMapping dataMapping: subjectMapping.getDataMappings()) {
+				if (dataMapping.getMapsPredicate()==null || dataMapping.getMapsHeader()==null) {
+					continue;
+				}
+				SortedMap<String, String> valueMap = new TreeMap<String, String>();
+				valueMap.put(PropertyLookup.QUERY_HEADER_URI, dataMapping.getMapsPredicate().toString());
+				valueMap.put(PropertyLookup.QUERY_HEADER_PROPERTY_TYPE, dataMapping.getMapsPropertyType().toString());
+				valueMap.put(PropertyLookup.QUERY_HEADER_LABEL, "URI=" + dataMapping.getMapsPredicate().toString());
+				valueMap.put(PropertyLookup.QUERY_HEADER_COMMENT, "(description unavailable)");
+				valueMap.put(PropertyLookup.QUERY_HEADER_PROPERTY_HEADER, dataMapping.getMapsHeader());
+				valueMap.put(PropertyLookup.QUERY_HEADER_PROPERTY_VALUE, dataMapping.getMapsValue());
+				
+				rowValuesFromMapping.add(valueMap);
+			}
+		}
+		
+		//Lookup known properties for this subject class
 		String dataAndSubjectPropertiesXml = PropertyLookup.lookupAllDataProperties(
 				subjectClassUri, 
 				100, 
@@ -183,9 +210,10 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		log.info("...with all REMOTE results:\n" + XmlDocumentUtil.xmlToString(allRemotePropertiesDocument));
 		List<SortedMap<String, String>> remoteRowValues = SparqlXmlUtil.getRowValues(allRemotePropertiesDocument);
 //		Document allPropertiesDocument = SparqlXmlUtil.merge(allLocalPropertiesDocument, allRemotePropertiesDocument);
-		log.info("Merged all results into:\n" + remoteRowValues);
+		log.info("Merged remote results into:\n" + remoteRowValues);
 
-		List<SortedMap<String, String>> rowValues = ListMapUtil.merge(localRowValues, remoteRowValues);
+		List<SortedMap<String, String>> allLocalValues = ListMapUtil.merge(rowValuesFromMapping, localRowValues);
+		List<SortedMap<String, String>> rowValues = ListMapUtil.merge(allLocalValues, remoteRowValues);
 		
 		makePropertyFormElements(rowValues);
 		
@@ -244,8 +272,12 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			if (comment != null) comment=comment.trim();
 			String propertyType = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_TYPE);
 			if (propertyType != null) propertyType=propertyType.trim();
+			String header = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_HEADER);
+			if (header != null) header=header.trim();
+			String value = row.get(PropertyLookup.QUERY_HEADER_PROPERTY_VALUE);
+			if (value != null) value=value.trim();
 			//log.info("Creating form element w/\nuri=" + uri + "\nlabel=" + label + "\ncomment=" + comment + "\npropertyType=" + propertyType);
-			addPropertyFormItem(uri, label, comment, propertyType);
+			addPropertyFormItem(uri, label, comment, propertyType, header, value);
 		}
 	}
 
@@ -298,7 +330,9 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 				addPropertyFormItem(prop.getURI(), 
 						prop.getLabel("EN"), 
 						prop.getComment("EN"),
-						prop.getSuperProperty().toString());
+						prop.getSuperProperty().toString(),
+						null,
+						null);
 			}
 			
 			refreshScrolledComposite();
@@ -315,5 +349,12 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			String uri, 
 			String label, 
 			String comment,
-			String propertyTypeUri);
+			String propertyTypeUri,
+			String header,
+			String value);
+	
+	public void setTableMapping(TableMapping tableMapping) {
+		this.tableMapping = tableMapping;
+	}
+	
 }
