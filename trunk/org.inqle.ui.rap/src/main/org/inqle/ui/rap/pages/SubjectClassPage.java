@@ -26,6 +26,7 @@ import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.http.lookup.LookupServlet;
 import org.inqle.http.lookup.Requestor;
@@ -85,7 +86,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 
 	private String createdName;
 
-	private TableMapping tableMapping;
+	private SubjectMapping subjectMapping;
 
 //	private static String TITLE = "Type of Subject";
 //	private static String DESCRIPTION = "Find and select the type of subject that this data is about.";
@@ -335,11 +336,14 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	
 	@Override
 	public void onEnterPageFromPrevious() {
-		if (tableMapping != null) {
-			selectCreatedClassButton.setSelection(true);
+		if (subjectMapping != null && subjectMapping.getSubjectClass() != null) {
 			table.deselectAll();
-			createdUri = tableMapping.getSubjectMapping().getSubjectClass().toString();
+			createdUri = subjectMapping.getSubjectClass().toString();
 			createdName = createdUri;
+			selectCreatedClassButton.setText(createdUri);
+			selectCreatedClassButton.setSelection(true);
+			selectNewSubjectLabel.setVisible(true);
+			selectCreatedClassButton.setVisible(true);
 		}
 	}
 	
@@ -369,6 +373,10 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	}
 	
 	public void setTableMapping(TableMapping tableMapping) {
-		this.tableMapping = tableMapping;
+		if (tableMapping == null) {
+			this.subjectMapping = null;
+		} else {
+			this.subjectMapping = tableMapping.getSubjectMapping();
+		}
 	}
 }

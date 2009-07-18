@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
+import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
 import org.inqle.ui.rap.actions.ICsvReaderWizard;
 import org.inqle.ui.rap.csv.CsvReader;
@@ -71,22 +72,33 @@ public class DateTimeMapperPage extends DynaWizardPage implements SelectionListe
 		log.info("Entering DateTimeMapperPage...");
 		refreshTableData();
 		if (tableMapping != null) {
-			selectGlobalDateTime.setSelection(false);
+			
 			DataMapping dateTimeDataMapping = tableMapping.findMappingByPredicate(RDF.DATE_PROPERTY);
-			String mappedHeader = dateTimeDataMapping.getMapsHeader();
-			if (mappedHeader != null) {
-				selectRowDateTime.setSelection(true);
-				for (int i=0; i< dateColumnList.getItems().length; i++) {
-					String header = dateColumnList.getItem(i);
-					if (mappedHeader.equals(header)) {
-						dateColumnList.setSelection(i);
-						break;
-					}
-				} 
-			} else {
+			
+			//date time set on the TableMapping
+			if (dateTimeDataMapping != null) {
 				selectGlobalDateTime.setSelection(true);
-				String mappedValue = dateTimeDataMapping.getMapsValue();
-				globalDateTextShower.setTextValue(mappedValue);
+				globalDateTextShower.setTextValue(dateTimeDataMapping.getMapsValue());
+			} else {
+				SubjectMapping subjectMapping = tableMapping.getSubjectMapping();
+				dateTimeDataMapping = subjectMapping.findMappingByPredicate(RDF.DATE_PROPERTY);
+				if (dateTimeDataMapping != null) {
+					String mappedHeader = dateTimeDataMapping.getMapsHeader();
+					if (mappedHeader != null) {
+						selectRowDateTime.setSelection(true);
+						for (int i=0; i< dateColumnList.getItems().length; i++) {
+							String header = dateColumnList.getItem(i);
+							if (mappedHeader.equals(header)) {
+								dateColumnList.setSelection(i);
+								break;
+							}
+						}
+					} else {
+						selectGlobalDateTime.setSelection(true);
+						String mappedValue = dateTimeDataMapping.getMapsValue();
+						globalDateTextShower.setTextValue(mappedValue);
+					}
+				}
 			}
 		}
 	}
