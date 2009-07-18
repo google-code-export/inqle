@@ -65,7 +65,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	
 	private ScrolledComposite scrolledComposite;
 
-	private TableMapping tableMapping;
+	private SubjectMapping subjectMapping;
 
 //	private boolean pageInitialized = false;
 
@@ -154,8 +154,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		
 		//is a TableMapping already identified?  If so, get any properties listed therein
 		List<SortedMap<String, String>> rowValuesFromMapping = new ArrayList<SortedMap<String, String>>();
-		if (tableMapping != null) {
-			SubjectMapping subjectMapping = tableMapping.getSubjectMapping();
+		if (subjectMapping != null && subjectMapping.getDataMappings() != null) {
 			for (DataMapping dataMapping: subjectMapping.getDataMappings()) {
 				if (dataMapping.getMapsPredicate()==null || dataMapping.getMapsHeader()==null) {
 					continue;
@@ -354,7 +353,11 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			String value);
 	
 	public void setTableMapping(TableMapping tableMapping) {
-		this.tableMapping = tableMapping;
+		if (tableMapping==null) {
+			subjectMapping = null;
+		} else {
+			subjectMapping = tableMapping.getSubjectMapping();
+		}
 	}
 	
 }

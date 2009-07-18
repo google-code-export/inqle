@@ -256,7 +256,7 @@ public class MappingLookupPage extends DynaWizardPage implements SelectionListen
 		if (newImportButton.getSelection()) {
 			return null;
 		} else {
-			String localTableMappingId = getSelectedValue(InqleInfo.ID_ATTRIBUTE);
+			String localTableMappingId = getSelectedValue(TableMappingsSearcher.MAPPING_ID);
 			Persister persister = Persister.getInstance();
 			TableMapping selectedTableMapping = (TableMapping) persister.reconstitute(TableMapping.class, localTableMappingId, true);
 			return selectedTableMapping;

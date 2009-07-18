@@ -265,6 +265,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	 * @param tableMapping
 	 */
 	public void setTableMapping(TableMapping tableMapping) {
+		log.info("Populating FileDataImporterWizard with TableMapping: \n" + JenabeanWriter.toString(tableMapping));
 		this.tableMapping = tableMapping;
 		dateTimeMapperPage.setTableMapping(tableMapping);
 		subjectClassPage.setTableMapping(tableMapping);
