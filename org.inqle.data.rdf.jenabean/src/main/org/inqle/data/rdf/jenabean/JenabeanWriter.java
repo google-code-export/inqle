@@ -21,6 +21,7 @@ public class JenabeanWriter {
 	}
 	
 	public static String toString(Object bean, String lang) {
+		if (bean==null) return "[NULL]";
 		registerPrefixes();
 
 		OntModel model = ModelFactory.createOntologyModel();

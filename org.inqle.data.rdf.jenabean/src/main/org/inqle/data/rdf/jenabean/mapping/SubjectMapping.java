@@ -171,5 +171,20 @@ public class SubjectMapping extends UniqueJenabean {
 	public void setInstanceMapping(boolean instanceMapping) {
 		this.instanceMapping = instanceMapping;
 	}
+	
+	/**
+	 * Returns the first DataMapping found which matches the specified predicate
+	 * @param dateProperty
+	 * @return
+	 */
+	public DataMapping findMappingByPredicate(String predicate) {
+		if (predicate==null) return null;
+		for (DataMapping dataMapping: getDataMappings()) {
+			if (predicate.equals(dataMapping.getMapsPredicate().toString())) {
+				return dataMapping;
+			}
+		}
+		return null;
+	}
 
 }

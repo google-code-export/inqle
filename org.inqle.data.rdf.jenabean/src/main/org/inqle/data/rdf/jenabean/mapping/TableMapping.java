@@ -85,20 +85,6 @@ public class TableMapping extends SubjectMapping {
 		return dataMapping;
 	}
 
-	/**
-	 * Returns the first DataMapping found which matches the specified predicate
-	 * @param dateProperty
-	 * @return
-	 */
-	public DataMapping findMappingByPredicate(String predicate) {
-		for (DataMapping dataMapping: getDataMappings()) {
-			if ((dataMapping.getMapsPredicate()).toString().equals(predicate)) {
-				return dataMapping;
-			}
-		}
-		return null;
-	}
-
 //	public String getMappedDataSubclassId() {
 //		return mappedDataSubclassId;
 //	}
