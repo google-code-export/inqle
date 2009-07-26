@@ -12,14 +12,17 @@
            weight="3000"
            access="admin">
 		</part-type>
+		<!--
 		<part-type
            class="org.inqle.experiment.rapidminer.LearningCycleParts"
            weight="4000"
            access="admin">
 		</part-type>
+		-->
    </extension>
     <extension
          point="org.inqle.data.datamodels">
+         <!--
       	<datamodel
            id="org.inqle.datamodels.learningCycles"
            weight="7000"
@@ -27,13 +30,21 @@
 					 cacheInMemory="false"
 					 targetDatabase="org.inqle.data.databases.cache">
 		</datamodel>
+		-->
 		<datamodel
            id="org.inqle.datamodels.experiments"
            weight="8000"
            description="contains experiment results"
-					 cacheInMemory="false"
-					 targetDatabase="org.inqle.data.databases.cache">
-			</datamodel>
+		 cacheInMemory="false">
+		</datamodel>
+		<!-- targetDatabase="org.inqle.data.databases.cache" -->
+		
+		<datamodel
+			id="org.inqle.experiment.rapidminer.datamodels.rmExperiments"
+			weight="8000"
+           description="contains RapidMiner experiments"
+		 cacheInMemory="false">
+		</datamodel>
 	</extension>
    <extension
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
