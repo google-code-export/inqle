@@ -7,27 +7,27 @@
    		schema="schema/org.inqle.experiment.rapidminer.IRapidMinerExperiment.exsd"/>
    <extension
          point="org.inqle.ui.rap.IPartType">
-			<part-type
+		<part-type
            class="org.inqle.experiment.rapidminer.RapidMinerExperimentParts"
            weight="3000"
            access="admin">
-			</part-type>
-			<part-type
+		</part-type>
+		<part-type
            class="org.inqle.experiment.rapidminer.LearningCycleParts"
            weight="4000"
            access="admin">
-			</part-type>
+		</part-type>
    </extension>
     <extension
          point="org.inqle.data.datamodels">
-      <datamodel
+      	<datamodel
            id="org.inqle.datamodels.learningCycles"
            weight="7000"
            description="contains customized Learning Cycles"
 					 cacheInMemory="false"
 					 targetDatabase="org.inqle.data.databases.cache">
-			</datamodel>
-			<datamodel
+		</datamodel>
+		<datamodel
            id="org.inqle.datamodels.experiments"
            weight="8000"
            description="contains experiment results"
