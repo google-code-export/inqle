@@ -15,7 +15,7 @@ import org.inqle.data.rdf.jenabean.IUniqueJenabean;
  */
 public interface IExperimentResult extends IUniqueJenabean {
 
-	public static final String EXPERIMENTS_DATASET = "org.inqle.rapidminer.experiment.datamodels.experiments";
+	public static final String EXPERIMENT_RESULTS_DATAMODEL = "org.inqle.rapidminer.experiment.datamodels.rmExperimentResults";
 	
 	public void setExperimentLabelArc(Arc experimentLabelArc);
 
@@ -39,6 +39,10 @@ public interface IExperimentResult extends IUniqueJenabean {
 	 * @param dummy
 	 */
 	public void setExperimentAttributeQnameRepresentation(String dummy);
+	
+	public String getSamplerClassName();
+
+	public void setSamplerClassName(String samplerClassName);
 	
 	public Arc getExperimentLabelArc();
 	

@@ -8,12 +8,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.sampling.IDataTable;
+import org.inqle.experiment.rapidminer.util.RapidMinerProcessCreator;
+
+import org.inqle.experiment.rapidminer.PerformanceVectorResult;
+
+import com.rapidminer.example.Attribute;
+import com.rapidminer.example.ExampleSet;
+import com.rapidminer.example.table.MemoryExampleTable;
+import com.rapidminer.operator.IOContainer;
+import com.rapidminer.operator.IOObject;
+import com.rapidminer.operator.MissingIOObjectException;
+import com.rapidminer.operator.performance.PerformanceVector;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -179,6 +191,76 @@ public class ClassificationRegressionCrossValidationExperiment extends GlobalJen
 		}
 		log.info("Experiment: " + getStringRepresentation() + "\nDOES NOT MATCH this data table because the data type of the label does not match the capabilities of the experiment (" + getExperimentType() + ").");
 		return false;
+	}
+
+	/**
+	 * Apply this experiment to the IDataTable of data.
+	 * @param dataTable
+	 * @return
+	 */
+	@Override
+	public IExperimentResult runExperiment(IDataTable dataTable) {
+		
+		//the results to return
+		PerformanceVectorResult experimentResult = new PerformanceVectorResult();
+		experimentResult.setExperimentSubjectClass(dataTable.getSubjectClass());
+		//get a RapidMiner Process object, representing the Experiment
+		com.rapidminer.Process process = RapidMinerProcessCreator.createProcess(this);
+		
+		if (process == null) {
+			log.warn("Unable to retrieve a RapidMiner experiment/process object for rapidMinerExperiment" + getExperimentClassPath());
+			return null;
+		}
+		//convert the IDataTable into a RapidMiner MemoryExampleTable
+		MemoryExampleTableFactory memoryExampleTableFactory = new MemoryExampleTableFactory();
+		MemoryExampleTable exampleTable =  memoryExampleTableFactory.createExampleTable(dataTable);
+		
+		//convert the MemoryExampleTable into a RapidMiner ExampleSet
+//			int labelIndex = dataTable.getColumns().indexOf(labelDataColumn);
+		
+//			assert(labelIndex >= 0);
+		Attribute labelAttribute = exampleTable.getAttribute(dataTable.getLabelColumnIndex());
+		Attribute weightAttribute = null;
+		Attribute idAttribute = null;
+		if (dataTable.getIdColumnIndex() >= 0) {
+			idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
+		}
+		
+		//log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
+		ExampleSet exampleSet = 
+			exampleTable.createExampleSet(
+					labelAttribute, 
+					weightAttribute, 
+					idAttribute);
+		log.info("Created exampleSet of size " + exampleSet.size() + "."
+				+ "\n\nID Attribute=" + exampleSet.getAttributes().getId()
+				+ "\n\nLABEL Attribute=" + exampleSet.getAttributes().getLabel()
+		);
+		int i=0;
+		Iterator<?> regularAttributeI = exampleSet.getAttributes().iterator();
+		while (regularAttributeI.hasNext()) {
+			i++;
+			Attribute regularAttribute = (Attribute)regularAttributeI.next();
+			//log.info("\n\nREGULAR Attribute =" + regularAttribute);
+		}
+		//run this ExampleSet against the RapidMiner process
+		IOObject[] inputIOObjects = new IOObject[] { exampleSet };
+		IOContainer input = new IOContainer(inputIOObjects);
+		IOContainer results = new IOContainer();
+		try {
+			results = process.run(input);
+		} catch (Exception e) {
+			log.error("Error running experiment:", e);
+			//experimentResult.setException(e);
+		}
+		
+		//experimentResult.setLearningCycle(this);
+		try {
+			experimentResult.setPerformanceVector(results.get(PerformanceVector.class));
+		} catch (MissingIOObjectException e) {
+			//no PerformanceVector present
+		}
+		return experimentResult;
 	}
 	
 //	public void replicate(RapidMinerExperiment objectToClone) {

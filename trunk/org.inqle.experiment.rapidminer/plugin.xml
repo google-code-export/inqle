@@ -32,8 +32,8 @@
 		</datamodel>
 		-->
 		<datamodel
-           id="org.inqle.datamodels.experiments"
-           weight="8000"
+           id="org.inqle.rapidminer.experiment.datamodels.rmExperimentResults"
+           weight="8200"
            description="contains experiment results"
 		 cacheInMemory="false">
 		</datamodel>

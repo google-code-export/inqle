@@ -9,10 +9,10 @@ import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.sampling.ISampler;
 import org.inqle.experiment.rapidminer.ExperimentResult;
-import org.inqle.experiment.rapidminer.ILearningCycle;
+import org.inqle.experiment.rapidminer.IRapidMinerExperiment;
 import org.inqle.experiment.rapidminer.LearningCycle;
-import org.inqle.experiment.rapidminer.LearningCycleLister;
 
 import thewebsemantic.Namespace;
 
@@ -20,17 +20,37 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class ExperimenterAgent extends AAgent {
 
-	public static final int USE_RANDOM_LEARNING_CYCLE = 0;
-	public static final int USE_BASE_LEARNING_CYCLE = 1;
-	public static final int USE_SELECTED_LEARNING_CYCLE = 2;
+	public static final int USE_RANDOM_SAMPLER = 0;
+	public static final int USE_BASE_SAMPLER = 1;
+	public static final int USE_SELECTED_SAMPLER = 2;
 	
-	private LearningCycle learningCycle;
+	private ISampler sampler;
+	public ISampler getSampler() {
+		return sampler;
+	}
+
+	public void setSampler(ISampler sampler) {
+		this.sampler = sampler;
+	}
+
+	private IRapidMinerExperiment rapidMinerExperiment;
 	private static Logger log = Logger.getLogger(ExperimenterAgent.class);
-	private int learningCycleMode = USE_RANDOM_LEARNING_CYCLE;
+	private int samplerMode = USE_RANDOM_SAMPLER;
+	
+	public int getSamplerMode() {
+		return samplerMode;
+	}
+
+	public void setSamplerMode(int samplerMode) {
+		this.samplerMode = samplerMode;
+	}
+
+
 	
 	public void clone(ExperimenterAgent objectToClone) {
-		setLearningCycle(objectToClone.getLearningCycle());
-		setLearningCycleMode(objectToClone.getLearningCycleMode());
+		setSamplerMode(objectToClone.getSamplerMode());
+		setSampler(objectToClone.getSampler());
+		setRapidMinerExperiment(objectToClone.getRapidMinerExperiment());
 		super.clone(objectToClone);
 	}
 	
@@ -52,28 +72,12 @@ public class ExperimenterAgent extends AAgent {
 		return newAgent;
 	}
 
-	public ILearningCycle getLearningCycle() {
-		return learningCycle;
-	}
-
-	public void setLearningCycle(ILearningCycle learningCycle) {
-		this.learningCycle = learningCycle;
-	}
-
-	public ILearningCycle selectLearningCycle() {
-		if (learningCycleMode == USE_RANDOM_LEARNING_CYCLE) {
+	public ISampler selectSampler() {
+		if (samplerMode == USE_RANDOM_SAMPLER || sampler == null) {
 			//log.info("Selecting random learning cycle...");
-			return selectRandomLearningCycle();
+			return selectRandomSampler();
 		}
-		if (learningCycleMode == USE_BASE_LEARNING_CYCLE) {
-			//log.info("Selecting the base learning cycle...");
-			return new LearningCycle();
-		}
-		if (learningCycle == null) {
-			//select a random learning cycle
-			return selectRandomLearningCycle();
-		}
-		return learningCycle;
+		return sampler;
 	}
 	
 	public void run() {
@@ -94,7 +98,7 @@ public class ExperimenterAgent extends AAgent {
 			log.info("############### Running Cycle #" + (cycleCount) + " of " + stoppingPoint);
 			
 			//select the learning cycle
-			ILearningCycle learningCycleToRun = selectLearningCycle();
+			LearningCycle learningCycleToRun = new LearningCycle();
 			log.info("Running this LearningCycle: " + learningCycleToRun);
 			ExperimentResult experimentResult = learningCycleToRun.execute();
 			if (experimentResult == null) {
@@ -117,17 +121,19 @@ public class ExperimenterAgent extends AAgent {
 		
 	}
 
-	private ILearningCycle selectRandomLearningCycle() {
-		List<ILearningCycle> allLearningCycles = LearningCycleLister.listAllLearningCycles();
-		int randomIndex = RandomListChooser.chooseRandomIndex(allLearningCycles.size());
-		return allLearningCycles.get(randomIndex);
-	}
-
 	public int getLearningCycleMode() {
 		return learningCycleMode;
 	}
 
 	public void setLearningCycleMode(int learningCycleMode) {
 		this.learningCycleMode = learningCycleMode;
+	}
+
+	public void setRapidMinerExperiment(IRapidMinerExperiment rapidMinerExperiment) {
+		this.rapidMinerExperiment = rapidMinerExperiment;
+	}
+
+	public IRapidMinerExperiment getRapidMinerExperiment() {
+		return rapidMinerExperiment;
 	}
 }

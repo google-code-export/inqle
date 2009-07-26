@@ -20,15 +20,14 @@ public interface IRapidMinerExperiment extends IGlobalJenabean {
 	public void setExperimentType(String type);
 	
 	/**
-	 * Create the RapidMiner process object, which can be executed to perform the RM experiment.
-	 * @return
-	 */
-	public com.rapidminer.Process createProcess();
-	
-	/**
 	 * If this RM Experiment can handle the provided IDataTable, return true.  Otherwise return false
 	 * @param dataTable
 	 * @return
 	 */
 	public boolean handlesDataTable(IDataTable dataTable);
+	
+	/**
+	 * Perform the experiment
+	 */
+public IExperimentResult runExperiment(IDataTable dataTable);
 }
