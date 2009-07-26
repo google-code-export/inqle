@@ -24,7 +24,7 @@ public class ExperimenterAgent extends AAgent {
 	public static final int USE_BASE_LEARNING_CYCLE = 1;
 	public static final int USE_SELECTED_LEARNING_CYCLE = 2;
 	
-	private LearningCycle learningCycle;
+	private ILearningCycle learningCycle;
 	private static Logger log = Logger.getLogger(ExperimenterAgent.class);
 	private int learningCycleMode = USE_RANDOM_LEARNING_CYCLE;
 	

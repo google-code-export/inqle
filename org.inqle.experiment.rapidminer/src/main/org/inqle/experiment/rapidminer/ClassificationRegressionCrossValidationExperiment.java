@@ -7,28 +7,35 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.sampling.IDataTable;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 /**
+ * This class handles execution of any RapidMiner experiment which applies either a 
+ * classification or regression algorithm to a data table, followed by cross-validation to 
+ * test the validity of the model.
  * @author David Donohue
  * Apr 18, 2008
  */
-@TargetDatamodel(ILearningCycle.LEARNING_CYCLES_DATASET)
+@TargetDatamodel(IRapidMinerExperiment.RAPID_MINER_EXPERIMENTS_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerExperiment {
+public class ClassificationRegressionCrossValidationExperiment extends GlobalJenabean implements IRapidMinerExperiment {
 
 	private String experimentClassPath;
 	private String experimentXml;
 
-	private static Logger log = Logger.getLogger(RapidMinerExperiment.class);
+	private static Logger log = Logger.getLogger(ClassificationRegressionCrossValidationExperiment.class);
 	private String experimentType;
+	public static final String REGRESSION_TYPE = "regression";
+	public static final String CLASSIFICATION_TYPE = "classification";
 	
 	@Override
 	@Id
@@ -123,8 +130,8 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 		this.experimentType = experimentType;
 	}
 	
-	public RapidMinerExperiment createClone() {
-		RapidMinerExperiment newObj = new RapidMinerExperiment();
+	public ClassificationRegressionCrossValidationExperiment createClone() {
+		ClassificationRegressionCrossValidationExperiment newObj = new ClassificationRegressionCrossValidationExperiment();
 		newObj.clone(this);
 		return newObj;
 	}
@@ -136,7 +143,7 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 //	}
 
 	
-	public void clone(RapidMinerExperiment objectToBeCloned) {
+	public void clone(ClassificationRegressionCrossValidationExperiment objectToBeCloned) {
 		super.clone(objectToBeCloned);
 		setExperimentXml(objectToBeCloned.getExperimentXml());
 		setExperimentType(objectToBeCloned.getExperimentType());
@@ -150,6 +157,28 @@ public class RapidMinerExperiment extends GlobalJenabean implements IRapidMinerE
 		s += "[experimentXml=" + experimentXml + "]\n";
 		s += "}";
 		return s;
+	}
+
+	@Override
+	public boolean handlesDataTable(IDataTable dataTable) {
+		String[] types = getExperimentType().split("\\|");
+		ArrayList<String> typeList = new ArrayList<String>();
+		for (String type: types) {
+			if (type == null) {
+				continue;
+			}
+			typeList.add(type.trim().toLowerCase());
+		}
+		
+		if (typeList.contains(ClassificationRegressionCrossValidationExperiment.REGRESSION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_NUMERIC) {
+			log.info("Experiment: " + getStringRepresentation() + "\nmatches because it is a REGRESSION learner and the data has a numeric label.");
+			return true;
+		} else if (typeList.contains(ClassificationRegressionCrossValidationExperiment.CLASSIFICATION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_STRING) {
+			log.info("Experiment: " + getStringRepresentation() + "\nmatches because it is a CLASSIFICATION learner and the data has a string label.");
+			return true;
+		}
+		log.info("Experiment: " + getStringRepresentation() + "\nDOES NOT MATCH this data table because the data type of the label does not match the capabilities of the experiment (" + getExperimentType() + ").");
+		return false;
 	}
 	
 //	public void replicate(RapidMinerExperiment objectToClone) {

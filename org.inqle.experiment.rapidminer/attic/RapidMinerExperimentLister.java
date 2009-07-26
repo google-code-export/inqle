@@ -49,7 +49,21 @@ public class RapidMinerExperimentLister {
 		//log.info("dataTable.getDataType(dataTable.getLabelColumnIndex())=" + dataTable.getDataType(dataTable.getLabelColumnIndex()));
 		
 		for (IRapidMinerExperiment experiment: allExperiments) {
-			if (experiment.handlesDataTable(dataTable)) {
+			
+			String[] types = experiment.getExperimentType().split("\\|");
+			ArrayList<String> typeList = new ArrayList<String>();
+			for (String type: types) {
+				if (type == null) {
+					continue;
+				}
+				typeList.add(type.trim().toLowerCase());
+			}
+			
+			if (typeList.contains(RapidMinerExperiment.REGRESSION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_NUMERIC) {
+				log.info("Adding experiment: " + experiment + " because it is a REGRESSION learner and the data has a numeric label.");
+				matchingExperiments.add(experiment);
+			} else if (typeList.contains(RapidMinerExperiment.CLASSIFICATION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_STRING) {
+				log.info("Adding experiment: " + experiment + " because it is a CLASSIFICATION learner and the data has a string label.");
 				matchingExperiments.add(experiment);
 			}
 		}
