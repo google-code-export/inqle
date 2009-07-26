@@ -83,7 +83,7 @@ public class Persister {
 	public static final Object TEXT_INDEX_TYPE_LITERAL = "literal";
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
 //	private static final String EXTENSION_POINT_CONNECTION = "org.inqle.data.connection";
-	public static final String CACHE_CONNECTION = "org.inqle.data.databases.cache";
+//	public static final String CACHE_CONNECTION = "org.inqle.data.databases.cache";
 	public static final String DATASET_SUBJECT_CLASSES_CACHE = "org.inqle.datamodels.cache.subjectClass";
 	public static final String DATASET_ARCS_CACHE = "org.inqle.datamodels.cache.arc";
 	
