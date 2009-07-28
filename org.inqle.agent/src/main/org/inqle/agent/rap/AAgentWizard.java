@@ -5,7 +5,7 @@ package org.inqle.agent.rap;
 
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.ui.rap.actions.DynaWizard;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+
 import com.hp.hpl.jena.rdf.model.Model;
 
 /**
@@ -15,11 +15,17 @@ import com.hp.hpl.jena.rdf.model.Model;
  * addPages()
  * @author David Donohue
  * Feb 28, 2008
+ * 
+ * No need for this abstract class
  */
+@Deprecated
 public abstract class AAgentWizard extends DynaWizard implements IAgentWizard {
 
+	protected Model saveToModel;
+
 	public AAgentWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+		super(shell);
+		this.saveToModel = saveToModel;
 	}
 
 }
