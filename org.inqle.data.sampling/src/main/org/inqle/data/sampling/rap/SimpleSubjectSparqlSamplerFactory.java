@@ -69,7 +69,7 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 	public ISamplerWizard createWizardForReplica(Model model, Shell shell) {
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
 		SimpleSubjectSparqlSampler replica = baseSampler.createReplica();
-		wizard.setBean(replica);
+//		wizard.setBean(replica);
 		return wizard;
 	}
 	
