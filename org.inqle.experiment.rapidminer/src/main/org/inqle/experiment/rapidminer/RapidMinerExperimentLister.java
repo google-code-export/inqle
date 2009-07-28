@@ -13,7 +13,7 @@ public class RapidMinerExperimentLister {
 
 	private static Logger log = Logger.getLogger(RapidMinerExperimentLister.class);
 	
-	public static List<IRapidMinerExperiment> listRapidMinerExperiments(Persister persister) {
+	public static List<IRapidMinerExperiment> listRapidMinerExperiments() {
 		List<IRapidMinerExperiment> experiments = new ArrayList<IRapidMinerExperiment>();
 		
 		List<IExtensionSpec> extensionSpecs = 
@@ -42,8 +42,7 @@ public class RapidMinerExperimentLister {
 	 * also on basis of the attributes and other factors
 	 */
 	public static List<IRapidMinerExperiment> listMatchingExperiments(IDataTable dataTable) {
-		Persister persister = Persister.getInstance();
-		List<IRapidMinerExperiment> allExperiments = listRapidMinerExperiments(persister);
+		List<IRapidMinerExperiment> allExperiments = listRapidMinerExperiments();
 		List<IRapidMinerExperiment> matchingExperiments = new ArrayList<IRapidMinerExperiment>();
 		//log.info("dataTable.getLabelColumnIndex()=" + dataTable.getLabelColumnIndex());
 		//log.info("dataTable.getDataType(dataTable.getLabelColumnIndex())=" + dataTable.getDataType(dataTable.getLabelColumnIndex()));

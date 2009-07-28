@@ -8,13 +8,19 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.agent.rap.AAgentWizard;
-import org.inqle.experiment.rapidminer.ILearningCycle;
-import org.inqle.experiment.rapidminer.LearningCycle;
-import org.inqle.experiment.rapidminer.LearningCycleLister;
+import org.inqle.agent.IAgent;
+import org.inqle.agent.rap.IAgentWizard;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.sampling.ISampler;
+import org.inqle.data.sampling.SamplerLister;
+import org.inqle.experiment.rapidminer.IRapidMinerExperiment;
+import org.inqle.experiment.rapidminer.Learner;
+import org.inqle.experiment.rapidminer.RapidMinerExperimentLister;
 import org.inqle.ui.rap.IList2Provider;
 import org.inqle.ui.rap.IListProvider;
+import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IValueUpdater;
+import org.inqle.ui.rap.actions.DynaWizard;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 import org.inqle.ui.rap.pages.NumericFieldPage;
 import org.inqle.ui.rap.pages.RadioOrListSelectorPage;
@@ -22,17 +28,23 @@ import org.inqle.ui.rap.pages.SimpleListSelectorPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-public class ExperimenterAgentWizard extends AAgentWizard  implements IListProvider, IList2Provider, IValueUpdater {
+public class ExperimenterAgentWizard extends DynaWizard implements IAgentWizard, IListProvider, IList2Provider, IValueUpdater {
 
-	private static final String OPTION_RANDOM_LC = "Use a randomly-selected Learning Cycle";
+	private static final String OPTION_RANDOM_SAMPLER = "Use a randomly-selected Sampler";
+	private static final String OPTION_RANDOM_RAPIDMINER_EXPERIMENT = "Use a randomly-selected RapidMiner Experiment";
 //	private static final String OPTION_BASE_LC = "Use the Base Learning Cycle, which itself makes all random selections";
 	private static Logger log = Logger.getLogger(ExperimenterAgentWizard.class);
-	private SimpleListSelectorPage learningCycleSelectorPage;
-	private ArrayList learningCycleOptions;
-	private List<LearningCycle> learningCycles;
-	
-	public ExperimenterAgentWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+	private ExperimenterAgent experimenterAgent;
+	private SimpleListSelectorPage samplerSelectorPage;
+	private List<Object> samplerOptions;
+	private List<Object> experimentOptions;
+	List<ISampler> samplers;
+	List<IRapidMinerExperiment> rapidMinerExperiments;
+	private SimpleListSelectorPage experimentSelectorPage;
+
+	public ExperimenterAgentWizard(ExperimenterAgent experimenterAgent, Shell shell) {
+		super(shell);
+		this.experimenterAgent = experimenterAgent;
 	}
 
 	@Override
@@ -41,29 +53,15 @@ public class ExperimenterAgentWizard extends AAgentWizard  implements IListProvi
 	 */
 	public void addPages() {
 		//log.info("ExperimenterAgentWizard adding pages...");
-		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(bean, "Name and Description", null);
+		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage("Name and Description", null);
 		addPage(nameDescriptionPage);
 		log.info("Added NameDescriptionPage");
 		
-//		ListSelectorPage learningCycleSelectorPage = new ListSelectorPage(bean, "learningCycle", "Select Learning Cycle to use", null);
-//		learningCycleSelectorPage.setBeanItemClass(ILearningCycle.class);
-//		ILearningCycle[] nullLCArray = {};
-//		learningCycleSelectorPage.setListItems(LearningCycleLister.listAllLearningCycles().toArray(nullLCArray));
-//		addPage(learningCycleSelectorPage);
+		samplerSelectorPage = new SimpleListSelectorPage("Select Sampler to use", "Select whether to use a randomly selected Sampler, or specify the Sampler to be used for this Learning Cycle.", "Select Sampler:", SWT.SINGLE);
+		addPage(samplerSelectorPage);
 		
-//		RadioOrListSelectorPage learningCycleSelectorPage = new RadioOrListSelectorPage(bean, "learningCycle", "Select Learning Cycle to use", null);
-//		learningCycleSelectorPage.setBeanItemClass(ILearningCycle.class);
-//		ILearningCycle[] nullLCArray = {};
-//		learningCycleSelectorPage.setListItems(LearningCycleLister.listCustomizedLearningCycles().toArray(nullLCArray));
-//		List<String> radioOptionTexts = Arrays.asList(RADIO_OPTIONS);
-//		//learningCycleSelectorPage.setSelectedOptionIndex();
-//		learningCycleSelectorPage.setRadioOptionTexts(radioOptionTexts);
-//		ExperimenterBeanProvider experimenterBeanProvider = new ExperimenterBeanProvider();
-//		experimenterBeanProvider.setBean(bean);
-//		learningCycleSelectorPage.setRadioBeanProvider(experimenterBeanProvider);
-//		addPage(learningCycleSelectorPage);
-		learningCycleSelectorPage = new SimpleListSelectorPage("Select Learning Cycle to use", "Select whether to use a randomly selected Learning Cycle, the base Learning Cycle, or a customized Learning Cycle.", "Select Learning Cycle:", SWT.SINGLE);
-		addPage(learningCycleSelectorPage);
+		experimentSelectorPage = new SimpleListSelectorPage("Select RapidMiner Experiment to use", "Select whether to use a randomly selected RapidMiner experiment, or specify the experiment to be used repeatedly.", "Select RapidMiner Experiment:", SWT.SINGLE);
+		addPage(experimentSelectorPage);
 		
 		NumericFieldPage numberOfRunsPage = new NumericFieldPage(bean, "stoppingPoint", "Enter Number of Executions", "Select number of executions to run (-1 to run continuously).", null);
 		addPage(numberOfRunsPage);
@@ -74,18 +72,30 @@ public class ExperimenterAgentWizard extends AAgentWizard  implements IListProvi
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Object> getList(IWizardPage page) {
-		if (page.equals(learningCycleSelectorPage)) {
-			learningCycleOptions = new ArrayList();
-			learningCycleOptions.add(OPTION_RANDOM_LC);
-//			learningCycleOptions.add(OPTION_BASE_LC);
-			if (learningCycles==null) {
-				learningCycles = LearningCycleLister.listCustomizedLearningCycles();
+		if (page.equals(samplerSelectorPage)) {
+			samplerOptions = new ArrayList<Object>();
+			samplerOptions.add(OPTION_RANDOM_SAMPLER);
+			if (samplers==null) {
+				samplers = SamplerLister.listSamplers(true);
 			}
-			for (ILearningCycle learningCycle: learningCycles) {
-				learningCycleOptions.add(learningCycle.getName());
+			for (ISampler sampler: samplers) {
+				samplerOptions.add(sampler.getName());
 			}
-			return learningCycleOptions;
+			return samplerOptions;
 		}
+		
+		if (page.equals(experimentSelectorPage)) {
+			experimentOptions = new ArrayList<Object>();
+			experimentOptions.add(OPTION_RANDOM_RAPIDMINER_EXPERIMENT);
+			if (rapidMinerExperiments==null) {
+				rapidMinerExperiments = RapidMinerExperimentLister.listRapidMinerExperiments();
+			}
+			for (IRapidMinerExperiment experiment: rapidMinerExperiments) {
+				experimentOptions.add(experiment.getName());
+			}
+			return experimentOptions;
+		}
+		
 		return null;
 	}
 
@@ -94,13 +104,20 @@ public class ExperimenterAgentWizard extends AAgentWizard  implements IListProvi
 	 */
 	public List<Object> getList2(IWizardPage page) {
 		if (bean == null) return null;
-		ExperimenterAgent experimenterAgent = (ExperimenterAgent) bean;
-		if (page.equals(learningCycleSelectorPage)) {
-			if (experimenterAgent.getLearningCycle()==null) return null;
+		if (page.equals(samplerSelectorPage)) {
+			if (experimenterAgent.getSampler()==null) return null;
 			List<Object> listItems = new ArrayList<Object>();
-			listItems.add(experimenterAgent.getLearningCycle().getName());
+			listItems.add(experimenterAgent.getSampler().getName());
 			return listItems;
 		}
+		
+		if (page.equals(experimentSelectorPage)) {
+			if (experimenterAgent.getRapidMinerExperiment()==null) return null;
+			List<Object> listItems = new ArrayList<Object>();
+			listItems.add(experimenterAgent.getRapidMinerExperiment().getName());
+			return listItems;
+		}
+		
 		return null;
 	}
 
@@ -109,16 +126,50 @@ public class ExperimenterAgentWizard extends AAgentWizard  implements IListProvi
 	 */
 	public void updateValue(IWizardPage page) {
 		if (bean == null) return;
-		ExperimenterAgent experimenterAgent = (ExperimenterAgent) bean;
-		if (page.equals(learningCycleSelectorPage)) {
-			int selectedLCIndex = learningCycleSelectorPage.getSelectedIndex();
-			if (selectedLCIndex < 1) {
-				experimenterAgent.setLearningCycle(null);
-			} else {
-				experimenterAgent.setLearningCycle(learningCycles.get(selectedLCIndex - 1));
-			}
+		if (page.equals(samplerSelectorPage)) {
+			experimenterAgent.setSampler(getSelectedSampler());
+		}
+		if (page.equals(experimentSelectorPage)) {
+			experimenterAgent.setRapidMinerExperiment(getSelectedRapidMinerExperiment());
 		}
 		
+	}
+	
+	public ISampler getSelectedSampler() {
+		int selectedIndex = samplerSelectorPage.getSelectedIndex();
+		if (selectedIndex < 1) {
+			return null;
+		} else {
+			return samplers.get(selectedIndex - 1);
+		}
+	}
+	
+	private IRapidMinerExperiment getSelectedRapidMinerExperiment() {
+		int selectedIndex = experimentSelectorPage.getSelectedIndex();
+		if (selectedIndex < 1) {
+			return null;
+		} else {
+			return rapidMinerExperiments.get(selectedIndex - 1);
+		}
+	}
+
+	@Override
+	public boolean performFinish() {
+		Persister persister = Persister.getInstance();
+		experimenterAgent.setSampler(getSelectedSampler());
+		experimenterAgent.setRapidMinerExperiment(getSelectedRapidMinerExperiment());
+		persister.persist(experimenterAgent);
+		return true;
+	}
+
+	@Override
+	public IPart getPart() {
+		return part;
+	}
+
+	@Override
+	public void setPart(IPart part) {
+		this.part = part;
 	}
 
 }
