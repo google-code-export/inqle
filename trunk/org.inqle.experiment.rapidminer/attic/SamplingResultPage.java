@@ -22,7 +22,7 @@ public class SamplingResultPage extends DataTablePage {
 
 	static Logger log = Logger.getLogger(SamplingResultPage.class);
 
-	public SamplingResultPage(LearningCycle learningCycle, String title) {
+	public SamplingResultPage(Learner learningCycle, String title) {
 		super(learningCycle, null, null, title, null);
 	}
 
@@ -30,7 +30,7 @@ public class SamplingResultPage extends DataTablePage {
 	public void onEnterPageFromPrevious() {
 		clearTableData();
 		//this.getShell().redraw();
-		ISampler origSampler = ((LearningCycle)bean).getSampler();
+		ISampler origSampler = ((Learner)bean).getSampler();
 		if (origSampler == null) {
 			return;
 		}

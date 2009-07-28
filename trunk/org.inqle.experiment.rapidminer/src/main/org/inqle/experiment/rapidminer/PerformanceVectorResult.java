@@ -533,6 +533,17 @@ public class PerformanceVectorResult extends UniqueJenabean implements IExperime
 		return weighted_mean_recall;
 	}
 
+	@Override
+	public String getSamplerClassName() {
+		return samplerClassName;
+	}
+
+	@Override
+	public void setSamplerClassName(String samplerClassName) {
+		this.samplerClassName = samplerClassName;
+		
+	}
+
 
 
 }

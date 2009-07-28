@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import org.apache.log4j.Logger;
 import org.inqle.experiment.rapidminer.IRapidMinerExperiment;
-import org.inqle.experiment.rapidminer.LearningCycle;
+import org.inqle.experiment.rapidminer.Learner;
 
 public class RapidMinerProcessCreator {
 
