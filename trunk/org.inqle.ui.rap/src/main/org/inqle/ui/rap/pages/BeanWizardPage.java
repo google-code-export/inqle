@@ -33,9 +33,12 @@ import org.inqle.data.rdf.jenabean.IBasicJenabean;
  * 
  * To get full functionality of this class (e.g. methods onNextPage() and onEnterPage()),
  * must use DynaWizardDialog and not the standard WizardDialog
+ * 
+ * Deprecated because we are removing data binding
  * @author David Donohue
  * Feb 20, 2008
  */
+@Deprecated
 public abstract class BeanWizardPage extends DynaWizardPage {
 
 	protected IBasicJenabean bean;
