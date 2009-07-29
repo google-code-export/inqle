@@ -46,9 +46,8 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	private IAgent agent;
 	private NumericFieldPage numberOfRunsPage;
 	
-	public ExperimenterAgentWizard(ExperimenterAgent experimenterAgent, Shell shell) {
+	public ExperimenterAgentWizard(Shell shell) {
 		super(shell);
-		this.agent = experimenterAgent;
 	}
 
 	public IAgent getAgent() {
