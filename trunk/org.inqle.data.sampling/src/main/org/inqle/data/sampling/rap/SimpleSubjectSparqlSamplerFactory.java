@@ -29,7 +29,7 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 	}
 
 	public SimpleSubjectSparqlSamplerWizard createWizard(Model model, Shell shell) {
-		SimpleSubjectSparqlSamplerWizard wizard = new SimpleSubjectSparqlSamplerWizard(model, shell);
+		SimpleSubjectSparqlSamplerWizard wizard = new SimpleSubjectSparqlSamplerWizard(shell);
 		return wizard;
 	}
 
@@ -76,7 +76,7 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 	public ISamplerWizard createWizardForClone(Model model, Shell shell) {
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
 		SimpleSubjectSparqlSampler clone = baseSampler.createClone();
-		wizard.setBean(clone);
+		wizard.setSampler(clone);
 		return wizard;
 	}
 	
