@@ -21,8 +21,10 @@ import com.hp.hpl.jena.rdf.model.Model;
 @TargetDatamodel(IAgent.AGENT_DATASET)
 public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 	
-	public JUnitTestRunnerAgentWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+	private NameDescriptionPage nameDescriptionPage;
+
+	public JUnitTestRunnerAgentWizard(Shell shell) {
+		super(shell);
 	}
 
 	/**
@@ -30,8 +32,18 @@ public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 	 */
 	@Override
 	public void addPages() {
-		NameDescriptionPage nameDescriptionPage = new NameDescriptionPage(bean, "Name and Description", null);
+		nameDescriptionPage = new NameDescriptionPage("Name and Description", null);
 		addPage(nameDescriptionPage);
+	}
+
+	@Override
+	public boolean performFinish() {
+		JUnitTestRunnerAgent juAgent = (JUnitTestRunnerAgent)getAgent();
+		juAgent.setName(nameDescriptionPage.getName());
+		juAgent.setDescription(nameDescriptionPage.getDescription());
+		Persister persister = Persister.getInstance();
+		persister.persist(juAgent);
+		return true;
 	}
 
 }

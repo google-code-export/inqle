@@ -43,7 +43,7 @@ public interface IAgentFactory extends INamedAndDescribed {
 	 * @param shell
 	 * @return
 	 */
-	public IAgentWizard createWizard(Model model, Shell shell);
+	public IAgentWizard createWizard(Shell shell);
 
 	public boolean hasWizard();
 
@@ -54,11 +54,11 @@ public interface IAgentFactory extends INamedAndDescribed {
 	 * @param shell
 	 * @return
 	 */
-	public IAgentWizard createWizardForReplica(Model model, Shell shell);
+	public IAgentWizard createWizardForReplica(Shell shell);
 
 	public IAgentFactory cloneFactory(IAgent childAgent);
 
-	public IAgentWizard createWizardForClone(Model model, Shell shell);
+	public IAgentWizard createWizardForClone(Shell shell);
 
 //	public Persister getPersister();
 //	

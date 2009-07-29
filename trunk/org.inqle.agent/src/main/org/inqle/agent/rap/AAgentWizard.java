@@ -4,6 +4,8 @@
 package org.inqle.agent.rap;
 
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.agent.IAgent;
+import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.actions.DynaWizard;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -16,16 +18,30 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Feb 28, 2008
  * 
- * No need for this abstract class
  */
-@Deprecated
 public abstract class AAgentWizard extends DynaWizard implements IAgentWizard {
 
-	protected Model saveToModel;
+	private IAgent agent;
+	private IPart part;
+	
+	public IPart getPart() {
+		return part;
+	}
 
-	public AAgentWizard(Model saveToModel, Shell shell) {
+	public void setPart(IPart part) {
+		this.part = part;
+	}
+
+	public AAgentWizard(Shell shell) {
 		super(shell);
-		this.saveToModel = saveToModel;
+	}
+
+	public void setAgent(IAgent agent) {
+		this.agent = agent;
+	}
+
+	public IAgent getAgent() {
+		return agent;
 	}
 
 }

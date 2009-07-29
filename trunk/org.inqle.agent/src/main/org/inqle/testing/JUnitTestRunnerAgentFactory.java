@@ -6,8 +6,6 @@ import org.inqle.agent.rap.AAgentFactory;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.agent.rap.IAgentWizard;
 
-import com.hp.hpl.jena.rdf.model.Model;
-
 public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 
 	public IAgentFactory cloneFactory(IAgent childAgent) {
@@ -16,15 +14,15 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 		return newFactory;
 	}
 
-	public IAgentWizard createWizard(Model model, Shell shell) {
-		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, shell);
-		newWizard.setBean(newAgent());
+	public IAgentWizard createWizard(Shell shell) {
+		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
+		newWizard.setAgent(newAgent());
 		return newWizard;
 	}
 
-	public IAgentWizard createWizardForReplica(Model model, Shell shell) {
-		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, shell);
-		newWizard.setBean((IAgent)getBaseAgent().createReplica());
+	public IAgentWizard createWizardForReplica(Shell shell) {
+		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
+		newWizard.setAgent((IAgent)getBaseAgent().createReplica());
 		return newWizard;
 	}
 
@@ -38,9 +36,9 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 		return newAgent;
 	}
 
-	public IAgentWizard createWizardForClone(Model model, Shell shell) {
-		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(model, shell);
-		newWizard.setBean((IAgent)getBaseAgent().createClone());
+	public IAgentWizard createWizardForClone(Shell shell) {
+		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
+		newWizard.setAgent((IAgent)getBaseAgent().createClone());
 		return newWizard;
 	}
 
