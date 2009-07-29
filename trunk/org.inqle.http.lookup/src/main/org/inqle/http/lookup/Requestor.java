@@ -81,7 +81,7 @@ public class Requestor {
 	* @throws Exception
 	*/
 	public static boolean sendData(String urlStr, String method, Map<String, String> params, Writer outWriter) {
-		log.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSSS send data to " + urlStr);
+		log.trace("Send data to " + urlStr);
 		
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
@@ -122,11 +122,11 @@ public class Requestor {
 					requestParams += key + "=" + value;
 				}
 				urlc.setRequestProperty("Content-Length", String.valueOf(requestParams.length()));
-				log.info("Sending request to: " + urlc.toString());
+				log.info("Requestor: sending request to: " + urlc.toString());
 				OutputStreamWriter outStream = new OutputStreamWriter(new BufferedOutputStream(urlc.getOutputStream()));
 				outStream.write(requestParams);
 				outStream.close();
-				log.info("added request params:\n" + requestParams);
+				log.info("Requestor: added request params:\n" + requestParams);
 			}
 			
 			InputStream in = urlc.getInputStream();
@@ -168,7 +168,7 @@ public class Requestor {
 	* @throws Exception
 	*/
 	public static Document retrieveXml(String urlStr, Map<String, String> params, String method) {
-		log.info("SSSSSSSSSSSSSSSSSSSSSSSSSSSSS send data to " + urlStr);
+		log.info("Requestor: send data to " + urlStr);
 		Document document = null;
 		//add siteId to the params
 		Persister persister = Persister.getInstance();
@@ -226,7 +226,7 @@ public class Requestor {
 			
 	    document = builder.parse(in);
 		} catch (IOException e) {
-			log.error("SDBDatabase error; Unable to connect to server at " + url, e);
+			log.error("Requestor error: Unable to connect to server at " + url);
 		} catch (Exception e) {
 			log.error("Error parsing XML from InputStream from URL " + url + " for parameters: " + params, e);
 			log.info("Offending input stream=" + InputStreamUtil.convertStreamToString(in));
