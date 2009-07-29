@@ -16,6 +16,9 @@ public interface IAgentWizard extends IWizard {
 	public static final String ID = "org.inqle.agent.IAgentWizard";
 	public IPart getPart();
 	public void setPart(IPart part);
+	public void setAgent(IAgent agent);
+	public IAgent getAgent();
+
 	
 //	public void setBean(IAgent bean);
 //	public IAgent getBean();
