@@ -1004,7 +1004,7 @@ public class Persister {
 				log.warn("Unable to persist object " + persistableObj + ".  It has no TargetDatamodel annotation.");
 				return;
 			}
-			log.info("Persisting to datamodel of role:" + targetDatamodelRoleId + "\npersistableObj=" + JenabeanWriter.toString(persistableObj));
+//			log.info("Persisting to datamodel of role:" + targetDatamodelRoleId + "\npersistableObj=" + JenabeanWriter.toString(persistableObj));
 			Model targetModel = getSystemModel(targetDatamodelRoleId);
 			persist(persistableObj, targetModel);
 		}
