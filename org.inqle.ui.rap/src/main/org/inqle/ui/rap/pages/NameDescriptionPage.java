@@ -60,4 +60,12 @@ public class NameDescriptionPage extends DynaWizardPage {
 		if (description == null) return null;
 		return description.getText();
 	}
+
+	public void setTheName(String theName) {
+		name.setText(theName);
+	}
+
+	public void setTheDescription(String theDescription) {
+		description.setText(theDescription);
+	}
 }

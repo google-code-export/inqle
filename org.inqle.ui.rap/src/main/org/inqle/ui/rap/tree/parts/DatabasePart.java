@@ -27,7 +27,7 @@ public class DatabasePart extends PartType {
 	private IDatabase database;
 	private List<ModelPart> modelParts = new ArrayList<ModelPart>();
 	
-	static Logger log = Logger.getLogger(DatabasePart.class);
+	private static Logger log = Logger.getLogger(DatabasePart.class);
 
 	private boolean childrenIntialized = false;
 
@@ -103,6 +103,7 @@ public class DatabasePart extends PartType {
 			Datamodel datamodel = persister.getDatamodel(modelId);
 			ModelPart modelPart = new ModelPart(datamodel);
 			modelPart.setParent(this);
+			modelPart.addListener(this.listener);
 			//modelPart.setPersister(this.persister);
 			modelParts.add(modelPart);
 		}
