@@ -134,6 +134,10 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 	
 	@Override
 	public void onEnterPageFromPrevious() {
+		updateElements();
+	}
+	
+	public void updateElements() {
 		if (enterNewPropertyButtonExplanation==null) {
 			//log.info("Page not yet initialized.  Exiting SubjectPropertiesPage.");
 			return;
@@ -358,6 +362,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 		} else {
 			subjectMapping = tableMapping.getSubjectMapping();
 		}
+		updateElements();
 	}
 	
 }

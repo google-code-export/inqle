@@ -2,6 +2,7 @@ package org.inqle.ui.rap;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.Viewer;
@@ -14,6 +15,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.ui.rap.tree.IDeltaListener;
 import org.inqle.ui.rap.tree.NullDeltaListener;
+import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.views.ObjectViewer;
 
 public abstract class Part implements IPart {
@@ -22,6 +24,8 @@ public abstract class Part implements IPart {
 	protected IPartType parent;
 	protected IDeltaListener listener = null;
 	protected String description;
+	
+	private static Logger log = Logger.getLogger(Part.class);
 	
 	public String getName() {
 		return name;
@@ -80,6 +84,10 @@ public abstract class Part implements IPart {
 	}
 
 	public void addListener(IDeltaListener listener) {
+		if (listener==null) {
+			log.error("Listener is null");
+			throw new RuntimeException("Listener is null");
+		}
 		this.listener = listener;
 	}
 	

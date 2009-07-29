@@ -336,17 +336,22 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 	
 	@Override
 	public void onEnterPageFromPrevious() {
+		updateElements();
+	}
+	
+	private void updateElements() {
+		table.deselectAll();
 		if (subjectMapping != null && subjectMapping.getSubjectClass() != null) {
-			table.deselectAll();
 			createdUri = subjectMapping.getSubjectClass().toString();
 			createdName = createdUri;
 			selectCreatedClassButton.setText(createdUri);
 			selectCreatedClassButton.setSelection(true);
 			selectNewSubjectLabel.setVisible(true);
-			selectCreatedClassButton.setVisible(true);
+			selectCreatedClassButton.setVisible(true);	
 		}
+			
 	}
-	
+
 	@Override
 	public boolean onNextPage() {
 		String subjUri = getSubjectUri();
@@ -378,5 +383,6 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		} else {
 			this.subjectMapping = tableMapping.getSubjectMapping();
 		}
+		updateElements();
 	}
 }
