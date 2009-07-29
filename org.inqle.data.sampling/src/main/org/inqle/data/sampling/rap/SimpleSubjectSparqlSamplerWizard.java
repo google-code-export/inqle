@@ -62,6 +62,8 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 //		addPage(samplerNamePage);
 		
 		nameDescriptionPage = new NameDescriptionPage("Name and Description", null);
+		nameDescriptionPage.setTheName(sssSampler.getName());
+		nameDescriptionPage.setTheDescription(sssSampler.getName());
 		addPage(nameDescriptionPage);
 		
 		selectedModelsPage = new SimpleListSelectorPage("Select datamodel(s) for sampling", 
@@ -228,7 +230,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 				for (int selectedIndex: selectedModelsPage.getSelectedIndexes()) {
 					//ignore if they selected random
 					if (selectedIndex==0) continue;
-					Datamodel selectedDM = getUserDatamodels().get(selectedIndex-1);
+					Datamodel selectedDM = getUserDatamodels().get(selectedIndex);
 					selectedDatamodels.add(selectedDM.getId());
 				}
 				sssSampler.setSelectedDatamodels(selectedDatamodels);
