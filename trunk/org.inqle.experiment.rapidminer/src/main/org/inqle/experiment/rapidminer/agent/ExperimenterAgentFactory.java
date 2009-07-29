@@ -23,24 +23,24 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 		return newFactory;
 	}
 
-	public IAgentWizard createWizard(Model model, Shell shell) {
-		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
+	public IAgentWizard createWizard(Shell shell) {
+		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
 		return newWizard;
 	}
 
-	public IAgentWizard createWizardForReplica(Model model,	Shell shell) {
-		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
+	public IAgentWizard createWizardForReplica(Shell shell) {
+		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
 		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createReplica();
 //		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
-		newWizard.setBean(replicaAgent);
+		newWizard.setAgent(replicaAgent);
 		return newWizard;
 	}
 
-	public IAgentWizard createWizardForClone(Model model,	Shell shell) {
-		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(model, shell);
+	public IAgentWizard createWizardForClone(Shell shell) {
+		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
 		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createClone();
 		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
-		newWizard.setBean(replicaAgent);
+		newWizard.setAgent(replicaAgent);
 		return newWizard;
 	}
 	
