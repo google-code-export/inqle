@@ -46,7 +46,7 @@ public class InqleInfo {
 	//TODO use this:public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org/register";
 	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://inqle.org:7700/register";
 	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://inqle.org:7700/lookup";
-//	
+	
 //	public static final String URL_CENTRAL_REGISTRATION_SERVICE = "http://localhost:7700/register";
 //	public static final String URL_CENTRAL_LOOKUP_SERVICE = "http://localhost:7700/lookup";
 
