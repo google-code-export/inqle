@@ -2,7 +2,6 @@ package org.inqle.data.sampling.rap;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,9 +21,6 @@ import org.inqle.ui.rap.IListProvider;
 import org.inqle.ui.rap.IValueUpdater;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 import org.inqle.ui.rap.pages.SimpleListSelectorPage;
-import org.inqle.ui.rap.table.BeanTableSelectorPage;
-
-import com.hp.hpl.jena.rdf.model.Model;
 
 //import example.Datamodel;
 
@@ -40,27 +36,38 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	private SimpleListSelectorPage labelSelectorPage;
 	private NameDescriptionPage nameDescriptionPage;
 	private MinMaxPage minMaxPage;
-	
-	public SimpleSubjectSparqlSamplerWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+//	private SimpleSubjectSparqlSampler sampler;
+//	
+//	public SimpleSubjectSparqlSampler getSampler() {
+//		return sampler;
+//	}
+//
+//	public void setSampler(SimpleSubjectSparqlSampler sampler) {
+//		this.sampler = sampler;
+//	}
+	private SimpleListSelectorPage selectedModelsPage;
+	private List<String> userDatamodelStrings;
+	private List<Datamodel> userDatamodels;
+
+	public SimpleSubjectSparqlSamplerWizard(Shell shell) {
+		super(shell);
 	}
 
 	@Override
 	public void addPages() {
-		SimpleSubjectSparqlSampler sampler = (SimpleSubjectSparqlSampler) bean;
+		SimpleSubjectSparqlSampler sssSampler = (SimpleSubjectSparqlSampler)getSampler();
 		//log.info("addPages() called; SimpleSubjectSparqlSamplerWizard has model bean: " + JenabeanWriter.toString(sampler));
 //		SingleTextPage samplerNamePage = new SingleTextPage(sampler, "name", "Sampler name", null);
 //		samplerNamePage.setLabelText("Sampler Name");
 //		addPage(samplerNamePage);
 		
-		nameDescriptionPage = new NameDescriptionPage(sampler, "Name and Description", null);
+		nameDescriptionPage = new NameDescriptionPage("Name and Description", null);
 		addPage(nameDescriptionPage);
 		
-		BeanTableSelectorPage selectedModelsPage = new BeanTableSelectorPage(sampler, "selectedDatamodels", String.class, "Select datamodel(s) for sampling", null);
-		Persister persister = Persister.getInstance();
-		selectedModelsPage.setBeans(persister.listDatamodels(InqleInfo.USER_DATABASE_ROOT));
-		selectedModelsPage.setTableBeanClass(Datamodel.class);
-		selectedModelsPage.setPropertyNames(Arrays.asList(new String[]{"name", "id", "class"}));
+		selectedModelsPage = new SimpleListSelectorPage("Select datamodel(s) for sampling", 
+				"Optionally select which datamodel(s) from which to extract data.", 
+				"Select datamodels:", 
+				SWT.MULTI);
 		addPage(selectedModelsPage);
 		
 		subjectClassSelectorPage = new SimpleListSelectorPage("Select Class of Subject", 
@@ -78,8 +85,8 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		minMaxPage = new MinMaxPage(
 				"Number of Attributes", 
 				"Enter the number of attributes to test each run.  Specify the minimum and maximum number of attributes to select.  Each run, a random number will be selected in this range.",
-				sampler.getMinLearnablePredicates(),
-				sampler.getMaxLearnablePredicates()
+				sssSampler.getMinLearnablePredicates(),
+				sssSampler.getMaxLearnablePredicates()
 		);
 		addPage(minMaxPage);
 		
@@ -141,16 +148,39 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	
 	@Override
 	public boolean performFinish() {
-		SimpleSubjectSparqlSampler sampler = (SimpleSubjectSparqlSampler) bean;
+		SimpleSubjectSparqlSampler sssSampler = (SimpleSubjectSparqlSampler)getSampler();
+		sssSampler.setName(nameDescriptionPage.getName());
+		sssSampler.setDescription(nameDescriptionPage.getDescription());
 		Integer minAttributes = minMaxPage.getMinVal();
 		if (minAttributes != null) {
-			sampler.setMinLearnablePredicates(minAttributes);
+			sssSampler.setMinLearnablePredicates(minAttributes);
 		}
 		Integer maxAttributes = minMaxPage.getMaxVal();
 		if (maxAttributes != null) {
-			sampler.setMaxLearnablePredicates(maxAttributes);
+			sssSampler.setMaxLearnablePredicates(maxAttributes);
 		}
-		return super.performFinish();
+		Persister persister = Persister.getInstance();
+		persister.persist(sssSampler);
+		
+		return true;
+	}
+
+	private List<String> getUserDatamodelStrings() {
+		if (userDatamodelStrings==null) {
+			userDatamodelStrings = new ArrayList<String>();
+			for (Datamodel datamodel: getUserDatamodels()) {
+				userDatamodelStrings.add(datamodel.getName());
+			}
+		}
+		return userDatamodelStrings;
+	}
+	
+	private List<Datamodel> getUserDatamodels() {
+		if (userDatamodels==null) {
+			Persister persister = Persister.getInstance();
+			userDatamodels = persister.listDatamodels(InqleInfo.USER_DATABASE_ROOT);
+		}
+		return userDatamodels;
 	}
 
 	/**
@@ -158,16 +188,21 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	 */
 	@SuppressWarnings("unchecked")
 	public List getList(IWizardPage page) {
-		if (bean == null) return null;
+		SimpleSubjectSparqlSampler sssSampler = (SimpleSubjectSparqlSampler)getSampler();
+		if (sssSampler == null) return null;
+		
+		if (page.equals(selectedModelsPage)) {
+			return getUserDatamodelStrings();
+		}
 		if (page.equals(subjectClassSelectorPage)) {
-			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedDatamodels();
+			Collection<String> selectedModelsCollection = sssSampler.getSelectedDatamodels();
 			log.info("GGGGGGGGGGGGGGGGGGG Get subjects for datamodels: " + selectedModelsCollection );
 			return SubjectClassLister.getUncommonSubjectClasses(selectedModelsCollection);
 		}
 		
 		if (page.equals(arcSelectorPage) || page.equals(labelSelectorPage)) {
-			Collection<String> selectedModelsCollection = ((SimpleSubjectSparqlSampler)bean).getSelectedDatamodels();
-			URI subjectClass = ((SimpleSubjectSparqlSampler)bean).getSubjectClass();
+			Collection<String> selectedModelsCollection = sssSampler.getSelectedDatamodels();
+			URI subjectClass = sssSampler.getSubjectClass();
 			if (selectedModelsCollection == null || selectedModelsCollection.size()==0 || subjectClass == null) {
 				log.info("Returning NULL for list of Arcs");
 				arcsList = null;
@@ -179,63 +214,101 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		}
 		return null;
 	}
-	
+
 	public void updateValue(IWizardPage page) {
+		SimpleSubjectSparqlSampler sssSampler = (SimpleSubjectSparqlSampler)getSampler();
+		if (sssSampler==null) return;
+		
+		if (page.equals(selectedModelsPage)) {
+			if (selectedModelsPage.getSelectedStrings()==null || selectedModelsPage.getSelectedStrings().length==0) {
+				sssSampler.setSelectedDatamodels(null);
+			} else {
+				List<String> selectedDatamodels = new ArrayList<String>();
+				//add each selected ID to the sssSampler
+				for (int selectedIndex: selectedModelsPage.getSelectedIndexes()) {
+					//ignore if they selected random
+					if (selectedIndex==0) continue;
+					Datamodel selectedDM = getUserDatamodels().get(selectedIndex-1);
+					selectedDatamodels.add(selectedDM.getId());
+				}
+				sssSampler.setSelectedDatamodels(selectedDatamodels);
+			}
+		}
+		
 		if (page.equals(subjectClassSelectorPage)) {
 			if (subjectClassSelectorPage.getSelectedString()==null) {
-				((SimpleSubjectSparqlSampler)bean).setSubjectClass(null);
+				sssSampler.setSubjectClass(null);
 				log.info("Updated sampler with null");
 			} else {
 				String selectedSubject = subjectClassSelectorPage.getSelectedString();
-				((SimpleSubjectSparqlSampler)bean).setSubjectClass(URI.create(selectedSubject));
+				sssSampler.setSubjectClass(URI.create(selectedSubject));
 				log.info("Updated sampler with subject class: " + selectedSubject);
 			}
 		}
 		
 		if (page.equals(labelSelectorPage)) {
 			if (labelSelectorPage.getSelectedIndexes()==null || labelSelectorPage.getSelectedIndexes().length==0) {
-				((SimpleSubjectSparqlSampler)bean).setLabelArc(null);
+				sssSampler.setLabelArc(null);
 			} else {
 				int selectedArcIndex = labelSelectorPage.getSelectedIndex();
-				((SimpleSubjectSparqlSampler)bean).setLabelArc(arcsList.get(selectedArcIndex));
+				sssSampler.setLabelArc(arcsList.get(selectedArcIndex));
 				log.info("Updated sampler with label arc: " + arcsList.get(selectedArcIndex));
 			}
 		}
 		
 		if (page.equals(arcSelectorPage)) {
 			if (arcSelectorPage.getSelectedIndexes()==null || arcSelectorPage.getSelectedIndexes().length==0) {
-				((SimpleSubjectSparqlSampler)bean).setArcs(null);
+				sssSampler.setArcs(null);
 			} else {
 				List<Arc> newlySelectedArcs = new ArrayList<Arc>();
 				for (int selectedArcIndex: arcSelectorPage.getSelectedIndexes()) {
 					newlySelectedArcs.add(arcsList.get(selectedArcIndex));
 				}
-				((SimpleSubjectSparqlSampler)bean).setArcs(newlySelectedArcs);
+				sssSampler.setArcs(newlySelectedArcs);
 				log.info("Updated sampler with subject arcs: " + newlySelectedArcs);
 			}
 		}
 	}
 
+	/**
+	 * Return the list of things which are already selected in the SSSSampler
+	 */
 	@SuppressWarnings("unchecked")
 	public List getList2(IWizardPage page) {
-		if (bean == null) return null;
+		SimpleSubjectSparqlSampler sssSampler = (SimpleSubjectSparqlSampler)getSampler();
+		if (sssSampler==null) return null;
+		
+		if (page.equals(selectedModelsPage)) {
+			List<String> selectedDatamodelNames = new ArrayList<String>();
+			Collection<String> selectedDatamodelIds = sssSampler.getSelectedDatamodels();
+			if (selectedDatamodelIds==null || selectedDatamodelIds.size()==0) return null;
+			
+			for (Datamodel datamodel: getUserDatamodels()) {
+				if (selectedDatamodelIds.contains(datamodel.getId())) {
+					selectedDatamodelNames.add(datamodel.getName());
+				}
+			}
+			return selectedDatamodelNames;
+		}
+		
+		if (sssSampler == null) return null;
 		if (page.equals(subjectClassSelectorPage)) {
 			List<String> selectedSubjectClass = new ArrayList<String>();
-			URI subjectClassUri = ((SimpleSubjectSparqlSampler)bean).getSubjectClass();
+			URI subjectClassUri = sssSampler.getSubjectClass();
 			if (subjectClassUri != null) {
 				selectedSubjectClass.add(subjectClassUri.toString());
 			}
 			return selectedSubjectClass;
 		}
 		if (page.equals(labelSelectorPage)) {
-			Arc selectedLabelArc = ((SimpleSubjectSparqlSampler)bean).getLabelArc();
+			Arc selectedLabelArc = sssSampler.getLabelArc();
 			if (selectedLabelArc==null) return null;
 			List<String> selectedLabelArcList = new ArrayList<String>();
 			selectedLabelArcList.add(selectedLabelArc.toString());
 			return selectedLabelArcList;
 		}
 		if (page.equals(arcSelectorPage)) {
-			Collection<Arc> selectedArcsCollection = ((SimpleSubjectSparqlSampler)bean).getArcs();
+			Collection<Arc> selectedArcsCollection = sssSampler.getArcs();
 			if (selectedArcsCollection==null) return null;
 			List<String> selectedArcsList = new ArrayList<String>();
 			for (Arc selectedArc: selectedArcsCollection) {
