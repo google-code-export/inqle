@@ -47,9 +47,11 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWizard {
 
 	private static final String DEFAULT_THING_CLASS = "type of thing";
+	private Model saveToModel;
 
 	public FileDataImporterWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+		super(shell);
+		this.saveToModel = saveToModel;
 	}
 
 	private static Logger log = Logger.getLogger(FileDataImporterWizard.class);
@@ -63,12 +65,20 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	private DateTimeMapperPage dateTimeMapperPage;
 	private Datamodel datamodel;
 	private IPart part;
+	public IPart getPart() {
+		return part;
+	}
+
+	public void setPart(IPart part) {
+		this.part = part;
+	}
+
 	private RowSubjectClassPage subjectClassPage;
 	private RowSubjectUriPage subjectUriPage;
 	private RowSubjectPropertyMappingsPage propertyMappingsPage;
 	private RowSubjectPropertyValuesPage propertyValuesPage;
 	private MappingLookupPage mappingLookupPage;
-	private TableMapping tableMapping;
+//	private TableMapping tableMapping;
 	
 	//each time a new subject (of either type) is added, each of these 5 lists is appended with 
 	//a new page of its type.
@@ -215,7 +225,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			saveMappingLoadDataPage.setShouldSaveMapping(false);
 			return true;
 		} else {
-			tableMapping = null;
+//			tableMapping = null;
 			saveMappingLoadDataPage.setShouldSaveMapping(false);
 		}
 		
@@ -266,7 +276,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 	 */
 	public void setTableMapping(TableMapping tableMapping) {
 		log.info("Populating FileDataImporterWizard with TableMapping: \n" + JenabeanWriter.toString(tableMapping));
-		this.tableMapping = tableMapping;
+//		this.tableMapping = tableMapping;
 		dateTimeMapperPage.setTableMapping(tableMapping);
 		subjectClassPage.setTableMapping(tableMapping);
 		subjectUriPage.setTableMapping(tableMapping);

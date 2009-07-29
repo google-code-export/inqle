@@ -35,9 +35,11 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 	private Datamodel datamodel;
 //	private ModelPart modelPart = null;
 	private boolean successImporting = false;
+	private Model saveToModel;
 	
 	public AddReasonerStatementsWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+		super(shell);
+		this.saveToModel = saveToModel;
 	}
 	
 	

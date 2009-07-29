@@ -27,9 +27,9 @@ public abstract class DynaWizard extends Wizard {
 	
 //	protected Model saveToModel;
 	protected Shell shell;
-	protected IPart part = null;
+//	protected IPart part = null;
 
-	protected IBasicJenabean bean;
+//	protected IBasicJenabean bean;
 	/**
 	 * @param bean
 	 */

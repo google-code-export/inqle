@@ -35,8 +35,10 @@ import com.hp.hpl.jena.rdf.model.Model;
  */
 public class LoadRdfFileWizard extends DynaWizard {
 
+	private Model saveToModel;
 	public LoadRdfFileWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+		super(shell);
+		this.saveToModel = saveToModel;
 		// TODO Auto-generated constructor stub
 	}
 

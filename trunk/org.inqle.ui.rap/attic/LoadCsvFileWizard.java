@@ -48,8 +48,11 @@ import com.hp.hpl.jena.rdf.model.Model;
 @Deprecated
 public class LoadCsvFileWizard extends DynaWizard implements ICsvReaderWizard {
 
+	private Model saveToModel;
+
 	public LoadCsvFileWizard(Model saveToModel, Shell shell) {
-		super(saveToModel, shell);
+		super(shell);
+		this.saveToModel = saveToModel;
 		log.info("CCCCCCCCCCCCCreating new LoadCsvFileWizard");
 		// TODO Auto-generated constructor stub
 	}
