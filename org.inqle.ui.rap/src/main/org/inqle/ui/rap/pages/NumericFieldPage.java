@@ -21,6 +21,8 @@ public class NumericFieldPage extends DynaWizardPage {
 	
 	private Text numericField;
 
+	private String numberStr;
+
 	private static Logger log = Logger.getLogger(NumericFieldPage.class);
 	
 	public NumericFieldPage(String title, String labelText, ImageDescriptor titleImage) {
@@ -39,6 +41,9 @@ public class NumericFieldPage extends DynaWizardPage {
 		Composite composite = selfComposite;
 		new Label (composite, SWT.NONE).setText(labelText);	
 		numericField = new Text(composite, SWT.BORDER);
+		if (numberStr != null) {
+			numericField.setText(numberStr);
+		}
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		numericField.setLayoutData(gridData);
 	}
@@ -63,5 +68,19 @@ public class NumericFieldPage extends DynaWizardPage {
 			return null;
 		}
 		return new Integer(intVal);
+	}
+	
+	public void setDoubleValue(double val) {
+		numberStr = String.valueOf(val);
+		if (numericField != null) {
+			numericField.setText(numberStr);
+		}
+	}
+	
+	public void setIntegerValue(int val) {
+		numberStr = String.valueOf(val);
+		if (numericField != null) {
+			numericField.setText(numberStr);
+		}
 	}
 }
