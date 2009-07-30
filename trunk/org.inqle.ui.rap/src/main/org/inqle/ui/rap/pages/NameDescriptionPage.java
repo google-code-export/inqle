@@ -28,6 +28,8 @@ public class NameDescriptionPage extends DynaWizardPage {
 	private static final Logger log = Logger.getLogger(NameDescriptionPage.class);
 	private Text name;
 	private Text description;
+	private String nameStr;
+	private String descriptionStr;
 	
 	public NameDescriptionPage(String title, ImageDescriptor titleImage) {
 		super(title, titleImage);
@@ -39,16 +41,19 @@ public class NameDescriptionPage extends DynaWizardPage {
 		selfComposite.setLayout(gl);
 		new Label (selfComposite, SWT.NONE).setText("Name");	
 		name = new Text(selfComposite, SWT.BORDER);
-    GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-    name.setLayoutData(gridData);
-    
-    new Label (selfComposite, SWT.NONE).setText("Description");	
+		if (nameStr != null) name.setText(nameStr);
+	    GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+	    name.setLayoutData(gridData);
+	    
+	    new Label (selfComposite, SWT.NONE).setText("Description");	
 		description = new Text(selfComposite, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+		if (descriptionStr != null) description.setText(descriptionStr);
 		//description.setSize (description.computeSize (500, 200));
 		//gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 		//description.setEditable(true);
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		description.setLayoutData(gridData);
+		
 	}
 
 	public String getName() {
@@ -62,10 +67,16 @@ public class NameDescriptionPage extends DynaWizardPage {
 	}
 
 	public void setTheName(String theName) {
-		name.setText(theName);
+		this.nameStr = theName;
+		if (name!=null) {
+			name.setText(nameStr);
+		}
 	}
 
 	public void setTheDescription(String theDescription) {
-		description.setText(theDescription);
+		this.descriptionStr = theDescription;
+		if (description!=null) {
+			description.setText(descriptionStr);
+		}
 	}
 }
