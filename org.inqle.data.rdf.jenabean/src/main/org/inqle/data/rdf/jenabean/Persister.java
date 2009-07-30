@@ -643,6 +643,7 @@ public class Persister {
 	 * @return
 	 */
 	public Model getModel(Datamodel datamodel) {
+		if (datamodel == null) return null;
 //		assert(namedModel != null);
 		//Model repositoryModel = getMetarepositoryModel();
 		if (cachedModels.containsKey(datamodel.getId())) {
