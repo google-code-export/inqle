@@ -1,33 +1,25 @@
 package org.inqle.experiment.rapidminer.agent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.agent.IAgent;
 import org.inqle.agent.rap.AAgentWizard;
 import org.inqle.agent.rap.IAgentWizard;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 import org.inqle.experiment.rapidminer.IRapidMinerExperiment;
-import org.inqle.experiment.rapidminer.Learner;
 import org.inqle.experiment.rapidminer.RapidMinerExperimentLister;
 import org.inqle.ui.rap.IList2Provider;
 import org.inqle.ui.rap.IListProvider;
-import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IValueUpdater;
-import org.inqle.ui.rap.actions.DynaWizard;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 import org.inqle.ui.rap.pages.NumericFieldPage;
-import org.inqle.ui.rap.pages.RadioOrListSelectorPage;
 import org.inqle.ui.rap.pages.SimpleListSelectorPage;
-
-import com.hp.hpl.jena.rdf.model.Model;
 
 public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizard, IListProvider, IList2Provider, IValueUpdater {
 
@@ -43,19 +35,11 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	List<IRapidMinerExperiment> rapidMinerExperiments;
 	private SimpleListSelectorPage experimentSelectorPage;
 	private NameDescriptionPage nameDescriptionPage;
-	private IAgent agent;
+//	private IAgent agent;
 	private NumericFieldPage numberOfRunsPage;
 	
 	public ExperimenterAgentWizard(Shell shell) {
 		super(shell);
-	}
-
-	public IAgent getAgent() {
-		return agent;
-	}
-
-	public void setAgent(IAgent agent) {
-		this.agent = agent;
 	}
 
 	@Override
@@ -63,8 +47,13 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	 * TODO finish wizard
 	 */
 	public void addPages() {
+		ExperimenterAgent experimenterAgent = (ExperimenterAgent)getAgent();
 		//log.info("ExperimenterAgentWizard adding pages...");
 		nameDescriptionPage = new NameDescriptionPage("Name and Description", null);
+		if (experimenterAgent != null) {
+			nameDescriptionPage.setTheName(experimenterAgent.getName());
+			nameDescriptionPage.setTheDescription(experimenterAgent.getDescription());
+		}
 		addPage(nameDescriptionPage);
 		log.info("Added NameDescriptionPage");
 		
@@ -76,6 +65,9 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 		
 		numberOfRunsPage = new NumericFieldPage("Enter Number of Executions", "Select number of executions to run (-1 to run continuously).", null);
 		addPage(numberOfRunsPage);
+		if (experimenterAgent != null) {
+			numberOfRunsPage.setIntegerValue(experimenterAgent.getStoppingPoint());
+		}
 	}
 
 	/**
@@ -83,6 +75,7 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Object> getList(IWizardPage page) {
+		
 		if (page.equals(samplerSelectorPage)) {
 			samplerOptions = new ArrayList<Object>();
 			samplerOptions.add(OPTION_RANDOM_SAMPLER);
@@ -114,8 +107,9 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	 * This is called by some wizard pages, to retrieve the list of items that are pre-selected
 	 */
 	public List<Object> getList2(IWizardPage page) {
-		if (agent == null) return null;
-		ExperimenterAgent experimenterAgent = (ExperimenterAgent) agent;
+		ExperimenterAgent experimenterAgent = (ExperimenterAgent)getAgent();
+		if (experimenterAgent == null) return null;
+		
 		if (page.equals(samplerSelectorPage)) {
 			if (experimenterAgent.getSampler()==null) return null;
 			List<Object> listItems = new ArrayList<Object>();
@@ -124,6 +118,7 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 		}
 		
 		if (page.equals(experimentSelectorPage)) {
+			log.info("experimenterAgent.getRapidMinerExperiment()=" + experimenterAgent.getRapidMinerExperiment());
 			if (experimenterAgent.getRapidMinerExperiment()==null) return null;
 			List<Object> listItems = new ArrayList<Object>();
 			listItems.add(experimenterAgent.getRapidMinerExperiment().getName());
@@ -137,8 +132,8 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	 * This is called by some wizard pages, to permit update of the bean with appropriate value(s)
 	 */
 	public void updateValue(IWizardPage page) {
-		if (agent == null) return;
-		ExperimenterAgent experimenterAgent = (ExperimenterAgent) agent;
+		ExperimenterAgent experimenterAgent = (ExperimenterAgent)getAgent();
+		if (experimenterAgent == null) return;
 		
 		if (page.equals(samplerSelectorPage)) {
 			experimenterAgent.setSampler(getSelectedSampler());
@@ -160,6 +155,7 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 	
 	private IRapidMinerExperiment getSelectedRapidMinerExperiment() {
 		int selectedIndex = experimentSelectorPage.getSelectedIndex();
+		log.info("getSelectedRapidMinerExperiment(): Selected RM Experiment=" + selectedIndex);
 		if (selectedIndex < 1) {
 			return null;
 		} else {
@@ -169,8 +165,7 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 
 	@Override
 	public boolean performFinish() {
-		if (agent == null) return false;
-		ExperimenterAgent experimenterAgent = (ExperimenterAgent) agent;
+		ExperimenterAgent experimenterAgent = (ExperimenterAgent)getAgent();
 		
 		experimenterAgent.setStoppingPoint(numberOfRunsPage.getIntegerValue());
 		experimenterAgent.setName(nameDescriptionPage.getName());
@@ -180,6 +175,8 @@ public class ExperimenterAgentWizard extends AAgentWizard implements IAgentWizar
 		
 		Persister persister = Persister.getInstance();
 		persister.persist(experimenterAgent);
+		
+		getPart().fireUpdatePart();
 		return true;
 	}
 

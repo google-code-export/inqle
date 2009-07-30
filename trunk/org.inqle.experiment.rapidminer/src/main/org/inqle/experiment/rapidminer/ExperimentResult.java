@@ -23,11 +23,11 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * Apr 22, 2008
  */
-@TargetDatamodel(ExperimentResult.EXPERIMENTS_DATASET)
+@TargetDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class ExperimentResult extends UniqueJenabean {
 
-	public static final String EXPERIMENTS_DATASET = "org.inqle.datamodels.experiments";
+//	public static final String EXPERIMENTS_DATASET = "org.inqle.datamodels.experiments";
 	
 	private static Logger log = Logger.getLogger(ExperimentResult.class);
 	

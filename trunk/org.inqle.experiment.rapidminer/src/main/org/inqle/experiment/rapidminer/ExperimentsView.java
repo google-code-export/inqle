@@ -52,7 +52,7 @@ public class ExperimentsView extends SparqlView {
 			"{\n" +
 			"GRAPH ?g {\n" +
 			"?" + ResultSetTable.URI_VARIABLE + " a ?classUri\n" +
-			"  . ?classUri <" + RDF.JAVA_CLASS + "> \"" + ExperimentResult.class.getName() + "\" \n" +
+			"  . ?classUri <" + RDF.JAVA_CLASS + "> \"" + PerformanceVectorResult.class.getName() + "\" \n" +
 			". ?" + ResultSetTable.URI_VARIABLE + " inqle:id ?id \n" +
 			". ?" + ResultSetTable.URI_VARIABLE + " inqle:creationDate ?Creation_Date \n" +
 //			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " dc:name ?Name }\n" +
@@ -75,7 +75,7 @@ public class ExperimentsView extends SparqlView {
 	@Override
 	public Datamodel getDatamodel() {
 		Persister persister = Persister.getInstance();
-		SystemDatamodel datamodel = persister.getSystemDatamodel(ExperimentResult.EXPERIMENTS_DATASET);
+		SystemDatamodel datamodel = persister.getSystemDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL);
 		return datamodel;
 	}
 	

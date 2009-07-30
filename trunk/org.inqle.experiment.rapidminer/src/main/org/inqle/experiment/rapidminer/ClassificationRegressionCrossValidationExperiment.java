@@ -241,7 +241,7 @@ public class ClassificationRegressionCrossValidationExperiment extends GlobalJen
 		while (regularAttributeI.hasNext()) {
 			i++;
 			Attribute regularAttribute = (Attribute)regularAttributeI.next();
-			//log.info("\n\nREGULAR Attribute =" + regularAttribute);
+			log.info("\n\nREGULAR Attribute =" + regularAttribute);
 		}
 		//run this ExampleSet against the RapidMiner process
 		IOObject[] inputIOObjects = new IOObject[] { exampleSet };
