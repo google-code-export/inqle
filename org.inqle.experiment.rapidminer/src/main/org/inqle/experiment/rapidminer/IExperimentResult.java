@@ -15,7 +15,7 @@ import org.inqle.data.rdf.jenabean.IUniqueJenabean;
  */
 public interface IExperimentResult extends IUniqueJenabean {
 
-	public static final String EXPERIMENT_RESULTS_DATAMODEL = "org.inqle.rapidminer.experiment.datamodels.rmExperimentResults";
+	public static final String EXPERIMENT_RESULTS_DATAMODEL = "org.inqle.experiment.rapidminer.datamodels.rmExperimentResults";
 	
 	public void setExperimentLabelArc(Arc experimentLabelArc);
 
