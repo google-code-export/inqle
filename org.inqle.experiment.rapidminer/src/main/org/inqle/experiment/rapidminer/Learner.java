@@ -45,14 +45,7 @@ public class Learner {
 	 * Next, convert the IDataTable into a RapidMiner ExampleSet.
 	 * Finally, run the ExampleSet through the experiment.
 	 */
-	public static IExperimentResult execute(ISampler sampler, IRapidMinerExperiment rapidMinerExperiment) {
-		IDataTable resultDataTable = sampler.execute();
-		log.info("Got resultDataTable=\n" + resultDataTable);
-		if (resultDataTable == null) {
-			log.warn("Sampler " + sampler + " of class " + sampler.getClass() + " was unable" +
-					" to retrieve a DataTable of results.");
-			return null;
-		}
+	public static IExperimentResult execute(IDataTable resultDataTable, IRapidMinerExperiment rapidMinerExperiment) {
 		
 		//test to see if the RM experiment matches 
 		if (! rapidMinerExperiment.handlesDataTable(resultDataTable)) {
@@ -61,7 +54,6 @@ public class Learner {
 		
 		IExperimentResult experimentResult = rapidMinerExperiment.runExperiment(resultDataTable);
 		
-		experimentResult.setSamplerClassName(sampler.getClass().getName());
 		if (resultDataTable.getIdColumnIndex() >= 0) {
 			experimentResult.setExperimentSubjectArc(resultDataTable.getColumn(resultDataTable.getIdColumnIndex()));
 		}

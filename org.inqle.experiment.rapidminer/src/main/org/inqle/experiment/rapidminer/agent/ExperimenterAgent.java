@@ -150,11 +150,12 @@ public class ExperimenterAgent extends AAgent {
 			
 			IRapidMinerExperiment rapidMinerExperiment = selectRapidMinerExperiment(resultDataTable);
 			
-			IExperimentResult experimentResult = Learner.execute(sampler, rapidMinerExperiment);
+			IExperimentResult experimentResult = Learner.execute(resultDataTable, rapidMinerExperiment);
 			if (experimentResult == null) {
 				log.warn("Resulting ExperimentResult is null.  Skip to next cycle.");
 				continue;
 			}
+			experimentResult.setSamplerClassName(sampler.getClass().getName());
 			log.info("Storing experiment result: " + JenabeanWriter.toString(experimentResult));
 //			log.info("Storing experiment result");
 			persister.persist(experimentResult);
