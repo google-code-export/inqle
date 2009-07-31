@@ -31,7 +31,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  */
 @TargetDatamodel(IRapidMinerExperiment.RAPID_MINER_EXPERIMENTS_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class ClassificationRegressionCrossValidationExperiment extends ARapidMinerExperiment implements IRapidMinerExperiment {
+public class ClassificationRegressionCrossValidationExperiment extends ARapidMinerExperiment {
 
 	private static Logger log = Logger.getLogger(ClassificationRegressionCrossValidationExperiment.class);
 	public static final String REGRESSION_TYPE = "regression";
