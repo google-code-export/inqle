@@ -187,6 +187,8 @@ public class SubjectsSearcher {
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
+	 * 
+	 * FAILS
 	 */
 	public static String lookupSubjectsInSubjectsDatamodel (
 		String searchTermForRdfClass, 
@@ -198,6 +200,12 @@ public class SubjectsSearcher {
 				Data.DATA_SUBJECT_DATASET_ROLE_ID, 
 				countSearchResults, 
 				offset);
+//		return lookupSubclassesInInternalDatamodel(
+//				searchTermForRdfClass,
+//				null,
+//				Data.DATA_SUBJECT_DATASET_ROLE_ID, 
+//				countSearchResults, 
+//				offset);
 	}
 	/**
 	 *  Lookup in the specified internal datamodel any resource, of the provided OWL class URI, which matches the provided search term.
@@ -207,6 +215,8 @@ public class SubjectsSearcher {
 	 * @param countSearchResults
 	 * @param offset usually = 0
 	 * @return
+	 * 
+	 * WORKS
 	 */
 	public static String lookupSubclassesInInternalDatamodel (
 			String searchTermForRdfClass, 
@@ -219,7 +229,7 @@ public class SubjectsSearcher {
 		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatamodelRoleId));
 		IndexLARQ textIndex =  persister.getIndex(internalDatamodelRoleId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("Searched " + internalDatamodelRoleId + " index for '" + searchTermForRdfClass + "'...");
+		log.info("ZZZZZZZZZZZZZZZZZZZZZZZ Searched " + internalDatamodelRoleId + " index for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());

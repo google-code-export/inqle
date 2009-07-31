@@ -140,7 +140,12 @@ public class LookupServlet extends HttpServlet {
 //		log.info("LLLLLLLLLLLLLLLLLLLLLLLLLLLLL LOOKUP searchTermDataUmbelClass=" + searchTermDataUmbelClass);
 		if (searchTermDataUmbelClass != null) {
 			
-			String matchingDataClassesXml = SubjectsSearcher.lookupSubclassesInInternalDatamodel(searchTermDataUmbelClass, null, Data.DATA_SUBJECT_DATASET_ROLE_ID, countResults, startIndex);
+			String matchingDataClassesXml = SubjectsSearcher.lookupSubclassesInInternalDatamodel(
+					searchTermDataUmbelClass, 
+					null, 
+					Data.DATA_SUBJECT_DATASET_ROLE_ID, 
+					countResults, 
+					startIndex);
 			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
 
 			String matchingUmbelClassesXml = SubjectsSearcher.lookupPreferredOntologySubjectsInSchemaDatamodels(searchTermDataUmbelClass, countResults, startIndex);
