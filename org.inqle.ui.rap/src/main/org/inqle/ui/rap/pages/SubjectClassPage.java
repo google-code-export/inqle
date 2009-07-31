@@ -181,7 +181,6 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 		ObservableListContentProvider olContentProvider = new ObservableListContentProvider();
 		tableViewer.setContentProvider(olContentProvider);
 		
-		
 		tableViewer.setLabelProvider(labelProvider);
 		
 		WritableList writableListInput = new WritableList(labelProvider.getRowElements(), tableBeanClass);
