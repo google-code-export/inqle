@@ -48,22 +48,6 @@
 	</extension>
    <extension
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
-      <!--rapidminer-experiment
-      		 id="org.inqle.experiment.basic.SimpleRegressionNeuralNet"
-      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionNeuralNet.xml"
-      		 name="Simple Regression Using RapidMiner's Neural Net Learner"
-      		 description="A simple regression experiment"
-      		 type="regression"
-           weight="1000">
-      </rapidminer-experiment-->
-      <!--rapidminer-experiment
-      		 id="org.inqle.experiment.basic.SimpleRegressionM5P"
-      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionM5P.xml"
-      		 name="Simple Regression Using Weka's M5 Prime Decision tree learner"
-      		 description="A simple regression experiment"
-      		 type="regression"
-           weight="1000">
-      </rapidminer-experiment-->
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleClassificationDecisionTree"
       		 class="org.inqle.experiment.rapidminer.ClassificationRegressionCrossValidationExperiment"
@@ -91,6 +75,22 @@
       		 type="regression"
            weight="1000">
       </rapidminer-experiment>
+      <!--rapidminer-experiment
+      		 id="org.inqle.experiment.basic.SimpleRegressionNeuralNet"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionNeuralNet.xml"
+      		 name="Simple Regression Using RapidMiner's Neural Net Learner"
+      		 description="A simple regression experiment"
+      		 type="regression"
+           weight="1000">
+      </rapidminer-experiment-->
+      <!--rapidminer-experiment
+      		 id="org.inqle.experiment.basic.SimpleRegressionM5P"
+      		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionM5P.xml"
+      		 name="Simple Regression Using Weka's M5 Prime Decision tree learner"
+      		 description="A simple regression experiment"
+      		 type="regression"
+           weight="1000">
+      </rapidminer-experiment-->
    </extension>
 
 	<extension
