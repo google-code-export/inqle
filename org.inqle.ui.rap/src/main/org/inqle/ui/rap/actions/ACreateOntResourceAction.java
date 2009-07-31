@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
+import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.LookupServlet;
@@ -61,7 +62,9 @@ public abstract class ACreateOntResourceAction extends Action {
 		log.trace("Create ACreateOntResourceAction");
 		this.internalDatasetRoleId = internalDatasetRoleId;
 		Persister persister = Persister.getInstance();
-		this.model = persister.getSystemModel(internalDatasetRoleId);
+		Datamodel searchDatamodel = persister.getDatamodel(internalDatasetRoleId);
+		this.model = persister.getIndexableModel(searchDatamodel);
+//		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
 		this.parentResourceUri = parentResourceUri;
 		this.actionType = actionType;
