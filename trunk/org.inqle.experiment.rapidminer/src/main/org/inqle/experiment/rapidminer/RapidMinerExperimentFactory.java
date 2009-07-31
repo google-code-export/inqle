@@ -1,12 +1,14 @@
 package org.inqle.experiment.rapidminer;
 
+import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.util.InqleInfo;
 
 public class RapidMinerExperimentFactory {
 
 	public static IRapidMinerExperiment createRapidMinerExperiment(IExtensionSpec extensionSpec) {
-		ClassificationRegressionCrossValidationExperiment experiment = new ClassificationRegressionCrossValidationExperiment();
+//		ClassificationRegressionCrossValidationExperiment experiment = new ClassificationRegressionCrossValidationExperiment();
+		IRapidMinerExperiment experiment = (IRapidMinerExperiment)ExtensionFactory.createExtensionObject(extensionSpec);
 		experiment.setId(extensionSpec.getAttribute(InqleInfo.ID_ATTRIBUTE));
 		experiment.setExperimentClassPath(extensionSpec.getAttribute(InqleInfo.FILE_ATTRIBUTE));
 		experiment.setName(extensionSpec.getAttribute(IRapidMinerExperiment.NAME_ATTRIBUTE));

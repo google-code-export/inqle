@@ -211,6 +211,7 @@ public class ClassificationRegressionCrossValidationExperiment extends GlobalJen
 			log.warn("Unable to retrieve a RapidMiner experiment/process object for rapidMinerExperiment" + getExperimentClassPath());
 			return null;
 		}
+		log.info("PPPPPPPPPPPPPPPPPP Preparing to run process: " + process.toString());
 		//convert the IDataTable into a RapidMiner MemoryExampleTable
 		MemoryExampleTableFactory memoryExampleTableFactory = new MemoryExampleTableFactory();
 		MemoryExampleTable exampleTable =  memoryExampleTableFactory.createExampleTable(dataTable);
@@ -226,7 +227,7 @@ public class ClassificationRegressionCrossValidationExperiment extends GlobalJen
 			idAttribute = exampleTable.getAttribute(dataTable.getIdColumnIndex());
 		}
 		
-		//log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
+//		log.info("labelIndex=" + labelIndex + "; labelAttribute=" + labelAttribute.getName());
 		ExampleSet exampleSet = 
 			exampleTable.createExampleSet(
 					labelAttribute, 

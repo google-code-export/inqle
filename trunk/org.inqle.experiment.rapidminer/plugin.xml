@@ -66,6 +66,7 @@
       </rapidminer-experiment-->
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleClassificationDecisionTree"
+      		 class="org.inqle.experiment.rapidminer.ClassificationRegressionCrossValidationExperiment"
       		 file="/org/inqle/experiment/rapidminer/xml/SimpleClassificationDecisionTree.xml"
       		 name="Decision Tree Classification"
       		 description="Simple Classification Using RapidMiner's Decision Tree Learner"
@@ -74,6 +75,7 @@
       </rapidminer-experiment>
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleClassificationNearestNeighbor"
+      		 class="org.inqle.experiment.rapidminer.ClassificationRegressionCrossValidationExperiment"
       		 file="/org/inqle/experiment/rapidminer/xml/SimpleClassificationNearestNeighbor.xml"
       		 name="Nearest Neighbor Classification"
       		 description="Simple Classification Using RapidMiner's Nearest Neighbor Learner"
@@ -82,6 +84,7 @@
       </rapidminer-experiment>
       <rapidminer-experiment
       		 id="org.inqle.experiment.basic.SimpleRegressionNearestNeighbor"
+      		 class="org.inqle.experiment.rapidminer.ClassificationRegressionCrossValidationExperiment"
       		 file="/org/inqle/experiment/rapidminer/xml/SimpleRegressionNearestNeighbor.xml"
       		 name="Nearest Neighbor Regression"
       		 description="Simple Regression Using RapidMiner's Nearest Neighbor Learner"
