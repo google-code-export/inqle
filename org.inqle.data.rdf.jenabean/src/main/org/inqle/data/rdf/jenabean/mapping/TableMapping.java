@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Namespace;
 

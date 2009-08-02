@@ -5,7 +5,7 @@ package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -16,7 +16,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class LocalFolderDatabase extends UniqueJenabean implements IDatabase {
+public class LocalFolderDatabase extends UniqueCloneableJenabean implements IDatabase {
 	
 	public void clone(LocalFolderDatabase objectToBeCloned) {
 		super.clone(objectToBeCloned);

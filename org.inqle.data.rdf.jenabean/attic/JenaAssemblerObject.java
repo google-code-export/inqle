@@ -5,6 +5,7 @@ import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Namespace;
 
-@Namespace(RDF.INQLE)
-public abstract class Datamodel extends UniqueCloneableJenabean {
+@Namespace(RDF.JA)
+public abstract class JenaAssemblerObject extends UniqueCloneableJenabean {
+
 }

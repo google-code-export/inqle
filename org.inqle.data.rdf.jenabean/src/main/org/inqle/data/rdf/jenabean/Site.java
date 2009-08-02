@@ -17,7 +17,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(Site.SITE_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
-public class Site extends UniqueJenabean {
+public class Site extends UniqueCloneableJenabean {
 
 	public static final String SITE_DATASET_ROLE_ID = "org.inqle.datamodels.site";
 	

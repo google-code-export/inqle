@@ -5,14 +5,14 @@ import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
+import org.inqle.data.rdf.jenabean.AJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
 @TargetDatamodel(Persister.DATASET_SUBJECT_CLASSES_CACHE)
 @Namespace(RDF.INQLE)
-public class SubjectClassCache extends BasicJenabean {
+public class SubjectClassCache extends AJenabean {
 
 	private String datamodelId;
 	private Collection<URI> subjectClasses;
@@ -25,11 +25,11 @@ public class SubjectClassCache extends BasicJenabean {
 		return s;
 	}
 	
-	public void clone(SubjectClassCache objectToBeCloned) {
-		setSubjectClasses(objectToBeCloned.getSubjectClasses());
-		setDatasetId(objectToBeCloned.getDatasetId());
-		super.clone(objectToBeCloned);
-	}
+//	public void clone(SubjectClassCache objectToBeCloned) {
+//		setSubjectClasses(objectToBeCloned.getSubjectClasses());
+//		setDatasetId(objectToBeCloned.getDatasetId());
+//		super.clone(objectToBeCloned);
+//	}
 
 	public void setSubjectClasses(Collection<URI> subjectClasses) {
 		this.subjectClasses = subjectClasses;
@@ -47,10 +47,10 @@ public class SubjectClassCache extends BasicJenabean {
 		return datamodelId;
 	}
 
-	public SubjectClassCache createClone() {
-		SubjectClassCache subjectClassCache = new SubjectClassCache();
-		subjectClassCache.clone(this);
-		return subjectClassCache;
-	}
+//	public SubjectClassCache createClone() {
+//		SubjectClassCache subjectClassCache = new SubjectClassCache();
+//		subjectClassCache.clone(this);
+//		return subjectClassCache;
+//	}
 
 }

@@ -9,7 +9,7 @@ import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
-public abstract class UniqueJenabean extends BasicJenabean implements IUniqueJenabean {
+public abstract class UniqueCloneableJenabean extends CloneableJenabean implements IUniqueJenabean {
 
 	private Date creationDate;
 	private Date updateDate;
@@ -69,5 +69,15 @@ public abstract class UniqueJenabean extends BasicJenabean implements IUniqueJen
 	public void replicate(IUniqueJenabean objectToReplicate) {
 		clone(objectToReplicate);
 		setId(objectToReplicate.getId());
+	}
+	
+	@Override
+	public String getStringRepresentation() {
+		String s = getClass().toString() + " {\n";
+		s += "[id=" + getId() + "]\n";
+		s += "[name=" + name + "]\n";
+		s += "[description=" + description + "]\n";
+		s += "}";
+		return s;
 	}
 }

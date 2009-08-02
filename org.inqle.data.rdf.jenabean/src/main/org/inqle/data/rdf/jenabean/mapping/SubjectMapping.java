@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -39,7 +39,7 @@ import thewebsemantic.Namespace;
  * Aug 4, 2008
  */
 @Namespace(RDF.INQLE)
-public class SubjectMapping extends UniqueJenabean {
+public class SubjectMapping extends UniqueCloneableJenabean {
 
 	public static final String URI_TYPE_UNKNOWN = "Unknown (blank)";
 	public static final String URI_TYPE_INQLE_GENERATED = "INQLE-generated";

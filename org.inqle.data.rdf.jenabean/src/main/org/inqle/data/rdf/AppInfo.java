@@ -3,10 +3,8 @@ package org.inqle.data.rdf;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.inqle.data.rdf.jena.SDBDatabase;
-import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Site;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 import org.inqle.data.rdf.jenabean.UserAccount;
 
 import thewebsemantic.Id;
@@ -20,7 +18,7 @@ import thewebsemantic.Namespace;
  * Dec 4, 2007
  */
 @Namespace(RDF.INQLE)
-public class AppInfo extends UniqueJenabean {
+public class AppInfo extends UniqueCloneableJenabean {
 	
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";

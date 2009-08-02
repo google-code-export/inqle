@@ -1,6 +1,5 @@
 package org.inqle.data.rdf.jena;
 
-import org.inqle.data.rdf.jena.sdb.SDBConnector;
 import org.inqle.data.rdf.jena.tdb.TDBConnector;
 
 public class DBConnectorFactory {
@@ -15,9 +14,9 @@ public class DBConnectorFactory {
 		if (database==null) {
 			return getDBConnector();
 		}
-		if (database instanceof SDBDatabase) {
-			return new SDBConnector((SDBDatabase)database);
-		}
+//		if (database instanceof SDBDatabase) {
+//			return new SDBConnector((SDBDatabase)database);
+//		}
 		return new TDBConnector(database.getId());
 	}
 	

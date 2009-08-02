@@ -4,9 +4,9 @@
 package org.inqle.data.rdf.jena.uri;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.BasicJenabean;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.CloneableJenabean;
+import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -17,7 +17,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
 @Namespace(RDF.INQLE)
-public class NamespaceMapping extends GlobalJenabean {
+public class NamespaceMapping extends GlobalCloneableJenabean {
 
 	private static final String NAMESPACE_MAPPING_DATASET = "org.inqle.datamodels.ns";
 	private String namespaceAbbrev;
@@ -39,7 +39,7 @@ public class NamespaceMapping extends GlobalJenabean {
 		setNamespaceAbbrev(objectToBeCloned.getNamespaceAbbrev());
 		setNamespaceUri(objectToBeCloned.getUri());
 	}
-	public IBasicJenabean createClone() {
+	public ICloneableJenabean createClone() {
 		NamespaceMapping ns = new NamespaceMapping();
 		ns.clone(this);
 		return ns;

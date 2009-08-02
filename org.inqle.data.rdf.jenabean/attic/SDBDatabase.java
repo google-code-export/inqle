@@ -2,14 +2,14 @@ package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
 @TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 //public class SDBDatabase extends JenaAssemblerObject implements IDatabase {
-public class SDBDatabase extends UniqueJenabean implements IDatabase {
+public class SDBDatabase extends UniqueCloneableJenabean implements IDatabase {
 	
 	private String dbClass = null;	
 	private String dbPassword = null;

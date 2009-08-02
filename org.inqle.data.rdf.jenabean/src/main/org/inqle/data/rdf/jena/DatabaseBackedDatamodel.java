@@ -1,7 +1,7 @@
 package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Namespace;
 

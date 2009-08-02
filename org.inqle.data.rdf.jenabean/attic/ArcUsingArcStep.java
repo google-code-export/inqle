@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
 	 * Feb 22, 2008
 	 */
 	@Namespace(RDF.INQLE)
-	public class ArcUsingArcStep extends GlobalJenabean {
+	public class ArcUsingArcStep extends GlobalCloneableJenabean {
 		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
 		
 //		private transient Object value;

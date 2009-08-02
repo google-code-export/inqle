@@ -22,31 +22,10 @@ import thewebsemantic.TypeWrapper;
  * Jan 25, 2008
  */
 @Namespace(RDF.INQLE)
-public abstract class BasicJenabean implements IBasicJenabean {
+public abstract class CloneableJenabean extends AJenabean implements ICloneableJenabean {
 
-	protected String id;
 	protected String description;
 	protected String name;
-	
-	@Id
-	public String getId() {
-		if (id==null) {
-			setRandomId();
-		}
-		return id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public void setRandomId() {
-		setId(UUID.randomUUID().toString());
-	}
-	
-	public String getUri() {
-		return TypeWrapper.instanceURI(this);
-	}
 
 	@RdfProperty(RDF.DESCRIPTION_PREDICATE)
 	public String getDescription() {
@@ -70,17 +49,23 @@ public abstract class BasicJenabean implements IBasicJenabean {
 		this.name = name;
 	}
 	
-	@Override
-	public String toString() {
+	
+//	@Override
+	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";
-		s += "[name=" + name + "]\n";
 		s += "[id=" + getId() + "]\n";
+		s += "[name=" + name + "]\n";
+		s += "[description=" + description + "]\n";
 		s += "}";
 		return s;
 	}
 
+	@Override
+	public String toString() {
+		return getStringRepresentation();
+	}
 
-	public void clone(IBasicJenabean template) {
+	public void clone(ICloneableJenabean template) {
 		setName(template.getName());
 		setDescription(template.getDescription());
 	}
