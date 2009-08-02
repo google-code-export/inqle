@@ -1,6 +1,6 @@
 package org.inqle.agent;
 
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 
 /**
