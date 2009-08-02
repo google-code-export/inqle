@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -25,7 +25,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  */
 @TargetDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class PerformanceVectorResult extends UniqueJenabean implements IExperimentResult {
+public class PerformanceVectorResult extends UniqueCloneableJenabean implements IExperimentResult {
 
 	public static final String EXPERIMENTS_DATASET = "org.inqle.datamodels.experiments";
 	
