@@ -12,7 +12,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 
 public class RadioOrListSelectorPage extends ListSelectorPage implements SelectionListener {
 
@@ -23,7 +23,7 @@ public class RadioOrListSelectorPage extends ListSelectorPage implements Selecti
 
 	private static final Logger log = Logger.getLogger(RadioOrListSelectorPage.class);
 	
-	public RadioOrListSelectorPage(IBasicJenabean bean, String beanValueId,
+	public RadioOrListSelectorPage(ICloneableJenabean bean, String beanValueId,
 			String title, ImageDescriptor titleImage) {
 		super(bean, beanValueId, title, titleImage);
 	}

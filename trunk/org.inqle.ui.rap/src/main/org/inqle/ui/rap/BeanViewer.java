@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.inqle.core.domain.INamedAndDescribed;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 public class BeanViewer extends Viewer implements ISelectionListener {
@@ -122,10 +122,10 @@ public class BeanViewer extends Viewer implements ISelectionListener {
 			description = namedAndDescribed.getDescription();
 			//MessageDialog.openInformation(composite.getShell(), "Selected object '" + namedAndDescribed.getName() + "'", "Description:\n" + namedAndDescribed.getDescription());
 		}
-		if (bean instanceof IBasicJenabean) {
+		if (bean instanceof ICloneableJenabean) {
 			log.trace("...is IBasicJenabean...");
 			try {
-				id = ((IBasicJenabean)bean).getId();
+				id = ((ICloneableJenabean)bean).getId();
 				detail = JenabeanWriter.toString(bean);
 			} catch (Exception e) {
 				log.error("Unable to write IBasicJenabean to RDF:\nname=" + name + "\ndescription=" + description + "\nclass=" + clazz, e);

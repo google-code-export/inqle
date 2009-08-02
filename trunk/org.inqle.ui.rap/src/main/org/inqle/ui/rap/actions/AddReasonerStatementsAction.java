@@ -5,13 +5,8 @@ package org.inqle.ui.rap.actions;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;

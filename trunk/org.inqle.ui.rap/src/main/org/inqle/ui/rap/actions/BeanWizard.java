@@ -6,7 +6,7 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
@@ -40,7 +40,7 @@ public abstract class BeanWizard extends DynaWizard {
 	protected Shell shell;
 	protected IPart part = null;
 
-	protected IBasicJenabean bean;
+	protected ICloneableJenabean bean;
 	/**
 	 * @param bean
 	 */
@@ -83,11 +83,11 @@ public abstract class BeanWizard extends DynaWizard {
 		this.part = part;
 	}
 	
-	public IBasicJenabean getBean() {
+	public ICloneableJenabean getBean() {
 		return bean;
 	}
 
-	public void setBean(IBasicJenabean bean) {
+	public void setBean(ICloneableJenabean bean) {
 		this.bean = bean;
 	}
 	
