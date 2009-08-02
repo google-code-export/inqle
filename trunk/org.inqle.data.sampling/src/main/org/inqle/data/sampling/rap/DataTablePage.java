@@ -14,7 +14,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.inqle.data.rdf.jena.uri.UriMapper;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.table.ListListTableLabelProvider;
@@ -73,7 +73,7 @@ public class DataTablePage extends BeanWizardPage {
 	 * @param title the title of this page
 	 * @param titleImage
 	 */
-	public DataTablePage(IBasicJenabean modelBean, String modelBeanValueId, Class<?> modelListClass, String title, ImageDescriptor titleImage) {
+	public DataTablePage(ICloneableJenabean modelBean, String modelBeanValueId, Class<?> modelListClass, String title, ImageDescriptor titleImage) {
 		super(modelBean, modelBeanValueId, title, titleImage);
 		this.modelListClass = modelListClass;
 		assert(this.bean != null);
