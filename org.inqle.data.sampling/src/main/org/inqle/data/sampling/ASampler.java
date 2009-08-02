@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -28,7 +28,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
-public abstract class ASampler extends UniqueJenabean implements ISampler {
+public abstract class ASampler extends UniqueCloneableJenabean implements ISampler {
 
 //	protected Collection<String> availableDatamodels;
 
