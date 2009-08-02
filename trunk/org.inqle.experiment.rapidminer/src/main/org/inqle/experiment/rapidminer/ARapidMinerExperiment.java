@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.experiment.rapidminer.util.RapidMinerProcessCreator;
@@ -36,7 +36,7 @@ import thewebsemantic.Namespace;
  * July 30, 2009
  */
 
-public abstract class ARapidMinerExperiment extends GlobalJenabean implements IRapidMinerExperiment {
+public abstract class ARapidMinerExperiment extends GlobalCloneableJenabean implements IRapidMinerExperiment {
 
 	private String experimentClassPath;
 	private String experimentXml;

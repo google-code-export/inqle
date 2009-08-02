@@ -11,7 +11,7 @@ import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
