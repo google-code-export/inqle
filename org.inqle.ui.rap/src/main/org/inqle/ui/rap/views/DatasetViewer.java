@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.core.util.DateFormatter;
 import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IDisposableViewer;
@@ -134,10 +134,10 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 			description = namedAndDescribed.getDescription();
 			//MessageDialog.openInformation(composite.getShell(), "Selected object '" + namedAndDescribed.getName() + "'", "Description:\n" + namedAndDescribed.getDescription());
 		}
-		if (bean instanceof IBasicJenabean) {
+		if (bean instanceof ICloneableJenabean) {
 			log.trace("...is IBasicJenabean...");
 			try {
-				id = ((IBasicJenabean)bean).getId();
+				id = ((ICloneableJenabean)bean).getId();
 				detail = JenabeanWriter.toString(bean);
 			} catch (Exception e) {
 				log.error("Unable to write IBasicJenabean to RDF:\nname=" + name + "\ndescription=" + description + "\nclass=" + clazz, e);

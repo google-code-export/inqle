@@ -19,12 +19,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.SDBDatabase;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
-import org.inqle.ui.rap.tree.parts.ModelPart;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -43,7 +41,7 @@ public class LoadRdfFileWizard extends DynaWizard {
 	}
 
 	//private final File tempDir = Persister.getTempDirectory();
-	private SDBDatabase sDBDatabase = null;
+//	private SDBDatabase sDBDatabase = null;
 	//private Persister persister;
 	static Logger log = Logger.getLogger(LoadRdfFileWizard.class);
 	Composite composite;
@@ -51,7 +49,7 @@ public class LoadRdfFileWizard extends DynaWizard {
 	private String defaultUri = RDF.INQLE;
 	private Datamodel datamodel;
 	
-	private ModelPart modelPart = null;
+//	private ModelPart modelPart = null;
 	//LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
 	LoadFilePage loadFilePage = new LoadFilePage("Load Data from Local File");
 	

@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 
 /**
@@ -36,7 +36,7 @@ public class SingleTextPage extends BeanWizardPage {
 
 	private static final Logger log = Logger.getLogger(SingleTextPage.class);
 	
-	public SingleTextPage(IBasicJenabean bean, String beanValueId, String title, ImageDescriptor titleImage) {
+	public SingleTextPage(ICloneableJenabean bean, String beanValueId, String title, ImageDescriptor titleImage) {
 		super(bean, beanValueId, title, titleImage);
 		assert(this.bean != null);
 	}
