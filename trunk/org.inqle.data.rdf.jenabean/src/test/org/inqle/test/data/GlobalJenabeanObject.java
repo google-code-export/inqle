@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
 
 import thewebsemantic.Id;
 
-public class GlobalJenabeanObject extends GlobalJenabean {
+public class GlobalJenabeanObject extends GlobalCloneableJenabean {
 
 	private String experimentClassPath;
 	private String experimentXml;

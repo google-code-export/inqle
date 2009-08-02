@@ -20,7 +20,7 @@ import thewebsemantic.Namespace;
 	 * So now Arcs only support outgoing direction
 	 */
 	@Namespace(RDF.INQLE)
-	public class ArcUsingStrings extends GlobalJenabean implements Comparable<ArcUsingStrings> {
+	public class ArcUsingStrings extends GlobalCloneableJenabean implements Comparable<ArcUsingStrings> {
 		private List<String> arcStepList = new ArrayList<String>();
 		
 //		private transient Object value;

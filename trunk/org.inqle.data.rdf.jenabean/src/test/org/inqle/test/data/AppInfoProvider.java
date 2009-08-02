@@ -2,15 +2,10 @@ package org.inqle.test.data;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.sql.SQLException;
-import java.util.Arrays;
 
 import org.apache.log4j.Logger;
-//import org.h2.tools.Server;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jena.SDBDatabase;
-import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 
@@ -41,17 +36,17 @@ public class AppInfoProvider {
 	
 	public static void createAppInfo() {
 		//create the connection object, containing db connection info for the repository namedmodel
-		SDBDatabase sDBDatabase = new SDBDatabase();
-		sDBDatabase.setDbClass(DB_DRIVER);
-		sDBDatabase.setDbType(DB_TYPE);
-		sDBDatabase.setDbURL(DB_URL);
-		sDBDatabase.setDbUser(DB_USER);
-		sDBDatabase.setDbPassword(DB_PASSWORD);
+//		SDBDatabase sDBDatabase = new SDBDatabase();
+//		sDBDatabase.setDbClass(DB_DRIVER);
+//		sDBDatabase.setDbType(DB_TYPE);
+//		sDBDatabase.setDbURL(DB_URL);
+//		sDBDatabase.setDbUser(DB_USER);
+//		sDBDatabase.setDbPassword(DB_PASSWORD);
 		
 		//Create the repository namedmodel, to contain info about data repositories
 		SystemDatamodel repositoryModel = new SystemDatamodel();
 		repositoryModel.setId(InqleInfo.REPOSITORY_MODEL_NAME);
-		repositoryModel.setDatabaseId(sDBDatabase.getId());
+//		repositoryModel.setDatabaseId(sDBDatabase.getId());
 		
 		//create the AppInfo object
 		AppInfo appInfo = new AppInfo();

@@ -12,7 +12,7 @@ import thewebsemantic.Namespace;
  * Feb 22, 2008
  */
 @Namespace(RDF.INQLE)
-public class ArcStep extends GlobalJenabean {
+public class ArcStep extends GlobalCloneableJenabean {
 	public static final int OUTGOING = 0;
 	public static final int INCOMING = 1;
 	

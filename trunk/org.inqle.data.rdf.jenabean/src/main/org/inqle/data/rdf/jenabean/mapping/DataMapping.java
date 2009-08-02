@@ -4,7 +4,7 @@ import java.net.URI;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -32,7 +32,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
-public class DataMapping extends GlobalJenabean {
+public class DataMapping extends GlobalCloneableJenabean {
 	
 	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datamodels.mapping";
 	private String mapsHeader;

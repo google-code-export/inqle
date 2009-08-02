@@ -12,7 +12,7 @@ import org.inqle.core.domain.INamedAndDescribed;
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface IUniqueJenabean extends IBasicJenabean {
+public interface IUniqueJenabean extends ICloneableJenabean {
 
 	public Date getCreationDate();
 	

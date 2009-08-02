@@ -13,7 +13,7 @@ import thewebsemantic.Namespace;
  * May 12, 2008
  */
 @Namespace(RDF.INQLE)
-public abstract class GlobalJenabean extends BasicJenabean implements IGlobalJenabean {
+public abstract class GlobalCloneableJenabean extends CloneableJenabean implements IGlobalJenabean {
 
 //	@Id
 //	public String getId() {
