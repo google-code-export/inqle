@@ -11,7 +11,7 @@ import org.inqle.agent.AAgent;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.IBasicJenabean;
+import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -38,7 +38,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 	}
 	
 	/**
-	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createClone()
+	 * @see org.inqle.data.rdf.jenabean.CloneableJenabean#createClone()
 	 */
 	public JUnitTestRunnerAgent createClone() {
 		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
@@ -47,7 +47,7 @@ public class JUnitTestRunnerAgent extends AAgent {
 	}
 
 	/**
-	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createReplica()
+	 * @see org.inqle.data.rdf.jenabean.CloneableJenabean#createReplica()
 	 */
 	public JUnitTestRunnerAgent createReplica() {
 		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
