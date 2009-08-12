@@ -37,6 +37,7 @@ public class ClassificationRegressionCrossValidationExperiment extends ARapidMin
 	public static final String REGRESSION_TYPE = "regression";
 	public static final String CLASSIFICATION_TYPE = "classification";
 	
+	@Override
 	public ClassificationRegressionCrossValidationExperiment createClone() {
 		ClassificationRegressionCrossValidationExperiment newObj = new ClassificationRegressionCrossValidationExperiment();
 		newObj.clone(this);
