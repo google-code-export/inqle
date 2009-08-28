@@ -26,7 +26,7 @@
 ==Questions on Using INQLE==
   * What am I supposed to do with my INQLE server?
     # Load your data into it.
-    # Start the Learning Agent, and watch the correlations that it finds.
+    # Start the Experimenter Agent, and watch the correlations that it finds.
 
   * OK, how can I get my data into my INQLE server?
     * If you have data in a spreadsheet (and who doesn't), just save it as a delimited text format like Comma-Separated Values (CSV), then use INQLE's importer for such delimited text.  See [http://code.google.com/p/inqle/ "Getting Started Using INQLE"] for details on how to use this importer.
