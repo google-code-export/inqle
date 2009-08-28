@@ -15,7 +15,7 @@
     * INQLE assists in the generation of a hypothesis.  As INQLE finds correlations that exist, it can discover previously unknown associations.  Such associations might be spurious, trivial, or already known.  They might also be true discoveries.  In this case, the correlation might or might not represent things that are causally related.  It would be the job of traditional research to test any hypothesis and to determine causality.
 
   * Will INQLE ever be able to do traditional research?
-    * Yes!  Just as we have modeled the process of data mining by creating the concepts of Samplers, Learning Cycles, and Experimenter Agents, we intend to model traditional research by programmatically creating the concepts of Cohorts, Data Gatherers, and Study Question.
+    * Yes!  Just as we have modeled the process of data mining by creating the concepts of Samplers and Experimenter Agents executing repeated cycles of experimentation, we intend to model traditional research by programmatically creating the concepts of Cohorts, Data Gatherers, and Study Question.
 
   * What does INQLE stand for?
     * Intelligent Network of Querying and Learning Engines
@@ -32,7 +32,7 @@
     * If you have data in a spreadsheet (and who doesn't), just save it as a delimited text format like Comma-Separated Values (CSV), then use INQLE's importer for such delimited text.  See [http://code.google.com/p/inqle/ "Getting Started Using INQLE"] for details on how to use this importer.
 
   * What format of data can be imported into INQLE?
-    * INQLE accepts [http://www.w3.org/TR/REC-rdf-syntax/ RDF data].
+    * INQLE can import any spreadsheet of data (from a text-delimited/CSV file) or it can import [http://www.w3.org/TR/REC-rdf-syntax/ RDF data].
 
   * What is RDF?
     * Resource Description Framework.  It is a way of representing data, using 3-part statements: 
@@ -41,11 +41,5 @@
       # an object (which can be a literal value like "7.5" or "Norman Borlaug", or the URI of another RDF subject.
 Thus, RDF is a powerful way for representing most any information in a computer-processable way.  The "Unique" in URI allows disparate data on a common subject to be linked together.  This will enable future versions of INQLE to merge local data with remote data.
 
-  * How can I convert other data into RDF?
-    * Believe it or not, there are a number of free products which can do this:
-      * http://esw.w3.org/topic/ConverterToRdf
-      * http://simile.mit.edu/wiki/RDFizers
-      * http://spire.umbc.edu/firefox/
-
-  * I am importing my data into INQLE.  The Import CSV wizard asks me for URI of a RDF class of my rows, and URI for each column of my spreadsheet.  How can I find out the which URIs to use?
+  * I am importing my data into INQLE.  The File Data Importer Wizard asks me for URI of a RDF class of my rows, and URI for each column of my spreadsheet.  How can I find out the which URIs to use?
     * Good question, because it is important that you use any standard URIs.  You can try [http://swoogle.umbc.edu/ Swoogle] or [http://www.freebase.com/ Freebase].  We will add tools to make this selection process easier!
