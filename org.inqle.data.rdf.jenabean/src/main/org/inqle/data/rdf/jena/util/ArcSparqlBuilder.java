@@ -14,6 +14,11 @@ import org.inqle.data.rdf.jenabean.ArcStep;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
+/**
+ * This class generates a SPARQL CONSTUCT query, given a collection of Arcs.
+ * @author gd9345
+ *
+ */
 public class ArcSparqlBuilder {
 
 	private static final String SUBJECT_VARIABLE_NAME = "subject";
@@ -50,46 +55,46 @@ public class ArcSparqlBuilder {
 	 * TODO support bidirectional ArcSteps (incomming)
 	 */
 	public String getSparqlWhereFromArc(String subjectVariableName, Arc arc, Object object) {
-			String sparql = "";
-	//		String subjectStr = "";
-	//		String newNode = subject;
+		String sparql = "";
+//		String subjectStr = "";
+//		String newNode = subject;
+		
+//		for (int i=0; i < arc.getArcSteps().length; i++) {
+		List<String> stepsSoFar = new ArrayList<String>();
+		String subjectStr = subjectVariableName;
+		//log.info("AAAAAAAAAAAAAAAA Adding where lines for Arc: " + arc);
+		for (ArcStep arcStep: arc.getArcSteps()) {
+			String predicate = arcStep.getPredicate();
+			stepsSoFar.add(predicate);
+			if (variableNameExists(stepsSoFar)) {
+				subjectStr = getVariableName(stepsSoFar);
+				//log.info("SSSSSSSSSSSSSSSSSS Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
+				continue;
+			}
+			String objectStr = null;
 			
-	//		for (int i=0; i < arc.getArcSteps().length; i++) {
-			List<String> stepsSoFar = new ArrayList<String>();
-			String subjectStr = subjectVariableName;
-			//log.info("AAAAAAAAAAAAAAAA Adding where lines for Arc: " + arc);
-			for (ArcStep arcStep: arc.getArcSteps()) {
-				String predicate = arcStep.getPredicate();
-				stepsSoFar.add(predicate);
-				if (variableNameExists(stepsSoFar)) {
-					subjectStr = getVariableName(stepsSoFar);
-					//log.info("SSSSSSSSSSSSSSSSSS Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
-					continue;
-				}
-				String objectStr = null;
-				
-				if (object == null) {
-					objectStr = getVariableName(stepsSoFar);
-					//log.info("NNNNNNNNNNNNNN Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
-				} else if (object instanceof URI) {
-					objectStr = "<" + ((URI)object).toString() + ">";
-				} 
+			if (object == null) {
+				objectStr = getVariableName(stepsSoFar);
+				//log.info("NNNNNNNNNNNNNN Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
+			} else if (object instanceof URI) {
+				objectStr = "<" + ((URI)object).toString() + ">";
+			} 
 //				else if (object instanceof String) {
 //					objectStr = "\"" + object.toString() + "\"";
 //				} else {
 //					objectStr = object.toString();
 //				}
 
-				if (objectStr==null) {
-					log.warn("Arc object is null for steps: " + stepsSoFar + "; object=" + object);
-					continue;
-				}
-				sparql += "\n . ";
-				sparql += subjectStr + " <" + predicate + "> " + objectStr;
-				subjectStr = objectStr;
+			if (objectStr==null) {
+				log.warn("Arc object is null for steps: " + stepsSoFar + "; object=" + object);
+				continue;
 			}
-			return sparql;
+			sparql += "\n . ";
+			sparql += subjectStr + " <" + predicate + "> " + objectStr;
+			subjectStr = objectStr;
 		}
+		return sparql;
+	}
 
 	private boolean variableNameExists(List<String> key) {
 		if (key==null) return false;
