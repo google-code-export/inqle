@@ -16,7 +16,7 @@ public class ArcStep extends GlobalCloneableJenabean {
 	public static final int OUTGOING = 0;
 	public static final int INCOMING = 1;
 	
-	private String predicate;
+	protected String predicate;
 	private int stepType = OUTGOING;
 
 	public ArcStep() {
