@@ -14,6 +14,7 @@ import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatabaseWizardAction;
@@ -155,7 +156,8 @@ public class DatabasePart extends PartType {
 	private UserDatamodel getNewDataset() {
 		UserDatamodel newDataset = new UserDatamodel();
 		newDataset.setDatabaseId(this.getDatabase().getId());
-		return newDataset.createClone();
+//		return newDataset.createClone();
+		return BeanTool.clone(newDataset);
 	}
 	
 //	private OntologyDataset getNewOntologyDataset() {

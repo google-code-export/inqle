@@ -15,6 +15,7 @@ import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.pages.BasicNameDescriptionPage;
@@ -129,11 +130,14 @@ public class TDBDatabaseWizard extends Wizard {
 	 */
 	public final void resetConnection() {
 		if (mode == DatabaseWizardAction.MODE_EDIT) {
-			database = startingDatabase.createReplica();
+//			database = startingDatabase.createReplica();
+			database = BeanTool.replicate(startingDatabase);
 		} else if (mode == DatabaseWizardAction.MODE_CLONE) {
-			database = startingDatabase.createClone();
+//			database = startingDatabase.createClone();
+			database = BeanTool.clone(startingDatabase);
 		} else {
-			database = new LocalFolderDatabase().createClone();
+//			database = new LocalFolderDatabase().createClone();
+			database = BeanTool.clone(new LocalFolderDatabase());
 		}
 		assert(database != null);
 	}

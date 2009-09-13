@@ -28,6 +28,7 @@ import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.UserDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.widgets.TextFieldShower;
 
@@ -306,10 +307,12 @@ public class UserDatamodelWizard extends Wizard {
 	
 	public final void resetModel() {
 		if (mode == DatamodelWizardAction.MODE_EDIT) {
-			datamodel = startingDatamodel.createReplica();
+//			datamodel = startingDatamodel.createReplica();
+			datamodel = BeanTool.replicate(startingDatamodel);
 		//} else if (mode == DatamodelWizardAction.MODE_CLONE) {
 		} else {
-			datamodel = startingDatamodel.createClone();
+//			datamodel = startingDatamodel.createClone();
+			datamodel = BeanTool.clone(startingDatamodel);
 //		} else {
 //			datamodel = new Datamodel();
 //			datamodel.setConnection(this.connection);

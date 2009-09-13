@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IDisposableViewer;

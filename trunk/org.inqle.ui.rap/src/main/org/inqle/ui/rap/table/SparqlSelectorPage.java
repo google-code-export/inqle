@@ -11,7 +11,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 
 import com.hp.hpl.jena.query.QuerySolution;
 
@@ -31,7 +31,7 @@ public abstract class SparqlSelectorPage extends RdfTableSelectorPage {
 
 	private static final Logger log = Logger.getLogger(SparqlSelectorPage.class);
 	
-	public SparqlSelectorPage(ICloneableJenabean modelBean, String modelBeanValueId,
+	public SparqlSelectorPage(INamedAndDescribedJenabean modelBean, String modelBeanValueId,
 			Class<?> modelListClass, String title, ImageDescriptor titleImage) {
 		super(modelBean, modelBeanValueId, modelListClass, title, titleImage);
 		// TODO Auto-generated constructor stub
