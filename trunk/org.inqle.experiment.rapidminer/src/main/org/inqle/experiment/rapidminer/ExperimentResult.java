@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -25,7 +25,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  */
 @TargetDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class ExperimentResult extends UniqueCloneableJenabean {
+public class ExperimentResult extends UniqueJenabean {
 
 //	public static final String EXPERIMENTS_DATASET = "org.inqle.datamodels.experiments";
 	
@@ -233,57 +233,57 @@ public class ExperimentResult extends UniqueCloneableJenabean {
 		} catch (Exception e) { }
 	}
 	
-	public void clone(ExperimentResult copyFieldsFrom) {
-		setExperimentSubjectArc(copyFieldsFrom.getExperimentSubjectArc());
-		setExperimentAttributeArcs(copyFieldsFrom.getExperimentAttributeArcs());
-		setExperimentLabelArc(copyFieldsFrom.getExperimentLabelArc());
-		setRapidMinerExperimentId(copyFieldsFrom.getRapidMinerExperimentId());
-		setCorrelation(copyFieldsFrom.getCorrelation());
-		setSpearman_rho(copyFieldsFrom.getSpearman_rho());
-		setKendall_tau(copyFieldsFrom.getKendall_tau());
-		setAbsolute_error(copyFieldsFrom.getAbsolute_error());
-		setRelative_error(copyFieldsFrom.getRelative_error());
-		setRelative_error_lenient(copyFieldsFrom.getRelative_error_lenient());
-		setRelative_error_strict(copyFieldsFrom.getRelative_error_strict());
-		setNormalized_absolute_error(copyFieldsFrom.getNormalized_absolute_error());
-		setRoot_relative_squared_error(copyFieldsFrom.getRoot_relative_squared_error());
-		setSquared_error(copyFieldsFrom.getSquared_error());
-		setSquared_correlation(copyFieldsFrom.getSquared_correlation());
-		setCross_entropy(copyFieldsFrom.getCross_entropy());
-		setMargin(copyFieldsFrom.getMargin());
-		setSoft_margin_loss(copyFieldsFrom.getSoft_margin_loss());
-		setLogistic_loss(copyFieldsFrom.getLogistic_loss());
-		
-		setAccuracy(copyFieldsFrom.getAccuracy());
-		setClassification_error(copyFieldsFrom.getClassification_error());
-		setKappa(copyFieldsFrom.getKappa());
-		setWeighted_mean_precision(copyFieldsFrom.getWeighted_mean_precision());
-		setWeighted_mean_recall(copyFieldsFrom.getWeighted_mean_recall());
-		super.clone(copyFieldsFrom);
-	}
+//	public void clone(ExperimentResult copyFieldsFrom) {
+//		setExperimentSubjectArc(copyFieldsFrom.getExperimentSubjectArc());
+//		setExperimentAttributeArcs(copyFieldsFrom.getExperimentAttributeArcs());
+//		setExperimentLabelArc(copyFieldsFrom.getExperimentLabelArc());
+//		setRapidMinerExperimentId(copyFieldsFrom.getRapidMinerExperimentId());
+//		setCorrelation(copyFieldsFrom.getCorrelation());
+//		setSpearman_rho(copyFieldsFrom.getSpearman_rho());
+//		setKendall_tau(copyFieldsFrom.getKendall_tau());
+//		setAbsolute_error(copyFieldsFrom.getAbsolute_error());
+//		setRelative_error(copyFieldsFrom.getRelative_error());
+//		setRelative_error_lenient(copyFieldsFrom.getRelative_error_lenient());
+//		setRelative_error_strict(copyFieldsFrom.getRelative_error_strict());
+//		setNormalized_absolute_error(copyFieldsFrom.getNormalized_absolute_error());
+//		setRoot_relative_squared_error(copyFieldsFrom.getRoot_relative_squared_error());
+//		setSquared_error(copyFieldsFrom.getSquared_error());
+//		setSquared_correlation(copyFieldsFrom.getSquared_correlation());
+//		setCross_entropy(copyFieldsFrom.getCross_entropy());
+//		setMargin(copyFieldsFrom.getMargin());
+//		setSoft_margin_loss(copyFieldsFrom.getSoft_margin_loss());
+//		setLogistic_loss(copyFieldsFrom.getLogistic_loss());
+//		
+//		setAccuracy(copyFieldsFrom.getAccuracy());
+//		setClassification_error(copyFieldsFrom.getClassification_error());
+//		setKappa(copyFieldsFrom.getKappa());
+//		setWeighted_mean_precision(copyFieldsFrom.getWeighted_mean_precision());
+//		setWeighted_mean_recall(copyFieldsFrom.getWeighted_mean_recall());
+//		super.clone(copyFieldsFrom);
+//	}
+//	
+//	public void replicate(ExperimentResult objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//	}
 	
-	public void replicate(ExperimentResult objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createClone()
-	 */
-	public ExperimentResult createClone() {
-		ExperimentResult newExperimentResult = new ExperimentResult();
-		newExperimentResult.clone(this);
-		return newExperimentResult;
-	}
+//	/* (non-Javadoc)
+//	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createClone()
+//	 */
+//	public ExperimentResult createClone() {
+//		ExperimentResult newExperimentResult = new ExperimentResult();
+//		newExperimentResult.clone(this);
+//		return newExperimentResult;
+//	}
 
-	/* (non-Javadoc)
-	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createReplica()
-	 */
-	public ExperimentResult createReplica() {
-		ExperimentResult newExperimentResult = new ExperimentResult();
-		newExperimentResult.replicate(this);
-		return newExperimentResult;
-	}
+//	/* (non-Javadoc)
+//	 * @see org.inqle.data.rdf.jenabean.BasicJenabean#createReplica()
+//	 */
+//	public ExperimentResult createReplica() {
+//		ExperimentResult newExperimentResult = new ExperimentResult();
+//		newExperimentResult.replicate(this);
+//		return newExperimentResult;
+//	}
 
 //	public LearningCycle getLearningCycle() {
 //		return learningCycle;

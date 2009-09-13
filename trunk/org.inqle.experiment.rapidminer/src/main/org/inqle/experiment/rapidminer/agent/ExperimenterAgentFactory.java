@@ -7,6 +7,7 @@ import org.inqle.agent.rap.AAgentFactory;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.agent.rap.IAgentWizard;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
@@ -30,7 +31,8 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 
 	public IAgentWizard createWizardForReplica(Shell shell) {
 		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
-		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createReplica();
+//		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createReplica();
+		ExperimenterAgent replicaAgent = BeanTool.replicate((ExperimenterAgent)getBaseAgent());
 //		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
 		newWizard.setAgent(replicaAgent);
 		return newWizard;
@@ -38,9 +40,10 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 
 	public IAgentWizard createWizardForClone(Shell shell) {
 		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
-		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createClone();
-		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
-		newWizard.setAgent(replicaAgent);
+//		ExperimenterAgent cloneAgent = (ExperimenterAgent)getBaseAgent().createClone();
+		ExperimenterAgent cloneAgent = BeanTool.clone((ExperimenterAgent)getBaseAgent());
+		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(cloneAgent));
+		newWizard.setAgent(cloneAgent);
 		return newWizard;
 	}
 	
