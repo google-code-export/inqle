@@ -37,12 +37,12 @@ public class ClassificationRegressionCrossValidationExperiment extends ARapidMin
 	public static final String REGRESSION_TYPE = "regression";
 	public static final String CLASSIFICATION_TYPE = "classification";
 	
-	@Override
-	public ClassificationRegressionCrossValidationExperiment createClone() {
-		ClassificationRegressionCrossValidationExperiment newObj = new ClassificationRegressionCrossValidationExperiment();
-		newObj.clone(this);
-		return newObj;
-	}
+//	@Override
+//	public ClassificationRegressionCrossValidationExperiment createClone() {
+//		ClassificationRegressionCrossValidationExperiment newObj = new ClassificationRegressionCrossValidationExperiment();
+//		newObj.clone(this);
+//		return newObj;
+//	}
 
 	@Override
 	/**
@@ -60,13 +60,13 @@ public class ClassificationRegressionCrossValidationExperiment extends ARapidMin
 		}
 		
 		if (typeList.contains(ClassificationRegressionCrossValidationExperiment.REGRESSION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_NUMERIC) {
-			log.info("Experiment: " + getStringRepresentation() + "\nmatches because it is a REGRESSION learner and the data has a numeric label.");
+			log.info("Experiment: " + toString() + "\nmatches because it is a REGRESSION learner and the data has a numeric label.");
 			return true;
 		} else if (typeList.contains(ClassificationRegressionCrossValidationExperiment.CLASSIFICATION_TYPE) && dataTable.getDataType(dataTable.getLabelColumnIndex()) == IDataTable.DATA_TYPE_STRING) {
-			log.info("Experiment: " + getStringRepresentation() + "\nmatches because it is a CLASSIFICATION learner and the data has a string label.");
+			log.info("Experiment: " + toString() + "\nmatches because it is a CLASSIFICATION learner and the data has a string label.");
 			return true;
 		}
-		log.info("Experiment: " + getStringRepresentation() + "\nDOES NOT MATCH this data table because the data type of the label does not match the capabilities of the experiment (" + getExperimentType() + ").");
+		log.info("Experiment: " + toString() + "\nDOES NOT MATCH this data table because the data type of the label does not match the capabilities of the experiment (" + getExperimentType() + ").");
 		return false;
 	}
 

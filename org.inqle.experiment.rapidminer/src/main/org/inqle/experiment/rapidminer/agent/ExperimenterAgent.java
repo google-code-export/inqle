@@ -44,30 +44,30 @@ public class ExperimenterAgent extends AAgent {
 
 
 	
-	public void clone(ExperimenterAgent objectToClone) {
-		setSamplerMode(objectToClone.getSamplerMode());
-		setSampler(objectToClone.getSampler());
-		setRapidMinerExperiment(objectToClone.getRapidMinerExperiment());
-		super.clone(objectToClone);
-	}
-	
-	public void replicate(ExperimenterAgent objectToReplicate) {
-		clone(objectToReplicate);
-		setId(objectToReplicate.getId());
-		super.replicate(objectToReplicate);
-	}
-	
-	public ExperimenterAgent createClone() {
-		ExperimenterAgent newAgent = new ExperimenterAgent();
-		newAgent.clone(this);
-		return newAgent;
-	}
-
-	public ExperimenterAgent createReplica() {
-		ExperimenterAgent newAgent = new ExperimenterAgent();
-		newAgent.replicate(this);
-		return newAgent;
-	}
+//	public void clone(ExperimenterAgent objectToClone) {
+//		setSamplerMode(objectToClone.getSamplerMode());
+//		setSampler(objectToClone.getSampler());
+//		setRapidMinerExperiment(objectToClone.getRapidMinerExperiment());
+//		super.clone(objectToClone);
+//	}
+//	
+//	public void replicate(ExperimenterAgent objectToReplicate) {
+//		clone(objectToReplicate);
+//		setId(objectToReplicate.getId());
+//		super.replicate(objectToReplicate);
+//	}
+//	
+//	public ExperimenterAgent createClone() {
+//		ExperimenterAgent newAgent = new ExperimenterAgent();
+//		newAgent.clone(this);
+//		return newAgent;
+//	}
+//
+//	public ExperimenterAgent createReplica() {
+//		ExperimenterAgent newAgent = new ExperimenterAgent();
+//		newAgent.replicate(this);
+//		return newAgent;
+//	}
 
 	public ISampler selectSampler() {
 		if (samplerMode == USE_RANDOM_SAMPLER || sampler == null) {
