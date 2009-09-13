@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.inqle.data.rdf.jenabean.Site;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.rdf.jenabean.UserAccount;
 
 import thewebsemantic.Id;
@@ -18,7 +18,7 @@ import thewebsemantic.Namespace;
  * Dec 4, 2007
  */
 @Namespace(RDF.INQLE)
-public class AppInfo extends UniqueCloneableJenabean {
+public class AppInfo extends UniqueJenabean {
 	
 	public static final String DEFAULT_CHARSET = "UTF-8";
 	public static final String APPINFO_INSTANCE_ID = "AppInfoInstance";
@@ -58,32 +58,29 @@ public class AppInfo extends UniqueCloneableJenabean {
 //		this.logNamedModel = logNamedModel;
 //	}
 	
-	public void clone(AppInfo objectToBeCloned) {
-//		setServerBaseUrl(objectToBeCloned.getServerBaseUrl());
-//		setMetarepositoryDataset(objectToBeCloned.getMetarepositoryDataset());
-//		setInternalConnection(objectToBeCloned.getInternalConnection());
-		setAdminAccounts(objectToBeCloned.getAdminAccounts());
-		setSite(objectToBeCloned.getSite());
-		super.clone(objectToBeCloned);
-	}
-	
-	public void replicate(AppInfo objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-		super.replicate(objectToClone);
-	}
-	
-	public AppInfo createClone() {
-		AppInfo newAppInfo = new AppInfo();
-		newAppInfo.clone(this);
-		return newAppInfo;
-	}
-
-	public AppInfo createReplica() {
-		AppInfo newAppInfo = new AppInfo();
-		newAppInfo.replicate(this);
-		return newAppInfo;
-	}
+//	public void clone(AppInfo objectToBeCloned) {
+//		setAdminAccounts(objectToBeCloned.getAdminAccounts());
+//		setSite(objectToBeCloned.getSite());
+//		super.clone(objectToBeCloned);
+//	}
+//	
+//	public void replicate(AppInfo objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//		super.replicate(objectToClone);
+//	}
+//	
+//	public AppInfo createClone() {
+//		AppInfo newAppInfo = new AppInfo();
+//		newAppInfo.clone(this);
+//		return newAppInfo;
+//	}
+//
+//	public AppInfo createReplica() {
+//		AppInfo newAppInfo = new AppInfo();
+//		newAppInfo.replicate(this);
+//		return newAppInfo;
+//	}
 
 //	public SDBDatabase getInternalConnection() {
 //		return internalConnection;

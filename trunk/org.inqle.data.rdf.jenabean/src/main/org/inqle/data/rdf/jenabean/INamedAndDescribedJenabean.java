@@ -9,19 +9,19 @@ import org.inqle.core.domain.INamedAndDescribed;
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface ICloneableJenabean extends IJenabean, INamedAndDescribed {
+public interface INamedAndDescribedJenabean extends IJenabean, INamedAndDescribed {
 	
 	/**
 	 * Copy all values from the provided ISampler to this one,
 	 * except do not copy the ID (i.e. allow this sampler to have a unique ID)
 	 * @return
 	 */
-	public void clone(ICloneableJenabean objectToBeCloned);
+//	public void clone(ICloneableJenabean objectToBeCloned);
 	
 	/**
 	 * Create new clone of self.  
 	 * The clone has all fields identical to this, except has unique ID
 	 */
-	public ICloneableJenabean createClone();
+//	public ICloneableJenabean createClone();
 	
 }

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -39,7 +39,7 @@ import thewebsemantic.Namespace;
  * Aug 4, 2008
  */
 @Namespace(RDF.INQLE)
-public class SubjectMapping extends UniqueCloneableJenabean {
+public class SubjectMapping extends UniqueJenabean {
 
 	public static final String URI_TYPE_UNKNOWN = "Unknown (blank)";
 	public static final String URI_TYPE_INQLE_GENERATED = "INQLE-generated";
@@ -83,18 +83,18 @@ public class SubjectMapping extends UniqueCloneableJenabean {
 //		return s;
 //	}
 
-	public void clone(SubjectMapping objectToBeCloned) {
-		setSubjectClass(objectToBeCloned.getSubjectClass());
-		setSubjectInstance(objectToBeCloned.getSubjectInstance());
-		setDataMappings(objectToBeCloned.getDataMappings());
-		super.clone(objectToBeCloned);
-	}
-	
-	public SubjectMapping createClone() {
-		SubjectMapping subjectMapping = new SubjectMapping();
-		subjectMapping.clone(this);
-		return subjectMapping;
-	}
+//	public void clone(SubjectMapping objectToBeCloned) {
+//		setSubjectClass(objectToBeCloned.getSubjectClass());
+//		setSubjectInstance(objectToBeCloned.getSubjectInstance());
+//		setDataMappings(objectToBeCloned.getDataMappings());
+//		super.clone(objectToBeCloned);
+//	}
+//	
+//	public SubjectMapping createClone() {
+//		SubjectMapping subjectMapping = new SubjectMapping();
+//		subjectMapping.clone(this);
+//		return subjectMapping;
+//	}
 
 	public void addDataMapping(DataMapping dataMapping) {
 		dataMappings.add(dataMapping);
@@ -153,16 +153,16 @@ public class SubjectMapping extends UniqueCloneableJenabean {
 		return SUBJECT_URI_CREATION_METHOD_LIST.indexOf(label);
 	}
 
-	public void replicate(SubjectMapping objectToBeReplicated) {
-		clone(objectToBeReplicated);
-		setId(objectToBeReplicated.getId());
-	}
-	
-	public SubjectMapping createReplica() {
-		SubjectMapping subjectMapping = new SubjectMapping();
-		subjectMapping.replicate(this);
-		return subjectMapping;
-	}
+//	public void replicate(SubjectMapping objectToBeReplicated) {
+//		clone(objectToBeReplicated);
+//		setId(objectToBeReplicated.getId());
+//	}
+//	
+//	public SubjectMapping createReplica() {
+//		SubjectMapping subjectMapping = new SubjectMapping();
+//		subjectMapping.replicate(this);
+//		return subjectMapping;
+//	}
 
 	public boolean isInstanceMapping() {
 		return instanceMapping;

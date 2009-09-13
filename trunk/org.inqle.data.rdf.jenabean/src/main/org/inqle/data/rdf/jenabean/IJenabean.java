@@ -19,4 +19,6 @@ public interface IJenabean {
 	
 	public String getUri();
 	
+	public void setRandomId();
+	
 }

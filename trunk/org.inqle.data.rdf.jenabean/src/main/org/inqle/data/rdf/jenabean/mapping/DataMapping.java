@@ -4,7 +4,7 @@ import java.net.URI;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -32,7 +32,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
-public class DataMapping extends GlobalCloneableJenabean {
+public class DataMapping extends GlobalJenabean {
 	
 	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datamodels.mapping";
 	private String mapsHeader;
@@ -41,29 +41,29 @@ public class DataMapping extends GlobalCloneableJenabean {
 	
 	private String mapsValue;
 	
-	public String getStringRepresentation() {
-		String s = getClass().toString() + " {\n";
-		s += "[mapsHeader=" + mapsHeader + "]\n";
-		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
-		s += "[mapsPropertyType=" + mapsPropertyType.toString() + "]\n";
-		s += "[mapsValue=" + mapsValue + "]\n";
-		s += "}";
-		return s;
-	}
+//	public String getStringRepresentation() {
+//		String s = getClass().toString() + " {\n";
+//		s += "[mapsHeader=" + mapsHeader + "]\n";
+//		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
+//		s += "[mapsPropertyType=" + mapsPropertyType.toString() + "]\n";
+//		s += "[mapsValue=" + mapsValue + "]\n";
+//		s += "}";
+//		return s;
+//	}
 
-	public void clone(DataMapping objectToBeCloned) {
-		setMapsHeader(objectToBeCloned.getMapsHeader());
-		setMapsPredicate(objectToBeCloned.getMapsPredicate());
-		setMapsPropertyType(objectToBeCloned.getMapsPropertyType());
-		setMapsValue(objectToBeCloned.getMapsValue());
-		super.clone(objectToBeCloned);
-	}
-	
-	public DataMapping createClone() {
-		DataMapping dataMapping = new DataMapping();
-		dataMapping.clone(this);
-		return dataMapping;
-	}
+//	public void clone(DataMapping objectToBeCloned) {
+//		setMapsHeader(objectToBeCloned.getMapsHeader());
+//		setMapsPredicate(objectToBeCloned.getMapsPredicate());
+//		setMapsPropertyType(objectToBeCloned.getMapsPropertyType());
+//		setMapsValue(objectToBeCloned.getMapsValue());
+//		super.clone(objectToBeCloned);
+//	}
+//	
+//	public DataMapping createClone() {
+//		DataMapping dataMapping = new DataMapping();
+//		dataMapping.clone(this);
+//		return dataMapping;
+//	}
 
 	public String getMapsHeader() {
 		return mapsHeader;

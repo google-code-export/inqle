@@ -4,9 +4,9 @@
 package org.inqle.data.rdf.jena.uri;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.CloneableJenabean;
-import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.NamedAndDescribedJenabean;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -17,7 +17,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
 @Namespace(RDF.INQLE)
-public class NamespaceMapping extends GlobalCloneableJenabean {
+public class NamespaceMapping extends GlobalJenabean {
 
 	private static final String NAMESPACE_MAPPING_DATASET = "org.inqle.datamodels.ns";
 	private String namespaceAbbrev;
@@ -35,15 +35,15 @@ public class NamespaceMapping extends GlobalCloneableJenabean {
 	public String getStringRepresentation() {
 		return namespaceAbbrev + "=<" + namespaceUri + ">";
 	}
-	public void clone(NamespaceMapping objectToBeCloned) {
-		setNamespaceAbbrev(objectToBeCloned.getNamespaceAbbrev());
-		setNamespaceUri(objectToBeCloned.getUri());
-	}
-	public ICloneableJenabean createClone() {
-		NamespaceMapping ns = new NamespaceMapping();
-		ns.clone(this);
-		return ns;
-	}
+//	public void clone(NamespaceMapping objectToBeCloned) {
+//		setNamespaceAbbrev(objectToBeCloned.getNamespaceAbbrev());
+//		setNamespaceUri(objectToBeCloned.getUri());
+//	}
+//	public INamedAndDescribedJenabean createClone() {
+//		NamespaceMapping ns = new NamespaceMapping();
+//		ns.clone(this);
+//		return ns;
+//	}
 	public String getNamespaceAbbrev() {
 		return namespaceAbbrev;
 	}

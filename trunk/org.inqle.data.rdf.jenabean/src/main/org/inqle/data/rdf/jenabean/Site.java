@@ -17,7 +17,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(Site.SITE_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
-public class Site extends UniqueCloneableJenabean {
+public class Site extends UniqueJenabean {
 
 	public static final String SITE_DATASET_ROLE_ID = "org.inqle.datamodels.site";
 	
@@ -26,25 +26,25 @@ public class Site extends UniqueCloneableJenabean {
 	private String ownerEmail;
 	private NamespaceMapping uriPrefix;
 
-	public void clone(Site objectToBeCloned) {
-		setUrl(objectToBeCloned.getUrl());
-		setIp(objectToBeCloned.getIp());
-		setOwnerEmail(objectToBeCloned.getOwnerEmail());
-		setUriPrefix(objectToBeCloned.getUriPrefix());
-		super.clone(objectToBeCloned);
-	}
+//	public void clone(Site objectToBeCloned) {
+//		setUrl(objectToBeCloned.getUrl());
+//		setIp(objectToBeCloned.getIp());
+//		setOwnerEmail(objectToBeCloned.getOwnerEmail());
+//		setUriPrefix(objectToBeCloned.getUriPrefix());
+//		super.clone(objectToBeCloned);
+//	}
 	
-	public Site createClone() {
-		Site site = new Site();
-		site.clone(this);
-		return site;
-	}
-
-	public Site createReplica() {
-		Site site = new Site();
-		site.replicate(this);
-		return site;
-	}
+//	public Site createClone() {
+//		Site site = new Site();
+//		site.clone(this);
+//		return site;
+//	}
+//
+//	public Site createReplica() {
+//		Site site = new Site();
+//		site.replicate(this);
+//		return site;
+//	}
 
 	public String getUrl() {
 		return url;

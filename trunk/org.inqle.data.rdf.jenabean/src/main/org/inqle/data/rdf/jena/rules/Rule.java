@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapping;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -26,7 +26,7 @@ import thewebsemantic.Namespace;
  * September 8, 2009
  */
 @Namespace(RDF.INQLE)
-public class Rule extends UniqueCloneableJenabean {
+public class Rule extends UniqueJenabean {
 
 	private Collection<UriMapping> prefixMappings;
 	private String antecedentClause;
@@ -34,31 +34,31 @@ public class Rule extends UniqueCloneableJenabean {
 	private String modifierClause;
 	
 
-	public void clone(Rule objectToClone) {
-		setPrefixMappings(objectToClone.getPrefixMappings());
-		setAntecedentClause(objectToClone.getAntecedentClause());
-		setConsequentClause(objectToClone.getConsequentClause());
-		setModifierClause(objectToClone.getModifierClause());
-		super.clone(objectToClone);
-	}
-	
-	public void replicate(Rule objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-	}
-	
-	public Rule createClone() {
-		Rule newRule = new Rule();
-		newRule.clone(this);
-		return newRule;
-	}
-	
-	@Override
-	public Rule createReplica() {
-		Rule newRule = new Rule();
-		newRule.replicate(this);
-		return newRule;
-	}
+//	public void clone(Rule objectToClone) {
+//		setPrefixMappings(objectToClone.getPrefixMappings());
+//		setAntecedentClause(objectToClone.getAntecedentClause());
+//		setConsequentClause(objectToClone.getConsequentClause());
+//		setModifierClause(objectToClone.getModifierClause());
+//		super.clone(objectToClone);
+//	}
+//	
+//	public void replicate(Rule objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//	}
+//	
+//	public Rule createClone() {
+//		Rule newRule = new Rule();
+//		newRule.clone(this);
+//		return newRule;
+//	}
+//	
+//	@Override
+//	public Rule createReplica() {
+//		Rule newRule = new Rule();
+//		newRule.replicate(this);
+//		return newRule;
+//	}
 	
 	public String getStringRepresentation() {
 		return getConstructQuery();

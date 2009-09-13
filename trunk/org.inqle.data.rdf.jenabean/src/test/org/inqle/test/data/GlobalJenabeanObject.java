@@ -6,11 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
 
 import thewebsemantic.Id;
 
-public class GlobalJenabeanObject extends GlobalCloneableJenabean {
+public class GlobalJenabeanObject extends GlobalJenabean {
 
 	private String experimentClassPath;
 	private String experimentXml;
@@ -111,11 +111,11 @@ public class GlobalJenabeanObject extends GlobalCloneableJenabean {
 		this.experimentType = experimentType;
 	}
 	
-	public GlobalJenabeanObject createClone() {
-		GlobalJenabeanObject newObj = new GlobalJenabeanObject();
-		newObj.clone(this);
-		return newObj;
-	}
+//	public GlobalJenabeanObject createClone() {
+//		GlobalJenabeanObject newObj = new GlobalJenabeanObject();
+//		newObj.clone(this);
+//		return newObj;
+//	}
 
 //	public RapidMinerExperiment createReplica() {
 //		RapidMinerExperiment newObj = new RapidMinerExperiment();
@@ -124,12 +124,12 @@ public class GlobalJenabeanObject extends GlobalCloneableJenabean {
 //	}
 
 	
-	public void clone(GlobalJenabeanObject objectToBeCloned) {
-		super.clone(objectToBeCloned);
-		setExperimentXml(objectToBeCloned.getExperimentXml());
-		setExperimentType(objectToBeCloned.getExperimentType());
-		setExperimentClassPath(objectToBeCloned.getExperimentClassPath());
-	}
+//	public void clone(GlobalJenabeanObject objectToBeCloned) {
+//		super.clone(objectToBeCloned);
+//		setExperimentXml(objectToBeCloned.getExperimentXml());
+//		setExperimentType(objectToBeCloned.getExperimentType());
+//		setExperimentClassPath(objectToBeCloned.getExperimentClassPath());
+//	}
 
 	public String getStringRepresentation() {
 		String s = getClass().toString() + " {\n";

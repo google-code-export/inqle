@@ -17,26 +17,26 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class SystemDatamodel extends DatabaseBackedDatamodel {
 	
-	public void clone(SystemDatamodel objectToBeCloned) {
-		super.clone(objectToBeCloned);
-//		setDatasetRole(objectToBeCloned.getDatasetRole());
-	}
-	
-	public void replicate(SystemDatamodel objectToBeCloned) {
-		clone(objectToBeCloned);
-		setId(objectToBeCloned.getId());
-	}
-	
-	public SystemDatamodel createClone() {
-		SystemDatamodel newObj = new SystemDatamodel();
-		newObj.clone(this);
-		return newObj;
-	}
-
-	public SystemDatamodel createReplica() {
-		SystemDatamodel newObj = new SystemDatamodel();
-		newObj.replicate(this);
-		return newObj;
-	}
+//	public void clone(SystemDatamodel objectToBeCloned) {
+//		super.clone(objectToBeCloned);
+////		setDatasetRole(objectToBeCloned.getDatasetRole());
+//	}
+//	
+//	public void replicate(SystemDatamodel objectToBeCloned) {
+//		clone(objectToBeCloned);
+//		setId(objectToBeCloned.getId());
+//	}
+//	
+//	public SystemDatamodel createClone() {
+//		SystemDatamodel newObj = new SystemDatamodel();
+//		newObj.clone(this);
+//		return newObj;
+//	}
+//
+//	public SystemDatamodel createReplica() {
+//		SystemDatamodel newObj = new SystemDatamodel();
+//		newObj.replicate(this);
+//		return newObj;
+//	}
 	
 }

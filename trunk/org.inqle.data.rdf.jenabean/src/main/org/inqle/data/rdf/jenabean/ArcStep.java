@@ -12,7 +12,7 @@ import thewebsemantic.Namespace;
  * Feb 22, 2008
  */
 @Namespace(RDF.INQLE)
-public class ArcStep extends GlobalCloneableJenabean {
+public class ArcStep extends GlobalJenabean {
 	public static final int OUTGOING = 0;
 	public static final int INCOMING = 1;
 	
@@ -52,18 +52,17 @@ public class ArcStep extends GlobalCloneableJenabean {
 		this.stepType = stepType;
 	}
 
-	public void clone(ArcStep objectToClone) {
-		setStepType(objectToClone.getStepType());
-		setPredicate(objectToClone.getPredicate());
-//			setObject(objectToClone.getObject());
-		super.clone(objectToClone);
-	}
-	
-	public ArcStep createClone() {
-		ArcStep newArcStep = new ArcStep();
-		newArcStep.clone(this);
-		return newArcStep;
-	}
+//	public void clone(ArcStep objectToClone) {
+//		setStepType(objectToClone.getStepType());
+//		setPredicate(objectToClone.getPredicate());
+//		super.clone(objectToClone);
+//	}
+//	
+//	public ArcStep createClone() {
+//		ArcStep newArcStep = new ArcStep();
+//		newArcStep.clone(this);
+//		return newArcStep;
+//	}
 	
 	public String getStringRepresentation() {
 		String s = "";

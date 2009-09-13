@@ -2,6 +2,8 @@ package org.inqle.data.rdf.jenabean;
 
 import org.inqle.core.util.JavaHasher;
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
+
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
@@ -13,7 +15,8 @@ import thewebsemantic.Namespace;
  * May 12, 2008
  */
 @Namespace(RDF.INQLE)
-public abstract class GlobalCloneableJenabean extends CloneableJenabean implements IGlobalJenabean {
+//public abstract class GlobalJenabean extends NamedAndDescribedJenabean implements IGlobalJenabean {
+public abstract class GlobalJenabean extends NamedAndDescribedJenabean implements IJenabean {
 
 //	@Id
 //	public String getId() {
@@ -22,7 +25,8 @@ public abstract class GlobalCloneableJenabean extends CloneableJenabean implemen
 	@Id
 	@Override
 	public String getId() {
-		String hash = JavaHasher.hashSha256(getStringRepresentation());
+//		String hash = JavaHasher.hashSha256(getStringRepresentation());
+		String hash = JavaHasher.hashSha256(BeanTool.getStringRepresentationExcludingId(this));
 		return hash;
 	}
 	
@@ -32,7 +36,7 @@ public abstract class GlobalCloneableJenabean extends CloneableJenabean implemen
 	
 	@Override
 	public String toString() {
-		return getStringRepresentation();
+		return BeanTool.getStringRepresentation(this);
 	}
 	
 //	public int compareTo(IGlobalJenabean anotherBean) {

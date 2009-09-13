@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 
 
 import thewebsemantic.Id;
@@ -22,7 +23,8 @@ import thewebsemantic.TypeWrapper;
  * Jan 25, 2008
  */
 @Namespace(RDF.INQLE)
-public abstract class CloneableJenabean extends AJenabean implements ICloneableJenabean {
+//public abstract class NamedAndDescribedJenabean extends AJenabean implements ICloneableJenabean {
+public abstract class NamedAndDescribedJenabean extends AJenabean implements IJenabean {
 
 	protected String description;
 	protected String name;
@@ -35,8 +37,12 @@ public abstract class CloneableJenabean extends AJenabean implements ICloneableJ
 	@RdfProperty(RDF.NAME_PREDICATE)
 	public String getName() {
 		if (name == null) {
-			//return this.getClass().getName();
-			return getId();
+			if (this.id != null) {
+				name = this.id;
+			} else {
+				name = this.getClass().getName();
+			}
+//			return getId();
 		}
 		return name;
 	}
@@ -51,23 +57,23 @@ public abstract class CloneableJenabean extends AJenabean implements ICloneableJ
 	
 	
 //	@Override
-	public String getStringRepresentation() {
-		String s = getClass().toString() + " {\n";
-		s += "[id=" + getId() + "]\n";
-		s += "[name=" + name + "]\n";
-		s += "[description=" + description + "]\n";
-		s += "}";
-		return s;
-	}
+//	public String getStringRepresentation() {
+//		String s = getClass().toString() + " {\n";
+//		s += "[id=" + getId() + "]\n";
+//		s += "[name=" + name + "]\n";
+//		s += "[description=" + description + "]\n";
+//		s += "}";
+//		return s;
+//	}
 
 	@Override
 	public String toString() {
-		return getStringRepresentation();
+		return BeanTool.getStringRepresentation(this);
 	}
 
-	public void clone(ICloneableJenabean template) {
-		setName(template.getName());
-		setDescription(template.getDescription());
-	}
+//	public void clone(ICloneableJenabean template) {
+//		setName(template.getName());
+//		setDescription(template.getDescription());
+//	}
 
 }
