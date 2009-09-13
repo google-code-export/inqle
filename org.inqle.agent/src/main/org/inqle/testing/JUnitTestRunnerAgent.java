@@ -11,7 +11,7 @@ import org.inqle.agent.AAgent;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -32,28 +32,28 @@ public class JUnitTestRunnerAgent extends AAgent {
 	
 	private static Logger log = Logger.getLogger(JUnitTestRunnerAgent.class);
 	
-	public void clone(JUnitTestRunnerAgent objectToClone) {
-		setTestsToRun(objectToClone.getTestsToRun());
-		super.clone(objectToClone);
-	}
-	
-	/**
-	 * @see org.inqle.data.rdf.jenabean.CloneableJenabean#createClone()
-	 */
-	public JUnitTestRunnerAgent createClone() {
-		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
-		newAgent.clone(this);
-		return newAgent;
-	}
+//	public void clone(JUnitTestRunnerAgent objectToClone) {
+//		setTestsToRun(objectToClone.getTestsToRun());
+//		super.clone(objectToClone);
+//	}
+//	
+//	/**
+//	 * @see org.inqle.data.rdf.jenabean.NamedAndDescribedJenabean#createClone()
+//	 */
+//	public JUnitTestRunnerAgent createClone() {
+//		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
+//		newAgent.clone(this);
+//		return newAgent;
+//	}
 
-	/**
-	 * @see org.inqle.data.rdf.jenabean.CloneableJenabean#createReplica()
-	 */
-	public JUnitTestRunnerAgent createReplica() {
-		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
-		newAgent.replicate(this);
-		return newAgent;
-	}
+//	/**
+//	 * @see org.inqle.data.rdf.jenabean.NamedAndDescribedJenabean#createReplica()
+//	 */
+//	public JUnitTestRunnerAgent createReplica() {
+//		JUnitTestRunnerAgent newAgent = new JUnitTestRunnerAgent();
+//		newAgent.replicate(this);
+//		return newAgent;
+//	}
 
 	/**
 	 * @see java.lang.Runnable#run()

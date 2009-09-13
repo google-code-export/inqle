@@ -5,6 +5,7 @@ import org.inqle.agent.IAgent;
 import org.inqle.agent.rap.AAgentFactory;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.agent.rap.IAgentWizard;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 
 public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 
@@ -22,7 +23,8 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 
 	public IAgentWizard createWizardForReplica(Shell shell) {
 		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
-		newWizard.setAgent((IAgent)getBaseAgent().createReplica());
+//		newWizard.setAgent((IAgent)getBaseAgent().createReplica());
+		newWizard.setAgent(BeanTool.replicate(getBaseAgent()));
 		return newWizard;
 	}
 
@@ -38,7 +40,8 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 
 	public IAgentWizard createWizardForClone(Shell shell) {
 		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
-		newWizard.setAgent((IAgent)getBaseAgent().createClone());
+//		newWizard.setAgent((IAgent)getBaseAgent().createClone());
+		newWizard.setAgent(BeanTool.clone(getBaseAgent()));
 		return newWizard;
 	}
 

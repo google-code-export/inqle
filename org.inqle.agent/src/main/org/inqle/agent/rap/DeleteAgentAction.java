@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.IPartType;
 
 /**
@@ -28,7 +29,8 @@ public class DeleteAgentAction extends Action {
 		this.window = window;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
-		this.agentToDelete  = (IAgent)agentPart.getAgentFactory().getBaseAgent().createReplica();
+//		this.agentToDelete  = (IAgent)agentPart.getAgentFactory().getBaseAgent().createReplica();
+		this.agentToDelete  = BeanTool.replicate(agentPart.getAgentFactory().getBaseAgent());
 		//this.persister = persister;
 	}
 	

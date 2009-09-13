@@ -12,6 +12,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.AgentLister;
 import org.inqle.agent.IAgent;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 
@@ -156,7 +157,8 @@ public class AgentPart extends PartType {
 //		actions.add(deleteAgentAction);
 		
 		//"Clone this Agent" action.  This wizard works with a clone of the base agent
-		IAgent cloneOfAgent = (IAgent)agentFactory.getBaseAgent().createClone();
+//		IAgent cloneOfAgent = (IAgent)agentFactory.getBaseAgent().createClone();
+		IAgent cloneOfAgent = BeanTool.clone(agentFactory.getBaseAgent());
 		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Create customization of this agent", this, workbenchWindow);
 		cloneAgentWizardAction.setAgent(cloneOfAgent); 
 		actions.add(cloneAgentWizardAction);
