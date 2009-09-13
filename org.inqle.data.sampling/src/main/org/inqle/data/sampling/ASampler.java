@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -28,97 +28,40 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
-public abstract class ASampler extends UniqueCloneableJenabean implements ISampler {
+public abstract class ASampler extends UniqueJenabean implements ISampler {
 
 //	protected Collection<String> availableDatamodels;
 
 	protected Collection<String> selectedDatamodels;
+
+	public void setSelectedDatamodels(Collection<String> selectedDatamodels) {
+		this.selectedDatamodels = selectedDatamodels;
+	}
 
 	protected Arc labelArc;
 	
 	public Arc getLabelArc() {
 		return this.labelArc;
 	}
-	/**
-	 * Add all field values from the provided template sampler to this sampler,
-	 * except the ID field
-	 * @param sampler the provided sampler
-	 */
-	public void clone(ISampler templateSampler) {
-		setSelectedDatamodels(templateSampler.getSelectedDatamodels());
-		setLabelArc(templateSampler.getLabelArc());
-		super.clone(templateSampler);
-	}
-	
-	public void replicate(ISampler objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-	}
-
-//	public Collection<String> getAvailableDatamodels() {
-//		return availableDatamodels;
+//	/**
+//	 * Add all field values from the provided template sampler to this sampler,
+//	 * except the ID field
+//	 * @param sampler the provided sampler
+//	 */
+//	public void clone(ISampler templateSampler) {
+//		setSelectedDatamodels(templateSampler.getSelectedDatamodels());
+//		setLabelArc(templateSampler.getLabelArc());
+//		super.clone(templateSampler);
 //	}
-
-//	public DataColumn[] getDataColumns() {
-//		return dataColumns;
-//	}
-
-//	public DataColumn getLabelDataColumn() {
-//		return labelDataColumn;
-//	}
-
-//	public Dictionary<?, ?> getProperties() {
-//		return properties;
-//	}
-
-//	public DataTable getResultDataTable() {
-//		return resultDataTable;
+//	
+//	public void replicate(ISampler objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
 //	}
 
 	public Collection<String> getSelectedDatamodels() {
 		return selectedDatamodels;
 	}
-
-//	public DataColumn getSubjectDataColumn() {
-//		return subjectDataColumn;
-//	}
-
-//	/**
-//	 * (Called prior to saving the object).  Remove all values not desired when saving this object
-//	 */
-//	public void removeInterimData() {
-//		availableDatamodels = null;
-//		dataColumns = null;
-//		resultDataTable = null;
-//	}
-
-//	public void setAvailableDatamodels(Collection<String> availableDatamodels) {
-//		this.availableDatamodels = availableDatamodels;
-//	}
-
-//	public void setDataColumns(DataColumn[] dataColumns) {
-//		this.dataColumns = dataColumns;
-//	}
-
-//	public void setLabelDataColumn(DataColumn labelDataColumn) {
-//		this.labelDataColumn = labelDataColumn;
-//	}
-
-//	public void setResultDataTable(DataTable resultDataTable) {
-//		this.resultDataTable = resultDataTable;
-//	}
-
-	public void setSelectedDatamodels(Collection<String> selectedDatamodels) {
-		this.selectedDatamodels = selectedDatamodels;
-	}
-
-//	public void setSubjectDataColumn(DataColumn subjectDataColumn) {
-//		this.subjectDataColumn = subjectDataColumn;
-//	}
-
-//	public void setProperties(Dictionary<?, ?> properties) {
-//		this.properties = properties;
-//	}
 
 	@Override
 	public String getName() {
@@ -131,17 +74,6 @@ public abstract class ASampler extends UniqueCloneableJenabean implements ISampl
 	public void setLabelArc(Arc labelArc) {
 		this.labelArc = labelArc;
 	}
-
-//	public void setName(String name) {
-//		this.name = name;		
-//	}
-
-//	/**
-//	 * Override to perform all steps of this sampler
-//	 */
-//	public DataTable execute(Persister persister) {
-//		return null;
-//	}
 	
 	/**
 	 * This basic implementation does nothing.  

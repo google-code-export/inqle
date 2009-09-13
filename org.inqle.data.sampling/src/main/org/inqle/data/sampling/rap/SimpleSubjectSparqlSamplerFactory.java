@@ -3,6 +3,7 @@ package org.inqle.data.sampling.rap;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SimpleSubjectSparqlSampler;
 
@@ -68,14 +69,16 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 
 	public ISamplerWizard createWizardForReplica(Model model, Shell shell) {
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
-		SimpleSubjectSparqlSampler replica = baseSampler.createReplica();
+//		SimpleSubjectSparqlSampler replica = baseSampler.createReplica();
+		SimpleSubjectSparqlSampler replica = BeanTool.replicate(baseSampler);
 		wizard.setSampler(replica);
 		return wizard;
 	}
 	
 	public ISamplerWizard createWizardForClone(Model model, Shell shell) {
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
-		SimpleSubjectSparqlSampler clone = baseSampler.createClone();
+//		SimpleSubjectSparqlSampler clone = baseSampler.createClone();
+		SimpleSubjectSparqlSampler clone = BeanTool.clone(baseSampler);
 		wizard.setSampler(clone);
 		return wizard;
 	}

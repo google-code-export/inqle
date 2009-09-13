@@ -6,6 +6,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.IPartType;
 
@@ -29,7 +30,8 @@ public class DeleteSamplerAction extends Action {
 		this.menuText = menuText;
 		this.samplerPart = samplerPart;
 		ISampler baseSampler = samplerPart.getSamplerFactory().getBaseSampler();
-		this.samplerToDelete  = (ISampler)baseSampler.createReplica();
+//		this.samplerToDelete  = (ISampler)baseSampler.createReplica();
+		this.samplerToDelete  = BeanTool.replicate(baseSampler);
 		//this.persister = persister;
 	}
 	
