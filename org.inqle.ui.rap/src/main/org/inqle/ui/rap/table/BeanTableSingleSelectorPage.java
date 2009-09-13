@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
@@ -93,7 +93,7 @@ public class BeanTableSingleSelectorPage extends BeanWizardPage {
 	 * @param title the title of this page
 	 * @param titleImage
 	 */
-	public BeanTableSingleSelectorPage(ICloneableJenabean modelBean, String modelBeanValueId, Class modelListClass, String title, ImageDescriptor titleImage) {
+	public BeanTableSingleSelectorPage(INamedAndDescribedJenabean modelBean, String modelBeanValueId, Class modelListClass, String title, ImageDescriptor titleImage) {
 		super(modelBean, modelBeanValueId, title, titleImage);
 		this.modelListClass = modelListClass;
 		assert(this.bean != null);

@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 
 /**
  * This generates a wizard page which has a list selector, without validation.  
@@ -38,7 +38,7 @@ public class ListSelectorPage extends BeanWizardPage {
 	protected ListViewer listViewer;
 	private static final Logger log = Logger.getLogger(ListSelectorPage.class);
 	
-	public ListSelectorPage(ICloneableJenabean bean, String beanValueId, String title, ImageDescriptor titleImage) {
+	public ListSelectorPage(INamedAndDescribedJenabean bean, String beanValueId, String title, ImageDescriptor titleImage) {
 		super(bean, beanValueId, title, titleImage);
 		assert(this.bean != null);
 		assert(this.beanValueId != null);

@@ -23,7 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 
 /**
  * Abstract class for wizard pages, which is designed to be extended w/ minimal effort.
@@ -41,7 +41,7 @@ import org.inqle.data.rdf.jenabean.ICloneableJenabean;
 @Deprecated
 public abstract class BeanWizardPage extends DynaWizardPage {
 
-	protected ICloneableJenabean bean;
+	protected INamedAndDescribedJenabean bean;
 	protected String beanValueId;
 	protected Realm realm = Realm.getDefault();
 	protected DataBindingContext bindingContext;
@@ -54,7 +54,7 @@ public abstract class BeanWizardPage extends DynaWizardPage {
 	 * @param pageName
 	 * @param titleImage
 	 */
-	public BeanWizardPage(ICloneableJenabean bean, String valueId, String title, ImageDescriptor titleImage) {
+	public BeanWizardPage(INamedAndDescribedJenabean bean, String valueId, String title, ImageDescriptor titleImage) {
 		super(title, titleImage);
 		assert(bean != null);
 		this.bean = bean;
