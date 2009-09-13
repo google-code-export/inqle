@@ -6,7 +6,7 @@ package org.inqle.agent;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
@@ -26,7 +26,7 @@ import thewebsemantic.RdfProperty;
  * @author David Donohue
  * Apr 24, 2008
  */
-public abstract class AAgent extends UniqueCloneableJenabean implements IAgent {
+public abstract class AAgent extends UniqueJenabean implements IAgent {
 
 	public static final int CYCLE_CONTINUOUSLY = -1;
 	//protected int mode = STOPPED;
@@ -40,16 +40,16 @@ public abstract class AAgent extends UniqueCloneableJenabean implements IAgent {
 	protected int stoppingPoint = CYCLE_CONTINUOUSLY;
 	//protected Persister persister;
 	
-	public void clone(AAgent objectToClone) {
-		setStoppingPoint(objectToClone.getStoppingPoint());
-		super.clone(objectToClone);
-	}
-	
-	public void replicate(AAgent objectToClone) {
-		clone(objectToClone);
-		setId(objectToClone.getId());
-		super.replicate(objectToClone);
-	}
+//	public void clone(AAgent objectToClone) {
+//		setStoppingPoint(objectToClone.getStoppingPoint());
+//		super.clone(objectToClone);
+//	}
+//	
+//	public void replicate(AAgent objectToClone) {
+//		clone(objectToClone);
+//		setId(objectToClone.getId());
+//		super.replicate(objectToClone);
+//	}
 	
 	public void setRunning() {
 		AgentRegistry registry = AgentRegistry.getInstance();
