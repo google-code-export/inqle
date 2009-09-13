@@ -1,11 +1,9 @@
 package org.inqle.data.rdf.jenabean;
 
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.uri.UriMapper;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import org.inqle.data.rdf.RDF;
 
 import thewebsemantic.Namespace;
 
@@ -20,7 +18,7 @@ import thewebsemantic.Namespace;
 	 * So now Arcs only support outgoing direction
 	 */
 	@Namespace(RDF.INQLE)
-	public class Arc extends GlobalCloneableJenabean implements Comparable<Arc> {
+	public class Arc extends GlobalJenabean implements Comparable<Arc> {
 		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
 		
 		public Arc() {}
@@ -54,17 +52,17 @@ import thewebsemantic.Namespace;
 			return arcStepList.toArray(arcStepArr);
 		}
 		
-		public void clone(Arc objectToBeCloned) {
-			setArcSteps(objectToBeCloned.getArcSteps());
-			setQnameRepresentation(objectToBeCloned.getQnameRepresentation());
-			super.clone(this);
-		}
-		
-		public Arc createClone() {
-			Arc arc = new Arc();
-			arc.clone(this);
-			return arc;
-		}
+//		public void clone(Arc objectToBeCloned) {
+//			setArcSteps(objectToBeCloned.getArcSteps());
+//			setQnameRepresentation(objectToBeCloned.getQnameRepresentation());
+//			super.clone(this);
+//		}
+//		
+//		public Arc createClone() {
+//			Arc arc = new Arc();
+//			arc.clone(this);
+//			return arc;
+//		}
 		
 		public String getStringRepresentation() {
 			String s = "";

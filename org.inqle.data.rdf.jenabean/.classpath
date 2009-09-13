@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" output="bin/main" path="src/main"/>
 	<classpathentry kind="src" output="bin/test" path="src/test"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.8.0.jar" sourcepath="C:/Documents and Settings/gd9345/Desktop/downloads/apache/commons-beanutils-1.8.0/commons-beanutils-1.8.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/antlr.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/icu4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/lucene-core.jar"/>

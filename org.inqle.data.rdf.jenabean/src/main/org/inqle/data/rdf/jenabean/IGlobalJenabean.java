@@ -13,14 +13,14 @@ import org.inqle.core.domain.INamedAndDescribed;
  * recordkeeping fields, which are not of relevance to the object's global 
  * value, these fields should be removed before calculating this hash.  
  * 
- * @see GlobalCloneableJenabean
+ * @see GlobalJenabean
  * 
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface IGlobalJenabean extends ICloneableJenabean {
+public interface IGlobalJenabean extends INamedAndDescribedJenabean {
 	
-	public String getStringRepresentation();
+//	public String getStringRepresentation();
 //	public void setStringRepresentation(String stringRepresentation);
 //	public int compareTo(IGlobalJenabean anotherBean);
 }

@@ -12,7 +12,7 @@ import org.inqle.core.domain.INamedAndDescribed;
  * @author David Donohue
  * Apr 18, 2008
  */
-public interface IUniqueJenabean extends ICloneableJenabean {
+public interface IUniqueJenabean extends INamedAndDescribedJenabean {
 
 	public Date getCreationDate();
 	
@@ -24,11 +24,11 @@ public interface IUniqueJenabean extends ICloneableJenabean {
 	 * Copy all values from the provided ISampler to this one
 	 * @return
 	 */
-	public void replicate(IUniqueJenabean objectToReplicate);
+//	public void replicate(IUniqueJenabean objectToReplicate);
 	
 	/**
 	 * Create new replica of self.  
 	 * The replica has all fields identical to self
 	 */
-	public IUniqueJenabean createReplica();
+//	public IUniqueJenabean createReplica();
 }

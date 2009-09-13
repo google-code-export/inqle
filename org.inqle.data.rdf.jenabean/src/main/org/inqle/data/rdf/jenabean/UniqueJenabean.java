@@ -4,12 +4,13 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
-public abstract class UniqueCloneableJenabean extends CloneableJenabean implements IUniqueJenabean {
+public abstract class UniqueJenabean extends NamedAndDescribedJenabean implements IUniqueJenabean {
 
 	private Date creationDate;
 	private Date updateDate;
@@ -61,23 +62,28 @@ public abstract class UniqueCloneableJenabean extends CloneableJenabean implemen
 	 * Assign a clone a new unique ID
 	 * @param objectToClone
 	 */
-	public void clone(IUniqueJenabean objectToClone) {
-		super.clone(objectToClone);
-		setId(UUID.randomUUID().toString());
-	}
+//	public void clone(IUniqueJenabean objectToClone) {
+//		super.clone(objectToClone);
+//		setId(UUID.randomUUID().toString());
+//	}
 	
-	public void replicate(IUniqueJenabean objectToReplicate) {
-		clone(objectToReplicate);
-		setId(objectToReplicate.getId());
-	}
+//	public void replicate(IUniqueJenabean objectToReplicate) {
+//		clone(objectToReplicate);
+//		setId(objectToReplicate.getId());
+//	}
+	
+//	@Override
+//	public String getStringRepresentation() {
+//		String s = getClass().toString() + " {\n";
+//		s += "[id=" + getId() + "]\n";
+//		s += "[name=" + name + "]\n";
+//		s += "[description=" + description + "]\n";
+//		s += "}";
+//		return s;
+//	}
 	
 	@Override
-	public String getStringRepresentation() {
-		String s = getClass().toString() + " {\n";
-		s += "[id=" + getId() + "]\n";
-		s += "[name=" + name + "]\n";
-		s += "[description=" + description + "]\n";
-		s += "}";
-		return s;
+	public String toString() {
+		return BeanTool.getStringRepresentation(this);
 	}
 }

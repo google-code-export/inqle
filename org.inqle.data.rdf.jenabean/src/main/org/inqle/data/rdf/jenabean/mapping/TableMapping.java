@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.GlobalCloneableJenabean;
+import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.UniqueCloneableJenabean;
+import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 
@@ -46,17 +46,17 @@ public class TableMapping extends SubjectMapping {
 //		return s;
 //	}
 
-	public void clone(TableMapping objectToBeCloned) {
-		setMappedText(objectToBeCloned.getMappedText());
-		setSubjectMapping(objectToBeCloned.getSubjectMapping());
-		super.clone(objectToBeCloned);
-	}
-	
-	public TableMapping createClone() {
-		TableMapping dataMapping = new TableMapping();
-		dataMapping.clone(this);
-		return dataMapping;
-	}
+//	public void clone(TableMapping objectToBeCloned) {
+//		setMappedText(objectToBeCloned.getMappedText());
+//		setSubjectMapping(objectToBeCloned.getSubjectMapping());
+//		super.clone(objectToBeCloned);
+//	}
+//	
+//	public TableMapping createClone() {
+//		TableMapping dataMapping = new TableMapping();
+//		dataMapping.clone(this);
+//		return dataMapping;
+//	}
 
 	public String getMappedText() {
 		return mappedText;
@@ -74,16 +74,16 @@ public class TableMapping extends SubjectMapping {
 		this.subjectMapping = subjectMapping;
 	}
 
-	public void replicate(TableMapping objectToBeReplicated) {
-		clone(objectToBeReplicated);
-		setId(objectToBeReplicated.getId());
-	}
-	
-	public TableMapping createReplica() {
-		TableMapping dataMapping = new TableMapping();
-		dataMapping.replicate(this);
-		return dataMapping;
-	}
+//	public void replicate(TableMapping objectToBeReplicated) {
+//		clone(objectToBeReplicated);
+//		setId(objectToBeReplicated.getId());
+//	}
+//	
+//	public TableMapping createReplica() {
+//		TableMapping dataMapping = new TableMapping();
+//		dataMapping.replicate(this);
+//		return dataMapping;
+//	}
 
 //	public String getMappedDataSubclassId() {
 //		return mappedDataSubclassId;
