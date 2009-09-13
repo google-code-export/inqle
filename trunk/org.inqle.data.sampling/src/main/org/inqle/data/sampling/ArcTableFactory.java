@@ -10,6 +10,7 @@ import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.ArcStep;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntModel;
@@ -149,7 +150,8 @@ public class ArcTableFactory {
 
   	while (stmtIterator.hasNext()) {
   		Statement statement = stmtIterator.nextStatement();
-  		addArcSteps(arc.createClone(), statement, excludeResources);
+//  		addArcSteps(arc.createClone(), statement, excludeResources);
+  		addArcSteps(BeanTool.clone(arc), statement, excludeResources);
 	  }
 		
 	}

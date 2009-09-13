@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
 import org.inqle.ui.rap.IPart;
@@ -127,8 +128,8 @@ public class SamplerPart extends PartType {
 //		manager.add(deleteSamplerAction);
 		
 		//"Clone this Sampler" action.  This wizard works with a clone of the base sampler
-		//ISampler cloneOfSampler = samplerFactory.cloneSampler();
-		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
+//		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
+		ISampler cloneOfSampler = BeanTool.clone(samplerFactory.getBaseSampler());
 		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Create a customized clone of this sampler...", this, workbenchWindow);
 		cloneSamplerWizardAction.setSampler(cloneOfSampler); 
 		actions.add(cloneSamplerWizardAction);

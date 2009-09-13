@@ -6,7 +6,7 @@ package org.inqle.data.sampling.rap;
 import java.util.Collection;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.inqle.data.rdf.jenabean.ICloneableJenabean;
+import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.ui.rap.table.SparqlSelectorPage;
 
@@ -18,7 +18,7 @@ public class SamplerBackedSparqlSelectorPage extends SparqlSelectorPage {
 
 	private String query;
 
-	public SamplerBackedSparqlSelectorPage(ICloneableJenabean modelBean,
+	public SamplerBackedSparqlSelectorPage(INamedAndDescribedJenabean modelBean,
 			String modelBeanValueId, Class<?> modelListClass, String title,
 			ImageDescriptor titleImage) {
 		super(modelBean, modelBeanValueId, modelListClass, title, titleImage);

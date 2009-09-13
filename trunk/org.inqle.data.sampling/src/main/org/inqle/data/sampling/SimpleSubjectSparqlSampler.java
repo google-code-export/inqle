@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.util.RandomUtil;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jena.util.ArcLister;
@@ -54,23 +53,23 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSampler.class);
 
-	public void clone(SimpleSubjectSparqlSampler objectToBeCloned) {
-		setMaxLearnablePredicates(objectToBeCloned.getMaximumNumberOfDatamodels());
-		setMinLearnablePredicates(objectToBeCloned.getMinimumNumberOfDatamodels());
-		super.clone(objectToBeCloned);
-	}
-	
-	public SimpleSubjectSparqlSampler createClone() {
-		SimpleSubjectSparqlSampler newSampler = new SimpleSubjectSparqlSampler();
-		newSampler.clone(this);
-		return newSampler;
-	}
-	
-	public SimpleSubjectSparqlSampler createReplica() {
-		SimpleSubjectSparqlSampler newSampler = new SimpleSubjectSparqlSampler();
-		newSampler.replicate(this);
-		return newSampler;
-	}
+//	public void clone(SimpleSubjectSparqlSampler objectToBeCloned) {
+//		setMaxLearnablePredicates(objectToBeCloned.getMaximumNumberOfDatamodels());
+//		setMinLearnablePredicates(objectToBeCloned.getMinimumNumberOfDatamodels());
+//		super.clone(objectToBeCloned);
+//	}
+//	
+//	public SimpleSubjectSparqlSampler createClone() {
+//		SimpleSubjectSparqlSampler newSampler = new SimpleSubjectSparqlSampler();
+//		newSampler.clone(this);
+//		return newSampler;
+//	}
+//	
+//	public SimpleSubjectSparqlSampler createReplica() {
+//		SimpleSubjectSparqlSampler newSampler = new SimpleSubjectSparqlSampler();
+//		newSampler.replicate(this);
+//		return newSampler;
+//	}
 
 	@Override
 	/**

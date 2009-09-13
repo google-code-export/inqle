@@ -299,31 +299,17 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		return DEFAULT_MINIMUM_NUMBER_OF_DATAMODELS;
 	}
 
-//	public String getQuery() {
-//		return query;
+//	public void replicate(AConstructSparqlSampler objectToClone) {
+//		clone(objectToClone);
+//		super.replicate(objectToClone);
 //	}
-//
-//	public void setQuery(String query) {
-//		this.query = query;
-//	}
-
-	public void replicate(AConstructSparqlSampler objectToClone) {
-		clone(objectToClone);
-		super.replicate(objectToClone);
-	}
-	
-	public void clone(AConstructSparqlSampler templateSampler) {
-		setSubjectClass(templateSampler.getSubjectClass());
-		setArcs(templateSampler.getArcs());
-//		setNumberOfAttributes(templateSampler.getNumberOfAttributes());
-		setMinLearnablePredicates(templateSampler.getMinLearnablePredicates());
-		setMaxLearnablePredicates(templateSampler.getMaxLearnablePredicates());
-		super.clone(templateSampler);
-//		setQuery(((ASelectSparqlSampler)templateSampler).getQuery());
-	}
-
-//	public void setNumberOfAttributes(int numberOfAttributes) {
-//		this.numberOfAttributes = numberOfAttributes;
+//	
+//	public void clone(AConstructSparqlSampler templateSampler) {
+//		setSubjectClass(templateSampler.getSubjectClass());
+//		setArcs(templateSampler.getArcs());
+//		setMinLearnablePredicates(templateSampler.getMinLearnablePredicates());
+//		setMaxLearnablePredicates(templateSampler.getMaxLearnablePredicates());
+//		super.clone(templateSampler);
 //	}
 
 	public URI getSubjectClass() {
