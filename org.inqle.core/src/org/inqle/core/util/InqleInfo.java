@@ -129,6 +129,8 @@ public class InqleInfo {
 
 	public static final String PARAM_MODEL = "model";
 
+	public static final String DEFAULT_LANG = "en";
+
 
 
 	public static String getDatabaseRootFilePath() {
