@@ -1,5 +1,6 @@
 package org.inqle.qa.common;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * September 10, 2009
  *
  */
-public class Question extends QAModelObject implements IQuestion {
+public class Question extends QAModelObject implements IQuestion, Serializable {
 	
 	
 	
