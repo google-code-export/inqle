@@ -1,6 +1,6 @@
 package org.inqle.qa.common;
 
-public class Translation implements ITranslation {
+public class Translation extends QAModelObject implements ITranslation {
 	public String text;
 	public String lang;
 	
