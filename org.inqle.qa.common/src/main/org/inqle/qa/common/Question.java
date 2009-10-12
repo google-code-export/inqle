@@ -11,7 +11,7 @@ import java.util.List;
  * September 10, 2009
  *
  */
-public class Question implements IQuestion {
+public class Question extends QAModelObject implements IQuestion {
 	
 	
 	

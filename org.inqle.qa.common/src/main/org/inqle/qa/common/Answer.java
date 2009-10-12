@@ -2,7 +2,7 @@ package org.inqle.qa.common;
 
 import java.util.Collection;
 
-public class Answer implements IAnswer {
+public class Answer extends QAModelObject implements IAnswer {
 
 	private IQuestion question;
 	private Collection<IOption> selectedOptions;

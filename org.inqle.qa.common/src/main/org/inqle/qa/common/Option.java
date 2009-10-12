@@ -7,7 +7,7 @@ import java.util.Collection;
  * @author David Donohue
  *
  */
-public class Option implements IOption {
+public class Option extends QAModelObject implements IOption {
 
 	private Collection<ITranslation> translations;
 
