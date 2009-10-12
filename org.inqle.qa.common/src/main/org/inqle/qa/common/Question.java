@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.inqle.core.data.ModelObject;
+
 /**
  * This class represents a question.
  * 
@@ -12,7 +14,7 @@ import java.util.List;
  * September 10, 2009
  *
  */
-public class Question extends QAModelObject implements IQuestion, Serializable {
+public class Question extends ModelObject implements IQuestion, Serializable {
 	
 	
 	

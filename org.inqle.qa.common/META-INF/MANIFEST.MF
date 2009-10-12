@@ -6,3 +6,4 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.inqle.qa.common
+Require-Bundle: org.inqle.core;bundle-version="1.0.0"
