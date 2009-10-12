@@ -1,6 +1,8 @@
 package org.inqle.qa.common;
 
-public class Translation extends QAModelObject implements ITranslation {
+import java.io.Serializable;
+
+public class Translation extends QAModelObject implements ITranslation, Serializable {
 	public String text;
 	public String lang;
 	

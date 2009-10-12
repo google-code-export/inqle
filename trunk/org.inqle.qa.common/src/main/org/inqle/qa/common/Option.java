@@ -1,5 +1,6 @@
 package org.inqle.qa.common;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Collection;
  * @author David Donohue
  *
  */
-public class Option extends QAModelObject implements IOption {
+public class Option extends QAModelObject implements IOption, Serializable {
 
 	private Collection<ITranslation> translations;
 
