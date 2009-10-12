@@ -3,7 +3,9 @@ package org.inqle.qa.common;
 import java.util.Collection;
 import java.io.Serializable;
 
-public class Answer extends QAModelObject implements IAnswer, Serializable {
+import org.inqle.core.data.ModelObject;
+
+public class Answer extends ModelObject implements IAnswer, Serializable {
 
 	private IQuestion question;
 	private Collection<IOption> selectedOptions;
