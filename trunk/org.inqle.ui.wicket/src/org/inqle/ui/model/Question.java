@@ -3,7 +3,6 @@
  */
 package org.inqle.ui.model;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,27 +10,25 @@ import java.util.Set;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class Question implements Serializable {
+public class Question extends BaseTranslatable {
 
+	public static enum AnswersMode {
+		// only a single answer for this question are allowed
+		SINGLE_SELECTION,
+		// multiple answers for this questions are allowed.
+		MULTIPLE_SELECTION
+	}
+	
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	
-	private String enuntiation;
-	
+		
+		
 	private Set<Answer>  answers = new HashSet<Answer>();
 	
-	private Answer selectedAnswer;
-		
-	public Answer getSelectedAnswer() {
-		return selectedAnswer;
-	}
+	private Set<Answer> selectedAnswers = new HashSet<Answer>();
 
-
-	public void setSelectedAnswer(Answer selectedAnswer) {
-		this.selectedAnswer = selectedAnswer;
-	}
-
+	public AnswersMode answersMode = AnswersMode.SINGLE_SELECTION;
 
 	public Question() {
 	}
@@ -44,15 +41,6 @@ public class Question implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getEnuntiation() {
-		return enuntiation;
-	}
-
-	public void setEnuntiation(String ennuntiate) {
-		this.enuntiation = ennuntiate;
-	}
-
 	
 	public Question addAnswer(Answer answer) {
 		answers.add(answer);
@@ -98,5 +86,30 @@ public class Question implements Serializable {
 			return false;
 		return true;
 	}
+
+
+	public Set<Answer> getSelectedAnswers() {
+		return selectedAnswers;
+	}
+
+
+	public void setSelectedAnswers(Set<Answer> selectedAnswers) {
+		if(answersMode.equals(AnswersMode.SINGLE_SELECTION) && selectedAnswers.size() > 0) {
+			throw new IllegalArgumentException("Only one answer is allowed!");
+		}
+		this.selectedAnswers = selectedAnswers;
+	}
 	
+	public Question addSelectedAnswer(Answer answer) {
+		if(answersMode.equals(AnswersMode.SINGLE_SELECTION) && selectedAnswers.size() > 0) {
+			throw new IllegalArgumentException("Only one answer is allowed!");
+		}
+		selectedAnswers.add(answer);
+		return this;
+	}
+	
+	public Question removeSelectedAnswer(Answer answer) {
+		selectedAnswers.remove(answer);
+		return this;
+	}
 }

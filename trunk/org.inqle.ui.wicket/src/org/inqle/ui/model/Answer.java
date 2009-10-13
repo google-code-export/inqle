@@ -1,17 +1,18 @@
 package org.inqle.ui.model;
 
-import java.io.Serializable;
 
 /**
+ * Answers do not have references to questions because 
+ * the same answer can be applied to different 
+ * questions.
+ * 
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  */
-public class Answer implements Serializable {
+public class Answer extends BaseTranslatable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-
-	private String enuntiation;
 	
 	public Answer() {
 	}
@@ -23,14 +24,7 @@ public class Answer implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public String getEnuntiation() {
-		return enuntiation;
-	}
 
-	public void setEnuntiation(String enuntiation) {
-		this.enuntiation = enuntiation;
-	}
 
 	@Override
 	public int hashCode() {
