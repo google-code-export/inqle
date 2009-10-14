@@ -7,11 +7,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Represents a question.
+ * 
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class Question extends BaseTranslatable {
+public class Question extends IdentifiableTranslatable {
 
+	/**
+	 *  Question allows one or several answers.
+	 *  
+	 * @author  Ernesto Reinaldo Barreiro (reiern70@gmail.com)
+	 *
+	 */
 	public static enum AnswersMode {
 		// only a single answer for this question are allowed
 		SINGLE_SELECTION,
@@ -20,26 +28,24 @@ public class Question extends BaseTranslatable {
 	}
 	
 	private static final long serialVersionUID = 1L;
-
-	private Long id;
-		
-		
+	
+	
+	/**
+	 * List of posible answers (options).
+	 */
 	private Set<Answer>  answers = new HashSet<Answer>();
 	
+	/**
+	 * The selected answer(s).
+	 */
 	private Set<Answer> selectedAnswers = new HashSet<Answer>();
 
+	/**
+	 * Flag to determine whether this question allows one or several answers.
+	 */
 	public AnswersMode answersMode = AnswersMode.SINGLE_SELECTION;
 
 	public Question() {
-	}
-	
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public Question addAnswer(Answer answer) {
@@ -58,33 +64,6 @@ public class Question extends BaseTranslatable {
 
 	public void setAnswers(Set<Answer> answers) {
 		this.answers = answers;
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Question other = (Question) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
 	}
 
 
