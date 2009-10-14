@@ -4,6 +4,19 @@
    <extension-point id="org.inqle.ui.rap.IPartType" name="Class of Application Parts" schema="schema/org.inqle.ui.rap.IPartType.exsd"/>
    
    <extension
+        point="org.eclipse.rap.ui.branding">
+     <branding
+           id="org.inqle.core.branding"
+           servletName="inqle"
+           title="INQLE Server"
+           exitConfirmation="Do you really want to exit INQLE?"
+           favicon="favicon.png"
+           body="body.html"
+           >
+     </branding>
+   </extension>
+   
+   <extension
          point="org.eclipse.rap.ui.entrypoint">
       <entrypoint
             class="org.inqle.ui.rap.Application"
