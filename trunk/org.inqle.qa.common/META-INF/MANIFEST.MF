@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Common
-Bundle-SymbolicName: org.inqle.ecf.common;singleton:=true
+Bundle-SymbolicName: org.inqle.qa.common;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
