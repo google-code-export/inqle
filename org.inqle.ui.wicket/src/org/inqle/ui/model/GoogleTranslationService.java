@@ -23,6 +23,7 @@ public class GoogleTranslationService implements ITranslationService {
 	 * 
 	 */
 	public GoogleTranslationService() {
+		Translate.setHttpReferrer("INQLE");
 	}
 
 	/* (non-Javadoc)
