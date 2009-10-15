@@ -122,8 +122,8 @@ public class InqleInfo {
 
 //	public static final String METAREPOSITORY_DATASET = "Metarepository";
 
-	public static final String USER_DATABASE_ROOT = "user";
-	public static final String SYSTEM_DATABASE_ROOT = "system";
+	public static final String USER_DATABASE_ROOT = "org.inqle.core.data.general";
+	public static final String SYSTEM_DATABASE_ROOT = "org.inqle.core.data.system";
 
 	public static final String ACCESS_ATTRIBUTE = "access";
 
