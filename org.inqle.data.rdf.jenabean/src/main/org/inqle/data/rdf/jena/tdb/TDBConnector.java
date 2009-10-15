@@ -78,6 +78,7 @@ public class TDBConnector implements IDBConnector {
 	}
 
 	public boolean testConnection() {
+		if (databaseId == null || databaseId.length()==0) return false;
 		return new File(getFilePath()).exists();
 	}
 
@@ -126,6 +127,11 @@ public class TDBConnector implements IDBConnector {
 	private String getFilePath() {
 		return InqleInfo.getDatabaseRootFilePath() + databaseId;
 	}
+	
+//	public static boolean databaseExists(String dbId) {
+//		if (dbId == null || dbId.length()==0) return false;
+//		return new File(InqleInfo.getDatabaseRootFilePath() + dbId).exists();
+//	}
 
 	public boolean deleteDirectory(File dir) {
 		File[] children = dir.listFiles();

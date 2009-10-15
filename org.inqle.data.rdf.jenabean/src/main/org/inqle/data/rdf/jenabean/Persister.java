@@ -249,7 +249,7 @@ public class Persister {
 	 * ********************************************************************* */
 	
 	/**
-	 * Creates a new Jena SDB Model, 
+	 * Creates a new Jena TDB Model, 
 	 * given a SDBDatabase object and the name of a model.
 	 * 
 	 * TODO Note that this might be different from a SDB data model
@@ -266,12 +266,11 @@ public class Persister {
 		log.debug("Creating Model of name '" + dbModelName + "'.");
 		
 		Model model = dbConnector.getModel(dbModelName);
-//		model.close();
-//		return model;
 	}
 	
 	/**
-	 * Creates a new database-backed model
+	 * Creates a new database-backed model, given a DatabaseBackedDatamodel.
+	 * Also stores the new datamodel in the metarepository
 	 */
 	public void createDatabaseBackedModel(DatabaseBackedDatamodel datamodel) {
 		
@@ -882,8 +881,7 @@ public class Persister {
 	 */
 	public int createNewDatabase(IDatabase database) {
 		log.info("Will try to create a new Database:\n" + JenabeanWriter.toString(database));
-		//first create the SDBConnector and use it to create the SDB store in the database
-//		SDBConnector connector = new SDBConnector(connection);
+		//first create the IDBConnector and use it to create the DB store in the database
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
 		//int status = SDBConnector.STORE_CREATED;
 		int status = connector.createDatabase();
