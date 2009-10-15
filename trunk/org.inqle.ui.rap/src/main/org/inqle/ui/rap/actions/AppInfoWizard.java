@@ -163,6 +163,7 @@ public class AppInfoWizard extends Wizard {
 		metarepositoryDatamodel.setId(Persister.METAREPOSITORY_DATAMODEL);
 		metarepositoryDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ROOT);
 		
+		//create the system database and the metarepository model (which contains data about datamodels)
 		try {
 			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase);
 			int status = connector.createDatabase();
@@ -171,28 +172,22 @@ public class AppInfoWizard extends Wizard {
 			persister.persist(systemDatabase, metarepositoryModel);
 			persister.persist(metarepositoryDatamodel, metarepositoryModel);
 			log.info("CREATED user database and first user datamodel.");
-//			persister.createDBModel(metarepositoryDataset);
 		} catch (Exception e) {
 			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ROOT + " and dataset: " + Persister.METAREPOSITORY_DATAMODEL, e);
 			//TODO show error to user
 			return false;
 		}
 		
-		UserDatamodel firstDataDataset = new UserDatamodel();
-		firstDataDataset.setId(FIRSTDATA_DATAMODEL_ID);
+		//create the user database and first user datamodel
+		UserDatamodel firstDataDatamodel = new UserDatamodel();
+		firstDataDatamodel.setId(FIRSTDATA_DATAMODEL_ID);
 		IDatabase userDatabase = new LocalFolderDatabase();
 		userDatabase.setId(InqleInfo.USER_DATABASE_ROOT);
-		firstDataDataset.setDatabaseId(userDatabase.getId());
-		firstDataDataset.addDatasetFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);
+		firstDataDatamodel.setDatabaseId(userDatabase.getId());
+		firstDataDatamodel.addDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);
 		try {
-//			IDBConnector connector = DBConnectorFactory.getDBConnector(firstDataDatabase);
-//			int status = connector.createDatabase();
-//			log.info("Created data store for first dataset " + firstDataDataset + ": Status=" + status);
-//			Persister persister = Persister.getInstance();
-//			persister.persist(firstDataDatabase);
-//			persister.persist(firstDataDataset);
 			persister.createNewDatabase(userDatabase);
-			persister.createDatabaseBackedModel(firstDataDataset);
+			persister.createDatabaseBackedModel(firstDataDatamodel);
 			log.info("CREATED user database and first user datamodel.");
 		} catch (Exception e) {
 			log.error("Error creating/storing first dataset", e);
