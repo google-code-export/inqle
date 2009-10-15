@@ -19,6 +19,18 @@ public interface IQuestion {
 	
 	public List<IOption> getQuestionOptions();
 	
+	public void setMinimumResponse(Double MinimumResponse);
+	
+	public Double getMinimumResponse();
+	
+	public void setMaximumResponse(Double maximumResponse);
+	
+	public Double getMaximumResponse();
+	
+	public void setAcceptedResponseInterval(Double acceptedResponseInterval);
+	
+	public Double getAcceptedResponseInterval();
+	
 	public ITranslation getQuestionTranslation(String lang);
 	
 	public ITranslation getDefaultQuestionTranslation();

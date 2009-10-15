@@ -24,28 +24,35 @@ public class Question extends ModelObject implements IQuestion, Serializable {
 	private Collection<ITranslation> translations = new ArrayList<ITranslation>();
 	private List<IOption> questionOptions;
 	private String questionType;
-	
+	private Double minimumResponse = new Double(0);
+	private Double maximumResponse;
+	private Double acceptedResponseInterval;
 	/**
-	 * Private constructor.  Use QAFactory.newQuestion();
+	 * Friendly constructor.  Use QAFactory.newQuestion();
 	 */
 	Question(){};
 	
+	@Override
 	public void setQuestionTranslations(Collection<ITranslation> questionTranslations) {
 		this.translations = questionTranslations;
 	}
 	
+	@Override
 	public Collection<ITranslation> getQuestionTranslations() {
 		return translations;
 	}
 	
+	@Override
 	public void addQuestionTranslation(ITranslation questionTranslation) {
 		translations.add(questionTranslation);
 	}
 	
+	@Override
 	public void setQuestionType(String questionType) {
 		this.questionType = questionType;
 	}
 	
+	@Override
 	public String getQuestionType() {
 		if (questionType==null) {
 			return QUESTION_TYPE_SINGLE_SELECTION;
@@ -53,14 +60,17 @@ public class Question extends ModelObject implements IQuestion, Serializable {
 		return questionType;
 	}
 	
+	@Override
 	public void setQuestionOptions(List<IOption> questionOptions) {
 		this.questionOptions = questionOptions;
 	}
 	
+	@Override
 	public List<IOption> getQuestionOptions() {
 		return questionOptions;
 	}
 	
+	@Override
 	public ITranslation getQuestionTranslation(String lang) {
 		for (ITranslation translation: getQuestionTranslations()) {
 			if (translation.getLang().equals(lang)) return translation;
@@ -68,8 +78,39 @@ public class Question extends ModelObject implements IQuestion, Serializable {
 		return null;
 	}
 	
+	@Override
 	public ITranslation getDefaultQuestionTranslation() {
 		return getQuestionTranslation(QAInfo.DEFAULT_LANG);
+	}
+
+	@Override
+	public void setMinimumResponse(Double minimumResponse) {
+		this.minimumResponse = minimumResponse;
+	}
+
+	@Override
+	public Double getMinimumResponse() {
+		return minimumResponse;
+	}
+
+	@Override
+	public void setMaximumResponse(Double maximumResponse) {
+		this.maximumResponse = maximumResponse;
+	}
+
+	@Override
+	public Double getMaximumResponse() {
+		return maximumResponse;
+	}
+
+	@Override
+	public void setAcceptedResponseInterval(Double acceptedResponseInterval) {
+		this.acceptedResponseInterval = acceptedResponseInterval;
+	}
+
+	@Override
+	public Double getAcceptedResponseInterval() {
+		return acceptedResponseInterval;
 	}
 	
 }
