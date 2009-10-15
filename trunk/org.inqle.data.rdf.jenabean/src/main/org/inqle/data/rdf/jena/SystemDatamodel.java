@@ -9,7 +9,8 @@ import org.inqle.data.rdf.jenabean.Persister;
 import thewebsemantic.Namespace;
 
 /**
- * A Datamodel, which contains internal INQLE data
+ * A Datamodel, which contains internal INQLE data.  Use this type when you need 1 and only 1
+ * datamodel to exist, of a particular ID
  * @author David Donohue
  * Jul 2, 2008
  */

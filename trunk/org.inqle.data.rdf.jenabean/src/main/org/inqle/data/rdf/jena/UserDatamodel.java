@@ -11,7 +11,8 @@ import org.inqle.data.rdf.RDF;
 import thewebsemantic.Namespace;
 
 /**
- * A Datamodel, which contains external (minable) data
+ * A Datamodel, which contains external (minable) data.  Use this class when data of a particular
+ * purpose or function might be distributed among multiple datamodels.
  * @author David Donohue
  * Jul 2, 2008
  */
@@ -41,7 +42,7 @@ public class UserDatamodel extends DatabaseBackedDatamodel {
 		this.datamodelFunctions = datamodelFunctions;
 	}
 	
-	public void addDatasetFunction(String datamodelFunction) {
+	public void addDatamodelFunction(String datamodelFunction) {
 		datamodelFunctions.add(datamodelFunction);
 	}
 	

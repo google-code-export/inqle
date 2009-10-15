@@ -317,8 +317,7 @@ Export-Package: EDU.oswego.cs.dl.util.concurrent,
  thewebsemantic.binding,
  thewebsemantic.vocabulary,
  vocabularies
-Require-Bundle: org.eclipse.core.runtime,
- org.inqle.core,
+Require-Bundle: org.inqle.core,
  org.inqle.core.extensions
 Import-Package: org.apache.commons.logging,
  org.apache.log4j
