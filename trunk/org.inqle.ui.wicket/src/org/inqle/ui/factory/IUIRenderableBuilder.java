@@ -1,29 +1,20 @@
-package org.inqle.ui;
+package org.inqle.ui.factory;
 
 import org.apache.wicket.Component;
-import org.inqle.ui.model.IAnswer;
+import org.inqle.ui.model.IUIRenderable;
 
 /**
+ * Defines a factory for UI parta of answers.
+ * 
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
- *
  */
-public interface IAnswersBuilderService {
-
-	/**
-	 * Allows to remove a builder.
-	 * 
-	 * @param builder
-	 * @return
-	 */	
-	public IAnswersBuilderService removeBuilder(IAnswerUIBuilder builder);
+public interface IUIRenderableBuilder {
 	
 	/**
-	 * Allows to add a builder.
-	 * 
-	 * @param builder
-	 * @return
+	 * @param answer The answer to test.
+	 * @return Returns true if this Builder can handle this kind of answer. Otherwise return false.
 	 */
-	public IAnswersBuilderService addBuilder(IAnswerUIBuilder builder);
+	public boolean canHandleAnswer(IUIRenderable renderable);
 	
 	/**
 	 *  Produces the presentation for the final user. e.g. in case of range answer 
@@ -32,7 +23,7 @@ public interface IAnswersBuilderService {
 	 * @param answer
 	 * @return The corresponding Wicket component.
 	 */
-	public Component createFinalUserUI(String id,IAnswer answer);
+	public Component createFinalUserUI(String id,IUIRenderable renderable);
 
 	/**
 	 *  Produces the presentation for the admin user. e.g. in case of range answer 
@@ -42,5 +33,5 @@ public interface IAnswersBuilderService {
 	 * @param answer
 	 * @return The corresponding Wicket component.
 	 */
-	public Component createAdminUserUI(String id,IAnswer answer);
+	public Component createAdminUserUI(String id, IUIRenderable renderable);
 }
