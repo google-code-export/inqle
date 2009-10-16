@@ -2,15 +2,15 @@ package org.inqle.ui.model;
 
 
 /**
- * A textual Answer!
+ * Option is considered as a kind of answer!
  * 
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  */
-public class TextualAnswer extends IdentifiableTranslatable implements IAnswer {
+public class Option extends IdentifiableTranslatable implements IUIRenderable {
 	
 	private static final long serialVersionUID = 1L;
 		
-	public TextualAnswer(String text) {
+	public Option(String text) {
 		setTranslationKey(text);
 	}
 		

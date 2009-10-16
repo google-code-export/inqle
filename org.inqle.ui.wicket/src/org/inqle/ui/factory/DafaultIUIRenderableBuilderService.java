@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.inqle.ui;
+package org.inqle.ui.factory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +14,23 @@ import org.inqle.ui.model.IAnswer;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class DafaultAnswersBuilder implements IAnswersBuilderService {
+public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderService {
 
-	private List<IAnswerUIBuilder> builders = new ArrayList<IAnswerUIBuilder>();
+	private List<IUIRenderableBuilder> builders = new ArrayList<IUIRenderableBuilder>();
 	
 	
-	public DafaultAnswersBuilder() {
-		addBuilder(new TextualAnswerBuilder());
+	public DafaultIUIRenderableBuilderService() {
+		addBuilder(new OptionsBuilder());
+		addBuilder(new RangeAnswerBuilder());
+		addBuilder(new MultipleChoiceBuilder(this));
+		addBuilder(new SingleChoiceBuilder(this));
 	}
 
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.IAnswersBuilderService#createAdminUserUI(org.inqle.ui.model.IAnswer)
 	 */
 	public Component createAdminUserUI(String id,IAnswer answer) {
-		for(IAnswerUIBuilder builder: builders) {
+		for(IUIRenderableBuilder builder: builders) {
 			if(builder.canHandleAnswer(answer))
 				builder.createAdminUserUI(id,answer);
 		}
@@ -38,19 +41,19 @@ public class DafaultAnswersBuilder implements IAnswersBuilderService {
 	 * @see org.inqle.ui.IAnswersBuilderService#createFinalUserUI(org.inqle.ui.model.IAnswer)
 	 */
 	public Component createFinalUserUI(String id,IAnswer answer) {
-		for(IAnswerUIBuilder builder: builders) {
+		for(IUIRenderableBuilder builder: builders) {
 			if(builder.canHandleAnswer(answer))
 				builder.createFinalUserUI(id,answer);
 		}
 		return new Label(id, "Cannot created UI for type of answer: " + answer.getClass().getName());
 	}
 	
-	public IAnswersBuilderService addBuilder(IAnswerUIBuilder builder) {
+	public IUIRenderableBuilderService addBuilder(IUIRenderableBuilder builder) {
 		builders.add(builder);
 		return this;
 	}
 	
-	public IAnswersBuilderService removeBuilder(IAnswerUIBuilder builder) {
+	public IUIRenderableBuilderService removeBuilder(IUIRenderableBuilder builder) {
 		builders.remove(builder);
 		return this;
 	}
