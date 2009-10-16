@@ -6,7 +6,10 @@ package org.inqle.ui;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.inqle.ui.model.IAnswer;
+import org.inqle.ui.model.ITranslationService;
 import org.inqle.ui.model.TextualAnswer;
+
+import com.google.inject.Inject;
 
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
@@ -14,6 +17,8 @@ import org.inqle.ui.model.TextualAnswer;
  */
 public class TextualAnswerBuilder implements IAnswerUIBuilder {
 
+	@Inject
+	private ITranslationService translationService;
 	/**
 	 * 
 	 */
@@ -33,7 +38,8 @@ public class TextualAnswerBuilder implements IAnswerUIBuilder {
 	 */
 	@Override
 	public Component createAdminUserUI(String id, IAnswer answer) {
-		return new Label(id, ((TextualAnswer)answer).getTranslationKey());
+		// translation needed here.
+		return new Label(id, translationService.translate((TextualAnswer)answer));
 	}
 
 	/* (non-Javadoc)
@@ -41,7 +47,7 @@ public class TextualAnswerBuilder implements IAnswerUIBuilder {
 	 */
 	@Override
 	public Component createFinalUserUI(String id, IAnswer answer) {
-		return new Label(id, ((TextualAnswer)answer).getTranslationKey());
+		return new Label(id, translationService.translate((TextualAnswer)answer));
 	}
 
 }
