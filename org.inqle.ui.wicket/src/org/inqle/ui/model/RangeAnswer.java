@@ -13,6 +13,8 @@ public class RangeAnswer<T extends Number> extends IdentifiableTranslatable impl
 	
 	private T maximumResponse;
 	
+	private T selectedVaue;
+	
 	/**
 	 * 
 	 */
@@ -33,5 +35,13 @@ public class RangeAnswer<T extends Number> extends IdentifiableTranslatable impl
 
 	public void setMaximumResponse(T maximumResponse) {
 		this.maximumResponse = maximumResponse;
+	}
+
+	public T getSelectedVaue() {
+		return selectedVaue;
+	}
+
+	public void setSelectedVaue(T selectedVaue) {
+		this.selectedVaue = selectedVaue;
 	}
 }
