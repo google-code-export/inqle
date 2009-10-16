@@ -33,12 +33,12 @@ public class Question extends IdentifiableTranslatable {
 	/**
 	 * List of posible answers (options).
 	 */
-	private Set<Answer>  answers = new HashSet<Answer>();
+	private Set<IAnswer>  answers = new HashSet<IAnswer>();
 	
 	/**
 	 * The selected answer(s).
 	 */
-	private Set<Answer> selectedAnswers = new HashSet<Answer>();
+	private Set<IAnswer> selectedAnswers = new HashSet<IAnswer>();
 
 	/**
 	 * Flag to determine whether this question allows one or several answers.
@@ -48,38 +48,38 @@ public class Question extends IdentifiableTranslatable {
 	public Question() {
 	}
 	
-	public Question addAnswer(Answer answer) {
+	public Question addAnswer(IAnswer answer) {
 		answers.add(answer);
 		return this;
 	}
 	
-	public Question removeAnswer(Answer answer) {
+	public Question removeAnswer(IAnswer answer) {
 		answers.remove(answer);
 		return this;
 	}
 	
-	public Set<Answer> getAnswers() {
+	public Set<IAnswer> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(Set<Answer> answers) {
+	public void setAnswers(Set<IAnswer> answers) {
 		this.answers = answers;
 	}
 
 
-	public Set<Answer> getSelectedAnswers() {
+	public Set<IAnswer> getSelectedAnswers() {
 		return selectedAnswers;
 	}
 
 
-	public void setSelectedAnswers(Set<Answer> selectedAnswers) {
+	public void setSelectedAnswers(Set<IAnswer> selectedAnswers) {
 		if(answersMode.equals(AnswersMode.SINGLE_SELECTION) && selectedAnswers.size() > 0) {
 			throw new IllegalArgumentException("Only one answer is allowed!");
 		}
 		this.selectedAnswers = selectedAnswers;
 	}
 	
-	public Question addSelectedAnswer(Answer answer) {
+	public Question addSelectedAnswer(IAnswer answer) {
 		if(answersMode.equals(AnswersMode.SINGLE_SELECTION) && selectedAnswers.size() > 0) {
 			throw new IllegalArgumentException("Only one answer is allowed!");
 		}
@@ -87,7 +87,7 @@ public class Question extends IdentifiableTranslatable {
 		return this;
 	}
 	
-	public Question removeSelectedAnswer(Answer answer) {
+	public Question removeSelectedAnswer(IAnswer answer) {
 		selectedAnswers.remove(answer);
 		return this;
 	}
