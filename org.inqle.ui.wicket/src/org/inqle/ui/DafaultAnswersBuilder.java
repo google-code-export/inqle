@@ -20,6 +20,7 @@ public class DafaultAnswersBuilder implements IAnswersBuilderService {
 	
 	
 	public DafaultAnswersBuilder() {
+		addBuilder(new TextualAnswerBuilder());
 	}
 
 	/* (non-Javadoc)
