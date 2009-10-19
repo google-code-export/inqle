@@ -7,19 +7,21 @@ import org.inqle.data.rdf.jena.DatabaseBackedDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.LocalFolderDatabase;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
+
+import com.hp.hpl.jena.rdf.model.Model;
 
 public class QADBTool {
 
 	private static final String USERS_DB_FOLDER = "org.inqle.qa.data.users";
 
 	private static final String DATAMODEL_ID_ANSWERS = "org.inqle.qa.db.id.answers.1";
-	private static final String DATAMODEL_FUNCTION_ANSWERS = "org.inqle.qa.db.function.answers";
+	private static final String DATAMODEL_PURPOSE_ANSWERS = "org.inqle.qa.db.function.answers";
 	private static final String DATAMODEL_ID_FACTS = "org.inqle.qa.db.id.facts.1";
-	private static final String DATAMODEL_FUNCTION_FACTS = "org.inqle.qa.db.function.facts";
+	private static final String DATAMODEL_PURPOSE_FACTS = "org.inqle.qa.db.function.facts";
 	private static final String DATAMODEL_ID_SEEN = "org.inqle.qa.db.id.seen.1";
-	private static final String DATAMODEL_FUNCTION_SEEN = "org.inqle.qa.db.function.seen";
+	private static final String DATAMODEL_PURPOSE_SEEN = "org.inqle.qa.db.function.seen";
 
 	private static Logger log = Logger.getLogger(QADBTool.class);
 	
@@ -35,35 +37,11 @@ public class QADBTool {
 		Persister persister = Persister.getInstance();
 		try {
 			int status = persister.createNewDatabase(databaseForUser);
-			log.info("CREATED user database.");
+			log.info("CREATED user database, with status=" + status);
 		} catch (Exception e) {
 			log.error("Error creating/storing first dataset", e);
 			return false;
 		}
-		
-		//create all datamodels
-		
-		//ANSWERS
-		UserDatamodel aDatamodel = new UserDatamodel();
-		aDatamodel.setId(DATAMODEL_ID_ANSWERS);
-		aDatamodel.setDatabaseId(databaseForUser.getId());
-		aDatamodel.addDatamodelFunction(DATAMODEL_FUNCTION_ANSWERS);
-		persister.createDatabaseBackedModel(aDatamodel);
-		
-		//DERIVED DATA
-		aDatamodel = new UserDatamodel();
-		aDatamodel.setId(DATAMODEL_ID_FACTS);
-		aDatamodel.setDatabaseId(databaseForUser.getId());
-		aDatamodel.addDatamodelFunction(DATAMODEL_FUNCTION_FACTS);
-		persister.createDatabaseBackedModel(aDatamodel);
-		
-		//ADVISORIES SEEN
-		aDatamodel = new UserDatamodel();
-		aDatamodel.setId(DATAMODEL_ID_SEEN);
-		aDatamodel.setDatabaseId(databaseForUser.getId());
-		aDatamodel.addDatamodelFunction(DATAMODEL_FUNCTION_SEEN);
-		persister.createDatabaseBackedModel(aDatamodel);
-		
 		return true;
 	}
 
@@ -77,8 +55,41 @@ public class QADBTool {
 		return USERS_DB_FOLDER + "/" + userId;
 	}
 	
-	public boolean userDataBaseExists(String userId) {
+	public static boolean userDataBaseExists(String userId) {
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(getDatabaseIdForUser(userId));
 		return dbConnector.testConnection();
 	}
+	
+//	public boolean ensureUserDatamodelExists(PurposefulDatamodel datamodel) {
+//		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
+//		log.info("Creating Model of id '" + datamodel.getId() + "'...");
+//		Model model = dbConnector.getModel(datamodel.getId());
+//	}
 }
+
+/*
+//create all datamodels
+
+//ANSWERS
+UserDatamodel aDatamodel = new UserDatamodel();
+aDatamodel.setId(DATAMODEL_ID_ANSWERS);
+aDatamodel.setDatabaseId(databaseForUser.getId());
+aDatamodel.addDatamodelPurpose(DATAMODEL_PURPOSE_ANSWERS);
+persister.createDatabaseBackedModel(aDatamodel);
+
+//DERIVED DATA
+aDatamodel = new UserDatamodel();
+aDatamodel.setId(DATAMODEL_ID_FACTS);
+aDatamodel.setDatabaseId(databaseForUser.getId());
+aDatamodel.addDatamodelPurpose(DATAMODEL_PURPOSE_FACTS);
+persister.createDatabaseBackedModel(aDatamodel);
+
+//ADVISORIES SEEN
+aDatamodel = new UserDatamodel();
+aDatamodel.setId(DATAMODEL_ID_SEEN);
+aDatamodel.setDatabaseId(databaseForUser.getId());
+aDatamodel.addDatamodelPurpose(DATAMODEL_PURPOSE_SEEN);
+persister.createDatabaseBackedModel(aDatamodel);
+
+return true;
+*/
