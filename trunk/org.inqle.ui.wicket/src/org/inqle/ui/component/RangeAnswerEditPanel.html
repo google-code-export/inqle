@@ -1,7 +1,24 @@
 <html xmlns:wicket="org.apache.wicket">
 	<body>
-		<wicket:panel>
-			This will be the edit panel for range answers
-		</wicket:panel>
+		<wicket:extend>		
+				<table>
+					<tr>
+						<td>
+							<label for="minimumResponse"><wicket:message key="minimumResponse"/>:</label>
+						</td>
+						<td>
+							<input wicket:id="minimumResponse" name="minimumResponse"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="maximumResponse"><wicket:message key="maximumResponse"/>:</label>
+						</td>
+						<td>
+							<input wicket:id="maximumResponse" name="maximumResponse"/>
+						</td>
+					</tr>
+				</table>
+		</wicket:extend>
 	</body>
 </html>

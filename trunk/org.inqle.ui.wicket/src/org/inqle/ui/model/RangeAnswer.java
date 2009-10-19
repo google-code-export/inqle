@@ -44,4 +44,9 @@ public class RangeAnswer<T extends Number> extends IdentifiableTranslatable impl
 	public void setSelectedVaue(T selectedVaue) {
 		this.selectedVaue = selectedVaue;
 	}
+	
+	@Override
+	public String toString() {
+		return "["+minimumResponse.toString()+","+maximumResponse.toString()+"]";
+	}
 }
