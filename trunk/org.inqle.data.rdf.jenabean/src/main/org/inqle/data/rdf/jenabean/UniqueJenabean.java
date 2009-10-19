@@ -15,6 +15,7 @@ public abstract class UniqueJenabean extends NamedAndDescribedJenabean implement
 	private Date creationDate;
 	private Date updateDate;
 
+//	@Override
 //	@Id
 //	public String getId() {
 //		if (super.getId() == null) {
@@ -23,18 +24,18 @@ public abstract class UniqueJenabean extends NamedAndDescribedJenabean implement
 //		return super.getId();
 //	}
 	
-	/**
-	 * If the ID is null, it will be set to the ID of the base object.
-	 * New ID is created upon cloning this object.
-	 */
-	@Override
-	@Id
-	public String getId() {
-		if (id == null) {
-			id = this.getClass().getName();
-		}
-		return id;
-	}
+//	/**
+//	 * If the ID is null, it will be set to the ID of the base object.
+//	 * New ID is created upon cloning this object.
+//	 */
+//	@Override
+//	@Id
+//	public String getId() {
+//		if (id == null) {
+//			id = this.getClass().getName();
+//		}
+//		return id;
+//	}
 	
 	public Date getCreationDate() {
 		if (creationDate == null) {

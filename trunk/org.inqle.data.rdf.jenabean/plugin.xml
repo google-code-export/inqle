@@ -3,7 +3,7 @@
 <plugin>
    <extension-point id="org.inqle.data.datamodels" name="Internal Datamodel Role" schema="schema/org.inqle.data.datamodels.exsd"/>
    <!--extension-point id="org.inqle.data.databases" name="Database Role" schema="schema/org.inqle.data.databases.exsd"/-->
-   <extension-point id="org.inqle.data.datamodelFunctions" name="External Datamodel Function" schema="schema/org.inqle.data.datamodelFunctions.exsd"/>
+   <extension-point id="org.inqle.data.datamodelPurposes" name="External Datamodel Purpose" schema="schema/org.inqle.data.datamodelPurposes.exsd"/>
    <extension
          point="org.inqle.data.datamodels">
       
@@ -90,21 +90,21 @@
 	</extension-->
 
 	<extension
-         point="org.inqle.data.datamodelFunctions">
+         point="org.inqle.data.datamodelPurposes">
       
-      <datamodelFunction
-           id="org.inqle.datamodelFunctions.data"
+      <datamodelPurpose
+           id="org.inqle.datamodelPurposes.data"
            name="General Data"
            weight="1000"
            description="General purpose data, usable for learning experiments."
 					 checkedByDefault="true">
-			</datamodelFunction>
-			<datamodelFunction
-           id="org.inqle.datamodelFunctions.schemas"
+			</datamodelPurpose>
+			<datamodelPurpose
+           id="org.inqle.datamodelPurposes.schemas"
            name="Schemas, Ontologies"
            weight="2000"
            textIndexType="subject"
            description="RDFS or OWL ontology, containing semantic types and properties for classifying General Data to be imported.">
-			</datamodelFunction>
+			</datamodelPurpose>
 	</extension>
 </plugin>

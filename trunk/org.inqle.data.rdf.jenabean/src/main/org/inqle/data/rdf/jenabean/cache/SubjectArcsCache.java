@@ -11,7 +11,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
-@TargetDatamodel(Persister.DATASET_ARCS_CACHE)
+@TargetDatamodel(Persister.DATAMODEL_ARCS_CACHE)
 @Namespace(RDF.INQLE)
 public class SubjectArcsCache extends AJenabean {
 
