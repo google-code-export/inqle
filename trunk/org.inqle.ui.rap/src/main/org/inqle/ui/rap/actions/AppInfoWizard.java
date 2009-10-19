@@ -13,7 +13,7 @@ import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jena.SystemDatamodel;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
@@ -158,33 +158,33 @@ public class AppInfoWizard extends Wizard {
 //		int status = connector.createDatabase();
 //		log.info("Tried to create new SDB store for Metarepository, with status=" + status);
 		IDatabase systemDatabase = new LocalFolderDatabase();
-		systemDatabase.setId(InqleInfo.SYSTEM_DATABASE_ROOT);
+		systemDatabase.setId(InqleInfo.SYSTEM_DATABASE_ID);
 		SystemDatamodel metarepositoryDatamodel = new SystemDatamodel();
 		metarepositoryDatamodel.setId(Persister.METAREPOSITORY_DATAMODEL);
-		metarepositoryDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ROOT);
+		metarepositoryDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ID);
 		
 		//create the system database and the metarepository model (which contains data about datamodels)
 		try {
 			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase);
 			int status = connector.createDatabase();
-			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ROOT + ": Status=" + status);
+			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ID + ": Status=" + status);
 			Model metarepositoryModel = persister.getMetarepositoryModel();
 			persister.persist(systemDatabase, metarepositoryModel);
 			persister.persist(metarepositoryDatamodel, metarepositoryModel);
 			log.info("CREATED user database and first user datamodel.");
 		} catch (Exception e) {
-			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ROOT + " and dataset: " + Persister.METAREPOSITORY_DATAMODEL, e);
+			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ID + " and dataset: " + Persister.METAREPOSITORY_DATAMODEL, e);
 			//TODO show error to user
 			return false;
 		}
 		
 		//create the user database and first user datamodel
-		UserDatamodel firstDataDatamodel = new UserDatamodel();
+		PurposefulDatamodel firstDataDatamodel = new PurposefulDatamodel();
 		firstDataDatamodel.setId(FIRSTDATA_DATAMODEL_ID);
 		IDatabase userDatabase = new LocalFolderDatabase();
-		userDatabase.setId(InqleInfo.USER_DATABASE_ROOT);
+		userDatabase.setId(InqleInfo.USER_DATABASE_ID);
 		firstDataDatamodel.setDatabaseId(userDatabase.getId());
-		firstDataDatamodel.addDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_DATA);
+		firstDataDatamodel.addDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES_DATA);
 		try {
 			persister.createNewDatabase(userDatabase);
 			persister.createDatabaseBackedModel(firstDataDatamodel);

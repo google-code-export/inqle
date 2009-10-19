@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 
 /**
@@ -55,9 +55,9 @@ public class DatamodelWizardAction extends Action {
 	
 	@Override
 	public void run() {
-		if (datamodel instanceof UserDatamodel) {
+		if (datamodel instanceof PurposefulDatamodel) {
 //			try {
-				UserDatamodelWizard wizard = new UserDatamodelWizard(mode, (UserDatamodel)datamodel, databasePart);
+				UserDatamodelWizard wizard = new UserDatamodelWizard(mode, (PurposefulDatamodel)datamodel, databasePart);
 				log.trace("Created UserDatamodelWizard");
 				WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 				dialog.open();
