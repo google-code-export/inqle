@@ -380,7 +380,7 @@ public class PropertyLookup {
 	 */
 	public static String lookupPropertiesInSchemaDatamodels(String subjectClassUri, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES);
 		
 //		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
@@ -403,7 +403,7 @@ public class PropertyLookup {
 	 */
 	public static String lookupPropertiesInPreferredOntologyDatamodels(String subjectClassUri, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS, null);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES, null);
 		
 //		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
