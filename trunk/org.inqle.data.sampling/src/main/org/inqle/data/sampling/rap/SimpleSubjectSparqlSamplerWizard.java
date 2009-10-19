@@ -180,7 +180,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	private List<Datamodel> getUserDatamodels() {
 		if (userDatamodels==null) {
 			Persister persister = Persister.getInstance();
-			userDatamodels = persister.listDatamodels(InqleInfo.USER_DATABASE_ROOT);
+			userDatamodels = persister.listDatamodels(InqleInfo.USER_DATABASE_ID);
 		}
 		return userDatamodels;
 	}
