@@ -11,29 +11,29 @@ public class QueryCriteriaFactory {
 
 	private static Logger log = Logger.getLogger(QueryCriteriaFactory.class);
 	
-	public static QueryCriteria createQueryCriteriaForDatamodelFunction(String datamodelFunctionId) {
-		return createQueryCriteriaForDatamodelFunction(datamodelFunctionId, null);
+	public static QueryCriteria createQueryCriteriaForDatamodelPurpose(String datamodelPurposeId) {
+		return createQueryCriteriaForDatamodelPurpose(datamodelPurposeId, null);
 	}
 	
 	/**
 	 * Create a QueryCriteria, prepared to search across all datamodels of the
-	 * specified datamodelFunctionId.  If any reasoning is to be done, specify the inferenceRules
+	 * specified datamodelPurposeId.  If any reasoning is to be done, specify the inferenceRules
 	 * as a string value.  Otherwise leave this parameter null.
-	 * @param datamodelFunctionId
+	 * @param datamodelPurposeId
 	 * @param inferenceRules
 	 * @return
 	 */
-	public static QueryCriteria createQueryCriteriaForDatamodelFunction(String datamodelFunctionId, String inferenceRules) {
+	public static QueryCriteria createQueryCriteriaForDatamodelPurpose(String datamodelPurposeId, String inferenceRules) {
 		QueryCriteria returnQueryCriteria = new QueryCriteria();
 		returnQueryCriteria.setInferenceRules(inferenceRules);
 		Persister persister = Persister.getInstance();
-		returnQueryCriteria.setTextIndex(persister.getIndex(datamodelFunctionId));
-		//query out the IDs of the ExternalDatamodels of this function
+		returnQueryCriteria.setTextIndex(persister.getIndex(datamodelPurposeId));
+		//query out the IDs of the ExternalDatamodels of this purpose
 		
 		
 //		AppInfo appInfo = persister.getAppInfo();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-//		String sparql = getSparqlToFindDatamodelsOfFunction(datamodelFunctionId);
+//		String sparql = getSparqlToFindDatamodelsOfPurpose(datamodelPurposeId);
 //		queryCriteria.setQuery(sparql);
 //		log.info("SPARQL=" + sparql);
 //		queryCriteria.addNamedModel(appInfo.getMetarepositoryDatamodel());
@@ -41,32 +41,32 @@ public class QueryCriteriaFactory {
 //		List<String> datamodelIds = Queryer.selectSimpleList(queryCriteria, "datamodelId");
 		
 		List<String> datamodelIds = new ArrayList<String>();
-		Collection<?> allExternalDatamodels = persister.reconstituteAll(UserDatamodel.class);
+		Collection<?> allExternalDatamodels = persister.reconstituteAll(PurposefulDatamodel.class);
 		if (allExternalDatamodels == null || allExternalDatamodels.size()==0) {
 			return returnQueryCriteria;
 		}
 		for (Object externalDatamodelObj: allExternalDatamodels) {
-			UserDatamodel userDatamodel = (UserDatamodel)externalDatamodelObj;
-			Collection<String> datamodelFunctions = userDatamodel.getDatamodelFunctions();
-			if (datamodelFunctions != null && datamodelFunctions.contains(datamodelFunctionId)) {
+			PurposefulDatamodel userDatamodel = (PurposefulDatamodel)externalDatamodelObj;
+			Collection<String> datamodelPurposes = userDatamodel.getDatamodelPurposes();
+			if (datamodelPurposes != null && datamodelPurposes.contains(datamodelPurposeId)) {
 				datamodelIds.add(userDatamodel.getId());
 			}
 		}
 		
 		returnQueryCriteria.addDatamodelIds(datamodelIds);
 		
-		log.info("Returning QueryCriteria for function " + datamodelFunctionId + ", with these models:" + datamodelIds);
+		log.info("Returning QueryCriteria for purpose " + datamodelPurposeId + ", with these models:" + datamodelIds);
 		return returnQueryCriteria;
 	}
 
-//	private static String getSparqlToFindDatamodelsOfFunction(String datamodelFunctionId) {
+//	private static String getSparqlToFindDatamodelsOfPurpose(String datamodelPurposeId) {
 //		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
 //		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
 //		" SELECT ?datamodelId \n " +
 //		" { \n " +
 //		" GRAPH ?g { \n " +
 //		" ?datamodelUri a inqle:UserDatamodel \n " +
-////		" . ?datamodelUri inqle:datamodelFunctions \"" + datamodelFunctionId + "\"^^xsd:string \n" +
+////		" . ?datamodelUri inqle:datamodelPurposes \"" + datamodelPurposeId + "\"^^xsd:string \n" +
 //		" } }\n";
 //		return sparql;
 //	}

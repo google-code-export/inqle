@@ -1,14 +1,23 @@
 package org.inqle.data.rdf.jena;
 
+import java.util.UUID;
+
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
+import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
 public abstract class DatabaseBackedDatamodel extends Datamodel {
 	private String databaseId;
-
+	private String datamodelName;
+	
+	@Override
+	@Id
+	public String getId() {
+		return getDatabaseId() + "/" + getDatamodelName();
+	}
 	
 //	public void clone(DatabaseBackedDatamodel objectToBeCloned) {
 //		super.clone(objectToBeCloned);
@@ -27,5 +36,16 @@ public abstract class DatabaseBackedDatamodel extends Datamodel {
 
 	public void setDatabaseId(String databaseId) {
 		this.databaseId = databaseId;
+	}
+
+	public void setDatamodelName(String datamodelName) {
+		this.datamodelName = datamodelName;
+	}
+
+	public String getDatamodelName() {
+		if (datamodelName == null) {
+			setDatamodelName(UUID.randomUUID().toString());
+		}
+		return datamodelName;
 	}
 }

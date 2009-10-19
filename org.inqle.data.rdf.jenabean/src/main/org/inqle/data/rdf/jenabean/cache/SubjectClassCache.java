@@ -10,7 +10,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
-@TargetDatamodel(Persister.DATASET_SUBJECT_CLASSES_CACHE)
+@TargetDatamodel(Persister.DATAMODEL_SUBJECT_CLASSES_CACHE)
 @Namespace(RDF.INQLE)
 public class SubjectClassCache extends AJenabean {
 

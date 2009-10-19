@@ -18,9 +18,9 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class UserDatamodel extends DatabaseBackedDatamodel {
+public class PurposefulDatamodel extends DatabaseBackedDatamodel {
 
-	private Collection<String> datamodelFunctions = new ArrayList<String>();
+	private Collection<String> datamodelPurposes = new ArrayList<String>();
 	
 //	public UserDatamodel createClone() {
 //		UserDatamodel newObj = new UserDatamodel();
@@ -34,16 +34,16 @@ public class UserDatamodel extends DatabaseBackedDatamodel {
 //		return newObj;
 //	}
 
-	public Collection<String> getDatamodelFunctions() {
-		return datamodelFunctions;
+	public Collection<String> getDatamodelPurposes() {
+		return datamodelPurposes;
 	}
 
-	public void setDatamodelFunctions(Collection<String> datamodelFunctions) {
-		this.datamodelFunctions = datamodelFunctions;
+	public void setDatamodelPurposes(Collection<String> datamodelPurposes) {
+		this.datamodelPurposes = datamodelPurposes;
 	}
 	
-	public void addDatamodelFunction(String datamodelFunction) {
-		datamodelFunctions.add(datamodelFunction);
+	public void addDatamodelPurpose(String datamodelPurpose) {
+		datamodelPurposes.add(datamodelPurpose);
 	}
 	
 //	public void clone(UserDatamodel objectToBeCloned) {

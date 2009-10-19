@@ -13,7 +13,9 @@ import thewebsemantic.TypeWrapper;
 
 /**
  * Class to assist with creating Jenabean classes.  This class helps in these ways:
- * (1) provides means of creating a unique ID
+ * (1) provides the @Id, which Jenabean uses for crafting the URI
+ * (2) provides means of creating a unique ID
+ * (3) Convenient way of getting the URI
  * 
  * @author David Donohue
  * Jan 25, 2008
