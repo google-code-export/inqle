@@ -10,7 +10,7 @@ import org.inqle.data.rdf.jena.LocalFolderDatabase;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
@@ -24,7 +24,7 @@ public class Wikis extends PartType {
 
 	private static final String ICON_PATH = "org/inqle/ui/rap/images/wikis.gif";
 
-	public static final String DATAMODEL_FUNCTION_WIKI = "org.inqle.datamodelFunctions.wiki";
+	public static final String DATAMODEL_PURPOSE_WIKI = "org.inqle.datamodelPurposes.wiki";
 
 	private List<WikiPart> wikiList = new ArrayList<WikiPart>();
 
@@ -36,8 +36,8 @@ public class Wikis extends PartType {
 	
 	public void initChildren() {
 		Persister persister = Persister.getInstance();
-		List<UserDatamodel> wikiDatamodels = persister.listUserDatamodelsOfFunction(DATAMODEL_FUNCTION_WIKI);
-		for (UserDatamodel datamodel: wikiDatamodels) {
+		List<PurposefulDatamodel> wikiDatamodels = persister.listUserDatamodelsOfPurpose(DATAMODEL_PURPOSE_WIKI);
+		for (PurposefulDatamodel datamodel: wikiDatamodels) {
 			WikiPart wikiPart = new WikiPart(datamodel);
 			wikiPart.setParent(this);
 			wikiPart.addListener(this.listener);

@@ -11,7 +11,7 @@ import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.http.lookup.PublishDatamodelServlet;
 import org.inqle.ui.rap.ApplicationActionBarAdvisor;
 import org.inqle.ui.rap.IDisposableViewer;

@@ -25,7 +25,7 @@ import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.util.BeanTool;
@@ -54,13 +54,13 @@ public class UserDatamodelWizard extends Wizard {
 
 	private DatabasePart databasePart = null;
 	//private ModelPart modelPart;
-	private UserDatamodel startingDatamodel;
-	private UserDatamodel datamodel;
+	private PurposefulDatamodel startingDatamodel;
+	private PurposefulDatamodel datamodel;
 //	private Text datasetIdText;
 	Composite parent;
-	public List<Button> datamodelFunctionCheckboxes = new ArrayList<Button>();
+	public List<Button> datamodelPurposeCheckboxes = new ArrayList<Button>();
 	private DatamodelInfoPage datasetInfoPage;
-	private DatamodelFunctionsPage datasetFunctionsPage;
+	private DatamodelPurposesPage datasetPurposesPage;
 	
 	/**
 	 * This generates the wizard page for creating a database database
@@ -148,13 +148,13 @@ public class UserDatamodelWizard extends Wizard {
 
 	}
 	
-	public class DatamodelFunctionsPage extends WizardPage {
+	public class DatamodelPurposesPage extends WizardPage {
 
-		private static final String PAGE_NAME = "Datamodel Functions";
-		private static final String PAGE_DESCRIPTION = "Select which functions this datamodel will fulfill.";
+		private static final String PAGE_NAME = "Datamodel Purposes";
+		private static final String PAGE_DESCRIPTION = "Select which purposes this datamodel will fulfill.";
 		private Composite composite;
 		
-		protected DatamodelFunctionsPage() {
+		protected DatamodelPurposesPage() {
 			super(PAGE_NAME);
 			setMessage(PAGE_DESCRIPTION);
 		}
@@ -166,48 +166,48 @@ public class UserDatamodelWizard extends Wizard {
 			GridLayout gl = new GridLayout(2, false);
 			composite.setLayout(gl);
 	    
-	    List<IExtensionSpec> datasetFunctionExtensions = ExtensionFactory.getExtensionSpecs(Persister.EXTENSION_POINT_DATASET_FUNCTIONS);
-//	    log.info("Got datasetFunctionExtensions of size: " + datasetFunctionExtensions.size());
+	    List<IExtensionSpec> datasetPurposeExtensions = ExtensionFactory.getExtensionSpecs(Persister.EXTENSION_POINT_DATAMODEL_PURPOSES);
+//	    log.info("Got datasetPurposeExtensions of size: " + datasetPurposeExtensions.size());
 	    //add the checkboxes
-			for (IExtensionSpec datasetFunctionExtension: datasetFunctionExtensions) {
-				addDatamodelFunctionCheckbox(datasetFunctionExtension, composite);
+			for (IExtensionSpec datasetPurposeExtension: datasetPurposeExtensions) {
+				addDatamodelPurposeCheckbox(datasetPurposeExtension, composite);
 			}
 			setControl(composite);
 		}
 
-		private void addDatamodelFunctionCheckbox(IExtensionSpec datasetFunctionExtension, Composite composite) {
-//			log.info("addDatamodelFunctionCheckbox()...");
+		private void addDatamodelPurposeCheckbox(IExtensionSpec datasetPurposeExtension, Composite composite) {
+//			log.info("addDatamodelPurposeCheckbox()...");
 			Button checkbox = new Button(composite, SWT.CHECK);
-			String extensionId = datasetFunctionExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			String extensionName = datasetFunctionExtension.getAttribute(InqleInfo.NAME_ATTRIBUTE);
-			String extensionDescription = datasetFunctionExtension.getAttribute(InqleInfo.DESCRIPTION_ATTRIBUTE);
+			String extensionId = datasetPurposeExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String extensionName = datasetPurposeExtension.getAttribute(InqleInfo.NAME_ATTRIBUTE);
+			String extensionDescription = datasetPurposeExtension.getAttribute(InqleInfo.DESCRIPTION_ATTRIBUTE);
 			checkbox.setText(extensionName);
-			checkbox.setData(datasetFunctionExtension);
+			checkbox.setData(datasetPurposeExtension);
 			
 			Text descriptionText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
 			descriptionText.setText(extensionDescription);
 			GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			descriptionText.setLayoutData(gridData);
-			String defaultCheckedVal = datasetFunctionExtension.getAttribute(DEFAULT_CHECKED_ATTRIBUTE);
+			String defaultCheckedVal = datasetPurposeExtension.getAttribute(DEFAULT_CHECKED_ATTRIBUTE);
 			boolean defaultChecked = false;
 			if (defaultCheckedVal != null && defaultCheckedVal.toLowerCase().equals("true")) {
 				defaultChecked = true;
 			}
 			
-			Collection<String> datasetFunctions = datamodel.getDatamodelFunctions();
-//			log.info("Compare datamodel function: " + extensionId + " to PRE-SELECTED functions: " + datasetFunctions);
+			Collection<String> datasetPurposes = datamodel.getDatamodelPurposes();
+//			log.info("Compare datamodel purpose: " + extensionId + " to PRE-SELECTED purposes: " + datasetPurposes);
 //			log.info("Default checked=" + defaultChecked);
-			if (datasetFunctions != null && datasetFunctions.contains(extensionId)) {
+			if (datasetPurposes != null && datasetPurposes.contains(extensionId)) {
 				checkbox.setSelection(true);
-			} else if ((datasetFunctions==null || datasetFunctions.size()==0) && defaultChecked) {
+			} else if ((datasetPurposes==null || datasetPurposes.size()==0) && defaultChecked) {
 				checkbox.setSelection(true);
 			}
 //			log.info("Add checkbox:" + extensionId + "...");
-			datamodelFunctionCheckboxes.add(checkbox);
+			datamodelPurposeCheckboxes.add(checkbox);
 		}
 	}
 	
-	public UserDatamodelWizard(int mode, UserDatamodel startingDatamodel, DatabasePart databasePart) {
+	public UserDatamodelWizard(int mode, PurposefulDatamodel startingDatamodel, DatabasePart databasePart) {
 		this.mode = mode;
 		this.databasePart = databasePart;
 		this.startingDatamodel = startingDatamodel;
@@ -231,16 +231,16 @@ public class UserDatamodelWizard extends Wizard {
 		datasetInfoPage = new DatamodelInfoPage("Datamodel Info");
 		addPage(datasetInfoPage);
 		
-//		log.info("Datamodel Wizard: creating DatamodelFunctionsPage...");
-		datasetFunctionsPage = new DatamodelFunctionsPage();
-//		log.info("Datamodel Wizard: adding DatamodelFunctionsPage...");
-		addPage(datasetFunctionsPage);
+//		log.info("Datamodel Wizard: creating DatamodelPurposesPage...");
+		datasetPurposesPage = new DatamodelPurposesPage();
+//		log.info("Datamodel Wizard: adding DatamodelPurposesPage...");
+		addPage(datasetPurposesPage);
 	}
 	
 	
 	@Override
 	public boolean canFinish() {
-		if (this.getContainer().getCurrentPage().equals(datasetFunctionsPage)) {
+		if (this.getContainer().getCurrentPage().equals(datasetPurposesPage)) {
 			return true;
 		}
 		return false;
@@ -265,19 +265,19 @@ public class UserDatamodelWizard extends Wizard {
 			return false;
 		}
 		
-		//get the datamodel functions assigned to this datamodel
-		List<String> datasetFunctionIds = new ArrayList<String>();
-		for (Button checkbox: datamodelFunctionCheckboxes) {
+		//get the datamodel purposes assigned to this datamodel
+		List<String> datasetPurposeIds = new ArrayList<String>();
+		for (Button checkbox: datamodelPurposeCheckboxes) {
 			if (! checkbox.getSelection()) continue;
-			IExtensionSpec datasetFunctionSpec = (IExtensionSpec)checkbox.getData();
-			String datasetFunctionId = datasetFunctionSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			log.info("adding to datamodel: function " + datasetFunctionId);
-			datasetFunctionIds.add(datasetFunctionId);
+			IExtensionSpec datasetPurposeSpec = (IExtensionSpec)checkbox.getData();
+			String datasetPurposeId = datasetPurposeSpec.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			log.info("adding to datamodel: purpose " + datasetPurposeId);
+			datasetPurposeIds.add(datasetPurposeId);
 		}
-		if (datasetFunctionIds.size() > 0) {
-			datamodel.setDatamodelFunctions(datasetFunctionIds);
+		if (datasetPurposeIds.size() > 0) {
+			datamodel.setDatamodelPurposes(datasetPurposeIds);
 		} else {
-			datamodel.setDatamodelFunctions(null);
+			datamodel.setDatamodelPurposes(null);
 		}
 		
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);

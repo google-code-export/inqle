@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jena.UserDatamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -153,8 +153,8 @@ public class DatabasePart extends PartType {
 		return actions;
 	}
 
-	private UserDatamodel getNewDataset() {
-		UserDatamodel newDataset = new UserDatamodel();
+	private PurposefulDatamodel getNewDataset() {
+		PurposefulDatamodel newDataset = new PurposefulDatamodel();
 		newDataset.setDatabaseId(this.getDatabase().getId());
 //		return newDataset.createClone();
 		return BeanTool.clone(newDataset);
