@@ -332,12 +332,12 @@ public class SubjectsSearcher {
 	public static String lookupSubclassesInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");
 //		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
-		IndexLARQ textIndex =  persister.getIndex(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		IndexLARQ textIndex =  persister.getIndex(Persister.EXTENSION_DATAMODEL_PURPOSES);
 		if (textIndex==null) return null;
 		
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
@@ -372,12 +372,12 @@ public class SubjectsSearcher {
 	public static String lookupPreferredOntologySubjectsInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelFunction(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");
 //		IndexLARQ textIndex =  persister.getSchemaFilesSubjectIndex();
-		IndexLARQ textIndex =  persister.getIndex(Persister.EXTENSION_DATASET_FUNCTION_SCHEMAS);
+		IndexLARQ textIndex =  persister.getIndex(Persister.EXTENSION_DATAMODEL_PURPOSES);
 		if (textIndex==null) return null;
 		
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
