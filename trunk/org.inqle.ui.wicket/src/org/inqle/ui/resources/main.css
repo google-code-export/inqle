@@ -1,0 +1,10 @@
+
+button.smallbutton {
+	border: 1px solid gray;
+	background: transparent;	
+}
+
+button.smallbuttonOver {
+	border: 1px solid black;
+	background: transparent;	
+}
