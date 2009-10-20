@@ -10,6 +10,7 @@ import org.inqle.ui.model.OptionsAnswer;
 
 import com.antilia.web.beantable.Table;
 import com.antilia.web.beantable.model.TableModel;
+import com.antilia.web.provider.SelectionMode;
 
 /**
  * @author  Ernesto Reinaldo Barreiro (reiern70@gmail.com)
@@ -32,6 +33,9 @@ public class OptionsAnswerListPanel extends Panel {
 		add(form);
 		TableModel<Option> tableModel = new TableModel<Option>(Option.class, "id", "translationKey");
 		Table<Option> optionList = new Table<Option>("optionList", tableModel, optionsAnswer.getOptions());
+		optionList.setColumnsResizable(false);
+		optionList.setFirstColumnResizable(false);
+		optionList.resetSelectionMode(SelectionMode.SINGLE);
 		form.add(optionList);
 	}
 
