@@ -18,7 +18,7 @@ public class Index extends WebPage {
 	 */
 	public Index() {
 		rangeAnswer = new RangeAnswer<Float>();
-		RangeAnswerEditPanel<Float> testEdit = new RangeAnswerEditPanel<Float>("testEdit", rangeAnswer);
+		RangeAnswerEditPanel<Float> testEdit = new RangeAnswerEditPanel<Float>("testEdit", rangeAnswer, Float.class);
 		add(testEdit);
 	}
 }

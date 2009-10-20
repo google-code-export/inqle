@@ -3,7 +3,7 @@
  */
 package org.inqle.ui.component;
 
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.Component;
 import org.inqle.ui.model.RangeAnswer;
 
 /**
@@ -14,19 +14,23 @@ public class RangeAnswerEditPanel<T extends Number> extends AnswerEditingPanel<R
 
 	private static final long serialVersionUID = 1L;
 
+	private Class<T> formatClass;
 	/**
 	 * @param id
 	 */
-	public RangeAnswerEditPanel(String id, RangeAnswer<T> rangeAnswer) {
-		super(id, rangeAnswer);		
-					
-		TextField<T> minimumResponse = new TextField<T>("minimumResponse");		
-		minimumResponse.setRequired(true);
-		add(minimumResponse);
-		
-		TextField<T> maximumResponse = new TextField<T>("maximumResponse");		
-		minimumResponse.setRequired(true);
-		add(maximumResponse);		
+	public RangeAnswerEditPanel(String id, RangeAnswer<T> rangeAnswer, Class<T> formatClass) {
+		super(id, rangeAnswer);	
+		this.formatClass = formatClass;
+	}
+	
+	@Override
+	protected Component createdContent(String contentId) {
+		RangeAnswerEditDetailPanel<T> rangeAnswerEditDetailPanel = new RangeAnswerEditDetailPanel<T>(contentId, this.formatClass);
+		// validating that minimum is not bigger that maximum.
+		getForm().add(new MinimumMaximumValidator<T>(
+				rangeAnswerEditDetailPanel.getMinimumResponse(), 
+				rangeAnswerEditDetailPanel.getMaximumResponse()));
+		return rangeAnswerEditDetailPanel;
 	}
 
 }
