@@ -24,8 +24,15 @@ public class InqleApplication extends AntiliaWebApplication {
 	 */
 	@Override
 	public Class<? extends Page> getHomePage() {
-		// TODO Auto-generated method stub
 		return Index.class;
+	}
+	
+	@Override
+	protected void init() {
+		super.init();
+		getMarkupSettings().setStripWicketTags(true);
+		getDebugSettings().setAjaxDebugModeEnabled(false);
+		getDebugSettings().setOutputMarkupContainerClassName(false);
 	}
 
 }
