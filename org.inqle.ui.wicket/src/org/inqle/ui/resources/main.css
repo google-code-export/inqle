@@ -1,10 +1,15 @@
 
 button.smallbutton {
-	border: 1px solid gray;
+	border: 1px solid transparent;
 	background: transparent;	
 }
 
 button.smallbuttonOver {
-	border: 1px solid black;
+	border: 1px solid gray;
 	background: transparent;	
+}
+
+div.dropColumn {
+	border: 1px solid transparent;
+	background: transparent;
 }
