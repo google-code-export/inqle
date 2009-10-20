@@ -6,8 +6,11 @@ package org.inqle.ui.wicket;
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.inqle.ui.component.OptionEditPanel;
+import org.inqle.ui.component.OptionsAnswerListPanel;
 import org.inqle.ui.component.RangeAnswerEditPanel;
+import org.inqle.ui.model.MultipleChoiceAnswer;
 import org.inqle.ui.model.Option;
+import org.inqle.ui.model.OptionsAnswer;
 import org.inqle.ui.model.RangeAnswer;
 import org.inqle.ui.resources.Styles;
 
@@ -19,6 +22,9 @@ public class Index extends WebPage {
 	private RangeAnswer<Float> rangeAnswer;
 	
 	private Option option;
+	
+	private OptionsAnswer optionsAnswer;
+	
 	/**
 	 * 
 	 */
@@ -32,5 +38,12 @@ public class Index extends WebPage {
 		OptionEditPanel editOption = new OptionEditPanel("editOption",option);
 		add(editOption);
 		
+		optionsAnswer = new MultipleChoiceAnswer();
+		optionsAnswer.addOption(new Option("Hi, there!"));
+		optionsAnswer.addOption(new Option("Hi, there2!"));
+		optionsAnswer.addOption(new Option("Hi, there3!"));
+		
+		OptionsAnswerListPanel options = new OptionsAnswerListPanel("options", optionsAnswer);
+		add(options);
 	}
 }
