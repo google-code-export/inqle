@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 import com.antilia.web.button.AbstractButton;
+import com.antilia.web.button.AbstractLink;
 import com.antilia.web.resources.DefaultStyle;
 
 /**
@@ -40,6 +41,7 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 		this.form = newFrom("form", bean);		
 		add(this.form);		
 		this.form.add(newSaveButton("save"));
+		this.form.add(newCancelLink("cancel"));
 		this.feedBack = new FeedbackPanel("feedBack");
 		this.feedBack.setOutputMarkupId(true);
 		add(this.feedBack);
@@ -80,13 +82,42 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				AnswerEditingPanel.this.onSubmit(target, form, bean);
+				AnswerEditingPanel.this.onSave(target, form, bean);
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
 				AnswerEditingPanel.this.onError(target, form, bean);
 			}
+		};
+	}
+	
+	protected Component newCancelLink(String id) {
+		return new AbstractLink(id) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected ResourceReference getImage() {
+				return DefaultStyle.IMG_CANCEL;
+			}
+
+			@Override
+			protected String getLabel() {
+				return "Cancel";
+			}
+
+			@Override
+			protected String getLabelKey() {
+				return "Cancel";
+			}
+
+			@Override
+			protected void onClick(AjaxRequestTarget target) {
+				AnswerEditingPanel.this.onCancel(target, bean);
+			}
+			
+			
 		};
 	}
 	
@@ -97,11 +128,15 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 	 * @param form
 	 * @param bean
 	 */
-	protected void onSubmit(AjaxRequestTarget target, Form<?> form, E bean) {
+	protected void onSave(AjaxRequestTarget target, Form<?> form, E bean) {
 		System.out.println("Saving" + bean.toString());
 		if(target != null) {
 			target.addComponent(getFeedBack());
 		}
+	}
+	
+	protected void onCancel(AjaxRequestTarget target, E bean) {
+		
 	}
 	
 	/**

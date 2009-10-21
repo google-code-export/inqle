@@ -14,6 +14,8 @@ import org.inqle.ui.model.OptionsAnswer;
 
 import com.antilia.web.button.AbstractLink;
 import com.antilia.web.button.IMenuItemHolder;
+import com.antilia.web.button.MenuItemsFactory;
+import com.antilia.web.button.SmallSeparatorButton;
 import com.antilia.web.resources.DefaultStyle;
 
 /**
@@ -57,8 +59,17 @@ public class OptionsAnswerEditPanel extends Panel {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSubmit(AjaxRequestTarget target, Form<?> form, Option bean) {
-					super.onSubmit(target, form, bean);
+				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
+					super.onSave(target, form, bean);
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
+					if(target != null) {
+						target.addComponent(optionsPanel.getContainer());
+					}
+				}
+				
+				@Override
+				protected void onCancel(AjaxRequestTarget target, Option bean) {
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
@@ -75,6 +86,70 @@ public class OptionsAnswerEditPanel extends Panel {
 		
 	}
 	
+	private static class CreateButton extends AbstractLink {
+		
+		private static final long serialVersionUID = 1L;
+
+		private Option option;
+		
+		private OptionsAnswer optionsAnswer;
+		
+		public CreateButton(String id, OptionsAnswer optionsAnswer) {
+			super(id);
+			this.option = new Option();
+			this.optionsAnswer = optionsAnswer;
+		}
+		
+		@Override
+		protected ResourceReference getImage() {
+			return DefaultStyle.IMG_NEW;
+		}
+		
+		@Override
+		protected String getLabel() {
+			return "Create";
+		}
+		
+		@Override
+		protected String getTitleKey() {
+			return "createOption";
+		}
+		
+		@Override
+		protected void onClick(AjaxRequestTarget target) {
+			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option) {
+				
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
+					super.onSave(target, form, bean);
+					optionsAnswer.addOption(this.getBean());
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
+					if(target != null) {
+						target.addComponent(optionsPanel.getContainer());
+					}
+				}
+				
+				@Override
+				protected void onCancel(AjaxRequestTarget target, Option bean) {
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
+					if(target != null) {
+						target.addComponent(optionsPanel.getContainer());
+					}
+				}
+			};			
+			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+			optionsPanel.setContent(optionEditingPanel);
+			if(target != null) {
+				target.addComponent(optionsPanel.getContainer());
+			}
+		}
+		
+	}
+
 	private OptionsAnswer optionsAnswer;
 	
 	private WebMarkupContainer container;
@@ -124,6 +199,12 @@ public class OptionsAnswerEditPanel extends Panel {
 			protected void populateRowMenu(IMenuItemHolder menu, int row, Option bean) {
 				menu.addMenuItem(new EditButton("edit", bean));
 			}
+			
+			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
+				factory.addItem(new SmallSeparatorButton());
+				factory.addItem(new CreateButton("create", OptionsAnswerEditPanel.this.getOptionsAnswer()));
+			}
+			
 		};
 	}
 	
