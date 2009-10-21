@@ -27,8 +27,11 @@ public class OptionsAnswerEditPanel extends Panel {
 		
 		private static final long serialVersionUID = 1L;
 
-		public EditButton(String id) {
+		private Option option;
+		
+		public EditButton(String id, Option option) {
 			super(id);
+			this.option = option;
 		}
 		
 		@Override
@@ -48,7 +51,22 @@ public class OptionsAnswerEditPanel extends Panel {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
+			AnswerEditingPanel<Option>  answerEditingPanel = new AnswerEditingPanel<Option>(OptionsAnswerEditPanel.CONTENT_ID, option) {
+				
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected Component createdContent(String contentId) {
+					return new OptionEditPanel(contentId, option);
+				}
+				
+			};
 			
+			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+			optionsPanel.setContent(answerEditingPanel);
+			if(target != null) {
+				target.addComponent(optionsPanel.getContainer());
+			}
 		}
 		
 	}
@@ -57,6 +75,10 @@ public class OptionsAnswerEditPanel extends Panel {
 	
 	private WebMarkupContainer container;
 	
+	public WebMarkupContainer getContainer() {
+		return container;
+	}
+
 	protected static String CONTENT_ID = "content";
 	
 	protected Component content;
@@ -68,7 +90,16 @@ public class OptionsAnswerEditPanel extends Panel {
 	public OptionsAnswerEditPanel(String id, OptionsAnswer optionsAnswer) {
 		super(id);
 		this.optionsAnswer = optionsAnswer;
-		container = new WebMarkupContainer("container");
+		container = new WebMarkupContainer("container") {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onBeforeRender() {
+				this.addOrReplace(content);
+				super.onBeforeRender();
+			}
+		};
 		container.setOutputMarkupId(true);	
 		add(container);
 		content = createdListComponent();
@@ -87,7 +118,7 @@ public class OptionsAnswerEditPanel extends Panel {
 
 			@Override
 			protected void populateRowMenu(IMenuItemHolder menu, int row, Option bean) {
-				menu.addMenuItem(new EditButton("edit"));
+				menu.addMenuItem(new EditButton("edit", bean));
 			}
 		};
 	}
