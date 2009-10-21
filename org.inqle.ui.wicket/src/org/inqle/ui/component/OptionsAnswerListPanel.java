@@ -11,6 +11,7 @@ import org.inqle.ui.model.OptionsAnswer;
 import com.antilia.web.beantable.Table;
 import com.antilia.web.beantable.model.TableModel;
 import com.antilia.web.button.IMenuItemHolder;
+import com.antilia.web.button.MenuItemsFactory;
 import com.antilia.web.provider.SelectionMode;
 
 /**
@@ -42,6 +43,11 @@ public class OptionsAnswerListPanel extends Panel {
 				OptionsAnswerListPanel.this.populateRowMenu(menu, row, bean);
 			}
 			
+			@Override
+			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
+				OptionsAnswerListPanel.this.addMenuItemsBeforeNavigation(factory);
+			}
+			
 		};
 		optionList.setColumnsResizable(false);
 		optionList.setFirstColumnResizable(false);
@@ -56,6 +62,10 @@ public class OptionsAnswerListPanel extends Panel {
 	 * @param bean
 	 */
 	protected void populateRowMenu(IMenuItemHolder menu, int row, Option bean) {
+		
+	}
+	
+	protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
 		
 	}
 	

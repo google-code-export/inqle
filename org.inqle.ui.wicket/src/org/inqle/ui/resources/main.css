@@ -1,29 +1,4 @@
 
-a.smallbutton, button.smallbutton {
-	border: none;
-	background: transparent;	
-}
-
-a.smallbuttonOver, button.smallbuttonOver {
-	border: none;
-	background: transparent;	
-}
-
-a.smallbutton{
-	margin-top: 2px;
-	padding-top: 1px;
-	padding-bottom: 5px;
-	vertical-align: middle;	
-}
-
-a.smallbuttonOver{
-	margin-top: 2px;
-	padding-top: 1px;
-	padding-bottom: 5px;
-	vertical-align: middle;	
-}
-
-div.dropColumn {
-	border: 1px solid transparent;
-	background: transparent;
+.test {
+	background-color: red;
 }
