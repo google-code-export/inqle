@@ -2,3 +2,9 @@
 .test {
 	background-color: red;
 }
+
+td.tbodycol {
+	overflow: hidden;
+	white-space: normal;
+	word-wrap: break-word;
+}
