@@ -7,6 +7,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.model.Option;
 import org.inqle.ui.model.OptionsAnswer;
@@ -51,19 +52,22 @@ public class OptionsAnswerEditPanel extends Panel {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			AnswerEditingPanel<Option>  answerEditingPanel = new AnswerEditingPanel<Option>(OptionsAnswerEditPanel.CONTENT_ID, option) {
+			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option) {
 				
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected Component createdContent(String contentId) {
-					return new OptionEditPanel(contentId, option);
+				protected void onSubmit(AjaxRequestTarget target, Form<?> form, Option bean) {
+					super.onSubmit(target, form, bean);
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
+					if(target != null) {
+						target.addComponent(optionsPanel.getContainer());
+					}
 				}
-				
-			};
-			
+			};			
 			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-			optionsPanel.setContent(answerEditingPanel);
+			optionsPanel.setContent(optionEditingPanel);
 			if(target != null) {
 				target.addComponent(optionsPanel.getContainer());
 			}
