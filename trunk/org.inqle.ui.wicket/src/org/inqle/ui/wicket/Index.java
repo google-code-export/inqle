@@ -42,6 +42,8 @@ public class Index extends WebPage {
 		optionsAnswer.addOption(new Option("Hi, there!"));
 		optionsAnswer.addOption(new Option("Hi, there2!"));
 		optionsAnswer.addOption(new Option("Hi, there3!"));
+		optionsAnswer.addOption(new Option("Very long answer! Very long answer! " +
+				"Very long answer! Very long answer! Very long answer! Very long answer!"));
 		
 		OptionsAnswerEditPanel options = new OptionsAnswerEditPanel("options", optionsAnswer);
 		add(options);

@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.inqle.ui.dao.IOptionsDao;
 import org.inqle.ui.model.Option;
 import org.inqle.ui.model.OptionsAnswer;
 
@@ -17,6 +18,7 @@ import com.antilia.web.button.IMenuItemHolder;
 import com.antilia.web.button.MenuItemsFactory;
 import com.antilia.web.button.SmallSeparatorButton;
 import com.antilia.web.resources.DefaultStyle;
+import com.google.inject.Inject;
 
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
@@ -25,6 +27,9 @@ import com.antilia.web.resources.DefaultStyle;
 public class OptionsAnswerEditPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Inject
+	protected IOptionsDao optionsDao;
 
 	private static class EditButton extends AbstractLink {
 		
@@ -61,8 +66,10 @@ public class OptionsAnswerEditPanel extends Panel {
 				@Override
 				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
 					super.onSave(target, form, bean);
+				
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
+					optionsPanel.optionsDao.persistOption(bean);
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
@@ -75,7 +82,7 @@ public class OptionsAnswerEditPanel extends Panel {
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
-				}
+				}							    
 			};			
 			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 			optionsPanel.setContent(optionEditingPanel);
@@ -124,8 +131,9 @@ public class OptionsAnswerEditPanel extends Panel {
 				@Override
 				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
 					super.onSave(target, form, bean);
-					optionsAnswer.addOption(this.getBean());
+					optionsAnswer.addOption(this.getBean());					
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.optionsDao.persistOption(bean);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());

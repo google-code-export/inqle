@@ -128,8 +128,7 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 	 * @param form
 	 * @param bean
 	 */
-	protected void onSave(AjaxRequestTarget target, Form<?> form, E bean) {
-		System.out.println("Saving" + bean.toString());
+	protected void onSave(AjaxRequestTarget target, Form<?> form, E bean) {	
 		if(target != null) {
 			target.addComponent(getFeedBack());
 		}
