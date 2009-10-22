@@ -75,7 +75,7 @@ public class OptionsAnswerListPanel extends Panel {
 					private static final long serialVersionUID = 1L;
 
 					public boolean isMenuItemAuthorized(IMenuItem menuItem) {
-						if(menuItem instanceof PageSizeButton || menuItem instanceof RefreshButton 
+						if(menuItem instanceof PageSizeButton<?> || menuItem instanceof RefreshButton<?> 
 								|| menuItem instanceof  DropColumnItem<?> || menuItem instanceof UnusedColumnsButton<?>) {
 							return false;
 						}
