@@ -17,14 +17,16 @@ import com.antilia.web.button.AbstractLink;
 import com.antilia.web.button.IMenuItemHolder;
 import com.antilia.web.button.MenuItemsFactory;
 import com.antilia.web.button.SmallSeparatorButton;
+import com.antilia.web.dialog.IVeilScope;
 import com.antilia.web.resources.DefaultStyle;
+import com.antilia.web.veil.AntiliaVeilResource;
 import com.google.inject.Inject;
 
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class OptionsAnswerEditPanel extends Panel {
+public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -69,7 +71,7 @@ public class OptionsAnswerEditPanel extends Panel {
 				
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
-					optionsPanel.optionsDao.persistOption(bean);
+					optionsPanel.optionsDao.updateOption(bean);
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
@@ -157,6 +159,46 @@ public class OptionsAnswerEditPanel extends Panel {
 		}
 		
 	}
+	
+	private static class DeleteButton extends AbstractLink {
+		
+		private static final long serialVersionUID = 1L;
+
+		private Option option;
+						
+		
+		public DeleteButton(String id, Option option) {
+			super(id);
+			this.option = option;
+		}
+		
+		@Override
+		protected ResourceReference getImage() {
+			return DefaultStyle.IMG_DELETE;
+		}
+		
+		@Override
+		protected String getLabel() {
+			return null;
+		}
+		
+		@Override
+		protected String getTitleKey() {
+			return "deleteOption";
+		}
+		
+		@Override
+		protected void onClick(AjaxRequestTarget target) {
+			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+			optionsPanel.optionsAnswer.removeOption(option);
+			optionsPanel.optionsDao.deleteOption(option);
+			optionsPanel.setContent(optionsPanel.createdListComponent());
+			if(target != null) {
+				target.addComponent(optionsPanel.getContainer());
+			}					
+		}
+		
+	}
 
 	private OptionsAnswer optionsAnswer;
 	
@@ -190,6 +232,7 @@ public class OptionsAnswerEditPanel extends Panel {
 		container.setOutputMarkupId(true);	
 		add(container);
 		content = createdListComponent();
+		add( new AntiliaVeilResource());
 	}
 	
 	@Override
@@ -206,6 +249,7 @@ public class OptionsAnswerEditPanel extends Panel {
 			@Override
 			protected void populateRowMenu(IMenuItemHolder menu, int row, Option bean) {
 				menu.addMenuItem(new EditButton("edit", bean));
+				menu.addMenuItem(new DeleteButton("delete", bean));
 			}
 			
 			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
@@ -214,6 +258,11 @@ public class OptionsAnswerEditPanel extends Panel {
 			}
 			
 		};
+	}
+	
+	@Override
+	public String getVeilId() {
+		return container.getMarkupId();
 	}
 	
 	public void setContent(Component content) {
