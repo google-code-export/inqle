@@ -4,8 +4,13 @@
 package org.inqle.ui.wicket;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.guice.GuiceComponentInjector;
+import org.inqle.ui.dao.IOptionsDao;
+import org.inqle.ui.dao.MockOptionDao;
 
 import com.antilia.web.AntiliaWebApplication;
+import com.google.inject.Binder;
+import com.google.inject.Module;
 
 /**
  * 
@@ -33,6 +38,23 @@ public class InqleApplication extends AntiliaWebApplication {
 		getMarkupSettings().setStripWicketTags(true);
 		getDebugSettings().setAjaxDebugModeEnabled(false);
 		getDebugSettings().setOutputMarkupContainerClassName(false);
+		addComponentInstantiationListener(
+				new GuiceComponentInjector(this, getModule()));
+	}
+	
+	/**
+	 * Configure GUICE.
+	 * 
+	 * @return
+	 */
+	protected Module getModule() {
+		return new Module() {
+			
+			@Override
+			public void configure(Binder binder) {
+				binder.bind(IOptionsDao.class).to(MockOptionDao.class);
+			}
+		};
 	}
 
 }

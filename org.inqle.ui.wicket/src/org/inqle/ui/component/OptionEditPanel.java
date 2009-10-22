@@ -12,8 +12,8 @@ import org.inqle.ui.model.Option;
  */
 public class OptionEditPanel extends AnswerEditingPanel<Option> {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;	
+	
 	/**
 	 * @param id
 	 */
@@ -26,5 +26,4 @@ public class OptionEditPanel extends AnswerEditingPanel<Option> {
 		OptionEditingDatailPanel optionDatailPanel = new OptionEditingDatailPanel(contentId);
 		return optionDatailPanel;
 	}
-
 }

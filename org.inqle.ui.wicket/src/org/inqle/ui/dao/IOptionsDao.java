@@ -3,6 +3,7 @@
  */
 package org.inqle.ui.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.inqle.ui.model.Option;
@@ -13,7 +14,7 @@ import com.antilia.common.query.IQuery;
  * 
  * @author  Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  */
-public interface IOptionsDao {
+public interface IOptionsDao extends Serializable {
 
 	/**
 	 * 
@@ -21,6 +22,15 @@ public interface IOptionsDao {
 	 * @return
 	 */
 	public Option persistOption(Option option);
+	
+	
+	/**
+	 * 
+	 * @param option
+	 * @return
+	 */
+	public Option updateOption(Option option);
+	
 	
 	/**
 	 * 
