@@ -13,11 +13,6 @@ import org.inqle.core.data.GlobalModelObject;
 public class Option extends GlobalModelObject implements Serializable {
 
 	private Collection<Translation> translations;
-
-	/**
-	 * Private constructor.  Use QAFactory.newOption();
-	 */
-	Option(){};
 	
 	public void setOptionTranslations(Collection<Translation> translations) {
 		this.translations = translations;
