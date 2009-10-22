@@ -27,10 +27,6 @@ public class Question extends ModelObject implements Serializable {
 	private Double minimumResponse = new Double(0);
 	private Double maximumResponse;
 	private Double acceptedResponseInterval;
-	/**
-	 * Friendly constructor.  Use QAFactory.newQuestion();
-	 */
-	Question(){};
 	
 	public void setQuestionTranslations(Collection<Translation> questionTranslations) {
 		this.translations = questionTranslations;

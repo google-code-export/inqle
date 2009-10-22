@@ -8,11 +8,6 @@ public class Translation extends ModelObject implements Serializable {
 	public String text;
 	public String lang;
 	
-	/**
-	 * Private constructor.  Use QAFactory.newTranslation();
-	 */
-	Translation(){};
-	
 	public String getLang() {
 		return lang;
 	}

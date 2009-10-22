@@ -10,11 +10,6 @@ public class Answer extends ModelObject implements Serializable {
 	private Question question;
 	private Collection<Option> selectedOptions;
 	
-	/**
-	 * Private constructor.  Use QAFactory.newAnswer();
-	 */
-	Answer(){};
-	
 	public Question getQuestion() {
 		return question;
 	}
