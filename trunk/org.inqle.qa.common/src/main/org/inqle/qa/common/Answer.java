@@ -5,29 +5,29 @@ import java.io.Serializable;
 
 import org.inqle.core.data.ModelObject;
 
-public class Answer extends ModelObject implements IAnswer, Serializable {
+public class Answer extends ModelObject implements Serializable {
 
-	private IQuestion question;
-	private Collection<IOption> selectedOptions;
+	private Question question;
+	private Collection<Option> selectedOptions;
 	
 	/**
 	 * Private constructor.  Use QAFactory.newAnswer();
 	 */
 	Answer(){};
 	
-	public IQuestion getQuestion() {
+	public Question getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(IQuestion question) {
+	public void setQuestion(Question question) {
 		this.question = question;
 	}
 
-	public void setSelectedOptions(Collection<IOption> selectedOptions) {
+	public void setSelectedOptions(Collection<Option> selectedOptions) {
 		this.selectedOptions = selectedOptions;
 	}
 
-	public Collection<IOption> getSelectedOptions() {
+	public Collection<Option> getSelectedOptions() {
 		return selectedOptions;
 	}
 	

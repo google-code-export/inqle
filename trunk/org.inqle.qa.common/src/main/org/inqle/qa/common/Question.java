@@ -14,15 +14,15 @@ import org.inqle.core.data.ModelObject;
  * September 10, 2009
  *
  */
-public class Question extends ModelObject implements IQuestion, Serializable {
+public class Question extends ModelObject implements Serializable {
 	
 	
 	
 	public static String QUESTION_TYPE_SINGLE_SELECTION = "SINGLE SELECTION";
 	public static String QUESTION_TYPE_MULTIPLE_SELECTION = "MULTIPLE SELECTION";
 	
-	private Collection<ITranslation> translations = new ArrayList<ITranslation>();
-	private List<IOption> questionOptions;
+	private Collection<Translation> translations = new ArrayList<Translation>();
+	private List<Option> questionOptions;
 	private String questionType;
 	private Double minimumResponse = new Double(0);
 	private Double maximumResponse;
@@ -32,15 +32,15 @@ public class Question extends ModelObject implements IQuestion, Serializable {
 	 */
 	Question(){};
 	
-	public void setQuestionTranslations(Collection<ITranslation> questionTranslations) {
+	public void setQuestionTranslations(Collection<Translation> questionTranslations) {
 		this.translations = questionTranslations;
 	}
 	
-	public Collection<ITranslation> getQuestionTranslations() {
+	public Collection<Translation> getQuestionTranslations() {
 		return translations;
 	}
 	
-	public void addQuestionTranslation(ITranslation questionTranslation) {
+	public void addQuestionTranslation(Translation questionTranslation) {
 		translations.add(questionTranslation);
 	}
 	
@@ -55,22 +55,22 @@ public class Question extends ModelObject implements IQuestion, Serializable {
 		return questionType;
 	}
 	
-	public void setQuestionOptions(List<IOption> questionOptions) {
+	public void setQuestionOptions(List<Option> questionOptions) {
 		this.questionOptions = questionOptions;
 	}
 	
-	public List<IOption> getQuestionOptions() {
+	public List<Option> getQuestionOptions() {
 		return questionOptions;
 	}
 	
-	public ITranslation getQuestionTranslation(String lang) {
-		for (ITranslation translation: getQuestionTranslations()) {
+	public Translation getQuestionTranslation(String lang) {
+		for (Translation translation: getQuestionTranslations()) {
 			if (translation.getLang().equals(lang)) return translation;
 		}
 		return null;
 	}
 	
-	public ITranslation getDefaultQuestionTranslation() {
+	public Translation getDefaultQuestionTranslation() {
 		return getQuestionTranslation(QAInfo.DEFAULT_LANG);
 	}
 

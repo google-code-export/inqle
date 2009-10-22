@@ -10,34 +10,34 @@ import org.inqle.core.data.GlobalModelObject;
  * @author David Donohue
  *
  */
-public class Option extends GlobalModelObject implements IOption, Serializable {
+public class Option extends GlobalModelObject implements Serializable {
 
-	private Collection<ITranslation> translations;
+	private Collection<Translation> translations;
 
 	/**
 	 * Private constructor.  Use QAFactory.newOption();
 	 */
 	Option(){};
 	
-	public void setOptionTranslations(Collection<ITranslation> translations) {
+	public void setOptionTranslations(Collection<Translation> translations) {
 		this.translations = translations;
 	}
 
-	public Collection<ITranslation> getOptionTranslations() {
+	public Collection<Translation> getOptionTranslations() {
 		return translations;
 	}
 	
-	public void addOptionTranslation(ITranslation translation) {
+	public void addOptionTranslation(Translation translation) {
 		translations.add(translation);
 	}
 	
-	public ITranslation getOptionTranslation(String lang) {
-		for (ITranslation translation: getOptionTranslations()) {
+	public Translation getOptionTranslation(String lang) {
+		for (Translation translation: getOptionTranslations()) {
 			if (translation.getLang().equals(lang)) return translation;
 		}
 		return null;
 	}
-	public ITranslation getDefaultOptionTranslation() {
+	public Translation getDefaultOptionTranslation() {
 		return getOptionTranslation(QAInfo.DEFAULT_LANG);
 	}
 

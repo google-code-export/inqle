@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.inqle.core.data.ModelObject;
 
-public class Translation extends ModelObject implements ITranslation, Serializable {
+public class Translation extends ModelObject implements Serializable {
 	public String text;
 	public String lang;
 	
