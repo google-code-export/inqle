@@ -13,13 +13,11 @@ package org.inqle.qa.ecf.server;
 import java.util.Properties;
 
 import org.eclipse.ecf.core.IContainerManager;
-import org.eclipse.ecf.core.identity.ID;
-import org.eclipse.ecf.core.identity.IDFactory;
-import org.eclipse.ecf.examples.remoteservices.hello.IHello;
-import org.eclipse.ecf.examples.remoteservices.hello.impl.Hello;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.inqle.qa.common.services.Hello;
+import org.inqle.qa.common.services.IHello;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
