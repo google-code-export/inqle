@@ -1,4 +1,4 @@
-package org.inqle.qa.common;
+package org.inqle.qa.common.beans;
 
 import java.util.Collection;
 import java.io.Serializable;

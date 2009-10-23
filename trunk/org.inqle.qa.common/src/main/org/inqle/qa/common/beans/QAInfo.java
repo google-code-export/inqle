@@ -1,4 +1,4 @@
-package org.inqle.qa.common;
+package org.inqle.qa.common.beans;
 
 public class QAInfo {
 
