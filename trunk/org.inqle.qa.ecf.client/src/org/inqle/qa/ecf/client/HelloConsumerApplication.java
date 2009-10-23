@@ -16,16 +16,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.ecf.core.IContainerFactory;
 import org.eclipse.ecf.core.IContainerManager;
-import org.eclipse.ecf.core.identity.ID;
-import org.eclipse.ecf.core.identity.IDFactory;
-import org.eclipse.ecf.examples.remoteservices.hello.IHello;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.RemoteServiceHelper;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.concurrent.future.IFuture;
-import org.inqle.qa.common.IHostIdentified;
+import org.inqle.qa.common.services.IHello;
+import org.inqle.qa.common.services.IServerIdentified;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -53,7 +51,7 @@ public class HelloConsumerApplication implements IApplication,
 
 //	private ServiceTracker helloServiceTracker;
 
-	public enum DBServer {
+	public enum QAServer {
 	    SERVER1 ("ecftcp://localhost:3787/server1", "3787", ECF_PROTOCOL),
 	    SERVER2 ("ecftcp://localhost:3788/server2", "3788", ECF_PROTOCOL);
 	    
@@ -62,18 +60,18 @@ public class HelloConsumerApplication implements IApplication,
 	    public String protocol;
 		public IHello helloService;
 	    
-	    DBServer(String uri, String port, String protocol) {
+	    QAServer(String uri, String port, String protocol) {
 	    	this.uri = uri;
 	    	this.port = port;
 	    	this.protocol = protocol;
 	    };
 	};
 	
-	public enum DBService {
+	public enum QAService {
 	    SERVICE1 (IHello.class.getName());
 	    
 	    public String serviceClassName;
-	    DBService(String serviceClassName) {
+	    QAService(String serviceClassName) {
 	    	this.serviceClassName = serviceClassName;
 	    };
 	};
@@ -88,12 +86,12 @@ public class HelloConsumerApplication implements IApplication,
 		// will
 		// be available for handling discovered remote endpoints
 //		List<String> serverUriList = new ArrayList<String>();
-		for (DBServer dbServer: DBServer.values()) {
+		for (QAServer dbServer: QAServer.values()) {
 			createContainer(dbServer.uri, dbServer.port, dbServer.protocol);
 //			serverUriList.add(dbServer.uri);
 		}
 //		createContainer(serverUriList.toArray(new String[] {}), ECF_PROTOCOL);
-		for (DBService dbService: DBService.values()) {
+		for (QAService dbService: QAService.values()) {
 			ServiceTracker serviceTracker = new ServiceTracker(bundleContext,
 				createRemoteFilter(dbService.serviceClassName), this);
 			serviceTracker.open();
@@ -191,14 +189,14 @@ public class HelloConsumerApplication implements IApplication,
 		Class objectClassClass = (Class)objectClass;
 		log.info("objectClassClass=" + objectClassClass.getName());
 		String hostUri = null;
-		if (serviceObject instanceof IHostIdentified) {
-			hostUri = ((IHostIdentified)serviceObject).getHostUri();
+		if (serviceObject instanceof IServerIdentified) {
+			hostUri = ((IServerIdentified)serviceObject).getServerId();
 		}
 		if (hostUri==null) {
-			log.warn("Added service not an instance of IHostIdentified, so will ignore it.");
+			log.warn("Added service not an instance of IServerIdentified, so will ignore it.");
 			return null;
 		}
-		DBServer server = getDBServerOfUri(hostUri);
+		QAServer server = getQAServerOfUri(hostUri);
 		if (serviceObject instanceof IHello) {
 			System.out.println("IHello service proxy being added");
 			IHello hello = (IHello) serviceObject;
@@ -228,8 +226,8 @@ public class HelloConsumerApplication implements IApplication,
 		return serviceObject;
 	}
 
-	private DBServer getDBServerOfUri(String hostUri) {
-		for (DBServer dbServer: DBServer.values()) {
+	private QAServer getQAServerOfUri(String hostUri) {
+		for (QAServer dbServer: QAServer.values()) {
 			if (dbServer.uri.equals(hostUri)) return dbServer;
 		}
 		return null;
