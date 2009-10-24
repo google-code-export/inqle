@@ -21,7 +21,6 @@
    <vm>
    </vm>
 
-
    <plugins>
       <plugin id="javax.servlet"/>
       <plugin id="org.eclipse.core.contenttype"/>
@@ -48,6 +47,9 @@
       <plugin id="org.eclipse.equinox.registry"/>
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.osgi.services"/>
+      <plugin id="org.inqle.core"/>
+      <plugin id="org.inqle.log4j.properties" fragment="true"/>
+      <plugin id="org.inqle.qa.common"/>
       <plugin id="org.inqle.qa.ecf.client"/>
    </plugins>
 

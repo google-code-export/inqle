@@ -11,7 +11,9 @@
 package org.inqle.qa.ecf.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ecf.core.IContainerFactory;
@@ -58,13 +60,29 @@ public class HelloConsumerApplication implements IApplication,
 	    public String uri;
 	    public String port;
 	    public String protocol;
-		public IHello helloService;
+		private Map<String, Object> services = new HashMap<String, Object>();
 	    
 	    QAServer(String uri, String port, String protocol) {
 	    	this.uri = uri;
 	    	this.port = port;
 	    	this.protocol = protocol;
 	    };
+	    
+	    public <T> T getService(Class<T> serviceClass) {
+	    	String key = serviceClass.getName();
+	    	Object serviceObject = services.get(key);
+	    	if (serviceObject == null) return null;
+	    	T typedServiceObject = (T)serviceObject;
+	    	return typedServiceObject;
+	    }
+	    
+	    public void addService(String serviceClassName, Object serviceObject) {
+	    	services.put(serviceClassName, serviceObject);
+	    }
+	    
+	    public void removeService(String serviceClassName) {
+	    	services.remove(serviceClassName);
+	    }
 	};
 	
 	public enum QAService {
@@ -183,31 +201,40 @@ public class HelloConsumerApplication implements IApplication,
 	public Object addingService(ServiceReference reference) {
 		Object serviceObject = bundleContext.getService(reference);
 		for (String key: reference.getPropertyKeys()) {
-			System.out.println(key + "=" + reference.getProperty(key));
+			log.info(key + "=" + reference.getProperty(key));
 		}
-		Object objectClass = reference.getProperty("objectClass");
-		Class objectClassClass = (Class)objectClass;
-		log.info("objectClassClass=" + objectClassClass.getName());
+		
+		String serviceClassName = null;
+		try {
+			String[] objectClasses = (String[])reference.getProperty("objectClass");
+			serviceClassName = objectClasses[0];
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		
 		String hostUri = null;
 		if (serviceObject instanceof IServerIdentified) {
 			hostUri = ((IServerIdentified)serviceObject).getServerId();
 		}
+		log.info("Getting server of URI:" + hostUri);
 		if (hostUri==null) {
-			log.warn("Added service not an instance of IServerIdentified, so will ignore it.");
+			log.warn("Incoming service is not an instance of IServerIdentified, so will ignore it.");
 			return null;
 		}
+		
 		QAServer server = getQAServerOfUri(hostUri);
+		log.info("For server " + server.uri + ", storing service:" + serviceClassName + "...");
 		if (serviceObject instanceof IHello) {
 			System.out.println("IHello service proxy being added");
 			IHello hello = (IHello) serviceObject;
 			// Call it
 			String helloMessage = hello.hello(CONSUMER_NAME);
-			System.out.println("Called hello using proxy, received: " + helloMessage);
-			server.helloService = hello;
+			log.info("Called hello using proxy, received: " + helloMessage);
 		}
 		
+		server.addService(serviceClassName, serviceObject);
 		
-
 		// Now get remote service reference and use asynchronous
 		// remote invocation
 		IRemoteService remoteService = (IRemoteService) reference
