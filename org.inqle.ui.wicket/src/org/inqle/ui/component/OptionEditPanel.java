@@ -10,7 +10,7 @@ import org.inqle.ui.model.Option;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class OptionEditPanel extends AnswerEditingPanel<Option> {
+public class OptionEditPanel extends BaseEditingPanel<Option> {
 
 	private static final long serialVersionUID = 1L;	
 	

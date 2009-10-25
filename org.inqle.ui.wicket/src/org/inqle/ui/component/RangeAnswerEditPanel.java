@@ -10,7 +10,7 @@ import org.inqle.ui.model.RangeAnswer;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class RangeAnswerEditPanel<T extends Number> extends AnswerEditingPanel<RangeAnswer<T>> {
+public class RangeAnswerEditPanel<T extends Number> extends BaseEditingPanel<RangeAnswer<T>> {
 
 	private static final long serialVersionUID = 1L;
 
