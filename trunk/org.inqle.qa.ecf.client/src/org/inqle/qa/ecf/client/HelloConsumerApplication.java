@@ -199,6 +199,7 @@ public class HelloConsumerApplication implements IApplication,
 	 * Method called when a REMOTE IHello instance is registered.
 	 */
 	public Object addingService(ServiceReference reference) {
+		
 		Object serviceObject = bundleContext.getService(reference);
 		for (String key: reference.getPropertyKeys()) {
 			log.info(key + "=" + reference.getProperty(key));
@@ -211,11 +212,20 @@ public class HelloConsumerApplication implements IApplication,
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
+		log.info("Getting service of class:" + serviceClassName);
 		
 		String hostUri = null;
 		if (serviceObject instanceof IServerIdentified) {
-			hostUri = ((IServerIdentified)serviceObject).getServerId();
+			log.info("1...");
+			IServerIdentified siObj = (IServerIdentified)serviceObject;
+			log.info("2...");
+			try {
+				hostUri = siObj.getServerId();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			log.info("3...");
 		}
 		log.info("Getting server of URI:" + hostUri);
 		if (hostUri==null) {
