@@ -3,6 +3,8 @@
  */
 package org.inqle.ui.dao;
 
+import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import org.inqle.ui.model.Option;
@@ -17,47 +19,70 @@ public class MockOptionDao implements IOptionsDao {
 
 	private static final long serialVersionUID = 1L;
 
-
-	/**
-	 * 
-	 */
-	public MockOptionDao() {
-	}
-
-	/* (non-Javadoc)
-	 * @see org.inqle.ui.dao.IOptionsDao#countOptionsMatching(com.antilia.common.query.IQuery)
-	 */
-	public Long countAllMatching(IQuery<Option> query) {
+	@Override
+	public Option add(Option element) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.inqle.ui.dao.IOptionsDao#deleteOption(org.inqle.ui.model.Option)
-	 */
-	public Option delete(Option option) {
+	@Override
+	public void addAll(Collection<Option> element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Option remove(Option element) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.inqle.ui.dao.IOptionsDao#getOptionsMatching(com.antilia.common.query.IQuery)
-	 */
-	public List<Option> getAllMatching(IQuery<Option> query) {
+	@Override
+	public void removeAll(Collection<Option> element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Option element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateAll(Collection<Option> element) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Long count(IQuery<Option> query) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.inqle.ui.dao.IOptionsDao#persistOption(org.inqle.ui.model.Option)
-	 */
-	public Option persist(Option option) {
-		return option;
+	@Override
+	public List<Option> findAll(IQuery<Option> query) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.inqle.ui.dao.IOptionsDao#updateOption(org.inqle.ui.model.Option)
-	 */
-	public Option update(Option option) {
-		return option;
+	@Override
+	public List<Option> findAll(Class<Option> beanClass) {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	@Override
+	public List<Option> findByExample(Option bean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Option findById(Class<Option> beanClass, Serializable key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
