@@ -71,7 +71,7 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 				
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
-					optionsPanel.optionsDao.updateOption(bean);
+					optionsPanel.optionsDao.update(bean);
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
@@ -135,7 +135,7 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 					super.onSave(target, form, bean);
 					optionsAnswer.addOption(this.getBean());					
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-					optionsPanel.optionsDao.persistOption(bean);
+					optionsPanel.optionsDao.persist(bean);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
@@ -191,7 +191,7 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 		protected void onClick(AjaxRequestTarget target) {
 			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 			optionsPanel.optionsAnswer.removeOption(option);
-			optionsPanel.optionsDao.deleteOption(option);
+			optionsPanel.optionsDao.delete(option);
 			optionsPanel.setContent(optionsPanel.createdListComponent());
 			if(target != null) {
 				target.addComponent(optionsPanel.getContainer());
