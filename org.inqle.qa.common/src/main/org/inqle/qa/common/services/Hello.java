@@ -1,6 +1,6 @@
 package org.inqle.qa.common.services;
 
-public class Hello implements IHello {
+public class Hello extends ServerIdentified implements IHello {
 
 	private String serverId;
 	
@@ -16,12 +16,12 @@ public class Hello implements IHello {
 		return "TO: " + from + ", FROM: " + serverId + "; HELLO!";
 	}
 
-	public void setServerId(String serverId) {
-		this.serverId = serverId;
-	}
-
-	public String getServerId() {
-		return serverId;
-	}
+//	public void setServerId(String serverId) {
+//		this.serverId = serverId;
+//	}
+//
+//	public String getServerId() {
+//		return serverId;
+//	}
 
 }
