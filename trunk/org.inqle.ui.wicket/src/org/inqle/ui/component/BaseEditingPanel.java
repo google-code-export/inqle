@@ -22,7 +22,7 @@ import com.antilia.web.resources.DefaultStyle;
  * @author  Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
+public abstract class BaseEditingPanel<E extends Serializable> extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -35,7 +35,7 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 	/**
 	 * @param id
 	 */
-	public AnswerEditingPanel(String id, E bean) {
+	public BaseEditingPanel(String id, E bean) {
 		super(id);
 		this.bean = bean;
 		this.form = newFrom("form", bean);		
@@ -82,12 +82,12 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 			
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				AnswerEditingPanel.this.onSave(target, form, bean);
+				BaseEditingPanel.this.onSave(target, form, bean);
 			}
 			
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				AnswerEditingPanel.this.onError(target, form, bean);
+				BaseEditingPanel.this.onError(target, form, bean);
 			}
 		};
 	}
@@ -114,7 +114,7 @@ public abstract class AnswerEditingPanel<E extends Serializable> extends Panel {
 
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				AnswerEditingPanel.this.onCancel(target, bean);
+				BaseEditingPanel.this.onCancel(target, bean);
 			}
 			
 			
