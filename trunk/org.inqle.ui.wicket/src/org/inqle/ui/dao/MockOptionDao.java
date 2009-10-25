@@ -27,29 +27,29 @@ public class MockOptionDao implements IOptionsDao {
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.dao.IOptionsDao#countOptionsMatching(com.antilia.common.query.IQuery)
 	 */
-	public Long countOptionsMatching(IQuery<Option> query) {
+	public Long countAllMatching(IQuery<Option> query) {
 		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.dao.IOptionsDao#deleteOption(org.inqle.ui.model.Option)
 	 */
-	public Option deleteOption(Option option) {
+	public Option delete(Option option) {
 		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.dao.IOptionsDao#getOptionsMatching(com.antilia.common.query.IQuery)
 	 */
-	public List<Option> getOptionsMatching(IQuery<Option> query) {
+	public List<Option> getAllMatching(IQuery<Option> query) {
 		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.dao.IOptionsDao#persistOption(org.inqle.ui.model.Option)
 	 */
-	public Option persistOption(Option option) {
-		return null;
+	public Option persist(Option option) {
+		return option;
 	}
 
 	
@@ -57,7 +57,7 @@ public class MockOptionDao implements IOptionsDao {
 	 * (non-Javadoc)
 	 * @see org.inqle.ui.dao.IOptionsDao#updateOption(org.inqle.ui.model.Option)
 	 */
-	public Option updateOption(Option option) {
-		return null;
+	public Option update(Option option) {
+		return option;
 	}
 }
