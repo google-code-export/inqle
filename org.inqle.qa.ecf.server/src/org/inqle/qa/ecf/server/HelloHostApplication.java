@@ -10,6 +10,8 @@
  *****************************************************************************/
 package org.inqle.qa.ecf.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.ecf.core.IContainerManager;
@@ -25,7 +27,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class HelloHostApplication implements IApplication,
 		IDistributionConstants {
-
+	
 //	private static final String DEFAULT_CONTAINER_TYPE = "ecf.r_osgi.peer";
 //	public static final String DEFAULT_CONTAINER_ID = null;
 
@@ -39,7 +41,8 @@ public class HelloHostApplication implements IApplication,
 	private final Object appLock = new Object();
 	private boolean done = false;
 
-	private ServiceRegistration helloRegistration;
+//	private ServiceRegistration helloRegistration;
+	private List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
 	public Object start(IApplicationContext appContext) throws Exception {
 		bundleContext = Activator.getContext();
@@ -54,16 +57,23 @@ public class HelloHostApplication implements IApplication,
 //		} else {
 //			ID serverId = IDFactory.getDefault().createStringID(containerId);
 			containerManager.getContainerFactory().createContainer(
-//				containerType, new Object[] {containerId, containerPort});
 				containerType, new Object[] {containerId});
-//		}
-		Properties props = new Properties();
-		// add OSGi service property indicating this
-		props.put(REMOTE_INTERFACES, REMOTE_INTERFACES_WILDCARD);
-		props.put(QAServiceConstants.PROPERTY_SERVER_URI, containerId);
-		// register remote service
-		helloRegistration = bundleContext.registerService(IHello.class
-				.getName(), new Hello(containerId), props);
+		
+//		Properties props = new Properties();
+//		// add OSGi service property indicating this
+//		props.put(REMOTE_INTERFACES, REMOTE_INTERFACES_WILDCARD);
+//		props.put(QAServiceConstants.PROPERTY_SERVER_URI, containerId);
+			
+		// register all remote services
+		ServiceRegistration serviceRegistration = ServiceRegistrar.registerService(
+			bundleContext,
+			containerId,
+			IHello.class.getName(), 
+			new Hello(containerId));
+			
+//			bundleContext.registerService(IHello.class
+//				.getName(), new Hello(containerId), props);
+		serviceRegistrations.add(serviceRegistration);
 		System.out.println("Host: Hello Service Registered on server: " + containerId);
 
 		// wait until stopped
@@ -73,10 +83,14 @@ public class HelloHostApplication implements IApplication,
 	}
 
 	public void stop() {
-		if (helloRegistration != null) {
-			helloRegistration.unregister();
-			helloRegistration = null;
+		for (ServiceRegistration sr: serviceRegistrations) {
+			if (sr != null) {
+				sr.unregister();
+				sr = null;
+			}
 		}
+		serviceRegistrations = new ArrayList<ServiceRegistration>();
+		
 		if (containerManagerServiceTracker != null) {
 			containerManagerServiceTracker.close();
 			containerManagerServiceTracker = null;
