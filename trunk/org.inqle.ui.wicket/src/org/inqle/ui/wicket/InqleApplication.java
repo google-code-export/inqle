@@ -6,7 +6,9 @@ package org.inqle.ui.wicket;
 import org.apache.wicket.Page;
 import org.apache.wicket.guice.GuiceComponentInjector;
 import org.inqle.ui.dao.IOptionsDao;
-import org.inqle.ui.dao.MockOptionDao;
+import org.inqle.ui.dao.IQuestionsDao;
+import org.inqle.ui.dao.MockOptionsDao;
+import org.inqle.ui.dao.MockQuestionDao;
 
 import com.antilia.web.AntiliaWebApplication;
 import com.google.inject.Binder;
@@ -52,7 +54,8 @@ public class InqleApplication extends AntiliaWebApplication {
 			
 			@Override
 			public void configure(Binder binder) {
-				binder.bind(IOptionsDao.class).to(MockOptionDao.class);
+				binder.bind(IOptionsDao.class).toInstance(MockOptionsDao.getInstance());
+				binder.bind(IQuestionsDao.class).toInstance(MockQuestionDao.getInstance());
 			}
 		};
 	}
