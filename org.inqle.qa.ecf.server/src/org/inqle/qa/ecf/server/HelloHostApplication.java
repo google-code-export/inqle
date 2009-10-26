@@ -18,6 +18,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.inqle.qa.common.services.Hello;
 import org.inqle.qa.common.services.IHello;
+import org.inqle.qa.common.services.QAServiceConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
@@ -59,6 +60,7 @@ public class HelloHostApplication implements IApplication,
 		Properties props = new Properties();
 		// add OSGi service property indicating this
 		props.put(REMOTE_INTERFACES, REMOTE_INTERFACES_WILDCARD);
+		props.put(QAServiceConstants.PROPERTY_SERVER_URI, containerId);
 		// register remote service
 		helloRegistration = bundleContext.registerService(IHello.class
 				.getName(), new Hello(containerId), props);
