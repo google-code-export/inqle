@@ -1,6 +1,6 @@
 package org.inqle.qa.common.services;
 
-public interface IHello extends IServerIdentified {
+public interface IHello {
 
 	public String hello(String from);
 	

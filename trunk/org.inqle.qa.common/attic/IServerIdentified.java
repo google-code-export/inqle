@@ -7,6 +7,7 @@ package org.inqle.qa.common.services;
  * @author gd9345
  *
  */
+@Deprecated
 public interface IServerIdentified {
 
 	public String getServerId();

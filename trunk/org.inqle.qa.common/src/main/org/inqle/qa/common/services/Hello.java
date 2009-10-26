@@ -1,6 +1,6 @@
 package org.inqle.qa.common.services;
 
-public class Hello extends ServerIdentified implements IHello {
+public class Hello implements IHello {
 
 	private String serverId;
 	
