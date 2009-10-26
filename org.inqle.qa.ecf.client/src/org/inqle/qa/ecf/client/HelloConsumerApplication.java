@@ -21,11 +21,12 @@ import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.RemoteServiceHelper;
+import org.eclipse.ecf.remoteservice.util.tracker.RemoteServiceTracker;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.concurrent.future.IFuture;
 import org.inqle.qa.common.services.IHello;
-import org.inqle.qa.common.services.IServerIdentified;
+import org.inqle.qa.common.services.QAServiceConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -214,19 +215,24 @@ public class HelloConsumerApplication implements IApplication,
 		}
 		log.info("Getting service of class:" + serviceClassName);
 		
-		String hostUri = null;
-		if (serviceObject instanceof IServerIdentified) {
-			log.info("1...");
-			IServerIdentified siObj = (IServerIdentified)serviceObject;
-			log.info("2...");
-			try {
-				hostUri = siObj.getServerId();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			log.info("3...");
+		
+		String hostUri = (String)reference.getProperty(QAServiceConstants.PROPERTY_SERVER_URI);
+		if (hostUri==null || hostUri.length()==0) {
+			log.error("Remote service: " + serviceClassName + " did not declare property: " + QAServiceConstants.PROPERTY_SERVER_URI + ".  Ignoring it.");
+			return null;
 		}
+//		if (serviceObject instanceof IServerIdentified) {
+//			log.info("1...");
+//			IServerIdentified siObj = (IServerIdentified)serviceObject;
+//			log.info("2...");
+//			try {
+//				hostUri = siObj.getServerId();
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			log.info("3...");
+//		}
 		log.info("Getting server of URI:" + hostUri);
 		if (hostUri==null) {
 			log.warn("Incoming service is not an instance of IServerIdentified, so will ignore it.");
