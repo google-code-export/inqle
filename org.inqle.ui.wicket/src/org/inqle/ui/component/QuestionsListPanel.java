@@ -46,7 +46,7 @@ public class QuestionsListPanel extends Panel {
 		
 		Form<Question> form = new Form<Question>("form");
 		add(form);
-		TableModel<Question> tableModel = new TableModel<Question>(Question.class, "id", "translationKey") {
+		TableModel<Question> tableModel = new TableModel<Question>(Question.class, "id", "translationKey", "answer") {
 			
 			private static final long serialVersionUID = 1L;
 
