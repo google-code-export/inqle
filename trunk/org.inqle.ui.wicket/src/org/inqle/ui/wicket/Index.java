@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
 import org.inqle.ui.component.OptionEditPanel;
 import org.inqle.ui.component.OptionsAnswerEditPanel;
-import org.inqle.ui.component.QuestionsListPanel;
+import org.inqle.ui.component.QuestionsEditPanel;
 import org.inqle.ui.component.RangeAnswerEditPanel;
 import org.inqle.ui.model.MultipleChoiceAnswer;
 import org.inqle.ui.model.Option;
@@ -49,7 +49,7 @@ public class Index extends WebPage {
 		OptionsAnswerEditPanel options = new OptionsAnswerEditPanel("options", optionsAnswer);
 		add(options);
 		
-		QuestionsListPanel questions = new QuestionsListPanel("questions");
+		QuestionsEditPanel questions = new QuestionsEditPanel("questions");
 		add(questions);
 	}
 }
