@@ -28,7 +28,6 @@ import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.SystemDatamodel;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
@@ -86,7 +85,7 @@ public class Persister {
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
 	public static final String DATAMODEL_SUBJECT_CLASSES_CACHE = "org.inqle.datamodels.cache.subjectClass";
 	public static final String DATAMODEL_ARCS_CACHE = "org.inqle.datamodels.cache.arc";
-	private static final String CORE_DATABASE_ID = "org.inqle.core.db";
+	public static final String CORE_DATABASE_ID = "org.inqle.core.db";
 	
 	private AppInfo appInfo = null;
 	private static Logger log = Logger.getLogger(Persister.class);
@@ -231,7 +230,7 @@ public class Persister {
 	 * Also stores the new datamodel in the metarepository
 	 * @version 2
 	 */
-	public void createDatabaseBackedModel(DatabaseBackedDatamodel datamodel) {
+	public <T extends DatabaseBackedDatamodel> void createDatabaseBackedModel(T datamodel) {
 		
 		//create the database-backed model
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
@@ -246,7 +245,7 @@ public class Persister {
 			return;
 		}
 		
-		persist(datamodel.getDatabaseId(), datamodel);
+		persist(datamodel, getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId()));
 		log.info("Persisted datamodel: " + datamodel.getId());
 		return;
 	}
@@ -302,8 +301,9 @@ public class Persister {
 //		return systemModel;
 //	}
 	
+	@Deprecated
 	public SystemDatamodel getSystemDatamodel(String datamodelId) {
-		SystemDatamodel datamodel = reconstitute(getDatabaseIdFromDatamodelId(datamodelId), SystemDatamodel.class, datamodelId, true);
+		SystemDatamodel datamodel = reconstitute(SystemDatamodel.class, datamodelId, getModel(datamodelId), true);
 		return datamodel;
 	}
 	
@@ -585,11 +585,11 @@ public class Persister {
 //		return getModel(datamodel);
 //	}
 	
-	public String getDatamodelNameFromDatamodelId(String datamodelId) {
+	public static String getDatamodelNameFromDatamodelId(String datamodelId) {
 		return datamodelId.substring(datamodelId.lastIndexOf("/") + 1);
 	}
 	
-	public String getDatabaseIdFromDatamodelId(String datamodelId) {
+	public static String getDatabaseIdFromDatamodelId(String datamodelId) {
 		return datamodelId.substring(0, datamodelId.lastIndexOf("/"));
 	}
 	
@@ -823,16 +823,17 @@ public class Persister {
 	 * create the DB store in the actual database.
 	 * @param testConnectionInfo
 	 */
-	public int createNewDatabase(IDatabase database) {
+	public <T extends IDatabase> int createNewDatabase(T database) {
 		log.info("Will try to create a new Database:\n" + JenabeanWriter.toString(database));
 		//first create the IDBConnector and use it to create the DB store in the database
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
 		int status = connector.createDatabase();
 		log.info("Tried to create new DB store, with status=" + status);
-		//next register the new DB in the repositories namedModel
+		
+		//next register the new DB in the repositories namedModel, within this new database
 		//TODO: when deleting works, remove the below " || status == SDBConnector.STORE_IS_BLANK"
 		if (status == IDBConnector.STORE_CREATED || status == IDBConnector.STORE_IS_BLANK) {
-			persist(database.getId(), database);
+			persist(database, Persister.getTargetDatamodelId(database.getClass(), database.getId()));
 		}
 		
 		return status;
@@ -903,7 +904,8 @@ public class Persister {
 		List<PurposefulDatamodel> datamodels = new ArrayList<PurposefulDatamodel>();
 		List<String> allDatamodelIds = listDatamodelIds(databaseId);
 		for (String datamodelId: allDatamodelIds) {
-			PurposefulDatamodel purposefulDatamodel = reconstitute(databaseId, PurposefulDatamodel.class, datamodelId, true);
+			Model model = getModel(datamodelId);
+			PurposefulDatamodel purposefulDatamodel = reconstitute(PurposefulDatamodel.class, datamodelId, model, true);
 			Collection<String> purposes = purposefulDatamodel.getDatamodelPurposes();
 			if (purposes==null) continue;
 			if (purposes.contains(purposeId)) {
@@ -912,99 +914,65 @@ public class Persister {
 		}
 		return datamodels;
 	}
+	
+	/* *********************************************************************
+	 * *** TARGET ANNOTATION METHODS
+	 * ********************************************************************* */
+	
+	/**
+	 * Get the ID of the database to which the provided class is supposed to be persisted, per its
+	 * annotation TargetDatabaseId
+	 * @param persistableClass
+	 * @return
+	 */
+	public static String getTargetDatabaseId(Class<?> persistableClass) {
+		TargetDatabaseId targetDatabaseId = persistableClass.getAnnotation(TargetDatabaseId.class);
+		if (targetDatabaseId == null) {
+			log.warn("Unable to retrieve database id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDatamodel annotation.");
+			return null;
+		}
+		return targetDatabaseId.value();
+	}
+	
+	/**
+	 * Get the name of the datamodel to which the provided class is supposed to be persisted, per its
+	 * annotation TargetDatamodelName
+	 * @param persistableClass
+	 * @return
+	 */
+	public static String getTargetDatamodelName(Class<?> persistableClass) {
+		TargetDatamodelName targetDatamodel = persistableClass.getAnnotation(TargetDatamodelName.class);
+		if (targetDatamodel == null) {
+			log.warn("Unable to retrieve datamodel name for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDatamodel annotation.");
+			return null;
+		}
+		return targetDatamodel.value();
+	}
+	
+	/**
+	 * For classes with both annotations TargetDatabaseId and TargetDatamodelName
+	 * @return the datamodelId
+	 */
+	public static String getTargetDatamodelId(Class<?> persistableClass) {
+		String databaseId = getTargetDatabaseId(persistableClass);
+		if (databaseId==null) return null;
+		return getTargetDatamodelId(persistableClass, databaseId);
+	}
+	
+	/**
+	 * For classes with the annotation TargetDatamodelName
+	 * @param databaseId
+	 * @return the datamodelId
+	 */
+	public static String getTargetDatamodelId(Class<?> persistableClass, String databaseId) {
+		String datamodelName = getTargetDatamodelName(persistableClass);
+		if (datamodelName==null) return null;
+		return databaseId + "/" + datamodelName;
+	}
+	
 	/* *********************************************************************
 	 * *** PERSISTING METHODS
 	 * ********************************************************************* */
-		/**
-		 * Persist a Object object to an SDB store as RDF
-		 * @param persistableObj the object implementing Persistable_legacy interface
-		 * @param model the Jena model into which to persist
-		 * @param persistMembers if true, all Object members (and their members, recursively)
-		 * will be persisted.  If false, they will not.
-		 */
-		public void persist(Object persistableObj, Model model) {
-			//log.info("Persisting:\n" + JenabeanWriter.toString(persistableObj));
-			persist(persistableObj, model, true);
-		}
-		
-		/**
-		 * If the object has a TargetDatamodel annotation, persist it to the
-		 * indicated system datamodel.  If not, do nothing.
-		 * @version 2
-		 */
-		public void persist(String databaseId, Object persistableObj) {
-			String targetDatamodelName = getTargetDatamodelName(persistableObj);
-			if (targetDatamodelName==null) {
-				log.warn("Unable to persist object " + persistableObj + ".  It has no TargetDatamodel annotation.");
-				return;
-			}
-//			log.info("Persisting to datamodel of role:" + targetDatamodelRoleId + "\npersistableObj=" + JenabeanWriter.toString(persistableObj));
-//			Model targetModel = getSystemModel(targetDatamodelRoleId);
-			Model targetModel = getModel(databaseId + "/" + targetDatamodelName);
-			persist(persistableObj, targetModel);
-		}
-	
-		/**
-		 * Read the annotation for the provided object, to get the name of the datamodel 
-		 * to which it should be persisted
-		 * @param persistableObject
-		 * @return
-		 * @version 2
-		 */
-		public static String getTargetDatamodelName(Object persistableObject) {
-			Class<? extends Object> persistableClass = persistableObject.getClass();
-			TargetDatamodel targetDatamodel = persistableClass.getAnnotation(TargetDatamodel.class);
-			if (targetDatamodel == null) {
-				log.warn("Unable to retrieve datamodel name for " + persistableObject + ".  Perhaps the class definition for class " + persistableClass.getCanonicalName() + " needs to have the TargetDatamodel annotation.");
-				return null;
-			}
-			return targetDatamodel.value();
-		}
-		
-		/**
-		 * Get the datamodel to which the provided class is supposed to be persisted
-		 * @param persistableClass
-		 * @return
-		 * @version 2
-		 */
-		public Datamodel getTargetDatamodel(String databaseId, Class<?> persistableClass) {
-			String datamodelName = getTargetDatamodelName(persistableClass);
-//			log.info("getTargetDatamodelName() = " + datamodelId);
-			return getSystemDatamodel(databaseId + "/" + datamodelName);
-		}
-		
-		/**
-		 * Get the name of the datamodel to which the provided class is supposed to be persisted
-		 * @param persistableClass
-		 * @return
-		 */
-		public static String getTargetDatamodelName(Class<?> persistableClass) {
-			TargetDatamodel targetDatamodel = persistableClass.getAnnotation(TargetDatamodel.class);
-			if (targetDatamodel == null) {
-				log.warn("Unable to retrieve system datamodel role id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDatamodel annotation.");
-				return null;
-			}
-			return targetDatamodel.value();
-		}
-		
-//		public static String getCacheDatamodelRoleId(Object persistableObject) {
-//			Class<? extends Object> persistableClass = persistableObject.getClass();
-//			TargetDatamodel targetDatamodel = persistableClass.getAnnotation(TargetDatamodel.class);
-//			if (targetDatamodel == null) {
-//				log.warn("Unable to retrieve system datamodel role id for " + persistableObject + ".  Perhaps the class definition for class " + persistableClass.getCanonicalName() + " needs to have the TargetDatamodel annotation.");
-//				return null;
-//			}
-//			return targetDatamodel.value();
-//		}
-//		
-//		public static String getCacheDatamodelRoleId(Class<?> persistableClass) {
-//			TargetCache targetCache = persistableClass.getAnnotation(TargetCache.class);
-//			if (targetCache == null) {
-//				log.warn("Unable to retrieve cache datamodel role id for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetCache annotation.");
-//				return null;
-//			}
-//			return targetDatamodel.value();
-//		}
 		
 	/**
 	 * Persist a Object object to an SDB store as RDF
@@ -1030,6 +998,22 @@ public class Persister {
 		//log.info("Saved");
 	}
 
+	/**
+	 * Persist a Object object to an SDB store as RDF
+	 * @param persistableObj the object implementing Persistable_legacy interface
+	 * @param model the Jena model into which to persist
+	 * @param persistMembers if true, all Object members (and their members, recursively)
+	 * will be persisted.  If false, they will not.
+	 */
+	public void persist(Object persistableObj, Model model) {
+		//log.info("Persisting:\n" + JenabeanWriter.toString(persistableObj));
+		persist(persistableObj, model, true);
+	}
+	
+	public void persist(Object persistableObj, String datamodelId) {
+		persist(persistableObj, getModel(datamodelId));
+	}
+	
 	/**
 	 * Save the Object to a file using "RDF/XML" format
 	 * @param persistableObj
@@ -1073,20 +1057,20 @@ public class Persister {
 	/* *********************************************************************
 	 * *** RECONSTITUTING METHODS
 	 * ********************************************************************* */
-	/**
-	 * reconstitue the object of the specified class, from the default TargetDatamodel within
-	 * the specified database
-	 * If not annotation is present, return null
-	 */
-	public <T> T reconstitute(String targetDatabaseId, Class<T> persistedClass, String objectId, boolean reconstituteMembers) {
-		String targetDatamodelName = getTargetDatamodelName(persistedClass);
-		if (targetDatamodelName==null) {
-			log.warn("Unable to reconsitute object of ID " + objectId + ".  Its class " + persistedClass + " has no TargetDatamodel annotation.");
-			return null;
-		}
-		Model targetModel = getModel(targetDatabaseId + "/" + targetDatamodelName);
-		return Persister.reconstitute(persistedClass, objectId, targetModel, reconstituteMembers);
-	}
+//	/**
+//	 * reconstitue the object of the specified class, from the specified datamodel
+//	 * If not annotation is present, return null
+//	 */
+//	public <T> T reconstitute(String datamodelId, Class<T> persistedClass, String objectId, boolean reconstituteMembers) {
+//		String targetDatamodelName = getTargetDatamodelName(persistedClass);
+//		if (targetDatamodelName==null) {
+//			log.warn("Unable to reconsitute object of ID " + objectId + ".  Its class " + persistedClass + " has no TargetDatamodel annotation.");
+//			return null;
+//		}
+//		Model targetModel = getModel(targetDatabaseId + "/" + targetDatamodelName);
+//		Model targetModel = getModel(datamodelId);
+//		return Persister.reconstitute(persistedClass, objectId, targetModel, reconstituteMembers);
+//	}
 	
 	/**
 	 * tell whether the Jenabean exists
@@ -1102,7 +1086,7 @@ public class Persister {
 	}
 	
 	/**
-	 * Reconstitute an object from Jena OntModel
+	 * Reconstitute an object from Jena Model
 	 * @param clazz the class of the object to reconstitute
 	 * @param objectId the ID or relative URI of the object to reconstitute
 	 * @param model which contains the object
@@ -1130,6 +1114,48 @@ public class Persister {
 			log.error("Error reconstituting object of class " + clazz + " with ID of " + objectId, e);
 		}
 		return reconstitutedObj;
+	}
+	
+	/**
+	 * Reconstitute an object from Jena Model
+	 * @param clazz the class of the object to reconstitute
+	 * @param objectId the ID or relative URI of the object to reconstitute
+	 * @param datamodelId which contains the object
+	 * @param reconstituteMembers if true, do deep reconstitute 
+	 * @return
+	 */
+	public <T> T reconstitute(Class<T> clazz, String objectId, String datamodelId, boolean reconstituteMembers) {
+		return reconstitute(clazz, objectId, getModel(datamodelId), reconstituteMembers);
+	}
+	
+	/**
+	 * Reconstitute an object from its target Jena model.  Thsi only works when the class
+	 * specifies both TargetDatabaseId and TargetDatamodelName annotations.
+	 * @param <T>
+	 * @param clazz
+	 * @param objectId
+	 * @param model
+	 * @param reconstituteMembers
+	 * @return
+	 */
+	public <T> T reconstitute(Class<T> persistableClass, String objectId, boolean reconstituteMembers) {
+		String datamodelId = getTargetDatamodelId(persistableClass);
+		return reconstitute(persistableClass, objectId, datamodelId, reconstituteMembers);
+	}
+	
+	/**
+	 * Retrieve a Collection of jenabeans from the appropriate system datamodel,
+	 * as specified in the TargetDatabase and TargetDatamodel annotations of the persistableClass
+	 * @param <T>
+	 * @param persistableClass the class to reconstitute
+	 * @return a Collection of objects of that class, or null if the class does not have a 
+	 * TargetDatamodel defined
+	 * 
+	 * @version 2
+	 */
+	public <T> Collection<T> reconstituteAll(Class<T> persistableClass) {
+		String databaseId = getTargetDatabaseId(persistableClass);
+		return reconstituteAll(databaseId, persistableClass);
 	}
 	
 	/**
@@ -1266,22 +1292,23 @@ public class Persister {
 		return successDeleting;
 	}
 	
-	/**
-	 * Delete the Resource from the database, plus all references to it
-	 * 
-	 */
-	public void remove(String databaseId, Object objectToDelete) {
-		String targetDatamodelName = getTargetDatamodelName(objectToDelete);
-		if (targetDatamodelName==null) {
-			log.warn("Unable to delete object " + objectToDelete + ".  Its class has no TargetDatamodel annotation.");
-			return;
-		}
-		Model model = getModel(databaseId + "/" + targetDatamodelName);
-		model.begin();
-		Bean2RDF deleter = new Bean2RDF(model);
-		deleter.delete(objectToDelete);
-		model.commit();
-	}
+//	/**
+//	 * Delete the Resource from the database, plus all references to it
+//	 * 
+//	 */
+//	public void remove(String datamodelId, Object objectToDelete) {
+//		String targetDatamodelName = getTargetDatamodelName(objectToDelete);
+//		if (targetDatamodelName==null) {
+//			log.warn("Unable to delete object " + objectToDelete + ".  Its class has no TargetDatamodel annotation.");
+//			return;
+//		}
+//		Model model = getModel(databaseId + "/" + targetDatamodelName);
+//		remove(objectToDelete, model);
+//		model.begin();
+//		Bean2RDF deleter = new Bean2RDF(model);
+//		deleter.delete(objectToDelete);
+//		model.commit();
+//	}
 	
 	/**
 	 * Delete the Resource from the model, plus all references to it
@@ -1296,6 +1323,16 @@ public class Persister {
 		deleter.delete(objectToDelete);
 		model.commit();
 		log.info("After delete: model has " + model.size() + " statements.");
+	}
+	
+	/**
+	 * Delete the Resource from the model, plus all references to it
+	 * 
+	 * @param objectToDelete the object to be removed
+	 * @param modelId the ID of the datamodelJena Model containing the object to remove
+	 */
+	public void remove(Object objectToDelete, String datamodelId) {
+		remove(objectToDelete, getModel(datamodelId));
 	}
 
 	/* *********************************************************************

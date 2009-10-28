@@ -4,14 +4,14 @@ import java.net.URI;
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.AJenabean;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 
 import thewebsemantic.Namespace;
 
-@TargetDatamodel(Persister.DATAMODEL_ARCS_CACHE)
+@TargetDatamodelName(Persister.DATAMODEL_ARCS_CACHE)
 @Namespace(RDF.INQLE)
 public class SubjectArcsCache extends AJenabean {
 

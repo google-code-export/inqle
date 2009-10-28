@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.inqle.data.rdf.RDF;
 import thewebsemantic.Namespace;
 
@@ -16,7 +17,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Jul 2, 2008
  */
-@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
+@TargetDatamodelName(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class PurposefulDatamodel extends DatabaseBackedDatamodel {
 

@@ -41,6 +41,7 @@ public class ArcLister {
 	/**
 	 * Get a random collection of filtered valued Arcs for the provided 
 	 * of datamodel & subject class & depth.
+	 * @param cacheDatabaseId the ID of the database in which to store the cache
 	 * @param datamodelId
 	 * @param subjectClassUri
 	 * @param depth
@@ -49,8 +50,8 @@ public class ArcLister {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<Arc> getRandomFilteredValuedArcs(String datamodelId, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
-		Collection<Arc> availableArcs = getFilteredValuedArcs(datamodelId, subjectClassUri, depth);
+	public static Collection<Arc> getRandomFilteredValuedArcs(String cacheDatabaseId, String datamodelId, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
+		Collection<Arc> availableArcs = getFilteredValuedArcs(cacheDatabaseId, datamodelId, subjectClassUri, depth);
 		if (availableArcs == null) return null;
 		
 		Collection<Arc> randomArcs = (Collection<Arc>)RandomListChooser.chooseRandomItemsAdditively(availableArcs, arcsToExclude, size);
@@ -60,7 +61,8 @@ public class ArcLister {
 	/**
 	 * Get a random collection of filtered valued Arcs for the provided 
 	 * collection of datamodels & subject class & depth.
-	 * @param datamodelId
+	 * @param cacheDatabaseId the ID of the database in which to store the cache
+	 * @param datamodelIds the collection of datamodels to poll for arcs
 	 * @param subjectClassUri
 	 * @param depth
 	 * @param size - the size of the collection to return
@@ -68,8 +70,8 @@ public class ArcLister {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<Arc> getRandomFilteredValuedArcs(Collection<String> datamodelIds, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
-		Collection<Arc> availableArcs = getFilteredValuedArcs(datamodelIds, subjectClassUri, depth);
+	public static Collection<Arc> getRandomFilteredValuedArcs(String cacheDatabaseId, Collection<String> datamodelIds, String subjectClassUri, int depth, int size, Collection<Arc> arcsToExclude) {
+		Collection<Arc> availableArcs = getFilteredValuedArcs(cacheDatabaseId, datamodelIds, subjectClassUri, depth);
 		if (availableArcs == null) return null;
 		
 		Collection<Arc> randomArcs = (Collection<Arc>)RandomListChooser.chooseRandomItemsAdditively(availableArcs, arcsToExclude, size);
@@ -81,17 +83,18 @@ public class ArcLister {
 	 * & subject class & depth. Filtered valued arcs are arcs, excluding those that
 	 * use common predicates like rdf:type, and ending with a literal value.
 	 * First try to retrieve from cache.  If not present, query the result and cache it
-	 * @param datamodelId
+	 * @param cacheDatabaseId the ID of the database to store the arcs in
+	 * @param sourceDatamodelId the ID of the datamodel from which to pull arcs
 	 * @param subjectClassUri
 	 * @return
 	 */
-	public static Collection<Arc> getFilteredValuedArcs(String datamodelId, String subjectClassUri, int depth) {
-		Collection<Arc> arcs = getArcsFromCache(datamodelId, subjectClassUri, depth, FILTERED_VALUED_ARCS);
+	public static Collection<Arc> getFilteredValuedArcs(String cacheDatabaseId, String sourceDatamodelId, String subjectClassUri, int depth) {
+		Collection<Arc> arcs = getArcsFromCache(cacheDatabaseId, sourceDatamodelId, subjectClassUri, depth, FILTERED_VALUED_ARCS);
 		if (arcs != null) return arcs;
 		
 		//not in cache: query then cache it
-		arcs = queryGetFilteredValuedArcs(datamodelId, subjectClassUri, depth);
-		cacheArcs(datamodelId, subjectClassUri, depth, FILTERED_VALUED_ARCS, arcs);
+		arcs = queryGetFilteredValuedArcs(sourceDatamodelId, subjectClassUri, depth);
+		cacheArcs(cacheDatabaseId, sourceDatamodelId, subjectClassUri, depth, FILTERED_VALUED_ARCS, arcs);
 //		log.info("Retrieved arcs from cache:" + arcs);
 		return arcs;
 	}
@@ -102,14 +105,15 @@ public class ArcLister {
 	 * Filtered valued arcs are arcs, excluding those that
 	 * use common predicates like rdf:type, and ending with a literal value.
 	 * First try to retrieve from cache.  If not present, query the result and cache it
-	 * @param datamodelId
+	 * @param cacheDatabaseId the ID of the database into which to store the cache
+	 * @param datamodelIds the collection of datamodels, to poll for arcs
 	 * @param subjectClassUri
 	 * @return
 	 */
-	public static Collection<Arc> getFilteredValuedArcs(Collection<String> datamodelIds, String subjectClassUri, int depth) {
+	public static Collection<Arc> getFilteredValuedArcs(String cacheDatabaseId, Collection<String> datamodelIds, String subjectClassUri, int depth) {
 		Collection<Arc> masterCollection = new ArrayList<Arc>();
 		for (String datamodelId: datamodelIds) {
-			masterCollection.addAll(getFilteredValuedArcs(datamodelId, subjectClassUri, depth));
+			masterCollection.addAll(getFilteredValuedArcs(cacheDatabaseId, datamodelId, subjectClassUri, depth));
 		}
 		return masterCollection;
 	}
@@ -369,37 +373,49 @@ public class ArcLister {
 
 	/**
 	 * Store the collection of Arcs in the appropriate cache
-	 * @param datamodelId
+	 * @param cacheDatabaseId the ID of the database where the cache should be stored
+	 * @param sourceDatamodelId the ID of the datamodel to poll for arcs
 	 * @param subjectClassUri
 	 * @param arcs
 	 */
-	public static void cacheArcs(String datamodelId, String subjectClassUri, int depth, String type, Collection<Arc> arcs) {
+	public static void cacheArcs(String cacheDatabaseId, String sourceDatamodelId, String subjectClassUri, int depth, String type, Collection<Arc> arcs) {
 		//first retrieve the appropriate arc
-		String arcCacheId = getArcCacheId(datamodelId, subjectClassUri, depth, type);
+		String arcCacheId = getArcCacheId(sourceDatamodelId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
 		SubjectArcsCache arcsCache = null;
+		String targetDatamodelId = Persister.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
 		try {
-			arcsCache = (SubjectArcsCache)persister.reconstitute(SubjectArcsCache.class, arcCacheId, true);
+			arcsCache = persister.reconstitute(SubjectArcsCache.class, arcCacheId, targetDatamodelId, true);
 		} catch (Exception e) {
 			//unable to reconstitute.  Assume this cache object has not been created
 		}
 		if (arcsCache == null) {
 			arcsCache = new SubjectArcsCache();
 			arcsCache.setId(arcCacheId);
-			arcsCache.setDatamodelId(datamodelId);
+			arcsCache.setDatamodelId(sourceDatamodelId);
 			arcsCache.setSubjectClass(URI.create(subjectClassUri));
 			arcsCache.setDepth(depth);
 			arcsCache.setType(FILTERED_VALUED_ARCS);
 		}
 		arcsCache.setArcs(arcs);
-		log.info("Caching list of " + arcs.size() + " arcs for datamodelId=" + datamodelId + "; subjectClassUri=" + subjectClassUri + ".");
-		persister.persist(arcsCache);
+		log.info("Caching list of " + arcs.size() + " arcs for datamodelId=" + sourceDatamodelId + "; subjectClassUri=" + subjectClassUri + ".");
+		persister.persist(arcsCache, targetDatamodelId);
 	}
 
-	public static Collection<Arc> getArcsFromCache(String datamodelId, String subjectClassUri, int depth, String type) {
-		String arcCacheId = getArcCacheId(datamodelId, subjectClassUri, depth, type);
+	/**
+	 * get Arcs from cache
+	 * @param cacheDatabaseId the ID of the database to contain the cache
+	 * @param sourceDatamodelId the ID of the datamodel to poll for Arcs
+	 * @param subjectClassUri the URI of the subject class, originating the Arc
+	 * @param depth
+	 * @param type
+	 * @return
+	 */
+	public static Collection<Arc> getArcsFromCache(String cacheDatabaseId, String sourceDatamodelId, String subjectClassUri, int depth, String type) {
+		String arcCacheId = getArcCacheId(sourceDatamodelId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
-		SubjectArcsCache arcsCache = (SubjectArcsCache)persister.reconstitute(SubjectArcsCache.class, arcCacheId, true);
+		String targetDatamodelId = Persister.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
+		SubjectArcsCache arcsCache = persister.reconstitute(SubjectArcsCache.class, arcCacheId, targetDatamodelId, true);
 		if (arcsCache == null) return null;
 //		log.info("Retrieved ArcsCache from cache:" + JenabeanWriter.toString(arcsCache));
 		log.info("Retrieved Arcs from cache");
@@ -428,10 +444,16 @@ public class ArcLister {
 	@SuppressWarnings("unchecked")
 	public static void invalidateCache(String datamodelId) {
 		Persister persister = Persister.getInstance();
-		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectArcsCache.class);
-		Collection<SubjectArcsCache> arcCacheObjectsToRemove = (Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(targetDatamodel, SubjectArcsCache.class, RDF.INQLE + "datamodelId", datamodelId);
+//		String databaseId = Persister.getDatabaseIdFromDatamodelId(datamodelId);
+//		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectArcsCache.class);
+		Collection<SubjectArcsCache> arcCacheObjectsToRemove = 
+			(Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(
+					datamodelId, 
+					SubjectArcsCache.class, 
+					RDF.INQLE + "datamodelId", 
+					datamodelId);
 		for (SubjectArcsCache arcCacheObject: arcCacheObjectsToRemove) {
-			persister.remove(arcCacheObject);
+			Persister.remove(arcCacheObject, persister.getModel(datamodelId));
 		}
 	}
 }

@@ -32,15 +32,17 @@ import com.hp.hpl.jena.sdb.Store;
  * Aug 7, 2007
  * 
  * TODO consider dynamic generation of SPARQL, through adding "RDF step objects"
- * TODO consider rename to SDBQueryCirteria, implementing IQueryCriteria interface.
  * TODO consider add a QueryCriteriaFactory, which creates appropriate QueryCriteria implementation
+ * 
+ * @version 0.5
  */
 public class QueryCriteria {
 
 	private Store store;
 	
 //	private List<Model> models = new ArrayList<Model>();
-	private List<Datamodel> datamodels = new ArrayList<Datamodel>();
+//	private List<Datamodel> datamodels = new ArrayList<Datamodel>();
+	private List<String> datamodelIds = new ArrayList<String>();
 	private DataSource dataSource = null;
 	private String query = "";
 	private IndexLARQ textIndex = null;
@@ -65,26 +67,28 @@ public class QueryCriteria {
 	 * given the ID of the Datamodel
 	 * @param datamodelUri
 	 */
-	public void addDatamodel(String namedModelId) {
+	public void addDatamodel(String datamodelId) {
 		Persister persister = Persister.getInstance();
-		Datamodel namedModel = (Datamodel)persister.getDatamodel(namedModelId);
-		addDatamodel(namedModel);
+//		Datamodel namedModel = (Datamodel)persister.getDatamodel(namedModelId);
+//		addDatamodel(namedModel);
+		datamodelIds.add(datamodelId);
+		Model model = persister.getModel(datamodelId);
+		log.info("In QueryCriteria, for datamodel: " + datamodelId + ", adding model of size " + model.size());
+		addModel(datamodelId, model);
 	}
 	
-	/**
-	 * Add a Datamodel to the list of models to query
-	 * @param aModel
-	 */
-	public void addDatamodel(Datamodel datamodel) {
-		log.trace("QueryCriteria.addModel(" + datamodel + ")");
-		Persister persister = Persister.getInstance();
-		datamodels.add(datamodel);
-		Model model = persister.getModel(datamodel);
-		log.info("In QueryCriteria, for datamodel: " + datamodel.getId() + ", adding model of size " + model.size());
-//		models.add(model);
-//		dataSource.addDatamodel(namedModel.getId(), model);
-		addModel(datamodel.getId(), model);
-	}
+//	/**
+//	 * Add a Datamodel to the list of models to query
+//	 * @param aModel
+//	 */
+//	public void addDatamodel(Datamodel datamodel) {
+//		log.trace("QueryCriteria.addModel(" + datamodel + ")");
+//		Persister persister = Persister.getInstance();
+//		datamodels.add(datamodel);
+//		Model model = persister.getModel(datamodel);
+//		log.info("In QueryCriteria, for datamodel: " + datamodel.getId() + ", adding model of size " + model.size());
+//		addModel(datamodel.getId(), model);
+//	}
 	
 	public void addModel(String id, Model model) {
 		if (inferenceRules  != null) {
@@ -106,45 +110,42 @@ public class QueryCriteria {
 	 * @param model
 	 */
 	public void setDefaultModel(Model model) {
-//		models.add(model);
 		dataSource.setDefaultModel(model);
 	}
 	
-	@Deprecated
-	public void setSingleModel(Model model) {
-		this.singleModel = model;
-//		dataSource.addDatamodel(InqleInfo.DEFAULT_NAMED_MODEL_NAME, model);
-	}
+//	@Deprecated
+//	public void setSingleModel(Model model) {
+//		this.singleModel = model;
+//	}
 
 	/**
 	 * Add a List of Datamodel to be queried
 	 * @param namedModelIds
 	 */
-	public void addDatamodelIds(Collection<String> namedModelIds) {
-		if (namedModelIds == null) return;
+	public void addDatamodelIds(Collection<String> datamodelIds) {
+		if (datamodelIds == null) return;
 		Persister persister = Persister.getInstance();
-		for (String namedModelId: namedModelIds) {
-			Datamodel datamodel = persister.getDatamodel(namedModelId);
-			addDatamodel(datamodel);
+		for (String datamodelId: datamodelIds) {
+			addDatamodel(datamodelId);
 		}
 	}
 	
-	/**
-	 * Add a List of AModels to query
-	 * @param addDatamodels
-	 */
-	public void addDatamodels(List<Datamodel> addDatamodels) {
-		for (Datamodel aDatamodel: addDatamodels) {
-			addDatamodel(aDatamodel);
-		}
-	}
+//	/**
+//	 * Add a List of AModels to query
+//	 * @param addDatamodels
+//	 */
+//	public void addDatamodels(List<Datamodel> addDatamodels) {
+//		for (Datamodel aDatamodel: addDatamodels) {
+//			addDatamodel(aDatamodel);
+//		}
+//	}
 	
 	/**
 	 * Get the list of AModels which have been added to this
 	 * @return
 	 */
-	public List<Datamodel> getDatamodels() {
-		return datamodels;
+	public List<String> getDatamodelIds() {
+		return datamodelIds;
 	}
 	
 	/**

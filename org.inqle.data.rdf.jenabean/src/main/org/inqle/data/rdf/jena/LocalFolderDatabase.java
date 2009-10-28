@@ -5,6 +5,7 @@ package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
@@ -14,7 +15,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Jul 2, 2008
  */
-@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
+@TargetDatamodelName(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class LocalFolderDatabase extends UniqueJenabean implements IDatabase {
 	

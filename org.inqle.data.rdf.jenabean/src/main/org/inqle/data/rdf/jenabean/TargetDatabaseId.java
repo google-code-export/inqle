@@ -1,4 +1,4 @@
-package org.inqle.data.rdf.jena;
+package org.inqle.data.rdf.jenabean;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -17,8 +17,6 @@ import java.lang.annotation.ElementType;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TargetDatamodel {
-
+public @interface TargetDatabaseId {
 	String value();
-
 }

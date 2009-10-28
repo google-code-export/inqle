@@ -1,7 +1,6 @@
 package org.inqle.data.rdf.jenabean;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
 
 import thewebsemantic.Namespace;
@@ -15,7 +14,7 @@ import thewebsemantic.Namespace;
  * TODO replace UniqueJenabean w/ a base class which does not have replicate or clone methods or name
  * or description
  */
-@TargetDatamodel(Site.SITE_DATASET_ROLE_ID)
+@TargetDatamodelName(Site.SITE_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class Site extends UniqueJenabean {
 
