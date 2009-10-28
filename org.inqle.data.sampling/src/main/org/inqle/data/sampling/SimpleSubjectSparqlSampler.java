@@ -9,11 +9,11 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 
 import thewebsemantic.Namespace;
 
@@ -38,7 +38,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * 
  * TODO add elements which define how to render the UI elements, for manual execution mode
  */
-@TargetDatamodel(ISampler.SAMPLER_DATASET)
+@TargetDatamodelName(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 
