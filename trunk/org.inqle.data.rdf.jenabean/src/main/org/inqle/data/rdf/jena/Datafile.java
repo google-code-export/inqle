@@ -2,6 +2,7 @@ package org.inqle.data.rdf.jena;
 
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 
 import thewebsemantic.Namespace;
 
@@ -12,7 +13,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Jan 9, 2008
  */
-@TargetDatamodel(Persister.METAREPOSITORY_DATAMODEL)
+@TargetDatamodelName(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class Datafile extends Datamodel {
 

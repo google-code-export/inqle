@@ -3,10 +3,10 @@
  */
 package org.inqle.data.rdf.jena.uri;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
-import org.inqle.data.rdf.jenabean.NamedAndDescribedJenabean;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 
 import thewebsemantic.Namespace;
 
@@ -15,7 +15,8 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * May 31, 2008
  */
-@TargetDatamodel(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
+@TargetDatabaseId(Persister.CORE_DATABASE_ID)
+@TargetDatamodelName(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
 @Namespace(RDF.INQLE)
 public class NamespaceMapping extends GlobalJenabean {
 

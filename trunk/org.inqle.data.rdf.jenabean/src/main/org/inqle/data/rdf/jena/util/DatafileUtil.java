@@ -55,7 +55,7 @@ public class DatafileUtil {
 			} else {
 				Datafile datafile = new Datafile();
 				datafile.setFileUrl(file.getAbsolutePath());
-				queryCriteria.addDatamodel(datafile);
+				queryCriteria.addModel(datafile.getId(), Persister.getModelFromFile(datafile.getFileUrl()));
 			}
 		}
 	}

@@ -4,13 +4,13 @@ import java.net.URI;
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.AJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 
 import thewebsemantic.Namespace;
 
-@TargetDatamodel(Persister.DATAMODEL_SUBJECT_CLASSES_CACHE)
+@TargetDatamodelName(Persister.DATAMODEL_SUBJECT_CLASSES_CACHE)
 @Namespace(RDF.INQLE)
 public class SubjectClassCache extends AJenabean {
 

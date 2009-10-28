@@ -11,8 +11,8 @@ public class QueryCriteriaFactory {
 
 	private static Logger log = Logger.getLogger(QueryCriteriaFactory.class);
 	
-	public static QueryCriteria createQueryCriteriaForDatamodelPurpose(String datamodelPurposeId) {
-		return createQueryCriteriaForDatamodelPurpose(datamodelPurposeId, null);
+	public static QueryCriteria createQueryCriteriaForDatamodelPurpose(String databaseId, String datamodelPurposeId) {
+		return createQueryCriteriaForDatamodelPurpose(databaseId, datamodelPurposeId, null);
 	}
 	
 	/**
@@ -23,7 +23,7 @@ public class QueryCriteriaFactory {
 	 * @param inferenceRules
 	 * @return
 	 */
-	public static QueryCriteria createQueryCriteriaForDatamodelPurpose(String datamodelPurposeId, String inferenceRules) {
+	public static QueryCriteria createQueryCriteriaForDatamodelPurpose(String databaseId, String datamodelPurposeId, String inferenceRules) {
 		QueryCriteria returnQueryCriteria = new QueryCriteria();
 		returnQueryCriteria.setInferenceRules(inferenceRules);
 		Persister persister = Persister.getInstance();
@@ -41,7 +41,7 @@ public class QueryCriteriaFactory {
 //		List<String> datamodelIds = Queryer.selectSimpleList(queryCriteria, "datamodelId");
 		
 		List<String> datamodelIds = new ArrayList<String>();
-		Collection<?> allExternalDatamodels = persister.reconstituteAll(PurposefulDatamodel.class);
+		Collection<?> allExternalDatamodels = persister.reconstituteAll(databaseId, PurposefulDatamodel.class);
 		if (allExternalDatamodels == null || allExternalDatamodels.size()==0) {
 			return returnQueryCriteria;
 		}
