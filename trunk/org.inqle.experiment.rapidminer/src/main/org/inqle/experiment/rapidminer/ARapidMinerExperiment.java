@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.experiment.rapidminer.util.RapidMinerProcessCreator;

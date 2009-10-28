@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.experiment.rapidminer.util.RapidMinerProcessCreator;
 
@@ -29,7 +29,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * July 30, 2009
  */
-@TargetDatamodel(IRapidMinerExperiment.RAPID_MINER_EXPERIMENTS_DATAMODEL)
+@TargetDatamodelName(IRapidMinerExperiment.RAPID_MINER_EXPERIMENTS_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class ClassificationRegressionCrossValidationExperiment extends ARapidMinerExperiment {
 

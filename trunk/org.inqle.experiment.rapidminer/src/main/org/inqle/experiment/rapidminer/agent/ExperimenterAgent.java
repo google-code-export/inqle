@@ -7,9 +7,9 @@ import org.inqle.agent.AAgent;
 import org.inqle.agent.IAgent;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
@@ -20,7 +20,7 @@ import org.inqle.experiment.rapidminer.RapidMinerExperimentLister;
 
 import thewebsemantic.Namespace;
 
-@TargetDatamodel(IAgent.AGENT_DATASET)
+@TargetDatamodelName(IAgent.AGENT_DATASET)
 @Namespace(RDF.INQLE)
 public class ExperimenterAgent extends AAgent {
 
