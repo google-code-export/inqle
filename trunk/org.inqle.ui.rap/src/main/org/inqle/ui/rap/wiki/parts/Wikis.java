@@ -36,7 +36,7 @@ public class Wikis extends PartType {
 	
 	public void initChildren() {
 		Persister persister = Persister.getInstance();
-		List<PurposefulDatamodel> wikiDatamodels = persister.listUserDatamodelsOfPurpose(DATAMODEL_PURPOSE_WIKI);
+		List<PurposefulDatamodel> wikiDatamodels = persister.listPurposefulDatamodelsOfPurpose(DATAMODEL_PURPOSE_WIKI);
 		for (PurposefulDatamodel datamodel: wikiDatamodels) {
 			WikiPart wikiPart = new WikiPart(datamodel);
 			wikiPart.setParent(this);

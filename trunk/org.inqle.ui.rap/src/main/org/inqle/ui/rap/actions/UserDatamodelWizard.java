@@ -259,7 +259,7 @@ public class UserDatamodelWizard extends Wizard {
 		
 		Persister persister = Persister.getInstance();
 		
-		if (mode != DatamodelWizardAction.MODE_EDIT && persister.userDatamodelExists(datamodel.getId())) {
+		if (mode != DatamodelWizardAction.MODE_EDIT && persister.datamodelExists(datamodel.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Datamodel ID already exists", 
 					"This database already has a datamodel with ID '" + datamodel.getId() + "'.\nPlease choose a different ID.");
 			return false;

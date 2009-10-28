@@ -59,7 +59,7 @@ public abstract class BeanWizard extends DynaWizard {
 		//focus away from current item on current page, ensuring that databinding happens
 		getContainer().getCurrentPage().getControl().forceFocus();
 		
-		log.info("PPPPPPPPPPPPPPPPPPPP Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of role: " + Persister.getTargetDatamodelId(getBean()));
+		log.info("PPPPPPPPPPPPPPPPPPPP Persisting:" + JenabeanWriter.toString(getBean()) + "\n...persisting to model of role: " + Persister.getTargetDatamodelName(getBean()));
 		if (saveToModel != null) {
 			persister.persist(getBean(), saveToModel, true);
 		} else {
