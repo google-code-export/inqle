@@ -5,8 +5,10 @@ package org.inqle.ui.wicket;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.guice.GuiceComponentInjector;
+import org.inqle.ui.dao.IAnswersDao;
 import org.inqle.ui.dao.IOptionsDao;
 import org.inqle.ui.dao.IQuestionsDao;
+import org.inqle.ui.dao.MockAnswersDao;
 import org.inqle.ui.dao.MockOptionsDao;
 import org.inqle.ui.dao.MockQuestionDao;
 
@@ -55,6 +57,7 @@ public class InqleApplication extends AntiliaWebApplication {
 			@Override
 			public void configure(Binder binder) {
 				binder.bind(IOptionsDao.class).toInstance(MockOptionsDao.getInstance());
+				binder.bind(IAnswersDao.class).toInstance(MockAnswersDao.getInstance());				
 				binder.bind(IQuestionsDao.class).toInstance(MockQuestionDao.getInstance());
 			}
 		};
