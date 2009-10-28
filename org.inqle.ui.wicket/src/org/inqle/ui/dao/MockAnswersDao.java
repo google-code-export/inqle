@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.inqle.ui.model.IAnswer;
-import org.inqle.ui.model.Option;
 
 import com.antilia.common.dao.impl.ListQuerableUpdatableDao;
 

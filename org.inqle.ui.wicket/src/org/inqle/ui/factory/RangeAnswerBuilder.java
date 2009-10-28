@@ -24,7 +24,7 @@ public class RangeAnswerBuilder implements IUIRenderableBuilder {
 	 */
 	@Override
 	public boolean canHandleAnswer(IUIRenderable renderable) {
-		return (renderable instanceof RangeAnswer);
+		return (renderable instanceof RangeAnswer<?>);
 	}
 
 	/* (non-Javadoc)
