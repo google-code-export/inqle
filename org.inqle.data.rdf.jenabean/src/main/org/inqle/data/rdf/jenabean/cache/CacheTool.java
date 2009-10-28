@@ -8,10 +8,15 @@ public class CacheTool {
 
 	private static Logger log = Logger.getLogger(CacheTool.class);
 	
-	public static void invalidateDataCache(String datamodelId) {
+	/**
+	 * Invalidate cached Arcs and cached subject classes
+	 * @param cacheDatabaseId the ID of the database where the cache is stored
+	 * @param datamodelId the ID of the datamodel from which to draw the cache
+	 */
+	public static void invalidateDataCache(String cacheDatabaseId, String datamodelId) {
 		log.info("IIIIIIIIIIIIIIIIIIII Invalidating cache for datamodel: " + datamodelId);
-		SubjectClassLister.invalidateCache(datamodelId);
-		ArcLister.invalidateCache(datamodelId);
+		SubjectClassLister.invalidateCache(cacheDatabaseId, datamodelId);
+		ArcLister.invalidateCache(cacheDatabaseId, datamodelId);
 	}
 
 }

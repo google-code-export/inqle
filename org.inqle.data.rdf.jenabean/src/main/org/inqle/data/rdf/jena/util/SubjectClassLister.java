@@ -27,13 +27,14 @@ public class SubjectClassLister {
 	 * randomly select a number of values.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
+	 * @param cacheDatabaseId the ID of the database in which the cache is stored
 	 * @param datamodelId the datamodel to query
 	 * @param size the size of the collection to return
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<String> getRandomUncommonSubjectClasses(String datamodelId, int size, Collection<String> subjectClassesToExclude) {
-		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datamodelId);
+	public static Collection<String> getRandomUncommonSubjectClasses(String cacheDatabaseId, String datamodelId, int size, Collection<String> subjectClassesToExclude) {
+		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(cacheDatabaseId, datamodelId);
 		if (availableSubjectClasses == null) return null;
 		
 		Collection<String> randomSubjectClasses = (Collection<String>)RandomListChooser.chooseRandomItemsAdditively(availableSubjectClasses, subjectClassesToExclude, size);
@@ -45,13 +46,14 @@ public class SubjectClassLister {
 	 * randomly select a number of values.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
+	 * @param cacheDatabaseId the ID of the database in which the cache is stored
 	 * @param datamodelId the datamodel to query
 	 * @param size the size of the collection to return
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static Collection<String> getRandomUncommonSubjectClasses(Collection<String> datamodelIds, int size, Collection<String> subjectClassesToExclude) {
-		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(datamodelIds);
+	public static Collection<String> getRandomUncommonSubjectClasses(String cacheDatabaseId, Collection<String> datamodelIds, int size, Collection<String> subjectClassesToExclude) {
+		Collection<String> availableSubjectClasses = getUncommonSubjectClasses(cacheDatabaseId, datamodelIds);
 		if (availableSubjectClasses == null) return null;
 		
 		Collection<String> randomSubjectClasses = (Collection<String>)RandomListChooser.chooseRandomItemsAdditively(availableSubjectClasses, subjectClassesToExclude, size);
@@ -62,17 +64,18 @@ public class SubjectClassLister {
 	 * Get a collection of the URIs of uncommon RDF subject classes.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
+	 * @param cacheDatabaseId the ID of the database in which the cache is stored
 	 * @param datamodelId the datamodel to query
 	 * @return
 	 */
-	public static Collection<String> getUncommonSubjectClasses(String datamodelId) {
+	public static Collection<String> getUncommonSubjectClasses(String cacheDatabaseId, String datamodelId) {
 		Collection<String> subjectClasses = getSubjectClassesFromCache(datamodelId);
 		if (subjectClasses != null) return subjectClasses;
 		
 		//not in cache: query then cache it
 		subjectClasses = queryGetUncommonSubjectClasses(datamodelId);
 		log.info("Queried, got subjectClasses=" + subjectClasses);
-		cacheSubjectClasses(datamodelId, subjectClasses);
+		cacheSubjectClasses(cacheDatabaseId, datamodelId, subjectClasses);
 		return subjectClasses;
 	}
 	
@@ -80,13 +83,14 @@ public class SubjectClassLister {
 	 * Get a collection of the URIs of uncommon RDF subject classes.  Uncommon
 	 * subject classes include any RDFS/OWL class, excluding common ones
 	 * like rdf:Property
+	 * @param cacheDatabaseId the ID of the database in which the cache is stored
 	 * @param datamodelIds the datamodels to query
 	 * @return
 	 */
-	public static List<String> getUncommonSubjectClasses(Collection<String> datamodelIds) {
+	public static List<String> getUncommonSubjectClasses(String cacheDatabaseId, Collection<String> datamodelIds) {
 		List<String> masterCollection = new ArrayList<String>();
 		for (String datamodelId: datamodelIds) {
-			masterCollection.addAll(getUncommonSubjectClasses(datamodelId));
+			masterCollection.addAll(getUncommonSubjectClasses(cacheDatabaseId, datamodelId));
 		}
 		return masterCollection;
 	}
@@ -199,8 +203,15 @@ public class SubjectClassLister {
 		return cacheId;
 	}
 	
-	private static void cacheSubjectClasses(String datamodelId, Collection<String> subjectClasses) {
+	/**
+	 * Store the provided collection containing URIs of the classes to cache
+	 * @param cacheDatabaseId the ID of the database in which to cache
+	 * @param datamodelId the ID of the datamodel from which to draw the cache info
+	 * @param subjectClasses the collection of class URIs to cache
+	 */
+	private static void cacheSubjectClasses(String cacheDatabaseId, String datamodelId, Collection<String> subjectClasses) {
 		String cacheId = getSubjectClassCacheId(datamodelId);
+		String cacheDatamodelId = Persister.getTargetDatamodelId(SubjectClassCache.class, cacheDatabaseId);
 		Persister persister = Persister.getInstance();
 		SubjectClassCache subjectClassCache = null;
 		try {
@@ -222,27 +233,28 @@ public class SubjectClassLister {
 		subjectClassCache.setSubjectClasses(subjectClassURIs);
 		//log.info("Caching list of " + subjectClasses.size() + " subject classes for: datamodelId=" + datamodelId +
 //				"\n" + JenabeanWriter.toString(subjectClassCache));
-		persister.persist(subjectClassCache);
+		persister.persist(subjectClassCache, cacheDatamodelId);
 		
 	}
 	
 	/**
 	 * Remove all SubjectClassCache objects, which have the provided datamodelId
+	 * @param cacheDatabaseId the ID of the database, where the cache is stored
 	 * @param datamodelId
 	 */
 	@SuppressWarnings("unchecked")
-	public static void invalidateCache(String datamodelId) {
+	public static void invalidateCache(String cacheDatabaseId, String datamodelId) {
 		Persister persister = Persister.getInstance();
-		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectClassCache.class);
+		String cacheDatamodelId = Persister.getTargetDatamodelId(SubjectClassCache.class, cacheDatabaseId);
 		Collection<SubjectClassCache> subjectClassCacheObjectsToRemove = 
 			(Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(
-					targetDatamodel, 
+					cacheDatamodelId, 
 					SubjectClassCache.class, 
 					RDF.INQLE + "datamodelId", 
 					datamodelId);
 		log.info("Retrieved these cache objects: " + subjectClassCacheObjectsToRemove);
 		for (SubjectClassCache cacheObject: subjectClassCacheObjectsToRemove) {
-			persister.remove(cacheObject);
+			persister.remove(cacheObject, cacheDatamodelId);
 		}
 	}
 }
