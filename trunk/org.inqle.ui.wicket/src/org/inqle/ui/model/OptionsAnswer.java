@@ -9,7 +9,7 @@ import java.util.List;
  *  
  * @author  Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  */
-public abstract class OptionsAnswer implements IAnswer {
+public abstract class OptionsAnswer extends IdentifiableTranslatable implements IAnswer {
 
 	private static final long serialVersionUID = 1L;
 
