@@ -3,8 +3,8 @@ package org.inqle.data.sampling;
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.TargetDatamodel;
 import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
@@ -26,7 +26,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Feb 29, 2008
  */
-@TargetDatamodel(ISampler.SAMPLER_DATASET)
+@TargetDatamodelName(ISampler.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public abstract class ASampler extends UniqueJenabean implements ISampler {
 
