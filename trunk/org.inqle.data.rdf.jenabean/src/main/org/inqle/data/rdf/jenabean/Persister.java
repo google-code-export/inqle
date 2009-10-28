@@ -1238,59 +1238,51 @@ public class Persister {
 		return true;
 	}
 	
-	/**
-	 * Delete a model and all its statements.
-	 * @return successDeleting true if the SDB store was deleted
-	 * TODO this does not work in TDB
-	 */
-	public boolean deleteModel(Datamodel datamodel) {
-//		//remove all statements and all index info for the Datamodel
-//		Model modelToBeDeleted = getIndexableModel(datamodel);
-//		modelToBeDeleted.removeAll();
-//		//remove the reference to the Datamodel from the metarepository
-		log.info("Removing model: " + datamodel.getUri() + "...");
+//	/**
+//	 * Delete a model and all its statements.
+//	 * @return successDeleting true if the SDB store was deleted
+//	 * TODO this does not work in TDB
+//	 */
+//	public boolean deleteModel(Datamodel datamodel) {
 //		
-//		modelToBeDeleted.close();
-		
-		boolean successDeleting = false;
-		if (datamodel instanceof DatabaseBackedDatamodel) {		
-			
-			//remove the model
-//			SDBConnector connector = new SDBConnector(getConnection(((Datamodel)namedModel).getConnectionId()));
-			DatabaseBackedDatamodel dbDatamodel = (DatabaseBackedDatamodel)datamodel;
-			IDBConnector connector = DBConnectorFactory.getDBConnector(dbDatamodel.getDatabaseId());
-			
-			successDeleting = connector.deleteModel(datamodel.getId());
-			log.info("Success deleting the DB model? " + successDeleting);
-	    connector.close();
-	    
-	    if (successDeleting) {
-	    	//invalidate the cache
-	    	CacheTool.invalidateDataCache(dbDatamodel.getId());
-	    	
-	    	if (cachedModels.containsKey(datamodel.getId())) {
-	    		cachedModels.remove(datamodel.getId());
-	    	}
-	    }
-	    
-	    return successDeleting;
-		} else if (datamodel instanceof Datafile) {
-			Model modelToDelete = getModel(datamodel);
-			modelToDelete.removeAll();
-//			DonohueUtil.removeAllStatements(modelToDelete, (Resource)null, (Property)null, (RDFNode)null);
-			modelToDelete.close();
-			//delete the file
-			String filePath = FileUtils.toFilename(((Datafile)datamodel).getFileUrl());
-			File fileToDelete = new File(filePath);
-			successDeleting = fileToDelete.delete();
-		}
-		if (successDeleting) {
-			Model metarepositoryModel = getMetarepositoryModel(datamodel.getId());
-			Persister.remove(datamodel, metarepositoryModel);
-//			metarepositoryModel.close();
-		}
-		return successDeleting;
-	}
+//		boolean successDeleting = false;
+//		if (datamodel instanceof DatabaseBackedDatamodel) {		
+//			
+//			//remove the model
+//			DatabaseBackedDatamodel dbDatamodel = (DatabaseBackedDatamodel)datamodel;
+//			IDBConnector connector = DBConnectorFactory.getDBConnector(dbDatamodel.getDatabaseId());
+//			
+//			successDeleting = connector.deleteModel(datamodel.getId());
+//			log.info("Success deleting the DB model? " + successDeleting);
+//	    connector.close();
+//	    
+//	    if (successDeleting) {
+//	    	//invalidate the cache
+//	    	CacheTool.invalidateDataCache(dbDatamodel.getId());
+//	    	
+//	    	if (cachedModels.containsKey(datamodel.getId())) {
+//	    		cachedModels.remove(datamodel.getId());
+//	    	}
+//	    }
+//	    
+//	    return successDeleting;
+//		} else if (datamodel instanceof Datafile) {
+//			Model modelToDelete = getModel(datamodel);
+//			modelToDelete.removeAll();
+////			DonohueUtil.removeAllStatements(modelToDelete, (Resource)null, (Property)null, (RDFNode)null);
+//			modelToDelete.close();
+//			//delete the file
+//			String filePath = FileUtils.toFilename(((Datafile)datamodel).getFileUrl());
+//			File fileToDelete = new File(filePath);
+//			successDeleting = fileToDelete.delete();
+//		}
+//		if (successDeleting) {
+//			Model metarepositoryModel = getMetarepositoryModel(datamodel.getId());
+//			Persister.remove(datamodel, metarepositoryModel);
+////			metarepositoryModel.close();
+//		}
+//		return successDeleting;
+//	}
 	
 //	/**
 //	 * Delete the Resource from the database, plus all references to it

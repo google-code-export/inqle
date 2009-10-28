@@ -439,169 +439,21 @@ public class ArcLister {
 	
 	/**
 	 * Remove all SubjectArcCache objects, which have the provided datamodelId
-	 * @param datamodelId
+	 * @param cacheDatabaseId the ID of the database where the cache is stored
+	 * @param datamodelId the ID of the datamodel from which to derive the cache info
 	 */
 	@SuppressWarnings("unchecked")
-	public static void invalidateCache(String datamodelId) {
+	public static void invalidateCache(String cacheDatabaseId, String datamodelId) {
 		Persister persister = Persister.getInstance();
-//		String databaseId = Persister.getDatabaseIdFromDatamodelId(datamodelId);
-//		Datamodel targetDatamodel = persister.getTargetDatamodel(SubjectArcsCache.class);
 		Collection<SubjectArcsCache> arcCacheObjectsToRemove = 
 			(Collection<SubjectArcsCache>)Finder.listJenabeansWithStringValue(
 					datamodelId, 
 					SubjectArcsCache.class, 
 					RDF.INQLE + "datamodelId", 
 					datamodelId);
+		String cacheDatamodelId = Persister.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
 		for (SubjectArcsCache arcCacheObject: arcCacheObjectsToRemove) {
-			Persister.remove(arcCacheObject, persister.getModel(datamodelId));
+			persister.remove(arcCacheObject, cacheDatamodelId);
 		}
 	}
 }
-
-///**
-//* Generate a list of randomly selected arcs, which terminate with a Literal value
-//* @param datamodelIdList a list of datamodel IDs to query
-//* @param subjectClassUri the URI of the subject class, from which to walk
-//* @param depth max number of steps to take from the subject
-//* @param numberToSelect number of Arcs to select
-//* @return a list of selected arcs, terminating with a literal value
-//*/
-//public static List<Arc> listFilteredRandomValuedArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
-//String baseSparql = getSparqlSelectFilteredValuedArcs(subjectClassUri, depth);
-//QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datamodelIdList);
-//String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-//log.info("listFilteredRandomValuedArcs() using SPARQL:" + sparql);
-//queryCriteria.setQuery(sparql);
-//
-//return listArcs(queryCriteria);
-//}
-
-
-
-///**
-//* Generate a list of randomly selected arcs
-//* @param datamodelIdList a list of datamodel IDs to query
-//* @param subjectClassUri the URI of the subject class, from which to walk
-//* @param depth max number of steps to take from the subject
-//* @param numberToSelect number of Arcs to select
-//* @return a list of selected arcs
-//*/
-//public static List<Arc> listFilteredRandomArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
-//String baseSparql = getSparqlSelectFilteredArcs(subjectClassUri, depth);
-//QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datamodelIdList);
-//String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-//log.info("listFilteredRandomArcs() using SPARQL:" + sparql);
-//queryCriteria.setQuery(sparql);
-//
-//return listArcs(queryCriteria);
-//}
-
-///**
-//* Generate a list of randomly selected arcs, which terminate with a Literal value
-//* @param datamodelIdList a list of datamodel IDs to query
-//* @param subjectClassUri the URI of the subject class, from which to walk
-//* @param depth max number of steps to take from the subject
-//* @param numberToSelect number of Arcs to select
-//* @return a list of selected arcs, terminating with a literal value
-//*/
-//public static List<Arc> listRandomValuedArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
-//String baseSparql = getSparqlSelectValuedArcs(subjectClassUri, depth);
-//QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datamodelIdList);
-//String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-//log.info("listRandomValuedArcs() using SPARQL:" + sparql);
-//queryCriteria.setQuery(sparql);
-//
-//return listArcs(queryCriteria);
-//}
-
-
-///**
-//* Generate a list of randomly selected arcs
-//* @param datamodelIdList a list of datamodel IDs to query
-//* @param subjectClassUri the URI of the subject class, from which to walk
-//* @param depth max number of steps to take from the subject
-//* @param numberToSelect number of Arcs to select
-//* @return a list of selected arcs
-//*/
-//public static List<Arc> listRandomArcs(Collection<String> datamodelIdList, String subjectClassUri, int depth, int numberToSelect) {
-//String baseSparql = getSparqlSelectArcs(subjectClassUri, depth);
-//QueryCriteria queryCriteria = new QueryCriteria();
-//queryCriteria.addNamedModelIds(datamodelIdList);
-//String sparql = Queryer.decorateSparql(baseSparql, "?pred1", 0, numberToSelect);
-////log.info("Finding random Arcs using SPARQL:" + sparql);
-//queryCriteria.setQuery(sparql);
-//
-//return listArcs(queryCriteria);
-//}
-
-
-///**
-//* Get SPARQL for finding Arc properties of the given resource subject. Select
-//* only Arcs that terminate with a literal value 
-//* This query looks for Arcs with maximum of 3 steps.
-//* @param subjectClassUri
-//* @param depth the number of steps from the subject to traverse
-//* @return
-//*/
-//public static String getSparqlSelectValuedArcs(String subjectClassUri, int depth) {
-//String sparql = "SELECT DISTINCT ";
-//for (int i=1; i<=depth; i++) {
-//	sparql += "?pred" + i + " ";
-//}
-//sparql += "\n{ GRAPH ?anyGraph { \n" +
-//	"?subject a <" + subjectClassUri + "> \n";
-//String statements = "";
-//String nextSubj = "?subject";
-//for (int i=1; i<=depth; i++) {
-//	String thisObj = "?obj" + i;
-//	statements += "\n . " + nextSubj + " ?pred" + i + " " + thisObj;
-//	sparql += ". OPTIONAL { " +
-//			"FILTER( isLiteral(" + thisObj + ") ) " + 
-//			statements + " } \n";
-//	nextSubj = thisObj;
-//}
-//sparql += "} }";
-//return sparql;
-//}
-
-///**
-//* Get SPARQL for finding Arc properties of the given resource subject.  
-//* This query looks for Arcs with maximum of 3 steps.
-//* @param subjectClassUri
-//* @param depth the number of steps from the subject to traverse
-//* @return
-//*/
-//public static String getSparqlSelectValuedArcs2(String subjectClassUri, int depth) {
-//String sparql = "SELECT DISTINCT ";
-//for (int i=1; i<=depth; i++) {
-//	sparql += "?pred" + i + " ";
-//}
-//sparql += "\n{ GRAPH ?anyGraph { \n" +
-//	"?subject a <" + subjectClassUri + "> \n";
-//if (depth >= 1) {
-//	sparql +=	". ?subject ?pred1 ?obj1 \n" +
-//			". { ";
-//}
-//
-//String nextSubj = "?obj1";
-//for (int i=2; i<=depth; i++) {
-//	if (i > 2) {
-//		sparql += " UNION ";
-//	}
-//	String thisObj = "?obj" + i;
-//	sparql += "  { " + nextSubj + " ?pred" + i + " " + thisObj + " \n" +
-//			"  . FILTER( bound(" + nextSubj + ") ) ";
-//	if (i < depth) {
-//		sparql += "  . OPTIONAL { FILTER( isLiteral(" + thisObj + ") ) } \n";
-//	} else {
-//		sparql += "  . FILTER( isLiteral(" + thisObj + ") ) \n";
-//	}
-//	sparql += " } \n";
-//	nextSubj = thisObj;
-//}
-//sparql += "} } }";
-//return sparql;
-//}
