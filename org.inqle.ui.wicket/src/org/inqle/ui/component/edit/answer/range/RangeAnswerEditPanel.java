@@ -6,6 +6,7 @@ package org.inqle.ui.component.edit.answer.range;
 import org.apache.wicket.Component;
 import org.inqle.ui.component.MinimumMaximumValidator;
 import org.inqle.ui.component.edit.BaseEditingPanel;
+import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.model.RangeAnswer;
 
 /**
@@ -17,11 +18,13 @@ public class RangeAnswerEditPanel<T extends Number> extends BaseEditingPanel<Ran
 	private static final long serialVersionUID = 1L;
 
 	private Class<T> formatClass;
+	
+
 	/**
 	 * @param id
 	 */
-	public RangeAnswerEditPanel(String id, RangeAnswer<T> rangeAnswer, Class<T> formatClass) {
-		super(id, rangeAnswer);	
+	public RangeAnswerEditPanel(String id, RangeAnswer<T> rangeAnswer, Class<T> formatClass, IOutcomeHandler<RangeAnswer<T>> handler) {
+		super(id, rangeAnswer, handler);	
 		this.formatClass = formatClass;
 	}
 	
@@ -34,5 +37,4 @@ public class RangeAnswerEditPanel<T extends Number> extends BaseEditingPanel<Ran
 				rangeAnswerEditDetailPanel.getMaximumResponse()));
 		return rangeAnswerEditDetailPanel;
 	}
-
 }

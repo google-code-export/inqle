@@ -11,7 +11,7 @@ import org.inqle.ui.model.SingleChoiceAnswer;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class SingleChoiceBuilder implements IUIRenderableBuilder {
+public class SingleChoiceBuilder implements IRenderableUIBuilder {
 	
 	/**
 	 * Needed to render options!
@@ -37,7 +37,7 @@ public class SingleChoiceBuilder implements IUIRenderableBuilder {
 	 * @see org.inqle.ui.IAnswerUIBuilder#createAdminUserUI(java.lang.String, org.inqle.ui.model.IAnswer)
 	 */
 	@Override
-	public Component createAdminUserUI(String id, IUIRenderable renderable) {		
+	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {		
 		// TODO: create a component that allows to create edit single choices.
 		// this is essentially the same as multiple choices!
 		return null;
@@ -56,5 +56,10 @@ public class SingleChoiceBuilder implements IUIRenderableBuilder {
 	public IUIRenderableBuilderService getRenderableBuilderService() {
 		return renderableBuilderService;
 	}
-
+	
+	@Override
+	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

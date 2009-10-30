@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.inqle.ui.factory.IOutcomeHandler;
 
 import com.antilia.web.button.AbstractButton;
 import com.antilia.web.button.AbstractLink;
@@ -32,12 +33,15 @@ public abstract class BaseEditingPanel<E extends Serializable> extends Panel {
 	
 	private FeedbackPanel feedBack;
 	
+	private IOutcomeHandler<E> handler;
+	
 	/**
 	 * @param id
 	 */
-	public BaseEditingPanel(String id, E bean) {
+	public BaseEditingPanel(String id, E bean, IOutcomeHandler<E> handler) {
 		super(id);
 		this.bean = bean;
+		this.handler = handler;
 		this.form = newFrom("form", bean);		
 		add(this.form);		
 		this.form.add(newSaveButton("save"));
@@ -129,13 +133,14 @@ public abstract class BaseEditingPanel<E extends Serializable> extends Panel {
 	 * @param bean
 	 */
 	protected void onSave(AjaxRequestTarget target, Form<?> form, E bean) {	
+		handler.onSave(target, form, bean);
 		if(target != null) {
-			target.addComponent(getFeedBack());
+			target.addComponent(getFeedBack());			
 		}
 	}
 	
 	protected void onCancel(AjaxRequestTarget target, E bean) {
-		
+		handler.onCancel(target, bean);
 	}
 	
 	/**

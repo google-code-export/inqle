@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.inqle.ui.model.IAnswer;
+import org.inqle.ui.model.IUIRenderable;
 
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
@@ -16,7 +16,7 @@ import org.inqle.ui.model.IAnswer;
  */
 public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderService {
 
-	private List<IUIRenderableBuilder> builders = new ArrayList<IUIRenderableBuilder>();
+	private List<IRenderableUIBuilder> builders = new ArrayList<IRenderableUIBuilder>();
 	
 	
 	public DafaultIUIRenderableBuilderService() {
@@ -29,31 +29,40 @@ public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderS
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.IAnswersBuilderService#createAdminUserUI(org.inqle.ui.model.IAnswer)
 	 */
-	public Component createAdminUserUI(String id,IAnswer answer) {
-		for(IUIRenderableBuilder builder: builders) {
-			if(builder.canHandleAnswer(answer))
-				builder.createAdminUserUI(id,answer);
+	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
+		for(IRenderableUIBuilder builder: builders) {
+			if(builder.canHandleAnswer(renderable))
+				builder.createAdminEditUI(id,renderable, handler);
 		}
-		return new Label(id, "Cannot created UI for type of answer: " + answer.getClass().getName());
+		return new Label(id, "Cannot created UI for type of answer: " + renderable.getClass().getName());
 	}
 
+	@Override
+	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
+		for(IRenderableUIBuilder builder: builders) {
+			if(builder.canHandleAnswer(renderable))
+				builder.createAdminCreateUI(id, renderable, handler);
+		}
+		return new Label(id, "Cannot created UI for type of answer: " + renderable.getClass().getName());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.IAnswersBuilderService#createFinalUserUI(org.inqle.ui.model.IAnswer)
 	 */
-	public Component createFinalUserUI(String id,IAnswer answer) {
-		for(IUIRenderableBuilder builder: builders) {
-			if(builder.canHandleAnswer(answer))
-				builder.createFinalUserUI(id,answer);
+	public Component createFinalUserUI(String id,IUIRenderable renderable) {
+		for(IRenderableUIBuilder builder: builders) {
+			if(builder.canHandleAnswer(renderable))
+				builder.createFinalUserUI(id,renderable);
 		}
-		return new Label(id, "Cannot created UI for type of answer: " + answer.getClass().getName());
+		return new Label(id, "Cannot created UI for type of answer: " + renderable.getClass().getName());
 	}
 	
-	public IUIRenderableBuilderService addBuilder(IUIRenderableBuilder builder) {
+	public IUIRenderableBuilderService addBuilder(IRenderableUIBuilder builder) {
 		builders.add(builder);
 		return this;
 	}
 	
-	public IUIRenderableBuilderService removeBuilder(IUIRenderableBuilder builder) {
+	public IUIRenderableBuilderService removeBuilder(IRenderableUIBuilder builder) {
 		builders.remove(builder);
 		return this;
 	}

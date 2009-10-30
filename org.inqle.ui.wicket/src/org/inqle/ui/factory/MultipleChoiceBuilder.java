@@ -4,6 +4,7 @@
 package org.inqle.ui.factory;
 
 import org.apache.wicket.Component;
+import org.inqle.ui.component.edit.answer.option.OptionsAnswerEditPanel;
 import org.inqle.ui.model.IUIRenderable;
 import org.inqle.ui.model.MultipleChoiceAnswer;
 
@@ -11,7 +12,7 @@ import org.inqle.ui.model.MultipleChoiceAnswer;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class MultipleChoiceBuilder implements IUIRenderableBuilder {
+public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 
 	/**
 	 * Needed to render options!
@@ -37,9 +38,10 @@ public class MultipleChoiceBuilder implements IUIRenderableBuilder {
 	 * @see org.inqle.ui.IAnswerUIBuilder#createAdminUserUI(java.lang.String, org.inqle.ui.model.IAnswer)
 	 */
 	@Override
-	public Component createAdminUserUI(String id, IUIRenderable renderable) {		
-		// TODO: create a component that allows to create edit multiple choices.
-		return null;
+	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {		
+		MultipleChoiceAnswer multipleChoiceAnswer = (MultipleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer); 
+		return answerListPanel;
 	}
 
 	/* (non-Javadoc)
@@ -51,6 +53,12 @@ public class MultipleChoiceBuilder implements IUIRenderableBuilder {
 		return null;
 	}
 
+	@Override
+	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public IUIRenderableBuilderService getRenderableBuilderService() {
 		return renderableBuilderService;
 	}
