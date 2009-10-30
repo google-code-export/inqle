@@ -1,7 +1,7 @@
 	/**
  * 
  */
-package org.inqle.ui.component;
+package org.inqle.ui.component.edit.answer.range;
 
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;

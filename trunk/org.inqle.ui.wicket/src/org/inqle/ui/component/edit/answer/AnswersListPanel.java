@@ -1,12 +1,12 @@
 /**
  * 
  */
-package org.inqle.ui.component;
+package org.inqle.ui.component.edit.answer;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.inqle.ui.dao.IQuestionsDao;
-import org.inqle.ui.model.Question;
+import org.inqle.ui.dao.IAnswersDao;
+import org.inqle.ui.model.IAnswer;
 
 import com.antilia.common.query.IQuery;
 import com.antilia.common.query.Query;
@@ -28,31 +28,31 @@ import com.google.inject.Inject;
  * @author  Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class QuestionsListPanel extends Panel {
+public class AnswersListPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private IQuestionsDao questionsDao;
+	private IAnswersDao dao;
 	
-	private IQuery<Question> query;
+	private IQuery<IAnswer> query;
 	
 	/**
 	 * @param id
 	 */
-	public QuestionsListPanel(String id) {
+	public AnswersListPanel(String id) {
 		super(id);
-		query = new Query<Question>(Question.class);
+		query = new Query<IAnswer>(IAnswer.class);
 		
-		Form<Question> form = new Form<Question>("form");
+		Form<IAnswer> form = new Form<IAnswer>("form");
 		add(form);
-		TableModel<Question> tableModel = new TableModel<Question>(Question.class, "id", "translationKey", "answer") {
+		TableModel<IAnswer> tableModel = new TableModel<IAnswer>(IAnswer.class, "id", "translationKey", "answer") {
 			
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected  IColumnModel<Question> createColumnModel(String expresion) {
-				IColumnModel<Question> incColumnModel = super.createColumnModel(expresion);
+			protected  IColumnModel<IAnswer> createColumnModel(String expresion) {
+				IColumnModel<IAnswer> incColumnModel = super.createColumnModel(expresion);
 				if(expresion.equals("id"))
 					incColumnModel.setWidth(300);
 				else
@@ -60,18 +60,18 @@ public class QuestionsListPanel extends Panel {
 				return incColumnModel;
 			}
 		};
-		Table<Question> optionList = new Table<Question>("optionList", tableModel, questionsDao, query) {
+		Table<IAnswer> optionList = new Table<IAnswer>("optionList", tableModel, dao, query) {
 
 			private static final long serialVersionUID = 1L;
 			
 			@Override
-			public void populateRowMenu(IMenuItemHolder menu, int row, Question bean) {
-				QuestionsListPanel.this.populateRowMenu(menu, row, bean);
+			public void populateRowMenu(IMenuItemHolder menu, int row, IAnswer bean) {
+				AnswersListPanel.this.populateRowMenu(menu, row, bean);
 			}
 			
 			@Override
 			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
-				QuestionsListPanel.this.addMenuItemsBeforeNavigation(factory);
+				AnswersListPanel.this.addMenuItemsBeforeNavigation(factory);
 			}
 			
 			@Override
@@ -103,7 +103,7 @@ public class QuestionsListPanel extends Panel {
 	 * @param row
 	 * @param bean
 	 */
-	protected void populateRowMenu(IMenuItemHolder menu, int row, Question bean) {
+	protected void populateRowMenu(IMenuItemHolder menu, int row, IAnswer bean) {
 		
 	}
 	

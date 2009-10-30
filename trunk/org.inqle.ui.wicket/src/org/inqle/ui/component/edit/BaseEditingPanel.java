@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.inqle.ui.component;
+package org.inqle.ui.component.edit;
 
 import java.io.Serializable;
 
