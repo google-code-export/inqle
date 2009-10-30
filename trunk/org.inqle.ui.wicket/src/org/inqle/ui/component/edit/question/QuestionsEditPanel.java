@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.dao.IQuestionsDao;
+import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.model.Question;
 
 import com.antilia.web.button.AbstractLink;
@@ -28,9 +29,25 @@ import com.google.inject.Inject;
 public class QuestionsEditPanel extends Panel implements IVeilScope {
 
 	private static final long serialVersionUID = 1L;
+		
 	
 	@Inject
 	protected IQuestionsDao questionsDao;
+	
+	private static abstract class Handler implements IOutcomeHandler<Question> {
+		private static final long serialVersionUID = 1L;
+		
+		private QuestionsEditPanel questionsPanel;
+		
+		public Handler(QuestionsEditPanel questionsPanel) {
+			this.questionsPanel = questionsPanel;
+		}
+
+		public QuestionsEditPanel getQuestionsPanel() {
+			return questionsPanel;
+		}
+		
+	}
 
 	private static class EditButton extends AbstractLink {
 		
@@ -60,31 +77,27 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			QuestionEditPanel questionEditPanel = new QuestionEditPanel(QuestionsEditPanel.CONTENT_ID, question) {
-				
+			QuestionEditPanel questionEditPanel = new QuestionEditPanel(QuestionsEditPanel.CONTENT_ID, question,
+			 new Handler(findParent(QuestionsEditPanel.class)) {
 				private static final long serialVersionUID = 1L;
 
-				@Override
-				protected void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
-					super.onSave(target, form, bean);
+				public void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
+					getQuestionsPanel().setContent(getQuestionsPanel().createdListComponent());
+					getQuestionsPanel().questionsDao.update(bean);
+					if(target != null) {
+						target.addComponent(getQuestionsPanel().getContainer());
+					}
+				}
 				
+				public void onCancel(AjaxRequestTarget target, Question bean) {
 					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
 					questionsPanel.setContent(questionsPanel.createdListComponent());
-					questionsPanel.questionsDao.update(bean);
 					if(target != null) {
 						target.addComponent(questionsPanel.getContainer());
 					}
 				}
-				
-				@Override
-				protected void onCancel(AjaxRequestTarget target, Question bean) {
-					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-					questionsPanel.setContent(questionsPanel.createdListComponent());
-					if(target != null) {
-						target.addComponent(questionsPanel.getContainer());
-					}
-				}							    
-			};			
+			}
+			);			
 			QuestionsEditPanel optionsPanel = findParent(QuestionsEditPanel.class);
 			optionsPanel.setContent(questionEditPanel);
 			if(target != null) {
@@ -122,30 +135,27 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			QuestionEditPanel optionEditingPanel = new QuestionEditPanel(QuestionsEditPanel.CONTENT_ID, question) {
-				
+			QuestionEditPanel optionEditingPanel = new QuestionEditPanel(QuestionsEditPanel.CONTENT_ID, question,
+			   new Handler(findParent(QuestionsEditPanel.class)) {
 				private static final long serialVersionUID = 1L;
 
-				@Override
-				protected void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
-					super.onSave(target, form, bean);
-					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-					questionsPanel.questionsDao.add(bean);
-					questionsPanel.setContent(questionsPanel.createdListComponent());
+				public void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
+					getQuestionsPanel().questionsDao.add(bean);
+					getQuestionsPanel().setContent(getQuestionsPanel().createdListComponent());
 					if(target != null) {
-						target.addComponent(questionsPanel.getContainer());
+						target.addComponent(getQuestionsPanel().getContainer());
 					}
 				}
 				
-				@Override
-				protected void onCancel(AjaxRequestTarget target, Question bean) {
+				public void onCancel(AjaxRequestTarget target, Question bean) {
 					QuestionsEditPanel optionsPanel = findParent(QuestionsEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
 				}
-			};			
+			}
+			);			
 			QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
 			questionsPanel.setContent(optionEditingPanel);
 			if(target != null) {

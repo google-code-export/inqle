@@ -5,6 +5,7 @@ package org.inqle.ui.component.edit.answer.option;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.BaseEditingPanel;
+import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.model.Option;
 
 /**
@@ -18,8 +19,8 @@ public class OptionEditPanel extends BaseEditingPanel<Option> {
 	/**
 	 * @param id
 	 */
-	public OptionEditPanel(String id, Option option) {
-		super(id, option);	
+	public OptionEditPanel(String id, Option option, IOutcomeHandler<Option> handler) {
+		super(id, option, handler);	
 	}
 	
 	@Override

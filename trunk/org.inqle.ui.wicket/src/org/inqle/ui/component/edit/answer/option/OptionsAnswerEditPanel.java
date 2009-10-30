@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.dao.IOptionsDao;
+import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.model.Option;
 import org.inqle.ui.model.OptionsAnswer;
 
@@ -61,31 +62,31 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option) {
+			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option,
+				new IOutcomeHandler<Option>() {
 				
-				private static final long serialVersionUID = 1L;
+					private static final long serialVersionUID = 1L;
 
-				@Override
-				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
-					super.onSave(target, form, bean);
-				
-					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-					optionsPanel.setContent(optionsPanel.createdListComponent());
-					optionsPanel.optionsDao.update(bean);
-					if(target != null) {
-						target.addComponent(optionsPanel.getContainer());
+					@Override
+					public void onCancel(AjaxRequestTarget target, Option bean) {
+						OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+						optionsPanel.setContent(optionsPanel.createdListComponent());
+						if(target != null) {
+							target.addComponent(optionsPanel.getContainer());
+						}
+					}
+					
+					@Override
+					public void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
+						OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+						optionsPanel.setContent(optionsPanel.createdListComponent());
+						optionsPanel.optionsDao.update(bean);
+						if(target != null) {
+							target.addComponent(optionsPanel.getContainer());
+						}
 					}
 				}
-				
-				@Override
-				protected void onCancel(AjaxRequestTarget target, Option bean) {
-					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-					optionsPanel.setContent(optionsPanel.createdListComponent());
-					if(target != null) {
-						target.addComponent(optionsPanel.getContainer());
-					}
-				}							    
-			};			
+			);			
 			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 			optionsPanel.setContent(optionEditingPanel);
 			if(target != null) {
@@ -126,14 +127,12 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option) {
-				
-				private static final long serialVersionUID = 1L;
+			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option,
+					new IOutcomeHandler<Option>() {
+						private static final long serialVersionUID = 1L;
 
-				@Override
-				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
-					super.onSave(target, form, bean);
-					optionsAnswer.addOption(this.getBean());					
+				public void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
+					optionsAnswer.addOption(bean);					
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.optionsDao.add(bean);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
@@ -142,15 +141,15 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 					}
 				}
 				
-				@Override
-				protected void onCancel(AjaxRequestTarget target, Option bean) {
+				public void onCancel(AjaxRequestTarget target, Option bean) {
 					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
 				}
-			};			
+			}
+			);			
 			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 			optionsPanel.setContent(optionEditingPanel);
 			if(target != null) {

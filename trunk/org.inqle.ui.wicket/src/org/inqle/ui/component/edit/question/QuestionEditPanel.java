@@ -5,6 +5,7 @@ package org.inqle.ui.component.edit.question;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.BaseEditingPanel;
+import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.model.Question;
 
 /**
@@ -18,8 +19,8 @@ public class QuestionEditPanel extends BaseEditingPanel<Question> {
 	/**
 	 * @param id
 	 */
-	public QuestionEditPanel(String id, Question question) {
-		super(id, question);	
+	public QuestionEditPanel(String id, Question question, IOutcomeHandler<Question> handler) {
+		super(id, question, handler);	
 	}
 	
 	@Override

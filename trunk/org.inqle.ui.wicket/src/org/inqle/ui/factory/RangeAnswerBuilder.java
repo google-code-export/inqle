@@ -4,6 +4,7 @@
 package org.inqle.ui.factory;
 
 import org.apache.wicket.Component;
+import org.inqle.ui.component.edit.answer.range.RangeAnswerEditPanel;
 import org.inqle.ui.model.IUIRenderable;
 import org.inqle.ui.model.RangeAnswer;
 
@@ -11,7 +12,7 @@ import org.inqle.ui.model.RangeAnswer;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class RangeAnswerBuilder implements IUIRenderableBuilder {
+public class RangeAnswerBuilder implements IRenderableUIBuilder {
 
 	/**
 	 * 
@@ -30,10 +31,12 @@ public class RangeAnswerBuilder implements IUIRenderableBuilder {
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.IAnswerUIBuilder#createAdminUserUI(java.lang.String, org.inqle.ui.model.IAnswer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Component createAdminUserUI(String id, IUIRenderable renderable) {		
-		// TODO: create a component that allows to edit range limits.
-		return null;
+	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {		
+		RangeAnswer<Float> rangeAnswer = (RangeAnswer<Float>)renderable;
+		IOutcomeHandler<RangeAnswer<Float>> handler1 = (IOutcomeHandler<RangeAnswer<Float>>)handler;
+		return new RangeAnswerEditPanel<Float>(id, rangeAnswer, Float.class, handler1);
 	}
 
 	/* (non-Javadoc)
@@ -43,6 +46,14 @@ public class RangeAnswerBuilder implements IUIRenderableBuilder {
 	public Component createFinalUserUI(String id, IUIRenderable renderable) {
 		// TODO: create a component that allows to select a value within limits.
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
+		RangeAnswer<Float> rangeAnswer = (RangeAnswer<Float>)renderable;
+		IOutcomeHandler<RangeAnswer<Float>> handler1 = (IOutcomeHandler<RangeAnswer<Float>>)handler;
+		return new RangeAnswerEditPanel<Float>(id, rangeAnswer, Float.class, handler1);
 	}
 
 }
