@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.inqle.ui.component;
+package org.inqle.ui.component.edit.answer.option;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ResourceReference;
@@ -9,8 +9,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.inqle.ui.dao.IQuestionsDao;
-import org.inqle.ui.model.Question;
+import org.inqle.ui.dao.IOptionsDao;
+import org.inqle.ui.model.Option;
+import org.inqle.ui.model.OptionsAnswer;
 
 import com.antilia.web.button.AbstractLink;
 import com.antilia.web.button.IMenuItemHolder;
@@ -25,22 +26,22 @@ import com.google.inject.Inject;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class QuestionsEditPanel extends Panel implements IVeilScope {
+public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Inject
-	protected IQuestionsDao questionsDao;
+	protected IOptionsDao optionsDao;
 
 	private static class EditButton extends AbstractLink {
 		
 		private static final long serialVersionUID = 1L;
 
-		private Question question;
+		private Option option;
 		
-		public EditButton(String id, Question question) {
+		public EditButton(String id, Option option) {
 			super(id);
-			this.question = question;
+			this.option = option;
 		}
 		
 		@Override
@@ -60,33 +61,33 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			QuestionEditPanel questionEditPanel = new QuestionEditPanel(QuestionsEditPanel.CONTENT_ID, question) {
+			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option) {
 				
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
+				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
 					super.onSave(target, form, bean);
 				
-					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-					questionsPanel.setContent(questionsPanel.createdListComponent());
-					questionsPanel.questionsDao.update(bean);
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
+					optionsPanel.optionsDao.update(bean);
 					if(target != null) {
-						target.addComponent(questionsPanel.getContainer());
+						target.addComponent(optionsPanel.getContainer());
 					}
 				}
 				
 				@Override
-				protected void onCancel(AjaxRequestTarget target, Question bean) {
-					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-					questionsPanel.setContent(questionsPanel.createdListComponent());
+				protected void onCancel(AjaxRequestTarget target, Option bean) {
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
-						target.addComponent(questionsPanel.getContainer());
+						target.addComponent(optionsPanel.getContainer());
 					}
 				}							    
 			};			
-			QuestionsEditPanel optionsPanel = findParent(QuestionsEditPanel.class);
-			optionsPanel.setContent(questionEditPanel);
+			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+			optionsPanel.setContent(optionEditingPanel);
 			if(target != null) {
 				target.addComponent(optionsPanel.getContainer());
 			}
@@ -98,11 +99,14 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		private static final long serialVersionUID = 1L;
 
-		private Question question;
-				
-		public CreateButton(String id) {
+		private Option option;
+		
+		private OptionsAnswer optionsAnswer;
+		
+		public CreateButton(String id, OptionsAnswer optionsAnswer) {
 			super(id);
-			this.question = new Question();
+			this.option = new Option();
+			this.optionsAnswer = optionsAnswer;
 		}
 		
 		@Override
@@ -122,34 +126,35 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			QuestionEditPanel optionEditingPanel = new QuestionEditPanel(QuestionsEditPanel.CONTENT_ID, question) {
+			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option) {
 				
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
+				protected void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
 					super.onSave(target, form, bean);
-					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-					questionsPanel.questionsDao.add(bean);
-					questionsPanel.setContent(questionsPanel.createdListComponent());
+					optionsAnswer.addOption(this.getBean());					
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+					optionsPanel.optionsDao.add(bean);
+					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
-						target.addComponent(questionsPanel.getContainer());
+						target.addComponent(optionsPanel.getContainer());
 					}
 				}
 				
 				@Override
-				protected void onCancel(AjaxRequestTarget target, Question bean) {
-					QuestionsEditPanel optionsPanel = findParent(QuestionsEditPanel.class);
+				protected void onCancel(AjaxRequestTarget target, Option bean) {
+					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
 					optionsPanel.setContent(optionsPanel.createdListComponent());
 					if(target != null) {
 						target.addComponent(optionsPanel.getContainer());
 					}
 				}
 			};			
-			QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-			questionsPanel.setContent(optionEditingPanel);
+			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+			optionsPanel.setContent(optionEditingPanel);
 			if(target != null) {
-				target.addComponent(questionsPanel.getContainer());
+				target.addComponent(optionsPanel.getContainer());
 			}
 		}
 		
@@ -159,12 +164,12 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		private static final long serialVersionUID = 1L;
 
-		private Question question;
+		private Option option;
 						
 		
-		public DeleteButton(String id, Question option) {
+		public DeleteButton(String id, Option option) {
 			super(id);
-			this.question = option;
+			this.option = option;
 		}
 		
 		@Override
@@ -184,16 +189,19 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
-			QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-			questionsPanel.questionsDao.remove(question);
-			questionsPanel.setContent(questionsPanel.createdListComponent());
+			OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
+			optionsPanel.optionsAnswer.removeOption(option);
+			optionsPanel.optionsDao.remove(option);
+			optionsPanel.setContent(optionsPanel.createdListComponent());
 			if(target != null) {
-				target.addComponent(questionsPanel.getContainer());
+				target.addComponent(optionsPanel.getContainer());
 			}					
 		}
 		
 	}
 
+	private OptionsAnswer optionsAnswer;
+	
 	private WebMarkupContainer container;
 	
 	public WebMarkupContainer getContainer() {
@@ -208,8 +216,9 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 	/**
 	 * @param id
 	 */
-	public QuestionsEditPanel(String id) {
+	public OptionsAnswerEditPanel(String id, OptionsAnswer optionsAnswer) {
 		super(id);
+		this.optionsAnswer = optionsAnswer;
 		container = new WebMarkupContainer("container") {
 			
 			private static final long serialVersionUID = 1L;
@@ -233,19 +242,19 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 	}
 	
 	protected Component createdListComponent() {
-		return new QuestionsListPanel(CONTENT_ID) {
+		return new OptionsAnswerListPanel(CONTENT_ID, optionsAnswer) {
 			
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateRowMenu(IMenuItemHolder menu, int row, Question bean) {
+			protected void populateRowMenu(IMenuItemHolder menu, int row, Option bean) {
 				menu.addMenuItem(new EditButton("edit", bean));
 				menu.addMenuItem(new DeleteButton("delete", bean));
 			}
 			
 			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
 				factory.addItem(new SmallSeparatorButton());
-				factory.addItem(new CreateButton("create"));
+				factory.addItem(new CreateButton("create", OptionsAnswerEditPanel.this.getOptionsAnswer()));
 			}
 			
 		};
@@ -262,5 +271,9 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 	
 	public String getContentId() {
 		return CONTENT_ID;
+	}
+	
+	public OptionsAnswer getOptionsAnswer() {
+		return optionsAnswer;
 	}
 }

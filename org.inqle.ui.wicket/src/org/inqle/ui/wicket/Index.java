@@ -5,7 +5,7 @@ package org.inqle.ui.wicket;
 
 import org.apache.wicket.markup.html.CSSPackageResource;
 import org.apache.wicket.markup.html.WebPage;
-import org.inqle.ui.component.QuestionsEditPanel;
+import org.inqle.ui.component.edit.question.QuestionsEditPanel;
 import org.inqle.ui.resources.Styles;
 
 /**

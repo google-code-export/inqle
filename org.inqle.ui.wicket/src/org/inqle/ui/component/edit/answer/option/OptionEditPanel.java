@@ -1,9 +1,10 @@
 /**
  * 
  */
-package org.inqle.ui.component;
+package org.inqle.ui.component.edit.answer.option;
 
 import org.apache.wicket.Component;
+import org.inqle.ui.component.edit.BaseEditingPanel;
 import org.inqle.ui.model.Option;
 
 /**

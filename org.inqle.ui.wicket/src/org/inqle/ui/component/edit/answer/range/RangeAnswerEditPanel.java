@@ -1,9 +1,11 @@
 /**
  * 
  */
-package org.inqle.ui.component;
+package org.inqle.ui.component.edit.answer.range;
 
 import org.apache.wicket.Component;
+import org.inqle.ui.component.MinimumMaximumValidator;
+import org.inqle.ui.component.edit.BaseEditingPanel;
 import org.inqle.ui.model.RangeAnswer;
 
 /**
