@@ -7,6 +7,8 @@ package org.inqle.ui.model;
 public class SingleChoiceType implements IAnswerType<SingleChoiceAnswer> {
 
 
+	private static final long serialVersionUID = 1L;
+
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.model.IAnswerType#createNewInstance()
 	 */

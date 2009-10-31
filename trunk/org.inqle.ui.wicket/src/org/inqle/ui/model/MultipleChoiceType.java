@@ -6,6 +6,8 @@ package org.inqle.ui.model;
  */
 public class MultipleChoiceType implements IAnswerType<MultipleChoiceAnswer> {
 
+	private static final long serialVersionUID = 1L;
+
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.model.IAnswerType#createNewInstance()
 	 */
