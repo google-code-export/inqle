@@ -21,7 +21,8 @@ public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderS
 	
 	public DafaultIUIRenderableBuilderService() {
 		addBuilder(new OptionsBuilder());
-		addBuilder(new RangeAnswerBuilder());
+		addBuilder(new IntegerRangeAnswerBuilder());
+		addBuilder(new DoubleRangeAnswerBuilder());
 		addBuilder(new MultipleChoiceBuilder(this));
 		addBuilder(new SingleChoiceBuilder(this));
 	}

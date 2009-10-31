@@ -13,7 +13,7 @@ import org.inqle.ui.model.RangeAnswer;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class RangeAnswerEditPanel<T extends Number> extends BaseEditingPanel<RangeAnswer<T>> {
+public abstract class RangeAnswerEditPanel<R extends RangeAnswer<T>, T extends Number> extends BaseEditingPanel<R> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class RangeAnswerEditPanel<T extends Number> extends BaseEditingPanel<Ran
 	/**
 	 * @param id
 	 */
-	public RangeAnswerEditPanel(String id, RangeAnswer<T> rangeAnswer, Class<T> formatClass, IOutcomeHandler<RangeAnswer<T>> handler) {
+	public RangeAnswerEditPanel(String id, R rangeAnswer, Class<T> formatClass, IOutcomeHandler<R> handler) {
 		super(id, rangeAnswer, handler);	
 		this.formatClass = formatClass;
 	}

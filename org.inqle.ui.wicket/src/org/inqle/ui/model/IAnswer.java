@@ -12,5 +12,4 @@ package org.inqle.ui.model;
  */
 public interface IAnswer extends IUIRenderable, IDentifiable {
 	
-
 }
