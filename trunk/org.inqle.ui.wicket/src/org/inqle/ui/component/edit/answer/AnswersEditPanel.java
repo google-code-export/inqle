@@ -12,8 +12,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.dao.IAnswersDao;
 import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.factory.IUIRenderableBuilderService;
+import org.inqle.ui.model.DoubleRangeAnswer;
 import org.inqle.ui.model.IAnswer;
-import org.inqle.ui.model.RangeAnswer;
 
 import com.antilia.web.button.AbstractLink;
 import com.antilia.web.button.IMenuItemHolder;
@@ -127,7 +127,7 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 		protected void onClick(AjaxRequestTarget target) {
 			AnswersEditPanel answersEditPanel = findParent(AnswersEditPanel.class);
 			//TODO: how to see which kind of answer we create.
-			IAnswer answer = new RangeAnswer<Float>();
+			IAnswer answer = new DoubleRangeAnswer();
 			Component editPanel =  answersEditPanel.renderService.createAdminCreateUI(AnswersEditPanel.CONTENT_ID, answer, 
 					new IOutcomeHandler<IAnswer>() {										
 						private static final long serialVersionUID = 1L;
