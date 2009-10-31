@@ -33,7 +33,7 @@ public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderS
 	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
 		for(IRenderableUIBuilder builder: builders) {
 			if(builder.canHandleAnswer(renderable))
-				builder.createAdminEditUI(id,renderable, handler);
+				return builder.createAdminEditUI(id,renderable, handler);
 		}
 		return new Label(id, "Cannot created UI for type of answer: " + renderable.getClass().getName());
 	}
@@ -42,7 +42,7 @@ public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderS
 	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
 		for(IRenderableUIBuilder builder: builders) {
 			if(builder.canHandleAnswer(renderable))
-				builder.createAdminCreateUI(id, renderable, handler);
+				return builder.createAdminCreateUI(id, renderable, handler);
 		}
 		return new Label(id, "Cannot created UI for type of answer: " + renderable.getClass().getName());
 	}
@@ -53,7 +53,7 @@ public class DafaultIUIRenderableBuilderService implements IUIRenderableBuilderS
 	public Component createFinalUserUI(String id,IUIRenderable renderable) {
 		for(IRenderableUIBuilder builder: builders) {
 			if(builder.canHandleAnswer(renderable))
-				builder.createFinalUserUI(id,renderable);
+				return builder.createFinalUserUI(id,renderable);
 		}
 		return new Label(id, "Cannot created UI for type of answer: " + renderable.getClass().getName());
 	}

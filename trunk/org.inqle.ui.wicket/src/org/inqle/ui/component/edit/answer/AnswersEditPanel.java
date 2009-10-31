@@ -37,6 +37,22 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 	
 	@Inject
 	private IUIRenderableBuilderService renderService; 
+	
+	private static abstract class Handler implements IOutcomeHandler<IAnswer> {
+		private static final long serialVersionUID = 1L;
+		
+		private AnswersEditPanel answersEditPanel;
+			
+
+		public Handler(AnswersEditPanel answersEditPanel) {
+			this.answersEditPanel = answersEditPanel;
+		}
+
+		public AnswersEditPanel getAnswersEditPanel() {
+			return answersEditPanel;
+		}
+		
+	}
 
 	private static class EditButton extends AbstractLink {
 		
@@ -68,25 +84,20 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 		protected void onClick(AjaxRequestTarget target) {
 			AnswersEditPanel answersEditPanel = findParent(AnswersEditPanel.class);
 			Component editPanel =  answersEditPanel.renderService.createAdminEditUI(AnswersEditPanel.CONTENT_ID, answer, 
-					new IOutcomeHandler<IAnswer>() {				
+					new Handler(answersEditPanel) {				
 						private static final long serialVersionUID = 1L;
 
 						@Override
 						public void onSave(AjaxRequestTarget target, Form<?> form, IAnswer bean) {
-							AnswersEditPanel answersPanel = findParent(AnswersEditPanel.class);
-							answersPanel.dao.update(bean);
-							answersPanel.setContent(answersPanel.createdListComponent());
-							if(target != null) {
-								target.addComponent(answersPanel.getContainer());
-							}
+							getAnswersEditPanel().dao.update(bean);
+							onCancel(target, bean);
 						}
 						
 						@Override
 						public void onCancel(AjaxRequestTarget target, IAnswer bean) {
-							AnswersEditPanel optionsPanel = findParent(AnswersEditPanel.class);
-							optionsPanel.setContent(optionsPanel.createdListComponent());
+							getAnswersEditPanel().setContent(getAnswersEditPanel().createdListComponent());
 							if(target != null) {
-								target.addComponent(optionsPanel.getContainer());
+								target.addComponent(getAnswersEditPanel().getContainer());
 							}
 						}
 						
@@ -129,25 +140,20 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 			//TODO: how to see which kind of answer we create.
 			IAnswer answer = new DoubleRangeAnswer();
 			Component editPanel =  answersEditPanel.renderService.createAdminCreateUI(AnswersEditPanel.CONTENT_ID, answer, 
-					new IOutcomeHandler<IAnswer>() {										
+					new Handler(answersEditPanel)  {										
 						private static final long serialVersionUID = 1L;
 
 						@Override
 						public void onSave(AjaxRequestTarget target, Form<?> form, IAnswer bean) {
-							AnswersEditPanel answersPanel = findParent(AnswersEditPanel.class);
-							answersPanel.dao.update(bean);
-							answersPanel.setContent(answersPanel.createdListComponent());
-							if(target != null) {
-								target.addComponent(answersPanel.getContainer());
-							}
+							getAnswersEditPanel().dao.add(bean);
+							onCancel(target, bean);
 						}
 						
 						@Override
 						public void onCancel(AjaxRequestTarget target, IAnswer bean) {
-							AnswersEditPanel optionsPanel = findParent(AnswersEditPanel.class);
-							optionsPanel.setContent(optionsPanel.createdListComponent());
+							getAnswersEditPanel().setContent(getAnswersEditPanel().createdListComponent());
 							if(target != null) {
-								target.addComponent(optionsPanel.getContainer());
+								target.addComponent(getAnswersEditPanel().getContainer());
 							}
 						}
 						
@@ -155,10 +161,9 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 			);						
 			answersEditPanel.setContent(editPanel);
 			
-			AnswersEditPanel questionsPanel = findParent(AnswersEditPanel.class);
-			questionsPanel.setContent(answersEditPanel);
+			answersEditPanel.setContent(editPanel);
 			if(target != null) {
-				target.addComponent(questionsPanel.getContainer());
+				target.addComponent(answersEditPanel.getContainer());
 			}
 		}
 		
