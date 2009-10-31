@@ -6,7 +6,11 @@ package org.inqle.ui.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.inqle.ui.model.DoubleRangeType;
 import org.inqle.ui.model.IAnswerType;
+import org.inqle.ui.model.IntegerRangeType;
+import org.inqle.ui.model.MultipleChoiceType;
+import org.inqle.ui.model.SingleChoiceType;
 
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
@@ -29,6 +33,10 @@ public class DefaultAnswersTypeService implements IAnswerTypesService {
 	 * 
 	 */
 	private DefaultAnswersTypeService() {
+		registerType(new IntegerRangeType());
+		registerType(new DoubleRangeType());
+		registerType(new SingleChoiceType());
+		registerType(new MultipleChoiceType());
 	}
 	
 	

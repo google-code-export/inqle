@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.dao.IAnswersDao;
 import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.factory.IUIRenderableBuilderService;
-import org.inqle.ui.model.DoubleRangeAnswer;
 import org.inqle.ui.model.IAnswer;
 
 import com.antilia.web.button.AbstractLink;
@@ -38,7 +37,7 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 	@Inject
 	private IUIRenderableBuilderService renderService; 
 	
-	private static abstract class Handler implements IOutcomeHandler<IAnswer> {
+	public static abstract class Handler implements IOutcomeHandler<IAnswer> {
 		private static final long serialVersionUID = 1L;
 		
 		private AnswersEditPanel answersEditPanel;
@@ -111,63 +110,6 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 		
 	}
 	
-	private static class CreateButton extends AbstractLink {
-		
-		private static final long serialVersionUID = 1L;
-				
-		public CreateButton(String id) {
-			super(id);
-		}
-		
-		@Override
-		protected ResourceReference getImage() {
-			return DefaultStyle.IMG_NEW;
-		}
-		
-		@Override
-		protected String getLabel() {
-			return "Create";
-		}
-		
-		@Override
-		protected String getTitleKey() {
-			return "createOption";
-		}
-		
-		@Override
-		protected void onClick(AjaxRequestTarget target) {
-			AnswersEditPanel answersEditPanel = findParent(AnswersEditPanel.class);
-			//TODO: how to see which kind of answer we create.
-			IAnswer answer = new DoubleRangeAnswer();
-			Component editPanel =  answersEditPanel.renderService.createAdminCreateUI(AnswersEditPanel.CONTENT_ID, answer, 
-					new Handler(answersEditPanel)  {										
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void onSave(AjaxRequestTarget target, Form<?> form, IAnswer bean) {
-							getAnswersEditPanel().dao.add(bean);
-							onCancel(target, bean);
-						}
-						
-						@Override
-						public void onCancel(AjaxRequestTarget target, IAnswer bean) {
-							getAnswersEditPanel().setContent(getAnswersEditPanel().createdListComponent());
-							if(target != null) {
-								target.addComponent(getAnswersEditPanel().getContainer());
-							}
-						}
-						
-					}			
-			);						
-			answersEditPanel.setContent(editPanel);
-			
-			answersEditPanel.setContent(editPanel);
-			if(target != null) {
-				target.addComponent(answersEditPanel.getContainer());
-			}
-		}
-		
-	}
 	
 	private static class DeleteButton extends AbstractLink {
 		
@@ -259,7 +201,7 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 			
 			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
 				factory.addItem(new SmallSeparatorButton());
-				factory.addItem(new CreateButton("create"));
+				factory.addItem(new AnswerTypePanel("create"));
 			}
 			
 		};
