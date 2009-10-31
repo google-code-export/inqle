@@ -3,7 +3,6 @@
  */
 package org.inqle.ui.component.edit.question;
 
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -26,7 +25,7 @@ public class QuestionEditingDatailPanel extends Panel {
 		translationKey.setRequired(true);
 		add(translationKey);
 		
-		Label answer = new Label("answer", "selected answer");
+		SelectAnswerDialogLink answer = new SelectAnswerDialogLink("answer");
 		add(answer);
 	}
 }

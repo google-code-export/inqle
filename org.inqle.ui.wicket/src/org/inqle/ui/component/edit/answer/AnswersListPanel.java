@@ -46,7 +46,7 @@ public class AnswersListPanel extends Panel {
 		
 		Form<IAnswer> form = new Form<IAnswer>("form");
 		add(form);
-		TableModel<IAnswer> tableModel = new TableModel<IAnswer>(IAnswer.class, "id", "translationKey", "answer") {
+		TableModel<IAnswer> tableModel = new TableModel<IAnswer>(IAnswer.class, "id", "translationKey") {
 			
 			private static final long serialVersionUID = 1L;
 
