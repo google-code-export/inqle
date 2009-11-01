@@ -5,7 +5,7 @@ package org.inqle.testing;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.agent.IAgent;
+import org.inqle.agent.AgentInfo;
 import org.inqle.agent.rap.AAgentWizard;
 import org.inqle.agent.rap.AgentWizardAction;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -18,7 +18,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Apr 25, 2008
  */
-@TargetDatamodelName(IAgent.AGENT_DATASET)
+@TargetDatamodelName(AgentInfo.AGENT_DATASET)
 public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 	
 	private NameDescriptionPage nameDescriptionPage;
@@ -42,7 +42,8 @@ public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 		juAgent.setName(nameDescriptionPage.getName());
 		juAgent.setDescription(nameDescriptionPage.getDescription());
 		Persister persister = Persister.getInstance();
-		persister.persist(juAgent);
+		String datamodelId = Persister.getTargetDatamodelId(JUnitTestRunnerAgent.class, AgentInfo.AGENT_DB);
+		persister.persist(juAgent, datamodelId);
 		return true;
 	}
 

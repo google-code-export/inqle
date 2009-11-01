@@ -8,9 +8,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
-import org.inqle.agent.IAgent;
+import org.inqle.agent.AgentInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
 import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -22,7 +23,8 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Apr 25, 2008
  */
-@TargetDatamodelName(IAgent.AGENT_DATASET)
+@TargetDatabaseId(AgentInfo.AGENT_DB)
+@TargetDatamodelName(AgentInfo.AGENT_DATASET)
 @Namespace(RDF.INQLE)
 public class JUnitTestRunnerAgent extends AAgent {
 
