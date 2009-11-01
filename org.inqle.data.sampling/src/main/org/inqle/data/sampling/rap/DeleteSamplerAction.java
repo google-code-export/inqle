@@ -8,6 +8,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
+import org.inqle.data.sampling.SamplerInfo;
 import org.inqle.ui.rap.IPartType;
 
 /**

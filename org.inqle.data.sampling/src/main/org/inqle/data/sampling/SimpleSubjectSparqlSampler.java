@@ -13,6 +13,7 @@ import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
 import org.inqle.data.rdf.jenabean.TargetDatamodelName;
 
 import thewebsemantic.Namespace;
@@ -38,7 +39,8 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * 
  * TODO add elements which define how to render the UI elements, for manual execution mode
  */
-@TargetDatamodelName(ISampler.SAMPLER_DATASET)
+@TargetDatabaseId(SamplerInfo.SAMPLER_DB)
+@TargetDatamodelName(SamplerInfo.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 
@@ -79,7 +81,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 * 
 	 */
 	public Arc decideLabelArc(Collection<String> modelsToUse, Resource subjectClass) {
-		Collection<Arc> randomArcs = ArcLister.getRandomFilteredValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1, null);
+		Collection<Arc> randomArcs = ArcLister.getRandomFilteredValuedArcs(SamplerInfo.SAMPLER_DB, modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, 1, null);
 		if (randomArcs == null || randomArcs.size()==0) return null;
 		return new ArrayList<Arc>(randomArcs).get(0);
 	}
@@ -93,7 +95,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	 */
 	public Collection<Arc> decideLearnableArcs(Collection<String> modelsToUse, Resource subjectClass, int numberToSelect, Collection<Arc> arcsToExclude) {
 		log.info("decideLearnableArcs()...");
-		Collection<Arc> randomArcs = ArcLister.getRandomFilteredValuedArcs(modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, numberToSelect, arcsToExclude);
+		Collection<Arc> randomArcs = ArcLister.getRandomFilteredValuedArcs(SamplerInfo.SAMPLER_DB, modelsToUse, subjectClass.toString(), MAX_PROPERTY_ARC_DEPTH, numberToSelect, arcsToExclude);
 		log.info("decideLearnableArcs() yields this list:\n" + randomArcs);
 		return randomArcs;
 //		if (randomArcs==null) return null;
@@ -112,7 +114,7 @@ public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 	@Override
 	protected URI decideSubjectClass(Collection<String> modelsToUse) {
 		log.info("decideSubjectClass()...");
-		Collection<String> randomSubjectClasses = SubjectClassLister.getRandomUncommonSubjectClasses(modelsToUse, 1, null);
+		Collection<String> randomSubjectClasses = SubjectClassLister.getRandomUncommonSubjectClasses(SamplerInfo.SAMPLER_DB, modelsToUse, 1, null);
 		if (randomSubjectClasses==null) return null;
 		String randomSubjectClass = new ArrayList<String>(randomSubjectClasses).get(0);
 		return URI.create(randomSubjectClass);
