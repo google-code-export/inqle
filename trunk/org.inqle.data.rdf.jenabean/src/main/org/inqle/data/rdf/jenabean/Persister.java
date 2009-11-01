@@ -217,8 +217,8 @@ public class Persister {
 	 * @param dbModelName
 	 * @return
 	 */
-	public static void createDBModel(IDatabase database, String dbModelName) {
-		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(database);
+	public static void createDBModel(String databaseId, String dbModelName) {
+		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(databaseId);
 
 		log.debug("Creating Model of name '" + dbModelName + "'.");
 		
@@ -826,7 +826,7 @@ public class Persister {
 	public <T extends IDatabase> int createNewDatabase(T database) {
 		log.info("Will try to create a new Database:\n" + JenabeanWriter.toString(database));
 		//first create the IDBConnector and use it to create the DB store in the database
-		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
 		int status = connector.createDatabase();
 		log.info("Tried to create new DB store, with status=" + status);
 		
@@ -1010,8 +1010,23 @@ public class Persister {
 		persist(persistableObj, model, true);
 	}
 	
+	/**
+	 * Persist a Jenabean object to the datamodel of ID
+	 * @param persistableObj
+	 * @param datamodelId
+	 */
 	public void persist(Object persistableObj, String datamodelId) {
 		persist(persistableObj, getModel(datamodelId));
+	}
+	
+	/**
+	 * Persist a Jenabean object to the default target datamodel.
+	 * @param <T>
+	 * @param persistableObj
+	 */
+	public <T> void persist(T persistableObj) {
+		String datamodelId = getTargetDatamodelId(persistableObj.getClass());
+		persist(persistableObj, datamodelId);
 	}
 	
 	/**
@@ -1129,7 +1144,7 @@ public class Persister {
 	}
 	
 	/**
-	 * Reconstitute an object from its target Jena model.  Thsi only works when the class
+	 * Reconstitute an object from its target Jena model.  This only works when the class
 	 * specifies both TargetDatabaseId and TargetDatamodelName annotations.
 	 * @param <T>
 	 * @param clazz
@@ -1214,7 +1229,7 @@ public class Persister {
 		//try to delete the connection
 		try {
 //			SDBConnector connector = new SDBConnector(connection);
-			IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+			IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
 			connector.deleteDatabase();
 			connector.close();
 		} catch (Exception e) {
@@ -1324,6 +1339,19 @@ public class Persister {
 	 * @param modelId the ID of the datamodelJena Model containing the object to remove
 	 */
 	public void remove(Object objectToDelete, String datamodelId) {
+		remove(objectToDelete, getModel(datamodelId));
+	}
+	
+	/**
+	 * Delete the Resource from the default target datamodel, plus all references to it
+	 * This can only be used for Jenabean classes that have both the TargetDatabaseId and 
+	 * TargetDatamodelName annotation
+	 * 
+	 * @param objectToDelete the object to be removed
+	 * @param modelId the ID of the datamodelJena Model containing the object to remove
+	 */
+	public <T> void remove(T objectToDelete) {
+		String datamodelId = getTargetDatamodelId(objectToDelete.getClass());
 		remove(objectToDelete, getModel(datamodelId));
 	}
 
