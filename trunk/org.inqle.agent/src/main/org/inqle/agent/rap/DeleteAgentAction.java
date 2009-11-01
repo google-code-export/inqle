@@ -5,6 +5,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.inqle.agent.AgentInfo;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.util.BeanTool;
@@ -54,7 +55,7 @@ public class DeleteAgentAction extends Action {
 		}
 		if (confirmDelete) {
 			Persister persister = Persister.getInstance();
-			persister.remove(agentToDelete);
+			persister.remove(agentToDelete, AgentInfo.AGENT_DB);
 			IPartType parentPart = agentPart.getParent();
 			parentPart.fireUpdate(parentPart);
 		}

@@ -1,6 +1,5 @@
 package org.inqle.agent;
 
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 
 /**
@@ -18,8 +17,6 @@ import org.inqle.data.rdf.jenabean.IUniqueJenabean;
  */
 public interface IAgent extends IUniqueJenabean, Runnable {
 
-	public static final String AGENT_DATASET = "org.inqle.datamodels.agents";
-	
 	public static final int STOPPED = 0;
 	public static final int STOPPING = 1;
 	public static final int RUNNING = 2;
