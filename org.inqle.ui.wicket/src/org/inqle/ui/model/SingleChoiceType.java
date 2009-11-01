@@ -25,4 +25,13 @@ public class SingleChoiceType implements IAnswerType<SingleChoiceAnswer> {
 		return "Single choice answer";
 	}
 
+	@Override
+	public String toString() {
+		return getTypeDescription();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof SingleChoiceType);
+	}
 }

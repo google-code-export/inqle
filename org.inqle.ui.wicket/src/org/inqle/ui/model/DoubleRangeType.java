@@ -24,4 +24,14 @@ public class DoubleRangeType implements IAnswerType<DoubleRangeAnswer> {
 	public String getTypeDescription() {
 		return "Double range";
 	}
+	
+	@Override
+	public String toString() {
+		return getTypeDescription();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof DoubleRangeType);
+	}
 }

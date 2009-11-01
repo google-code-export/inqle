@@ -25,4 +25,13 @@ public class IntegerRangeType implements IAnswerType<IntegerRangeAnswer> {
 		return "Integers range";
 	}
 
+	@Override
+	public String toString() {
+		return getTypeDescription();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof IntegerRangeType);
+	}
 }
