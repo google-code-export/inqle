@@ -23,5 +23,14 @@ public class MultipleChoiceType implements IAnswerType<MultipleChoiceAnswer> {
 	public String getTypeDescription() {
 		return "Multiple choice answer";
 	}
+	
+	@Override
+	public String toString() {
+		return getTypeDescription();
+	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof MultipleChoiceType);
+	}
 }

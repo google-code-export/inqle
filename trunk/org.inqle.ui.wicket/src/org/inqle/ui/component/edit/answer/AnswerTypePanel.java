@@ -6,13 +6,13 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.inqle.ui.component.edit.answer.AnswersEditPanel.Handler;
 import org.inqle.ui.factory.IAnswerTypesService;
-import org.inqle.ui.model.DoubleRangeAnswer;
 import org.inqle.ui.model.IAnswer;
 import org.inqle.ui.model.IAnswerType;
 
@@ -60,33 +60,35 @@ public class AnswerTypePanel extends Panel implements IMenuItem {
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
 			AnswersEditPanel answersEditPanel = findParent(AnswersEditPanel.class);
-			//TODO: how to see which kind of answer we create.
-			IAnswer answer = new DoubleRangeAnswer();
-			Component editPanel =  answersEditPanel.getRenderService().createAdminCreateUI(AnswersEditPanel.CONTENT_ID, answer, 
-					new Handler(answersEditPanel)  {										
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void onSave(AjaxRequestTarget target, Form<?> form, IAnswer bean) {
-							getAnswersEditPanel().dao.add(bean);
-							onCancel(target, bean);
-						}
-						
-						@Override
-						public void onCancel(AjaxRequestTarget target, IAnswer bean) {
-							getAnswersEditPanel().setContent(getAnswersEditPanel().createdListComponent());
-							if(target != null) {
-								target.addComponent(getAnswersEditPanel().getContainer());
+			AnswerTypePanel answerTypePanel = findParent(AnswerTypePanel.class);
+			if(answerTypePanel.getSelected() != null) {			
+				IAnswer answer = answerTypePanel.getSelected().createNewInstance();
+				Component editPanel =  answersEditPanel.getRenderService().createAdminCreateUI(AnswersEditPanel.CONTENT_ID, answer, 
+						new Handler(answersEditPanel)  {										
+							private static final long serialVersionUID = 1L;
+	
+							@Override
+							public void onSave(AjaxRequestTarget target, Form<?> form, IAnswer bean) {
+								getAnswersEditPanel().dao.add(bean);
+								onCancel(target, bean);
 							}
-						}
-						
-					}			
-			);						
-			answersEditPanel.setContent(editPanel);
-			
-			answersEditPanel.setContent(editPanel);
-			if(target != null) {
-				target.addComponent(answersEditPanel.getContainer());
+							
+							@Override
+							public void onCancel(AjaxRequestTarget target, IAnswer bean) {
+								getAnswersEditPanel().setContent(getAnswersEditPanel().createdListComponent());
+								if(target != null) {
+									target.addComponent(getAnswersEditPanel().getContainer());
+								}
+							}
+							
+						}			
+				);						
+				answersEditPanel.setContent(editPanel);
+				
+				answersEditPanel.setContent(editPanel);
+				if(target != null) {
+					target.addComponent(answersEditPanel.getContainer());
+				}
 			}
 		}
 		
@@ -114,11 +116,20 @@ public class AnswerTypePanel extends Panel implements IMenuItem {
 			
 			@Override
 			public void setObject(IAnswerType<?> object) {
-				AnswerTypePanel.this.selected = selected;
+				AnswerTypePanel.this.selected = object;
 			}
 			
+		});				
+		answerType.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				AnswerTypePanel.this.selected = (IAnswerType<?>)getComponent().getDefaultModel().getObject();
+				System.out.println(AnswerTypePanel.this.selected);
+			}
 		});
-		
 		add(answerType);
 		
 		CreateButton createLink = new CreateButton("createLink");
