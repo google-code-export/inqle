@@ -26,7 +26,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * Feb 29, 2008
  */
-@TargetDatamodelName(ISampler.SAMPLER_DATASET)
+@TargetDatamodelName(SamplerInfo.SAMPLER_DATASET)
 @Namespace(RDF.INQLE)
 public abstract class ASampler extends UniqueJenabean implements ISampler {
 

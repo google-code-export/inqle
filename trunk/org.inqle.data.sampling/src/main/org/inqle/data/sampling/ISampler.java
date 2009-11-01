@@ -3,7 +3,6 @@ package org.inqle.data.sampling;
 import java.util.Collection;
 import java.util.Dictionary;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.IUniqueJenabean;
 
@@ -33,11 +32,6 @@ import thewebsemantic.Id;
  * Dec 26, 2007
  */
 public interface ISampler extends IUniqueJenabean {
-	
-	//public static final String PROPERTY_WEIGHT = "weight";
-	public static final String URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES = RDF.INQLE + "subjectContainingCommonAttributes";
-	public static final String ID = "org.inqle.data.sampling.ISampler";
-	public static final String SAMPLER_DATASET = "org.inqle.datamodels.samplers";
 	
 	/**
 	 * Get the Collection of IDs of Datamodel which have been selected for 
