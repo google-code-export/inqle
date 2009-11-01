@@ -34,6 +34,21 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 	@Inject
 	protected IOptionsDao optionsDao;
 
+	private static abstract class Handler implements IOutcomeHandler<Option> {
+		private static final long serialVersionUID = 1L;
+		
+		private OptionsAnswerEditPanel optionsAnswerEditPanel;
+		
+		public Handler(OptionsAnswerEditPanel optionsAnswerEditPanel) {
+			this.optionsAnswerEditPanel = optionsAnswerEditPanel;
+		}
+
+		public OptionsAnswerEditPanel getOptionsAnswerEditPanel() {
+			return optionsAnswerEditPanel;
+		}
+	
+	}
+	
 	private static class EditButton extends AbstractLink {
 		
 		private static final long serialVersionUID = 1L;
@@ -63,27 +78,23 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
 			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option,
-				new IOutcomeHandler<Option>() {
-				
+				new Handler(findParent(OptionsAnswerEditPanel.class)) {
+											
 					private static final long serialVersionUID = 1L;
 
+					
 					@Override
 					public void onCancel(AjaxRequestTarget target, Option bean) {
-						OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-						optionsPanel.setContent(optionsPanel.createdListComponent());
+						getOptionsAnswerEditPanel().setContent(getOptionsAnswerEditPanel().createdListComponent());
 						if(target != null) {
-							target.addComponent(optionsPanel.getContainer());
+							target.addComponent(getOptionsAnswerEditPanel().getContainer());
 						}
 					}
 					
 					@Override
 					public void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
-						OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-						optionsPanel.setContent(optionsPanel.createdListComponent());
-						optionsPanel.optionsDao.update(bean);
-						if(target != null) {
-							target.addComponent(optionsPanel.getContainer());
-						}
+						getOptionsAnswerEditPanel().optionsDao.update(bean);
+						onCancel(target, bean);
 					}
 				}
 			);			
@@ -128,24 +139,19 @@ public class OptionsAnswerEditPanel extends Panel implements IVeilScope {
 		@Override
 		protected void onClick(AjaxRequestTarget target) {
 			OptionEditPanel optionEditingPanel = new OptionEditPanel(OptionsAnswerEditPanel.CONTENT_ID, option,
-					new IOutcomeHandler<Option>() {
+				new Handler(findParent(OptionsAnswerEditPanel.class)) {
 						private static final long serialVersionUID = 1L;
 
 				public void onSave(AjaxRequestTarget target, Form<?> form, Option bean) {
 					optionsAnswer.addOption(bean);					
-					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-					optionsPanel.optionsDao.add(bean);
-					optionsPanel.setContent(optionsPanel.createdListComponent());
-					if(target != null) {
-						target.addComponent(optionsPanel.getContainer());
-					}
+					getOptionsAnswerEditPanel().optionsDao.add(bean);
+					onCancel(target, bean);
 				}
 				
 				public void onCancel(AjaxRequestTarget target, Option bean) {
-					OptionsAnswerEditPanel optionsPanel = findParent(OptionsAnswerEditPanel.class);
-					optionsPanel.setContent(optionsPanel.createdListComponent());
+					getOptionsAnswerEditPanel().setContent(getOptionsAnswerEditPanel().createdListComponent());
 					if(target != null) {
-						target.addComponent(optionsPanel.getContainer());
+						target.addComponent(getOptionsAnswerEditPanel().getContainer());
 					}
 				}
 			}

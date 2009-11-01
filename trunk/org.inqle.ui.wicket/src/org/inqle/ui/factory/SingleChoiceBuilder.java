@@ -4,6 +4,7 @@
 package org.inqle.ui.factory;
 
 import org.apache.wicket.Component;
+import org.inqle.ui.component.edit.answer.option.OptionsAnswerEditPanel;
 import org.inqle.ui.model.IUIRenderable;
 import org.inqle.ui.model.SingleChoiceAnswer;
 
@@ -38,9 +39,9 @@ public class SingleChoiceBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {		
-		// TODO: create a component that allows to create edit single choices.
-		// this is essentially the same as multiple choices!
-		return null;
+		SingleChoiceAnswer multipleChoiceAnswer = (SingleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer); 
+		return answerListPanel;
 	}
 
 	/* (non-Javadoc)
@@ -59,7 +60,8 @@ public class SingleChoiceBuilder implements IRenderableUIBuilder {
 	
 	@Override
 	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
-		// TODO Auto-generated method stub
-		return null;
+		SingleChoiceAnswer multipleChoiceAnswer = (SingleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer); 
+		return answerListPanel;
 	}
 }

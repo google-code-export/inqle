@@ -55,8 +55,9 @@ public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 
 	@Override
 	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
-		// TODO Auto-generated method stub
-		return null;
+		MultipleChoiceAnswer multipleChoiceAnswer = (MultipleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer); 
+		return answerListPanel;
 	}
 	
 	public IUIRenderableBuilderService getRenderableBuilderService() {
