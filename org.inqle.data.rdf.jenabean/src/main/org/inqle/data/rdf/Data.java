@@ -17,6 +17,6 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class Data {
 
-	public static final String DATA_SUBJECT_DATASET_ROLE_ID = "org.inqle.datamodels.dataSubject";
-	public static final String DATA_PROPERTY_DATASET_ROLE_ID = "org.inqle.datamodels.dataProperty";
+	public static final String DATASET_NAME_FOR_DATA_SUBJECT = "org.inqle.datamodels.dataSubject";
+	public static final String DATASET_NAME_FOR_DATA_PROPERTY = "org.inqle.datamodels.dataProperty";
 }
