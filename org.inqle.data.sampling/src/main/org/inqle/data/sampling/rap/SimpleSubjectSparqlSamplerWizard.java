@@ -15,6 +15,7 @@ import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.sampling.SamplingInfo;
 import org.inqle.data.sampling.SimpleSubjectSparqlSampler;
 import org.inqle.ui.rap.IList2Provider;
 import org.inqle.ui.rap.IListProvider;
@@ -47,7 +48,8 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 //	}
 	private SimpleListSelectorPage selectedModelsPage;
 	private List<String> userDatamodelStrings;
-	private List<Datamodel> userDatamodels;
+//	private List<String> userDatamodels;
+	private List<String> userDatamodelIds;
 
 	public SimpleSubjectSparqlSamplerWizard(Shell shell) {
 		super(shell);
@@ -167,22 +169,30 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		return true;
 	}
 
-	private List<String> getUserDatamodelStrings() {
-		if (userDatamodelStrings==null) {
-			userDatamodelStrings = new ArrayList<String>();
-			for (Datamodel datamodel: getUserDatamodels()) {
-				userDatamodelStrings.add(datamodel.getName());
-			}
-		}
-		return userDatamodelStrings;
-	}
+//	private List<String> getUserDatamodelStrings() {
+//		if (userDatamodelStrings==null) {
+//			userDatamodelStrings = new ArrayList<String>();
+//			for (Datamodel datamodel: getUserDatamodels()) {
+//				userDatamodelStrings.add(datamodel.getName());
+//			}
+//		}
+//		return userDatamodelStrings;
+//	}
 	
-	private List<Datamodel> getUserDatamodels() {
-		if (userDatamodels==null) {
+//	private List<Datamodel> getUserDatamodels() {
+//		if (userDatamodels==null) {
+//			Persister persister = Persister.getInstance();
+//			userDatamodels = persister.listDatamodels(InqleInfo.USER_DATABASE_ID);
+//		}
+//		return userDatamodels;
+//	}
+	
+	private List<String> getUserDatamodelIds() {
+		if (userDatamodelIds==null) {
 			Persister persister = Persister.getInstance();
-			userDatamodels = persister.listDatamodels(InqleInfo.USER_DATABASE_ID);
+			userDatamodelIds = persister.listDatamodelIds(InqleInfo.USER_DATABASE_ID);
 		}
-		return userDatamodels;
+		return userDatamodelIds;
 	}
 
 	/**
@@ -194,12 +204,12 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (sssSampler == null) return null;
 		
 		if (page.equals(selectedModelsPage)) {
-			return getUserDatamodelStrings();
+			return getUserDatamodelIds();
 		}
 		if (page.equals(subjectClassSelectorPage)) {
 			Collection<String> selectedModelsCollection = sssSampler.getSelectedDatamodels();
 			log.info("GGGGGGGGGGGGGGGGGGG Get subjects for datamodels: " + selectedModelsCollection );
-			return SubjectClassLister.getUncommonSubjectClasses(selectedModelsCollection);
+			return SubjectClassLister.getUncommonSubjectClasses(SamplingInfo.SAMPLER_DB, selectedModelsCollection);
 		}
 		
 		if (page.equals(arcSelectorPage) || page.equals(labelSelectorPage)) {
@@ -209,7 +219,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 				log.info("Returning NULL for list of Arcs");
 				arcsList = null;
 			} else {
-				arcsList = new ArrayList<Arc>(ArcLister.getFilteredValuedArcs(selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH));
+				arcsList = new ArrayList<Arc>(ArcLister.getFilteredValuedArcs(SamplingInfo.SAMPLER_DB, selectedModelsCollection, subjectClass.toString(), SimpleSubjectSparqlSampler.MAX_PROPERTY_ARC_DEPTH));
 				log.info("Returning this collection of Arcs: " + arcsList);
 			}
 			return arcsList;
@@ -225,13 +235,13 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 			if (selectedModelsPage.getSelectedStrings()==null || selectedModelsPage.getSelectedStrings().length==0) {
 				sssSampler.setSelectedDatamodels(null);
 			} else {
-				List<String> selectedDatamodels = new ArrayList<String>();
+				List<String> selectedDatamodelIds = new ArrayList<String>();
 				//add each selected ID to the sssSampler
 				for (int selectedIndex: selectedModelsPage.getSelectedIndexes()) {
-					Datamodel selectedDM = getUserDatamodels().get(selectedIndex);
-					selectedDatamodels.add(selectedDM.getId());
+					String selectedDM = getUserDatamodelIds().get(selectedIndex);
+					selectedDatamodelIds.add(selectedDM);
 				}
-				sssSampler.setSelectedDatamodels(selectedDatamodels);
+				sssSampler.setSelectedDatamodels(selectedDatamodelIds);
 			}
 		}
 		
@@ -279,16 +289,17 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 		if (sssSampler==null) return null;
 		
 		if (page.equals(selectedModelsPage)) {
-			List<String> selectedDatamodelNames = new ArrayList<String>();
-			Collection<String> selectedDatamodelIds = sssSampler.getSelectedDatamodels();
-			if (selectedDatamodelIds==null || selectedDatamodelIds.size()==0) return null;
-			
-			for (Datamodel datamodel: getUserDatamodels()) {
-				if (selectedDatamodelIds.contains(datamodel.getId())) {
-					selectedDatamodelNames.add(datamodel.getName());
-				}
-			}
-			return selectedDatamodelNames;
+//			List<String> selectedDatamodelNames = new ArrayList<String>();
+//			Collection<String> selectedDatamodelIds = sssSampler.getSelectedDatamodels();
+//			if (selectedDatamodelIds==null || selectedDatamodelIds.size()==0) return null;
+//			
+//			for (String datamodelId: getUserDatamodelIds()) {
+//				if (selectedDatamodelIds.contains(datamodelId)) {
+//					selectedDatamodelNames.add(datamodel.getName());
+//				}
+//			}
+//			return selectedDatamodelNames;
+			return new ArrayList<String>(sssSampler.getSelectedDatamodels());
 		}
 		
 		if (sssSampler == null) return null;
