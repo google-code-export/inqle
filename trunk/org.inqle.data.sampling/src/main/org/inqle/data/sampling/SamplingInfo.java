@@ -2,7 +2,7 @@ package org.inqle.data.sampling;
 
 import org.inqle.data.rdf.RDF;
 
-public class SamplerInfo {
+public class SamplingInfo {
 
 	//public static final String PROPERTY_WEIGHT = "weight";
 	public static final String URI_SUBJECT_CONTAINING_COMMON_ATTRIBUTES = RDF.INQLE + "subjectContainingCommonAttributes";
