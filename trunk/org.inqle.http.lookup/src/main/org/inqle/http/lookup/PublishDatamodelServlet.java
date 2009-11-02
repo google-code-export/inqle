@@ -87,7 +87,7 @@ public class PublishDatamodelServlet extends HttpServlet {
 		}
 		
 		Persister persister = Persister.getInstance();
-		Model modelToExport = persister.getCachedModel(datamodelid);
+		Model modelToExport = persister.getModel(datamodelid);
 		AppInfo appInfo = persister.getAppInfo();
 		String baseUri = RDF.INQLE;
 		try {
