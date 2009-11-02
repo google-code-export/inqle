@@ -195,16 +195,26 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 
 			@Override
 			protected void populateRowMenu(IMenuItemHolder menu, int row, IAnswer bean) {
+				AnswersEditPanel.this.populateRowMenu(menu, row, bean);
 				menu.addMenuItem(new EditButton("edit", bean));
 				menu.addMenuItem(new DeleteButton("delete", bean));
 			}
 			
-			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
+			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {				
+				AnswersEditPanel.this.addMenuItemsBeforeNavigation(factory);
 				factory.addItem(new SmallSeparatorButton());
 				factory.addItem(new AnswerTypePanel("create"));
 			}
 			
 		};
+	}
+	
+	protected void populateRowMenu(IMenuItemHolder menu, int row, IAnswer bean) {
+	
+	}
+	
+	protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
+	
 	}
 	
 	@Override
