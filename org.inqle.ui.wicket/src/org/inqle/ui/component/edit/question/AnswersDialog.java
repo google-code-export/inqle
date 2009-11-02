@@ -26,6 +26,10 @@ public class AnswersDialog extends DefaultDialog {
 	 */
 	public AnswersDialog(String id, IDialogLink button) {
 		super(id, button);
+		setWidth(800);
+		setHeight(300);
+		setCentered(true);
+		setModal(true);
 	}
 
 	/* (non-Javadoc)
