@@ -25,7 +25,7 @@ public class QuestionEditPanel extends BaseEditingPanel<Question> {
 	
 	@Override
 	protected Component createdContent(String contentId) {
-		QuestionEditingDatailPanel optionDatailPanel = new QuestionEditingDatailPanel(contentId);
+		QuestionEditingDatailPanel optionDatailPanel = new QuestionEditingDatailPanel(contentId, getBean());
 		return optionDatailPanel;
 	}
 }

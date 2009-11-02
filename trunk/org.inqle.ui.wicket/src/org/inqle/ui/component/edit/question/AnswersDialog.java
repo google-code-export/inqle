@@ -7,7 +7,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.inqle.ui.component.edit.answer.AnswersEditPanel;
+import org.inqle.ui.model.IAnswer;
 
+import com.antilia.web.button.IMenuItemHolder;
+import com.antilia.web.button.MenuItemsFactory;
 import com.antilia.web.dialog.DefaultDialog;
 import com.antilia.web.dialog.IDialogLink;
 
@@ -37,7 +40,28 @@ public class AnswersDialog extends DefaultDialog {
 	 */
 	@Override
 	protected Component createBody(String id) {		
-		return new AnswersEditPanel(id);
+		return new AnswersEditPanel(id) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateRowMenu(IMenuItemHolder menu, int row, IAnswer bean) {
+				AnswersDialog.this.populateRowMenu(menu, row, bean);
+			}
+			
+			@Override
+			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
+				AnswersDialog.this.addMenuItemsBeforeNavigation(factory);
+			}
+		};
+	}
+	
+	protected void populateRowMenu(IMenuItemHolder menu, int row, IAnswer bean) {
+		
+	}
+	
+	protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
+	
 	}
 	
 	@Override
