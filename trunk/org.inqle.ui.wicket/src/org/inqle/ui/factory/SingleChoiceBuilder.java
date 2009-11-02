@@ -6,6 +6,7 @@ package org.inqle.ui.factory;
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.option.OptionsAnswerEditPanel;
 import org.inqle.ui.model.IUIRenderable;
+import org.inqle.ui.model.OptionsAnswer;
 import org.inqle.ui.model.SingleChoiceAnswer;
 
 /**
@@ -37,10 +38,11 @@ public class SingleChoiceBuilder implements IRenderableUIBuilder {
 	/* (non-Javadoc)
 	 * @see org.inqle.ui.IAnswerUIBuilder#createAdminUserUI(java.lang.String, org.inqle.ui.model.IAnswer)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {		
-		SingleChoiceAnswer multipleChoiceAnswer = (SingleChoiceAnswer)renderable;		
-		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer); 
+		SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, singleChoiceAnswer, (IOutcomeHandler<OptionsAnswer>)handler); 
 		return answerListPanel;
 	}
 
@@ -58,10 +60,11 @@ public class SingleChoiceBuilder implements IRenderableUIBuilder {
 		return renderableBuilderService;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
-		SingleChoiceAnswer multipleChoiceAnswer = (SingleChoiceAnswer)renderable;		
-		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer); 
+		SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, singleChoiceAnswer, (IOutcomeHandler<OptionsAnswer>)handler); 
 		return answerListPanel;
 	}
 }
