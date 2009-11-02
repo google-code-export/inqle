@@ -188,21 +188,6 @@ public class Persister {
 		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
 		return appInfoModel;
 	}
-	
-	/**
-	 * Get the Jena model containing the AppInfo object
-	 * @return
-	 */
-//	private static Model getAppInfoModel() {
-//		Model appInfoModel = null;
-//		try {
-//			appInfoModel = FileManager.get().loadModel( getAppInfoFilePath() );
-//		} catch (Exception e) {
-//			log.error("Error getting Model for AppInfo:", e);
-//		}
-//		//log.info("Retrieved appInfoModel w/ " + appInfoModel.size() + " statements");
-//		return appInfoModel;
-//	}
 
 	/* *********************************************************************
 	 * *** JENA MODEL METHODS
@@ -240,7 +225,7 @@ public class Persister {
 		log.info("Created and cached Model of name '" + datamodel.getId() + "'...");
 		
 		//see if a datamodel of that ID already exists
-		if (datamodelExists(datamodel.getId())) {
+		if (modelExists(datamodel.getId())) {
 			log.info("A Datamodel of ID: " + datamodel.getId() + " already exists.");
 			return;
 		}
@@ -255,9 +240,12 @@ public class Persister {
 	 * This ID is in the format databse_id/datamodel_name
 	 * First check the cached models
 	 * then load the model from the database.
+	 * If the model and/or the database foes not exist, create it
 	 * Best practice to never close the model.
 	 * @param datamodelId the id of the DatabaseBackedDatamodel object, 
 	 * @return the model, or null if no model found
+	 * 
+	 * TODO consider memory impact if we cache thousands of models
 	 */
 //	public Model getDatabaseBackedModel(String datamodelId) {
 	public Model getModel(String datamodelId) {
@@ -265,18 +253,13 @@ public class Persister {
 		if (cachedModel != null) {
 			return cachedModel;
 		}
-		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/datamodel_name.  Was '" + datamodelId + "'");
-			return null;
-		}
-		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
-			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
-			return null;
-		}
+		
 		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
 		String datamodelName = getDatamodelNameFromDatamodelId(datamodelId);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
-		return connector.getModel(datamodelName);
+		Model model = connector.getModel(datamodelName);
+		cachedModels.put(datamodelId, model);
+		return model;
 	}
 	
 	public String getCoreDatamodelId(String datamodelName) {
@@ -307,30 +290,7 @@ public class Persister {
 		return datamodel;
 	}
 	
-	/**
-	 * Get the IndexBuilder for the key.
-	 * @param indexBuilderKey either the id of the SystemDatamodel role 
-	 * or the UserDatamodel purpose
-	 * @return
-	 */
-	public IndexBuilderModel getIndexBuilder(String indexBuilderKey) {
-		return getIndexBuilders().get(indexBuilderKey);
-	}
-	
-	public IndexLARQ getIndex(String indexId) {
-		Map<String, IndexBuilderModel> idxBuilders = getIndexBuilders();
-		if (idxBuilders==null) {
-			return null;
-		}
-		IndexBuilderModel indexBuilder = idxBuilders.get(indexId);
-		if (indexBuilder == null) {
-			return null;
-		}
-		indexBuilder.flushWriter();
-		log.trace("Retrieved & flushed IndexBuilder:" + indexBuilder);
-		return indexBuilder.getIndex();
-	}
-	
+	@Deprecated
 	public void initializeSystemDatamodels() {
 		//get all system datamodel extensions
 		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
@@ -353,166 +313,11 @@ public class Persister {
 		}
 		
 		//having created the Datamodels and Models, make sure any text indexes have been created
-		getIndexBuilders();
+		initializeIndexBuilders();
 		
 		log.info("System datamodels initialized");
 		systemDatamodelsInitialized  = true;
 	}
-	
-	public Map<String, IndexBuilderModel> getIndexBuilders() {
-		if (indexBuilders != null) {
-			return indexBuilders;
-		}
-		
-		indexBuilders = new HashMap<String, IndexBuilderModel>();
-		//loop thru system datamodels extensions, and create each index
-		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
-		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
-			log.trace("datamodelExtension=" + datamodelExtension);
-			String datamodelId = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			String textIndexType = datamodelExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
-			
-			//if directed to do so, build & store an index for this Model
-			if (textIndexType != null) {
-				log.info("Creating IndexBuilder for datamodel of ID or purpose: " + datamodelId + "; textIndexType=" + textIndexType);
-				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datamodelId;
-				//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
-				
-				//first unlock the directory, if locked
-				try {
-					if (IndexReader.isLocked(indexFilePath)) {
-						log.info("Index is locked.  Unlocking...");
-						FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
-						IndexReader.unlock(dir);
-					}
-				} catch (Exception e) {
-					log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
-				}
-				
-				IndexWriter indexWriter = null;
-				try {
-					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
-				} catch (Exception e) {
-					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
-				}
-				
-				textIndexType = textIndexType.toLowerCase();
-				IndexBuilderModel larqBuilder = null;
-				
-//				Model internalModel = getSystemModel(datamodelId);
-//				log.info("got internalmodel for " + datamodelId + ".  Is null?" + (internalModel==null));
-				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
-					larqBuilder = new IndexBuilderSubject(indexWriter);
-					
-				} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
-//					larqBuilder = new IndexBuilderString(indexFilePath);
-					larqBuilder = new IndexBuilderString(indexWriter);
-				}
-				if (larqBuilder != null) {
-					log.info("Retrieving Index for Datamodel of ID: " + datamodelId + "...");
-//					larqBuilder.indexStatements(internalModel.listStatements()) ;
-					//this does not work because listener does not listen across JVMs:
-					//save this larqBuilder
-					if (larqBuilder.getIndex() == null) {
-						log.warn("No text index exists for datamodel role " + datamodelId);
-					}
-					indexBuilders.put(datamodelId, larqBuilder);
-				}
-			}
-		}
-		
-		//add any external datamodel purposes which are supposed to be indexed
-		List<IExtensionSpec> datamodelPurposeExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL_PURPOSES);
-		for (IExtensionSpec datamodelPurposeExtension: datamodelPurposeExtensions) {
-			
-			String datamodelPurposeId = datamodelPurposeExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			String textIndexType = datamodelPurposeExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
-			
-//			log.info("FFFFFFFFFFFFFFFFFFdatamodelPurposeId=" + datamodelPurposeId + "; textIndexType=" + textIndexType);
-			//if directed to do so, build & store an index for this Model
-			if (textIndexType != null) {
-				log.info("Making IndexBuilder for external datamodel: datamodelExtension=" + datamodelPurposeExtension);
-				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datamodelPurposeId;
-				
-				IndexWriter indexWriter = null;
-				
-				//first unlock the directory, if locked
-				try {
-					if (IndexReader.isLocked(indexFilePath)) {
-						log.info("Index is locked.  Unlocking...");
-						FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
-						IndexReader.unlock(dir);
-					}
-				} catch (Exception e) {
-					log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
-				}
-				
-				try {
-					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
-					//log.info("created IndexWriter");
-				} catch (Exception e) {
-					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
-				}
-				
-				textIndexType = textIndexType.toLowerCase();
-				IndexBuilderModel larqBuilder = null;
-				
-//				Model internalModel = getInternalModel(datamodelPurposeId);
-//				log.info("got internalmodel for " + datamodelPurposeId + ".  Is null?" + (internalModel==null));
-				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
-//					larqBuilder = new IndexBuilderSubject(indexFilePath);
-					larqBuilder = new IndexBuilderSubject(indexWriter);
-				} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
-//					larqBuilder = new IndexBuilderString(indexFilePath);
-					larqBuilder = new IndexBuilderString(indexWriter);
-				}
-				//if this datamodel purpose is a type to be indexed and if it has an index, load it.
-				if (larqBuilder != null) {
-					//log.info("Created indexBuilder for purpose " + datamodelPurposeId + ".  Retrieving index if available...");
-//					larqBuilder.indexStatements(internalModel.listStatements()) ;
-					//this does not work because listener does not listen across JVMs:
-//					log.info("Registering Index for role " + datamodelId + "...");
-//					internalModel.register(larqBuilder);
-					//save this larqBuilder
-					IndexLARQ theIndex = null;
-					try {
-						theIndex = larqBuilder.getIndex();
-					} catch (Exception e) {
-						log.info("Unable to retrieve index for datamodel purpose " + datamodelPurposeId);
-					}
-					if (theIndex == null) {
-						log.warn("No text index exists yet for datamodel purpose " + datamodelPurposeId + "Proceeding w/ blank index.");
-					}
-					indexBuilders.put(datamodelPurposeId, larqBuilder);
-					log.info("Added indexbuilder for purpose " + datamodelPurposeId);
-				}
-			}
-		}
-		
-		log.trace("assembled list of index builders:" + indexBuilders);
-		return indexBuilders;
-	}
-	
-	/**
-	 * Return an index containing all RDF data files in the Schema files area
-	 * @return the index
-	 * 
-	 * TODO consider storing this as a file
-	 * TODO consider not saving in memory
-	 * TODO consider index the OntModel instead (adds extraneous statements?)
-	 */
-//	public IndexLARQ getSchemaFilesSubjectIndex() {
-//		if (schemaFilesSubjectIndex != null) {
-//			return schemaFilesSubjectIndex;
-//		}
-//		Model schemaFilesModel = DatafileUtil.getModel(InqleInfo.getRdfSchemaFilesDirectory());
-//		IndexBuilderModel larqBuilder = new IndexBuilderSubject();
-//		log.trace("Persister.getSchemaFilesSubjectIndex(): indexing model of " + schemaFilesModel.size() + " statements...");
-//		larqBuilder.indexStatements(schemaFilesModel.listStatements());
-//		log.trace("...done");
-//		schemaFilesSubjectIndex = larqBuilder.getIndex();
-//		return schemaFilesSubjectIndex;
-//	}
 	
 	/**
 	 * Flush any Lucene text indexes for the Datamodel
@@ -556,7 +361,7 @@ public class Persister {
 	 */
 	public Model getIndexableModel(Datamodel indexableDatamodel) {
 //		log.info("Persister.getIndexableModel(Datamodel of ID=" + indexableDatamodel.getId() + ")...");
-		Model model = getModel(indexableDatamodel);
+		Model model = getModel(indexableDatamodel.getId());
 		if (indexableDatamodel instanceof PurposefulDatamodel) {
 			PurposefulDatamodel userDatamodel = (PurposefulDatamodel)indexableDatamodel;
 			Collection<String> purposes = userDatamodel.getDatamodelPurposes();
@@ -586,108 +391,75 @@ public class Persister {
 //	}
 	
 	public static String getDatamodelNameFromDatamodelId(String datamodelId) {
+		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
+			log.error("datamodelId should be in the format 'database_name/datamodel_name.  Was '" + datamodelId + "'");
+			return null;
+		}
+		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
+			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
+			return null;
+		}
 		return datamodelId.substring(datamodelId.lastIndexOf("/") + 1);
 	}
 	
 	public static String getDatabaseIdFromDatamodelId(String datamodelId) {
+		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
+			log.error("datamodelId should be in the format 'database_name/datamodel_name.  Was '" + datamodelId + "'");
+			return null;
+		}
+		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
+			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
+			return null;
+		}
 		return datamodelId.substring(0, datamodelId.lastIndexOf("/"));
 	}
 	
-	/**
-	 * Given an instance of a Datamodel, retrieve the Jena model
-	 * @param datamodel
-	 * @return
-	 */
-	public Model getModel(Datamodel datamodel) {
-		if (datamodel == null) return null;
-//		assert(namedModel != null);
-		//Model repositoryModel = getMetarepositoryModel();
-		if (cachedModels.containsKey(datamodel.getId())) {
-			return cachedModels.get(datamodel.getId());
-		}
-		if (datamodel instanceof DatabaseBackedDatamodel) {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(((DatabaseBackedDatamodel) datamodel).getDatabaseId());
-			Model model = connector.getModel(datamodel.getId());
-			cachedModels.put(datamodel.getId(), model);
-			return model;
-		}
-		
-		if (datamodel instanceof Datafile){
-			return Persister.getModelFromFile(((Datafile)datamodel).getFileUrl());
-		}
-		
-		//unknown type of Datamodel: return null
-		return null;
-		
-		//OLD CODE FOLLOWS:
-		
-		//log.info("#" + persisterId + ":getModel(" + namedModel.getId() + "): get new model");
-		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
-//		Model model = null;
-//		if (namedModel instanceof SystemDatamodel) {
-//			SystemDatamodel internalDatamodel = (SystemDatamodel)namedModel;
-			//if the model being requested is the Metarepository, return this special model
-//			if (internalDatamodel.getId().equals(getAppInfo().getMetarepositoryDatamodel().getId())) {
-//				return getMetarepositoryModel();
-//			}
-			
-//			if (getCachedModels() != null && getCachedModels().containsKey(internalDatamodel.getDatamodelRole())) {
-//				return getCachedModels().get(namedModel.getId());
-//			}
-//			SystemDatamodel datamodel = (SystemDatamodel)namedModel;
-//			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
-//			
-//			SDBDatabase theConnection;
-//			if (datamodel.getConnectionId().equals(getAppInfo().getInternalConnection().getId())) {
-//				theConnection = getAppInfo().getInternalConnection();
-//			} else {
-//				
-//				try {
-//					theConnection = (InternalConnection)reader.load(InternalConnection.class, datamodel.getConnectionId());
-//				} catch (NotFoundException e) {
-//					log.error("Unable to load SDBDatabase for Internal Datamodel: " + datamodel.getConnectionId());
-//					return null;
-//				}
-//			}
-//			SDBConnector connector = new SDBConnector(theConnection);
-			
-			
-//		} else if (namedModel instanceof UserDatamodel) {
-//			UserDatamodel datamodel = (UserDatamodel)namedModel;
-//			RDF2Bean reader = new RDF2Bean(getMetarepositoryModel());
-//			SDBDatabase dbConnectionInfo;
-//			try {
-//				//dbConnectionInfo = (SDBDatabase)reader.load(SDBDatabase.class, getConnection(rdbModel.getConnectionId()).getId());
-//				dbConnectionInfo = (SDBDatabase)reader.load(SDBDatabase.class, datamodel.getConnectionId());
-//			} catch (NotFoundException e) {
-//				log.error("Unable to load SDBDatabase for External Datamodel: " + getConnection(datamodel.getConnectionId()).getId());
-//				return null;
-//			}
-//			SDBConnector connector = new SDBConnector(dbConnectionInfo);
-//			model = connector.getModel(namedModel.getId());
+//	/**
+//	 * Given an instance of a Model, retrieve the Jena model
+//	 * @param datamodel
+//	 * @return
+//	 */
+//	public Model getModel(Datamodel datamodel) {
+//		if (datamodel == null) return null;
+//		//Model repositoryModel = getMetarepositoryModel();
+//		if (cachedModels.containsKey(datamodel.getId())) {
+//			return cachedModels.get(datamodel.getId());
+//		}
+//		if (datamodel instanceof DatabaseBackedDatamodel) {
+//			IDBConnector connector = DBConnectorFactory.getDBConnector(((DatabaseBackedDatamodel) datamodel).getDatabaseId());
+//			Model model = connector.getModel(datamodel.getId());
+//			cachedModels.put(datamodel.getId(), model);
+//			return model;
+//		}
+//		
+//		if (datamodel instanceof Datafile){
+//			return Persister.getModelFromFile(((Datafile)datamodel).getFileUrl());
+//		}
+//		
+//		//unknown type of Datamodel: return null
+//		return null;
+//	}
+	
+//	/**
+//	 * Get the database-backed model from the database directly, without using cache
+//	 * @param databaseId
+//	 * @param datamodelId
+//	 * @return
+//	 * 
+//	 * @deprecated - always use cache when possible
+//	 */
+//	public Model getDbModel(String databaseId, String datamodelId) {
+//		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(databaseId);
+//
+//		log.debug("Creating Model of name '" + datamodelId + "'.");
+//		
+//		Model model = dbConnector.getModel(datamodelId);
 //		return model;
-	}
+//	}
 	
-	/**
-	 * Get the database-backed model from the database directly, without using cache
-	 * @param databaseId
-	 * @param datamodelId
-	 * @return
-	 * 
-	 * @deprecated - always use cache when possible
-	 */
-	public Model getDbModel(String databaseId, String datamodelId) {
-		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(databaseId);
-
-		log.debug("Creating Model of name '" + datamodelId + "'.");
-		
-		Model model = dbConnector.getModel(datamodelId);
-		return model;
-	}
-	
-	public Model getCachedModel(String datamodelId) {
-		return cachedModels.get(datamodelId);
-	}
+//	public Model getCachedModel(String datamodelId) {
+//		return cachedModels.get(datamodelId);
+//	}
 	
 	/**
 	 * Loads an RDF file from local filesystem or remote (HTTP) source
@@ -703,79 +475,180 @@ public class Persister {
 			return null;
 		}
 	}
-
-	/**
-	 * Given the URI of a Datamodel, get the Jena Model object
-	 * @param namedModelUri
-	 * @return
-	 */
-//	public OntModel getOntModel(String namedModelId) {
-//		Datamodel namedModel = getDatamodel(namedModelId);
-//		if (namedModel != null) {
-//			return getOntModel(namedModel);
-//		}
-//		return null;
-//	}
-
-	/**
-	 * Given an instance of a Datamodel, retrieve the Jena model
-	 * @param aModel
-	 * 
-	 * @return
-	 * TODO Untested
-	 */
-//	@Deprecated
-//	public OntModel getOntModel(Datamodel namedModel) {
-//		OntModel repositoryOntModel = getMetarepositoryModel();
-//		//if the model being requested is not in the Repositories model, retrieve that specially
-//		if (namedModel.getId().equals(getAppInfo().getMetarepositoryDatamodel().getId())) {
-//			return repositoryOntModel;
-//		}
-//		
-//		//otherwise the requested model is a regular data-containing model.  Retrieve it from the Repositories Model
-//		OntModel ontModel = null;
-//		if (namedModel instanceof Datamodel) {
-//			Datamodel rdbModel = (Datamodel)namedModel;
-//			RDF2Bean reader = new RDF2Bean(repositoryOntModel);
-//			SDBDatabase dbConnectionInfo;
-//			try {
-//				dbConnectionInfo = (SDBDatabase)reader.load(SDBDatabase.class, getConnection(rdbModel.getConnectionId()).getId());
-//			} catch (NotFoundException e) {
-//				log.error("Unable to load SDBDatabase info " + rdbModel.getConnectionId());
-//				e.printStackTrace();
-//				return null;
-//			}
-//			SDBConnector connector = new SDBConnector(dbConnectionInfo);
-////			ontModel = connector.getOntModel(namedModel.getModelName());
-//			ontModel = connector.getMemoryOntModel(namedModel.getId());
-//			
-//			/*if null, create a new model
-//			if (model == null) {
-//				log.debug("Creating Datamodel '" + namedModel.getModelName() + "'...");
-//				model = createDBModel(dbConnectionInfo, namedModel.getModelName());
-//			}
-//			*/
-//			
-//			//close
-//			//connector.close();
-//			
-//		} else if (namedModel instanceof Datafile){
-//			ontModel = ModelFactory.createOntologyModel();
-//			ontModel.add(getModelFromFile(((Datafile)namedModel).getFileUrl()));
-//		}
-//		
-//		return ontModel;
-//	}
 	
 	/**
 	 * Does this server already have a datamodel of the provided ID?
 	 * @param datamodelId
 	 * @return
 	 */
-	public boolean datamodelExists(String datamodelId) {
-//		Model metarepositoryModel = getMetarepositoryModel();
-		if ( getModel(datamodelId) == null) return false;
-		return true;
+	public boolean modelExists(String datamodelId) {
+		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
+		String datamodelName = getDatamodelNameFromDatamodelId(datamodelId);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
+		return connector.modelExists(datamodelName);
+	}
+	
+	/* *********************************************************************
+	 * *** TEXT INDEX METHODS
+	 * ********************************************************************* */
+	/**
+	 * Get the IndexBuilder for the indexId.
+	 * @param indexBuilderKey either the id of the SystemDatamodel role 
+	 * or the UserDatamodel purpose
+	 * @return
+	 */
+	public IndexBuilderModel getIndexBuilder(String indexId) {
+		IndexBuilderModel indexBuilder = indexBuilders.get(indexId);
+//		if (indexBuilder!=null) return indexBuilder;
+//		initializeIndexBuilders();
+//		indexBuilder = indexBuilders.get(indexId);
+		return indexBuilder;
+	}
+	
+	public IndexLARQ getIndex(String indexId) {
+		IndexBuilderModel indexBuilder = getIndexBuilder(indexId);
+		indexBuilder.flushWriter();
+		log.trace("Retrieved & flushed IndexBuilder:" + indexBuilder);
+		return indexBuilder.getIndex();
+	}
+	
+	/**
+	 * Get an index builder
+	 * @param indexId
+	 * @param textIndexType
+	 * @return
+	 */
+	public IndexBuilderModel getIndexBuilder(String indexId, String textIndexType) {
+		String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + indexId;
+		//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
+		
+		//first unlock the directory, if locked
+		try {
+			if (IndexReader.isLocked(indexFilePath)) {
+				log.info("Index is locked.  Unlocking...");
+				FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
+				IndexReader.unlock(dir);
+			}
+		} catch (Exception e) {
+			log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
+		}
+		
+		IndexWriter indexWriter = null;
+		try {
+			indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
+		} catch (Exception e) {
+			log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
+		}
+		
+		textIndexType = textIndexType.toLowerCase();
+		IndexBuilderModel larqBuilder = null;
+		
+//		Model internalModel = getSystemModel(datamodelId);
+//		log.info("got internalmodel for " + datamodelId + ".  Is null?" + (internalModel==null));
+		if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+			larqBuilder = new IndexBuilderSubject(indexWriter);
+			
+		} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+//			larqBuilder = new IndexBuilderString(indexFilePath);
+			larqBuilder = new IndexBuilderString(indexWriter);
+		}
+		return larqBuilder;
+	}
+	
+
+	public Map<String, IndexBuilderModel> initializeIndexBuilders() {
+		
+		indexBuilders = new HashMap<String, IndexBuilderModel>();
+		
+		//loop thru system datamodels extensions, and create each index
+		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
+		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
+			log.trace("datamodelExtension=" + datamodelExtension);
+			String datamodelId = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String textIndexType = datamodelExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
+			
+			//if directed to do so, build & store an index for this Model
+			if (textIndexType != null) {
+				log.info("Creating IndexBuilder for datamodel of ID or purpose: " + datamodelId + "; textIndexType=" + textIndexType);
+
+				IndexBuilderModel larqBuilder = getIndexBuilder(datamodelId, textIndexType);
+				if (larqBuilder != null) {
+					log.info("Retrieving Index for Datamodel of ID: " + datamodelId + "...");
+					if (larqBuilder.getIndex() == null) {
+						log.warn("No text index exists for datamodel role " + datamodelId);
+					}
+					indexBuilders.put(datamodelId, larqBuilder);
+				}
+				
+			}
+		}
+		
+		//add any external datamodel purposes which are supposed to be indexed
+		List<IExtensionSpec> datamodelPurposeExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL_PURPOSES);
+		for (IExtensionSpec datamodelPurposeExtension: datamodelPurposeExtensions) {
+			
+			String datamodelPurposeId = datamodelPurposeExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String textIndexType = datamodelPurposeExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
+			
+//			log.info("FFFFFFFFFFFFFFFFFFdatamodelPurposeId=" + datamodelPurposeId + "; textIndexType=" + textIndexType);
+			//if directed to do so, build & store an index for this Model
+			if (textIndexType != null) {
+				IndexBuilderModel larqBuilder = getIndexBuilder(datamodelPurposeId, textIndexType);
+
+				
+//				log.info("Making IndexBuilder for external datamodel: datamodelExtension=" + datamodelPurposeExtension);
+//				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datamodelPurposeId;
+//				
+//				IndexWriter indexWriter = null;
+//				
+//				//first unlock the directory, if locked
+//				try {
+//					if (IndexReader.isLocked(indexFilePath)) {
+//						log.info("Index is locked.  Unlocking...");
+//						FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
+//						IndexReader.unlock(dir);
+//					}
+//				} catch (Exception e) {
+//					log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
+//				}
+//				
+//				try {
+//					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
+//					//log.info("created IndexWriter");
+//				} catch (Exception e) {
+//					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
+//				}
+//				
+//				textIndexType = textIndexType.toLowerCase();
+//				IndexBuilderModel larqBuilder = null;
+//				
+//				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
+//					larqBuilder = new IndexBuilderSubject(indexWriter);
+//				} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
+//					larqBuilder = new IndexBuilderString(indexWriter);
+//				}
+				
+				
+				
+				
+				if (larqBuilder != null) {
+					IndexLARQ theIndex = null;
+					try {
+						theIndex = larqBuilder.getIndex();
+					} catch (Exception e) {
+						log.info("Unable to retrieve index for datamodel purpose " + datamodelPurposeId);
+					}
+					if (theIndex == null) {
+						log.warn("No text index exists yet for datamodel purpose " + datamodelPurposeId + "Proceeding w/ blank index.");
+					}
+					indexBuilders.put(datamodelPurposeId, larqBuilder);
+					log.info("Added indexbuilder for purpose " + datamodelPurposeId);
+				}
+			}
+		}
+		
+		log.trace("assembled list of index builders:" + indexBuilders);
+		return indexBuilders;
 	}
 	
 	/* *********************************************************************

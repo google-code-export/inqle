@@ -94,7 +94,7 @@ public class TDBConnector implements IDBConnector {
 	 * List all models for this database
 	 */
 	public List<String> listModels() {
-		List<String> modelIds = new ArrayList<String>();
+		List<String> modelNames = new ArrayList<String>();
 		String dbRootPath = getFilePath();
 		File dbRoot = new File(dbRootPath);
 		File[] databaseFolders = dbRoot.listFiles();
@@ -102,10 +102,10 @@ public class TDBConnector implements IDBConnector {
 		for (File databaseFolder: databaseFolders) {
 			if (databaseFolder.isDirectory()) {
 				log.info("Found model: " + databaseFolder.getName());
-				modelIds.add(databaseFolder.getName());
+				modelNames.add(databaseFolder.getName());
 			}
 		}
-		return modelIds;
+		return modelNames;
 	}
 	
 	/**
@@ -158,6 +158,11 @@ public class TDBConnector implements IDBConnector {
 		datasetToDelete.close();
 		File dirToDelete = new File(getFilePath() + "/" + modelName);
 		return deleteDirectory(dirToDelete);
+	}
+
+	public boolean modelExists(String modelName) {
+		File putativeModelFolder = new File(getFilePath() + "/" + modelName);
+		return putativeModelFolder.exists();
 	}
 
 }
