@@ -22,7 +22,6 @@ public class SelectAnswerDialogLink extends DialogLink {
 	 */
 	public SelectAnswerDialogLink(String id) {
 		super(id);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
