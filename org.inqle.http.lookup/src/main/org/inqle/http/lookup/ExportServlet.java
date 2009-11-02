@@ -105,7 +105,7 @@ public class ExportServlet extends HttpServlet {
 		}
 		
 		Persister persister = Persister.getInstance();
-		Model model = persister.getCachedModel(datamodelid);
+		Model model = persister.getModel(datamodelid);
 		AppInfo appInfo = persister.getAppInfo();
 		String baseUri = RDF.INQLE;
 		try {

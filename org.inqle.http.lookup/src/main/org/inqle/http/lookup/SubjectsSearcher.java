@@ -197,7 +197,7 @@ public class SubjectsSearcher {
 		return lookupSubclassesInInternalDatamodel(
 				searchTermForRdfClass,
 				RDF.SUBJECT,
-				Data.DATA_SUBJECT_DATASET_ROLE_ID, 
+				Data.DATASET_NAME_FOR_DATA_SUBJECT, 
 				countSearchResults, 
 				offset);
 //		return lookupSubclassesInInternalDatamodel(
@@ -211,7 +211,7 @@ public class SubjectsSearcher {
 	 *  Lookup in the specified internal datamodel any resource, of the provided OWL class URI, which matches the provided search term.
 	 * @param searchTermForRdfClass
 	 * @param superClassUri the OWL superclass of the subjects to find.  Leave null to search RDFS classes (i.e. subclasses of rdfs:Class)
-	 * @param internalDatamodelRoleId the role of the internal datamodel to search
+	 * @param datamodelId the ID of the internal datamodel to search
 	 * @param countSearchResults
 	 * @param offset usually = 0
 	 * @return
@@ -221,15 +221,15 @@ public class SubjectsSearcher {
 	public static String lookupSubclassesInInternalDatamodel (
 			String searchTermForRdfClass, 
 			String superClassUri, 
-			String internalDatamodelRoleId, 
+			String datamodelId, 
 			int countSearchResults, 
 			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatamodelRoleId));
-		IndexLARQ textIndex =  persister.getIndex(internalDatamodelRoleId);
+		queryCriteria.addDatamodel(datamodelId);
+		IndexLARQ textIndex =  persister.getIndex(datamodelId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("ZZZZZZZZZZZZZZZZZZZZZZZ Searched " + internalDatamodelRoleId + " index for '" + searchTermForRdfClass + "'...");
+		log.info("ZZZZZZZZZZZZZZZZZZZZZZZ Searched index: " + datamodelId + " for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -251,7 +251,7 @@ public class SubjectsSearcher {
 	 * 
 	 * @param searchTermForRdfClass
 	 * @param superClassUri
-	 * @param internalDatamodelRoleId
+	 * @param datamodelId
 	 * @param countSearchResults
 	 * @param offset
 	 * @return
@@ -259,15 +259,15 @@ public class SubjectsSearcher {
 	public static String lookupRdfsAndSpecifiedSubclassesInInternalDatamodel (
 			String searchTermForRdfClass, 
 			String superClassUri, 
-			String internalDatamodelRoleId, 
+			String datamodelId, 
 			int countSearchResults, 
 			int offset) {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
-		queryCriteria.addDatamodel(persister.getSystemDatamodel(internalDatamodelRoleId));
-		IndexLARQ textIndex =  persister.getIndex(internalDatamodelRoleId);
+		queryCriteria.addDatamodel(datamodelId);
+		IndexLARQ textIndex =  persister.getIndex(datamodelId);
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("Searched " + internalDatamodelRoleId + " index for '" + searchTermForRdfClass + "'...");
+		log.info("Searched index: " + datamodelId + " for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
@@ -284,14 +284,14 @@ public class SubjectsSearcher {
 	}
 
 	
-	/**
-	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
-	 * @param searchTermForRdfClass the user-entered query term
-	 * @param owlClassUri the URI of the superclass 
-	 * @param countSearchResults
-	 * @param offset
-	 * @return
-	 */
+//	/**
+//	 * Lookup any resource, of the provided OWL class URI, which matches the provided search term.
+//	 * @param searchTermForRdfClass the user-entered query term
+//	 * @param owlClassUri the URI of the superclass 
+//	 * @param countSearchResults
+//	 * @param offset
+//	 * @return
+//	 */
 //	public static String lookupSubclassesInSchemaFiles(String searchTermForRdfClass, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
@@ -332,7 +332,7 @@ public class SubjectsSearcher {
 	public static String lookupSubclassesInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");
@@ -372,7 +372,7 @@ public class SubjectsSearcher {
 	public static String lookupPreferredOntologySubjectsInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");

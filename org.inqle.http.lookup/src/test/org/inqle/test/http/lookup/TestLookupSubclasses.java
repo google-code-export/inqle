@@ -47,7 +47,7 @@ public class TestLookupSubclasses {
 		log.info("Get/Create OntModel...");
 		OntModel schemaModel = getOntModel(SCHEMA_FILES_DIRECTORY);
 		schemaModel.setStrictMode(true);
-		queryCriteria.setSingleModel(schemaModel);
+		queryCriteria.addModel(null, schemaModel);
 		
 		String sparql = SubjectsSearcher.getSparqlSearchRdfSubclasses(SEARCH_TERM, null, 10, 0);
 		log.info("Querying w/ this sparql:\n" + sparql);
