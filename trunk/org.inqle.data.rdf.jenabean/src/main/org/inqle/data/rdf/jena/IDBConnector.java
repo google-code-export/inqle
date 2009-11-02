@@ -73,4 +73,6 @@ public interface IDBConnector {
 	public List<String> listModels();
 
 	public boolean deleteModel(String id);
+
+	public boolean modelExists(String datamodelName);
 }
