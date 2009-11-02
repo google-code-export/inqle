@@ -752,6 +752,16 @@ public class Persister {
 //	}
 	
 	/**
+	 * Get the datamodel object
+	 */
+	public <T extends Datamodel> Datamodel getDatamodel(Class<T> clazz, String datamodelId) {
+		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
+		Model metarepository = getMetarepositoryModel(databaseId);
+		T datamodel = reconstitute(clazz, datamodelId, metarepository, true);
+		return datamodel;
+	}
+	
+	/**
 	 * List all datamodels for a given database
 	 * @param databaseId
 	 * @return
