@@ -45,7 +45,7 @@ public abstract class ACreateOntResourceAction extends Action {
 
 	private String actionType;
 
-	private String internalDatasetRoleId;
+	private String datamodelId;
 	
 	private static final Logger log = Logger.getLogger(ACreateOntResourceAction.class);
 	
@@ -57,12 +57,12 @@ public abstract class ACreateOntResourceAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlPropertyUri
 	 */
-	public ACreateOntResourceAction(Shell shell, String internalDatasetRoleId, String parentResourceUri, String actionType) {
+	public ACreateOntResourceAction(Shell shell, String datamodelId, String parentResourceUri, String actionType) {
 		this.shell = shell;
 		log.trace("Create ACreateOntResourceAction");
-		this.internalDatasetRoleId = internalDatasetRoleId;
+		this.datamodelId = datamodelId;
 		Persister persister = Persister.getInstance();
-		Datamodel searchDatamodel = persister.getDatamodel(internalDatasetRoleId);
+		Datamodel searchDatamodel = persister.getDatamodel(datamodelId);
 		this.model = persister.getIndexableModel(searchDatamodel);
 //		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
