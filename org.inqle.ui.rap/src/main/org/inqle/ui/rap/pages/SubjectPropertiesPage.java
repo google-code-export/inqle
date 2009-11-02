@@ -315,7 +315,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			CreateHeaderPropertiesAction createHeaderPropertiesAction = new CreateHeaderPropertiesAction(
 					formComposite.getShell(),
 					getCsvReader().getHeaders(),
-					Data.DATA_PROPERTY_DATASET_ROLE_ID, 
+					Data.DATASET_NAME_FOR_DATA_PROPERTY, 
 					getSubjectUri(), 
 					getThingClass());
 			createHeaderPropertiesAction.run();
