@@ -39,7 +39,7 @@ public class CreateHeaderPropertiesAction extends Action {
 //	private OntClass domainClass;
 	private Shell shell;
 	private String[] headers;
-	private String internalDatasetRoleId;
+//	private String datamodelId;
 	private String subjectClass;
 	private Model model;
 	private String subjectName;
@@ -51,16 +51,16 @@ public class CreateHeaderPropertiesAction extends Action {
 	 * @param internalDatasetRoleId
 	 * @param owlPropertyUri
 	 */
-	public CreateHeaderPropertiesAction(Shell shell, String[] headers, String internalDatasetRoleId, String subjectClass, String subjectName) {
+	public CreateHeaderPropertiesAction(Shell shell, String[] headers, String datamodelId, String subjectClass, String subjectName) {
 //		super(shell, internalDatasetRoleId, owlPropertyUri);
 		this.shell = shell;
 		this.headers = headers;
-		this.internalDatasetRoleId = internalDatasetRoleId;
+//		this.datamodelId = datamodelId;
 		log.trace("Created CreateHeaderPropertiesAction");
 		this.subjectClass = subjectClass;
 		this.subjectName = subjectName;
 		Persister persister = Persister.getInstance();
-		this.model = persister.getSystemModel(internalDatasetRoleId);
+		this.model = persister.getModel(datamodelId);
 	}
 	
 	public void run() {

@@ -26,6 +26,7 @@ import org.inqle.core.util.ListMapUtil;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
 import org.inqle.data.rdf.jenabean.mapping.SubjectMapping;
 import org.inqle.data.rdf.jenabean.mapping.TableMapping;
@@ -315,7 +316,7 @@ public abstract class SubjectPropertiesPage extends DynaWizardPage implements Se
 			CreateHeaderPropertiesAction createHeaderPropertiesAction = new CreateHeaderPropertiesAction(
 					formComposite.getShell(),
 					getCsvReader().getHeaders(),
-					Data.DATASET_NAME_FOR_DATA_PROPERTY, 
+					Data.DATAMODEL_ID_FOR_DATA_PROPERTY,
 					getSubjectUri(), 
 					getThingClass());
 			createHeaderPropertiesAction.run();

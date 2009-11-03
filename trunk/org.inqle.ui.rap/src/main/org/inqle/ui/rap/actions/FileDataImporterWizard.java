@@ -199,7 +199,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			persister.flushIndexes(datamodel);
 			
 			//invalidate the cache for this dataset
-			CacheTool.invalidateDataCache(datamodel.getId());
+			CacheTool.invalidateDataCache(Persister.CORE_DATABASE_ID, datamodel.getId());
 		}
 		
 		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");
