@@ -197,7 +197,7 @@ public class SubjectsSearcher {
 		return lookupSubclassesInInternalDatamodel(
 				searchTermForRdfClass,
 				RDF.SUBJECT,
-				Data.DATASET_NAME_FOR_DATA_SUBJECT, 
+				Data.DATAMODEL_ID_FOR_DATA_SUBJECT, 
 				countSearchResults, 
 				offset);
 //		return lookupSubclassesInInternalDatamodel(

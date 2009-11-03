@@ -358,7 +358,7 @@ public class PropertyLookup {
 		Persister persister = Persister.getInstance();
 		QueryCriteria queryCriteria = new QueryCriteria();
 //		queryCriteria.addDatamodel(persister.getSystemDatamodel(Data.DATA_PROPERTY_DATASET_ROLE_ID));
-		queryCriteria.addDatamodel(Persister.CORE_DATABASE_ID + "/" + Data.DATASET_NAME_FOR_DATA_PROPERTY);
+		queryCriteria.addDatamodel(Persister.CORE_DATABASE_ID + "/" + Data.DATAMODEL_ID_FOR_DATA_PROPERTY);
 		String sparql = getSparqlFindDataAndSubjectProperties(subjectClassUri, countSearchResults, offset);
 		log.info("lookupAllDataProperties(): Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);
