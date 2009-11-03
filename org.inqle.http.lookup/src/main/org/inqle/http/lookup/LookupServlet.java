@@ -143,7 +143,7 @@ public class LookupServlet extends HttpServlet {
 			String matchingDataClassesXml = SubjectsSearcher.lookupSubclassesInInternalDatamodel(
 					searchTermDataUmbelClass, 
 					null, 
-					Data.DATASET_NAME_FOR_DATA_SUBJECT, 
+					Data.DATAMODEL_ID_FOR_DATA_SUBJECT, 
 					countResults, 
 					startIndex);
 			Document matchingDataClassesDoc = XmlDocumentUtil.getDocument(matchingDataClassesXml);
