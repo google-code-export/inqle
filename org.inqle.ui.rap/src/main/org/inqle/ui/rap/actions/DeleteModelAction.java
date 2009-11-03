@@ -15,7 +15,9 @@ import org.inqle.ui.rap.tree.parts.ModelPart;
 /**
  * @author David Donohue
  * Feb 8, 2008
+ * TODO make deleting models work
  */
+@Deprecated
 public class DeleteModelAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
@@ -52,8 +54,9 @@ public class DeleteModelAction extends Action {
 			deleteObject = MessageDialog.openConfirm(window.getShell(), "Delete this database", "Are you sure you want to delete datamodel\n'" + modelPart.getName() + "'?\nTHIS CANNOT BE UNDONE!");
 		}
 		if (deleteObject) {
-			Persister persister = Persister.getInstance();
-			persister.deleteModel(namedModelToDelete);
+//			Persister persister = Persister.getInstance();
+//			TODO: get deleting models to work, when TDB supports it
+//			persister.deleteModel(namedModelToDelete);
 			IPartType parentPart = modelPart.getParent();
 			parentPart.fireUpdate(parentPart);
 		}

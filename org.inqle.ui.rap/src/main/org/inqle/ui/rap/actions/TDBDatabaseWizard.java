@@ -90,7 +90,7 @@ public class TDBDatabaseWizard extends Wizard {
 		
 		Persister persister = Persister.getInstance();
 //		SDBConnector connector = new SDBConnector(database);
-		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (this.mode == DatabaseWizardAction.MODE_NEW || this.mode == DatabaseWizardAction.MODE_CLONE) {

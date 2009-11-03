@@ -9,6 +9,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.LookupServlet;
@@ -62,7 +63,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		log.trace("Create ACreateOntResourceAction");
 		this.datamodelId = datamodelId;
 		Persister persister = Persister.getInstance();
-		Datamodel searchDatamodel = persister.getDatamodel(datamodelId);
+		Datamodel searchDatamodel = persister.getDatamodel(PurposefulDatamodel.class, datamodelId);
 		this.model = persister.getIndexableModel(searchDatamodel);
 //		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);

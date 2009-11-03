@@ -205,7 +205,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 
 			CreateSubclassAction createSubclassAction = new CreateSubclassAction(
 					selfComposite.getShell(), 
-					Data.DATASET_NAME_FOR_DATA_SUBJECT, 
+					Data.DATAMODEL_ID_FOR_DATA_SUBJECT, 
 					RDF.SUBJECT);
 			createSubclassAction.run();
 			

@@ -98,7 +98,7 @@ public class DatabasePart extends PartType {
 //		log.trace("datamodels=" + datamodels);
 		
 		//for Datamodel, add a ModelPart
-		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
 		List<String> modelIds = connector.listModels();
 		for (String modelId: modelIds) {
 			Datamodel datamodel = persister.getDatamodel(modelId);

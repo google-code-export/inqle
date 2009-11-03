@@ -259,7 +259,7 @@ public class UserDatamodelWizard extends Wizard {
 		
 		Persister persister = Persister.getInstance();
 		
-		if (mode != DatamodelWizardAction.MODE_EDIT && persister.datamodelExists(datamodel.getId())) {
+		if (mode != DatamodelWizardAction.MODE_EDIT && persister.modelExists(datamodel.getId())) {
 			MessageDialog.openInformation(parent.getShell(), "Datamodel ID already exists", 
 					"This database already has a datamodel with ID '" + datamodel.getId() + "'.\nPlease choose a different ID.");
 			return false;
@@ -280,7 +280,7 @@ public class UserDatamodelWizard extends Wizard {
 			datamodel.setDatamodelPurposes(null);
 		}
 		
-		IDBConnector connector = DBConnectorFactory.getDBConnector(database);
+		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
 		boolean connectionSucceeds = connector.testConnection();
 		
 		if (! connectionSucceeds) {

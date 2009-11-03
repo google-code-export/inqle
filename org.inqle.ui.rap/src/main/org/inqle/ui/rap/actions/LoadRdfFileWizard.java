@@ -221,7 +221,7 @@ public class LoadRdfFileWizard extends DynaWizard {
     waitingDialog.close();
     if (success) {
     	log.info("Success loading RDF file.");
-    	CacheTool.invalidateDataCache(datamodel.getId());
+    	CacheTool.invalidateDataCache(Persister.CORE_DATABASE_ID, datamodel.getId());
     	if (loader.getCountLoaded() == 0) {
     		MessageDialog.openWarning( getShell(), "Loaded no data", "Successfully processed file " + file.getName() + ", however imported no records.\nPerhaps this file was already loaded into this datamodel."); 
     	} else {

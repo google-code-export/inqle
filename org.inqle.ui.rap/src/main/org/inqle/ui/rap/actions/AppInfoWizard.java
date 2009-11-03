@@ -165,10 +165,10 @@ public class AppInfoWizard extends Wizard {
 		
 		//create the system database and the metarepository model (which contains data about datamodels)
 		try {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase);
+			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase.getId());
 			int status = connector.createDatabase();
 			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ID + ": Status=" + status);
-			Model metarepositoryModel = persister.getMetarepositoryModel();
+			Model metarepositoryModel = persister.getMetarepositoryModel(Persister.CORE_DATABASE_ID);
 			persister.persist(systemDatabase, metarepositoryModel);
 			persister.persist(metarepositoryDatamodel, metarepositoryModel);
 			log.info("CREATED user database and first user datamodel.");
