@@ -127,7 +127,6 @@ public class AnswerTypePanel extends Panel implements IMenuItem {
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
 				AnswerTypePanel.this.selected = (IAnswerType<?>)getComponent().getDefaultModel().getObject();
-				System.out.println(AnswerTypePanel.this.selected);
 			}
 		});
 		add(answerType);
