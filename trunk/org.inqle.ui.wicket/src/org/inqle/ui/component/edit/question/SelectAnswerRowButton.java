@@ -3,6 +3,8 @@
  */
 package org.inqle.ui.component.edit.question;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.inqle.ui.model.IAnswer;
 
 import com.antilia.web.dialog.DefaultDialog;
@@ -35,4 +37,18 @@ public abstract class SelectAnswerRowButton extends OkDialogButton {
 		this.bean = bean;
 	}
 
+	@Override
+	protected String getLabel() {
+		return null;
+	}
+	
+	@Override
+	protected String getLabelKey() {
+		return null;
+	}
+	
+	@Override
+	protected IModel<String> getTitleModel() {
+		return new Model<String>("Select this row");
+	}
 }
