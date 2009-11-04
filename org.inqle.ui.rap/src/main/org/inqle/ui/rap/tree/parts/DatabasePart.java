@@ -13,6 +13,7 @@ import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
+import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.IPart;
@@ -101,7 +102,10 @@ public class DatabasePart extends PartType {
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
 		List<String> modelIds = connector.listModels();
 		for (String modelId: modelIds) {
-			Datamodel datamodel = persister.getDatamodel(modelId);
+			Datamodel datamodel = persister.getDatamodel(PurposefulDatamodel.class, modelId);
+			if (datamodel == null) {
+				datamodel = persister.getDatamodel(SystemDatamodel.class, modelId);
+			}
 			ModelPart modelPart = new ModelPart(datamodel);
 			modelPart.setParent(this);
 			modelPart.addListener(this.listener);

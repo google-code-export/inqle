@@ -47,7 +47,7 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 			if (view==null) {
 				view = (IDatamodelView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
 			}
-			view.setDatamodel(datamodel);
+			view.setDatamodelId(datamodel.getId());
 			view.setTitleText("Types in Datamodel :" + datamodel);
 			log.info("Refreshing Datamodel View with dataset: " + getDatamodel());
 			view.refreshView();

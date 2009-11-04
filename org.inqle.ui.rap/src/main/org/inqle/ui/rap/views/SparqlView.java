@@ -74,8 +74,9 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 	private ResultSetRewindable resultSet;
 
 
-	protected Datamodel datamodel;
-
+//	protected Datamodel datamodel;
+	protected String datamodelId;
+	
 	private Button checkAllButton;
 
 	private Button uncheckAllButton;
@@ -243,12 +244,12 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		log.info("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(sparql);
-		queryCriteria.addDatamodel(getDatamodel());
+		queryCriteria.addDatamodel(datamodelId);
 		this.resultSet = Queryer.selectResultSet(queryCriteria);
 	}
 
-	public Datamodel getDatamodel() {
-		return datamodel;
+	public String getDatamodelId() {
+		return datamodelId;
 	}
 
 	public abstract String getSparql();
@@ -465,7 +466,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 			return;
 		}
 		
-		Model modelToDeleteFrom = persister.getModel(getDatamodel());
+		Model modelToDeleteFrom = persister.getModel(datamodelId);
 		long sizeBeforeDelete = modelToDeleteFrom.size();
 		int deletedCount = 0;
 		log.info("Deleting these items: " + checkedItems);
@@ -522,7 +523,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 			log.error("Error endocing list of URIs:" + checkedUriList, e);
 			return;
 		}
-		String url = ExportServlet.PATH + "?" + ExportServlet.PARAM_EXPORT_FROM_DATAMODEL + "=" + getDatamodel().getId() +
+		String url = ExportServlet.PATH + "?" + ExportServlet.PARAM_EXPORT_FROM_DATAMODEL + "=" + datamodelId +
 			"&" + ExportServlet.PARAM_URI_LIST + "=" + encodedUriList;
 		NewBrowserAction newBrowserAction = new NewBrowserAction(
 			url,
@@ -533,8 +534,8 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		);
 		newBrowserAction.run();
 	}
-	public void setDatamodel(Datamodel datamodel) {
-		this.datamodel = datamodel;
+	public void setDatamodelId(String datamodelId) {
+		this.datamodelId = datamodelId;
 	}
 
 	public String getTitleText() {

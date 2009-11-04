@@ -25,7 +25,7 @@ import org.inqle.ui.rap.actions.LoadRdfFileAction;
 import org.inqle.ui.rap.actions.NewBrowserAction;
 import org.inqle.ui.rap.actions.OpenNamedModelViewAction;
 import org.inqle.ui.rap.views.DatamodelView;
-import org.inqle.ui.rap.views.DatasetViewer;
+import org.inqle.ui.rap.views.DatamodelViewer;
 
 public class ModelPart extends Part {
 
@@ -132,6 +132,6 @@ public class ModelPart extends Part {
 	}
 	
 	public IDisposableViewer getViewer(Composite composite) {
-		return new DatasetViewer(composite, getObject());
+		return new DatamodelViewer(composite, getObject());
 	}
 }

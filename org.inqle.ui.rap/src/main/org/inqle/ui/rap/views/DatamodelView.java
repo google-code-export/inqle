@@ -79,10 +79,10 @@ public class DatamodelView extends SparqlView {
 					}
 				}
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(classView);
-				classView.setDatamodel(getDatamodel());
+				classView.setDatamodelId(datamodelId);
 				classView.setClassUri(data.toString());
 				classView.setTitleText("Things of type: <" + data.toString() + ">");
-				log.info("Refreshing Class View with datamodel: " + getDatamodel() + " and class URI: " + data.toString());
+				log.info("Refreshing Class View with datamodel: " + datamodelId + " and class URI: " + data.toString());
 				classView.refreshView();
 			}
 		}

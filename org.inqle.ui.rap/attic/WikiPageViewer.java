@@ -40,7 +40,7 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 	
 	private static final Logger log = Logger.getLogger(WikiPageViewer.class);
 	
-	public WikiPageViewer(Composite parentComposite, Datamodel datamodel, String resourceUri) {
+	public WikiPageViewer(Composite parentComposite, String datamodelId, String resourceUri) {
 //		this.datamodel = datamodel;
 		this.pageResourceUri = resourceUri;
 	
@@ -51,7 +51,7 @@ public class WikiPageViewer extends Viewer implements IDisposableViewer {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		Persister persister = Persister.getInstance();
-		Model model = persister.getModel(datamodel);
+		Model model = persister.getModel(datamodelId);
 		wikiData = new WikiData(model, pageResourceUri);
 		
 		typeText = new Text(composite, SWT.READ_ONLY);
