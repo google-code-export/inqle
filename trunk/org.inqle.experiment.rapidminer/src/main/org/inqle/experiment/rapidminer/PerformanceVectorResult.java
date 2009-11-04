@@ -23,7 +23,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * Apr 22, 2008
  */
-@TargetDatamodelName(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL)
+@TargetDatamodelName(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME)
 @Namespace(RDF.INQLE)
 public class PerformanceVectorResult extends UniqueJenabean implements IExperimentResult {
 

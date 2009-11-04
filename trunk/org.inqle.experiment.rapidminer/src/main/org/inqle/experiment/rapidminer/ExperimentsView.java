@@ -73,10 +73,11 @@ public class ExperimentsView extends SparqlView {
 	}
 	
 	@Override
-	public Datamodel getDatamodel() {
-		Persister persister = Persister.getInstance();
-		SystemDatamodel datamodel = persister.getSystemDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL);
-		return datamodel;
+	public String getDatamodelId() {
+//		Persister persister = Persister.getInstance();
+//		SystemDatamodel datamodel = persister.getSystemDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME);
+//		return datamodel;
+		return IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_ID;
 	}
 	
 	@Override
@@ -99,10 +100,10 @@ public class ExperimentsView extends SparqlView {
 					}
 				}
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(ssView);
-				ssView.setDatamodel(getDatamodel());
+				ssView.setDatamodelId(datamodelId);
 				ssView.setSubjectUri(uriValData.getUriVal());
 				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
-				log.info("Refreshing Subject Statements View with datamodel: " + getDatamodel() + " and instance URI: " + data.toString());
+				log.info("Refreshing Subject Statements View with datamodel: " + datamodelId + " and instance URI: " + data.toString());
 				ssView.refreshView();
 //				ssView.setFocus();
 				
