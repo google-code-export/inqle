@@ -5,9 +5,9 @@ import org.inqle.data.rdf.jena.Datamodel;
 
 public interface IDatamodelView extends IWorkbenchPart {
 
-	public void setDatamodel(Datamodel data);
+	public void setDatamodelId(String data);
 	
-	public Datamodel getDatamodel();
+	public String getDatamodelId();
 
 	public void setTitleText(String string);
 

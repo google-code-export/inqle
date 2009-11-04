@@ -86,10 +86,10 @@ public class ClassView extends SparqlView {
 					}
 				}
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().bringToTop(ssView);
-				ssView.setDatamodel(getDatamodel());
+				ssView.setDatamodelId(datamodelId);
 				ssView.setSubjectUri(uriValData.getUriVal());
 				ssView.setTitleText("Properties of thing: <" + uriValData.getUriVal() + ">");
-				log.info("Refreshing Subject Statements View with datamodel: " + getDatamodel() + " and instance URI: " + data.toString());
+				log.info("Refreshing Subject Statements View with datamodel: " + datamodelId + " and instance URI: " + data.toString());
 				ssView.refreshView();
 //				ssView.setFocus();
 				

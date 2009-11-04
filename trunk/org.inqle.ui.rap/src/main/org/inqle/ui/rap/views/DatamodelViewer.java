@@ -22,7 +22,7 @@ import org.inqle.ui.rap.IDisposableViewer;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-public class DatasetViewer extends Viewer implements IDisposableViewer {
+public class DatamodelViewer extends Viewer implements IDisposableViewer {
 
 	private Composite composite;
 	private Text idWidget;
@@ -33,23 +33,23 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 	private Text createdWidget;
 //	private ResultSetTable resultSetTable;
 	
-	public DatasetViewer(Composite parentComposite, Object bean) {
+	public DatamodelViewer(Composite parentComposite, Object bean) {
 		this(parentComposite);
 		setInput(bean);
 	}
 	
-	public Datamodel getDataset() {
+	public Datamodel getDatamodel() {
 		if (bean == null) return null;
 		return (Datamodel)bean;
 	}
 	
 	public Model getModel() {
 		Persister persister = Persister.getInstance();
-		Model model = persister.getModel(getDataset());
+		Model model = persister.getModel(getDatamodel().getId());
 		return model;
 	}
 	
-	public DatasetViewer(Composite parentComposite) {
+	public DatamodelViewer(Composite parentComposite) {
 		//this.parentComposite = parentComposite;
 		
 		composite = new Composite(parentComposite, SWT.NONE);
@@ -99,7 +99,7 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 	//private ISelection selection;
 	private Object bean;
 
-	private static final Logger log = Logger.getLogger(DatasetViewer.class);
+	private static final Logger log = Logger.getLogger(DatamodelViewer.class);
 	
 	@Override
 	public Control getControl() {
@@ -169,8 +169,8 @@ public class DatasetViewer extends Viewer implements IDisposableViewer {
 			sizeWidget.setText(String.valueOf(model.size()));
 		}
 //		model.close();
-		if (getDataset() != null) {
-			Date creationDate = getDataset().getCreationDate();
+		if (getDatamodel() != null) {
+			Date creationDate = getDatamodel().getCreationDate();
 			if (creationDate != null) {
 				createdWidget.setText(DateFormatter.getDateString(creationDate));
 			}

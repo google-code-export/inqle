@@ -12,6 +12,7 @@ import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
+import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.PublishDatamodelServlet;
 import org.inqle.ui.rap.ApplicationActionBarAdvisor;
 import org.inqle.ui.rap.IDisposableViewer;
@@ -25,21 +26,21 @@ import org.inqle.ui.rap.actions.LoadRdfFileAction;
 import org.inqle.ui.rap.actions.NewBrowserAction;
 import org.inqle.ui.rap.actions.OpenNamedModelViewAction;
 import org.inqle.ui.rap.views.DatamodelView;
-import org.inqle.ui.rap.views.DatasetViewer;
+import org.inqle.ui.rap.views.DatamodelViewer;
 import org.inqle.ui.rap.views.ObjectViewer;
 
 public class WikiPart extends Part {
 
 	private static final String ICON_PATH_EXTERNAL_DATASET = "org/inqle/ui/rap/images/wiki.gif";
-	private Datamodel datamodel;
+	private String datamodelId;
 	
 	private static final Logger log = Logger.getLogger(WikiPart.class);
 	
-	public WikiPart(Datamodel datamodel) {
-		this.datamodel = datamodel;
+	public WikiPart(String datamodelId) {
+		this.datamodelId = datamodelId;
 	}
 	public String getModelName() {
-		return datamodel.getName();
+		return Persister.getDatamodelNameFromDatamodelId(datamodelId);
 	}
 	
 	@Override
@@ -51,8 +52,8 @@ public class WikiPart extends Part {
 	public String getIconPath() {
 		return ICON_PATH_EXTERNAL_DATASET;
 	}
-	public Datamodel getDataset() {
-		return this.datamodel;
+	public String getDatamodelId() {
+		return this.datamodelId;
 	}
 	
 	@Override
@@ -89,13 +90,13 @@ public class WikiPart extends Part {
 	
 	@Override
 	public Object getObject() {
-		return datamodel;
+		return datamodelId;
 	}
 	
 	@Override
 	public IDisposableViewer getViewer(Composite composite) {
 //		return new WikiPageViewer(composite, datamodel, new DatamodelPage(datamodel));
-		log.info("Creating WikiPageViewer w/ datamodel: " + datamodel);
-		return new WikiPageViewer(composite, datamodel, null);
+		log.info("Creating WikiPageViewer w/ datamodel: " + datamodelId);
+		return new WikiPageViewer(composite, datamodelId, null);
 	}
 }
