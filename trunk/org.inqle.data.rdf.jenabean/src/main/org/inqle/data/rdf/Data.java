@@ -1,5 +1,7 @@
 package org.inqle.data.rdf;
 
+import org.inqle.data.rdf.jenabean.Persister;
+
 import thewebsemantic.Namespace;
 
 /**
@@ -17,6 +19,8 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class Data {
 
-	public static final String DATASET_NAME_FOR_DATA_SUBJECT = "org.inqle.datamodels.dataSubject";
-	public static final String DATASET_NAME_FOR_DATA_PROPERTY = "org.inqle.datamodels.dataProperty";
+	private static final String DATAMODEL_NAME_FOR_DATA_SUBJECT = "org.inqle.datamodels.dataSubject";
+	private static final String DATAMODEL_NAME_FOR_DATA_PROPERTY = "org.inqle.datamodels.dataProperty";
+	public static final String DATAMODEL_ID_FOR_DATA_PROPERTY = Persister.CORE_DATABASE_ID + "/" + DATAMODEL_NAME_FOR_DATA_PROPERTY;
+	public static final String DATAMODEL_ID_FOR_DATA_SUBJECT = Persister.CORE_DATABASE_ID + "/" + DATAMODEL_NAME_FOR_DATA_SUBJECT;
 }
