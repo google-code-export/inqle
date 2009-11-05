@@ -17,7 +17,10 @@ import com.antilia.web.button.AbstractLink;
 import com.antilia.web.button.IMenuItemHolder;
 import com.antilia.web.button.MenuItemsFactory;
 import com.antilia.web.button.SmallSeparatorButton;
+import com.antilia.web.dialog.DefaultDialog;
+import com.antilia.web.dialog.DialogLink;
 import com.antilia.web.dialog.IVeilScope;
+import com.antilia.web.dialog.util.ConfirmationDialog;
 import com.antilia.web.resources.DefaultStyle;
 import com.antilia.web.veil.AntiliaVeilResource;
 import com.google.inject.Inject;
@@ -161,7 +164,7 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 	}
 	
-	private static class DeleteButton extends AbstractLink {
+	private static class DeleteButton extends DialogLink {
 		
 		private static final long serialVersionUID = 1L;
 
@@ -189,15 +192,27 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		}
 		
 		@Override
-		protected void onClick(AjaxRequestTarget target) {
-			QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-			questionsPanel.questionsDao.remove(question);
-			questionsPanel.setContent(questionsPanel.createdListComponent());
-			if(target != null) {
-				target.addComponent(questionsPanel.getContainer());
-			}					
+		protected String getLabelKey() {
+			return null;
 		}
 		
+		@Override
+		public DefaultDialog newDialog(String id) {
+			return new ConfirmationDialog(id, this, "Do you want to delete Question?") {
+				
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onOk(AjaxRequestTarget target, Form<?> form) {
+					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
+					questionsPanel.questionsDao.remove(question);
+					questionsPanel.setContent(questionsPanel.createdListComponent());
+					if(target != null) {
+						target.addComponent(questionsPanel.getContainer());
+					}					
+				}
+			};
+		}		
 	}
 
 	private WebMarkupContainer container;
