@@ -85,18 +85,14 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 				private static final long serialVersionUID = 1L;
 
 				public void onSave(AjaxRequestTarget target, Form<?> form, Question bean) {
-					getQuestionsPanel().setContent(getQuestionsPanel().createdListComponent());
 					getQuestionsPanel().questionsDao.update(bean);
-					if(target != null) {
-						target.addComponent(getQuestionsPanel().getContainer());
-					}
+					onCancel(target, bean);
 				}
 				
 				public void onCancel(AjaxRequestTarget target, Question bean) {
-					QuestionsEditPanel questionsPanel = findParent(QuestionsEditPanel.class);
-					questionsPanel.setContent(questionsPanel.createdListComponent());
+					getQuestionsPanel().setContent(getQuestionsPanel().createdListComponent());
 					if(target != null) {
-						target.addComponent(questionsPanel.getContainer());
+						target.addComponent(getQuestionsPanel().getContainer());
 					}
 				}
 			}
