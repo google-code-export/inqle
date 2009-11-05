@@ -194,7 +194,7 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 		
 		@Override
 		public DefaultDialog newDialog(String id) {
-			return new ConfirmationDialog(id, this, "Do you want to delete Question?") {
+			ConfirmationDialog dialog = new ConfirmationDialog(id, this, "Do you want to delete Question?") {
 				
 				private static final long serialVersionUID = 1L;
 
@@ -208,6 +208,8 @@ public class QuestionsEditPanel extends Panel implements IVeilScope {
 					}					
 				}
 			};
+			dialog.setCentered(true);
+			return dialog;
 		}		
 	}
 

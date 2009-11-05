@@ -197,14 +197,13 @@ public class OptionsAnswerEditDetailPanel extends Panel implements IVeilScope {
 		
 		@Override
 		protected String getLabelKey() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 		
 		@Override
 		public DefaultDialog newDialog(String id) {
 			
-			return new ConfirmationDialog(id, this, "Do you want to delete option?") {
+			ConfirmationDialog dialog = new ConfirmationDialog(id, this, "Do you want to delete option?") {
 				
 				private static final long serialVersionUID = 1L;
 
@@ -219,7 +218,9 @@ public class OptionsAnswerEditDetailPanel extends Panel implements IVeilScope {
 					}					
 				}
 			};
-		}
+			dialog.setCentered(true);
+			return dialog;
+		}		
 		
 	}
 	
