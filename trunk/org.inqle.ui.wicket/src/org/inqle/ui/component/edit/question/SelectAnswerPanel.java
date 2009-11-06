@@ -3,6 +3,7 @@
  */
 package org.inqle.ui.component.edit.question;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -18,7 +19,7 @@ public abstract class SelectAnswerPanel extends Panel {
 
 	private static final long serialVersionUID = 1L;
 
-	private Label answerLabel; 
+	private Component answerLabel; 
 	/**
 	 * @param id
 	 */
@@ -51,11 +52,16 @@ public abstract class SelectAnswerPanel extends Panel {
 		add(answerDialogLink);
 	}
 
+	@Override
+	protected void onBeforeRender() {
+		
+		super.onBeforeRender();
+	}
 	public abstract IAnswer getAnswer();
 
 	public abstract void setAnswer(IAnswer answer);
 	
-	public Label getAnswerLabel() {
+	public Component getAnswerLabel() {
 		return answerLabel;
 	}
 		
