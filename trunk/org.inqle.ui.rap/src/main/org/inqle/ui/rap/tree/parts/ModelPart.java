@@ -41,7 +41,7 @@ public class ModelPart extends Part {
 		//this.persister = persister;
 	}
 	public String getModelName() {
-		return datamodel.getId();
+		return datamodel.getName();
 	}
 	
 	@Override

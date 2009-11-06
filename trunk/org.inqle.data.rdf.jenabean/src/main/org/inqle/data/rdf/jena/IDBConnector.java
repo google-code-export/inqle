@@ -28,7 +28,7 @@ public interface IDBConnector {
 	public static final int STORE_CREATED = 1;
 	
 	/**
-	 * Get the Jena Datamodel object, representing a set of named graphs
+	 * Get the Jena Dataset object, representing a set of named graphs
 	 * @return
 	 */
 	public Dataset getDataset(String datasetId);
@@ -38,7 +38,7 @@ public interface IDBConnector {
 	 * @param modelName
 	 * @return
 	 */
-	public Model getModel(String modelId);
+	public Model getModel(String modelName);
 	
 	/**
 	 * This creates a new database/store.

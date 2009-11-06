@@ -157,7 +157,7 @@ public class AppInfoWizard extends Wizard {
 //		SDBConnector connector = new SDBConnector(metarepositoryConnection);
 //		int status = connector.createDatabase();
 //		log.info("Tried to create new SDB store for Metarepository, with status=" + status);
-		IDatabase systemDatabase = new LocalFolderDatabase();
+		LocalFolderDatabase systemDatabase = new LocalFolderDatabase();
 		systemDatabase.setId(InqleInfo.SYSTEM_DATABASE_ID);
 		SystemDatamodel metarepositoryDatamodel = new SystemDatamodel();
 		metarepositoryDatamodel.setId(Persister.METAREPOSITORY_DATAMODEL);
@@ -168,9 +168,10 @@ public class AppInfoWizard extends Wizard {
 			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase.getId());
 			int status = connector.createDatabase();
 			log.info("Created database: " + InqleInfo.SYSTEM_DATABASE_ID + ": Status=" + status);
-			Model metarepositoryModel = persister.getMetarepositoryModel(Persister.CORE_DATABASE_ID);
-			persister.persist(systemDatabase, metarepositoryModel);
-			persister.persist(metarepositoryDatamodel, metarepositoryModel);
+//			Model metarepositoryModel = persister.getMetarepositoryModel(Persister.CORE_DATABASE_ID);
+//			persister.persist(systemDatabase, metarepositoryModel);
+			persister.persist(systemDatabase, Persister.getTargetDatamodelId(LocalFolderDatabase.class, systemDatabase.getId()));
+			persister.persist(metarepositoryDatamodel, Persister.getTargetDatamodelId(SystemDatamodel.class, systemDatabase.getId()));
 			log.info("CREATED user database and first user datamodel.");
 		} catch (Exception e) {
 			log.error("Error creating/storing database: " + InqleInfo.SYSTEM_DATABASE_ID + " and dataset: " + Persister.METAREPOSITORY_DATAMODEL, e);

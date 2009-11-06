@@ -67,7 +67,7 @@ public class BeanTool {
 	 */
 	public static String getStringRepresentationExcludingId(
 			Object bean) {
-		log.info("gggggggggggggggggggggggggetStringRepresentationExcludingId()...");
+//		log.info("gggggggggggggggggggggggggetStringRepresentationExcludingId()...");
 		Map description = new HashMap();
 		PropertyUtilsBean propertyUtilsBean = new PropertyUtilsBean();
 		BeanUtilsBean beanUtilsBean = BeanUtilsBean.getInstance();
@@ -76,7 +76,7 @@ public class BeanTool {
         Class clazz = bean.getClass();
         for (int i = 0; i < descriptors.length; i++) {
             String name = descriptors[i].getName();
-            log.info("PPPPPPPPPP property name=" + name);
+//            log.info("PPPPPPPPPP property name=" + name);
             if (name.equals("id")) continue;
             if (getReadMethod(clazz, descriptors[i]) != null) {
                 try {

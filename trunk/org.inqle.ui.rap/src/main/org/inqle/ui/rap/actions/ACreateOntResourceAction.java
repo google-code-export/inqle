@@ -63,7 +63,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		log.trace("Create ACreateOntResourceAction");
 		this.datamodelId = datamodelId;
 		Persister persister = Persister.getInstance();
-		Datamodel searchDatamodel = persister.getDatamodel(PurposefulDatamodel.class, datamodelId);
+		Datamodel searchDatamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, datamodelId);
 		this.model = persister.getIndexableModel(searchDatamodel);
 //		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);

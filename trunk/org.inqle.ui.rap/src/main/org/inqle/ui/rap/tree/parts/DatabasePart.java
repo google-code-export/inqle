@@ -9,6 +9,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
+import org.inqle.data.rdf.jena.DatabaseBackedDatamodel;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
@@ -35,21 +36,18 @@ public class DatabasePart extends PartType {
 
 	private List<String> modelNames = new ArrayList<String>();
 		
-	private String getSparqlToFindChildDatasets() {
-		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
-		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
-		" SELECT ?datamodelId \n " +
-		" { \n " +
-		" GRAPH ?g { \n " +
-		" ?datamodelUri a inqle:UserDatamodel \n " +
-		" . ?datamodelUri inqle:id ?datamodelId \n " +
-		" . ?datamodelUri inqle:connectionId \"" + database.getId() + "\"^^xsd:string \n" +
-		//" . ?datamodelUri inqle:connectionId " + literal + " \n " +
-		//" . ?datamodelUri inqle:connectionId ?anyConnectionId" +
-		//" . ?datamodelUri inqle:id \"dave_1\"^^http://www.w3.org/2001/XMLSchema#string " +
-		" } }\n";
-		return sparql;
-	}
+//	private String getSparqlToFindChildDatasets() {
+//		String sparql = " PREFIX inqle: <" + RDF.INQLE + "> \n " + 
+//		" PREFIX xsd: <" + RDF.XSD + "> \n " + 
+//		" SELECT ?datamodelId \n " +
+//		" { \n " +
+//		" GRAPH ?g { \n " +
+//		" ?datamodelUri a inqle:UserDatamodel \n " +
+//		" . ?datamodelUri inqle:id ?datamodelId \n " +
+//		" . ?datamodelUri inqle:connectionId \"" + database.getId() + "\"^^xsd:string \n" +
+//		" } }\n";
+//		return sparql;
+//	}
 	
 	public DatabasePart(IDatabase database) {
 		this.database = database;
@@ -100,11 +98,17 @@ public class DatabasePart extends PartType {
 		
 		//for Datamodel, add a ModelPart
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
-		List<String> modelIds = connector.listModels();
-		for (String modelId: modelIds) {
-			Datamodel datamodel = persister.getDatamodel(PurposefulDatamodel.class, modelId);
+		List<String> modelNames = connector.listModels();
+		for (String modelName: modelNames) {
+			String modelId = database.getId() + "/" + modelName;
+			DatabaseBackedDatamodel datamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, modelId);
 			if (datamodel == null) {
-				datamodel = persister.getDatamodel(SystemDatamodel.class, modelId);
+				datamodel = persister.getDatabaseBackedDatamodel(SystemDatamodel.class, modelId);
+			}
+			if (datamodel == null) {
+				datamodel = new SystemDatamodel();
+				datamodel.setDatamodelName(modelName);
+				datamodel.setDatabaseId(database.getId());
 			}
 			ModelPart modelPart = new ModelPart(datamodel);
 			modelPart.setParent(this);

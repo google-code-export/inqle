@@ -34,7 +34,7 @@ public class Databases extends PartType {
 
 	private boolean childrenIntialized = false;
 
-	private IDatabase baseDatabaseObject = new LocalFolderDatabase();;
+	private LocalFolderDatabase baseDatabaseObject = new LocalFolderDatabase();
 	
 	static Logger log = Logger.getLogger(Databases.class);
 	
@@ -44,7 +44,13 @@ public class Databases extends PartType {
 		List<String> databaseIds = connector.listDatabases();
 		List<IDatabase> databases = new ArrayList<IDatabase>();
 		for (String databaseId: databaseIds) {
-			IDatabase database = (IDatabase) persister.reconstitute(baseDatabaseObject.getClass(), databaseId, true);
+			String targetDatamodelId = Persister.getTargetDatamodelId(baseDatabaseObject.getClass(), databaseId);
+			IDatabase database = persister.reconstitute(baseDatabaseObject.getClass(), databaseId, targetDatamodelId, true);
+			//if the database object is not stored in the metarepository, create it
+			if (database==null) {
+				database = new LocalFolderDatabase();
+				database.setId(databaseId);
+			}
 			databases.add(database);
 		}
 //		Collection<?> connectionObjects = persister.reconstituteAll(SDBDatabase.class);
