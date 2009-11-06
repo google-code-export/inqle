@@ -217,20 +217,21 @@ public class Persister {
 	 */
 	public <T extends DatabaseBackedDatamodel> void createDatabaseBackedModel(T datamodel) {
 		
-		//create the database-backed model
-		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
-		log.info("Creating Model of name '" + datamodel.getId() + "'...");
-		Model model = dbConnector.getModel(datamodel.getId());
-		cachedModels.put(datamodel.getId(), model);
-		log.info("Created and cached Model of name '" + datamodel.getId() + "'...");
-		
 		//see if a datamodel of that ID already exists
 		if (modelExists(datamodel.getId())) {
 			log.info("A Datamodel of ID: " + datamodel.getId() + " already exists.");
 			return;
 		}
 		
-		persist(datamodel, getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId()));
+		//create the database-backed model
+		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
+		log.info("Creating Model of name '" + datamodel.getName() + "'...");
+		Model model = dbConnector.getModel(datamodel.getName());
+		cachedModels.put(datamodel.getId(), model);
+		log.info("Created and cached Model of name '" + datamodel.getId() + "'...");
+		
+//		persist(datamodel, getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId()));
+		persist(datamodel, getMetarepositoryModel(datamodel.getDatabaseId()));
 		log.info("Persisted datamodel: " + datamodel.getId());
 		return;
 	}
@@ -297,19 +298,19 @@ public class Persister {
 		
 		//find or create the Datamodel for each.
 		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
-			String datamodelId = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+			String datamodelName = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
 
 			//if the model is already cached, do not recreate it
-			if (cachedModels.containsKey(datamodelId)) {
+			if (cachedModels.containsKey(datamodelName)) {
 				continue;
 			}
 			
 			//create the Datamodel
 			SystemDatamodel systemDatamodel = new SystemDatamodel();
-			systemDatamodel.setId(datamodelId);
+			systemDatamodel.setDatamodelName(datamodelName);
 			systemDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ID);
 			createDatabaseBackedModel(systemDatamodel);
-			log.info("Created & stored new SystemDatamodel of ID: " + datamodelId + ":\n" + JenabeanWriter.toString(systemDatamodel));
+			log.info("Created & stored new SystemDatamodel of ID: " + datamodelName + ":\n" + JenabeanWriter.toString(systemDatamodel));
 		}
 		
 		//having created the Datamodels and Models, make sure any text indexes have been created
@@ -754,7 +755,7 @@ public class Persister {
 	/**
 	 * Get the datamodel object
 	 */
-	public <T extends Datamodel> Datamodel getDatamodel(Class<T> clazz, String datamodelId) {
+	public <T extends DatabaseBackedDatamodel> T getDatabaseBackedDatamodel(Class<T> clazz, String datamodelId) {
 		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
 		Model metarepository = getMetarepositoryModel(databaseId);
 		T datamodel = reconstitute(clazz, datamodelId, metarepository, true);
