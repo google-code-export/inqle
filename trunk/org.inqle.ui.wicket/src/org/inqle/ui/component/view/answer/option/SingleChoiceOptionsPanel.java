@@ -6,6 +6,8 @@ package org.inqle.ui.component.view.answer.option;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.DataGridView;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,6 +19,9 @@ import org.inqle.ui.model.Option;
 import org.inqle.ui.model.OptionsAnswer;
 import org.inqle.ui.model.SingleChoiceAnswer;
 
+import com.antilia.web.button.AbstractLink;
+import com.antilia.web.resources.DefaultStyle;
+
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
@@ -26,13 +31,52 @@ public class SingleChoiceOptionsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	private OptionsAnswer optionsAnswer;
+	
+	private Option selected;
+	
+	public static class CheckBoxLink extends AbstractLink {
 		
+		private Option option;
+		
+		public CheckBoxLink(String id, Option option) {			
+			super(id);
+			this.option = option;
+		}
+		
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected ResourceReference getImage() {
+			SingleChoiceOptionsPanel choiceOptionsPanel = findParent(SingleChoiceOptionsPanel.class);
+			if(option.equals(choiceOptionsPanel.getSelected()))
+				return DefaultStyle.IMG_CHECKBOX_CHECKED;
+			else 
+				return DefaultStyle.IMG_CHECKBOX_UNCHECKED;
+		}
+		
+		@Override
+		protected String getLabel() {
+			return null;
+		}
+		
+		@Override
+		protected void onClick(AjaxRequestTarget target) {
+			SingleChoiceOptionsPanel choiceOptionsPanel = findParent(SingleChoiceOptionsPanel.class);
+			choiceOptionsPanel.setSelected(this.option);
+			if(target != null) {
+				target.addComponent(choiceOptionsPanel);
+			}
+		}
+		
+	}
+	
 	/**
 	 * @param id
 	 */
 	public SingleChoiceOptionsPanel(String id, SingleChoiceAnswer optionsAnswer) {
 		super(id);
 		this.optionsAnswer = optionsAnswer;
+		setOutputMarkupId(true);
 		
 		List<ICellPopulator<Option>> columns = new ArrayList<ICellPopulator<Option>>();
 
@@ -41,7 +85,7 @@ public class SingleChoiceOptionsPanel extends Panel {
 
 			@Override
 			public void populateItem(Item<ICellPopulator<Option>> cellItem, String componentId, IModel<Option> rowModel) {
-				cellItem.add(new Label(componentId, "Check"));
+				cellItem.add(new CheckBoxLink(componentId, rowModel.getObject()));
 			}
 			
 			@Override
@@ -77,6 +121,14 @@ public class SingleChoiceOptionsPanel extends Panel {
 
 	public void setOptionsAnswer(OptionsAnswer optionsAnswer) {
 		this.optionsAnswer = optionsAnswer;
+	}
+
+	public Option getSelected() {
+		return selected;
+	}
+
+	public void setSelected(Option selected) {
+		this.selected = selected;
 	}
 
 }
