@@ -5,7 +5,7 @@ package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.option.OptionsAnswerEditPanel;
-import org.inqle.ui.component.view.answer.option.ViewOptionsPanel;
+import org.inqle.ui.component.view.answer.option.MultipleChoiceOptionsPanel;
 import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.factory.IUIRenderableBuilderService;
@@ -55,7 +55,7 @@ public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public Component createFinalUserUI(String id, IUIRenderable renderable) {
-		ViewOptionsPanel optionsPanel = new ViewOptionsPanel(id, (OptionsAnswer)renderable);
+		MultipleChoiceOptionsPanel optionsPanel = new MultipleChoiceOptionsPanel(id, (MultipleChoiceAnswer)renderable);
 		return optionsPanel;
 	}
 
