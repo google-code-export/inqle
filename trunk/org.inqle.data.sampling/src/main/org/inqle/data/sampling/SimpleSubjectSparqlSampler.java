@@ -40,7 +40,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * TODO add elements which define how to render the UI elements, for manual execution mode
  */
 @TargetDatabaseId(SamplingInfo.SAMPLER_DB)
-@TargetDatamodelName(SamplingInfo.SAMPLER_DATASET)
+@TargetDatamodelName(SamplingInfo.SAMPLER_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 

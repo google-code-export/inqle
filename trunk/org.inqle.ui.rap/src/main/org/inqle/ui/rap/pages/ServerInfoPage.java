@@ -56,10 +56,18 @@ public class ServerInfoPage extends DynaWizardPage {
 //		siteNameText.setLayoutData(gridData);
 //		siteNameText.forceFocus();
 
+//		ownerDomainShower = new TextFieldShower(
+//				composite,
+//				"Your domain",
+//				"Enter your domain identifier, e.g. mycompany.com, or mydepartment.mycompany.com\nUse only letters, numbers, periods (.), or underscores.  Do not use spaces or other characters.",
+//				null,
+//				SWT.BORDER
+//		);
+		
 		siteNameShower = new TextFieldShower(
 				composite,
 				"Server ID",
-				"Enter an ID for your INQLE Server, e.g. my.domain.name.inqle.server.1\nDo not use spaces or special characters.",
+				"Enter an ID for your INQLE Server, e.g. my.domain.name.inqle.server.1\nUse only letters, numbers, periods (.), or underscores (_).  Do not use spaces or special characters.",
 				null,
 				SWT.BORDER
 		);

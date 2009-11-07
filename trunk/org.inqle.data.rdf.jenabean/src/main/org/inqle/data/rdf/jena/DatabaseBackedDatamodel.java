@@ -11,12 +11,13 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public abstract class DatabaseBackedDatamodel extends Datamodel {
 	private String databaseId;
-	private String datamodelName;
+//	private String datamodelName;
 	
 	@Override
 	@Id
 	public String getId() {
-		return getDatabaseId() + "/" + getDatamodelName();
+//		return getDatabaseId() + "/" + getDatamodelName();
+		return getDatabaseId() + "/" + getName();
 	}
 	
 //	public void clone(DatabaseBackedDatamodel objectToBeCloned) {
@@ -38,14 +39,22 @@ public abstract class DatabaseBackedDatamodel extends Datamodel {
 		this.databaseId = databaseId;
 	}
 
-	public void setDatamodelName(String datamodelName) {
-		this.datamodelName = datamodelName;
-	}
+//	public void setDatamodelName(String datamodelName) {
+//		this.datamodelName = datamodelName;
+//	}
 
-	public String getDatamodelName() {
-		if (datamodelName == null) {
-			setDatamodelName(UUID.randomUUID().toString());
+//	public String getDatamodelName() {
+//		if (datamodelName == null) {
+//			setDatamodelName(UUID.randomUUID().toString());
+//		}
+//		return datamodelName;
+//	}
+	
+	@Override
+	public String getName() {
+		if (name == null) {
+			setName(UUID.randomUUID().toString());
 		}
-		return datamodelName;
+		return name;
 	}
 }

@@ -107,7 +107,7 @@ public class DatabasePart extends PartType {
 			}
 			if (datamodel == null) {
 				datamodel = new SystemDatamodel();
-				datamodel.setDatamodelName(modelName);
+				datamodel.setName(modelName);
 				datamodel.setDatabaseId(database.getId());
 			}
 			ModelPart modelPart = new ModelPart(datamodel);

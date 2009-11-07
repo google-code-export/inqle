@@ -90,11 +90,11 @@
 	</extension-->
 
 	<extension
-         point="org.inqle.data.datamodelPurposes">
+         point="org.inqle.data.purposes">
       
       <datamodelPurpose
-           id="org.inqle.datamodelPurposes.data"
-           name="General Data"
+           id="org.inqle.data.purposes.minable"
+           name="General Minable Data"
            weight="1000"
            description="General purpose data, usable for learning experiments."
 					 checkedByDefault="true">
