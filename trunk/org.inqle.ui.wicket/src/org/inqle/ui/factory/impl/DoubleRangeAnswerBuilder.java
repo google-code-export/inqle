@@ -1,10 +1,12 @@
 /**
  * 
  */
-package org.inqle.ui.factory;
+package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.range.DoubleRangeAnswerEditPanel;
+import org.inqle.ui.factory.IOutcomeHandler;
+import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.model.DoubleRangeAnswer;
 import org.inqle.ui.model.IUIRenderable;
 

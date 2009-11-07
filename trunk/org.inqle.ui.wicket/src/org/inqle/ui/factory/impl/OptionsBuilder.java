@@ -1,12 +1,14 @@
 /**
  * 
  */
-package org.inqle.ui.factory;
+package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.PropertyModel;
+import org.inqle.ui.factory.IOutcomeHandler;
+import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.model.ITranslatable;
 import org.inqle.ui.model.ITranslationService;
 import org.inqle.ui.model.IUIRenderable;

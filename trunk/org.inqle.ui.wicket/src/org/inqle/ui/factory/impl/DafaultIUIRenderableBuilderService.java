@@ -1,13 +1,17 @@
 /**
  * 
  */
-package org.inqle.ui.factory;
+package org.inqle.ui.factory.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.inqle.ui.factory.IOutcomeHandler;
+import org.inqle.ui.factory.IRenderableUIBuilder;
+import org.inqle.ui.factory.IUIRenderableBuilderService;
+import org.inqle.ui.factory.IntegerRangeAnswerBuilder;
 import org.inqle.ui.model.IUIRenderable;
 
 /**

@@ -1,11 +1,12 @@
 /**
  * 
  */
-package org.inqle.ui.factory;
+package org.inqle.ui.factory.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.inqle.ui.factory.IAnswerTypesService;
 import org.inqle.ui.model.DoubleRangeType;
 import org.inqle.ui.model.IAnswerType;
 import org.inqle.ui.model.IntegerRangeType;
