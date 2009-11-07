@@ -68,8 +68,7 @@ public class SingleChoiceOptionsPanel extends Panel {
 			SingleChoiceOptionsPanel choiceOptionsPanel = findParent(SingleChoiceOptionsPanel.class);
 			choiceOptionsPanel.setSelected(this.option);
 			choiceOptionsPanel.updateChectBoxes(target);
-		}
-		
+		}		
 	}
 	
 	/**
