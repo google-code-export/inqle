@@ -11,10 +11,10 @@ import org.inqle.ui.dao.IQuestionsDao;
 import org.inqle.ui.dao.MockAnswersDao;
 import org.inqle.ui.dao.MockOptionsDao;
 import org.inqle.ui.dao.MockQuestionDao;
-import org.inqle.ui.factory.DafaultIUIRenderableBuilderService;
-import org.inqle.ui.factory.DefaultAnswersTypeService;
 import org.inqle.ui.factory.IAnswerTypesService;
 import org.inqle.ui.factory.IUIRenderableBuilderService;
+import org.inqle.ui.factory.impl.DafaultIUIRenderableBuilderService;
+import org.inqle.ui.factory.impl.DefaultAnswersTypeService;
 
 import com.antilia.web.AntiliaWebApplication;
 import com.google.inject.Binder;

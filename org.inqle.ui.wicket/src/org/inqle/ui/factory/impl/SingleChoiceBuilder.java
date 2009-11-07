@@ -1,20 +1,24 @@
 /**
  * 
  */
-package org.inqle.ui.factory;
+package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.option.OptionsAnswerEditPanel;
+import org.inqle.ui.component.view.answer.option.ViewOptionsPanel;
+import org.inqle.ui.factory.IOutcomeHandler;
+import org.inqle.ui.factory.IRenderableUIBuilder;
+import org.inqle.ui.factory.IUIRenderableBuilderService;
 import org.inqle.ui.model.IUIRenderable;
-import org.inqle.ui.model.MultipleChoiceAnswer;
 import org.inqle.ui.model.OptionsAnswer;
+import org.inqle.ui.model.SingleChoiceAnswer;
 
 /**
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class MultipleChoiceBuilder implements IRenderableUIBuilder {
-
+public class SingleChoiceBuilder implements IRenderableUIBuilder {
+	
 	/**
 	 * Needed to render options!
 	 */
@@ -23,7 +27,7 @@ public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 	/**
 	 * 
 	 */
-	public MultipleChoiceBuilder(IUIRenderableBuilderService renderableBuilderService) {
+	public SingleChoiceBuilder(IUIRenderableBuilderService renderableBuilderService) {
 		this.renderableBuilderService = renderableBuilderService;
 	}
 
@@ -32,7 +36,7 @@ public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public boolean canHandleAnswer(IUIRenderable renderable) {
-		return (renderable instanceof MultipleChoiceAnswer);
+		return (renderable instanceof SingleChoiceAnswer);
 	}
 
 	/* (non-Javadoc)
@@ -41,8 +45,8 @@ public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Component createAdminEditUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {		
-		MultipleChoiceAnswer multipleChoiceAnswer = (MultipleChoiceAnswer)renderable;				
-		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer, (IOutcomeHandler<OptionsAnswer>)handler); 
+		SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, singleChoiceAnswer, (IOutcomeHandler<OptionsAnswer>)handler); 
 		return answerListPanel;
 	}
 
@@ -51,20 +55,19 @@ public class MultipleChoiceBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public Component createFinalUserUI(String id, IUIRenderable renderable) {
-		// TODO: create a component that allows to select choices.
-		return null;
+		ViewOptionsPanel optionsPanel = new ViewOptionsPanel(id, (OptionsAnswer)renderable);
+		return optionsPanel;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
-		MultipleChoiceAnswer multipleChoiceAnswer = (MultipleChoiceAnswer)renderable;		
-		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, multipleChoiceAnswer, (IOutcomeHandler<OptionsAnswer>)handler); 
-		return answerListPanel;
-	}
-	
 	public IUIRenderableBuilderService getRenderableBuilderService() {
 		return renderableBuilderService;
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Component createAdminCreateUI(String id, IUIRenderable renderable, IOutcomeHandler<? extends IUIRenderable> handler) {
+		SingleChoiceAnswer singleChoiceAnswer = (SingleChoiceAnswer)renderable;		
+		OptionsAnswerEditPanel answerListPanel = new OptionsAnswerEditPanel(id, singleChoiceAnswer, (IOutcomeHandler<OptionsAnswer>)handler); 
+		return answerListPanel;
+	}
 }
