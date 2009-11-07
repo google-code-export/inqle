@@ -118,8 +118,8 @@ public class InqleInfo {
 		return getAssetsDirectory() + RDF_FOLDER + "/" + RDF_PREFIXES_FOLDER + "/";
 	}
 
-	public static final String USER_DATABASE_ID = "org.inqle.core.data.general";
-	public static final String SYSTEM_DATABASE_ID = "org.inqle.core.data.system";
+//	public static final String USER_DATABASE_ID = "org.inqle.core.data.general";
+//	public static final String SYSTEM_DATABASE_ID = "org.inqle.core.data.system";
 
 	public static final String ACCESS_ATTRIBUTE = "access";
 

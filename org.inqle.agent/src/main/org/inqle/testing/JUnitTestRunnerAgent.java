@@ -24,7 +24,7 @@ import thewebsemantic.Namespace;
  * Apr 25, 2008
  */
 @TargetDatabaseId(AgentInfo.AGENT_DB)
-@TargetDatamodelName(AgentInfo.AGENT_DATASET)
+@TargetDatamodelName(AgentInfo.AGENT_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class JUnitTestRunnerAgent extends AAgent {
 

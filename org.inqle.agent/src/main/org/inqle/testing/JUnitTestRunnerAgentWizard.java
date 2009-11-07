@@ -18,7 +18,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Apr 25, 2008
  */
-@TargetDatamodelName(AgentInfo.AGENT_DATASET)
+@TargetDatamodelName(AgentInfo.AGENT_DATAMODEL)
 public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 	
 	private NameDescriptionPage nameDescriptionPage;

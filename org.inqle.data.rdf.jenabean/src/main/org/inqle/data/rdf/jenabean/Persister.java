@@ -27,10 +27,9 @@ import org.inqle.data.rdf.jena.Datafile;
 import org.inqle.data.rdf.jena.Datamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
-import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
+import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
-import org.inqle.data.rdf.jenabean.cache.CacheTool;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;
@@ -46,7 +45,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.util.FileUtils;
 
 
 /**
@@ -74,8 +72,8 @@ public class Persister {
 	public static final String EXTENSION_POINT_DATAMODEL = "org.inqle.data.datamodels";
 	public static final String METAREPOSITORY_DATAMODEL = "org.inqle.datamodels.metaRepository";
 
-	public static final String EXTENSION_POINT_DATAMODEL_PURPOSES = "org.inqle.data.datamodelPurposes";
-	public static final String EXTENSION_DATAMODEL_PURPOSES_DATA = "org.inqle.datamodelPurposes.data";
+	public static final String EXTENSION_POINT_DATAMODEL_PURPOSES = "org.inqle.data.purposes";
+	public static final String EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA = "org.inqle.data.purposes.minable";
 	public static final String EXTENSION_DATAMODEL_PURPOSES = "org.inqle.datamodelPurposes.schemas";
 	
 	public static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
@@ -85,7 +83,7 @@ public class Persister {
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
 	public static final String DATAMODEL_SUBJECT_CLASSES_CACHE = "org.inqle.datamodels.cache.subjectClass";
 	public static final String DATAMODEL_ARCS_CACHE = "org.inqle.datamodels.cache.arc";
-	public static final String CORE_DATABASE_ID = "org.inqle.core.db";
+	public static final String CORE_DATABASE_ID = "core.db.system";
 	
 	private AppInfo appInfo = null;
 	private static Logger log = Logger.getLogger(Persister.class);
@@ -125,7 +123,7 @@ public class Persister {
 	 * ********************************************************************* */
 	public void initialize() {
 		if (! systemDatamodelsInitialized) {
-			initializeSystemDatamodels();
+//			initializeSystemDatamodels();
 		}
 	}
 	
@@ -291,34 +289,34 @@ public class Persister {
 		return datamodel;
 	}
 	
-	@Deprecated
-	public void initializeSystemDatamodels() {
-		//get all system datamodel extensions
-		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
-		
-		//find or create the Datamodel for each.
-		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
-			String datamodelName = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-
-			//if the model is already cached, do not recreate it
-			if (cachedModels.containsKey(datamodelName)) {
-				continue;
-			}
-			
-			//create the Datamodel
-			SystemDatamodel systemDatamodel = new SystemDatamodel();
-			systemDatamodel.setDatamodelName(datamodelName);
-			systemDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ID);
-			createDatabaseBackedModel(systemDatamodel);
-			log.info("Created & stored new SystemDatamodel of ID: " + datamodelName + ":\n" + JenabeanWriter.toString(systemDatamodel));
-		}
-		
-		//having created the Datamodels and Models, make sure any text indexes have been created
-		initializeIndexBuilders();
-		
-		log.info("System datamodels initialized");
-		systemDatamodelsInitialized  = true;
-	}
+//	@Deprecated
+//	public void initializeSystemDatamodels() {
+//		//get all system datamodel extensions
+//		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
+//		
+//		//find or create the Datamodel for each.
+//		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
+//			String datamodelName = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+//
+//			//if the model is already cached, do not recreate it
+//			if (cachedModels.containsKey(datamodelName)) {
+//				continue;
+//			}
+//			
+//			//create the Datamodel
+//			SystemDatamodel systemDatamodel = new SystemDatamodel();
+//			systemDatamodel.setName(datamodelName);
+//			systemDatamodel.setDatabaseId(InqleInfo.SYSTEM_DATABASE_ID);
+//			createDatabaseBackedModel(systemDatamodel);
+//			log.info("Created & stored new SystemDatamodel of ID: " + datamodelName + ":\n" + JenabeanWriter.toString(systemDatamodel));
+//		}
+//		
+//		//having created the Datamodels and Models, make sure any text indexes have been created
+//		initializeIndexBuilders();
+//		
+//		log.info("System datamodels initialized");
+//		systemDatamodelsInitialized  = true;
+//	}
 	
 	/**
 	 * Flush any Lucene text indexes for the Datamodel

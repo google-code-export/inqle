@@ -205,16 +205,9 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @return
 	 */
 	public Collection<String> selectAvailableDatamodels() {
-		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.USER_DATABASE_ID);
-		return connector.listModels();
-//		Persister persister = Persister.getInstance();
-//		List<Datamodel> allDatamodels = persister.listDatamodels();
-//		log.debug("allDatamodels=" + allDatamodels);
-//		if (allDatamodels != null) {
-//			List<String> allDatamodelIds = JenabeanConverter.getIds(allDatamodels);
-//			return allDatamodelIds;
-//		}
-//		return new ArrayList<String>();
+		return DatamodelLister.findDatamodelsOfPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA);
+//		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.USER_DATABASE_ID);
+//		return connector.listModels();
 	}
 
 	/**

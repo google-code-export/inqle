@@ -67,6 +67,10 @@ public class TDBConnector implements IDBConnector {
 	}
 
 	public Model getModel(String modelName) {
+		//if the database does not yet exist, create it
+		if (!testConnection()) {
+			createDatabase();
+		}
 //		log.info("Creating/loading model: " + getFilePath() + "/" + modelName);
 		return TDBFactory.createModel(getFilePath() + "/" + modelName);
 	}
