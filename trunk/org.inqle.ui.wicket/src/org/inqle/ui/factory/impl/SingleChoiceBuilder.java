@@ -5,7 +5,7 @@ package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.option.OptionsAnswerEditPanel;
-import org.inqle.ui.component.view.answer.option.ViewOptionsPanel;
+import org.inqle.ui.component.view.answer.option.SingleChoiceOptionsPanel;
 import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.factory.IUIRenderableBuilderService;
@@ -55,7 +55,7 @@ public class SingleChoiceBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public Component createFinalUserUI(String id, IUIRenderable renderable) {
-		ViewOptionsPanel optionsPanel = new ViewOptionsPanel(id, (OptionsAnswer)renderable);
+		SingleChoiceOptionsPanel optionsPanel = new SingleChoiceOptionsPanel(id, (SingleChoiceAnswer)renderable);
 		return optionsPanel;
 	}
 
