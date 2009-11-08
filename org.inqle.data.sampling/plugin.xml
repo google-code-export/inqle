@@ -13,6 +13,7 @@
            access="admin">
 			</part-type>
    </extension>
+   <!--
    <extension
          point="org.inqle.data.datamodels">
       <datamodel
@@ -22,6 +23,7 @@
 					 cacheInMemory="false"
 			</datamodel>
 	</extension>
+	-->
   <extension
          point="org.inqle.data.sampling.rap.ISamplerFactory">
       <sampler-factory

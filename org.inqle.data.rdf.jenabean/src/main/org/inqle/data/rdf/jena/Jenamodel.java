@@ -6,5 +6,5 @@ import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
-public abstract class Datamodel extends UniqueJenabean {
+public abstract class Jenamodel extends UniqueJenabean {
 }

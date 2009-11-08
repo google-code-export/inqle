@@ -17,6 +17,9 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodelName(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class SystemDatamodel extends DatabaseBackedDatamodel {
-	
+public class SystemDatamodel extends DatabaseBackedJenamodel {
+	@Override
+	public String getModelType() {
+		return IDBConnector.SUBDATABASE_SYSTEM;
+	}
 }

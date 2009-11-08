@@ -15,7 +15,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodelName(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class Datafile extends Datamodel {
+public class Datafile extends Jenamodel {
 
 	private String fileUrl;
 

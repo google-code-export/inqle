@@ -7,6 +7,9 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public interface IDBConnector {
 
+	public static final String SUBDATABASE_SYSTEM = "system";
+	public static final String SUBDATABASE_DATA = "data";
+	
 	/**
 	 * This store already exists in the database, and has statements
 	 */
@@ -31,14 +34,14 @@ public interface IDBConnector {
 	 * Get the Jena Dataset object, representing a set of named graphs
 	 * @return
 	 */
-	public Dataset getDataset(String datasetId);
+	public Dataset getDataset(String modelType, String datasetId);
 	
 	/**
-	 * Get the Jenam model of the specified name
+	 * Get the Jena "data" model of the specified name
 	 * @param modelName
 	 * @return
 	 */
-	public Model getModel(String modelName);
+	public Model getModel(String modelType, String modelName);
 	
 	/**
 	 * This creates a new database/store.
@@ -50,7 +53,7 @@ public interface IDBConnector {
 	 * Create a new database/store only if it does not yet exist
 	 * @return IDBConnector.status
 	 */
-	public int createDatabase();
+	public boolean createDatabase();
 	
 	/**
 	 * 
@@ -63,16 +66,17 @@ public interface IDBConnector {
 	 */
 	public void close();
 	
-	/**
-	 * Close the DB Connector, if necessary
-	 */
 	public boolean testConnection();
 
-	public List<String> listDatabases();
+	/**
+	 * List all databases on this INQLE server
+	 * @return
+	 */
+	public List<String> listAllDatabases();
 
-	public List<String> listModels();
+	public List<String> listModelNames(String modelType);
 
-	public boolean deleteModel(String id);
+	public boolean deleteModel(String modelType, String id);
 
-	public boolean modelExists(String datamodelName);
+	public boolean modelExists(String modelType, String datamodelName);
 }

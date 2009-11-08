@@ -28,32 +28,38 @@ public class TDBConnector implements IDBConnector {
 	}
 
 	/**
-	 * Creates a new database (folder) withing the root database folder
+	 * Creates a new database (folder)
 	 * Returns IDBConnector.STORE_CREATED if successful, otherwise 
 	 * IDBConnector.STORE_NOT_CREATED
 	 */
-	public int createDatabase() {
+	public boolean createDatabase() {
 		if (databaseId==null || databaseId.length()==0) {
 			log.error("Unable to create new database, as databaseId is blank or null");
-			return IDBConnector.STORE_NOT_CREATED;
+			return false;
 		}
 		
-		File newDBFolder = new File(getFilePath());
+		File newDBFolder = new File(getBaseFilePath());
 		
-		boolean dirMade = newDBFolder.mkdir();
-		if (dirMade) {
-			return IDBConnector.STORE_CREATED;
-		} else {
-			return IDBConnector.STORE_NOT_CREATED;
-		}
+		return newDBFolder.mkdir();
 	}
 
+	/**
+	 * Creates a new subdatabase (folder) within the root database folder
+	 * Returns true if successful
+	 */
+	public boolean createSubdatabase(String subdatabase) {
+		boolean success = false;
+		if (!testConnection()) createDatabase();
+		File dbFolder = new File(getFilePath(subdatabase));
+		return dbFolder.mkdir();
+	}
+	
 	public boolean deleteDatabase() {
 		if (databaseId==null || databaseId.length()==0) {
 			log.error("Unable to delete database: null");
 			return false;
 		}
-		File folderToDelete = new File(getFilePath());
+		File folderToDelete = new File(getBaseFilePath());
 		return deleteDirectory(folderToDelete);
 	}
 
@@ -62,17 +68,17 @@ public class TDBConnector implements IDBConnector {
 		createDatabase();
 	}
 
-	public Dataset getDataset(String modelName) {
-		return TDBFactory.createDataset(getFilePath() + "/" + modelName);
+	public Dataset getDataset(String modelType, String modelName) {
+		return TDBFactory.createDataset(getFilePath(modelType) + "/" + modelName);
 	}
 
-	public Model getModel(String modelName) {
+	public Model getModel(String modelType, String modelName) {
 		//if the database does not yet exist, create it
-		if (!testConnection()) {
-			createDatabase();
+		if (!testSubdatabaseConnection(modelType)) {
+			createSubdatabase(modelType);
 		}
 //		log.info("Creating/loading model: " + getFilePath() + "/" + modelName);
-		return TDBFactory.createModel(getFilePath() + "/" + modelName);
+		return TDBFactory.createModel(getFilePath(modelType) + "/" + modelName);
 	}
 
 	/**
@@ -83,7 +89,12 @@ public class TDBConnector implements IDBConnector {
 
 	public boolean testConnection() {
 		if (databaseId == null || databaseId.length()==0) return false;
-		return new File(getFilePath()).exists();
+		return new File(getBaseFilePath()).exists();
+	}
+	
+	public boolean testSubdatabaseConnection(String subdatabase) {
+		if (!testConnection()) return false;
+		return new File(getFilePath(subdatabase)).exists();
 	}
 
 	public String getDatabaseId() {
@@ -95,12 +106,12 @@ public class TDBConnector implements IDBConnector {
 	}
 
 	/**
-	 * List all models for this database
+	 * List all models for this database, of the given type
 	 */
-	public List<String> listModels() {
+	public List<String> listModelNames(String modelType) {
+		String dbPath = getFilePath(modelType);
 		List<String> modelNames = new ArrayList<String>();
-		String dbRootPath = getFilePath();
-		File dbRoot = new File(dbRootPath);
+		File dbRoot = new File(dbPath);
 		File[] databaseFolders = dbRoot.listFiles();
 //		log.info("Listing models for database: " + getFilePath());
 		for (File databaseFolder: databaseFolders) {
@@ -112,10 +123,7 @@ public class TDBConnector implements IDBConnector {
 		return modelNames;
 	}
 	
-	/**
-	 * list all databases, from the rootmost DB folder
-	 */
-	public List<String> listDatabases() {
+	public List<String> listAllDatabases() {
 		List<String> databases = new ArrayList<String>();
 		String dbRootPath = InqleInfo.getDatabaseRootFilePath();
 		File dbRoot = new File(dbRootPath);
@@ -128,8 +136,12 @@ public class TDBConnector implements IDBConnector {
 		return databases;
 	}
 	
-	private String getFilePath() {
+	private String getBaseFilePath() {
 		return InqleInfo.getDatabaseRootFilePath() + databaseId;
+	}
+	
+	private String getFilePath(String subdatabase) {
+		return getBaseFilePath() + "/" + subdatabase;
 	}
 	
 //	public static boolean databaseExists(String dbId) {
@@ -155,17 +167,17 @@ public class TDBConnector implements IDBConnector {
 		return success;
 	}
 
-	public boolean deleteModel(String modelName) {
-		Dataset datasetToDelete = getDataset(modelName);
+	public boolean deleteModel(String type, String modelName) {
+		Dataset datasetToDelete = getDataset(type, modelName);
 		datasetToDelete.getDefaultModel().removeAll();
 		TDB.sync(datasetToDelete) ;
 		datasetToDelete.close();
-		File dirToDelete = new File(getFilePath() + "/" + modelName);
+		File dirToDelete = new File(getFilePath(type) + "/" + modelName);
 		return deleteDirectory(dirToDelete);
 	}
-
-	public boolean modelExists(String modelName) {
-		File putativeModelFolder = new File(getFilePath() + "/" + modelName);
+	
+	public boolean modelExists(String modelType, String modelName) {
+		File putativeModelFolder = new File(getFilePath(modelType) + "/" + modelName);
 		return putativeModelFolder.exists();
 	}
 
