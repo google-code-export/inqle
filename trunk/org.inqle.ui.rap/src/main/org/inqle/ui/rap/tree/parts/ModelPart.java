@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.http.lookup.PublishDatamodelServlet;
@@ -32,11 +32,11 @@ public class ModelPart extends Part {
 	private static final String ICON_PATH_EXTERNAL_DATASET = "org/inqle/ui/rap/images/table.gif";
 //	private static final String EXTENSION_VIEW_BROWSE_DATA = "org.inqle.rap.ui.views.browseData";
 //	private static final String ICON_PATH_ONTOLOGY_DATASET = "org/inqle/ui/rap/images/ontology.gif";
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 	
 	private static final Logger log = Logger.getLogger(ModelPart.class);
 	
-	public ModelPart(Datamodel datamodel) {
+	public ModelPart(Jenamodel datamodel) {
 		this.datamodel = datamodel;
 		//this.persister = persister;
 	}
@@ -60,7 +60,7 @@ public class ModelPart extends Part {
 //			return null;
 //		}
 	}
-	public Datamodel getDataset() {
+	public Jenamodel getDataset() {
 		return this.datamodel;
 	}
 	

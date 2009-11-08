@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.IPartType;
 import org.inqle.ui.rap.tree.parts.ModelPart;
@@ -22,7 +22,7 @@ public class DeleteModelAction extends Action {
 	private String menuText;
 	private IWorkbenchWindow window;
 	//private Persister persister;
-	private Datamodel namedModelToDelete = null;
+	private Jenamodel namedModelToDelete = null;
 	private ModelPart modelPart = null;
 	
 	private static final Logger log = Logger.getLogger(DeleteModelAction.class);

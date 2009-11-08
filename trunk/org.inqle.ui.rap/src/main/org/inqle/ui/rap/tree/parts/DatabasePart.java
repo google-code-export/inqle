@@ -1,27 +1,21 @@
 package org.inqle.ui.rap.tree.parts;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.DatabaseBackedDatamodel;
-import org.inqle.data.rdf.jena.Datamodel;
-import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
-import org.inqle.ui.rap.actions.DatabaseWizardAction;
 import org.inqle.ui.rap.actions.DatamodelWizardAction;
-import org.inqle.ui.rap.actions.DeleteDatabaseAction;
 
 public class DatabasePart extends PartType {
 	
@@ -98,22 +92,29 @@ public class DatabasePart extends PartType {
 		
 		//for Datamodel, add a ModelPart
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
-		List<String> modelNames = connector.listModels();
+		List<String> modelNames = connector.listModelNames(IDBConnector.SUBDATABASE_DATA);
 		for (String modelName: modelNames) {
-			String modelId = database.getId() + "/" + modelName;
-			DatabaseBackedDatamodel datamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, modelId);
-			if (datamodel == null) {
-				datamodel = persister.getDatabaseBackedDatamodel(SystemDatamodel.class, modelId);
-			}
-			if (datamodel == null) {
-				datamodel = new SystemDatamodel();
-				datamodel.setName(modelName);
-				datamodel.setDatabaseId(database.getId());
+			String modelId = database.getId() + "/" + IDBConnector.SUBDATABASE_DATA + "/" + modelName;
+			PurposefulDatamodel datamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, modelId);
+			if (datamodel==null) {
+				log.warn("Model of ID " + modelId + " does not exist but should.");
+				continue;
 			}
 			ModelPart modelPart = new ModelPart(datamodel);
 			modelPart.setParent(this);
 			modelPart.addListener(this.listener);
-			//modelPart.setPersister(this.persister);
+			modelParts.add(modelPart);
+		}
+		
+		modelNames = connector.listModelNames(IDBConnector.SUBDATABASE_SYSTEM);
+		for (String modelName: modelNames) {
+//			String modelId = database.getId() + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/"  + modelName;
+			SystemDatamodel datamodel = new SystemDatamodel();
+			datamodel.setName(modelName);
+			datamodel.setDatabaseId(database.getId());
+			ModelPart modelPart = new ModelPart(datamodel);
+			modelPart.setParent(this);
+			modelPart.addListener(this.listener);
 			modelParts.add(modelPart);
 		}
 		

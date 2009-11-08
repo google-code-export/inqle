@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.util.OntModelUtil;
 import org.inqle.data.rdf.jenabean.Persister;
 
@@ -32,7 +32,7 @@ public class AddReasonerStatementsWizard extends DynaWizard {
 	private Text reasonerText;
 	private static Logger log = Logger.getLogger(AddReasonerStatementsWizard.class);
 	Composite composite;
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 //	private ModelPart modelPart = null;
 	private boolean successImporting = false;
 	private Model saveToModel;
@@ -174,11 +174,11 @@ public class AddReasonerStatementsWizard extends DynaWizard {
     return true;
 	}
 
-	public Datamodel getDataset() {
+	public Jenamodel getDataset() {
 		return datamodel;
 	}
 
-	public void setDataset(Datamodel datamodel) {
+	public void setDataset(Jenamodel datamodel) {
 		this.datamodel = datamodel;
 	}
 	

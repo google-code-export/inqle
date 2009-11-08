@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
@@ -47,7 +47,7 @@ public class LoadRdfFileWizard extends DynaWizard {
 	Composite composite;
 	//private Model modelToLoad = null;
 	private String defaultUri = RDF.INQLE;
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 	
 //	private ModelPart modelPart = null;
 	//LoadFromPage loadFromPage = new LoadFromPage("Location of Data");
@@ -263,11 +263,11 @@ public class LoadRdfFileWizard extends DynaWizard {
 		}
 	}
 
-	public Datamodel getDatamodel() {
+	public Jenamodel getDatamodel() {
 		return datamodel;
 	}
 
-	public void setDatamodel(Datamodel namedModel) {
+	public void setDatamodel(Jenamodel namedModel) {
 		this.datamodel = namedModel;
 	}
 	

@@ -41,7 +41,7 @@ public class Databases extends PartType {
 	public void initChildren() {
 		Persister persister = Persister.getInstance();
 		IDBConnector connector = DBConnectorFactory.getDBConnector();
-		List<String> databaseIds = connector.listDatabases();
+		List<String> databaseIds = connector.listAllDatabases();
 		List<IDatabase> databases = new ArrayList<IDatabase>();
 		for (String databaseId: databaseIds) {
 			String targetDatamodelId = Persister.getTargetDatamodelId(baseDatabaseObject.getClass(), databaseId);
