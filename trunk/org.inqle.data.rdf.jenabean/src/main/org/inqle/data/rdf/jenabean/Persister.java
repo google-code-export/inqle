@@ -22,9 +22,9 @@ import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.AppInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.DatabaseBackedDatamodel;
+import org.inqle.data.rdf.jena.DatabaseBackedJenamodel;
 import org.inqle.data.rdf.jena.Datafile;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
@@ -89,7 +89,8 @@ public class Persister {
 	private static Logger log = Logger.getLogger(Persister.class);
 	public static int persisterId = 0;
 	
-	private Map<String, Model> cachedModels = new HashMap<String, Model>();
+	private Map<String, Map<String, Model>> modelCache = new HashMap<String, Map<String, Model>>();
+		
 	private Map<String, IndexBuilderModel> indexBuilders;
 	private Model prefixesModel;
 	private boolean systemDatamodelsInitialized = false;
@@ -192,20 +193,19 @@ public class Persister {
 	 * ********************************************************************* */
 	
 	/**
-	 * Creates a new Jena TDB Model, 
-	 * given a SDBDatabase object and the name of a model.
+	 * Creates a new data Model, 
+	 * given a database ID and the name of a model.
 	 * 
-	 * TODO Note that this might be different from a SDB data model
-	 * @param dbConnectionInfo
+	 * @param databaseId
 	 * @param dbModelName
 	 * @return
 	 */
-	public static void createDBModel(String databaseId, String dbModelName) {
+	public static void createModel(String modelType, String databaseId, String dbModelName) {
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(databaseId);
 
-		log.debug("Creating Model of name '" + dbModelName + "'.");
+		log.debug("Creating Model of name type: " + modelType + "and name: " + dbModelName);
 		
-		Model model = dbConnector.getModel(dbModelName);
+		dbConnector.getModel(modelType, dbModelName);
 	}
 	
 	/**
@@ -213,7 +213,7 @@ public class Persister {
 	 * Also stores the new datamodel in the metarepository
 	 * @version 2
 	 */
-	public <T extends DatabaseBackedDatamodel> void createDatabaseBackedModel(T datamodel) {
+	public <T extends DatabaseBackedJenamodel> void createDatabaseBackedModel(T datamodel) {
 		
 		//see if a datamodel of that ID already exists
 		if (modelExists(datamodel.getId())) {
@@ -224,8 +224,8 @@ public class Persister {
 		//create the database-backed model
 		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(datamodel.getDatabaseId());
 		log.info("Creating Model of name '" + datamodel.getName() + "'...");
-		Model model = dbConnector.getModel(datamodel.getName());
-		cachedModels.put(datamodel.getId(), model);
+		Model model = dbConnector.getModel(datamodel.getModelType(), datamodel.getName());
+		getModelCache(datamodel.getModelType()).put(datamodel.getId(), model);
 		log.info("Created and cached Model of name '" + datamodel.getId() + "'...");
 		
 //		persist(datamodel, getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId()));
@@ -234,6 +234,15 @@ public class Persister {
 		return;
 	}
 	
+	private Map<String, Model> getModelCache(String modelType) {
+		Map<String, Model> targetModelCache = modelCache.get(modelType);
+		if (targetModelCache==null) {
+			targetModelCache = new HashMap<String, Model>();
+			modelCache.put(modelType, targetModelCache);
+		}
+		return targetModelCache;
+	}
+
 	/**
 	 * Given the ID of DatabaseBackedDatamodel, get the Jena Model object.  
 	 * This ID is in the format databse_id/datamodel_name
@@ -248,16 +257,16 @@ public class Persister {
 	 */
 //	public Model getDatabaseBackedModel(String datamodelId) {
 	public Model getModel(String datamodelId) {
-		Model cachedModel = cachedModels.get(datamodelId);
+		String modelType = getModelTypeFromDatamodelId(datamodelId);
+		Model cachedModel = getModelCache(modelType).get(datamodelId);
 		if (cachedModel != null) {
 			return cachedModel;
 		}
-		
 		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
-		String datamodelName = getDatamodelNameFromDatamodelId(datamodelId);
+		String modelName = getModelNameFromDatamodelId(datamodelId);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
-		Model model = connector.getModel(datamodelName);
-		cachedModels.put(datamodelId, model);
+		Model model = connector.getModel(modelType, modelName);
+		getModelCache(modelType).put(datamodelId, model);
 		return model;
 	}
 	
@@ -321,7 +330,7 @@ public class Persister {
 	/**
 	 * Flush any Lucene text indexes for the Datamodel
 	 */
-	public void flushIndexes(Datamodel namedModel) {
+	public void flushIndexes(Jenamodel namedModel) {
 		if (namedModel instanceof SystemDatamodel) {
 			SystemDatamodel systemDatamodel = (SystemDatamodel) namedModel;
 //			String datamodelRole = internalDatamodel.getDatamodelRole();
@@ -358,7 +367,7 @@ public class Persister {
 	 * @param indexableDatamodel
 	 * @return
 	 */
-	public Model getIndexableModel(Datamodel indexableDatamodel) {
+	public Model getIndexableModel(Jenamodel indexableDatamodel) {
 //		log.info("Persister.getIndexableModel(Datamodel of ID=" + indexableDatamodel.getId() + ")...");
 		Model model = getModel(indexableDatamodel.getId());
 		if (indexableDatamodel instanceof PurposefulDatamodel) {
@@ -389,7 +398,43 @@ public class Persister {
 //		return getModel(datamodel);
 //	}
 	
-	public static String getDatamodelNameFromDatamodelId(String datamodelId) {
+	public static String getDatabaseIdFromDatamodelId(String datamodelId) {
+		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
+			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
+			return null;
+		}
+		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
+			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
+			return null;
+		}
+		String dbIdPlusType = datamodelId.substring(0, datamodelId.lastIndexOf("/"));
+		if (dbIdPlusType==null || dbIdPlusType.indexOf("/") < 1) {
+			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
+			return null;
+		}
+		
+		return dbIdPlusType.substring(0, dbIdPlusType.lastIndexOf("/"));
+	}
+	
+	public static String getModelTypeFromDatamodelId(String datamodelId) {
+		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
+			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
+			return null;
+		}
+		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
+			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
+			return null;
+		}
+		String dbIdPlusType = datamodelId.substring(0, datamodelId.lastIndexOf("/"));
+		if (dbIdPlusType==null || dbIdPlusType.indexOf("/") < 1) {
+			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
+			return null;
+		}
+		
+		return dbIdPlusType.substring(dbIdPlusType.lastIndexOf("/") + 1);
+	}
+	
+	public static String getModelNameFromDatamodelId(String datamodelId) {
 		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
 			log.error("datamodelId should be in the format 'database_name/datamodel_name.  Was '" + datamodelId + "'");
 			return null;
@@ -400,19 +445,6 @@ public class Persister {
 		}
 		return datamodelId.substring(datamodelId.lastIndexOf("/") + 1);
 	}
-	
-	public static String getDatabaseIdFromDatamodelId(String datamodelId) {
-		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/datamodel_name.  Was '" + datamodelId + "'");
-			return null;
-		}
-		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
-			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
-			return null;
-		}
-		return datamodelId.substring(0, datamodelId.lastIndexOf("/"));
-	}
-	
 //	/**
 //	 * Given an instance of a Model, retrieve the Jena model
 //	 * @param datamodel
@@ -482,9 +514,10 @@ public class Persister {
 	 */
 	public boolean modelExists(String datamodelId) {
 		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
-		String datamodelName = getDatamodelNameFromDatamodelId(datamodelId);
+		String modelType = getModelTypeFromDatamodelId(datamodelId);
+		String modelName = getModelNameFromDatamodelId(datamodelId);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
-		return connector.modelExists(datamodelName);
+		return connector.modelExists(modelType, modelName);
 	}
 	
 	/* *********************************************************************
@@ -695,65 +728,30 @@ public class Persister {
 	 * create the DB store in the actual database.
 	 * @param testConnectionInfo
 	 */
-	public <T extends IDatabase> int createNewDatabase(T database) {
+	public <T extends IDatabase> boolean createNewDatabase(T database) {
 		log.info("Will try to create a new Database:\n" + JenabeanWriter.toString(database));
 		//first create the IDBConnector and use it to create the DB store in the database
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
-		int status = connector.createDatabase();
-		log.info("Tried to create new DB store, with status=" + status);
+		boolean success = connector.createDatabase();
+		log.info("Tried to create new DB store, with success?" + success);
 		
 		//next register the new DB in the repositories namedModel, within this new database
 		//TODO: when deleting works, remove the below " || status == SDBConnector.STORE_IS_BLANK"
-		if (status == IDBConnector.STORE_CREATED || status == IDBConnector.STORE_IS_BLANK) {
+		if (success) {
 			persist(database, Persister.getTargetDatamodelId(database.getClass(), database.getId()));
 		}
 		
-		return status;
+		return success;
 	}
 	
 	/* *********************************************************************
 	 * *** DATAMODEL METHODS
 	 * ********************************************************************* */
-//	/**
-//	 * Gets the Datamodel matching the provided ID
-//	 * @return the Datamodel
-//	 * 
-//	 * TODO add support fo any other Datamodel subclasses e.g. UrlModel
-//	 */
-//	public Datamodel getDatamodel(String namedModelId) {
-//		//OntModel metarepositoryModel = getMetarepositoryModel();
-//		Model metarepositoryModel = getMetarepositoryModel();
-//		for (Class<?> clazz: MODEL_CLASSES) {
-//			if (! exists(clazz, namedModelId, metarepositoryModel)) {
-//				continue;
-//			}
-//			Datamodel namedModel = (Datamodel)reconstitute(clazz, namedModelId, metarepositoryModel, true);
-//			if (namedModel != null) {
-//				return namedModel;
-//			}
-//		}
-//		return null;
-//	}
-	
-	//TODO load model classes from a service/extension
-//	public boolean datamodelExists(String namedModelId) {
-//		//OntModel metarepositoryModel = getMetarepositoryModel();
-//		Model metarepositoryModel = getMetarepositoryModel();
-//		for (Class<?> clazz: MODEL_CLASSES) {
-//			boolean datamodelExists = exists(clazz, namedModelId, metarepositoryModel);
-//			if (datamodelExists) {
-////				metarepositoryModel.close();
-//				return true;
-//			}
-//		}
-////		metarepositoryModel.close();
-//		return false;
-//	}
 	
 	/**
 	 * Get the datamodel object
 	 */
-	public <T extends DatabaseBackedDatamodel> T getDatabaseBackedDatamodel(Class<T> clazz, String datamodelId) {
+	public <T extends DatabaseBackedJenamodel> T getDatabaseBackedDatamodel(Class<T> clazz, String datamodelId) {
 		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
 		Model metarepository = getMetarepositoryModel(databaseId);
 		T datamodel = reconstitute(clazz, datamodelId, metarepository, true);
@@ -761,40 +759,13 @@ public class Persister {
 	}
 	
 	/**
-	 * List all datamodels for a given database
+	 * List all model names for a given database and type
 	 * @param databaseId
 	 * @return
 	 */
-	public List<String> listDatamodelIds(String databaseId) {
+	public List<String> listModelNames(String databaseId, String modelType) {
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
-		return connector.listModels();
-//		List<Datamodel> datamodels = new ArrayList<Datamodel>();
-//		for (String datamodelId: datamodelIds) {
-//			Datamodel datamodel = getDatamodel(datamodelId);
-//			datamodels.add(datamodel);
-//		}
-//		return datamodels;
-	}
-	
-	/**
-	 * List all datamodels for a given database
-	 * @param databaseId
-	 * @return
-	 * @version 2
-	 */
-	public List<PurposefulDatamodel> listPurposefulDatamodelsOfPurpose(String databaseId, String purposeId) {
-		List<PurposefulDatamodel> datamodels = new ArrayList<PurposefulDatamodel>();
-		List<String> allDatamodelIds = listDatamodelIds(databaseId);
-		for (String datamodelId: allDatamodelIds) {
-			Model model = getModel(datamodelId);
-			PurposefulDatamodel purposefulDatamodel = reconstitute(PurposefulDatamodel.class, datamodelId, model, true);
-			Collection<String> purposes = purposefulDatamodel.getDatamodelPurposes();
-			if (purposes==null) continue;
-			if (purposes.contains(purposeId)) {
-				datamodels.add(purposefulDatamodel);
-			}
-		}
-		return datamodels;
+		return connector.listModelNames(modelType);
 	}
 	
 	/* *********************************************************************
@@ -1124,7 +1095,7 @@ public class Persister {
 	 * Delete all statements from a model.
 	 * @return successClearing true if the store was emptied
 	 */
-	public boolean emptyModel(Datamodel namedModel) {
+	public boolean emptyModel(Jenamodel namedModel) {
 		
 		//remove all statements and all index info for the Datamodel
 		Model modelToBeDeleted = getIndexableModel(namedModel);

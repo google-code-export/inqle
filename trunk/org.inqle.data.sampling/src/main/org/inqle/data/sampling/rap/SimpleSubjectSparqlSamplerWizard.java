@@ -10,8 +10,9 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.util.ArcLister;
+import org.inqle.data.rdf.jena.util.DatamodelLister;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -190,7 +191,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 	private List<String> getUserDatamodelIds() {
 		if (userDatamodelIds==null) {
 			Persister persister = Persister.getInstance();
-			userDatamodelIds = persister.listDatamodelIds(InqleInfo.USER_DATABASE_ID);
+			userDatamodelIds = DatamodelLister.listAllDatamodelIdsOfPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA);
 		}
 		return userDatamodelIds;
 	}

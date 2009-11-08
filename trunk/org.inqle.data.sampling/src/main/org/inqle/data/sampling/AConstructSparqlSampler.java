@@ -12,10 +12,13 @@ import org.inqle.core.util.RandomUtil;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
+import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
+import org.inqle.data.rdf.jena.util.DatamodelLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
@@ -204,8 +207,8 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @param datamodelOptions the Collection of available data models to consider
 	 * @return
 	 */
-	public Collection<String> selectAvailableDatamodels() {
-		return DatamodelLister.findDatamodelsOfPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA);
+	public Collection<PurposefulDatamodel> selectAvailableDatamodels() {
+		return DatamodelLister.listAllDatamodelsOfPurpose(Persister.EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA);
 //		IDBConnector connector = DBConnectorFactory.getDBConnector(InqleInfo.USER_DATABASE_ID);
 //		return connector.listModels();
 	}
@@ -227,7 +230,7 @@ public abstract class AConstructSparqlSampler extends ASampler {
 			return getSelectedDatamodels();
 		}
 		//...otherwise populate the list of available named models
-		Collection<String> choosableDatamodels = selectAvailableDatamodels();
+		Collection<PurposefulDatamodel> choosableDatamodels = selectAvailableDatamodels();
 		log.debug("choosableDatamodels=" + choosableDatamodels);
 		
 		//we must select a subset of the choosable datamodels

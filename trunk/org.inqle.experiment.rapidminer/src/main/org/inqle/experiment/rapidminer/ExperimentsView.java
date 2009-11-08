@@ -11,7 +11,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.SystemDatamodel;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.views.SparqlView;
 import org.inqle.ui.rap.views.SubjectStatementsView;

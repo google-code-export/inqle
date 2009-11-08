@@ -19,7 +19,7 @@ import thewebsemantic.Namespace;
  */
 @TargetDatamodelName(Persister.METAREPOSITORY_DATAMODEL)
 @Namespace(RDF.INQLE)
-public class PurposefulDatamodel extends DatabaseBackedDatamodel {
+public class PurposefulDatamodel extends DatabaseBackedJenamodel {
 
 	private Collection<String> datamodelPurposes = new ArrayList<String>();
 	
@@ -57,5 +57,10 @@ public class PurposefulDatamodel extends DatabaseBackedDatamodel {
 //		clone(objectToClone);
 //		setId(objectToClone.getId());
 //	}
+	
+	@Override
+	public String getModelType() {
+		return IDBConnector.SUBDATABASE_DATA;
+	}
 	
 }

@@ -3,21 +3,21 @@ package org.inqle.data.rdf.jena;
 import java.util.UUID;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
-public abstract class DatabaseBackedDatamodel extends Datamodel {
+public abstract class DatabaseBackedJenamodel extends Jenamodel {
 	private String databaseId;
 //	private String datamodelName;
-	
+	private String modelType;
+
 	@Override
 	@Id
 	public String getId() {
 //		return getDatabaseId() + "/" + getDatamodelName();
-		return getDatabaseId() + "/" + getName();
+		return getDatabaseId() + "/" + getModelType() + "/" + getName();
 	}
 	
 //	public void clone(DatabaseBackedDatamodel objectToBeCloned) {
@@ -56,5 +56,17 @@ public abstract class DatabaseBackedDatamodel extends Datamodel {
 			setName(UUID.randomUUID().toString());
 		}
 		return name;
+	}
+	
+	/**
+	 * @return the type of model, e.g. "system" or "data"
+	 * @return
+	 */
+	public String getModelType() {
+		return modelType;
+	}
+	
+	public void setModelType(String modelType) {
+		this.modelType = modelType;
 	}
 }
