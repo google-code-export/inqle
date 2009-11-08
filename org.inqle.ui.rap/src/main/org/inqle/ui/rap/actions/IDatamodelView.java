@@ -1,7 +1,7 @@
 package org.inqle.ui.rap.actions;
 
 import org.eclipse.ui.IWorkbenchPart;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 
 public interface IDatamodelView extends IWorkbenchPart {
 

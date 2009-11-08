@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
@@ -63,7 +63,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		log.trace("Create ACreateOntResourceAction");
 		this.datamodelId = datamodelId;
 		Persister persister = Persister.getInstance();
-		Datamodel searchDatamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, datamodelId);
+		Jenamodel searchDatamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, datamodelId);
 		this.model = persister.getIndexableModel(searchDatamodel);
 //		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);

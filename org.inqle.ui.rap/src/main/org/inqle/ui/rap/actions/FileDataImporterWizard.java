@@ -12,7 +12,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
@@ -63,7 +63,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 //	private AddSubjectPage addSubjectPage;
 	private SaveMappingLoadDataPage saveMappingLoadDataPage;
 	private DateTimeMapperPage dateTimeMapperPage;
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 	private IPart part;
 	public IPart getPart() {
 		return part;
@@ -450,7 +450,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 		return tableMapping;
 	}
 
-	public void setDatamodel(Datamodel namedModel) {
+	public void setDatamodel(Jenamodel namedModel) {
 		this.datamodel = namedModel;
 	}
 

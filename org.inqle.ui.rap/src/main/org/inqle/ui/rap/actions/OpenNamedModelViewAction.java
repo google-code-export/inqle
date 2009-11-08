@@ -3,7 +3,7 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 
 /**
  * When run, this action will open another instance of a view.
@@ -22,7 +22,7 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 		super(window, label, viewId, pluginId, iconPath);
 	}
 
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 	
 	private static final Logger log = Logger.getLogger(OpenNamedModelViewAction.class);
 	
@@ -61,11 +61,11 @@ public class OpenNamedModelViewAction extends OpenViewAction {
 //		super.run();
 	}
 
-	public void setDatamodel(Datamodel datamodel) {
+	public void setDatamodel(Jenamodel datamodel) {
 		this.datamodel = datamodel;
 	}
 
-	public Datamodel getDatamodel() {
+	public Jenamodel getDatamodel() {
 		return datamodel;
 	}
 }

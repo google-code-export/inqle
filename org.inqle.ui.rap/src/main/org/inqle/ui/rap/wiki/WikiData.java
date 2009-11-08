@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -17,7 +17,7 @@ public class WikiData {
 
 	private String title;
 	private String description;
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 	private String classUri;
 	private Map<String, Object> properties;
 	private Model model;

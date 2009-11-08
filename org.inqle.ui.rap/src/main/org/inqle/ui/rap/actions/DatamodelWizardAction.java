@@ -8,7 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 
@@ -27,7 +27,7 @@ public class DatamodelWizardAction extends Action {
 	private int mode = MODE_NEW;
 	//private ModelPart modelPart = null;
 	private DatabasePart databasePart;
-	private Datamodel datamodel;
+	private Jenamodel datamodel;
 	
 	private static final Logger log = Logger.getLogger(DatamodelWizardAction.class);
 	
@@ -72,7 +72,7 @@ public class DatamodelWizardAction extends Action {
 //		return datamodel;
 //	}
 
-	public void setDatamodel(Datamodel datamodel) {
+	public void setDatamodel(Jenamodel datamodel) {
 		this.datamodel = datamodel;
 	}
 }

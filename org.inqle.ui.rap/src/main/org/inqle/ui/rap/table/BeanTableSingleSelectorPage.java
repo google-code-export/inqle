@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jena.Datamodel;
+import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.ui.rap.pages.BeanWizardPage;
