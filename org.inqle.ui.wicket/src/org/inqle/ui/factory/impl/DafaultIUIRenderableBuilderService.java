@@ -11,7 +11,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.factory.IUIRenderableBuilderService;
-import org.inqle.ui.factory.IntegerRangeAnswerBuilder;
 import org.inqle.ui.model.IUIRenderable;
 
 /**
