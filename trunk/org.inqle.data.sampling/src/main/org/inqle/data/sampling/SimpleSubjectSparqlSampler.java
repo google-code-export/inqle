@@ -14,7 +14,7 @@ import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 
 import thewebsemantic.Namespace;
 
@@ -40,7 +40,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * TODO add elements which define how to render the UI elements, for manual execution mode
  */
 @TargetDatabaseId(SamplingInfo.SAMPLER_DB)
-@TargetDatamodelName(SamplingInfo.SAMPLER_DATAMODEL)
+@TargetModelName(SamplingInfo.SAMPLER_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class SimpleSubjectSparqlSampler extends AConstructSparqlSampler {
 

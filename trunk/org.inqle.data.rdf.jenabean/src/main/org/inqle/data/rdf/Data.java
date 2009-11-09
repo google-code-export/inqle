@@ -1,13 +1,13 @@
 package org.inqle.data.rdf;
 
+import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jenabean.Persister;
 
 import thewebsemantic.Namespace;
 
 /**
  * This class is used for importing Data.
- * It represents a OWL class, and is not used
- * programmatically.
+ * It represents a generic and flexible class of data, especially for data imported into INQLE
  * 
  * @author David Donohue
  * Jul 12, 2008
@@ -19,8 +19,8 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class Data {
 
-	private static final String DATAMODEL_NAME_FOR_DATA_SUBJECT = "org.inqle.datamodels.dataSubject";
-	private static final String DATAMODEL_NAME_FOR_DATA_PROPERTY = "org.inqle.datamodels.dataProperty";
-	public static final String DATAMODEL_ID_FOR_DATA_PROPERTY = Persister.CORE_DATABASE_ID + "/" + DATAMODEL_NAME_FOR_DATA_PROPERTY;
-	public static final String DATAMODEL_ID_FOR_DATA_SUBJECT = Persister.CORE_DATABASE_ID + "/" + DATAMODEL_NAME_FOR_DATA_SUBJECT;
+	private static final String DATAMODEL_NAME_FOR_DATA_SUBJECT = "DataSubject.data";
+	private static final String DATAMODEL_NAME_FOR_DATA_PROPERTY = "DataProperty.data";
+	public static final String DATAMODEL_ID_FOR_DATA_PROPERTY = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_PROPERTY;
+	public static final String DATAMODEL_ID_FOR_DATA_SUBJECT = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_SUBJECT;
 }

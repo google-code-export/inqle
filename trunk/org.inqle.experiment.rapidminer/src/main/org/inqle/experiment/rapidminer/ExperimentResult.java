@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Id;
@@ -23,7 +23,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
  * @author David Donohue
  * Apr 22, 2008
  */
-@TargetDatamodelName(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME)
+@TargetModelName(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME)
 @Namespace(RDF.INQLE)
 public class ExperimentResult extends UniqueJenabean {
 

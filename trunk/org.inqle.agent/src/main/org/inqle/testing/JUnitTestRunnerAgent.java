@@ -12,7 +12,7 @@ import org.inqle.agent.AgentInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -24,7 +24,7 @@ import thewebsemantic.Namespace;
  * Apr 25, 2008
  */
 @TargetDatabaseId(AgentInfo.AGENT_DB)
-@TargetDatamodelName(AgentInfo.AGENT_DATAMODEL)
+@TargetModelName(AgentInfo.AGENT_DATAMODEL)
 @Namespace(RDF.INQLE)
 public class JUnitTestRunnerAgent extends AAgent {
 

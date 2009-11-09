@@ -270,9 +270,9 @@ public class Persister {
 		return model;
 	}
 	
-	public String getCoreDatamodelId(String datamodelName) {
-		return CORE_DATABASE_ID + "/" + datamodelName;
-	}
+//	public String getCoreDatamodelId(String datamodelName) {
+//		return CORE_DATABASE_ID + "/" + datamodelName;
+//	}
 	
 //	/**
 //	 * Given the URI or ID of a Datamodel in the System database, get the Jena Model object.
@@ -710,7 +710,7 @@ public class Persister {
 	 * Get the model for storing info about the repositories, within the specified database
 	 */
 	public Model getMetarepositoryModel(String databaseId) {
-		return getModel(databaseId + "/" + METAREPOSITORY_DATAMODEL);
+		return getModel(databaseId + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + METAREPOSITORY_DATAMODEL);
 	}
 	
 	
@@ -793,13 +793,28 @@ public class Persister {
 	 * @param persistableClass
 	 * @return
 	 */
-	public static String getTargetDatamodelName(Class<?> persistableClass) {
-		TargetDatamodelName targetDatamodel = persistableClass.getAnnotation(TargetDatamodelName.class);
-		if (targetDatamodel == null) {
-			log.warn("Unable to retrieve datamodel name for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetDatamodel annotation.");
+	public static String getTargetModelName(Class<?> persistableClass) {
+		TargetModelName targetModel = persistableClass.getAnnotation(TargetModelName.class);
+		if (targetModel == null) {
+			log.warn("Unable to retrieve model name for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetModelName annotation.");
 			return null;
 		}
-		return targetDatamodel.value();
+		return targetModel.value();
+	}
+	
+	/**
+	 * Get the name of the datamodel to which the provided class is supposed to be persisted, per its
+	 * annotation TargetDatamodelName
+	 * @param persistableClass
+	 * @return
+	 */
+	public static String getTargetModelType(Class<?> persistableClass) {
+		TargetModelType targetModelType = persistableClass.getAnnotation(TargetModelType.class);
+		if (targetModelType == null) {
+			log.warn("Unable to retrieve model type for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetModelType annotation.  By default, assume it to be 'system' type.");
+			return IDBConnector.SUBDATABASE_SYSTEM;
+		}
+		return targetModelType.value();
 	}
 	
 	/**
@@ -818,9 +833,10 @@ public class Persister {
 	 * @return the datamodelId
 	 */
 	public static String getTargetDatamodelId(Class<?> persistableClass, String databaseId) {
-		String datamodelName = getTargetDatamodelName(persistableClass);
-		if (datamodelName==null) return null;
-		return databaseId + "/" + datamodelName;
+		String modelName = getTargetModelName(persistableClass);
+		String modelType = getTargetModelType(persistableClass);
+		if (modelName==null) return null;
+		return databaseId + "/" + modelName;
 	}
 	
 	/* *********************************************************************
@@ -1037,11 +1053,12 @@ public class Persister {
 	 * @version 2
 	 */
 	public <T> Collection<T> reconstituteAll(String databaseId, Class<T> persistableClass) {
-		String datamodelName = getTargetDatamodelName(persistableClass);
-		if (datamodelName == null) {
+		String modelName = getTargetModelName(persistableClass);
+		String modelType = getTargetModelType(persistableClass);
+		if (modelName == null) {
 			return null;
 		}
-		Model model = getModel(databaseId + "/" + datamodelName);
+		Model model = getModel(databaseId + "/" + modelType + "/" + modelName);
 		Collection<T> results = reconstituteAll(persistableClass, model);
 		return results;
 	}

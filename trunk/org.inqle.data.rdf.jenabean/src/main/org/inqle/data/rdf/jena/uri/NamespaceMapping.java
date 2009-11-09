@@ -6,7 +6,7 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 
 import thewebsemantic.Namespace;
 
@@ -16,7 +16,7 @@ import thewebsemantic.Namespace;
  * May 31, 2008
  */
 @TargetDatabaseId(Persister.CORE_DATABASE_ID)
-@TargetDatamodelName(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
+@TargetModelName(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
 @Namespace(RDF.INQLE)
 public class NamespaceMapping extends GlobalJenabean {
 

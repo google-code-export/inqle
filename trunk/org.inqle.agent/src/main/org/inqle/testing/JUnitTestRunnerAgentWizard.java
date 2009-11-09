@@ -9,7 +9,7 @@ import org.inqle.agent.AgentInfo;
 import org.inqle.agent.rap.AAgentWizard;
 import org.inqle.agent.rap.AgentWizardAction;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -18,7 +18,7 @@ import com.hp.hpl.jena.rdf.model.Model;
  * @author David Donohue
  * Apr 25, 2008
  */
-@TargetDatamodelName(AgentInfo.AGENT_DATAMODEL)
+@TargetModelName(AgentInfo.AGENT_DATAMODEL)
 public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 	
 	private NameDescriptionPage nameDescriptionPage;

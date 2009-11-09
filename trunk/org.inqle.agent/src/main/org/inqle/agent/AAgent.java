@@ -5,7 +5,7 @@ package org.inqle.agent;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.inqle.data.rdf.jenabean.UniqueJenabean;
 
 import thewebsemantic.Namespace;
