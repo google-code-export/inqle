@@ -5,6 +5,7 @@ package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.range.DoubleRangeAnswerEditPanel;
+import org.inqle.ui.component.view.answer.range.RangePanel;
 import org.inqle.ui.factory.IOutcomeHandler;
 import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.model.DoubleRangeAnswer;
@@ -46,8 +47,8 @@ public class DoubleRangeAnswerBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public Component createFinalUserUI(String id, IUIRenderable renderable) {
-		// TODO: create a component that allows to select a value within limits.
-		return null;
+		DoubleRangeAnswer rangeAnswer = (DoubleRangeAnswer)renderable;		
+		return new RangePanel<DoubleRangeAnswer, Double>(id, rangeAnswer, Double.class);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -1,10 +1,13 @@
 /**
  * 
  */
-package org.inqle.ui.factory;
+package org.inqle.ui.factory.impl;
 
 import org.apache.wicket.Component;
 import org.inqle.ui.component.edit.answer.range.IntegerRangeAnswerEditPanel;
+import org.inqle.ui.component.view.answer.range.RangePanel;
+import org.inqle.ui.factory.IOutcomeHandler;
+import org.inqle.ui.factory.IRenderableUIBuilder;
 import org.inqle.ui.model.IUIRenderable;
 import org.inqle.ui.model.IntegerRangeAnswer;
 
@@ -44,8 +47,8 @@ public class IntegerRangeAnswerBuilder implements IRenderableUIBuilder {
 	 */
 	@Override
 	public Component createFinalUserUI(String id, IUIRenderable renderable) {
-		// TODO: create a component that allows to select a value within limits.
-		return null;
+		IntegerRangeAnswer rangeAnswer = (IntegerRangeAnswer)renderable;		
+		return new RangePanel<IntegerRangeAnswer, Integer>(id, rangeAnswer, Integer.class);
 	}
 	
 	@SuppressWarnings("unchecked")
