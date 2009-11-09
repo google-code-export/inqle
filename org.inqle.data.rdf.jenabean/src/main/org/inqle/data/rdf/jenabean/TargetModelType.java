@@ -7,17 +7,16 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Annotation for any classes which are intended to be persisted in an SystemDatamodel.
- * The value should be the role ID of the datamodel, to which objects of this class should
- * be persisted.
+ * Annotation for any classes which are intended to be persisted to a datamodel of a consistent type
+ * (e.g. system or data).
  * 
  * @author David Donohue
- * Jul 3, 2008
+ * Nov 9, 2009
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TargetDatamodelName {
+public @interface TargetModelType {
 
 	String value();
 

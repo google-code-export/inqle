@@ -7,11 +7,11 @@ import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.AJenabean;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetDatamodelName;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 
 import thewebsemantic.Namespace;
 
-@TargetDatamodelName(Persister.DATAMODEL_ARCS_CACHE)
+@TargetModelName(Persister.DATAMODEL_ARCS_CACHE)
 @Namespace(RDF.INQLE)
 public class SubjectArcsCache extends AJenabean {
 

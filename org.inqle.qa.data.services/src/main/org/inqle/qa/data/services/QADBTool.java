@@ -3,7 +3,7 @@ package org.inqle.qa.data.services;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
-import org.inqle.data.rdf.jena.DatabaseBackedDatamodel;
+import org.inqle.data.rdf.jena.DatabaseBackedJenamodel;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.LocalFolderDatabase;
@@ -36,10 +36,10 @@ public class QADBTool {
 		IDatabase databaseForUser = getDatabaseForUser(userId);
 		Persister persister = Persister.getInstance();
 		try {
-			int status = persister.createNewDatabase(databaseForUser);
-			log.info("CREATED user database, with status=" + status);
+			boolean success = persister.createNewDatabase(databaseForUser);
+			log.info("CREATED user database, with success?" + success);
 		} catch (Exception e) {
-			log.error("Error creating/storing first dataset", e);
+			log.error("Error creating/storing user database", e);
 			return false;
 		}
 		return true;
@@ -52,7 +52,7 @@ public class QADBTool {
 	}
 	
 	public static String getDatabaseIdForUser(String userId) {
-		return USERS_DB_FOLDER + "/" + userId;
+		return USERS_DB_FOLDER + "/" + IDBConnector.SUBDATABASE_DATA + "/" + userId;
 	}
 	
 	public static boolean userDataBaseExists(String userId) {
