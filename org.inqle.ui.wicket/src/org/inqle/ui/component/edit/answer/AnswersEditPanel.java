@@ -18,7 +18,10 @@ import com.antilia.web.button.AbstractLink;
 import com.antilia.web.button.IMenuItemHolder;
 import com.antilia.web.button.MenuItemsFactory;
 import com.antilia.web.button.SmallSeparatorButton;
+import com.antilia.web.dialog.DefaultDialog;
+import com.antilia.web.dialog.DialogLink;
 import com.antilia.web.dialog.IVeilScope;
+import com.antilia.web.dialog.util.ConfirmationDialog;
 import com.antilia.web.resources.DefaultStyle;
 import com.antilia.web.veil.AntiliaVeilResource;
 import com.google.inject.Inject;
@@ -111,7 +114,7 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 	}
 	
 	
-	private static class DeleteButton extends AbstractLink {
+    private static class DeleteButton extends DialogLink {
 		
 		private static final long serialVersionUID = 1L;
 
@@ -139,15 +142,29 @@ public class AnswersEditPanel extends Panel implements IVeilScope {
 		}
 		
 		@Override
-		protected void onClick(AjaxRequestTarget target) {
-			AnswersEditPanel answersEditPanel = findParent(AnswersEditPanel.class);
-			answersEditPanel.dao.remove(answer);
-			answersEditPanel.setContent(answersEditPanel.createdListComponent());
-			if(target != null) {
-				target.addComponent(answersEditPanel.getContainer());
-			}					
+		protected String getLabelKey() {
+			return null;
 		}
 		
+		@Override
+		public DefaultDialog newDialog(String id) {
+			ConfirmationDialog dialog = new ConfirmationDialog(id, this, "Do you want to delete answer?") {
+				
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onOk(AjaxRequestTarget target, Form<?> form) {
+					AnswersEditPanel answersEditPanel = findParent(AnswersEditPanel.class);
+					answersEditPanel.dao.remove(answer);
+					answersEditPanel.setContent(answersEditPanel.createdListComponent());
+					if(target != null) {
+						target.addComponent(answersEditPanel.getContainer());
+					}					
+				}
+			};
+			dialog.setCentered(true);
+			return dialog;
+		}		
 	}
 
 	private WebMarkupContainer container;
