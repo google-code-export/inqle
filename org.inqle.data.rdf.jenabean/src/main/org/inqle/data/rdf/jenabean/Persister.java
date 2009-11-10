@@ -70,7 +70,7 @@ public class Persister {
 	public static final Class<?>[] MODEL_CLASSES = {SystemDatamodel.class, PurposefulDatamodel.class, Datafile.class};
 	
 	public static final String EXTENSION_POINT_DATAMODEL = "org.inqle.data.datamodels";
-	public static final String METAREPOSITORY_DATAMODEL = "org.inqle.datamodels.metaRepository";
+	public static final String METAREPOSITORY_DATAMODEL = "MetaRepository.data";
 
 	public static final String EXTENSION_POINT_DATAMODEL_PURPOSES = "org.inqle.data.purposes";
 	public static final String EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA = "org.inqle.data.purposes.minable";
@@ -836,7 +836,7 @@ public class Persister {
 		String modelName = getTargetModelName(persistableClass);
 		String modelType = getTargetModelType(persistableClass);
 		if (modelName==null) return null;
-		return databaseId + "/" + modelName;
+		return databaseId + "/" + modelType + "/" + modelName;
 	}
 	
 	/* *********************************************************************
@@ -994,8 +994,8 @@ public class Persister {
 				reconstitutedObj = reader.load(clazz, objectId);
 			}
 		} catch (Exception e) {
-			//return null
-			log.error("Error reconstituting object of class " + clazz + " with ID of " + objectId, e);
+			//unable to reconstitute: return null
+			log.debug("Error reconstituting object of class " + clazz + " with ID of " + objectId, e);
 		}
 		return reconstitutedObj;
 	}

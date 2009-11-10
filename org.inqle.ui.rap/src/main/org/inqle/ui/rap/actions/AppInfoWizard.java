@@ -159,22 +159,22 @@ public class AppInfoWizard extends Wizard {
 //		SDBConnector connector = new SDBConnector(metarepositoryConnection);
 //		int status = connector.createDatabase();
 //		log.info("Tried to create new SDB store for Metarepository, with status=" + status);
-		LocalFolderDatabase systemDatabase = new LocalFolderDatabase();
-		systemDatabase.setId(Persister.CORE_DATABASE_ID);
-		SystemDatamodel metarepositoryDatamodel = new SystemDatamodel();
-		metarepositoryDatamodel.setId(Persister.METAREPOSITORY_DATAMODEL);
-		metarepositoryDatamodel.setDatabaseId(Persister.CORE_DATABASE_ID);
+		LocalFolderDatabase coreDatabase = new LocalFolderDatabase();
+		coreDatabase.setId(Persister.CORE_DATABASE_ID);
+//		SystemDatamodel metarepositoryDatamodel = new SystemDatamodel();
+//		metarepositoryDatamodel.setId(Persister.METAREPOSITORY_DATAMODEL);
+//		metarepositoryDatamodel.setDatabaseId(Persister.CORE_DATABASE_ID);
 		
 		//create the system database and the metarepository model (which contains data about datamodels)
 		try {
-			IDBConnector connector = DBConnectorFactory.getDBConnector(systemDatabase.getId());
+			IDBConnector connector = DBConnectorFactory.getDBConnector(coreDatabase.getId());
 			boolean success = connector.createDatabase();
 			log.info("Created database: " + Persister.CORE_DATABASE_ID + ": Success?" + success);
 //			Model metarepositoryModel = persister.getMetarepositoryModel(Persister.CORE_DATABASE_ID);
 //			persister.persist(systemDatabase, metarepositoryModel);
-			persister.persist(systemDatabase, Persister.getTargetDatamodelId(LocalFolderDatabase.class, systemDatabase.getId()));
-			persister.persist(metarepositoryDatamodel, Persister.getTargetDatamodelId(SystemDatamodel.class, systemDatabase.getId()));
-			log.info("CREATED user database and first user datamodel.");
+//			persister.persist(coreDatabase, Persister.getTargetDatamodelId(LocalFolderDatabase.class, coreDatabase.getId()));
+//			persister.persist(metarepositoryDatamodel, Persister.getTargetDatamodelId(SystemDatamodel.class, coreDatabase.getId()));
+//			log.info("CREATED core database.");
 		} catch (Exception e) {
 			log.error("Error creating/storing database: " + Persister.CORE_DATABASE_ID + " and dataset: " + Persister.METAREPOSITORY_DATAMODEL, e);
 			//TODO show error to user
