@@ -113,6 +113,7 @@ public class TDBConnector implements IDBConnector {
 		List<String> modelNames = new ArrayList<String>();
 		File dbRoot = new File(dbPath);
 		File[] databaseFolders = dbRoot.listFiles();
+		if (databaseFolders==null || databaseFolders.length==0) return modelNames;
 //		log.info("Listing models for database: " + getFilePath());
 		for (File databaseFolder: databaseFolders) {
 			if (databaseFolder.isDirectory()) {
