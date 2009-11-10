@@ -3,9 +3,11 @@
  */
 package org.inqle.ui.component.edit.answer;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.dao.IAnswersDao;
+import org.inqle.ui.factory.IUIRenderableBuilderService;
 import org.inqle.ui.model.IAnswer;
 
 import com.antilia.common.query.IQuery;
@@ -36,6 +38,9 @@ public class AnswersListPanel extends Panel {
 	private IAnswersDao dao;
 	
 	private IQuery<IAnswer> query;
+	
+	@Inject
+	private IUIRenderableBuilderService builderService;
 	
 	/**
 	 * @param id
@@ -72,6 +77,14 @@ public class AnswersListPanel extends Panel {
 			@Override
 			protected void addMenuItemsBeforeNavigation(MenuItemsFactory factory) {
 				AnswersListPanel.this.addMenuItemsBeforeNavigation(factory);
+			}
+			
+			@Override
+			protected Component newBodyCell(String id, IColumnModel<IAnswer> columnModel, IAnswer object) {
+				if(columnModel.getPropertyPath().equals("translationKey") && object != null) {
+					return builderService.createFinalUserUI(id, object);					
+				}
+				return super.newBodyCell(id, columnModel, object);
 			}
 			
 			@Override
