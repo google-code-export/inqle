@@ -3,9 +3,11 @@
  */
 package org.inqle.ui.component.edit.question;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.inqle.ui.dao.IQuestionsDao;
+import org.inqle.ui.factory.IUIRenderableBuilderService;
 import org.inqle.ui.model.Question;
 
 import com.antilia.common.query.IQuery;
@@ -34,6 +36,9 @@ public class QuestionsListPanel extends Panel {
 	
 	@Inject
 	private IQuestionsDao questionsDao;
+	
+	@Inject
+	private IUIRenderableBuilderService builderService;
 	
 	private IQuery<Question> query;
 	
@@ -88,6 +93,14 @@ public class QuestionsListPanel extends Panel {
 						return true;
 					}
 				};
+			}
+			
+			@Override
+			protected Component newBodyCell(String id, IColumnModel<Question> columnModel, Question object) {
+				if(columnModel.getPropertyPath().equals("answer") && object.getAnswer() != null) {
+					return builderService.createFinalUserUI(id, object.getAnswer());
+				}
+				return super.newBodyCell(id, columnModel, object);
 			}
 			
 		};
