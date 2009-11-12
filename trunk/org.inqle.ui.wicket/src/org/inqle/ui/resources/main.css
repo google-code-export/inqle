@@ -15,7 +15,8 @@ td.tbodycol {
 
 div.iheader {
  	height: 70px;
- 	background-color: #cfd2cf;
+ 	background-image: url('back.png');
+ 	background-repeat: repeat-x;
 }
 
 div.ipage {	
@@ -30,6 +31,8 @@ div.ipage {
 }
 
 div.smallheader {
+	margin-left: 5px;
 	background-image: url('test.png');
 	background-repeat: repeat-x;
+	font-weight: bold;
 }
