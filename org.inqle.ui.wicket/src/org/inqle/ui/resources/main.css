@@ -1,3 +1,7 @@
+body {
+	margin: 0px;
+	padding: 0px;
+}
 
 .test {
 	background-color: red;
@@ -7,4 +11,25 @@ td.tbodycol {
 	overflow: hidden;
 	white-space: normal;
 	word-wrap: break-word;
+}
+
+div.iheader {
+ 	height: 70px;
+ 	background-color: #cfd2cf;
+}
+
+div.ipage {	
+	width: 1200px;
+	margin-top: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	overflow: auto;
+	height: 800px;
+	background-color: #eaf3ea;
+}
+
+div.smallheader {
+	background-image: url('test.png');
+	background-repeat: repeat-x;
 }
