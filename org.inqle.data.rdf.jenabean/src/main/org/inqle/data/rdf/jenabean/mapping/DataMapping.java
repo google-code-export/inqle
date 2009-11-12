@@ -38,8 +38,8 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 	
-	private static final String MAPPING_MODEL_NAME = "DataMapping.data";
-	private static final String MAPPING_DB_ID = "DataMapping.db";
+	static final String MAPPING_MODEL_NAME = "DataMapping.data";
+	static final String MAPPING_DB_ID = "DataMapping.db";
 	public static final String MAPPING_MODEL_ID = MAPPING_DB_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + MAPPING_MODEL_NAME;
 	private String mapsHeader;
 	private URI mapsPredicate;
