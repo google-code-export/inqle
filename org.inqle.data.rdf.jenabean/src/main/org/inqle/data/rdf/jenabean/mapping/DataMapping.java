@@ -3,7 +3,10 @@ package org.inqle.data.rdf.jenabean.mapping;
 import java.net.URI;
 
 import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
 import org.inqle.data.rdf.jenabean.TargetModelName;
 
 import thewebsemantic.Namespace;
@@ -30,11 +33,14 @@ import thewebsemantic.Namespace;
  * 
  * TODO extend a base class, which does not have name & description fields
  */
-@TargetModelName(DataMapping.MAPPING_DATASET_ROLE_ID)
+@TargetDatabaseId(DataMapping.MAPPING_DB_ID)
+@TargetModelName(DataMapping.MAPPING_MODEL_NAME)
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 	
-	public static final String MAPPING_DATASET_ROLE_ID = "org.inqle.datamodels.mapping";
+	private static final String MAPPING_MODEL_NAME = "DataMapping.data";
+	private static final String MAPPING_DB_ID = "DataMapping.db";
+	public static final String MAPPING_MODEL_ID = MAPPING_DB_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + MAPPING_MODEL_NAME;
 	private String mapsHeader;
 	private URI mapsPredicate;
 	private URI mapsPropertyType;

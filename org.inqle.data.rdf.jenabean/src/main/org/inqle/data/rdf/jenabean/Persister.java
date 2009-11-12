@@ -93,7 +93,7 @@ public class Persister {
 		
 	private Map<String, IndexBuilderModel> indexBuilders;
 	private Model prefixesModel;
-	private boolean systemDatamodelsInitialized = false;
+	private boolean persisterInitialized = false;
 	
 	
 	/* *********************************************************************
@@ -122,11 +122,13 @@ public class Persister {
 	/* *********************************************************************
 	 * *** INITIALIZATION METHODS
 	 * ********************************************************************* */
-	public void initialize() {
-		if (! systemDatamodelsInitialized) {
-//			initializeSystemDatamodels();
-		}
-	}
+//	private void initialize() {
+//		if (! persisterInitialized) {
+//			initializeIndexBuilders();
+//			persisterInitialized = true;
+////			initializeSystemDatamodels();
+//		}
+//	}
 	
 	/* *********************************************************************
 	 * *** APPINFO METHODS
@@ -530,7 +532,7 @@ public class Persister {
 	 * @return
 	 */
 	public IndexBuilderModel getIndexBuilder(String indexId) {
-		IndexBuilderModel indexBuilder = indexBuilders.get(indexId);
+		IndexBuilderModel indexBuilder = getIndexBuilders().get(indexId);
 //		if (indexBuilder!=null) return indexBuilder;
 //		initializeIndexBuilders();
 //		indexBuilder = indexBuilders.get(indexId);
@@ -588,32 +590,34 @@ public class Persister {
 	}
 	
 
-	public Map<String, IndexBuilderModel> initializeIndexBuilders() {
-		
+	public Map<String, IndexBuilderModel> getIndexBuilders() {
+		if (indexBuilders!=null && indexBuilders.size() > 0) {
+			return indexBuilders;
+		}
 		indexBuilders = new HashMap<String, IndexBuilderModel>();
 		
-		//loop thru system datamodels extensions, and create each index
-		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
-		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
-			log.trace("datamodelExtension=" + datamodelExtension);
-			String datamodelId = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
-			String textIndexType = datamodelExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
-			
-			//if directed to do so, build & store an index for this Model
-			if (textIndexType != null) {
-				log.info("Creating IndexBuilder for datamodel of ID or purpose: " + datamodelId + "; textIndexType=" + textIndexType);
-
-				IndexBuilderModel larqBuilder = getIndexBuilder(datamodelId, textIndexType);
-				if (larqBuilder != null) {
-					log.info("Retrieving Index for Datamodel of ID: " + datamodelId + "...");
-					if (larqBuilder.getIndex() == null) {
-						log.warn("No text index exists for datamodel role " + datamodelId);
-					}
-					indexBuilders.put(datamodelId, larqBuilder);
-				}
-				
-			}
-		}
+//		//loop thru system datamodels extensions, and create each index
+//		List<IExtensionSpec> datamodelExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL);
+//		for (IExtensionSpec datamodelExtension: datamodelExtensions) {
+//			log.trace("datamodelExtension=" + datamodelExtension);
+//			String datamodelId = datamodelExtension.getAttribute(InqleInfo.ID_ATTRIBUTE);
+//			String textIndexType = datamodelExtension.getAttribute(ATTRIBUTE_TEXT_INDEX_TYPE);
+//			
+//			//if directed to do so, build & store an index for this Model
+//			if (textIndexType != null) {
+//				log.info("Creating IndexBuilder for datamodel of ID or purpose: " + datamodelId + "; textIndexType=" + textIndexType);
+//
+//				IndexBuilderModel larqBuilder = getIndexBuilder(datamodelId, textIndexType);
+//				if (larqBuilder != null) {
+//					log.info("Retrieving Index for Datamodel of ID: " + datamodelId + "...");
+//					if (larqBuilder.getIndex() == null) {
+//						log.warn("No text index exists for datamodel role " + datamodelId);
+//					}
+//					indexBuilders.put(datamodelId, larqBuilder);
+//				}
+//				
+//			}
+//		}
 		
 		//add any external datamodel purposes which are supposed to be indexed
 		List<IExtensionSpec> datamodelPurposeExtensions = ExtensionFactory.getExtensionSpecs(EXTENSION_POINT_DATAMODEL_PURPOSES);
@@ -627,42 +631,6 @@ public class Persister {
 			if (textIndexType != null) {
 				IndexBuilderModel larqBuilder = getIndexBuilder(datamodelPurposeId, textIndexType);
 
-				
-//				log.info("Making IndexBuilder for external datamodel: datamodelExtension=" + datamodelPurposeExtension);
-//				String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + datamodelPurposeId;
-//				
-//				IndexWriter indexWriter = null;
-//				
-//				//first unlock the directory, if locked
-//				try {
-//					if (IndexReader.isLocked(indexFilePath)) {
-//						log.info("Index is locked.  Unlocking...");
-//						FSDirectory dir = FSDirectory.getDirectory(indexFilePath);
-//						IndexReader.unlock(dir);
-//					}
-//				} catch (Exception e) {
-//					log.error("Unable to test or unlock the Lucene index. Skipping this step.", e);
-//				}
-//				
-//				try {
-//					indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
-//					//log.info("created IndexWriter");
-//				} catch (Exception e) {
-//					log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
-//				}
-//				
-//				textIndexType = textIndexType.toLowerCase();
-//				IndexBuilderModel larqBuilder = null;
-//				
-//				if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
-//					larqBuilder = new IndexBuilderSubject(indexWriter);
-//				} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
-//					larqBuilder = new IndexBuilderString(indexWriter);
-//				}
-				
-				
-				
-				
 				if (larqBuilder != null) {
 					IndexLARQ theIndex = null;
 					try {

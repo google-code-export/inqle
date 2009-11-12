@@ -52,8 +52,8 @@ public class Application implements IEntryPoint {
 		
 		if (loggedIn) {
 			//initialize the (singleton) Persister
-			Persister.getInstance().initialize();
-			
+//			Persister.getInstance().initialize();
+			Persister.getInstance();
 			PlatformUI.createAndRunWorkbench( display, new ApplicationWorkbenchAdvisor() );
 			return PlatformUI.RETURN_OK;
 		} else {
