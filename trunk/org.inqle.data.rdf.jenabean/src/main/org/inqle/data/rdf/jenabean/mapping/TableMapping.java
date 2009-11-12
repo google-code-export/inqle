@@ -25,7 +25,7 @@ import thewebsemantic.Namespace;
  * 
  * TODO extend a base class, which does not have name & description fields
  */
-@TargetModelName(DataMapping.MAPPING_DATASET_ROLE_ID)
+@TargetModelName(DataMapping.MAPPING_DATAMODEL_NAME)
 @Namespace(RDF.INQLE)
 //public class TableMapping extends GlobalJenabean {
 public class TableMapping extends SubjectMapping {
