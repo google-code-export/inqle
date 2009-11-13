@@ -10,16 +10,25 @@ body {
 td.tbodycol {
 	overflow: hidden;
 	white-space: normal;
-	word-wrap: break-word;
+	word-wrap: break-word;	
 }
 
 div.iheader {
  	height: 70px;
- 	background-image: url('back.png');
+ 	background-image: url('back_green.png');
  	background-repeat: repeat-x;
 }
 
+div.ilogo {
+	height: 70px;
+	width: 200px;
+ 	background-image: url('Inqle_green.png');
+ 	background-repeat: no-repeat;
+ 	background-position: center;
+}
+
 div.ipage {	
+	color: #424b49;
 	width: 1200px;
 	margin-top: 5px;
 	margin-left: auto;
@@ -27,12 +36,13 @@ div.ipage {
 	position: relative;
 	overflow: auto;
 	height: 800px;
-	background-color: #eaf3ea;
+	background-color: #bee5c0;
 }
 
 div.smallheader {
-	margin-left: 5px;
-	background-image: url('test.png');
+	padding-left: 5px;
+	background-image: url('title.png');
 	background-repeat: repeat-x;
 	font-weight: bold;
+	color: #424b49;
 }
