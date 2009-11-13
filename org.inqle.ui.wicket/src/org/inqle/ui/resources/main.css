@@ -1,7 +1,8 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	background-color: #c6c6c6;  
+	background-color: #f9f2f2;  
+	height: 100%;
 }
 
 .test {
@@ -16,14 +17,14 @@ td.tbodycol {
 
 div.iheader {
  	height: 70px;
- 	background-image: url('back_green.png');
+ 	background-image: url('back_blue.png');
  	background-repeat: repeat-x;
 }
 
 div.ilogo {
 	height: 70px;
 	width: 200px;
- 	background-image: url('Inqle.png');
+ 	background-image: url('Inqle_blue.png');
  	background-repeat: no-repeat;
  	background-position: center;
 }
@@ -37,7 +38,7 @@ div.ipage {
 	position: relative;
 	overflow: auto;
 	height: 800px;
-	background-color: #d0e3d8;
+	background-color: #dbe6ff;
 }
 
 div.smallheader {

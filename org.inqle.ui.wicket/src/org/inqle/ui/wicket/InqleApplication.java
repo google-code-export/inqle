@@ -37,7 +37,7 @@ public class InqleApplication extends AntiliaWebApplication {
 	 */
 	@Override
 	public Class<? extends Page> getHomePage() {
-		return Index.class;
+		return EditPage.class;
 	}
 	
 	@Override
