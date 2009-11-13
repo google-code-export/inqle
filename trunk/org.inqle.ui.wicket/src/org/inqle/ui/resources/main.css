@@ -1,6 +1,7 @@
 body {
 	margin: 0px;
 	padding: 0px;
+	background-color: #c6c6c6;  
 }
 
 .test {
@@ -22,7 +23,7 @@ div.iheader {
 div.ilogo {
 	height: 70px;
 	width: 200px;
- 	background-image: url('Inqle_green.png');
+ 	background-image: url('Inqle.png');
  	background-repeat: no-repeat;
  	background-position: center;
 }
@@ -36,13 +37,14 @@ div.ipage {
 	position: relative;
 	overflow: auto;
 	height: 800px;
-	background-color: #bee5c0;
+	background-color: #d0e3d8;
 }
 
 div.smallheader {
 	padding-left: 5px;
-	background-image: url('title.png');
+	background-image: url('title_green.png');
 	background-repeat: repeat-x;
 	font-weight: bold;
-	color: #424b49;
+	height: 20px;
+	color: white;
 }
