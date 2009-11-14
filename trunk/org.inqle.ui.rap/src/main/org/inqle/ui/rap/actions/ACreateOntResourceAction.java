@@ -60,11 +60,11 @@ public abstract class ACreateOntResourceAction extends Action {
 	 */
 	public ACreateOntResourceAction(Shell shell, String datamodelId, String parentResourceUri, String actionType) {
 		this.shell = shell;
-		log.trace("Create ACreateOntResourceAction");
+		log.info("Create ACreateOntResourceAction: datamodelId = " + datamodelId + "; parentResourceUri=" + parentResourceUri + "; actionType=" + actionType);
 		this.datamodelId = datamodelId;
 		Persister persister = Persister.getInstance();
-		Jenamodel searchDatamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, datamodelId);
-		this.model = persister.getIndexableModel(searchDatamodel);
+//		PurposefulDatamodel searchDatamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, datamodelId);
+		this.model = persister.getIndexableModel(datamodelId);
 //		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
 		this.parentResourceUri = parentResourceUri;

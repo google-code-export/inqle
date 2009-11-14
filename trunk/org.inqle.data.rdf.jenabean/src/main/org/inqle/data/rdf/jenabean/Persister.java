@@ -370,7 +370,7 @@ public class Persister {
 	 * @return
 	 */
 	public Model getIndexableModel(Jenamodel indexableDatamodel) {
-//		log.info("Persister.getIndexableModel(Datamodel of ID=" + indexableDatamodel.getId() + ")...");
+		if (indexableDatamodel==null) return null;
 		Model model = getModel(indexableDatamodel.getId());
 		if (indexableDatamodel instanceof PurposefulDatamodel) {
 			PurposefulDatamodel userDatamodel = (PurposefulDatamodel)indexableDatamodel;
@@ -386,7 +386,6 @@ public class Persister {
 			}
 		} else if (indexableDatamodel instanceof SystemDatamodel) {
 			SystemDatamodel systemDatamodel = (SystemDatamodel)indexableDatamodel;
-//			IndexBuilderModel builder = getIndexBuilder(internalDatamodel.getDatamodelRole());
 			IndexBuilderModel builder = getIndexBuilder(systemDatamodel.getId());
 			if (builder != null) {
 				model.register(builder);
@@ -395,10 +394,22 @@ public class Persister {
 		return model;
 	}
 	
-//	public Model getModel(String datamodelId) {
-//		Datamodel datamodel = getDatamodel(datamodelId);
-//		return getModel(datamodel);
-//	}
+	/**
+	 * Given the ID of a model, retrieves a Model which has
+	 * had its text indexers registered.
+	 * @param modelId
+	 * @return
+	 */
+	public Model getIndexableModel(String modelId) {
+		//see if it is a purposeful model
+		PurposefulDatamodel purposefulDatamodel = getDatabaseBackedDatamodel(PurposefulDatamodel.class, modelId);
+		if (purposefulDatamodel != null) return getIndexableModel(purposefulDatamodel);
+		//otherwise it is a system model
+		SystemDatamodel systemDatamodel = new SystemDatamodel();
+		systemDatamodel.setId(modelId);
+		return getIndexableModel(systemDatamodel);
+	}
+	
 	
 	public static String getDatabaseIdFromDatamodelId(String datamodelId) {
 		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
@@ -541,6 +552,7 @@ public class Persister {
 	
 	public IndexLARQ getIndex(String indexId) {
 		IndexBuilderModel indexBuilder = getIndexBuilder(indexId);
+		if (indexBuilder==null) return null;
 		indexBuilder.flushWriter();
 		log.trace("Retrieved & flushed IndexBuilder:" + indexBuilder);
 		return indexBuilder.getIndex();

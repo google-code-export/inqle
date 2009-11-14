@@ -30,7 +30,7 @@ public class TableMappingsSearcher {
 	public static String lookupMappings(String headerText, int countSearchResults, int offset) {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(getSparqlFindMatchingMappings(headerText, countSearchResults, offset));
-		queryCriteria.addDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID);
+		queryCriteria.addDatamodel(DataMapping.MAPPING_MODEL_ID);
 		String matchingMappingsXml = Queryer.selectXml(queryCriteria);
 		return matchingMappingsXml;
 	}

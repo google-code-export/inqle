@@ -16,6 +16,8 @@
            weight="5000"
            access="admin,access_agents"/>
   </extension>
+  
+  <!--
   <extension
          point="org.inqle.data.datamodels">
     <datamodel
@@ -25,6 +27,8 @@
 				 cacheInMemory="false"
 		</datamodel>
 	</extension>
+	-->
+	
   <extension
          point="org.inqle.agent.rap.IAgentFactory">
 		<agent
