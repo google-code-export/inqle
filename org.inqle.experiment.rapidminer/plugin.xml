@@ -20,24 +20,16 @@
 		</part-type>
 		-->
    </extension>
+   
+   <!--
     <extension
          point="org.inqle.data.datamodels">
-         <!--
-      	<datamodel
-           id="org.inqle.datamodels.learningCycles"
-           weight="7000"
-           description="contains customized Learning Cycles"
-					 cacheInMemory="false"
-					 targetDatabase="org.inqle.data.databases.cache">
-		</datamodel>
-		-->
 		<datamodel
            id="org.inqle.experiment.rapidminer.datamodels.rmExperimentResults"
            weight="8200"
            description="contains experiment results"
 		 cacheInMemory="false">
 		</datamodel>
-		<!-- targetDatabase="org.inqle.data.databases.cache" -->
 		
 		<datamodel
 			id="org.inqle.experiment.rapidminer.datamodels.rmExperiments"
@@ -46,6 +38,8 @@
 		 cacheInMemory="false">
 		</datamodel>
 	</extension>
+	-->
+	
    <extension
          point="org.inqle.experiment.rapidminer.IRapidMinerExperiment">
       <rapidminer-experiment
