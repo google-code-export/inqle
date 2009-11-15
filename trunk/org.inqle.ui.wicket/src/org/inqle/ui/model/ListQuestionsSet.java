@@ -6,7 +6,7 @@ import java.util.List;
  * @author Ernesto Reinaldo Barreiro (reiern70@gmail.com)
  *
  */
-public class ListQuestionSet implements IQuestionsSet {
+public class ListQuestionsSet implements IQuestionsSet {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -14,7 +14,7 @@ public class ListQuestionSet implements IQuestionsSet {
 	
 	private int current = -1;
 	
-	public ListQuestionSet(List<Question> questions) {
+	public ListQuestionsSet(List<Question> questions) {
 		this.questions= questions;
 	}
 
