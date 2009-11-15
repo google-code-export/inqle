@@ -73,9 +73,10 @@ public class TDBDatabaseWizard extends Wizard {
 		resetConnection();
 		log.info("addPages() using Database:\n" + JenabeanWriter.toString(database));
 		if (mode == DatabaseWizardAction.MODE_NEW) {
-			databaseInfoPage = new DatabaseInfoPage("Database SDBDatabase Info", null, null);
+			databaseInfoPage = new DatabaseInfoPage(null, null);
+//			database = new LocalFolderDatabase();
 		} else {
-			databaseInfoPage = new DatabaseInfoPage("Database SDBDatabase Info", database.getName(), database.getDescription());
+			databaseInfoPage = new DatabaseInfoPage(database.getId(), database.getDescription());
 		}
 		addPage(databaseInfoPage);
 	}
@@ -85,8 +86,8 @@ public class TDBDatabaseWizard extends Wizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		database.setName(databaseInfoPage.getName());
-		
+		database.setId(databaseInfoPage.getDatabaseId());
+		database.setDescription(databaseInfoPage.getDatabaseDescription());
 		
 		Persister persister = Persister.getInstance();
 //		SDBConnector connector = new SDBConnector(database);
@@ -137,7 +138,8 @@ public class TDBDatabaseWizard extends Wizard {
 			database = BeanTool.clone(startingDatabase);
 		} else {
 //			database = new LocalFolderDatabase().createClone();
-			database = BeanTool.clone(new LocalFolderDatabase());
+//			database = BeanTool.clone(new LocalFolderDatabase());
+			database = new LocalFolderDatabase();
 		}
 		assert(database != null);
 	}

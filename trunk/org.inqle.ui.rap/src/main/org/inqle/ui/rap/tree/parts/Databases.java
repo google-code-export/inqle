@@ -44,6 +44,7 @@ public class Databases extends PartType {
 		List<String> databaseIds = connector.listAllDatabases();
 		List<IDatabase> databases = new ArrayList<IDatabase>();
 		for (String databaseId: databaseIds) {
+			if (databaseId==null) continue;
 			String targetDatamodelId = Persister.getTargetDatamodelId(baseDatabaseObject.getClass(), databaseId);
 			IDatabase database = persister.reconstitute(baseDatabaseObject.getClass(), databaseId, targetDatamodelId, true);
 			//if the database object is not stored in the metarepository, create it
@@ -106,8 +107,8 @@ public class Databases extends PartType {
 //public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
 		List<IAction> actions = new ArrayList<IAction>();
-//		DatabaseWizardAction databaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_NEW, "Create new database....", baseDatabaseObject, this, workbenchWindow);
-//		actions.add(databaseWizardAction);
+		DatabaseWizardAction databaseWizardAction = new DatabaseWizardAction(DatabaseWizardAction.MODE_NEW, "Create new database....", null, this, workbenchWindow);
+		actions.add(databaseWizardAction);
 		return actions;
 	}
 }

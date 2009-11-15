@@ -11,21 +11,22 @@ public class DatabaseInfoPage extends DynaWizardPage {
 	private static final String PAGE_NAME = "Database Info";
 	private static final String PAGE_DESCRIPTION = "";
 	private TextFieldShower idShower;
-	private TextFieldShower nameShower;
+//	private TextFieldShower nameShower;
 	private TextFieldShower descriptionShower;
 	private String databaseId;
-	private String databaseName;
+//	private String databaseName;
 	private String databaseDescription;
 	
-	private DatabaseInfoPage(String pageName, String pageDescription) {
-		super(pageName, null);
-		setMessage(pageDescription);
-	}
+//	private DatabaseInfoPage(String pageName, String pageDescription) {
+//		super(pageName, null);
+//		setMessage(pageDescription);
+//	}
 
-	public DatabaseInfoPage(String id, String name, String description) {
-		this(PAGE_NAME, PAGE_DESCRIPTION);
+	public DatabaseInfoPage(String id, String description) {
+		super(PAGE_NAME, null);
+//		this(PAGE_NAME, PAGE_DESCRIPTION);
 		this.databaseId = id;
-		this.databaseName = name;
+//		this.databaseName = name;
 		this.databaseDescription = description;
 	}
 	
@@ -46,16 +47,16 @@ public class DatabaseInfoPage extends DynaWizardPage {
 			idShower.setEnabled(false);
 		}
 
-		nameShower = new TextFieldShower(
-				composite,
-				"Database Name",
-				"Enter a nickname for this database.",
-				null,
-				SWT.BORDER
-		);
-		if (databaseName != null) {
-			nameShower.setValue(databaseName);
-		}
+//		nameShower = new TextFieldShower(
+//				composite,
+//				"Database Name",
+//				"Enter a nickname for this database.",
+//				null,
+//				SWT.BORDER
+//		);
+//		if (databaseName != null) {
+//			nameShower.setValue(databaseName);
+//		}
 			
 		descriptionShower = new TextFieldShower(
 				composite,
@@ -80,10 +81,10 @@ public class DatabaseInfoPage extends DynaWizardPage {
 			return false;
 		}
 		
-		if (getDatabaseName()==null || getDatabaseName().length()==0) {
-			setMessage("Please enter a name for this database.");
-			return false;
-		}
+//		if (getDatabaseName()==null || getDatabaseName().length()==0) {
+//			setMessage("Please enter a name for this database.");
+//			return false;
+//		}
 		
 		if (getDatabaseDescription()==null || getDatabaseDescription().length()==0) {
 			setMessage("Please enter a description.");
@@ -101,9 +102,9 @@ public class DatabaseInfoPage extends DynaWizardPage {
 		return idShower.getValue();
 	}
 
-	public String getDatabaseName() {
-		return nameShower.getValue();
-	}
+//	public String getDatabaseName() {
+//		return nameShower.getValue();
+//	}
 
 	public String getDatabaseDescription() {
 		return descriptionShower.getValue();
