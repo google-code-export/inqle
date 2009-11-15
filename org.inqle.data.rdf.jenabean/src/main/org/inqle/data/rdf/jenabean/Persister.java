@@ -265,6 +265,10 @@ public class Persister {
 			return cachedModel;
 		}
 		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
+		if (databaseId==null || databaseId.length()==0 || databaseId.equals("null")) {
+			log.error("databaseId is " + databaseId);
+			return null;
+		}
 		String modelName = getModelNameFromDatamodelId(datamodelId);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
 		Model model = connector.getModel(modelType, modelName);
@@ -960,6 +964,7 @@ public class Persister {
 	public static <T> T reconstitute(Class<T> clazz, String objectId, Model model, boolean reconstituteMembers) {
 		//OntModel ontModel = ModelFactory.createOntologyModel();
 		//ontModel.add(model);
+		if (model==null) return null;
 		RDF2Bean reader = new RDF2Bean(model);
 		
 		//the object to create and return
