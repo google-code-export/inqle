@@ -15,6 +15,8 @@ public class QuestionsViewsPanel extends Panel {
 
 	private IQuestionsSet questionsSet;
 	
+	private Question currentQuestion;
+	
 	/**
 	 * @param id
 	 */
@@ -23,5 +25,10 @@ public class QuestionsViewsPanel extends Panel {
 		this.questionsSet = questionsSet;
 		Form<Question> form = new Form<Question>("form");
 		add(form);
+	}
+	
+	@Override
+	protected void onBeforeRender() {
+		super.onBeforeRender();
 	}
 }
