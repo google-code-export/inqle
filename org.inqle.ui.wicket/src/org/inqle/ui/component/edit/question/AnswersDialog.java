@@ -33,6 +33,7 @@ public class AnswersDialog extends DefaultDialog {
 		setHeight(300);
 		setCentered(true);
 		setModal(true);
+		setTopLevel(true);
 	}
 
 	/* (non-Javadoc)
