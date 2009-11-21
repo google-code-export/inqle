@@ -795,7 +795,7 @@ public class Persister {
 	public static String getTargetModelType(Class<?> persistableClass) {
 		TargetModelType targetModelType = persistableClass.getAnnotation(TargetModelType.class);
 		if (targetModelType == null) {
-			log.warn("Unable to retrieve model type for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetModelType annotation.  By default, assume it to be 'system' type.");
+//			log.warn("Unable to retrieve model type for " + persistableClass + ".  Perhaps the class definition for this class lacks the TargetModelType annotation.  By default, assume it to be 'system' type.");
 			return IDBConnector.SUBDATABASE_SYSTEM;
 		}
 		return targetModelType.value();
