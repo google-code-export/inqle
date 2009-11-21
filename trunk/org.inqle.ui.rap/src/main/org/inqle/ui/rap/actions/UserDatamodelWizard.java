@@ -114,6 +114,7 @@ public class UserDatamodelWizard extends Wizard {
 			);
 			if (mode != DatamodelWizardAction.MODE_NEW && datamodel!=null && datamodel.getName() != null) {
 				datamodelNameTextField.setTextValue(datamodel.getName());
+				datamodelNameTextField.setEnabled(false);
 			}
 			
 			datamodelDescriptionTextField = new TextFieldShower(
@@ -199,6 +200,9 @@ public class UserDatamodelWizard extends Wizard {
 			} else if ((datamodelPurposes==null || datamodelPurposes.size()==0) && defaultChecked) {
 				checkbox.setSelection(true);
 			}
+//			if (mode != DatamodelWizardAction.MODE_NEW) {
+//				checkbox.setEnabled(false);
+//			}
 //			log.info("Add checkbox:" + extensionId + "...");
 			datamodelPurposeCheckboxes.add(checkbox);
 		}
@@ -249,7 +253,7 @@ public class UserDatamodelWizard extends Wizard {
 //		datamodel.setId(datamodelInfoPage.getDatamodelId());
 		datamodel.setName(datamodelInfoPage.getDatamodelName());
 		datamodel.setDescription(datamodelInfoPage.getDatamodelDescription());
-		if (datamodel.getId() == null || datamodel.getId().length() == 0) {
+		if (datamodel.getName() == null || datamodel.getName().length() == 0) {
 			MessageDialog.openWarning(parent.getShell(), "Please enter a value for Datamodel ID", "");
 			return false;
 		}
@@ -295,7 +299,8 @@ public class UserDatamodelWizard extends Wizard {
 			log.info("Created new model ");
 			databasePart.fireUpdate(databasePart);
 		} else if (this.mode == DatamodelWizardAction.MODE_EDIT) {
-			persister.persist(datamodel);
+			String targetDatamodelId = Persister.getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId());
+			persister.persist(datamodel, targetDatamodelId);
 			databasePart.fireUpdatePart();
 		}
 		//close wizard regardless

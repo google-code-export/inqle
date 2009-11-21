@@ -37,11 +37,11 @@ public abstract class NamedAndDescribedJenabean extends AJenabean implements IJe
 	@RdfProperty(RDF.NAME_PREDICATE)
 	public String getName() {
 		if (name == null) {
-			if (this.id != null) {
-				name = this.id;
-			} else {
+//			if (this.id != null) {
+//				name = this.id;
+//			} else {
 				name = this.getClass().getName();
-			}
+//			}
 //			return getId();
 		}
 		return name;

@@ -1,5 +1,6 @@
 package org.inqle.data.sampling;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.inqle.data.rdf.RDF;
@@ -32,7 +33,7 @@ public abstract class ASampler extends UniqueJenabean implements ISampler {
 
 //	protected Collection<String> availableDatamodels;
 
-	protected Collection<String> selectedDatamodels;
+	protected Collection<String> selectedDatamodels = new ArrayList<String>();
 
 	public void setSelectedDatamodels(Collection<String> selectedDatamodels) {
 		this.selectedDatamodels = selectedDatamodels;

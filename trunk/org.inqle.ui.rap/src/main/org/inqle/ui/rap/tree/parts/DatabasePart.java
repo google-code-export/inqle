@@ -142,7 +142,7 @@ public class DatabasePart extends PartType {
 		List<IAction> actions = new ArrayList<IAction>();
 		//"Create a datamodel" action
 		DatamodelWizardAction newModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Create new datamodel...", this, workbenchWindow);
-		newModelWizardAction.setDatamodel(getNewDataset());
+		newModelWizardAction.setDatamodel(getNewDatamodel());
 		actions.add(newModelWizardAction);
 		
 		//"Edit this database" action
@@ -162,11 +162,11 @@ public class DatabasePart extends PartType {
 		return actions;
 	}
 
-	private PurposefulDatamodel getNewDataset() {
-		PurposefulDatamodel newDataset = new PurposefulDatamodel();
-		newDataset.setDatabaseId(this.getDatabase().getId());
+	private PurposefulDatamodel getNewDatamodel() {
+		PurposefulDatamodel newDatamodel = new PurposefulDatamodel();
+		newDatamodel.setDatabaseId(this.getDatabase().getId());
 //		return newDataset.createClone();
-		return BeanTool.clone(newDataset);
+		return BeanTool.clone(newDatamodel);
 	}
 	
 //	private OntologyDataset getNewOntologyDataset() {
