@@ -21,16 +21,16 @@ public class SubjectArcsCache extends AJenabean {
 	private int depth;
 	private String type;
 
-	public String getStringRepresentation() {
-		String s = getClass().toString() + " {\n";
-		s += "[type=" + type + "]\n";
-		s += "[depth=" + depth + "]\n";
-		s += "[datamodelId=" + datamodelId + "]\n";
-		s += "[subjectClass=" + subjectClass.toString() + "]\n";
-		s += "[arcs=" + arcs.toString() + "]\n";
-		s += "}";
-		return s;
-	}
+//	public String getStringRepresentation() {
+//		String s = getClass().toString() + " {\n";
+//		s += "[type=" + type + "]\n";
+//		s += "[depth=" + depth + "]\n";
+//		s += "[datamodelId=" + datamodelId + "]\n";
+//		s += "[subjectClass=" + subjectClass.toString() + "]\n";
+//		s += "[arcs=" + arcs.toString() + "]\n";
+//		s += "}";
+//		return s;
+//	}
 	
 //	public void clone(SubjectArcsCache objectToBeCloned) {
 //		setSubjectClass(objectToBeCloned.getSubjectClass());

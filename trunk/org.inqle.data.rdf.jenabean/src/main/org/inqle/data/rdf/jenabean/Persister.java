@@ -839,7 +839,7 @@ public class Persister {
 		if (persistableObj instanceof IUniqueJenabean) {
 			((IUniqueJenabean)persistableObj).setUpdateDate(new Date());
 		}
-		//log.info("set update date");
+		log.info("PPPPPPPPPPPPPPP Persisting...");
 		Bean2RDF writer = new Bean2RDF(model);
 		if (persistMembers) {
 			writer.saveDeep(persistableObj);

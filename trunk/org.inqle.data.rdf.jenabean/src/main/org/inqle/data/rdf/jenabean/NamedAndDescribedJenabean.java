@@ -3,17 +3,10 @@
  */
 package org.inqle.data.rdf.jenabean;
 
-import java.util.Date;
-import java.util.UUID;
-
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
 
-
-import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;
-import thewebsemantic.TypeWrapper;
 
 /**
  * Class to assist with creating Jenabean classes.  This class helps in these ways:
@@ -66,10 +59,10 @@ public abstract class NamedAndDescribedJenabean extends AJenabean implements IJe
 //		return s;
 //	}
 
-	@Override
-	public String toString() {
-		return BeanTool.getStringRepresentation(this);
-	}
+//	@Override
+//	public String toString() {
+//		return BeanTool.getStringRepresentation(this);
+//	}
 
 //	public void clone(ICloneableJenabean template) {
 //		setName(template.getName());

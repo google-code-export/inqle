@@ -9,7 +9,6 @@ import org.inqle.data.rdf.jena.util.TypeConverter;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.ArcStep;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.util.BeanTool;
 
 import com.hp.hpl.jena.ontology.Individual;

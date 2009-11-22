@@ -165,6 +165,7 @@ public class SimpleSubjectSparqlSamplerWizard extends SamplerWizard implements I
 			sssSampler.setMaxLearnablePredicates(maxAttributes);
 		}
 		Persister persister = Persister.getInstance();
+		log.info("PPPPPPPPPPPPPPPPPPPPPPPPPP Persisting SSSS...");
 		persister.persist(sssSampler);
 		
 		return true;
