@@ -40,9 +40,10 @@ public abstract class ARapidMinerExperiment extends GlobalJenabean implements IR
 
 	private String experimentClassPath;
 	private String experimentXml;
-
-	private static Logger log = Logger.getLogger(ARapidMinerExperiment.class);
 	private String experimentType;
+	
+	private static Logger log = Logger.getLogger(ARapidMinerExperiment.class);
+	
 	
 	@Override
 	@Id
@@ -112,13 +113,13 @@ public abstract class ARapidMinerExperiment extends GlobalJenabean implements IR
 //		setExperimentType(objectToBeCloned.getExperimentType());
 //		setExperimentClassPath(objectToBeCloned.getExperimentClassPath());
 //	}
-//
-//	public String getStringRepresentation() {
-//		String s = getClass().toString() + " {\n";
-//		s += "[experimentType=" + experimentType + "]\n";
-//		s += "[experimentClassPath=" + experimentClassPath + "]\n";
-//		s += "[experimentXml=" + experimentXml + "]\n";
-//		s += "}";
-//		return s;
-//	}
+
+	public String getStringRepresentation() {
+		String s = getClass().toString() + " {\n";
+		s += "[experimentType=" + experimentType + "]\n";
+		s += "[experimentClassPath=" + experimentClassPath + "]\n";
+		s += "[experimentXml=" + experimentXml + "]\n";
+		s += "}";
+		return s;
+	}
 }

@@ -398,8 +398,9 @@ public class ArcLister {
 			arcsCache.setType(FILTERED_VALUED_ARCS);
 		}
 		arcsCache.setArcs(arcs);
-		log.info("Caching list of " + arcs.size() + " arcs for datamodelId=" + sourceDatamodelId + "; subjectClassUri=" + subjectClassUri + ".");
+		log.info("CCCCCCCCCCCCCCC Caching list of " + arcs.size() + " arcs for datamodelId=" + sourceDatamodelId + "; subjectClassUri=" + subjectClassUri + ".");
 		persister.persist(arcsCache, targetDatamodelId);
+		log.info("CCCCCCCCCCCCCCC Cached it successfully");
 	}
 
 	/**

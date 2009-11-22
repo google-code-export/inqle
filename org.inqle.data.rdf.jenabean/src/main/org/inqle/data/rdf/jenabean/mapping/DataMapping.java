@@ -44,18 +44,17 @@ public class DataMapping extends GlobalJenabean {
 	private String mapsHeader;
 	private URI mapsPredicate;
 	private URI mapsPropertyType;
-	
 	private String mapsValue;
 	
-//	public String getStringRepresentation() {
-//		String s = getClass().toString() + " {\n";
-//		s += "[mapsHeader=" + mapsHeader + "]\n";
-//		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
-//		s += "[mapsPropertyType=" + mapsPropertyType.toString() + "]\n";
-//		s += "[mapsValue=" + mapsValue + "]\n";
-//		s += "}";
-//		return s;
-//	}
+	public String getStringRepresentation() {
+		String s = getClass().toString() + " {\n";
+		s += "[mapsHeader=" + mapsHeader + "]\n";
+		s += "[mapsPredicate=" + mapsPredicate.toString() + "]\n";
+		s += "[mapsPropertyType=" + mapsPropertyType.toString() + "]\n";
+		s += "[mapsValue=" + mapsValue + "]\n";
+		s += "}";
+		return s;
+	}
 
 //	public void clone(DataMapping objectToBeCloned) {
 //		setMapsHeader(objectToBeCloned.getMapsHeader());

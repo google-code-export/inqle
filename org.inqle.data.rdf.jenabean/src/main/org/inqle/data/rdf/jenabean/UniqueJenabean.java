@@ -1,12 +1,9 @@
 package org.inqle.data.rdf.jenabean;
 
 import java.util.Date;
-import java.util.UUID;
 
 import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
 
-import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
 @Namespace(RDF.INQLE)
@@ -83,8 +80,8 @@ public abstract class UniqueJenabean extends NamedAndDescribedJenabean implement
 //		return s;
 //	}
 	
-	@Override
-	public String toString() {
-		return BeanTool.getStringRepresentation(this);
-	}
+//	@Override
+//	public String toString() {
+//		return BeanTool.getStringRepresentation(this);
+//	}
 }
