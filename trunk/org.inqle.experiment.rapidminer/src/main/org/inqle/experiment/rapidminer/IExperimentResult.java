@@ -15,10 +15,12 @@ import org.inqle.data.rdf.jenabean.IUniqueJenabean;
  */
 public interface IExperimentResult extends IUniqueJenabean {
 
-	static final String EXPERIMENT_RESULTS_DATAMODEL_NAME = "org.inqle.experiment.rapidminer.datamodels.rmExperimentResults";
+	public static final String EXPERIMENT_RESULTS_DATAMODEL_NAME = "RMExperimentResults.data";
 	
-	public static final String EXPERIMENT_RESULTS_DATAMODEL_ID = "org.inqle.experiment.rapidminer.db/" + EXPERIMENT_RESULTS_DATAMODEL_NAME;
+//	public static final String EXPERIMENT_RESULTS_DATAMODEL_ID = "org.inqle.experiment.rapidminer.db/" + EXPERIMENT_RESULTS_DATAMODEL_NAME;
 		
+	public static final String EXPERIMENT_RESULTS_DB_ID = "ExperimentResults.db";
+	
 	public void setExperimentLabelArc(Arc experimentLabelArc);
 
 	public void setExperimentAttributeArcs(Collection<Arc> experimentAttributeArcs);
