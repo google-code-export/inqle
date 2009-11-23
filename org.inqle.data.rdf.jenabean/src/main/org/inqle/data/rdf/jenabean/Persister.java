@@ -694,7 +694,7 @@ public class Persister {
 	 * Get the model for storing info about the repositories, within the specified database
 	 */
 	public Model getMetarepositoryModel(String databaseId) {
-		return getModel(databaseId + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + METAREPOSITORY_DATAMODEL);
+		return getModel(getDatamodelId(databaseId, IDBConnector.SUBDATABASE_SYSTEM, METAREPOSITORY_DATAMODEL));
 	}
 	
 	
@@ -820,7 +820,7 @@ public class Persister {
 		String modelName = getTargetModelName(persistableClass);
 		String modelType = getTargetModelType(persistableClass);
 		if (modelName==null) return null;
-		return databaseId + "/" + modelType + "/" + modelName;
+		return getDatamodelId(databaseId, modelType, modelName);
 	}
 	
 	/* *********************************************************************
@@ -1043,7 +1043,7 @@ public class Persister {
 		if (modelName == null) {
 			return null;
 		}
-		Model model = getModel(databaseId + "/" + modelType + "/" + modelName);
+		Model model = getModel(getDatamodelId(databaseId, modelType, modelName));
 		Collection<T> results = reconstituteAll(persistableClass, model);
 		return results;
 	}
@@ -1232,6 +1232,11 @@ public class Persister {
 	public static boolean resourceExists(String uri, Model model) {
 		Resource resource = ResourceFactory.createResource(uri);
 		return model.containsResource(resource);
+	}
+
+	public static String getDatamodelId(String dbid,
+			String modelType, String modelName) {
+		return dbid + "/" + modelType + "/" + modelName;
 	}
 
 //	public void registerInternalConnection(InternalConnection aConnection) {
