@@ -19,7 +19,7 @@ public interface IExperimentResult extends IUniqueJenabean {
 	
 //	public static final String EXPERIMENT_RESULTS_DATAMODEL_ID = "org.inqle.experiment.rapidminer.db/" + EXPERIMENT_RESULTS_DATAMODEL_NAME;
 		
-	public static final String EXPERIMENT_RESULTS_DB_ID = "ExperimentResults.db";
+	public static final String EXPERIMENT_RESULTS_DB_ID = "_ExperimentResults";
 	
 	public void setExperimentLabelArc(Arc experimentLabelArc);
 
