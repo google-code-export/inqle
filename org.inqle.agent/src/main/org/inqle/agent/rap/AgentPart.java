@@ -51,7 +51,7 @@ public class AgentPart extends PartType {
 	 */
 	@Override
 	public String getName() {
-		IAgent agent = agentFactory.getBaseAgent();
+		IAgent agent = agentFactory.getStartingAgent();
 		if (agent == null || agent.getName() == null) {
 			return agent.getClass().getName();
 		}
@@ -60,7 +60,7 @@ public class AgentPart extends PartType {
 	
 	@Override
 	public String getIconPath() {
-		IAgent agent = agentFactory.getBaseAgent();
+		IAgent agent = agentFactory.getStartingAgent();
 		if (agent.getMode() == IAgent.RUNNING) {
 			return ICON_PATH_RUNNING;
 		}
@@ -112,7 +112,7 @@ public class AgentPart extends PartType {
 	}
 	
 	public void initChildren() {
-		IAgent agent = agentFactory.getBaseAgent();
+		IAgent agent = agentFactory.getStartingAgent();
 		
 		//for each item in resultTable, add a ModelPart
 		childParts = new ArrayList<CustomizedAgentPart>();
@@ -132,7 +132,7 @@ public class AgentPart extends PartType {
 //public void addActions(IMenuManager manager, IWorkbenchWindow workbenchWindow) {
 	public List<IAction> getActions(IWorkbenchWindow workbenchWindow) {
 		List<IAction> actions = new ArrayList<IAction>();
-		IAgent agent = agentFactory.getBaseAgent();
+		IAgent agent = agentFactory.getStartingAgent();
 		int mode = agent.getMode();
 		if (mode == IAgent.STOPPED) {
 			//"Run this agent" action
@@ -158,7 +158,7 @@ public class AgentPart extends PartType {
 		
 		//"Clone this Agent" action.  This wizard works with a clone of the base agent
 //		IAgent cloneOfAgent = (IAgent)agentFactory.getBaseAgent().createClone();
-		IAgent cloneOfAgent = BeanTool.clone(agentFactory.getBaseAgent());
+		IAgent cloneOfAgent = BeanTool.clone(agentFactory.getStartingAgent());
 		AgentWizardAction cloneAgentWizardAction = new AgentWizardAction(AgentWizardAction.MODE_CLONE, "Create customization of this agent", this, workbenchWindow);
 		cloneAgentWizardAction.setAgent(cloneOfAgent); 
 		actions.add(cloneAgentWizardAction);
@@ -168,6 +168,6 @@ public class AgentPart extends PartType {
 
 	@Override
 	public Object getObject() {
-		return agentFactory.getBaseAgent();
+		return agentFactory.getStartingAgent();
 	}
 }

@@ -23,13 +23,13 @@ public interface IAgentFactory extends INamedAndDescribed {
 	 * Set the base agent to the provided agent
 	 * @param agent
 	 */
-	public void setBaseAgent(IAgent agent);
+	public void setStartingAgent(IAgent agent);
 	
 	/**
 	 * Return the base agent.  If none exists, creates a new default agent and returns it
 	 * @return
 	 */
-	public IAgent getBaseAgent();
+	public IAgent getStartingAgent();
 	
 	/**
 	 * Create a new agent and return it

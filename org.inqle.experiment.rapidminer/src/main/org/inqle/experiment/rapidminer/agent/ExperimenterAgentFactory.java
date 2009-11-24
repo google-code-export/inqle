@@ -17,7 +17,7 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 
 	public IAgentFactory cloneFactory(IAgent childAgent) {
 		ExperimenterAgentFactory newFactory = new ExperimenterAgentFactory();
-		newFactory.setBaseAgent(childAgent);
+		newFactory.setStartingAgent(childAgent);
 		//newFactory.setPersister(persister);
 		newFactory.setName(getName());
 		newFactory.setDescription(getDescription());
@@ -32,7 +32,7 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 	public IAgentWizard createWizardForReplica(Shell shell) {
 		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
 //		ExperimenterAgent replicaAgent = (ExperimenterAgent)getBaseAgent().createReplica();
-		ExperimenterAgent replicaAgent = BeanTool.replicate((ExperimenterAgent)getBaseAgent());
+		ExperimenterAgent replicaAgent = BeanTool.replicate((ExperimenterAgent)getStartingAgent());
 //		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(replicaAgent));
 		newWizard.setAgent(replicaAgent);
 		return newWizard;
@@ -41,7 +41,7 @@ public class ExperimenterAgentFactory extends AAgentFactory {
 	public IAgentWizard createWizardForClone(Shell shell) {
 		ExperimenterAgentWizard newWizard = new ExperimenterAgentWizard(shell);
 //		ExperimenterAgent cloneAgent = (ExperimenterAgent)getBaseAgent().createClone();
-		ExperimenterAgent cloneAgent = BeanTool.clone((ExperimenterAgent)getBaseAgent());
+		ExperimenterAgent cloneAgent = BeanTool.clone((ExperimenterAgent)getStartingAgent());
 		log.info("ExperimenterAgentFactory created replicaAgent=\n" + JenabeanWriter.toString(cloneAgent));
 		newWizard.setAgent(cloneAgent);
 		return newWizard;

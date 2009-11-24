@@ -28,6 +28,7 @@ public class AgentRegistry {
 	}
 	   
 	public void registerRunning(IAgent runningAgent) {
+		log.info("RARARARARARARARARARARAR Registering running agent: " + runningAgent.getId() + "; toString()=" + runningAgent.toString());
 		stoppingAgents.remove(runningAgent.getId());
 		runningAgents.add(runningAgent.getId());
 	}

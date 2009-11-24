@@ -21,7 +21,7 @@ public class StopAgentAction extends Action {
 	public StopAgentAction(String menuText, AgentPart agentPart) {
 		this.menuText = menuText;
 		this.agentPart = agentPart;
-		this.agentToStop  = (IAgent)agentPart.getAgentFactory().getBaseAgent();
+		this.agentToStop  = (IAgent)agentPart.getAgentFactory().getStartingAgent();
 	}
 	
 	public String getText() {

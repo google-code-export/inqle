@@ -11,7 +11,7 @@ import org.inqle.agent.IAgent;
  */
 public class RunAgentAction extends Action {
 	private String menuText;
-	private IWorkbenchWindow window;
+//	private IWorkbenchWindow window;
 	private IAgent agentToRun = null;
 	private AgentPart agentPart = null;
 	
@@ -21,7 +21,7 @@ public class RunAgentAction extends Action {
 //		this.window = window;
 		this.menuText = menuText;
 		this.agentPart = agentPart;
-		this.agentToRun  = agentPart.getAgentFactory().getBaseAgent();
+		this.agentToRun  = agentPart.getAgentFactory().getStartingAgent();
 		//this.persister = persister;
 		assert(agentToRun != null);
 	}

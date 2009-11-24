@@ -244,7 +244,7 @@ public abstract class SparqlView extends ViewPart implements SelectionListener, 
 		log.info("Querying w/ SPARQL:" + sparql);
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.setQuery(sparql);
-		queryCriteria.addDatamodel(datamodelId);
+		queryCriteria.addDatamodel(getDatamodelId());
 		this.resultSet = Queryer.selectResultSet(queryCriteria);
 	}
 

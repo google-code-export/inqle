@@ -21,4 +21,6 @@ public interface IJenabean {
 	
 	public void setRandomId();
 	
+	public void setBaseId();
+	
 }
