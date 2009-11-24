@@ -16,17 +16,17 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 	
 	static Logger log = Logger.getLogger(SimpleSubjectSparqlSamplerFactory.class);
 
-	private SimpleSubjectSparqlSampler baseSampler;
+	private SimpleSubjectSparqlSampler startingSampler;
 
 	/**
 	 * Return the base sampler
 	 */
-	public ISampler getBaseSampler() {
+	public ISampler getStartingSampler() {
 		//log.info("getBaseSampler() called");
-		if (baseSampler == null) {
-			baseSampler = newSampler();
+		if (startingSampler == null) {
+			startingSampler = newSampler();
 		}
-		return baseSampler;
+		return startingSampler;
 	}
 
 	public SimpleSubjectSparqlSamplerWizard createWizard(Model model, Shell shell) {
@@ -38,8 +38,8 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 		return name;
 	}
 
-	public void setBaseSampler(ISampler sampler) {
-		baseSampler = (SimpleSubjectSparqlSampler)sampler;
+	public void setStartingSampler(ISampler sampler) {
+		startingSampler = (SimpleSubjectSparqlSampler)sampler;
 	}
 
 	public boolean hasWizard() {
@@ -70,7 +70,7 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 	public ISamplerWizard createWizardForReplica(Model model, Shell shell) {
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
 //		SimpleSubjectSparqlSampler replica = baseSampler.createReplica();
-		SimpleSubjectSparqlSampler replica = BeanTool.replicate(baseSampler);
+		SimpleSubjectSparqlSampler replica = BeanTool.replicate(startingSampler);
 		wizard.setSampler(replica);
 		return wizard;
 	}
@@ -78,14 +78,14 @@ public class SimpleSubjectSparqlSamplerFactory implements ISamplerFactory {
 	public ISamplerWizard createWizardForClone(Model model, Shell shell) {
 		SimpleSubjectSparqlSamplerWizard wizard = createWizard(model, shell);
 //		SimpleSubjectSparqlSampler clone = baseSampler.createClone();
-		SimpleSubjectSparqlSampler clone = BeanTool.clone(baseSampler);
+		SimpleSubjectSparqlSampler clone = BeanTool.clone(startingSampler);
 		wizard.setSampler(clone);
 		return wizard;
 	}
 	
 	public ISamplerFactory cloneFactory() {
 		SimpleSubjectSparqlSamplerFactory newFactory = new SimpleSubjectSparqlSamplerFactory();
-		newFactory.setBaseSampler(baseSampler);
+		newFactory.setStartingSampler(startingSampler);
 		newFactory.setName(getName());
 		newFactory.setDescription(getDescription());
 		return newFactory;

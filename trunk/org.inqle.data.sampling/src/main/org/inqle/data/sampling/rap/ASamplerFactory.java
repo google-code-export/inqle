@@ -34,7 +34,7 @@ public abstract class ASamplerFactory implements ISamplerFactory {
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.ISamplerFactory#getBaseSampler()
 	 */
-	public ISampler getBaseSampler() {
+	public ISampler getStartingSampler() {
 		return null;
 	}
 
@@ -69,7 +69,7 @@ public abstract class ASamplerFactory implements ISamplerFactory {
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.ISamplerFactory#setBaseSampler(org.inqle.data.sampling.ISampler)
 	 */
-	public void setBaseSampler(ISampler sampler) {
+	public void setStartingSampler(ISampler sampler) {
 	}
 	
 	/**
