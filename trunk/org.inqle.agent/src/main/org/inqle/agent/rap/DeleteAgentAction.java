@@ -31,7 +31,7 @@ public class DeleteAgentAction extends Action {
 		this.menuText = menuText;
 		this.agentPart = agentPart;
 //		this.agentToDelete  = (IAgent)agentPart.getAgentFactory().getBaseAgent().createReplica();
-		this.agentToDelete  = BeanTool.replicate(agentPart.getAgentFactory().getBaseAgent());
+		this.agentToDelete  = BeanTool.replicate(agentPart.getAgentFactory().getStartingAgent());
 		//this.persister = persister;
 	}
 	

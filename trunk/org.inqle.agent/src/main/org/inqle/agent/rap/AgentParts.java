@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.agent.AgentLister;
+import org.inqle.agent.IAgent;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.util.ExtensionSecurityManager;
@@ -41,6 +42,9 @@ public class AgentParts extends PartType {
 //			parts.add(part);
 //		}
 		for (IAgentFactory agentFactory: AgentLister.listAgentFactories()) {
+			IAgent baseAgent = agentFactory.newAgent();
+			baseAgent.setBaseId();
+			agentFactory.setStartingAgent(baseAgent);
 			//agentFactory.setPersister(persister);
 			AgentPart part = new AgentPart(agentFactory);
 			part.setParent(this);

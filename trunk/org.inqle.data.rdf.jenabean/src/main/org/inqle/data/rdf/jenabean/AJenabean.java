@@ -41,6 +41,10 @@ public abstract class AJenabean implements IJenabean {
 		setId(UUID.randomUUID().toString());
 	}
 	
+	public void setBaseId() {
+		setId("Base_Object_" + getClass().getCanonicalName());
+	}
+	
 	public String getUri() {
 		return TypeWrapper.instanceURI(this);
 	}

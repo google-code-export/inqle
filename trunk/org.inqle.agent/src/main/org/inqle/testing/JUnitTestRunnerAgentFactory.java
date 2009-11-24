@@ -11,7 +11,7 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 
 	public IAgentFactory cloneFactory(IAgent childAgent) {
 		JUnitTestRunnerAgentFactory newFactory = new JUnitTestRunnerAgentFactory();
-		newFactory.setBaseAgent(childAgent);
+		newFactory.setStartingAgent(childAgent);
 		return newFactory;
 	}
 
@@ -24,7 +24,7 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 	public IAgentWizard createWizardForReplica(Shell shell) {
 		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
 //		newWizard.setAgent((IAgent)getBaseAgent().createReplica());
-		newWizard.setAgent(BeanTool.replicate(getBaseAgent()));
+		newWizard.setAgent(BeanTool.replicate(getStartingAgent()));
 		return newWizard;
 	}
 
@@ -41,7 +41,7 @@ public class JUnitTestRunnerAgentFactory extends AAgentFactory {
 	public IAgentWizard createWizardForClone(Shell shell) {
 		JUnitTestRunnerAgentWizard newWizard =  new JUnitTestRunnerAgentWizard(shell);
 //		newWizard.setAgent((IAgent)getBaseAgent().createClone());
-		newWizard.setAgent(BeanTool.clone(getBaseAgent()));
+		newWizard.setAgent(BeanTool.clone(getStartingAgent()));
 		return newWizard;
 	}
 

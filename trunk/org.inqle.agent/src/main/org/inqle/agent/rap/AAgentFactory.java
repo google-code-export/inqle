@@ -17,25 +17,26 @@ public abstract class AAgentFactory implements IAgentFactory {
 	private String name;
 	private String description;
 	
-	protected IAgent baseAgent;
+	protected IAgent startingAgent;
 
 	//protected Persister persister;
 
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.IAgentFactory#getBaseAgent()
 	 */
-	public IAgent getBaseAgent() {
-		if (baseAgent == null) {
-			baseAgent = newAgent();
+	public IAgent getStartingAgent() {
+		if (startingAgent == null) {
+			startingAgent = newAgent();
+			startingAgent.setBaseId();
 		}
-		return baseAgent;
+		return startingAgent;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.inqle.data.sampling.rap.IAgentFactory#setBaseAgent(org.inqle.data.sampling.IAgent)
 	 */
-	public void setBaseAgent(IAgent baseAgent) {
-		this.baseAgent = baseAgent;
+	public void setStartingAgent(IAgent baseAgent) {
+		this.startingAgent = baseAgent;
 	}
 
 //	public Persister getPersister() {

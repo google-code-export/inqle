@@ -48,7 +48,7 @@ public class CustomizedAgentPart extends AgentPart {
 		
 		//Delete action
 		//IAgent replicaOfAgent = agentFactory.replicateAgent();
-		log.debug("Created replica of agent:" + JenabeanWriter.toString(agentFactory.getBaseAgent()));
+		log.debug("Created replica of agent:" + JenabeanWriter.toString(agentFactory.getStartingAgent()));
 		DeleteAgentAction deleteAgentAction = new DeleteAgentAction("Delete", this, workbenchWindow);
 		actions.add(deleteAgentAction);
 		
