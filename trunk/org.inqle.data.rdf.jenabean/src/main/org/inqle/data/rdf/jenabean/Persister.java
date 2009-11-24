@@ -83,7 +83,7 @@ public class Persister {
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
 	public static final String DATAMODEL_SUBJECT_CLASSES_CACHE = "org.inqle.datamodels.cache.subjectClass";
 	public static final String DATAMODEL_ARCS_CACHE = "org.inqle.datamodels.cache.arc";
-	public static final String CORE_DATABASE_ID = "core.db.system";
+	public static final String CORE_DATABASE_ID = "_Core";
 	
 	private AppInfo appInfo = null;
 	private static Logger log = Logger.getLogger(Persister.class);

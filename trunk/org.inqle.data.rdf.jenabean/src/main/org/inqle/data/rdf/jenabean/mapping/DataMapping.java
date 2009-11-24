@@ -39,7 +39,7 @@ import thewebsemantic.Namespace;
 public class DataMapping extends GlobalJenabean {
 	
 	static final String MAPPING_MODEL_NAME = "DataMapping.data";
-	static final String MAPPING_DB_ID = "DataMapping.db";
+	static final String MAPPING_DB_ID = "_DataMapping";
 	public static final String MAPPING_MODEL_ID = MAPPING_DB_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + MAPPING_MODEL_NAME;
 	private String mapsHeader;
 	private URI mapsPredicate;
