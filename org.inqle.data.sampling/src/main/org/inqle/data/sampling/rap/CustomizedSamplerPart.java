@@ -48,7 +48,7 @@ public class CustomizedSamplerPart extends SamplerPart {
 		
 		//Delete action
 		//ISampler replicaOfSampler = samplerFactory.replicateSampler();
-		log.debug("Created replica of sampler:" + JenabeanWriter.toString(samplerFactory.getBaseSampler()));
+		log.debug("Created replica of sampler:" + JenabeanWriter.toString(samplerFactory.getStartingSampler()));
 		DeleteSamplerAction deleteSamplerAction = new DeleteSamplerAction("Delete", this, workbenchWindow);
 		actions.add(deleteSamplerAction);
 		

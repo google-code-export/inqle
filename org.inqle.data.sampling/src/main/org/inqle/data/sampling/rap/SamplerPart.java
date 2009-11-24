@@ -39,7 +39,7 @@ public class SamplerPart extends PartType {
 	public SamplerPart(ISamplerFactory samplerFactory) {
 		//samplerPartCount++;
 		this.samplerFactory = samplerFactory;
-		this.sampler = samplerFactory.getBaseSampler();
+		this.sampler = samplerFactory.getStartingSampler();
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class SamplerPart extends PartType {
 		childParts = new ArrayList<CustomizedSamplerPart>();
 		for (ISampler childSampler: SamplerLister.listCustomSamplers(sampler)) {
 			ISamplerFactory childSamplerFactory = samplerFactory.cloneFactory();
-			childSamplerFactory.setBaseSampler(childSampler);
+			childSamplerFactory.setStartingSampler(childSampler);
 			CustomizedSamplerPart part = new CustomizedSamplerPart(childSamplerFactory);
 			part.setParent(this);
 			//part.setPersister(persister);
@@ -129,7 +129,7 @@ public class SamplerPart extends PartType {
 		
 		//"Clone this Sampler" action.  This wizard works with a clone of the base sampler
 //		ISampler cloneOfSampler = samplerFactory.getBaseSampler().createClone();
-		ISampler cloneOfSampler = BeanTool.clone(samplerFactory.getBaseSampler());
+		ISampler cloneOfSampler = BeanTool.clone(samplerFactory.getStartingSampler());
 		SamplerWizardAction cloneSamplerWizardAction = new SamplerWizardAction(SamplerWizardAction.MODE_CLONE, "Create a customized clone of this sampler...", this, workbenchWindow);
 		cloneSamplerWizardAction.setSampler(cloneOfSampler); 
 		actions.add(cloneSamplerWizardAction);
@@ -139,7 +139,7 @@ public class SamplerPart extends PartType {
 
 	@Override
 	public Object getObject() {
-		return samplerFactory.getBaseSampler();
+		return samplerFactory.getStartingSampler();
 	}
 
 }

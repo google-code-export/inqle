@@ -30,7 +30,7 @@ public class DeleteSamplerAction extends Action {
 		this.window = window;
 		this.menuText = menuText;
 		this.samplerPart = samplerPart;
-		ISampler baseSampler = samplerPart.getSamplerFactory().getBaseSampler();
+		ISampler baseSampler = samplerPart.getSamplerFactory().getStartingSampler();
 //		this.samplerToDelete  = (ISampler)baseSampler.createReplica();
 		this.samplerToDelete  = BeanTool.replicate(baseSampler);
 		//this.persister = persister;

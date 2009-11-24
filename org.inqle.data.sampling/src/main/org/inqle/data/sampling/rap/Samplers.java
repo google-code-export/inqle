@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.core.extensions.util.ExtensionFactory;
 import org.inqle.core.extensions.util.IExtensionSpec;
+import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerFactoryFactory;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
@@ -42,6 +42,9 @@ public class Samplers extends PartType {
 			}
 			//ISamplerFactory samplerFactory = (ISamplerFactory)object;
 			ISamplerFactory samplerFactory = SamplerFactoryFactory.createSamplerFactory(extensionSpec);
+			ISampler baseSampler = samplerFactory.newSampler();
+			baseSampler.setBaseId();
+			samplerFactory.setStartingSampler(baseSampler);
 			SamplerPart part = new SamplerPart(samplerFactory);
 			//part.setPersister(persister);
 			part.addListener(this.listener);

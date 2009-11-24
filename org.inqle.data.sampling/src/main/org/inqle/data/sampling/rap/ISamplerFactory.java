@@ -23,13 +23,13 @@ public interface ISamplerFactory extends INamedAndDescribed {
 	 * Set the base sampler to the provided sampler
 	 * @param sampler
 	 */
-	public void setBaseSampler(ISampler sampler);
+	public void setStartingSampler(ISampler sampler);
 	
 	/**
 	 * Return the base sampler.  If none exists, creates a new default sampler and returns it
 	 * @return
 	 */
-	public ISampler getBaseSampler();
+	public ISampler getStartingSampler();
 	
 	/**
 	 * Create a new sampler and return it
