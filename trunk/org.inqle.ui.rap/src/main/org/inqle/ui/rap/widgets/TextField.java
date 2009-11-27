@@ -116,9 +116,11 @@ public class TextField extends Composite {
 		descriptionText.setEnabled(enabled);
 	}
 
+	@Override
 	public void setVisible(boolean visible) {
 		label.setVisible(visible);
 		text.setVisible(visible);
 		descriptionText.setVisible(visible);
+		super.setVisible(visible);
 	}
 }

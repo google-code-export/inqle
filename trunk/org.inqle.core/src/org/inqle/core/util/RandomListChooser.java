@@ -15,15 +15,15 @@ public class RandomListChooser {
 	 * @param maxSize the maximum number of entries to select
 	 * @return randomly chosen list of entries
 	 */
-	public static List<?> chooseRandomItemsSubtractively(List<?> origList, int size) {
-		List<Object> tempList = new ArrayList<Object>();
+	public static <T> List<T> chooseRandomItemsSubtractively(List<T> origList, int size) {
+		List<T> tempList = new ArrayList<T>();
 		tempList.addAll(origList);
-		List<Object> newList = new ArrayList<Object>();
+		List<T> newList = new ArrayList<T>();
 		
 		while (newList.size() < size) {
 			Random random = new Random();
 			int randomIndex = random.nextInt(tempList.size());
-			Object selectedObject = tempList.get(randomIndex);
+			T selectedObject = tempList.get(randomIndex);
 			newList.add(selectedObject);
 			tempList.remove(randomIndex);
 		}

@@ -25,11 +25,12 @@ public class XmlDocumentUtil {
 	public static Logger log = Logger.getLogger(XmlDocumentUtil.class);
 	
 	public static Document getDocument(String xmlString) {
+		if (xmlString==null) return null;
 		ByteArrayInputStream in;
 		try {
 			in = new ByteArrayInputStream(xmlString.getBytes(DEFAULT_XML_CHARACTER_SET));
 		} catch (Exception e) {
-			log.error("Character set " + DEFAULT_XML_CHARACTER_SET + " not supported??");
+			log.error("Unable to get XML Document from string: " + xmlString, e);
 			return null;
 		}
 		return getDocument(in);

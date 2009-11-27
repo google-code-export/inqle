@@ -50,7 +50,7 @@ public class AppInfoWizard extends Wizard {
 //	private static final String DEFAULT_FIRSTDATA_DB_NAME = "inqle_data1";
 //	private static final String DEFAULT_FIRSTDATA_DB_USER_NAME = "inqle";
 	
-	private static final String FIRSTDATA_DATAMODEL_ID = "data1";
+	private static final String FIRSTDATA_DATAMODEL_NAME = "data1";
 
 	private static final String FIRSTDATA_DATABASE_ID = "db1";
 	
@@ -183,7 +183,7 @@ public class AppInfoWizard extends Wizard {
 		
 		//create the user database and first user datamodel
 		PurposefulDatamodel firstDataDatamodel = new PurposefulDatamodel();
-		firstDataDatamodel.setId(FIRSTDATA_DATAMODEL_ID);
+		firstDataDatamodel.setName(FIRSTDATA_DATAMODEL_NAME);
 		IDatabase userDatabase = new LocalFolderDatabase();
 		userDatabase.setId(FIRSTDATA_DATABASE_ID);
 		firstDataDatamodel.setDatabaseId(userDatabase.getId());

@@ -64,32 +64,38 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 		subjectUriCreationMethodList.setItems(SubjectMapping.SUBJECT_URI_CREATION_METHODS);
 		subjectUriCreationMethodList.select(0);
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		subjectUriCreationMethodList.setLayoutData(gridData);
 		subjectUriCreationMethodList.addSelectionListener(this);
 		
-		gl = new GridLayout(2, true);
-		Composite uriCreationArea = new Composite(selfComposite, SWT.NONE);
-		uriCreationArea.setLayout(gl);
+//		GridLayout gl1 = new GridLayout(2, true);
+//		Composite uriCreationArea = new Composite(selfComposite, SWT.NONE);
+//		uriCreationArea.setLayout(gl1);
 		
-		instanceUriPrefixField = new TextField(uriCreationArea, "URI prefix", "Enter the first part of a URI, which will be appended with a value.");
+//		gl = new GridLayout(1, true);
+//		Composite prefixSelectionArea = new Composite(uriCreationArea, SWT.NONE);
+		
+		instanceUriPrefixField = new TextField(
+				selfComposite, 
+				"URI prefix", 
+				"Enter the first part of a URI, which will be appended with a value.");
 		instanceUriPrefixField.setVisible(false);
 		refreshUriPrefixField();
 		
-		gl = new GridLayout(1, true);
-		Composite columnSelectionArea = new Composite(uriCreationArea, SWT.NONE);
-		columnSelectionArea.setLayout(gl);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		columnSelectionArea.setLayoutData(gridData);
-		
-		uriSuffixColumnLabel = new Label (columnSelectionArea, SWT.NONE);
+//		GridLayout gl2 = new GridLayout(1, true);
+//		Composite columnSelectionArea = new Composite(uriCreationArea, SWT.NONE);
+//		columnSelectionArea.setLayout(gl2);
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+//		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+//		columnSelectionArea.setLayoutData(gridData);
+		uriSuffixColumnLabel = new Label (selfComposite, SWT.NONE);
 		uriSuffixColumnLabel.setText("Column containing value to append onto end of URI");
 		uriSuffixColumnLabel.setVisible(false);
-		uriSuffixColumnList = new List(columnSelectionArea, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
-//		gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		uriSuffixColumnList = new List(selfComposite, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+//		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
+		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		uriSuffixColumnList.setLayoutData(gridData);
 		uriSuffixColumnList.setVisible(false);
-//		log.info("uriSuffixColumnList null?" + (uriSuffixColumnList==null));
 		refreshTableData();
 	}
 
@@ -163,10 +169,12 @@ public class RowSubjectUriPage extends DynaWizardPage implements SelectionListen
 	}
 	
 	private void updateFormControls() {
+//		log.info("UUUUUUUUUUUU updating form controls for getSubjectCreationMethod()=" + getSubjectCreationMethod());
 		if (getSubjectCreationMethod().equals(SubjectMapping.URI_TYPE_INQLE_GENERATED)) {
 			instanceUriPrefixField.setVisible(false);
 		} else {
 			instanceUriPrefixField.setVisible(true);
+//			log.info("Set instanceUriPrefixField to visible.  Success?" + instanceUriPrefixField.getVisible());
 		}
 		
 		if (getSubjectCreationMethod().equals(SubjectMapping.URI_TYPE_COLUMN_VALUE)) {
