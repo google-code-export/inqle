@@ -19,8 +19,8 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class Data {
 
-	private static final String DATAMODEL_NAME_FOR_DATA_SUBJECT = "DataSubject.data";
-	private static final String DATAMODEL_NAME_FOR_DATA_PROPERTY = "DataProperty.data";
+	private static final String DATAMODEL_NAME_FOR_DATA_SUBJECT = "_DataSubject";
+	private static final String DATAMODEL_NAME_FOR_DATA_PROPERTY = "_DataProperty";
 	public static final String DATAMODEL_ID_FOR_DATA_PROPERTY = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_PROPERTY;
 	public static final String DATAMODEL_ID_FOR_DATA_SUBJECT = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_SUBJECT;
 }

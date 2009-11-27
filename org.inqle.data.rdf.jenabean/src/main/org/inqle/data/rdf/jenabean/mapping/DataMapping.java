@@ -33,14 +33,14 @@ import thewebsemantic.Namespace;
  * 
  * TODO extend a base class, which does not have name & description fields
  */
-@TargetDatabaseId(DataMapping.MAPPING_DB_ID)
+@TargetDatabaseId(Persister.CORE_DATABASE_ID)
 @TargetModelName(DataMapping.MAPPING_MODEL_NAME)
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 	
 	static final String MAPPING_MODEL_NAME = "DataMapping.data";
-	static final String MAPPING_DB_ID = "_DataMapping";
-	public static final String MAPPING_MODEL_ID = MAPPING_DB_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + MAPPING_MODEL_NAME;
+//	static final String MAPPING_DB_ID = "_DataMapping";
+	public static final String MAPPING_MODEL_ID = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + MAPPING_MODEL_NAME;
 	private String mapsHeader;
 	private URI mapsPredicate;
 	private URI mapsPropertyType;

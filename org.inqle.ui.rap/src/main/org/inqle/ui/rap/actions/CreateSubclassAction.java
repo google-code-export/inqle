@@ -31,8 +31,8 @@ public class CreateSubclassAction extends ACreateOntResourceAction {
 	 * @param internalDatasetRoleId
 	 * @param owlClassUri
 	 */
-	public CreateSubclassAction(Shell shell, String internalDatasetRoleId, String owlClassUri) {
-		super(shell, internalDatasetRoleId, owlClassUri, InqleInfo.ACTION_REGISTER_SUBJECTS);
+	public CreateSubclassAction(Shell shell, String datamodelId, String owlClassUri) {
+		super(shell, datamodelId, owlClassUri, InqleInfo.ACTION_REGISTER_SUBJECTS);
 		log.trace("Created CreateSubclassAction");
 	}
 	

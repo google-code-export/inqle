@@ -103,7 +103,7 @@ public abstract class ACreateOntResourceAction extends Action {
 		this.newUri = ontResource.getURI();
 		this.newName = ontResource.getLabel("EN");
 		newStatementsModel = ontModel.difference(model);
-		log.info("Saving these new statements:" + JenabeanWriter.modelToString(newStatementsModel));
+		log.info("SSSSSSSSSSSSSSSSSSSSSSSS Saving these new statements:" + JenabeanWriter.modelToString(newStatementsModel));
 		Persister persister = Persister.getInstance();
 		
 //		if (textIndexBuilder != null) {
@@ -119,9 +119,7 @@ public abstract class ACreateOntResourceAction extends Action {
 //			model.unregister(textIndexBuilder);
 //		}
 		long sizeDifference = model.size() - sizeBefore;
-		//close the model
-//		model.close();
-		log.info("Registered new type locally: Added " + sizeDifference + " new statements to the model.");
+		log.info("RERERERERERERERERERERERERE Registered new type locally: Added " + sizeDifference + " new statements to the model.");
 		
 		//send the new statements to the central INQLE server
 		Map<String, String> params = new HashMap<String, String>();

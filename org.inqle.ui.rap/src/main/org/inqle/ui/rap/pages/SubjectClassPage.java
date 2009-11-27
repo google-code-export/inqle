@@ -222,9 +222,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//log.info("Clicked table row.  getSubjectUri()=" + getSubjectUri());
 		} else if (clickedObject.equals(selectCreatedClassButton)) {
 			table.deselectAll();
-			//log.info("Clicked radio button.  getSubjectUri()=" + getSubjectUri());
 		} else {
-			//log.info("Clicked search button");
 
 			//this looks up subclasses of DataSubject, in this system datamodel: Data.DATA_SUBJECT_DATASET_ROLE_ID
 			String localDataSubjectXml = SubjectsSearcher.lookupSubjectsInSubjectsDatamodel(
@@ -239,7 +237,7 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 					getSearchTextValue(), 
 					10, 
 					0);
-			//log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
+			log.info("Retrieved this result set from LOCAL query:\n" + localRdfClassXml);
 			Document localRdfClassDocument = XmlDocumentUtil.getDocument(localRdfClassXml);
 			
 			Document localDocument = SparqlXmlUtil.merge(localDataSubjectDocument, localRdfClassDocument);
@@ -248,14 +246,14 @@ public abstract class SubjectClassPage extends DynaWizardPage implements Selecti
 			//read the header variables from the merged local document
 			headerVariables = SparqlXmlUtil.getHeaderVariables(localDocument);
 			
-			//log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
+			log.info("Looking up classes from lookup service at: " + InqleInfo.URL_CENTRAL_LOOKUP_SERVICE + "...");
 			//do the search
 			Map<String, String> params = new HashMap<String, String>();
 			params.put(LookupServlet.PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS, getSearchTextValue());
 			params.put(LookupServlet.PARAM_SEARCH_COUNT_RESULTS, MAX_NUMBER_REMOTE_SUBJECTS);
 			
 			Document remoteDocument = Requestor.retrieveXmlViaPost(InqleInfo.URL_CENTRAL_LOOKUP_SERVICE, params);
-			//log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
+			log.info("Received Document object:\n" + XmlDocumentUtil.xmlToString(remoteDocument));
 			List<SortedMap<String, String>> remoteRecords = SparqlXmlUtil.getRowValues(remoteDocument);
 			
 			

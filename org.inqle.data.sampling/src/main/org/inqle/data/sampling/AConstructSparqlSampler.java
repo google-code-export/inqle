@@ -221,7 +221,6 @@ public abstract class AConstructSparqlSampler extends ASampler {
 	 * @return
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	public Collection<String> selectDatamodels() {
 		log.debug("getSelectedDatamodels()=" + getSelectedDatamodels());
 		//if named models already selected, return
@@ -236,10 +235,13 @@ public abstract class AConstructSparqlSampler extends ASampler {
 		//we must select a subset of the choosable datamodels
 		//randomly remove datamodels until we reach the maximum acceptable number
 		int numberDatasetsToSelect = RandomListChooser.getRandomNumber(getMinimumNumberOfDatamodels(), getMaximumNumberOfDatamodels());
-		Collection<String> selectedDatamodels = (Collection<String>) RandomListChooser.chooseRandomItemsSubtractively(new ArrayList(choosableDatamodels), numberDatasetsToSelect);
-		
+		List<PurposefulDatamodel> selectedDatamodels = RandomListChooser.chooseRandomItemsSubtractively(new ArrayList<PurposefulDatamodel>(choosableDatamodels), numberDatasetsToSelect);
+		List<String> selectedDatamodelIds = new ArrayList<String>();
+		for (PurposefulDatamodel selectedDatamodel: selectedDatamodels) {
+			selectedDatamodelIds.add(selectedDatamodel.getId());
+		}
 		//if (selectedDatamodels != null) {
-		return selectedDatamodels;
+		return selectedDatamodelIds;
 		//}
 	}
 
