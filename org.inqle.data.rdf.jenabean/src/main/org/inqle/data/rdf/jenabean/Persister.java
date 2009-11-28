@@ -70,7 +70,7 @@ public class Persister {
 	public static final Class<?>[] MODEL_CLASSES = {SystemDatamodel.class, PurposefulDatamodel.class, Datafile.class};
 	
 	public static final String EXTENSION_POINT_DATAMODEL = "org.inqle.data.datamodels";
-	public static final String METAREPOSITORY_DATAMODEL = "MetaRepository.data";
+	public static final String METAREPOSITORY_DATAMODEL = "_MetaRepository";
 
 	public static final String EXTENSION_POINT_DATAMODEL_PURPOSES = "org.inqle.data.purposes";
 	public static final String EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA = "org.inqle.data.purposes.minable";
@@ -81,8 +81,8 @@ public class Persister {
 	public static final Object TEXT_INDEX_TYPE_SUBJECT = "subject";
 	public static final Object TEXT_INDEX_TYPE_LITERAL = "literal";
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
-	public static final String DATAMODEL_SUBJECT_CLASSES_CACHE = "org.inqle.datamodels.cache.subjectClass";
-	public static final String DATAMODEL_ARCS_CACHE = "org.inqle.datamodels.cache.arc";
+	public static final String DATAMODEL_SUBJECT_CLASSES_CACHE = "_CacheSubjectClasses";
+	public static final String DATAMODEL_ARCS_CACHE = "_CacheArcs";
 	public static final String CORE_DATABASE_ID = "_Core";
 	
 	private AppInfo appInfo = null;

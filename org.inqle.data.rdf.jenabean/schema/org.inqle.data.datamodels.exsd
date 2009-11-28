@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
+<!-- This file is depricated, as this plugin type is no longer used -->
 <schema targetNamespace="org.inqle.data">
 <annotation>
       <appInfo>

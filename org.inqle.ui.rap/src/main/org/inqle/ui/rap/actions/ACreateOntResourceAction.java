@@ -64,7 +64,9 @@ public abstract class ACreateOntResourceAction extends Action {
 		this.datamodelId = datamodelId;
 		Persister persister = Persister.getInstance();
 //		PurposefulDatamodel searchDatamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, datamodelId);
+		
 		this.model = persister.getIndexableModel(datamodelId);
+		log.info("GIGIGIGIGIGIGIGIGIGIGIGI Got indexable model of id:" + datamodelId + ": has " + model.size() + " statements.");
 //		this.model = persister.getSystemModel(internalDatasetRoleId);
 //		this.textIndexBuilder = persister.getIndexBuilder(internalDatasetRoleId);
 		this.parentResourceUri = parentResourceUri;
