@@ -30,7 +30,7 @@ import com.rapidminer.operator.performance.PerformanceVector;
 @Namespace(RDF.INQLE)
 public class PerformanceVectorResult extends UniqueJenabean implements IExperimentResult {
 
-	public static final String EXPERIMENTS_DATASET = "org.inqle.datamodels.experiments";
+	public static final String EXPERIMENTS_DATAMODEL_NAME = "_Experiments";
 	
 	private static Logger log = Logger.getLogger(PerformanceVectorResult.class);
 	
