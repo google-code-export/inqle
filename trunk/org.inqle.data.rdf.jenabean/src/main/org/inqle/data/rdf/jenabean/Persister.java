@@ -259,17 +259,17 @@ public class Persister {
 	 */
 //	public Model getDatabaseBackedModel(String datamodelId) {
 	public Model getModel(String datamodelId) {
-		String modelType = getModelTypeFromDatamodelId(datamodelId);
+		String modelType = DatabaseBackedJenamodel.getModelTypeFromDatamodelId(datamodelId);
 		Model cachedModel = getModelCache(modelType).get(datamodelId);
 		if (cachedModel != null) {
 			return cachedModel;
 		}
-		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
+		String databaseId = DatabaseBackedJenamodel.getDatabaseIdFromDatamodelId(datamodelId);
 		if (databaseId==null || databaseId.length()==0 || databaseId.equals("null")) {
 			log.error("databaseId is " + databaseId);
 			return null;
 		}
-		String modelName = getModelNameFromDatamodelId(datamodelId);
+		String modelName = DatabaseBackedJenamodel.getModelNameFromDatamodelId(datamodelId);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
 		Model model = connector.getModel(modelType, modelName);
 		getModelCache(modelType).put(datamodelId, model);
@@ -376,6 +376,8 @@ public class Persister {
 	public Model getIndexableModel(Jenamodel indexableDatamodel) {
 		if (indexableDatamodel==null) return null;
 		Model model = getModel(indexableDatamodel.getId());
+		log.info("PERSISTER: GIGIGIGIGIGIGIGIGIGIGIGI Got indexable model of id:" + indexableDatamodel.getId());
+		log.info("PERSISTER: ...which has " + model.size() + " statements.");
 		if (indexableDatamodel instanceof PurposefulDatamodel) {
 			PurposefulDatamodel userDatamodel = (PurposefulDatamodel)indexableDatamodel;
 			Collection<String> purposes = userDatamodel.getDatamodelPurposes();
@@ -415,100 +417,6 @@ public class Persister {
 	}
 	
 	
-	public static String getDatabaseIdFromDatamodelId(String datamodelId) {
-		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
-			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
-			return null;
-		}
-		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
-			return null;
-		}
-		String dbIdPlusType = datamodelId.substring(0, datamodelId.lastIndexOf("/"));
-		if (dbIdPlusType==null || dbIdPlusType.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
-			return null;
-		}
-		
-		return dbIdPlusType.substring(0, dbIdPlusType.lastIndexOf("/"));
-	}
-	
-	public static String getModelTypeFromDatamodelId(String datamodelId) {
-		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
-			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
-			return null;
-		}
-		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
-			return null;
-		}
-		String dbIdPlusType = datamodelId.substring(0, datamodelId.lastIndexOf("/"));
-		if (dbIdPlusType==null || dbIdPlusType.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/model_type/model_name'.  Was '" + datamodelId + "'");
-			return null;
-		}
-		
-		return dbIdPlusType.substring(dbIdPlusType.lastIndexOf("/") + 1);
-	}
-	
-	public static String getModelNameFromDatamodelId(String datamodelId) {
-		if (datamodelId==null || datamodelId.indexOf("/") < 1) {
-			log.error("datamodelId should be in the format 'database_name/datamodel_name.  Was '" + datamodelId + "'");
-			return null;
-		}
-		if (datamodelId.substring(datamodelId.length()-1).equals("/")) {
-			log.error("datamodelId should not end with a slash.  Was '" + datamodelId + "'");
-			return null;
-		}
-		return datamodelId.substring(datamodelId.lastIndexOf("/") + 1);
-	}
-//	/**
-//	 * Given an instance of a Model, retrieve the Jena model
-//	 * @param datamodel
-//	 * @return
-//	 */
-//	public Model getModel(Datamodel datamodel) {
-//		if (datamodel == null) return null;
-//		//Model repositoryModel = getMetarepositoryModel();
-//		if (cachedModels.containsKey(datamodel.getId())) {
-//			return cachedModels.get(datamodel.getId());
-//		}
-//		if (datamodel instanceof DatabaseBackedDatamodel) {
-//			IDBConnector connector = DBConnectorFactory.getDBConnector(((DatabaseBackedDatamodel) datamodel).getDatabaseId());
-//			Model model = connector.getModel(datamodel.getId());
-//			cachedModels.put(datamodel.getId(), model);
-//			return model;
-//		}
-//		
-//		if (datamodel instanceof Datafile){
-//			return Persister.getModelFromFile(((Datafile)datamodel).getFileUrl());
-//		}
-//		
-//		//unknown type of Datamodel: return null
-//		return null;
-//	}
-	
-//	/**
-//	 * Get the database-backed model from the database directly, without using cache
-//	 * @param databaseId
-//	 * @param datamodelId
-//	 * @return
-//	 * 
-//	 * @deprecated - always use cache when possible
-//	 */
-//	public Model getDbModel(String databaseId, String datamodelId) {
-//		IDBConnector dbConnector = DBConnectorFactory.getDBConnector(databaseId);
-//
-//		log.debug("Creating Model of name '" + datamodelId + "'.");
-//		
-//		Model model = dbConnector.getModel(datamodelId);
-//		return model;
-//	}
-	
-//	public Model getCachedModel(String datamodelId) {
-//		return cachedModels.get(datamodelId);
-//	}
-	
 	/**
 	 * Loads an RDF file from local filesystem or remote (HTTP) source
 	 * @param filePath the file path or URL
@@ -530,9 +438,9 @@ public class Persister {
 	 * @return
 	 */
 	public boolean modelExists(String datamodelId) {
-		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
-		String modelType = getModelTypeFromDatamodelId(datamodelId);
-		String modelName = getModelNameFromDatamodelId(datamodelId);
+		String databaseId = DatabaseBackedJenamodel.getDatabaseIdFromDatamodelId(datamodelId);
+		String modelType = DatabaseBackedJenamodel.getModelTypeFromDatamodelId(datamodelId);
+		String modelName = DatabaseBackedJenamodel.getModelNameFromDatamodelId(datamodelId);
 		IDBConnector connector = DBConnectorFactory.getDBConnector(databaseId);
 		return connector.modelExists(modelType, modelName);
 	}
@@ -736,7 +644,7 @@ public class Persister {
 	 * Get the datamodel object
 	 */
 	public <T extends DatabaseBackedJenamodel> T getDatabaseBackedDatamodel(Class<T> clazz, String datamodelId) {
-		String databaseId = getDatabaseIdFromDatamodelId(datamodelId);
+		String databaseId = DatabaseBackedJenamodel.getDatabaseIdFromDatamodelId(datamodelId);
 		Model metarepository = getMetarepositoryModel(databaseId);
 		T datamodel = reconstitute(clazz, datamodelId, metarepository, true);
 		return datamodel;
