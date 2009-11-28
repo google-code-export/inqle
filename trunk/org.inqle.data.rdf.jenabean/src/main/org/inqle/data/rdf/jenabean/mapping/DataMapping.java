@@ -38,7 +38,7 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class DataMapping extends GlobalJenabean {
 	
-	static final String MAPPING_MODEL_NAME = "DataMapping.data";
+	static final String MAPPING_MODEL_NAME = "_DataMapping";
 //	static final String MAPPING_DB_ID = "_DataMapping";
 	public static final String MAPPING_MODEL_ID = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + MAPPING_MODEL_NAME;
 	private String mapsHeader;

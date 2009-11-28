@@ -35,7 +35,7 @@ public class TestCreateStores {
 	
 	public static final String DB_NAME = "test_inqle_data";
 	public static final String MODEL_NAME = "test_model";
-	public static final String TEST_DATAMODEL_ID = "org.inqle.datamodels.TestDataset";
+	public static final String TEST_DATAMODEL_ID = "_TestDataset";
 	//public static final String TEST_DATAMODEL_URI = RDF.INQLE + TEST_DATAMODEL_ID;
 	//public final String URI_DUMMY_1 = RDF.INQLE + "dummy1";
 	//public final String URI_DUMMY_2 = RDF.INQLE + "dummy2";
