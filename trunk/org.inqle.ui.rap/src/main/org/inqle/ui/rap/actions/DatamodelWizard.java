@@ -39,12 +39,12 @@ import org.inqle.ui.rap.widgets.TextFieldShower;
  * 
  * TODO extend DynaWizard instead of Wizard
  */
-public class UserDatamodelWizard extends Wizard {
+public class DatamodelWizard extends Wizard {
 
 	public static final String DEFAULT_CHECKED_ATTRIBUTE = "checkedByDefault";
 	private IDatabase database = null;
 	//private Persister persister;
-	static Logger log = Logger.getLogger(UserDatamodelWizard.class);
+	static Logger log = Logger.getLogger(DatamodelWizard.class);
 	
 	int mode;
 
@@ -208,7 +208,8 @@ public class UserDatamodelWizard extends Wizard {
 		}
 	}
 	
-	public UserDatamodelWizard(int mode, PurposefulDatamodel startingDatamodel, DatabasePart databasePart) {
+	public DatamodelWizard(int mode, PurposefulDatamodel startingDatamodel, DatabasePart databasePart) {
+		log.info("Starting datamodel ID=" + startingDatamodel.getId());
 		this.mode = mode;
 		this.databasePart = databasePart;
 		this.startingDatamodel = startingDatamodel;

@@ -30,6 +30,11 @@ public abstract class DatabaseBackedJenamodel extends Jenamodel {
 		setName(getModelNameFromDatamodelId(id));
 	}
 	
+	@Override
+	public void setRandomId() {
+		setName(UUID.randomUUID().toString());
+	}
+	
 //	public void clone(DatabaseBackedDatamodel objectToBeCloned) {
 //		super.clone(objectToBeCloned);
 //		//setConnection(objectToBeCloned.getConnection());

@@ -78,8 +78,8 @@ public class Persister {
 	
 	public static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
 	public static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
-	public static final Object TEXT_INDEX_TYPE_SUBJECT = "subject";
-	public static final Object TEXT_INDEX_TYPE_LITERAL = "literal";
+	public static final String TEXT_INDEX_TYPE_SUBJECT = "subject";
+	public static final String TEXT_INDEX_TYPE_LITERAL = "literal";
 	public static final String DATABASE_ROLE_ID_ATTRIBUTE = "targetDatabase";
 	public static final String DATAMODEL_SUBJECT_CLASSES_CACHE = "_CacheSubjectClasses";
 	public static final String DATAMODEL_ARCS_CACHE = "_CacheArcs";
@@ -456,8 +456,9 @@ public class Persister {
 	 */
 	public IndexBuilderModel getIndexBuilder(String indexId) {
 		IndexBuilderModel indexBuilder = getIndexBuilders().get(indexId);
-//		if (indexBuilder!=null) return indexBuilder;
+		if (indexBuilder!=null) return indexBuilder;
 //		initializeIndexBuilders();
+		indexBuilder = attachIndexBuilder(indexId);
 //		indexBuilder = indexBuilders.get(indexId);
 		return indexBuilder;
 	}
@@ -471,12 +472,22 @@ public class Persister {
 	}
 	
 	/**
-	 * Get an index builder
+	 * Create or attach to an index builder, using the default index type (subjects)
 	 * @param indexId
 	 * @param textIndexType
 	 * @return
 	 */
-	public IndexBuilderModel getIndexBuilder(String indexId, String textIndexType) {
+	public IndexBuilderModel attachIndexBuilder(String indexId) {
+		return attachIndexBuilder(indexId, TEXT_INDEX_TYPE_SUBJECT);
+	}
+	
+	/**
+	 * Create or attach to an index builder
+	 * @param indexId
+	 * @param textIndexType
+	 * @return
+	 */
+	public IndexBuilderModel attachIndexBuilder(String indexId, String textIndexType) {
 		String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + indexId;
 		//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
 		
@@ -553,7 +564,7 @@ public class Persister {
 //			log.info("FFFFFFFFFFFFFFFFFFdatamodelPurposeId=" + datamodelPurposeId + "; textIndexType=" + textIndexType);
 			//if directed to do so, build & store an index for this Model
 			if (textIndexType != null) {
-				IndexBuilderModel larqBuilder = getIndexBuilder(datamodelPurposeId, textIndexType);
+				IndexBuilderModel larqBuilder = attachIndexBuilder(datamodelPurposeId, textIndexType);
 
 				if (larqBuilder != null) {
 					IndexLARQ theIndex = null;

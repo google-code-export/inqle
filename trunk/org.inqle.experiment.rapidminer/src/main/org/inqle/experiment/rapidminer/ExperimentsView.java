@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
@@ -17,7 +18,6 @@ import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.ui.rap.views.SparqlView;
 import org.inqle.ui.rap.views.SubjectStatementsView;
-import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
 /**
@@ -35,7 +35,7 @@ public class ExperimentsView extends SparqlView {
 	 */
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-		linkColumn = ResultSetTable.URI_VARIABLE;
+		linkColumn = InqleInfo.URI_VARIABLE;
 		linkUriOnly = true;
 		hideUriColumn = false;
 		setTitleText("Log of Experiments Done");
@@ -50,24 +50,24 @@ public class ExperimentsView extends SparqlView {
 			"PREFIX rdf: <" + RDF.RDF + ">\n" + 
 			"PREFIX dc: <" + RDF.DC + ">\n" + 
 			"PREFIX inqle: <" + RDF.INQLE + ">\n" + 
-			"SELECT ?" + ResultSetTable.URI_VARIABLE + " ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Accuracy\n" +
+			"SELECT ?" + InqleInfo.URI_VARIABLE + " ?Creation_Date ?Subject_Class ?Experiment_Subject ?Experiment_Label ?Experiment_Attributes ?Correlation ?Accuracy\n" +
 			"{\n" +
 			"GRAPH ?g {\n" +
-			"?" + ResultSetTable.URI_VARIABLE + " a ?classUri\n" +
+			"?" + InqleInfo.URI_VARIABLE + " a ?classUri\n" +
 			"  . ?classUri <" + RDF.JAVA_CLASS + "> \"" + PerformanceVectorResult.class.getName() + "\" \n" +
-			". ?" + ResultSetTable.URI_VARIABLE + " inqle:id ?id \n" +
-			". ?" + ResultSetTable.URI_VARIABLE + " inqle:creationDate ?Creation_Date \n" +
+			". ?" + InqleInfo.URI_VARIABLE + " inqle:id ?id \n" +
+			". ?" + InqleInfo.URI_VARIABLE + " inqle:creationDate ?Creation_Date \n" +
 //			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " dc:name ?Name }\n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentSubjectClass ?Subject_Class } \n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentSubjectArc ?experimentSubjectArc \n" +
+			". OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " inqle:experimentSubjectClass ?Subject_Class } \n" +
+			". OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " inqle:experimentSubjectArc ?experimentSubjectArc \n" +
 			"  . ?experimentSubjectArc inqle:qnameRepresentation ?Experiment_Subject }\n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentLabelArc ?experimentLabelArc \n" +
+			". OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " inqle:experimentLabelArc ?experimentLabelArc \n" +
 			"  . ?experimentLabelArc inqle:qnameRepresentation ?Experiment_Label }\n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentAttributeQnameRepresentation ?Experiment_Attributes } \n" +
+			". OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " inqle:experimentAttributeQnameRepresentation ?Experiment_Attributes } \n" +
 //			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:experimentAttributeArcs ?experimentAttributeArcs\n" +
 //			"  . ?experimentAttributeArcs inqle:qnameRepresentation ?Experiment_Attributes}\n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:correlation ?Correlation }\n" +
-			". OPTIONAL { ?" + ResultSetTable.URI_VARIABLE + " inqle:accuracy ?Accuracy }\n" +
+			". OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " inqle:correlation ?Correlation }\n" +
+			". OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " inqle:accuracy ?Accuracy }\n" +
 			"\n} } ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n";
 		sparql +=  "LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
 		log.info("SPARQL=" + sparql);

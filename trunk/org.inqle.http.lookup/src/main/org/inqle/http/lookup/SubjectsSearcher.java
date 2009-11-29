@@ -228,9 +228,12 @@ public class SubjectsSearcher {
 		QueryCriteria queryCriteria = new QueryCriteria();
 		queryCriteria.addDatamodel(datamodelId);
 		IndexLARQ textIndex =  persister.getIndex(datamodelId);
-		if (textIndex == null) return null;
+		if (textIndex == null) {
+			log.warn("Index is NULL for datamodel: " + datamodelId);
+			return null;
+		}
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
-		log.info("ZZZZZZZZZZZZZZZZZZZZZZZ Searched index: " + datamodelId + " for '" + searchTermForRdfClass + "'...");
+		log.info("Searched index: " + datamodelId + " for '" + searchTermForRdfClass + "'...");
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
