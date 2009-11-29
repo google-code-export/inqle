@@ -142,6 +142,8 @@ public class DatabasePart extends PartType {
 		List<IAction> actions = new ArrayList<IAction>();
 		//"Create a datamodel" action
 		DatamodelWizardAction newModelWizardAction = new DatamodelWizardAction(DatamodelWizardAction.MODE_NEW, "Create new datamodel...", this, workbenchWindow);
+		PurposefulDatamodel newDatamodel = getNewDatamodel();
+		log.info("Created new datamodel: " + newDatamodel.getId());
 		newModelWizardAction.setDatamodel(getNewDatamodel());
 		actions.add(newModelWizardAction);
 		

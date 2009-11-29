@@ -132,6 +132,8 @@ public class InqleInfo {
 	public static String getDatabaseRootFilePath() {
 		return getAssetsDirectory() + DB_FOLDER + "/";
 	}
+
+	public static final String URI_VARIABLE = "URI";
 	
 //	public static String getSystemDatabaseRootFilePath() {
 //		return getDatabaseRootFilePath() + SYSTEM_DATABASE_ROOT + "/";

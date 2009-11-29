@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Jenamodel;
@@ -99,24 +100,24 @@ public class SubjectClassLister {
 			"?classUri { GRAPH ?anyGraph { \n " +
 			"?subject a ?classUri } } \n";
 
-	public static final String CLASS_URI_VAR = "Type_URI";
+//	public static final String ResultSetTable.URI_VARIABLE = "Type_URI";
 	
 	private static final String SPARQL_SELECT_CLASSES_TABLE = "PREFIX rdfs: <" + RDF.RDFS + "> \n" +
 			"SELECT DISTINCT " +
-			"?" + CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
-			"?subject a ?" + CLASS_URI_VAR + " ." +
-			"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
-			"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
+			"?" + InqleInfo.URI_VARIABLE + " ?Name ?Description { GRAPH ?anyGraph { \n " +
+			"?subject a ?" + InqleInfo.URI_VARIABLE + " ." +
+			"OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " rdfs:label ?Name} . \n" +
+			"OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " rdfs:comment ?Description} . \n" +
 			"} } \n";
 	
 	public static String getSparqlSelectUncommonClassesTable() {
 		String s = "PREFIX rdfs: <" + RDF.RDFS + "> \n" +
 		"SELECT DISTINCT " +
-		"?" + CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
-		"?subject a ?" + CLASS_URI_VAR + " ." +
-		"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
-		"OPTIONAL { ?" + CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
-		 	Queryer.getSparqlClauseFilterCommonClasses("?" + CLASS_URI_VAR) +
+		"?" + InqleInfo.URI_VARIABLE + " ?Name ?Description { GRAPH ?anyGraph { \n " +
+		"?subject a ?" + InqleInfo.URI_VARIABLE + " ." +
+		"OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " rdfs:label ?Name} . \n" +
+		"OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " rdfs:comment ?Description} . \n" +
+//		 	Queryer.getSparqlClauseFilterCommonClasses("?" + InqleInfo.URI_VARIABLE) +
 		"\n} } \n";
 		
 		return s;

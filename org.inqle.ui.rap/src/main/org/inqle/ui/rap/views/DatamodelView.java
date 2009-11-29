@@ -6,10 +6,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
-import org.inqle.ui.rap.widgets.ResultSetTable;
 import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
 /**
@@ -25,10 +25,10 @@ public class DatamodelView extends SparqlView {
 	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-		currentSortColumn = ResultSetTable.URI_VARIABLE;
+		currentSortColumn = InqleInfo.URI_VARIABLE;
 		currentSortDirection = SparqlView.ASC;
 		hideUriColumn = false;
-		linkColumn = SubjectClassLister.CLASS_URI_VAR;
+		linkColumn = InqleInfo.URI_VARIABLE;
 		linkUriOnly = true;
 	}
 	
@@ -36,15 +36,16 @@ public class DatamodelView extends SparqlView {
 	public String getSparql() {
 		String s = "PREFIX rdfs: <" + RDF.RDFS + "> \n" +
 		"SELECT DISTINCT " +
-		"?" + SubjectClassLister.CLASS_URI_VAR + " ?Name ?Description { GRAPH ?anyGraph { \n " +
-		"?subject a ?" + SubjectClassLister.CLASS_URI_VAR + " ." +
-		"OPTIONAL { ?" + SubjectClassLister.CLASS_URI_VAR + " rdfs:label ?Name} . \n" +
-		"OPTIONAL { ?" + SubjectClassLister.CLASS_URI_VAR + " rdfs:comment ?Description} . \n" +
-		 	Queryer.getSparqlClauseFilterCommonClasses("?" + SubjectClassLister.CLASS_URI_VAR) +
+		"?" + InqleInfo.URI_VARIABLE + " ?Name ?Description { GRAPH ?anyGraph { \n " +
+//		"?subject a ?" + InqleInfo.URI_VARIABLE + " ." +
+		"?" + InqleInfo.URI_VARIABLE + " a rdfs:Class . \n" +
+		"OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " rdfs:label ?Name} . \n" +
+		"OPTIONAL { ?" + InqleInfo.URI_VARIABLE + " rdfs:comment ?Description} . \n" +
+//		 	Queryer.getSparqlClauseFilterCommonClasses("?" + InqleInfo.URI_VARIABLE) +
 		"\n} } \n" +
 		" ORDER BY " + getCurrentSortDirection() + "(?" + getCurrentSortColumn() + ") \n" +
 		" LIMIT " + String.valueOf(getRecordCount()) + " OFFSET " + String.valueOf(getOffset());
-		log.info("SPARQL lookup subjects in datamodel:" + s);
+		log.info("SPARQL lookup classes in datamodel:" + s);
 		return s;
 //		String sparql = 
 //			"PREFIX rdfs: <" + RDF.RDFS + ">\n" + 

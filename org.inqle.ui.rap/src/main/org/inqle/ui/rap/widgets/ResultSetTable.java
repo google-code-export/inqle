@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.uri.UriMapper;
 import org.inqle.data.rdf.jena.util.QuerySolutionValueExtractor;
 
@@ -30,9 +31,8 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
  */
 public class ResultSetTable extends AScrolledTable implements SelectionListener {
 
-	public static final String URI_VARIABLE = "URI";
 	ResultSetRewindable resultSet;
-	protected String uriVariable = URI_VARIABLE;
+	protected String uriVariable = InqleInfo.URI_VARIABLE;
 	private ArrayList<Button> checkboxes;
 	protected String linkColumn;
 	private boolean hideUriColumn = true;
@@ -86,16 +86,22 @@ public class ResultSetTable extends AScrolledTable implements SelectionListener 
 				return columnNames;
 			}
 			resultSet.reset();
-			QuerySolution querySolution = resultSet.nextSolution();
-			Iterator<?> varNames = querySolution.varNames();
-			while (varNames.hasNext()) {
-				Object varName = varNames.next();
-				if (varName==null) varName="";
-				if (hideUriColumn  && varName.equals(uriVariable)) {
-//					log.info("Hiding column: " + uriVariable);
-					continue;
+			
+			//add all column names for all rows
+			while(resultSet.hasNext()) {
+				QuerySolution querySolution = resultSet.nextSolution();
+				
+				Iterator<?> varNames = querySolution.varNames();
+				while (varNames.hasNext()) {
+					Object varName = varNames.next();
+					if (varName==null) continue;
+					if (hideUriColumn  && varName.equals(uriVariable)) {
+	//					log.info("Hiding column: " + uriVariable);
+						continue;
+					}
+					if (columnNames.contains(varName.toString())) continue;
+					columnNames.add(varName.toString());
 				}
-				columnNames.add(varName.toString());
 			}
 		}
 		return columnNames;

@@ -57,7 +57,7 @@ public class DatamodelWizardAction extends Action {
 	public void run() {
 		if (datamodel instanceof PurposefulDatamodel) {
 //			try {
-				UserDatamodelWizard wizard = new UserDatamodelWizard(mode, (PurposefulDatamodel)datamodel, databasePart);
+				DatamodelWizard wizard = new DatamodelWizard(mode, (PurposefulDatamodel)datamodel, databasePart);
 				log.trace("Created UserDatamodelWizard");
 				WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 				dialog.open();
