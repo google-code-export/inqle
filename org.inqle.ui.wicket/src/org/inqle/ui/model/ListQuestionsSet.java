@@ -18,6 +18,16 @@ public class ListQuestionsSet implements IQuestionsSet {
 		this.questions= questions;
 	}
 
+	
+	public void add(Question question) {
+		this.questions.add(question);
+	}
+	
+	public void remove(Question question) {
+		this.questions.remove(question);
+	}
+	
+	
 	@Override
 	public boolean hasNext() {
 		if(current < (questions.size()-1))
