@@ -234,13 +234,17 @@ public class SubjectsSearcher {
 		}
 		Iterator<?> searchResultI = textIndex.search(searchTermForRdfClass);
 		log.info("Searched index: " + datamodelId + " for '" + searchTermForRdfClass + "'...");
+		if (! searchResultI.hasNext()) {
+			log.info("...No results.");
+			return null;
+		}
 		while(searchResultI.hasNext()) {
 			HitLARQ hit = (HitLARQ)searchResultI.next();
 			log.info("Found result: " + hit.getNode() + "; score=" + hit.getScore());
 		}
-		if (textIndex != null) {
-			queryCriteria.setTextIndex(textIndex);
-		}
+		
+		queryCriteria.setTextIndex(textIndex);
+		
 		String sparql = getSparqlSearchRdfSubclasses(searchTermForRdfClass, superClassUri, countSearchResults, offset);
 		log.info("Querying w/ this sparql:\n" + sparql);
 		queryCriteria.setQuery(sparql);

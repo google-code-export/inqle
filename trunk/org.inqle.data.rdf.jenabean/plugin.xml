@@ -96,7 +96,7 @@
 					 checkedByDefault="true">
 			</datamodelPurpose>
 			<datamodelPurpose
-           id="org.inqle.datamodelPurposes.schemas"
+           id="org.inqle.data.purposes.schemas"
            name="Schemas, Ontologies"
            weight="2000"
            textIndexType="subject"

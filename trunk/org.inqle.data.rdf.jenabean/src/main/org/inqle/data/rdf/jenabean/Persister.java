@@ -74,7 +74,7 @@ public class Persister {
 
 	public static final String EXTENSION_POINT_DATAMODEL_PURPOSES = "org.inqle.data.purposes";
 	public static final String EXTENSION_DATAMODEL_PURPOSES_MINABLE_DATA = "org.inqle.data.purposes.minable";
-	public static final String EXTENSION_DATAMODEL_PURPOSES = "org.inqle.datamodelPurposes.schemas";
+	public static final String EXTENSION_DATAMODEL_PURPOSES = "org.inqle.data.purposes.schemas";
 	
 	public static final String ATTRIBUTE_CACHE_MODEL = "cacheInMemory";
 	public static final String ATTRIBUTE_TEXT_INDEX_TYPE = "textIndexType";
@@ -393,6 +393,7 @@ public class Persister {
 		} else if (indexableDatamodel instanceof SystemDatamodel) {
 			SystemDatamodel systemDatamodel = (SystemDatamodel)indexableDatamodel;
 			IndexBuilderModel builder = getIndexBuilder(systemDatamodel.getId());
+			log.info("Got IndexBuilder: " + builder);
 			if (builder != null) {
 				model.register(builder);
 			}
@@ -455,15 +456,18 @@ public class Persister {
 	 * @return
 	 */
 	public IndexBuilderModel getIndexBuilder(String indexId) {
+		indexId = sanitizeIndexId(indexId);
 		IndexBuilderModel indexBuilder = getIndexBuilders().get(indexId);
 		if (indexBuilder!=null) return indexBuilder;
 //		initializeIndexBuilders();
 		indexBuilder = attachIndexBuilder(indexId);
+		indexBuilders.put(indexId, indexBuilder);
 //		indexBuilder = indexBuilders.get(indexId);
 		return indexBuilder;
 	}
 	
 	public IndexLARQ getIndex(String indexId) {
+		indexId = sanitizeIndexId(indexId);
 		IndexBuilderModel indexBuilder = getIndexBuilder(indexId);
 		if (indexBuilder==null) return null;
 		indexBuilder.flushWriter();
@@ -488,6 +492,7 @@ public class Persister {
 	 * @return
 	 */
 	public IndexBuilderModel attachIndexBuilder(String indexId, String textIndexType) {
+		indexId = sanitizeIndexId(indexId);
 		String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + indexId;
 		//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
 		
@@ -504,6 +509,7 @@ public class Persister {
 		
 		IndexWriter indexWriter = null;
 		try {
+			log.info("Attaching or creating index: " + indexId);
 			indexWriter = new IndexWriter(indexFilePath, new StandardAnalyzer());
 		} catch (Exception e) {
 			log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
@@ -524,6 +530,12 @@ public class Persister {
 		return larqBuilder;
 	}
 	
+
+	private String sanitizeIndexId(String indexId) {
+		if (indexId.indexOf("/") < 0) return indexId;
+		String newIndexId = indexId.replaceAll("/", "--");
+		return newIndexId;
+	}
 
 	public Map<String, IndexBuilderModel> getIndexBuilders() {
 		if (indexBuilders!=null && indexBuilders.size() > 0) {
