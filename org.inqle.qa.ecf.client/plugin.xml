@@ -9,7 +9,7 @@
             thread="main"
             visible="true">
          <run
-               class="org.inqle.qa.ecf.client.HelloConsumerApplication">
+               class="org.inqle.ecf.client.ClientApplication">
          </run>
       </application>
    </extension>
