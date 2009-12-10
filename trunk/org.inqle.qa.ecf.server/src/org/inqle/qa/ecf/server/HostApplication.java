@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class HelloHostApplication implements IApplication,
+public class HostApplication implements IApplication,
 		IDistributionConstants {
 	
 //	private static final String DEFAULT_CONTAINER_TYPE = "ecf.r_osgi.peer";

@@ -9,7 +9,7 @@
             thread="main"
             visible="true">
          <run
-               class="org.inqle.qa.ecf.server.HelloHostApplication">
+               class="org.inqle.qa.ecf.server.HostApplication">
          </run>
       </application>
    </extension>
