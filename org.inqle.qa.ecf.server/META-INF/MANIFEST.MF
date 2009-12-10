@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundleName
-Bundle-SymbolicName: org.inqle.qa.ecf.server;singleton:=true
+Bundle-SymbolicName: org.inqle.ecf.server;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.inqle.qa.ecf.server.Activator
 Bundle-Vendor: %bundleProvider
