@@ -53,7 +53,7 @@ public class ClientApplication implements IApplication,
 
 //	private ServiceTracker helloServiceTracker;
 
-	private enum InqleServer {
+	public enum QAServer {
 	    SERVER1 ("ecftcp://localhost:3787/server1", "3787", ECF_PROTOCOL),
 	    SERVER2 ("ecftcp://localhost:3788/server2", "3788", ECF_PROTOCOL);
 	    
@@ -62,7 +62,7 @@ public class ClientApplication implements IApplication,
 	    public String protocol;
 		private Map<String, Object> services = new HashMap<String, Object>();
 	    
-	    InqleServer(String uri, String port, String protocol) {
+	    QAServer(String uri, String port, String protocol) {
 	    	this.uri = uri;
 	    	this.port = port;
 	    	this.protocol = protocol;
@@ -85,11 +85,11 @@ public class ClientApplication implements IApplication,
 	    }
 	};
 	
-	public enum InqleService {
+	public enum QAService {
 	    SERVICE1 (IHello.class.getName());
 	    
 	    public String serviceClassName;
-	    InqleService(String serviceClassName) {
+	    QAService(String serviceClassName) {
 	    	this.serviceClassName = serviceClassName;
 	    };
 	};
@@ -103,14 +103,14 @@ public class ClientApplication implements IApplication,
 
 		// Create ECF container. This setup is required so that an ECF provider
 		// will be available for handling discovered remote endpoints
-		for (InqleServer dbServer: InqleServer.values()) {
+		for (QAServer dbServer: QAServer.values()) {
 			createContainer(dbServer.uri, dbServer.port, dbServer.protocol);
 //			serverUriList.add(dbServer.uri);
 		}
 //		createContainer(serverUriList.toArray(new String[] {}), ECF_PROTOCOL);
-		for (InqleService service: InqleService.values()) {
+		for (QAService dbService: QAService.values()) {
 			ServiceTracker serviceTracker = new ServiceTracker(bundleContext,
-				createRemoteFilter(service.serviceClassName), this);
+				createRemoteFilter(dbService.serviceClassName), this);
 			serviceTracker.open();
 			serviceTrackers.add(serviceTracker);
 		}
@@ -195,7 +195,7 @@ public class ClientApplication implements IApplication,
 	}
 
 	/**
-	 * Method called when each service instance is registered.
+	 * Method called when a IHello instance is registered.
 	 */
 	public Object addingService(ServiceReference reference) {
 		
@@ -237,7 +237,7 @@ public class ClientApplication implements IApplication,
 			return null;
 		}
 		
-		InqleServer server = getQAServerOfUri(hostUri);
+		QAServer server = getQAServerOfUri(hostUri);
 		log.info("For server " + server.uri + ", storing service:" + serviceClassName + "...");
 		if (serviceObject instanceof IHello) {
 			System.out.println("IHello service proxy being added");
@@ -267,8 +267,8 @@ public class ClientApplication implements IApplication,
 		return serviceObject;
 	}
 
-	private InqleServer getQAServerOfUri(String hostUri) {
-		for (InqleServer dbServer: InqleServer.values()) {
+	private QAServer getQAServerOfUri(String hostUri) {
+		for (QAServer dbServer: QAServer.values()) {
 			if (dbServer.uri.equals(hostUri)) return dbServer;
 		}
 		return null;
