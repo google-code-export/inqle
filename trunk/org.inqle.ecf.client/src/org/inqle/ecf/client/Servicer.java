@@ -32,18 +32,25 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
+import org.inqle.ecf.client.EcfClientConstants;
+import org.inqle.ecf.client.spec.InqleServer;
+/**
+ * This class is responsible for holding references to all servers and services known to this INQLE app.
+ * @author David Donohue
+ * 2009/12/11
+ */
+public class Servicer implements IDistributionConstants, ServiceTrackerCustomizer {
 
-public class ClientApplication implements IApplication,
-		IDistributionConstants, ServiceTrackerCustomizer {
-
-	private static Logger log = Logger.getLogger(ClientApplication.class);
-	public static final String CONSUMER_NAME = "org.inqle.ecf.client";
+	private static Logger log = Logger.getLogger(Servicer.class);
+//	public static final String CONSUMER_NAME = "org.inqle.ecf.client";
 
 //	private static final String DEFAULT_CONTAINER_TYPE = "ecf.r_osgi.peer";
 
-	public static final String ECF_PROTOCOL = "ecf.generic.client";
+//	public static final String ECF_PROTOCOL = "ecf.generic.client";
 
-	private BundleContext bundleContext;
+	private Map<String, Object> services = new HashMap<String, Object>();
+	
+	private BundleContext bundleContext = Activator.getContext();
 	private ServiceTracker containerManagerServiceTracker;
 	private List<ServiceTracker> serviceTrackers = new ArrayList<ServiceTracker>();
 //	private String containerType = DEFAULT_CONTAINER_TYPE;
@@ -51,39 +58,38 @@ public class ClientApplication implements IApplication,
 	private final Object appLock = new Object();
 	private boolean done = false;
 
-//	private ServiceTracker helloServiceTracker;
-
-	private enum InqleServer {
-	    SERVER1 ("ecftcp://localhost:3787/server1", "3787", ECF_PROTOCOL),
-	    SERVER2 ("ecftcp://localhost:3788/server2", "3788", ECF_PROTOCOL);
-	    
-	    public String uri;
-	    public String port;
-	    public String protocol;
-		private Map<String, Object> services = new HashMap<String, Object>();
-	    
-	    InqleServer(String uri, String port, String protocol) {
-	    	this.uri = uri;
-	    	this.port = port;
-	    	this.protocol = protocol;
-	    };
-	    
-	    public <T> T getService(Class<T> serviceClass) {
-	    	String key = serviceClass.getName();
-	    	Object serviceObject = services.get(key);
-	    	if (serviceObject == null) return null;
-	    	T typedServiceObject = (T)serviceObject;
-	    	return typedServiceObject;
-	    }
-	    
-	    public void addService(String serviceClassName, Object serviceObject) {
-	    	services.put(serviceClassName, serviceObject);
-	    }
-	    
-	    public void removeService(String serviceClassName) {
-	    	services.remove(serviceClassName);
-	    }
-	};
+	/* *********************************************************************
+	 * *** FACTORY METHODS
+	 * ********************************************************************* */
+	private Servicer() {}
+	
+	/**
+	* ServicerHolder is loaded on the first execution of Servicer.getInstance() 
+	* or the first access to ServicerHolder, not before.
+	*/
+	private static class ServicerHolder { 
+		private final static Servicer instance = new Servicer();
+	}
+	 
+	public static Servicer getInstance() {
+		return ServicerHolder.instance;
+	}
+	
+	public <T> T getService(Class<T> serviceClass) {
+    	String key = serviceClass.getName();
+    	Object serviceObject = services.get(key);
+    	if (serviceObject == null) return null;
+    	T typedServiceObject = (T)serviceObject;
+    	return typedServiceObject;
+    }
+    
+    public void addService(String serviceClassName, Object serviceObject) {
+    	services.put(serviceClassName, serviceObject);
+    }
+    
+    public void removeService(String serviceClassName) {
+    	services.remove(serviceClassName);
+    }	
 	
 	public enum InqleService {
 	    SERVICE1 (IHello.class.getName());
@@ -98,26 +104,31 @@ public class ClientApplication implements IApplication,
 	public Object start(IApplicationContext appContext) throws Exception {
 		log.info("ECF Client starting...");
 		// Set bundle context (for use with service trackers)
-		bundleContext = Activator.getContext();
+		
 //		processArgs(appContext);
 
 		// Create ECF container. This setup is required so that an ECF provider
 		// will be available for handling discovered remote endpoints
 		for (InqleServer dbServer: InqleServer.values()) {
 			createContainer(dbServer.uri, dbServer.port, dbServer.protocol);
-//			serverUriList.add(dbServer.uri);
 		}
-//		createContainer(serverUriList.toArray(new String[] {}), ECF_PROTOCOL);
+		
 		for (InqleService service: InqleService.values()) {
-			ServiceTracker serviceTracker = new ServiceTracker(bundleContext,
-				createRemoteFilter(service.serviceClassName), this);
-			serviceTracker.open();
-			serviceTrackers.add(serviceTracker);
+			trackServiceType(service.serviceClassName);
 		}
 
 		waitForDone();
 
 		return IApplication.EXIT_OK;
+	}
+	
+	public void trackServiceType(String serviceClassName) throws InvalidSyntaxException {
+		ServiceTracker serviceTracker = new ServiceTracker(
+			bundleContext, 
+			createRemoteFilter(serviceClassName), 
+			this);
+		serviceTracker.open();
+		serviceTrackers.add(serviceTracker);
 	}
 
 //	private void createContainer(String serverUri, String protocol) throws Exception {
