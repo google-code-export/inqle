@@ -13,6 +13,7 @@ package org.inqle.ecf.server;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
 import org.eclipse.equinox.app.IApplication;
@@ -29,6 +30,8 @@ public class ServerApplication implements IApplication,
 //	private static final String DEFAULT_CONTAINER_TYPE = "ecf.r_osgi.peer";
 //	public static final String DEFAULT_CONTAINER_ID = null;
 
+	private static Logger log = Logger.getLogger(ServerApplication.class);
+	
 	private BundleContext bundleContext;
 	private ServiceTracker containerManagerServiceTracker;
 
@@ -43,6 +46,7 @@ public class ServerApplication implements IApplication,
 	private List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
 
 	public Object start(IApplicationContext appContext) throws Exception {
+		log.info("ECF Server starting...");
 		bundleContext = Activator.getContext();
 		// Process Arguments
 		processArgs(appContext);

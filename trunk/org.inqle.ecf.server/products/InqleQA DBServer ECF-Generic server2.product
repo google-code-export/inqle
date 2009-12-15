@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Generic Hello Host" uid="org.eclipse.ecf.examples.remoteservices.generichellohost" application="org.inqle.qa.ecf.server.HelloHost" version="1.0.0" useFeatures="false" includeLaunchers="false">
+<product name="Generic ECF Host #2" uid="org.inqle.ecf.server.2" application="org.inqle.ecf.server" version="1.0.0" useFeatures="false" includeLaunchers="false">
 
    <configIni use="default">
    </configIni>
@@ -52,7 +52,7 @@
       <plugin id="org.inqle.core"/>
       <plugin id="org.inqle.log4j.properties" fragment="true"/>
       <plugin id="org.inqle.qa.common"/>
-      <plugin id="org.inqle.qa.ecf.server"/>
+      <plugin id="org.inqle.qa.ecf.server" fragment=""/>
    </plugins>
 
    <configurations>
