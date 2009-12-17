@@ -2,20 +2,4 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.inqle.ecf.extensionPoint.servers" name="ECF Servers" schema="schema/org.inqle.ecf.extensionPoint.servers.exsd"/>
-   <extension-point id="org.inqle.ecf.extensionPoint.services" name="ECF Services" schema="schema/org.inqle.ecf.extensionPoint.services.exsd"/>
-
-<!--
-   <extension
-         id="HelloApplication"
-         point="org.eclipse.core.runtime.applications">
-      <application
-            cardinality="singleton-global"
-            thread="main"
-            visible="true">
-         <run
-               class="org.inqle.ecf.client.ClientApplication">
-         </run>
-      </application>
-   </extension>
--->
 </plugin>

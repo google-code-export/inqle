@@ -3,20 +3,13 @@ package org.inqle.ecf.client;
 import java.util.List;
 
 import org.inqle.core.extensions.util.ExtensionFactory;
-import org.inqle.ecf.common.EcfServer;
-import org.inqle.ecf.common.EcfService;
 
 public class EcfServers {
 	
 	public static final String EXTENSION_POINT_ECF_SERVERS = "org.inqle.ecf.extensionPoint.servers";
-	public static final String EXTENSION_POINT_ECF_SERVICES = "org.inqle.ecf.extensionPoint.services";
 	
 	public static List<EcfServer> listEcfServersFromExtensions() {
 		return ExtensionFactory.getExtensionObjects(EcfServer.class, EXTENSION_POINT_ECF_SERVERS);
-	}
-	
-	public static List<EcfService> listEcfServicesFromExtensions() {
-		return ExtensionFactory.getExtensionObjects(EcfService.class, EXTENSION_POINT_ECF_SERVICES);
 	}
 }
 
