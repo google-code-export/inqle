@@ -112,6 +112,22 @@ public class ExtensionFactory {
 		return extList;
 	}
 	
+	/**
+	 * Get a list of all extensions objects extending the provided extension point
+	 * @param extensionPointId the id of the extension point
+	 * @return 
+	 */
+	public static <T> List<T> getExtensionObjects(Class<T> objectClass, String extensionPointId) {
+		List<T> extList = new ArrayList<T>();
+		
+		List<IExtensionSpec> extSpecs = getExtensionSpecs(extensionPointId);
+		for (IExtensionSpec spec: extSpecs) {
+			T extObj = createExtensionObject(objectClass, spec);
+			extList.add(extObj);
+		}
+		return extList;
+	}
+	
 	
 	/**
 	 * Creates an object, given an extension spec
@@ -134,6 +150,31 @@ public class ExtensionFactory {
 		}
 		try {
 			instance = clazz.newInstance();
+			if (instance instanceof IJavaExtension) {
+				((IJavaExtension)instance).setSpec(spec);
+			}
+		} catch (Exception e) {
+			log.error("Unable to instantiate object of class " + className, e);
+			return null;
+		}
+		return instance;
+	}
+	
+	/**
+	 * Creates an object of the specified class, given an extension spec.
+	 * If the class implements IJavaExtension, then the values of this extension will be added to the new object
+	 * @param spec
+	 * @return
+	 */
+	public static <T> T createExtensionObject(Class<T> objectClass, IExtensionSpec spec) {
+		T instance = null;
+		String className = spec.getAttribute(InqleInfo.CLASS_ATTRIBUTE);
+		if (className == null) {
+			log.error("Unable to instantiate object from spec " + spec + " as it lacks attribute '" + InqleInfo.CLASS_ATTRIBUTE + "'.");
+			return null;
+		}
+		try {
+			instance = objectClass.newInstance();
 			if (instance instanceof IJavaExtension) {
 				((IJavaExtension)instance).setSpec(spec);
 			}

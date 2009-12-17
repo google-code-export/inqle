@@ -14,6 +14,7 @@ import thewebsemantic.Namespace;
  * TODO replace UniqueJenabean w/ a base class which does not have replicate or clone methods or name
  * or description
  */
+@TargetDatabaseId(Persister.CORE_DATABASE_ID)
 @TargetModelName(Site.SITE_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class Site extends UniqueJenabean {
