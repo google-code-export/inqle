@@ -3,9 +3,7 @@ package org.inqle.ecf.server;
 import java.util.Properties;
 
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
-import org.inqle.qa.common.services.Hello;
-import org.inqle.qa.common.services.IHello;
-import org.inqle.qa.common.services.QAServiceConstants;
+import org.inqle.ecf.common.EcfServiceConstants;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
@@ -27,7 +25,7 @@ public class ServiceRegistrar {
 		Properties props = new Properties();
 		// add OSGi service property indicating this
 		props.put(IDistributionConstants.REMOTE_INTERFACES, IDistributionConstants.REMOTE_INTERFACES_WILDCARD);
-		props.put(QAServiceConstants.PROPERTY_SERVER_URI, containerId);
+		props.put(EcfServiceConstants.PROPERTY_SERVER_URI, containerId);
 		
 		ServiceRegistration serviceRegistration = bundleContext.registerService(
 			serviceName, serviceObject, props);
