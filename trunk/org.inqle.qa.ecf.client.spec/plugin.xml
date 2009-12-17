@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.inqle.ecf.servers">
+   		<ecfServer
+   			uri="ecftcp://localhost:3787/server1"
+   			port="3787"
+   			protocol="ecf.generic.client"/>
+   		<ecfServer
+   			uri="ecftcp://localhost:3788/server2"
+   			port="3788"
+   			protocol="ecf.generic.client"/>
+   </extension>
+   <extension
+         point="org.inqle.ecf.services">
+   		<ecfService
+   			serviceClassName="org.inqle.qa.common.services.IHello"/>
+   </extension>
+</plugin>
