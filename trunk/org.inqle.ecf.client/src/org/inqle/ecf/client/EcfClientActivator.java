@@ -13,16 +13,20 @@ package org.inqle.ecf.client;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+public class EcfClientActivator implements BundleActivator {
 
 	private static BundleContext context;
+	private Servicer servicer;
 
 	public void start(BundleContext ctxt) throws Exception {
 		context = ctxt;
+		servicer = Servicer.getInstance();
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		context = null;
+		//TODO: needed?
+		servicer.removeServices();
 	}
 
 	public static BundleContext getContext() {

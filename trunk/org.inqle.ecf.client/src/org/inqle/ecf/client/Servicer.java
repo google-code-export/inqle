@@ -21,21 +21,16 @@ import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.RemoteServiceHelper;
-import org.eclipse.equinox.app.IApplication;
-import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.concurrent.future.IFuture;
-import org.inqle.qa.common.services.IHello;
-import org.inqle.qa.common.services.QAServiceConstants;
+import org.inqle.ecf.common.EcfService;
+import org.inqle.ecf.common.EcfServiceConstants;
+import org.inqle.ecf.common.EcfServices;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
-import org.inqle.core.extensions.util.ExtensionFactory;
-import org.inqle.ecf.client.EcfClientConstants;
-import org.inqle.ecf.common.EcfServer;
-import org.inqle.ecf.common.EcfService;
 
 /**
  * This class is responsible for holding references to all servers and services known to this INQLE app.
@@ -53,7 +48,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 
 	private Map<String, Object> services = new HashMap<String, Object>();
 	
-	private BundleContext bundleContext = Activator.getContext();
+	private BundleContext bundleContext = EcfClientActivator.getContext();
 	private ServiceTracker containerManagerServiceTracker;
 	private List<ServiceTracker> serviceTrackers = new ArrayList<ServiceTracker>();
 //	private String containerType = DEFAULT_CONTAINER_TYPE;
@@ -95,31 +90,21 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		return ServicerHolder.instance;
 	}
 	
-	public <T> T getService(Class<T> serviceClass) {
-    	String key = serviceClass.getName();
-    	Object serviceObject = services.get(key);
-    	if (serviceObject == null) return null;
-    	T typedServiceObject = (T)serviceObject;
-    	return typedServiceObject;
-    }
-    
-    public void addService(String serviceClassName, Object serviceObject) {
-    	services.put(serviceClassName, serviceObject);
-    }
-    
-    public void removeService(String serviceClassName) {
-    	services.remove(serviceClassName);
-    }	
-	
-	public enum InqleService {
-	    SERVICE1 (IHello.class.getName());
-	    
-	    public String serviceClassName;
-	    InqleService(String serviceClassName) {
-	    	this.serviceClassName = serviceClassName;
-	    };
-	};
-	
+//	public <T> T getService(Class<T> serviceClass) {
+//    	String key = serviceClass.getName();
+//    	Object serviceObject = services.get(key);
+//    	if (serviceObject == null) return null;
+//    	T typedServiceObject = (T)serviceObject;
+//    	return typedServiceObject;
+//    }
+//    
+//    public void addService(String serviceClassName, Object serviceObject) {
+//    	services.put(serviceClassName, serviceObject);
+//    }
+//    
+//    public void removeService(String serviceClassName) {
+//    	services.remove(serviceClassName);
+//    }	
 
 	public void setPermanentEcfServers() throws Exception {
 		log.info("setPermanentEcfServers()...");
@@ -143,7 +128,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 
 	public void setPermanentServices() throws InvalidSyntaxException {
 //		List<EcfService> ecfServices = ExtensionFactory.getExtensionObjects(EcfService.class, EcfServices.EXTENSION_POINT_ECF_SERVICES);
-		List<EcfService> ecfServices = EcfServers.listEcfServicesFromExtensions();
+		List<EcfService> ecfServices = EcfServices.listEcfServicesFromExtensions();
 		// Create ECF container. This setup is required so that an ECF provider
 		// will be available for handling discovered remote endpoints
 		for (EcfService ecfService: ecfServices) {
@@ -189,7 +174,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 				+ serviceClassName + ")(" + REMOTE + "=*))");
 	}
 
-	public void removeServices() {
+	void removeServices() {
 		for (ServiceTracker serviceTracker: serviceTrackers) {
 			if (serviceTracker != null) {
 				serviceTracker.close();
@@ -245,23 +230,12 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		log.info("Getting service of class:" + serviceClassName);
 		
 		
-		String hostUri = (String)reference.getProperty(QAServiceConstants.PROPERTY_SERVER_URI);
+		String hostUri = (String)reference.getProperty(EcfServiceConstants.PROPERTY_SERVER_URI);
 		if (hostUri==null || hostUri.length()==0) {
-			log.error("Remote service: " + serviceClassName + " did not declare property: " + QAServiceConstants.PROPERTY_SERVER_URI + ".  Ignoring it.");
+			log.error("Remote service: " + serviceClassName + " did not declare property: " + EcfServiceConstants.PROPERTY_SERVER_URI + ".  Ignoring it.");
 			return null;
 		}
-//		if (serviceObject instanceof IServerIdentified) {
-//			log.info("1...");
-//			IServerIdentified siObj = (IServerIdentified)serviceObject;
-//			log.info("2...");
-//			try {
-//				hostUri = siObj.getServerId();
-//			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			log.info("3...");
-//		}
+
 		log.info("Getting server of URI:" + hostUri);
 		if (hostUri==null) {
 			log.warn("Incoming service is not an instance of IServerIdentified, so will ignore it.");
@@ -271,16 +245,16 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		EcfServer server = getEcfServerOfUri(hostUri);
 		log.info("For server " + server.getUri() + ", storing service:" + serviceClassName + "...");
 		
-		if (serviceObject instanceof IHello) {
-			System.out.println("IHello service proxy being added");
-			IHello hello = (IHello) serviceObject;
-			// Call it
-			String helloMessage = hello.hello("org.inqle.ecf.client");
-			log.info("Called hello using proxy, received: " + helloMessage);
-		}
+//		if (serviceObject instanceof IHello) {
+//			System.out.println("IHello service proxy being added");
+//			IHello hello = (IHello) serviceObject;
+//			// Call it
+//			String helloMessage = hello.hello("org.inqle.ecf.client");
+//			log.info("Called hello using proxy, received: " + helloMessage);
+//		}
 		
 		server.addServiceObject(serviceClassName, serviceObject);
-		
+		server.addServiceReference(serviceClassName, reference);
 		// Now get remote service reference and use asynchronous
 		// remote invocation
 		IRemoteService remoteService = (IRemoteService) reference
@@ -299,16 +273,27 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		return serviceObject;
 	}
 
-	private EcfServer getEcfServerOfUri(String hostUri) {
+	private EcfServer getEcfServerOfUri(String serverUri) {
 		for (EcfServer ecfServer: ecfServers) {
-			if (ecfServer.getUri().equals(hostUri)) return ecfServer;
+			if (ecfServer.getUri().equals(serverUri)) return ecfServer;
 		}
 		return null;
+	}
+	
+	public <T> T getServiceObject(Class<T> serviceClass, String serverUri) {
+		EcfServer server = getEcfServerOfUri(serverUri);
+		return server.getServiceObject(serviceClass);
+	}
+	
+	public ServiceReference getServiceReference(String serviceClassName, String serverUri) {
+		EcfServer server = getEcfServerOfUri(serverUri);
+		return server.getServiceReference(serviceClassName);
 	}
 
 	public void modifiedService(ServiceReference reference, Object service) {
 	}
 
+	//TODO: get this working
 	public void removedService(ServiceReference reference, Object service) {
 	}
 

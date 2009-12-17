@@ -1,4 +1,4 @@
-package org.inqle.ecf.common;
+package org.inqle.ecf.client;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.data.rdf.jenabean.TargetDatabaseId;
 import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.osgi.framework.ServiceReference;
 
 import thewebsemantic.Namespace;
 
@@ -29,6 +30,7 @@ public class EcfServer implements IJavaExtension {
 	private String port;
 	private String protocol;
 	private Map<String, Object> ecfServiceObjects = new HashMap<String, Object>();
+	private Map<String, ServiceReference> ecfServiceReferences = new HashMap<String, ServiceReference>();
 	
 	public String getUri() {
 		return uri;
@@ -60,7 +62,13 @@ public class EcfServer implements IJavaExtension {
 	public void addServiceObject(String serviceClassName, Object serviceObject) {
 		ecfServiceObjects.put(serviceClassName, serviceObject);
 	}
-	public Object getServiceObject(String serviceClassName) {
-		return ecfServiceObjects.get(serviceClassName);
+	public <T> T getServiceObject(Class<T> serviceClass) {
+		return (T)ecfServiceObjects.get(serviceClass.getName());
+	}
+	public void addServiceReference(String serviceClassName, ServiceReference reference) {
+		ecfServiceReferences.put(serviceClassName, reference);
+	}
+	public ServiceReference getServiceReference(String serviceClassName) {
+		return ecfServiceReferences.get(serviceClassName);
 	}
 }
