@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %bundleName
 Bundle-SymbolicName: org.inqle.ecf.server;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.inqle.ecf.server.Activator
+Bundle-Activator: org.inqle.ecf.server.EcfServerActivator
 Bundle-Vendor: %bundleProvider
 Bundle-RequiredExecutionEnvironment: CDC-1.1/Foundation-1.1,
  J2SE-1.4
@@ -16,6 +16,6 @@ Import-Package: org.eclipse.ecf.core;version="3.0.0",
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
  org.inqle.core;bundle-version="1.0.0",
- org.inqle.qa.common;bundle-version="1.0.0"
+ org.inqle.ecf.common;bundle-version="1.0.0"
 Bundle-Localization: bundle
 Export-Package: org.inqle.ecf.server;x-internal:=true
