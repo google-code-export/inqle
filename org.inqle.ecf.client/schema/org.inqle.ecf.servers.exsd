@@ -3,7 +3,7 @@
 <schema targetNamespace="org.inqle.ecf.client" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.inqle.ecf.client" id="org.inqle.ecf.extensionPoint.servers" name="ECF Servers"/>
+         <meta.schema plugin="org.inqle.ecf.client" id="org.inqle.ecf.servers" name="ECF Servers"/>
       </appinfo>
       <documentation>
          identifies which ECF servers are available

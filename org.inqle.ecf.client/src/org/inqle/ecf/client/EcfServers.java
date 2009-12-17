@@ -6,7 +6,7 @@ import org.inqle.core.extensions.util.ExtensionFactory;
 
 public class EcfServers {
 	
-	public static final String EXTENSION_POINT_ECF_SERVERS = "org.inqle.ecf.extensionPoint.servers";
+	public static final String EXTENSION_POINT_ECF_SERVERS = "org.inqle.ecf.servers";
 	
 	public static List<EcfServer> listEcfServersFromExtensions() {
 		return ExtensionFactory.getExtensionObjects(EcfServer.class, EXTENSION_POINT_ECF_SERVERS);
