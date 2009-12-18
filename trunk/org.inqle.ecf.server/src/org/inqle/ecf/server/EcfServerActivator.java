@@ -31,20 +31,39 @@ public class EcfServerActivator implements BundleActivator {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 //		context = ctxt;
-		containerId = System.getProperty("org.inqle.ecf.server.containerId");
-		containerType = System.getProperty("org.inqle.ecf.server.containerType");
-		IContainerManager containerManager = getContainerManagerService(bundleContext);
-
-		containerManager.getContainerFactory().createContainer(
-			containerType, new Object[] {containerId});
-			
+		containerId = System.getProperty(EcfServerConstants.ECF_SERVER_CONTAINER_ID_SYSTEM_VARIABLE);
+		containerType = System.getProperty(EcfServerConstants.ECF_SERVER_CONTAINER_TYPE_SYSTEM_VARIABLE);
+		log.info("Creating container of id: " + containerId + " and type: " + containerType);
+		
+		try {
+			IContainerManager containerManager = getContainerManagerService(bundleContext);
+			log.info("Got containerManager");
+			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
+			log.info("Created container");
+		} catch (Exception e) {
+			log.error("Error creating container of id: " + containerId + " and type: " + containerType, e);
+			return;
+		}
+		log.info("Register services...");
 		registerServices(bundleContext);
 	}
 
 	private void registerServices(BundleContext bundleContext) {
 		// register all remote services
+		log.info("Get ECF Services...");
+		List<EcfService> ecfServices = null;
+		try {
+			ecfServices = EcfServices.listEcfServicesFromExtensions();
+			log.info("Successfully got list of ECF services");
+		} catch (Exception e) {
+			log.error("Error getting ECF services", e);
+		}
 		
-		List<EcfService> ecfServices = EcfServices.listEcfServicesFromExtensions();
+		if (ecfServices==null) {
+			log.info("Found no ECF services declared for this server.");
+			return;
+		}
+		log.info("Registering " + ecfServices.size() + " services...");
 		for (EcfService ecfService: ecfServices) {
 			Class serviceClass;
 			Object instance = null;

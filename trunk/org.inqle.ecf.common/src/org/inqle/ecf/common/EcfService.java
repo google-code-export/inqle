@@ -22,10 +22,12 @@ import thewebsemantic.Namespace;
 @Namespace(RDF.INQLE)
 public class EcfService implements IJavaExtension {
 	private String serviceClassName;
+	private String serviceInterfaceName;
 	
 	@Override
 	public void setSpec(IExtensionSpec spec) {
 		serviceClassName = spec.getAttribute("serviceClassName");
+		serviceInterfaceName = spec.getAttribute("serviceInterfaceName");
 	}
 
 	public void setServiceClassName(String serviceClassName) {
@@ -34,5 +36,13 @@ public class EcfService implements IJavaExtension {
 
 	public String getServiceClassName() {
 		return serviceClassName;
+	}
+
+	public void setServiceInterfaceName(String serviceInterfaceName) {
+		this.serviceInterfaceName = serviceInterfaceName;
+	}
+
+	public String getServiceInterfaceName() {
+		return serviceInterfaceName;
 	}
 }

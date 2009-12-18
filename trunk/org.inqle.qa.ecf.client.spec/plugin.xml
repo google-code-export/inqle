@@ -12,9 +12,4 @@
    			port="3788"
    			protocol="ecf.generic.client"/>
    </extension>
-   <extension
-         point="org.inqle.ecf.services">
-   		<ecfService
-   			serviceClassName="org.inqle.qa.common.services.IHello"/>
-   </extension>
 </plugin>
