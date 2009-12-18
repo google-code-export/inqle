@@ -5,5 +5,9 @@ Bundle-SymbolicName: org.inqle.qa.common;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.inqle.qa.common.beans
-Require-Bundle: org.inqle.core;bundle-version="1.0.0"
+Export-Package: org.inqle.qa.common.beans,
+ org.inqle.qa.common.services
+Require-Bundle: org.inqle.core;bundle-version="1.0.0",
+ org.inqle.ecf.common;bundle-version="1.0.0"
+Eclipse-RegisterBuddy: org.inqle.ecf.common;
+Bundle-RegisterBuddy: org.inqle.ecf.common;

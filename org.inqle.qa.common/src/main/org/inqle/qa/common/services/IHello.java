@@ -1,4 +1,4 @@
-package org.inqle.ecf.common;
+package org.inqle.qa.common.services;
 
 public interface IHello {
 
