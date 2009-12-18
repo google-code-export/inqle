@@ -66,6 +66,7 @@ public class EcfServerActivator implements BundleActivator {
 		log.info("Registering " + ecfServices.size() + " services...");
 		for (EcfService ecfService: ecfServices) {
 			Class serviceClass;
+			Class serviceInterface;
 			Object instance = null;
 			try {
 				serviceClass = Class.forName(ecfService.getServiceClassName());
@@ -82,7 +83,7 @@ public class EcfServerActivator implements BundleActivator {
 			ServiceRegistration serviceRegistration = ServiceRegistrar.registerService(
 				bundleContext,
 				containerId,
-				serviceClass.getName(), 
+				ecfService.getServiceInterfaceName(), 
 				instance);
 				
 	//			bundleContext.registerService(IHello.class

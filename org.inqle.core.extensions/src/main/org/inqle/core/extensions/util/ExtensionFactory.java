@@ -122,7 +122,7 @@ public class ExtensionFactory {
 		List<T> extList = new ArrayList<T>();
 		
 		List<IExtensionSpec> extSpecs = getExtensionSpecs(extensionPointId);
-		log.info("GGGGot " + extSpecs.size() + " extension specs for extension point: " + extensionPointId);
+		log.info("Got " + extSpecs.size() + " extension specs for extension point: " + extensionPointId);
 		for (IExtensionSpec spec: extSpecs) {
 			T extObj = createExtensionObject(objectClass, spec);
 			extList.add(extObj);
