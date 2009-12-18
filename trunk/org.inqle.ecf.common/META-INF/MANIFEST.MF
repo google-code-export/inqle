@@ -21,5 +21,3 @@ Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
  org.inqle.core.extensions;bundle-version="1.0.0",
  org.inqle.data.rdf.jenabean;bundle-version="1.0.0"
 Export-Package: org.inqle.ecf.common
-Eclipse-BuddyPolicy: registered
-Bundle-BuddyPolicy: registered
