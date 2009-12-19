@@ -1,0 +1,29 @@
+#summary how developers can package their classes as remote INQLE services, usable by INQLE clients
+
+As of version 0.3.5, INQLE embeds Eclipse Communication Framework (ECF).  This allows INQLE servers to connect with other INQLE servers, to get information or data.
+
+Developers can create a remote service in INQLE by doing the following:
+ # Build your Java class, which performs some valuable task (like a data lookup).
+ # In a bundle to be shared to both client and server INQLE applications, create an interface for it.  E.g. if your class is *org.mycompany.inqle.DataLookup*, then you need an interface named something like *org.mycompany.inqle.IDataLookup*, which includes whichever methods you wish.  Be sure to make your class *implement* the interface.
+ # In a bundle to be shared to both client and server INQLE applications, add this to plugin.xml:
+{{{
+   <extension
+         point="org.inqle.ecf.services">
+   		<ecfService
+   			serviceInterfaceName="org.mycompany.inqle.IDataLookup"
+   			serviceClassName="org.mycompany.inqle.DataLookup"/>
+   </extension>
+}}}
+
+This will accomplish the following:
+On the ECF *server* INQLE application, it will register the service, such that any clients of that server will know the service is available.
+On the ECF *client* INQLE application, it will listen for new servers registering your service, and will make them available.
+
+To get the service object, you can do something like this anywhere in your INQLE code:
+{{{
+String serverUri = "ecftcp://localhost:3787/server1";
+Servicer servicer = Servicer.newInstance();
+IDataLookup dataLookup = servicer.getServiceObject(IDataLookup.class, serverUri);
+//call the method of interest on the remote server
+String data = dataLookup.methodOfInterest();
+}}}
