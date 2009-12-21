@@ -2,22 +2,22 @@
 <launchConfiguration type="org.eclipse.pde.ui.EquinoxLauncher">
 <booleanAttribute key="append.args" value="true"/>
 <booleanAttribute key="automaticAdd" value="true"/>
-<booleanAttribute key="automaticValidate" value="false"/>
+<booleanAttribute key="automaticValidate" value="true"/>
 <stringAttribute key="bootstrap" value=""/>
 <stringAttribute key="checked" value="[NONE]"/>
 <booleanAttribute key="clearConfig" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/InqleEcfServer_3787"/>
 <booleanAttribute key="default_auto_start" value="true"/>
 <intAttribute key="default_start_level" value="4"/>
-<stringAttribute key="deselected_workspace_plugins" value="org.inqle.qa.ecf.client.spec,org.inqle.http.lookup,org.eclipse.rwt.widgets.upload,org.inqle.agent,org.inqle.ecf.client,org.inqle.ui.rap,org.inqle.data.sampling,org.inqle.experiment.rapidminer"/>
+<stringAttribute key="deselected_workspace_plugins" value="org.inqle.qa.ecf.client.spec,org.inqle.http.lookup,org.eclipse.rwt.widgets.upload,org.inqle.agent,org.inqle.ecf.client,org.inqle.ui.rap,org.inqle.data.sampling,org.inqle.qa.client,org.inqle.experiment.rapidminer"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -console"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms40m -Xmx256m -Declipse.ignoreApp=true -Dosgi.noShutdown=true&#13;&#10;-Dorg.inqle.ecf.server.id=&quot;ecftcp://localhost:3787/server1&quot; -Dorg.inqle.ecf.server.containerType=&quot;ecf.generic.server&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms40m -Xmx256m -Declipse.ignoreApp=true -Dosgi.noShutdown=true&#13;&#10;-Dorg.inqle.ecf.server.id=&quot;ecftcp://localhost:3787&quot;"/>
 <stringAttribute key="pde.version" value="3.3"/>
 <booleanAttribute key="show_selected_only" value="false"/>
-<stringAttribute key="target_bundles" value="javax.servlet@default:default,org.eclipse.equinox.concurrent@default:default,org.eclipse.ecf.provider.remoteservice@default:default,org.eclipse.ecf.discovery@default:default,org.eclipse.osgi@-1:true,org.eclipse.osgi.services@default:default,org.eclipse.ecf@default:default,org.eclipse.ecf.osgi.services.discovery@default:default,org.eclipse.core.jobs@default:default,org.eclipse.ecf.osgi.services@default:default,org.eclipse.core.runtime@default:true,org.eclipse.ecf.osgi.services.distribution@default:default,org.eclipse.equinox.preferences@default:default,org.eclipse.ecf.provider@default:default,org.eclipse.equinox.registry@default:default,org.eclipse.ecf.remoteservice@default:default,org.eclipse.equinox.common@2:true,org.eclipse.ecf.provider.jmdns@default:default,org.eclipse.equinox.app@default:default,org.eclipse.ecf.sharedobject@default:default,org.eclipse.ecf.identity@default:default,org.eclipse.core.contenttype@default:default"/>
+<stringAttribute key="target_bundles" value="org.apache.commons.httpclient@default:default,org.eclipse.ecf.osgi.services@default:default,org.eclipse.ecf.remoteservice@default:default,org.eclipse.equinox.common@2:true,org.eclipse.equinox.registry@default:default,org.eclipse.ecf.provider.jmdns@default:default,org.eclipse.ecf.remoteservice.rest@default:default,org.eclipse.ecf.provider.remoteservice@default:default,org.eclipse.core.contenttype@default:default,org.eclipse.core.jobs@default:default,org.eclipse.ecf.identity@default:default,org.eclipse.ecf.osgi.services.discovery@default:default,org.eclipse.equinox.concurrent@default:default,org.eclipse.ecf.sharedobject@default:default,org.eclipse.osgi@-1:true,org.eclipse.osgi.services@default:default,javax.servlet@default:default,org.eclipse.equinox.preferences@default:default,org.eclipse.ecf@default:default,org.eclipse.ecf.provider@default:default,org.eclipse.ecf.osgi.services.distribution@default:default,org.eclipse.equinox.app@default:default,org.eclipse.ecf.discovery@default:default,org.eclipse.core.runtime@default:true"/>
 <booleanAttribute key="tracing" value="false"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<stringAttribute key="workspace_bundles" value="org.inqle.ecf.server@default:default,org.inqle.qa.common@default:default,org.inqle.core@default:default,org.inqle.ecf.common@default:default,org.inqle.core.extensions@default:default,org.inqle.data.rdf.jenabean@default:default,org.inqle.log4j.properties@default:false"/>
+<stringAttribute key="workspace_bundles" value="org.inqle.ecf.server@default:default,org.inqle.ecf.common@default:default,org.inqle.core.extensions@default:default,org.inqle.qa.common@default:default,org.inqle.log4j.properties@default:false,org.inqle.qa.server@default:default,org.inqle.core@default:default,org.inqle.data.rdf.jenabean@default:default"/>
 </launchConfiguration>

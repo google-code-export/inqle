@@ -1,4 +1,4 @@
-package org.inqle.ecf.server;
+package org.inqle.ecf.common;
 
 public interface IInqleEcfService {
 

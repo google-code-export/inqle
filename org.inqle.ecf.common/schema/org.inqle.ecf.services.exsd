@@ -60,6 +60,27 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="protocol" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="produce" type="boolean" use="default" value="true">
+            <annotation>
+               <documentation>
+                  if true, this server will produce this service
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="consume" type="boolean" use="default" value="true">
+            <annotation>
+               <documentation>
+                  if true, this server will consume this service
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

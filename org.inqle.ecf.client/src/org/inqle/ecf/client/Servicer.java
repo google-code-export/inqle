@@ -75,7 +75,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 			log.error("Error setting ECF servers from plugin extensions", e);
 		}
 		try {
-			setPermanentServices();
+			setPermanentEcfServices();
 		} catch (InvalidSyntaxException e) {
 			log.error("Error setting ECF services from plugin extensions", e);
 		}
@@ -129,9 +129,9 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		createContainer(ecfServer.getUri(), ecfServer.getPort(), ecfServer.getProtocol());
 	}
 
-	public void setPermanentServices() throws InvalidSyntaxException {
+	public void setPermanentEcfServices() throws InvalidSyntaxException {
 //		List<EcfService> ecfServices = ExtensionFactory.getExtensionObjects(EcfService.class, EcfServices.EXTENSION_POINT_ECF_SERVICES);
-		List<EcfService> ecfServices = EcfServices.listEcfServicesFromExtensions();
+		List<EcfService> ecfServices = EcfServices.listEcfClientServicesFromExtensions();
 		// Create ECF container. This setup is required so that an ECF provider
 		// will be available for handling discovered remote endpoints
 		for (EcfService ecfService: ecfServices) {
@@ -177,7 +177,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 				+ serviceClassName + ")(" + REMOTE + "=*))");
 	}
 
-	void removeServices() {
+	public void removeServices() {
 		for (ServiceTracker serviceTracker: serviceTrackers) {
 			if (serviceTracker != null) {
 				serviceTracker.close();

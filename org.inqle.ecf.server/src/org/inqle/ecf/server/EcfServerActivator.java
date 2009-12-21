@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.ecf.core.IContainerManager;
 import org.inqle.ecf.common.EcfService;
 import org.inqle.ecf.common.EcfServices;
+import org.inqle.ecf.common.IInqleEcfService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -17,8 +18,9 @@ public class EcfServerActivator implements BundleActivator {
 //	private static BundleContext context;
 	private ServiceTracker containerManagerServiceTracker;
 	private List<ServiceRegistration> serviceRegistrations = new ArrayList<ServiceRegistration>();
-	private String containerId;
-	private String containerType;
+	private String baseContainerId;
+//	private String containerType;
+	private List<String> containerTypes = new ArrayList<String>();
 	
 	private static Logger log = Logger.getLogger(EcfServerActivator.class);
 	
@@ -30,30 +32,13 @@ public class EcfServerActivator implements BundleActivator {
 	 * )
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
-//		context = ctxt;
-		containerId = System.getProperty(EcfServerConstants.ECF_SERVER_CONTAINER_ID_SYSTEM_VARIABLE);
-		containerType = System.getProperty(EcfServerConstants.ECF_SERVER_CONTAINER_TYPE_SYSTEM_VARIABLE);
-		log.info("Creating container of id: " + containerId + " and type: " + containerType);
+		baseContainerId = System.getProperty(EcfServerConstants.ECF_SERVER_CONTAINER_ID_SYSTEM_VARIABLE);
 		
-		try {
-			IContainerManager containerManager = getContainerManagerService(bundleContext);
-			log.info("Got containerManager");
-			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
-			log.info("Created container");
-		} catch (Exception e) {
-			log.error("Error creating container of id: " + containerId + " and type: " + containerType, e);
-			return;
-		}
-		log.info("Register services...");
-		registerServices(bundleContext);
-	}
-
-	private void registerServices(BundleContext bundleContext) {
-		// register all remote services
+		// register all remote services, creating containers along the way
 		log.info("Get ECF Services...");
 		List<EcfService> ecfServices = null;
 		try {
-			ecfServices = EcfServices.listEcfServicesFromExtensions();
+			ecfServices = EcfServices.listEcfServerServicesFromExtensions();
 			log.info("Successfully got list of ECF services");
 		} catch (Exception e) {
 			log.error("Error getting ECF services", e);
@@ -65,8 +50,9 @@ public class EcfServerActivator implements BundleActivator {
 		}
 		log.info("Registering " + ecfServices.size() + " services...");
 		for (EcfService ecfService: ecfServices) {
+			registerContainerIfNotDone(bundleContext, ecfService.getProtocol());
 			Class serviceClass;
-			Class serviceInterface;
+//			Class serviceInterface;
 			Object instance = null;
 			try {
 				serviceClass = Class.forName(ecfService.getServiceClassName());
@@ -78,18 +64,33 @@ public class EcfServerActivator implements BundleActivator {
 			}
 			
 			if (instance instanceof IInqleEcfService) {
-				((IInqleEcfService)instance).setServerId(containerId);
+				((IInqleEcfService)instance).setServerId(baseContainerId);
 			}
 			ServiceRegistration serviceRegistration = ServiceRegistrar.registerService(
 				bundleContext,
-				containerId,
+				baseContainerId,
 				ecfService.getServiceInterfaceName(), 
 				instance);
 				
-	//			bundleContext.registerService(IHello.class
-	//				.getName(), new Hello(containerId), props);
 			serviceRegistrations.add(serviceRegistration);
-			System.out.println("Registered service: " + serviceClass.getName() + " on ECF Server: " + containerId);
+			System.out.println("Registered service: " + serviceClass.getName() + " on ECF Server: " + baseContainerId);
+		}
+	}
+	
+	private void registerContainerIfNotDone(BundleContext bundleContext, String containerType) {
+		if (containerTypes.contains(containerType)) return;
+		String containerId = baseContainerId + "/" + containerType;
+		log.info("Creating container of id: " + containerId + " and type: " + containerType);
+		
+		try {
+			IContainerManager containerManager = getContainerManagerService(bundleContext);
+			log.info("Got containerManager");
+			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
+			log.info("Created container");
+			containerTypes.add(containerType);
+		} catch (Exception e) {
+			log.error("Error creating container of id: " + containerId + " and type: " + containerType, e);
+			return;
 		}
 	}
 
