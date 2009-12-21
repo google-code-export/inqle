@@ -1,6 +1,8 @@
 package org.inqle.qa.common.services;
 
-public interface IHello {
+import org.inqle.ecf.common.IInqleEcfService;
+
+public interface IHello extends IInqleEcfService {
 
 	public String hello(String from);
 	

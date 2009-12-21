@@ -130,6 +130,25 @@ public class ExtensionFactory {
 		return extList;
 	}
 	
+	/**
+	 * Get a list of all extensions objects extending the provided extension point
+	 * here the specified attribute has the specified value
+	 * @param extensionPointId the id of the extension point
+	 * @return 
+	 */
+	public static <T> List<T> getExtensionObjectsWithValue(Class<T> objectClass, String extensionPointId, String attribute, String value) {
+		log.info("getExtensionObjects()...");
+		List<T> extList = new ArrayList<T>();
+		
+		List<IExtensionSpec> extSpecs = getExtensionsWithValue(extensionPointId, attribute, value);
+		log.info("Got " + extSpecs.size() + " extension specs for extension point: " + extensionPointId);
+		for (IExtensionSpec spec: extSpecs) {
+			T extObj = createExtensionObject(objectClass, spec);
+			extList.add(extObj);
+		}
+		return extList;
+	}
+	
 	
 	/**
 	 * Creates an object, given an extension spec

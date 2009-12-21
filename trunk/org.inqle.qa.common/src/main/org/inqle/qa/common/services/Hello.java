@@ -15,6 +15,11 @@ public class Hello implements IHello {
 		System.out.println("Hello server: " + serverId + " reports: hello from="+from);
 		return "TO: " + from + ", FROM: " + serverId + "; HELLO!";
 	}
+	
+	public void setServerId(String containerId) {
+		this.serverId = containerId;
+		
+	}
 
 //	public void setServerId(String serverId) {
 //		this.serverId = serverId;

@@ -8,8 +8,8 @@
    			port="3787"
    			protocol="ecf.generic.client"/>
    		<ecfServer
-   			uri="ecftcp://localhost:3788/server2"
+   			uri="ecftcp://localhost:3788/rest2"
    			port="3788"
-   			protocol="ecf.generic.client"/>
+   			protocol="ecf.rest.client"/>
    </extension>
 </plugin>
