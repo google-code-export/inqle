@@ -60,24 +60,47 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="protocol" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="produce" type="boolean" use="default" value="true">
+         <attribute name="produce" use="default" value="true">
             <annotation>
                <documentation>
                   if true, this server will produce this service
                </documentation>
             </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="true">
+                  </enumeration>
+                  <enumeration value="false">
+                  </enumeration>
+               </restriction>
+            </simpleType>
          </attribute>
-         <attribute name="consume" type="boolean" use="default" value="true">
+         <attribute name="consume" use="default" value="true">
             <annotation>
                <documentation>
                   if true, this server will consume this service
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="true">
+                  </enumeration>
+                  <enumeration value="false">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="serverProtocol" type="string">
+            <annotation>
+               <documentation>
+                  the server ECF protocol that should be used to produce this service
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="clientProtocol" type="string">
+            <annotation>
+               <documentation>
+                  the client ECF protocol that must be used to access this service
                </documentation>
             </annotation>
          </attribute>

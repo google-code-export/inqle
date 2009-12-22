@@ -16,12 +16,12 @@ public class EcfServices {
 	private static Logger log = Logger.getLogger(EcfServices.class);
 	
 	public static List<EcfService> listEcfClientServicesFromExtensions() {
-		log.info("listEcfServicesFromExtensions()...");
+		log.info("listEcfClientServicesFromExtensions()...");
 		return ExtensionFactory.getExtensionObjectsWithValue(EcfService.class, EXTENSION_POINT_ECF_SERVICES, ATTRIBUTE_CONSUME, "true");
 	}
 	
 	public static List<EcfService> listEcfServerServicesFromExtensions() {
-		log.info("listEcfServicesFromExtensions()...");
+		log.info("listEcfServerServicesFromExtensions()...");
 		return ExtensionFactory.getExtensionObjectsWithValue(EcfService.class, EXTENSION_POINT_ECF_SERVICES, ATTRIBUTE_PRODUCE, "true");
 	}
 }

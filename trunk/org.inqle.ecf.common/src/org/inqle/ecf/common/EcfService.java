@@ -23,17 +23,15 @@ import thewebsemantic.Namespace;
 public class EcfService implements IJavaExtension {
 	private String serviceClassName;
 	private String serviceInterfaceName;
-	private String protocol;
-	
-	public void setProtocol(String protocol) {
-		this.protocol = protocol;
-	}
+	private String serverProtocol;
+	private String clientProtocol;
 
 	@Override
 	public void setSpec(IExtensionSpec spec) {
 		serviceClassName = spec.getAttribute("serviceClassName");
 		serviceInterfaceName = spec.getAttribute("serviceInterfaceName");
-		protocol = spec.getAttribute("protocol");
+		serverProtocol = spec.getAttribute("serverProtocol");
+		clientProtocol = spec.getAttribute("clientProtocol");
 	}
 
 	public void setServiceClassName(String serviceClassName) {
@@ -52,7 +50,19 @@ public class EcfService implements IJavaExtension {
 		return serviceInterfaceName;
 	}
 
-	public String getProtocol() {
-		return protocol;
+	public String getServerProtocol() {
+		return serverProtocol;
+	}
+
+	public void setServerProtocol(String serverProtocol) {
+		this.serverProtocol = serverProtocol;
+	}
+
+	public String getClientProtocol() {
+		return clientProtocol;
+	}
+
+	public void setClientProtocol(String clientProtocol) {
+		this.clientProtocol = clientProtocol;
 	}
 }
