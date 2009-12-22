@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.ecf.core.IContainerFactory;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
+import org.inqle.ecf.common.EcfServerConstants;
 import org.inqle.ecf.common.EcfService;
 import org.inqle.ecf.common.EcfServiceConstants;
 import org.inqle.ecf.common.EcfServices;
@@ -165,6 +166,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		IContainerFactory containerFactory = getContainerManagerService()
 				.getContainerFactory();
 		//	ID serverId = IDFactory.getDefault().createStringID(serverUri);
+		log.info("creating container: " + serverUri);
 		containerFactory.createContainer(protocol, new Object[] {serverUri, port});
 	}
 	
@@ -231,9 +233,9 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 //		log.info("Getting service of class:" + serviceClassName);
 		
 		
-		String hostUri = (String)reference.getProperty(EcfServiceConstants.PROPERTY_SERVER_URI);
+		String hostUri = (String)reference.getProperty(EcfServerConstants.PROPERTY_SERVER_URI);
 		if (hostUri==null || hostUri.length()==0) {
-			log.error("Remote service: " + serviceClassName + " did not declare property: " + EcfServiceConstants.PROPERTY_SERVER_URI + ".  Ignoring it.");
+			log.error("Remote service: " + serviceClassName + " did not declare property: " + EcfServerConstants.PROPERTY_SERVER_URI + ".  Ignoring it.");
 			return null;
 		}
 

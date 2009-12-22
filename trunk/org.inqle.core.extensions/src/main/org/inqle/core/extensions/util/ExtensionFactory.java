@@ -137,7 +137,7 @@ public class ExtensionFactory {
 	 * @return 
 	 */
 	public static <T> List<T> getExtensionObjectsWithValue(Class<T> objectClass, String extensionPointId, String attribute, String value) {
-		log.info("getExtensionObjects()...");
+		log.info("getExtensionObjectsWithValue()...");
 		List<T> extList = new ArrayList<T>();
 		
 		List<IExtensionSpec> extSpecs = getExtensionsWithValue(extensionPointId, attribute, value);
@@ -220,20 +220,21 @@ public class ExtensionFactory {
 		IExtensionPoint extension = registry.getExtensionPoint(extensionPointId);
 		
 		if (extension == null) {
-			//log.error("Unable to find extension-point " + extensionPointId);
+			log.error("Unable to find extension-point " + extensionPointId);
 		} else {
 			//log.trace("Found extension-point " + extensionPointId + "; Valid?="+extension.isValid());
 			IExtension[] extensions =  extension.getExtensions();
 			for (int i = 0; i < extensions.length; i++) {
-				String extensionId = extensions[i].getNamespaceIdentifier() + "." + extensions[i].getSimpleIdentifier();
+//				String extensionId = extensions[i].getNamespaceIdentifier() + "." + extensions[i].getSimpleIdentifier();
 				IConfigurationElement [] configElements = extensions[i].getConfigurationElements();
 				//log.trace("Found extensions w/ configElements of length="+configElements.length);
 				for (int j = 0; j < configElements.length; j++) {
 					String foundVal = configElements[j].getAttribute(attribute);
+					log.info("Testing for attribute: " + attribute + ".  Found value: " + foundVal);
 					if (foundVal != null && foundVal.equals(value)) {
 						IExtensionSpec sElement = ExtensionSpecFactory.createExtensionSpec(configElements[j], extensions[i].getContributor().getName());
 						extList.add(sElement);
-							//log.trace("Added matching configElement w/ " + attribute + "=" + foundVal + "; element=" + sElement.toString());
+							
 
 					}
 				}
