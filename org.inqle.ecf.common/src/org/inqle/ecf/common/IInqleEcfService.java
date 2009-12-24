@@ -4,4 +4,5 @@ public interface IInqleEcfService {
 
 	public void setServerId(String containerId);
 
+	public String getServerId();
 }

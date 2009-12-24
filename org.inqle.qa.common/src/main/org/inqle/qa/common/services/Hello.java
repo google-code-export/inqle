@@ -18,9 +18,12 @@ public class Hello implements IHello {
 	
 	public void setServerId(String containerId) {
 		this.serverId = containerId;
-		
 	}
 
+	public String getServerId() {
+		return this.serverId;
+	}
+	
 //	public void setServerId(String serverId) {
 //		this.serverId = serverId;
 //	}
