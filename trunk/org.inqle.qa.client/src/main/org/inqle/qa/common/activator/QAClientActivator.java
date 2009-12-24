@@ -5,6 +5,7 @@ import org.inqle.ecf.client.Servicer;
 import org.inqle.qa.common.services.IHello;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.inqle.rdf.object.services.IRdfObjectService;
 
 public class QAClientActivator implements BundleActivator{
 
@@ -20,6 +21,7 @@ public class QAClientActivator implements BundleActivator{
 		IHello hello2 = servicer.getServiceObject(IHello.class, "ecftcp://localhost:3788/server2");
 		log.info("hello2.hello()" + hello2.hello("QA Client (to ECF server #2)"));
 		
+		IRdfObjectService rdfObjectService = servicer.getServiceObject(IRdfObjectService.class, "ecftcp://localhost:3787/server1");
 	}
 
 	public void stop(BundleContext context) throws Exception {

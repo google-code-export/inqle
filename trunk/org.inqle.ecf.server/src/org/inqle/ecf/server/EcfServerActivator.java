@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.ecf.core.ContainerFactory;
+import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.IContainerManager;
+import org.eclipse.ecf.core.identity.ID;
+import org.eclipse.ecf.core.identity.IDFactory;
 import org.inqle.ecf.common.EcfServerConstants;
 import org.inqle.ecf.common.EcfService;
 import org.inqle.ecf.common.EcfServices;
@@ -102,7 +106,11 @@ private static final String BASE_PROPERTY_NAME = "org.inqle.ecf.server.uri.";
 		try {
 			IContainerManager containerManager = getContainerManagerService(bundleContext);
 			log.info("Got containerManager");
-			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
+		    ID targetID = IDFactory.getDefault().createStringID(containerId);
+	        containerManager.getContainerFactory().createContainer(containerType, new Object[] {targetID});
+
+			//works for generic but not REST
+//			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
 			log.info("Created container");
 			containerTypes.add(containerType);
 		} catch (Exception e) {

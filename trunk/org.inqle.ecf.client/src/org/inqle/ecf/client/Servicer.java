@@ -18,10 +18,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.eclipse.ecf.core.IContainerFactory;
 import org.eclipse.ecf.core.IContainerManager;
+import org.eclipse.ecf.core.identity.ID;
+import org.eclipse.ecf.core.identity.IDFactory;
 import org.eclipse.ecf.osgi.services.distribution.IDistributionConstants;
 import org.inqle.ecf.common.EcfServerConstants;
 import org.inqle.ecf.common.EcfService;
-import org.inqle.ecf.common.EcfServiceConstants;
 import org.inqle.ecf.common.EcfServices;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
@@ -167,7 +168,12 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 				.getContainerFactory();
 		//	ID serverId = IDFactory.getDefault().createStringID(serverUri);
 		log.info("creating container: " + serverUri);
-		containerFactory.createContainer(protocol, new Object[] {serverUri, port});
+		
+		ID targetID = IDFactory.getDefault().createStringID(serverUri);
+		containerFactory.createContainer(protocol, new Object[] {targetID});
+
+		//works for generic but not REST
+//		containerFactory.createContainer(protocol, new Object[] {serverUri, port});
 	}
 	
 	private Filter createRemoteFilter(String serviceClassName) throws InvalidSyntaxException {
