@@ -144,6 +144,10 @@ public class ExtensionFactory {
 		log.info("Got " + extSpecs.size() + " extension specs for extension point: " + extensionPointId);
 		for (IExtensionSpec spec: extSpecs) {
 			T extObj = createExtensionObject(objectClass, spec);
+			if (extObj==null) {
+				log.warn("Unable to create object of class " + objectClass);
+			}
+			log.info("Adding extObj=" + extObj);
 			extList.add(extObj);
 		}
 		return extList;

@@ -21,3 +21,5 @@ Bundle-Localization: bundle
 Export-Package: org.inqle.ecf.server;x-internal:=true
 Eclipse-BuddyPolicy: global
 Bundle-BuddyPolicy: global
+Bundle-ClassPath: bin/,
+ .

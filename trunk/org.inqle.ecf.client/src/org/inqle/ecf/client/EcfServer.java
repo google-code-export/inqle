@@ -71,4 +71,10 @@ public class EcfServer implements IJavaExtension {
 	public ServiceReference getServiceReference(String serviceClassName) {
 		return ecfServiceReferences.get(serviceClassName);
 	}
+	
+	@Override
+	public String toString() {
+		String s = "EcfServer: {uri=" + uri + "; port=" + port + "; protocol=" + protocol + "; number of ecfServiceObjects=" + ecfServiceObjects.size() + "}";
+		return s;
+	}
 }
