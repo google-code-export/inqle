@@ -9,8 +9,8 @@
    			clientProtocol="ecf.generic.client"
    			serverProtocol="ecf.generic.server"
    			produce="true"
-   			consume="true"/>
-   		
+   			consume="false"/>
+   		<!--
    		<ecfService
    			serviceInterfaceName="org.inqle.qa.common.services.IHello"
    			serviceClassName="org.inqle.qa.common.services.Hello"
@@ -26,5 +26,14 @@
    			serverProtocol="ecf.generic.server"
    			produce="true"
    			consume="false"/>
+   			
+         <ecfService
+   			serviceInterfaceName="org.inqle.rdf.object.services.IRdfObjectService"
+   			serviceClassName="org.inqle.rdf.object.services.RdfObjectService"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			produce="true"
+   			consume="true"/>
+   			-->
    </extension>
 </plugin>

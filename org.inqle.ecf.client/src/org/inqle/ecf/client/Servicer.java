@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.IContainerFactory;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.core.identity.ID;
@@ -45,15 +46,15 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 
 //	public static final String ECF_PROTOCOL = "ecf.generic.client";
 
-	private Map<String, Object> services = new HashMap<String, Object>();
+//	private Map<String, Object> services = new HashMap<String, Object>();
 	
 	private BundleContext bundleContext;
 	private ServiceTracker containerManagerServiceTracker;
 	private List<ServiceTracker> serviceTrackers = new ArrayList<ServiceTracker>();
 //	private String containerType = DEFAULT_CONTAINER_TYPE;
 
-	private final Object appLock = new Object();
-	private boolean done = false;
+//	private final Object appLock = new Object();
+//	private boolean done = false;
 	private List<EcfServer> ecfServers = new ArrayList<EcfServer>();
 
 	/* *********************************************************************
@@ -128,12 +129,15 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 	}
 	
 	private void addEcfServer(EcfServer ecfServer) throws Exception {
-		createContainer(ecfServer.getUri(), ecfServer.getPort(), ecfServer.getProtocol());
+//		createContainer(ecfServer.getUri(), ecfServer.getPort(), ecfServer.getProtocol());
+		createContainer(ecfServer.getUri(), ecfServer.getProtocol());
+//		createContainer(ecfServer.getProtocol());
 	}
 
 	public void setPermanentEcfServices() throws InvalidSyntaxException {
 //		List<EcfService> ecfServices = ExtensionFactory.getExtensionObjects(EcfService.class, EcfServices.EXTENSION_POINT_ECF_SERVICES);
 		List<EcfService> ecfServices = EcfServices.listEcfClientServicesFromExtensions();
+		log.info("Found " + ecfServices.size() + " services to register.");
 		// Create ECF container. This setup is required so that an ECF provider
 		// will be available for handling discovered remote endpoints
 		for (EcfService ecfService: ecfServices) {
@@ -142,13 +146,14 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 	}
 	
 	private void addEcfService(EcfService ecfService) throws InvalidSyntaxException {
-		trackServiceType(ecfService.getServiceInterfaceName());
+		addEcfService(ecfService.getServiceInterfaceName());
 	}
 
-	public void trackServiceType(String serviceClassName) throws InvalidSyntaxException {
+	public void addEcfService(String serviceInterfaceName) throws InvalidSyntaxException {
+		log.info("Creating service tracker for: " + serviceInterfaceName);
 		ServiceTracker serviceTracker = new ServiceTracker(
 			bundleContext, 
-			createRemoteFilter(serviceClassName), 
+			createRemoteFilter(serviceInterfaceName), 
 			this);
 		serviceTracker.open();
 		serviceTrackers.add(serviceTracker);
@@ -167,22 +172,46 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		IContainerFactory containerFactory = getContainerManagerService()
 				.getContainerFactory();
 		//	ID serverId = IDFactory.getDefault().createStringID(serverUri);
-		log.info("creating container: " + serverUri);
+		log.info("creating container: uri=" + serverUri + "; port=" + port + "; protocol=" + protocol);
 		
-		ID targetID = IDFactory.getDefault().createStringID(serverUri);
-		containerFactory.createContainer(protocol, new Object[] {targetID});
+//		ID targetID = IDFactory.getDefault().createStringID(serverUri);
+//		containerFactory.createContainer(protocol, new Object[] {targetID, port});
 
 		//works for generic but not REST
-//		containerFactory.createContainer(protocol, new Object[] {serverUri, port});
+		containerFactory.createContainer(protocol, new Object[] {serverUri, port});
+		log.info("Created container: uri=" + serverUri + "; port=" + port + "; protocol=" + protocol);
 	}
 	
-	private Filter createRemoteFilter(String serviceClassName) throws InvalidSyntaxException {
+	private void createContainer(String serverUri, String protocol) throws Exception {
+		// Get container factory
+			IContainerFactory containerFactory = getContainerManagerService()
+					.getContainerFactory();
+			ID serverId = IDFactory.getDefault().createStringID(serverUri);
+			log.info("Creating container: uri=" + serverUri + "; protocol=" + protocol);
+
+			//works for generic but not REST
+			IContainer container = containerFactory.createContainer(protocol);
+			container.connect(serverId, null);
+			log.info("Created container: uri=" + serverUri + "; protocol=" + protocol);
+		}
+	
+	private void createContainer(String protocol) throws Exception {
+		// Get container factory
+		IContainerFactory containerFactory = getContainerManagerService()
+				.getContainerFactory();
+		containerFactory.createContainer(protocol);
+	}
+	
+	private Filter createRemoteFilter(String serviceInterfaceName) throws InvalidSyntaxException {
 		// This filter looks for IHello instances that have the REMOTE property
 		// set (are remote
 		// services as per RFC119).
+		log.info("Creating remote filter: " + "(&("
+				+ org.osgi.framework.Constants.OBJECTCLASS + "="
+				+ serviceInterfaceName + ")(" + REMOTE + "=*))");
 		return bundleContext.createFilter("(&("
 				+ org.osgi.framework.Constants.OBJECTCLASS + "="
-				+ serviceClassName + ")(" + REMOTE + "=*))");
+				+ serviceInterfaceName + ")(" + REMOTE + "=*))");
 	}
 
 	public void removeServices() {
@@ -223,7 +252,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 	 * Method called when each service instance is registered.
 	 */
 	public Object addingService(ServiceReference reference) {
-		log.info("Adding service: " + reference);
+		log.info("AAAAAAAAAAAAAAAAAAAAAAAAAAA Adding service: " + reference);
 		Object serviceObject = bundleContext.getService(reference);
 		for (String key: reference.getPropertyKeys()) {
 			log.info(key + "=" + reference.getProperty(key));
@@ -292,6 +321,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 	
 	public <T> T getServiceObject(Class<T> serviceClass, String serverUri) {
 		EcfServer server = getEcfServerOfUri(serverUri);
+		log.info("getServiceObject: got server: " + server);
 		return server.getServiceObject(serviceClass);
 	}
 	

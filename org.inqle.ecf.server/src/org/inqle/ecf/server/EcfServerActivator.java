@@ -67,7 +67,7 @@ private static final String BASE_PROPERTY_NAME = "org.inqle.ecf.server.uri.";
 			try {
 				serviceClass = Class.forName(ecfService.getServiceClassName());
 				instance = serviceClass.newInstance();
-				log.info("EcfServerActivator: registered service: " + ecfService.getServiceClassName() + " with object: " + instance);
+				log.info("EcfServerActivator: registering for container " + containerId + ": service: " + ecfService.getServiceInterfaceName() + " with object: " + instance);
 			} catch (Exception e) {
 				log.error("Unable to instantiate object of class: " + ecfService.getServiceClassName(), e);
 				continue;
@@ -84,7 +84,7 @@ private static final String BASE_PROPERTY_NAME = "org.inqle.ecf.server.uri.";
 				instance);
 				
 			serviceRegistrations.add(serviceRegistration);
-			System.out.println("Registered service: " + serviceClass.getName() + " on ECF Server: " + containerId);
+			log.info("Registered service: " + ecfService.getServiceInterfaceName() + " on ECF Server: " + containerId);
 		}
 	}
 	
@@ -106,12 +106,14 @@ private static final String BASE_PROPERTY_NAME = "org.inqle.ecf.server.uri.";
 		try {
 			IContainerManager containerManager = getContainerManagerService(bundleContext);
 			log.info("Got containerManager");
-		    ID targetID = IDFactory.getDefault().createStringID(containerId);
-	        containerManager.getContainerFactory().createContainer(containerType, new Object[] {targetID});
+			
+			//registers container for both generic & rest, but cannot connect w/ generic
+//		    ID targetID = IDFactory.getDefault().createStringID(containerId);
+//	        containerManager.getContainerFactory().createContainer(containerType, new Object[] {targetID});
 
 			//works for generic but not REST
-//			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
-			log.info("Created container");
+			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
+			log.info("SSS Successfully created container of id: " + containerId + " and type: " + containerType);
 			containerTypes.add(containerType);
 		} catch (Exception e) {
 			log.error("Error creating container of id: " + containerId + " and type: " + containerType, e);

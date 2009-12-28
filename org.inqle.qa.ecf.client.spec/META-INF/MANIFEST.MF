@@ -6,3 +6,5 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: INQLING, LLC
 Require-Bundle: org.inqle.ecf.client;bundle-version="1.0.0",
  org.inqle.ecf.common;bundle-version="1.0.0"
+Bundle-ClassPath: bin/,
+ .
