@@ -6,6 +6,5 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: INQLING, LLC
 Fragment-Host: org.inqle.ecf.common;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.inqle.ecf.services
 Bundle-ClassPath: bin/,
  .
