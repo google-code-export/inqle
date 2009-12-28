@@ -129,9 +129,9 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 	}
 	
 	private void addEcfServer(EcfServer ecfServer) throws Exception {
-//		createContainer(ecfServer.getUri(), ecfServer.getPort(), ecfServer.getProtocol());
+//		should work but does not: createContainer(ecfServer.getUri(), ecfServer.getPort(), ecfServer.getProtocol());
 		createContainer(ecfServer.getUri(), ecfServer.getProtocol());
-//		createContainer(ecfServer.getProtocol());
+//		does not work but does yield valuable error info: createContainer(ecfServer.getProtocol());
 	}
 
 	public void setPermanentEcfServices() throws InvalidSyntaxException {
@@ -167,6 +167,9 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 //		containerFactory.createContainer(protocol, serverId);
 //	}
 
+	/**
+	 * This method does not work as of 12/28/2009
+	 */
 	private void createContainer(String serverUri, String port, String protocol) throws Exception {
 	// Get container factory
 		IContainerFactory containerFactory = getContainerManagerService()
@@ -182,6 +185,12 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		log.info("Created container: uri=" + serverUri + "; port=" + port + "; protocol=" + protocol);
 	}
 	
+	/**
+	 * This method works as of 12/28/2009
+	 * @param serverUri
+	 * @param protocol
+	 * @throws Exception
+	 */
 	private void createContainer(String serverUri, String protocol) throws Exception {
 		// Get container factory
 			IContainerFactory containerFactory = getContainerManagerService()

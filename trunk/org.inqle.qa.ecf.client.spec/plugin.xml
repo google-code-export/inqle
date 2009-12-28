@@ -4,21 +4,21 @@
    <extension
          point="org.inqle.ecf.servers">
    		<ecfServer
-   			uri="ecftcp://127.0.0.1:3787/server1"
+   			uri="ecftcp://localhost:3787/server1"
    			port="3787"
    			protocol="ecf.generic.client"/>
    		<!--
    		<ecfServer
-   			uri="ecftcp://127.0.0.1:3788/server2"
+   			uri="ecftcp://localhost:3788/server2"
    			port="3788"
    			protocol="ecf.generic.client"/>
    		<ecfServer
-   			uri="http://127.0.0.1:3797/server1"
+   			uri="http://localhost:3797/server1"
    			port="3797"
    			protocol="ecf.rest.client"/>
    			
    		<ecfServer
-   			uri="http://127.0.0.1:3798/server2"
+   			uri="http://localhost:3798/server2"
    			port="3798"
    			protocol="ecf.rest.client"/>
    			-->
