@@ -1,4 +1,4 @@
-package org.inqle.qa.common.services;
+package org.inqle.ecf.services;
 
 import org.inqle.ecf.common.IInqleEcfService;
 

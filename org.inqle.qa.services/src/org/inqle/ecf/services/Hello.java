@@ -1,4 +1,6 @@
-package org.inqle.qa.common.services;
+package org.inqle.ecf.services;
+
+import org.inqle.ecf.services.IHello;
 
 public class Hello implements IHello {
 
