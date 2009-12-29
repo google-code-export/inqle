@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+   <extension
+         point="org.inqle.ecf.servers">
+   		<ecfServer
+   			uri="ecftcp://localhost:3787/server1"
+   			port="3787"
+   			protocol="ecf.generic.client"/>
+   		<!--
+   		<ecfServer
+   			uri="ecftcp://localhost:3788/server2"
+   			port="3788"
+   			protocol="ecf.generic.client"/>
+   		<ecfServer
+   			uri="http://localhost:3797/server1"
+   			port="3797"
+   			protocol="ecf.rest.client"/>
+   			
+   		<ecfServer
+   			uri="http://localhost:3798/server2"
+   			port="3798"
+   			protocol="ecf.rest.client"/>
+   			-->
+   </extension>
+   
+   <!--Disable this until ECF can handle registering services
+   <extension
+         point="org.inqle.ecf.services">
+   		<ecfService
+   			serviceInterfaceName="org.inqle.qa.common.services.IHello"
+   			serviceClassName="org.inqle.qa.common.services.Hello"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			consume="true"
+   			produce="false"/>
+   </extension>
+   -->
 </plugin>

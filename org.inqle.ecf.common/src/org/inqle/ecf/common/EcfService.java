@@ -26,7 +26,6 @@ public class EcfService implements IJavaExtension {
 	private String serverProtocol;
 	private String clientProtocol;
 
-	@Override
 	public void setSpec(IExtensionSpec spec) {
 		serviceClassName = spec.getAttribute("serviceClassName");
 		serviceInterfaceName = spec.getAttribute("serviceInterfaceName");

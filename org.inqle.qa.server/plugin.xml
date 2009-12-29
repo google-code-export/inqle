@@ -4,8 +4,8 @@
    <extension
          point="org.inqle.ecf.services">
    		<ecfService
-   			serviceInterfaceName="org.inqle.qa.common.services.IHello"
-   			serviceClassName="org.inqle.qa.common.services.Hello"
+   			serviceInterfaceName="org.inqle.ecf.services.IHello"
+   			serviceClassName="org.inqle.ecf.services.Hello"
    			clientProtocol="ecf.generic.client"
    			serverProtocol="ecf.generic.server"
    			produce="true"

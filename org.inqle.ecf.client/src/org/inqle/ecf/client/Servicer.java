@@ -77,11 +77,12 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		} catch (Exception e) {
 			log.error("Error setting ECF servers from plugin extensions", e);
 		}
-		try {
-			setPermanentEcfServices();
-		} catch (InvalidSyntaxException e) {
-			log.error("Error setting ECF services from plugin extensions", e);
-		}
+		//disable this until ECF can handle reistering services whose interfaces that reside in remote bundles
+//		try {
+//			setPermanentEcfServices();
+//		} catch (InvalidSyntaxException e) {
+//			log.error("Error setting ECF services from plugin extensions", e);
+//		}
 	}
 
 	/**
@@ -112,7 +113,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 //    	services.remove(serviceClassName);
 //    }	
 
-	public void setPermanentEcfServers() throws Exception {
+	private void setPermanentEcfServers() throws Exception {
 		log.info("setPermanentEcfServers()...");
 		// Set bundle context (for use with service trackers)
 		
@@ -134,7 +135,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 //		does not work but does yield valuable error info: createContainer(ecfServer.getProtocol());
 	}
 
-	public void setPermanentEcfServices() throws InvalidSyntaxException {
+	private void setPermanentEcfServices() throws InvalidSyntaxException {
 //		List<EcfService> ecfServices = ExtensionFactory.getExtensionObjects(EcfService.class, EcfServices.EXTENSION_POINT_ECF_SERVICES);
 		List<EcfService> ecfServices = EcfServices.listEcfClientServicesFromExtensions();
 		log.info("Found " + ecfServices.size() + " services to register.");
@@ -153,7 +154,7 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		log.info("Creating service tracker for: " + serviceInterfaceName);
 		ServiceTracker serviceTracker = new ServiceTracker(
 			bundleContext, 
-			createRemoteFilter(serviceInterfaceName), 
+			createRemoteFilter(serviceInterfaceName),
 			this);
 		serviceTracker.open();
 		serviceTrackers.add(serviceTracker);
