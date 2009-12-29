@@ -13,9 +13,12 @@ public class QAClientActivator implements BundleActivator{
 	private Servicer servicer;
 	private static Logger log = Logger.getLogger(QAClientActivator.class);
 	public void start(BundleContext ctxt) throws Exception {
-		
 		context = ctxt;
 		servicer = Servicer.getInstance();
+		//register services from this bundle
+		servicer.addEcfService(IHello.class.getName());
+		
+		//test calling service
 		IHello hello1 = servicer.getServiceObject(IHello.class, "ecftcp://localhost:3787/server1");
 		log.info("hello1.hello() to hello1 service object: " + hello1);
 		log.info(hello1.hello("QA Client (to ECF server #1)"));

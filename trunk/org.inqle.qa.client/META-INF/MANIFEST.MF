@@ -5,12 +5,7 @@ Bundle-SymbolicName: org.inqle.qa.client;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.inqle.core;bundle-version="1.0.0",
- org.eclipse.equinox.common;bundle-version="3.5.0",
- org.inqle.ecf.common;bundle-version="1.0.0",
- org.inqle.ecf.client;bundle-version="1.0.0",
- org.inqle.qa.common;bundle-version="1.0.0",
- org.inqle.rdf.object.services;bundle-version="1.0.0"
-Import-Package: org.osgi.framework,
- org.inqle.qa.common.services
-Bundle-Activator: org.inqle.qa.common.activator.QAClientActivator
+Bundle-ClassPath: bin/main/,
+ .
+Eclipse-BuddyPolicy: global
+Bundle-BuddyPolicy: global
