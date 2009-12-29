@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
  org.inqle.core.extensions;bundle-version="1.0.0",
  org.inqle.data.rdf.jenabean;bundle-version="1.0.0",
  org.inqle.ecf.common;bundle-version="1.0.0",
- org.eclipse.ecf.remoteservice.rest;bundle-version="1.0.0"
+ org.eclipse.ecf.remoteservice.rest;bundle-version="1.0.0",
+ org.inqle.qa.common;bundle-version="1.0.0"
 Export-Package: org.inqle.ecf.client
 Eclipse-BuddyPolicy: global
 Bundle-BuddyPolicy: global

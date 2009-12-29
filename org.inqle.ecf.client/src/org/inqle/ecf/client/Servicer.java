@@ -77,12 +77,12 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		} catch (Exception e) {
 			log.error("Error setting ECF servers from plugin extensions", e);
 		}
-		//disable this until ECF can handle reistering services whose interfaces that reside in remote bundles
-//		try {
-//			setPermanentEcfServices();
-//		} catch (InvalidSyntaxException e) {
-//			log.error("Error setting ECF services from plugin extensions", e);
-//		}
+		//DONT: disable this until ECF can handle reistering services whose interfaces that reside in remote bundles
+		try {
+			setPermanentEcfServices();
+		} catch (InvalidSyntaxException e) {
+			log.error("Error setting ECF services from plugin extensions", e);
+		}
 	}
 
 	/**
