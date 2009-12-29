@@ -12,8 +12,8 @@ package org.inqle.ecf.client;
 
 
 import org.apache.log4j.Logger;
-import org.inqle.ecf.services.IHello;
-import org.inqle.qa.ecf.services.IHello2;
+//import org.inqle.ecf.services.IHello;
+//import org.inqle.qa.ecf.services.IHello2;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
