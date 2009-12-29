@@ -10,6 +10,13 @@
    			serverProtocol="ecf.generic.server"
    			produce="true"
    			consume="false"/>
+   		<ecfService
+   			serviceInterfaceName="org.inqle.qa.ecf.services.IHello2"
+   			serviceClassName="org.inqle.qa.ecf.services.Hello2"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			produce="true"
+   			consume="false"/>
    		<!--
    		<ecfService
    			serviceInterfaceName="org.inqle.qa.common.services.IHello"

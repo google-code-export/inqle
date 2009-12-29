@@ -24,16 +24,23 @@
    			-->
    </extension>
    
-   <!--Disable this until ECF can handle registering services
+   <!--DONT: Disable this until ECF can handle registering services-->
    <extension
          point="org.inqle.ecf.services">
    		<ecfService
-   			serviceInterfaceName="org.inqle.qa.common.services.IHello"
-   			serviceClassName="org.inqle.qa.common.services.Hello"
+   			serviceInterfaceName="org.inqle.ecf.services.IHello"
+   			serviceClassName="org.inqle.ecf.services.Hello"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			consume="true"
+   			produce="false"/>
+
+   		<ecfService
+   			serviceInterfaceName="org.inqle.qa.ecf.services.IHello2"
+   			serviceClassName="org.inqle.qa.ecf.services.Hello2"
    			clientProtocol="ecf.generic.client"
    			serverProtocol="ecf.generic.server"
    			consume="true"
    			produce="false"/>
    </extension>
-   -->
 </plugin>
