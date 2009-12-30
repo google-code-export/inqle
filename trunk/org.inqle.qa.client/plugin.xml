@@ -7,21 +7,12 @@
    			uri="ecftcp://localhost:3787/server1"
    			port="3787"
    			protocol="ecf.generic.client"/>
-   		<!--
-   		<ecfServer
-   			uri="ecftcp://localhost:3788/server2"
-   			port="3788"
-   			protocol="ecf.generic.client"/>
+   		
    		<ecfServer
    			uri="http://localhost:3797/server1"
    			port="3797"
    			protocol="ecf.rest.client"/>
    			
-   		<ecfServer
-   			uri="http://localhost:3798/server2"
-   			port="3798"
-   			protocol="ecf.rest.client"/>
-   			-->
    </extension>
    
    <!--DONT: Disable this until ECF can handle registering services-->

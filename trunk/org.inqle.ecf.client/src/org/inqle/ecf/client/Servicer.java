@@ -200,9 +200,14 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 		log.info("Creating container: uri=" + serverUri + "; protocol=" + protocol);
 
 		//works for generic but not REST
-		IContainer container = containerFactory.createContainer(protocol);
-		container.connect(serverId, null);
-		log.info("Created container: uri=" + serverUri + "; protocol=" + protocol);
+		try {
+			IContainer container = containerFactory.createContainer(protocol);
+			container.connect(serverId, null);
+			log.info("Created container using method #1: uri=" + serverUri + "; protocol=" + protocol);
+		} catch (Exception e) {
+			containerFactory.createContainer(protocol, new Object[] {serverId});
+			log.info("Created container using method #2: uri=" + serverUri + "; protocol=" + protocol);
+		}
 	}
 	
 //	private void createContainer(String serverUri, String protocol) throws Exception {
