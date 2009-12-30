@@ -8,4 +8,4 @@ Require-Bundle: org.inqle.ecf.common;bundle-version="1.0.0",
  org.inqle.data.rdf.jenabean;bundle-version="1.0.0"
 Bundle-ClassPath: bin/,
  .
-Export-Package: org.inqle.data.rdf.jena.sparql
+Export-Package: org.inqle.rdf.jena.sparql
