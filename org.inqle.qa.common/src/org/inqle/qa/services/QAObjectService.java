@@ -49,7 +49,10 @@ public class QAObjectService implements IQAObjectService {
 	}
 
 	public Question getQuestion(String databaseId, String modelName, String objectId) {
-		return getObject(Question.class, databaseId, modelName, objectId);
+		Question question = new Question();
+		question.setQuestionType(Question.QUESTION_TYPE_SINGLE_SELECTION);
+		return question;
+		//		return getObject(Question.class, databaseId, modelName, objectId);
 	}
 
 	public String storeQuestion(String databaseId, String modelName, Question question) {
