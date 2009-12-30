@@ -112,7 +112,11 @@ private static final String BASE_PROPERTY_NAME = "org.inqle.ecf.server.uri.";
 //	        containerManager.getContainerFactory().createContainer(containerType, new Object[] {targetID});
 
 			//works for generic but not REST
-			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
+//			containerManager.getContainerFactory().createContainer(containerType, new Object[] {containerId});
+			
+			ID serverId = IDFactory.getDefault().createStringID(containerId);
+			containerManager.getContainerFactory().createContainer(containerType, new Object[] {serverId});
+			
 			log.info("SSS Successfully created container of id: " + containerId + " and type: " + containerType);
 			containerTypes.add(containerType);
 		} catch (Exception e) {
