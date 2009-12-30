@@ -1,4 +1,4 @@
-package org.inqle.data.rdf.jena.sparql;
+package org.inqle.rdf.jena.sparql;
 
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
