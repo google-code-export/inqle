@@ -1,8 +1,8 @@
 Bundle-ManifestVersion: 2
-Bundle-Name: %bundleName
+Bundle-Name: INQLE QA Common Services
 Bundle-SymbolicName: org.inqle.qa.common;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: %bundleProvider
+Bundle-Vendor: INQLING, LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.ecf.core;version="3.0.0",
  org.eclipse.ecf.core.identity;version="3.0.0",
