@@ -17,30 +17,12 @@
    			serverProtocol="ecf.generic.server"
    			produce="true"
    			consume="false"/>
-   		<!--
    		<ecfService
-   			serviceInterfaceName="org.inqle.qa.common.services.IHello"
-   			serviceClassName="org.inqle.qa.common.services.Hello"
-   			clientProtocol="ecf.rest.client"
-   			serverProtocol="ecf.rest.client"
-   			produce="true"
-   			consume="false"/>
-   			
-   		<ecfService
-   			serviceInterfaceName="org.inqle.rdf.object.services.IRdfObjectService"
-   			serviceClassName="org.inqle.rdf.object.services.RdfObjectService"
+   			serviceInterfaceName="org.inqle.qa.services.IQAObjectService"
+   			serviceClassName="org.inqle.qa.services.QAObjectService"
    			clientProtocol="ecf.generic.client"
    			serverProtocol="ecf.generic.server"
    			produce="true"
    			consume="false"/>
-   			
-         <ecfService
-   			serviceInterfaceName="org.inqle.rdf.object.services.IRdfObjectService"
-   			serviceClassName="org.inqle.rdf.object.services.RdfObjectService"
-   			clientProtocol="ecf.generic.client"
-   			serverProtocol="ecf.generic.server"
-   			produce="true"
-   			consume="true"/>
-   			-->
    </extension>
 </plugin>
