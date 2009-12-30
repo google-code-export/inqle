@@ -24,5 +24,12 @@
    			serverProtocol="ecf.generic.server"
    			produce="true"
    			consume="false"/>
+   		<ecfService
+   			serviceInterfaceName="org.inqle.rdf.sparql.ISparqlService"
+   			serviceClassName="org.inqle.rdf.sparql.SparqlService"
+   			clientProtocol="ecf.rest.client"
+   			serverProtocol="ecf.rest.client"
+   			produce="true"
+   			consume="false"/>
    </extension>
 </plugin>
