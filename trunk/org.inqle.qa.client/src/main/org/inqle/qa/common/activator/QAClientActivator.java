@@ -3,6 +3,7 @@ package org.inqle.qa.common.activator;
 import org.apache.log4j.Logger;
 import org.inqle.ecf.client.Servicer;
 import org.inqle.ecf.services.IHello;
+import org.inqle.qa.beans.Question;
 import org.inqle.qa.ecf.services.IHello2;
 import org.inqle.qa.services.IQAObjectService;
 import org.osgi.framework.BundleActivator;
@@ -31,6 +32,8 @@ public class QAClientActivator implements BundleActivator{
 		IQAObjectService qaObjectService = servicer.getServiceObject(
 				IQAObjectService.class, 
 				"ecftcp://localhost:3787/server1");
+		Question question = qaObjectService.getQuestion(null, null, null);
+		log.info("Got question: ID=" + question.getId() + "; type=" + question.getQuestionType());
 	}
 
 	public void stop(BundleContext context) throws Exception {
