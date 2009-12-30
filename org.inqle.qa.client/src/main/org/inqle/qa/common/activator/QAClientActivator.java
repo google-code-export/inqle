@@ -6,6 +6,7 @@ import org.inqle.ecf.services.IHello;
 import org.inqle.qa.beans.Question;
 import org.inqle.qa.ecf.services.IHello2;
 import org.inqle.qa.services.IQAObjectService;
+import org.inqle.rdf.sparql.ISparqlService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 //import org.inqle.rdf.object.services.IRdfObjectService;
@@ -34,6 +35,11 @@ public class QAClientActivator implements BundleActivator{
 				"ecftcp://localhost:3787/server1");
 		Question question = qaObjectService.getQuestion(null, null, null);
 		log.info("Got question: ID=" + question.getId() + "; type=" + question.getQuestionType());
+	
+		ISparqlService sparqlService = servicer.getServiceObject(
+				ISparqlService.class, 
+				"http://localhost:3797/server1");
+		log.info("sparqlService.echoQuery():" + sparqlService.echoQuery("My SPARQL here", "model ID here"));
 	}
 
 	public void stop(BundleContext context) throws Exception {
