@@ -194,16 +194,28 @@ public class Servicer implements IDistributionConstants, ServiceTrackerCustomize
 	 */
 	private void createContainer(String serverUri, String protocol) throws Exception {
 		// Get container factory
-			IContainerFactory containerFactory = getContainerManagerService()
-					.getContainerFactory();
-			ID serverId = IDFactory.getDefault().createStringID(serverUri);
-			log.info("Creating container: uri=" + serverUri + "; protocol=" + protocol);
+		IContainerFactory containerFactory = getContainerManagerService()
+				.getContainerFactory();
+		ID serverId = IDFactory.getDefault().createStringID(serverUri);
+		log.info("Creating container: uri=" + serverUri + "; protocol=" + protocol);
 
-			//works for generic but not REST
-			IContainer container = containerFactory.createContainer(protocol);
-			container.connect(serverId, null);
-			log.info("Created container: uri=" + serverUri + "; protocol=" + protocol);
-		}
+		//works for generic but not REST
+		IContainer container = containerFactory.createContainer(protocol);
+		container.connect(serverId, null);
+		log.info("Created container: uri=" + serverUri + "; protocol=" + protocol);
+	}
+	
+//	private void createContainer(String serverUri, String protocol) throws Exception {
+//		// Get container factory
+//		IContainerFactory containerFactory = getContainerManagerService()
+//				.getContainerFactory();
+//		ID serverId = IDFactory.getDefault().createStringID(serverUri);
+//		log.info("Creating container: uri=" + serverUri + "; protocol=" + protocol);
+//
+//		//works for generic but not REST
+//		IContainer container = containerFactory.createContainer(protocol, new Object[] {serverId});
+//		log.info("Created container: uri=" + serverUri + "; protocol=" + protocol);
+//	}
 	
 	private void createContainer(String protocol) throws Exception {
 		// Get container factory
