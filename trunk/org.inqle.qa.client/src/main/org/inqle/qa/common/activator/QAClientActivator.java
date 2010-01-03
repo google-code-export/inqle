@@ -25,21 +25,26 @@ public class QAClientActivator implements BundleActivator{
 		//test calling service
 		IHello hello1 = servicer.getServiceObject(IHello.class, "ecftcp://localhost:3787/server1");
 		log.info("hello1.hello() to hello1 service object: " + hello1);
-		log.info(hello1.hello("QA Client (to ECF server #1, IHello1 service)"));
+		if (hello1 != null) log.info(hello1.hello("QA Client (to ECF server #1, IHello1 service)"));
 
 		IHello2 hello2 = servicer.getServiceObject(IHello2.class, "ecftcp://localhost:3787/server1");
-		log.info("hello2.hello()" + hello2.hello("QA Client (to ECF server #1, IHello2 service)"));
+		log.info("hello2.hello() to hello2 service object: " + hello2);
+		if (hello2 != null) log.info("hello2.hello()" + hello2.hello("QA Client (to ECF server #1, IHello2 service)"));
 		
 		IQAObjectService qaObjectService = servicer.getServiceObject(
 				IQAObjectService.class, 
 				"ecftcp://localhost:3787/server1");
-		Question question = qaObjectService.getQuestion(null, null, null);
-		log.info("Got question: ID=" + question.getId() + "; type=" + question.getQuestionType());
-	
-		ISparqlService sparqlService = servicer.getServiceObject(
-				ISparqlService.class, 
-				"http://localhost:3797/server1");
-		log.info("sparqlService.echoQuery():" + sparqlService.echoQuery("My SPARQL here", "model ID here"));
+		Question question = new Question();
+		question.setQuestionType(Question.QUESTION_TYPE_MULTIPLE_SELECTION);
+		if (qaObjectService != null) {
+			String response = qaObjectService.storeQuestion(question);
+			log.info("Stored question, got error message: " + response);
+//			String response = qaObjectService.storeObject(question);
+		}
+//		ISparqlService sparqlService = servicer.getServiceObject(
+//				ISparqlService.class, 
+//				"http://localhost:3797/server1");
+//		log.info("sparqlService.echoQuery():" + sparqlService.echoQuery("My SPARQL here", "model ID here"));
 	}
 
 	public void stop(BundleContext context) throws Exception {

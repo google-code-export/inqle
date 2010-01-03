@@ -264,6 +264,7 @@ public class Persister {
 		if (cachedModel != null) {
 			return cachedModel;
 		}
+//		log.info("Getting model: " + datamodelId);
 		String databaseId = DatabaseBackedJenamodel.getDatabaseIdFromDatamodelId(datamodelId);
 		if (databaseId==null || databaseId.length()==0 || databaseId.equals("null")) {
 			log.error("databaseId is " + databaseId);
@@ -770,7 +771,7 @@ public class Persister {
 		if (persistableObj instanceof IUniqueJenabean) {
 			((IUniqueJenabean)persistableObj).setUpdateDate(new Date());
 		}
-		log.info("PPPPPPPPPPPPPPP Persisting...");
+//		log.info("Persisting...");
 		Bean2RDF writer = new Bean2RDF(model);
 		if (persistMembers) {
 			writer.saveDeep(persistableObj);

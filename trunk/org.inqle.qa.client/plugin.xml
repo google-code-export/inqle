@@ -15,7 +15,6 @@
    			
    </extension>
    
-   <!--DONT: Disable this until ECF can handle registering services-->
    <extension
          point="org.inqle.ecf.services">
    		<ecfService
@@ -47,7 +46,7 @@
    			serviceClassName="org.inqle.rdf.sparql.SparqlService"
    			clientProtocol="ecf.rest.client"
    			serverProtocol="ecf.rest.client"
-   			produce="false"
-   			consume="true"/>
+   			consume="true"
+   			produce="false"/>
    </extension>
 </plugin>

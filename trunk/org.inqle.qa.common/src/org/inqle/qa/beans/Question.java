@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.inqle.qa.common.QAConstants;
 import org.inqle.core.data.ModelObject;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
+import org.inqle.data.rdf.jenabean.TargetModelName;
 
 /**
  * This class represents a question.
@@ -14,10 +17,12 @@ import org.inqle.core.data.ModelObject;
  * September 10, 2009
  *
  */
+@TargetDatabaseId(QAConstants.QA_DATABASE)
+@TargetModelName(Question.DEFAULT_QUESTION_MODEL)
 public class Question extends ModelObject implements Serializable {
-	
-	
-	
+	private static final long serialVersionUID = 6534535589344701290L;
+	public static final String DEFAULT_QUESTION_DATABASE = "_Questions";
+	public static final String DEFAULT_QUESTION_MODEL = "_Questions";
 	public static String QUESTION_TYPE_SINGLE_SELECTION = "SINGLE SELECTION";
 	public static String QUESTION_TYPE_MULTIPLE_SELECTION = "MULTIPLE SELECTION";
 	
