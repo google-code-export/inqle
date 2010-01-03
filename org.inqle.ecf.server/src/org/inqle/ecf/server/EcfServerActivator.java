@@ -42,6 +42,7 @@ private static final String BASE_PROPERTY_NAME = "org.inqle.ecf.server.uri.";
 //		baseContainerId = System.getProperty(EcfServerConstants.PROPERTY_SERVER_URI);
 //		containerPort = System.getProperty(EcfServerConstants.PROPERTY_SERVER_PORT);
 		// register all remote services, creating containers along the way
+		log.info("inqle.home=" + System.getProperty("inqle.home"));
 		log.info("Get ECF Services...");
 		List<EcfService> ecfServices = null;
 		try {

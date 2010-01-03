@@ -77,7 +77,7 @@ public class TDBConnector implements IDBConnector {
 		if (!testSubdatabaseConnection(modelType)) {
 			createSubdatabase(modelType);
 		}
-//		log.info("Creating/loading model: " + getFilePath() + "/" + modelName);
+		log.info("Creating/loading model: " + getFilePath(modelType) + "/" + modelName);
 		return TDBFactory.createModel(getFilePath(modelType) + "/" + modelName);
 	}
 
@@ -142,7 +142,10 @@ public class TDBConnector implements IDBConnector {
 	}
 	
 	private String getFilePath(String subdatabase) {
-		return getBaseFilePath() + "/" + subdatabase;
+		String filePath = getBaseFilePath() + "/" + subdatabase;
+		File file = new File(filePath);
+		if (! file.exists()) file.mkdirs();
+		return filePath;
 	}
 	
 //	public static boolean databaseExists(String dbId) {

@@ -35,6 +35,7 @@ public class EcfClientActivator implements BundleActivator {
 //		
 //		IHello2 hello2 = servicer.getServiceObject(IHello2.class, "ecftcp://localhost:3787/server1");
 //		log.info("hello2.hello()" + hello2.hello("QA Client (to ECF server #1, IHello2 service)"));
+		log.info("inqle.home=" + System.getProperty("inqle.home"));
 	}
 
 	public void stop(BundleContext context) throws Exception {

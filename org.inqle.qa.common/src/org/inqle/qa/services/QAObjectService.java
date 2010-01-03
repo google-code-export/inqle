@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.inqle.core.util.StackUtil;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.qa.beans.Question;
@@ -16,30 +17,6 @@ public class QAObjectService implements IQAObjectService {
 
 	private static Logger log = Logger.getLogger(QAObjectService.class);
 	
-	public <T> T getObject(Class<T> objectClass, String databaseId, String modelName, String objectId) {
-		String datamodelId = Persister.getDatamodelId(databaseId, IDBConnector.SUBDATABASE_DATA, modelName);
-		Persister persister = Persister.getInstance();
-		return persister.reconstitute(objectClass, objectId, datamodelId, true);
-	}
-
-	public <T> Collection<T> listObjectsOfClass(Class<T> objectClass, String databaseId, String modelName) {
-		String datamodelId = Persister.getDatamodelId(databaseId, IDBConnector.SUBDATABASE_DATA, modelName);
-		Persister persister = Persister.getInstance();
-		Model model = persister.getModel(datamodelId);
-		return persister.reconstituteAll(objectClass, model);
-	}
-
-	/**
-	 * persist Jenabean object to specified database, using user database
-	 * Return error message, or null if no error
-	 */
-	public <T> String storeObject(String databaseId, String modelName, T objectToStore) {
-		String datamodelId = Persister.getDatamodelId(databaseId, IDBConnector.SUBDATABASE_DATA, modelName);
-		Persister persister = Persister.getInstance();
-		persister.persist(objectToStore, datamodelId);
-		return null;
-	}
-
 	public String getServerId() {
 		return serverId;
 	}
@@ -48,19 +25,53 @@ public class QAObjectService implements IQAObjectService {
 		this.serverId = containerId;
 	}
 
+	/**
+	 * Get a question from the default datamodel
+	 * @param questionId
+	 * @return
+	 */
+	public Question getQuestion(String questionId) {
+		return new RdfObjectService().getObject(Question.class, questionId);
+	}
+	
+	/**
+	 * Get a question from the specified datamodel
+	 */
 	public Question getQuestion(String databaseId, String modelName, String objectId) {
-		Question question = new Question();
-		question.setQuestionType(Question.QUESTION_TYPE_SINGLE_SELECTION);
-		return question;
-		//		return getObject(Question.class, databaseId, modelName, objectId);
+		return new RdfObjectService().getObject(Question.class, databaseId, modelName, objectId);
 	}
 
+	/**
+	 * Store a question to the default datamodel
+	 * @param question
+	 * @return
+	 */
+	public String storeQuestion(Question question) {
+		log.info("Storing question: " + question);
+		String msg = new RdfObjectService().storeObject(question);
+		log.info("Stored it, msg=" + msg);
+		return msg;
+	}
+	
+	/**
+	 * Store a question to the specified datamodel
+	 */
 	public String storeQuestion(String databaseId, String modelName, Question question) {
-		return storeObject(databaseId, modelName, question);
+		return new RdfObjectService().storeObject(databaseId, modelName, question);
 	}
 
+	/**
+	 * List all questions from the default datamodel
+	 */
+	public Collection<Question> listAllQuestions() {
+		return new RdfObjectService().listObjectsOfClass(Question.class);
+	}
+	
+	/**
+	 * List all questions from the specified datamodel
+	 */
 	public Collection<Question> listAllQuestions(String databaseId, String modelName) {
-		return listObjectsOfClass(Question.class, databaseId, modelName);
+		return new RdfObjectService().listObjectsOfClass(Question.class, databaseId, modelName);
 	}
 
 }
