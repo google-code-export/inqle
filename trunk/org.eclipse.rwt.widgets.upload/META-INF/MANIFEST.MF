@@ -19,4 +19,5 @@ Bundle-RegisterBuddy: org.apache.commons.fileupload,
  org.eclipse.rap.ui.workbench
 Bundle-ClassPath: lib/commons-fileupload-1.2.jar,
  lib/commons-io-1.3.2.jar,
- .
+ .,
+ bin/

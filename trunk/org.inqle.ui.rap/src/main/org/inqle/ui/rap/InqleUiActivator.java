@@ -23,8 +23,11 @@ public class InqleUiActivator extends Plugin {
 		plugin = this;
 	
 		//set some filepath environment variables
-		String inqleHome = Platform.getInstallLocation().getURL().getPath();
-		System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
+		String inqleHome = System.getProperty(InqleInfo.INQLE_HOME);
+		if (inqleHome == null) {
+			inqleHome = Platform.getInstallLocation().getURL().getPath();
+			System.setProperty(InqleInfo.INQLE_HOME, inqleHome);
+		}
 		System.setProperty("java.io.tmpdir", inqleHome + InqleInfo.TEMP_FOLDER);
 		log.info("Set system property '" + InqleInfo.INQLE_HOME + "' to " + inqleHome);
 		

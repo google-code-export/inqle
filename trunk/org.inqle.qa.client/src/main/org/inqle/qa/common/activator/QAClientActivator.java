@@ -39,12 +39,12 @@ public class QAClientActivator implements BundleActivator{
 		if (qaObjectService != null) {
 			String response = qaObjectService.storeQuestion(question);
 			log.info("Stored question, got error message: " + response);
-//			String response = qaObjectService.storeObject(question);
 		}
-//		ISparqlService sparqlService = servicer.getServiceObject(
-//				ISparqlService.class, 
-//				"http://localhost:3797/server1");
-//		log.info("sparqlService.echoQuery():" + sparqlService.echoQuery("My SPARQL here", "model ID here"));
+		ISparqlService sparqlService = servicer.getServiceObject(
+				ISparqlService.class, 
+				"http://localhost:3797/server1");
+		log.info("sparqlService.echoQuery():" + sparqlService.echoQuery("My SPARQL here", "model ID here"));
+		log.info("sparqlService.querySelect():" + sparqlService.querySelect("SELECT ?s ?p ?o ?g { GRAPH ?g { ?s ?p ?o } }", "_QA/system/_Questions"));
 	}
 
 	public void stop(BundleContext context) throws Exception {
