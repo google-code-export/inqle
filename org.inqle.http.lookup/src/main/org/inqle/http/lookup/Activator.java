@@ -2,12 +2,14 @@ package org.inqle.http.lookup;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Plugin;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends Plugin {
+public class Activator  implements BundleActivator {
+//extends Plugin {
 
 	private static Logger log = Logger.getLogger(Activator.class);
 
@@ -29,7 +31,7 @@ public class Activator extends Plugin {
 	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-		super.start(context);
+//		super.start(context);
 		plugin = this;
 		log.info(PLUGIN_ID + " started.");
 	}
@@ -40,7 +42,7 @@ public class Activator extends Plugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		super.stop(context);
+//		super.stop(context);
 	}
 
 	/**

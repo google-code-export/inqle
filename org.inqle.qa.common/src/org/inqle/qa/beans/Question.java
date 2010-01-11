@@ -10,6 +10,9 @@ import org.inqle.core.data.ModelObject;
 import org.inqle.data.rdf.jenabean.TargetDatabaseId;
 import org.inqle.data.rdf.jenabean.TargetModelName;
 
+import thewebsemantic.Namespace;
+import org.inqle.data.rdf.RDF;
+
 /**
  * This class represents a question.
  * 
@@ -19,6 +22,7 @@ import org.inqle.data.rdf.jenabean.TargetModelName;
  */
 @TargetDatabaseId(QAConstants.QA_DATABASE)
 @TargetModelName(Question.DEFAULT_QUESTION_MODEL)
+@Namespace(RDF.INQLE)
 public class Question extends ModelObject implements Serializable {
 	private static final long serialVersionUID = 6534535589344701290L;
 	public static final String DEFAULT_QUESTION_DATABASE = "_Questions";

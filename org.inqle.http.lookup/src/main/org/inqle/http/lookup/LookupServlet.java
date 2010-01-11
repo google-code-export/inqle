@@ -13,6 +13,8 @@ import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.SparqlXmlUtil;
 import org.inqle.core.util.XmlDocumentUtil;
 import org.inqle.data.rdf.Data;
+import org.inqle.data.rdf.jena.QueryCriteria;
+import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.http.lookup.util.HttpParameterParser;
 import org.w3c.dom.Document;
@@ -24,19 +26,18 @@ public class LookupServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = -4242876578599704824L;
 
-//	public static final String PARAM_SEARCH_DATA_SUBJECT = "searchDataSubject";
-//	public static final String PARAM_SEARCH_RDF_CLASS = "searchRdfClass";
 	public static final String PARAM_SEARCH_START_INDEX = "start";
 	public static final String PARAM_SEARCH_COUNT_RESULTS = "count";
-//	public static final String PARAM_DATA_AND_SUBJECT_PROPERTIES_OF_SUBJECT = "dsPropertiesOfSubject";
-//	public static final String PARAM_PROPERTIES_OF_SUBJECT_FROM_SCHEMA_FILES = "propertiesOfSubjectFromSchema";
-//	public static final String PARAM_SEARCH_PREFERRED_ONTOLOGY_CLASS = "searchPrefOntClass";
 	public static final String PARAM_SEARCH_DATA_AND_PREFERRED_ONTOLOGY_CLASS = "searchDataAndPrefOntClass";
 	public static final String PARAM_PROPERTIES_OF_DATA_AND_PREFERRED_ONTOLOGY = "propsDSPrefOnt";
 	
 	private static final int COUNT_SEARCH_RESULTS = 100;
 
 	private static final int MAX_COUNT_RESULTS = 1000;
+
+	private static final String PARAM_SPARQL_QUERY = "query";
+
+	private static final String PARAM_MODEL_ID = "default-graph-uri";
 
 	
 
@@ -209,6 +210,16 @@ public class LookupServlet extends HttpServlet {
 			return;
 		}
 	
+		String sparql = HttpParameterParser.getParam(request, PARAM_SPARQL_QUERY);
+		if (sparql != null) {
+			String modelId = HttpParameterParser.getParam(request, PARAM_MODEL_ID);
+			QueryCriteria queryCriteria = new QueryCriteria();
+			queryCriteria.setQuery(sparql);
+			queryCriteria.addDatamodel(modelId);
+			String resultXml = Queryer.selectXml(queryCriteria);
+			respondOK(resultXml);
+			return;
+		}
 	}
 	
 	private void respondOK(String message) {

@@ -20,3 +20,5 @@ Import-Package: com.hp.hpl.jena.rdf.model,
  org.xml.sax.helpers
 Export-Package: org.inqle.http.lookup,
  org.inqle.http.lookup.util
+Bundle-ClassPath: bin/main/,
+ .
