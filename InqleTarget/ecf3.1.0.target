@@ -4,9 +4,9 @@
 <target name="RCP + ECF Platform">
 <locations>
 <location path="${eclipse_home}/configuration/org.eclipse.rap.target-1.2/eclipse/plugins" type="Directory"/>
-<location path="${project_loc}/target-bundles/ecf/3.1/repo" type="Directory"/>
 <location path="${project_loc}/target-bundles/other/" type="Directory"/>
 <location path="${project_loc}/target-bundles/eclipse/plugins/" type="Directory"/>
+<location path="${project_loc}/target-bundles/ecf/3.1/repo" type="Directory"/>
 </locations>
 <environment>
 <os>win32</os>
