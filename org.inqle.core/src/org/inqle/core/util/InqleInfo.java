@@ -3,6 +3,8 @@
  */
 package org.inqle.core.util;
 
+import java.io.File;
+
 
 /**
  * Contains constants and other core static functions.
@@ -76,6 +78,21 @@ public class InqleInfo {
 	private static final String RDF_FOLDER = "rdf";
 	private static final String DB_FOLDER = "db/tdb";
 
+	public static void createNeededDirectories() {
+		File file = new File(getPluginsDirectory());
+		file.mkdirs();
+		file = new File(getAssetsDirectory());
+		file.mkdirs();
+		file = new File(getTempDirectory());
+		file.mkdirs();
+		file = new File(getRdfDirectory());
+		file.mkdirs();
+		file = new File(getUriPrefixesDirectory());
+		file.mkdirs();
+		file = new File(getDatabaseDirectory());
+		file.mkdirs();
+	}
+	
 	public static String getRootFilePath() {
 		return System.getProperty(INQLE_HOME);
 	}
@@ -129,7 +146,7 @@ public class InqleInfo {
 
 
 
-	public static String getDatabaseRootFilePath() {
+	public static String getDatabaseDirectory() {
 		return getAssetsDirectory() + DB_FOLDER + "/";
 	}
 

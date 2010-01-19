@@ -126,7 +126,7 @@ public class TDBConnector implements IDBConnector {
 	
 	public List<String> listAllDatabases() {
 		List<String> databases = new ArrayList<String>();
-		String dbRootPath = InqleInfo.getDatabaseRootFilePath();
+		String dbRootPath = InqleInfo.getDatabaseDirectory();
 		File dbRoot = new File(dbRootPath);
 		File[] databaseFolders = dbRoot.listFiles();
 		for (File databaseFolder: databaseFolders) {
@@ -138,7 +138,7 @@ public class TDBConnector implements IDBConnector {
 	}
 	
 	private String getBaseFilePath() {
-		return InqleInfo.getDatabaseRootFilePath() + databaseId;
+		return InqleInfo.getDatabaseDirectory() + databaseId;
 	}
 	
 	private String getFilePath(String subdatabase) {

@@ -99,7 +99,10 @@ public class Persister {
 	/* *********************************************************************
 	 * *** FACTORY METHODS
 	 * ********************************************************************* */
-	private Persister() {}
+	private Persister() {
+		//ensure directories exist
+		InqleInfo.createNeededDirectories();
+	}
 	
 	/**
 	* PersisterHolder is loaded on the first execution of Persister.getInstance() 
@@ -834,6 +837,10 @@ public class Persister {
 	 * @throws FileNotFoundException 
 	 */
 	public static void persistToFile(Object persistableObj, String fileName, String lang, boolean includeMembers) throws FileNotFoundException {
+		File file = new File(fileName);
+		File parentFile = file.getParentFile();
+		parentFile.mkdirs();
+		
 		OntModel persistableAsModel = ModelFactory.createOntologyModel();
 		Bean2RDF converter = new Bean2RDF(persistableAsModel);
 		converter.save(persistableObj);
