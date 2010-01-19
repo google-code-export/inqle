@@ -48,13 +48,13 @@ public class LoadFilePage extends DynaWizardPage {
     
     uploadWidget.addUploadListener(new UploadAdapter() {
 
-			public void uploadFinished(final UploadEvent uploadEvent) {
-    		log.info("uploadFinished() received event " + uploadEvent);
-        if (uploadEvent.isFinished()) {
-          //String uploadedFileName = uploadWidget.getLastFileUploaded();
-          uploadedFile = uploadWidget.getLastUploadedFile();
-          log.info("Uploaded file " + uploadedFile.getAbsolutePath());
-        }
+		public void uploadFinished(final UploadEvent uploadEvent) {
+		log.info("uploadFinished() received event " + uploadEvent);
+	        if (uploadEvent.isFinished()) {
+	          //String uploadedFileName = uploadWidget.getLastFileUploaded();
+	          uploadedFile = uploadWidget.getLastUploadedFile();
+	          log.info("Uploaded file " + uploadedFile.getAbsolutePath());
+	        }
     	}
     });
     

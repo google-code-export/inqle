@@ -246,7 +246,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 
 	public CsvReader getCsvReader() {
 		if (csvReader == null) {
-//			log.info("RRRRRRRRRRefreshing csvReader in LoadCsvFileWizard");
+			log.info("RRRRRRRRRRefreshing csvReader in LoadCsvFileWizard");
 			refreshCsvReader();
 		}
 		return csvReader;
