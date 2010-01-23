@@ -33,5 +33,8 @@ public abstract class GlobalModelObject extends ModelObject {
 	 */
 	public abstract String getDefiningStringRepresentation();
 	
+	public String toString() {
+		return getDefiningStringRepresentation();
+	}
 	
 }
