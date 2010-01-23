@@ -7,6 +7,7 @@ import org.inqle.core.data.ModelObject;
 
 public class Answer extends ModelObject implements Serializable {
 
+	private static final long serialVersionUID = -5195167656076619583L;
 	private Question question;
 	private Collection<Option> selectedOptions;
 	

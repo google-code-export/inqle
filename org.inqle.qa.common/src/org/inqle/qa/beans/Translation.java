@@ -2,9 +2,11 @@ package org.inqle.qa.beans;
 
 import java.io.Serializable;
 
-import org.inqle.core.data.ModelObject;
+import org.inqle.core.data.GlobalModelObject;
 
-public class Translation extends ModelObject implements Serializable {
+public class Translation extends GlobalModelObject implements Serializable {
+
+	private static final long serialVersionUID = 551131315984762079L;
 	public String text;
 	public String lang;
 	
@@ -24,5 +26,7 @@ public class Translation extends ModelObject implements Serializable {
 		this.text = text;
 	}
 	
-	
+	public String getDefiningStringRepresentation() {
+		return "Translation [lang=" + lang + ", text=" + text + "]";
+	}
 }
