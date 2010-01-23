@@ -17,6 +17,8 @@ import org.inqle.core.domain.INamedAndDescribed;
  * 
  * @author David Donohue
  * Apr 18, 2008
+ * 
+ * @deprecated - use IJenabean instead
  */
 public interface IGlobalJenabean extends INamedAndDescribedJenabean {
 	
