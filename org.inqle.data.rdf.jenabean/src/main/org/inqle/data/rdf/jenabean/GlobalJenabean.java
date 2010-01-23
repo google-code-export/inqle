@@ -14,8 +14,8 @@ import thewebsemantic.Namespace;
  * May 12, 2008
  */
 @Namespace(RDF.INQLE)
-//public abstract class GlobalJenabean extends NamedAndDescribedJenabean implements IGlobalJenabean {
-public abstract class GlobalJenabean extends NamedAndDescribedJenabean implements IJenabean {
+public abstract class GlobalJenabean extends NamedAndDescribedJenabean implements IGlobalJenabean {
+//public abstract class GlobalJenabean extends AJenabean implements IJenabean {
 
 //	@Id
 //	public String getId() {
