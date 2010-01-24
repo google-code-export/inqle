@@ -1,4 +1,4 @@
-package org.inqle.rdf.sparql;
+package org.inqle.rdf.services;
 
 import org.inqle.ecf.common.IInqleEcfService;
 
