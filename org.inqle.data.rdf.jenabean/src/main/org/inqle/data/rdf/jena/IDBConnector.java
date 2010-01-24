@@ -7,9 +7,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 public interface IDBConnector {
 
-	public static final String SUBDATABASE_SYSTEM = "system";
-	public static final String SUBDATABASE_DATA = "data";
-	
 	/**
 	 * This store already exists in the database, and has statements
 	 */
