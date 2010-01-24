@@ -1,6 +1,6 @@
 Bundle-ManifestVersion: 2
 Bundle-Name: INQLE SPARQL service
-Bundle-SymbolicName: org.inqle.rdf.sparql;singleton:=true
+Bundle-SymbolicName: org.inqle.rdf.services.common;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: INQLING, LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -16,10 +16,9 @@ Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
  org.inqle.core;bundle-version="1.0.0",
  org.eclipse.ecf.remoteservice;bundle-version="3.1.0",
  org.inqle.core.extensions;bundle-version="1.0.0",
- org.inqle.data.rdf.jenabean;bundle-version="1.0.0",
  org.inqle.ecf.common;bundle-version="1.0.0"
 Bundle-ClassPath: bin/,
  .
 Eclipse-BuddyPolicy: global
 Bundle-BuddyPolicy: global
-Export-Package: org.inqle.rdf.sparql
+Export-Package: org.inqle.rdf.services
