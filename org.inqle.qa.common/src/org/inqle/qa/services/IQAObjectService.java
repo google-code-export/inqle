@@ -1,9 +1,10 @@
 package org.inqle.qa.services;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.inqle.ecf.common.IInqleEcfService;
+import org.inqle.qa.beans.Option;
+import org.inqle.qa.beans.Question;
 
 
 public interface IQAObjectService extends IInqleEcfService {
