@@ -14,8 +14,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.inqle.data.rdf.jena.uri.UriMapper;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.sampling.IDataTable;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.table.ListListTableLabelProvider;
 

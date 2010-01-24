@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.RandomListChooser;
 import org.inqle.core.util.RandomUtil;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
@@ -17,8 +16,9 @@ import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.DatamodelLister;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Namespace;
 

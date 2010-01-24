@@ -7,6 +7,7 @@ Bundle-Activator: org.inqle.http.lookup.Activator
 Bundle-Vendor: INQLING, LLC
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.rap.rwt,
+ org.inqle.rdf.beans,
  org.inqle.data.rdf.jenabean,
  org.inqle.core
 Import-Package: com.hp.hpl.jena.rdf.model,

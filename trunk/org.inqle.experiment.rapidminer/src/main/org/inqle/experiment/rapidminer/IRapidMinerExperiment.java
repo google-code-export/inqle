@@ -1,7 +1,7 @@
 package org.inqle.experiment.rapidminer;
 
-import org.inqle.data.rdf.jenabean.IGlobalJenabean;
 import org.inqle.data.sampling.IDataTable;
+import org.inqle.rdf.beans.IGlobalJenabean;
 
 public interface IRapidMinerExperiment extends IGlobalJenabean {
 

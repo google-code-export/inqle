@@ -12,7 +12,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.AgentLister;
 import org.inqle.agent.IAgent;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
+import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 

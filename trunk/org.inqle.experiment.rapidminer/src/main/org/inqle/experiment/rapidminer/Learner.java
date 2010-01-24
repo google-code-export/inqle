@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.inqle.core.util.RandomListChooser;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.TargetModelName;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 

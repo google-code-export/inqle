@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.util.ArcLister;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
 
 import thewebsemantic.Namespace;
 

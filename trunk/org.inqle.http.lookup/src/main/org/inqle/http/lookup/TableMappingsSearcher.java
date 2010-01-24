@@ -5,14 +5,14 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.Data;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.QueryCriteriaFactory;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.mapping.DataMapping;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.query.larq.HitLARQ;
 import com.hp.hpl.jena.query.larq.IndexLARQ;

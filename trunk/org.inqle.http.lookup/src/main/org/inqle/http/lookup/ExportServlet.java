@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.http.lookup.util.HttpParameterParser;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;

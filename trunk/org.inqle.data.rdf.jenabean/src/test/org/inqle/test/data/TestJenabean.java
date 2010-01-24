@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.rdf.RDF;
-import org.inqle.rdf.beans.util.JenabeanWriter;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;

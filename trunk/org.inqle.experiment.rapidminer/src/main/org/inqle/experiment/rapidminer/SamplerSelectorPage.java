@@ -2,7 +2,7 @@ package org.inqle.experiment.rapidminer;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 

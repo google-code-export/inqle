@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.ui.rap.IPart;
 
 /**

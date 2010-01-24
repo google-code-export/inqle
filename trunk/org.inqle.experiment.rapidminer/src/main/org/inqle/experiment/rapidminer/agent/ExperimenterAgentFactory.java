@@ -6,8 +6,8 @@ import org.inqle.agent.IAgent;
 import org.inqle.agent.rap.AAgentFactory;
 import org.inqle.agent.rap.IAgentFactory;
 import org.inqle.agent.rap.IAgentWizard;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.beans.util.BeanTool;
 
 import com.hp.hpl.jena.rdf.model.Model;
 

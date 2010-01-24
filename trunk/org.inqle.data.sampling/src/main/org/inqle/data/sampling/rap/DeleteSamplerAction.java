@@ -6,9 +6,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplingInfo;
+import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.IPartType;
 
 /**
