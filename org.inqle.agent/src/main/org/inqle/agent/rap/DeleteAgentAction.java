@@ -8,7 +8,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.AgentInfo;
 import org.inqle.agent.IAgent;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
+import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.IPartType;
 
 /**

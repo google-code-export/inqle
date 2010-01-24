@@ -6,11 +6,8 @@ import org.apache.log4j.Logger;
 import org.inqle.agent.AAgent;
 import org.inqle.agent.AgentInfo;
 import org.inqle.core.util.RandomListChooser;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
@@ -18,6 +15,9 @@ import org.inqle.experiment.rapidminer.IExperimentResult;
 import org.inqle.experiment.rapidminer.IRapidMinerExperiment;
 import org.inqle.experiment.rapidminer.Learner;
 import org.inqle.experiment.rapidminer.RapidMinerExperimentLister;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
 
 import thewebsemantic.Namespace;
 

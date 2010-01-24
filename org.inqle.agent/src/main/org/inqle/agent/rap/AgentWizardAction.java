@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.inqle.agent.IAgent;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.ui.rap.actions.DynaWizardDialog;
 
 public class AgentWizardAction extends Action {

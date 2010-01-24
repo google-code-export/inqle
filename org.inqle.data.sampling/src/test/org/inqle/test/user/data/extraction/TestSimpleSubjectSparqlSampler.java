@@ -8,7 +8,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.apache.log4j.Logger;
 import org.inqle.data.rdf.AppInfo;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.data.sampling.SimpleSubjectSparqlSampler;
 import org.inqle.test.data.AppInfoProvider;

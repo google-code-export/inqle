@@ -30,6 +30,7 @@ Import-Package: com.hp.hpl.jena.query,
  thewebsemantic,
  thewebsemantic.binding
 Require-Bundle: org.inqle.core,
+ org.inqle.rdf.beans,
  org.inqle.data.rdf.jenabean,
  org.inqle.core.extensions,
  org.eclipse.rap.jface,

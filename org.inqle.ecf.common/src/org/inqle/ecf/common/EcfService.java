@@ -2,11 +2,11 @@ package org.inqle.ecf.common;
 
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.extensions.util.IJavaExtension;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.Site;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
 
 import thewebsemantic.Namespace;
 

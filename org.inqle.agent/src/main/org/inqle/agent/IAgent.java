@@ -1,6 +1,6 @@
 package org.inqle.agent;
 
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.rdf.beans.IUniqueJenabean;
 
 /**
  * All agent classes must implement this interface

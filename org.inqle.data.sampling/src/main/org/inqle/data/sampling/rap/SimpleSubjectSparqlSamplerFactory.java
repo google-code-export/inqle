@@ -3,9 +3,9 @@ package org.inqle.data.sampling.rap;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SimpleSubjectSparqlSampler;
+import org.inqle.rdf.beans.util.BeanTool;
 
 import com.hp.hpl.jena.rdf.model.Model;
 

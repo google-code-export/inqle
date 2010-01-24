@@ -6,7 +6,7 @@ package org.inqle.experiment.rapidminer;
 import java.util.Collection;
 
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.rdf.beans.IUniqueJenabean;
 
 /**
  * This interface specifies the results/output of any RapidMiner experiment.

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Dictionary;
 
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.rdf.beans.IUniqueJenabean;
 
 import thewebsemantic.Id;
 

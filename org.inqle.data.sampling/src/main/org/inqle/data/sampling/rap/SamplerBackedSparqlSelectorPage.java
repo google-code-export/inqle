@@ -6,8 +6,8 @@ package org.inqle.data.sampling.rap;
 import java.util.Collection;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
 import org.inqle.data.sampling.ISampler;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 import org.inqle.ui.rap.table.SparqlSelectorPage;
 
 /**

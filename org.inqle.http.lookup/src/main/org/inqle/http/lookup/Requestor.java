@@ -25,8 +25,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InputStreamUtil;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.w3c.dom.Document;
 
 /**

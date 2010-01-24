@@ -9,7 +9,7 @@ import org.inqle.agent.AgentInfo;
 import org.inqle.agent.rap.AAgentWizard;
 import org.inqle.agent.rap.AgentWizardAction;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.annotations.TargetModelName;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 
 import com.hp.hpl.jena.rdf.model.Model;

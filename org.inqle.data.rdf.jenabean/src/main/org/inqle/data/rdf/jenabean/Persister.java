@@ -29,12 +29,12 @@ import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.util.DatafileUtil;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.rdf.RDF;
 import org.inqle.rdf.annotations.TargetDatabaseId;
 import org.inqle.rdf.annotations.TargetModelName;
 import org.inqle.rdf.annotations.TargetModelType;
 import org.inqle.rdf.beans.IUniqueJenabean;
-import org.inqle.rdf.beans.util.JenabeanWriter;
 
 import thewebsemantic.Bean2RDF;
 import thewebsemantic.NotFoundException;

@@ -10,9 +10,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
 import org.inqle.data.sampling.ISampler;
 import org.inqle.data.sampling.SamplerLister;
+import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 

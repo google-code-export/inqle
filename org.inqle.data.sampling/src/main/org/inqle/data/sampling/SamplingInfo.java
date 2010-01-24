@@ -1,6 +1,6 @@
 package org.inqle.data.sampling;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 public class SamplingInfo {
 

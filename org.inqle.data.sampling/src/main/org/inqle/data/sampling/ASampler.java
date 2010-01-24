@@ -3,10 +3,10 @@ package org.inqle.data.sampling;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Arc;
-import org.inqle.data.rdf.jenabean.TargetModelName;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 

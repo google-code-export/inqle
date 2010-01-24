@@ -1,4 +1,4 @@
-package org.inqle.rdf.beans.util;
+package org.inqle.data.rdf.jenabean.util;
 
 import java.io.ByteArrayOutputStream;
 

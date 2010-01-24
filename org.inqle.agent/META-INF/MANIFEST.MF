@@ -9,6 +9,7 @@ Require-Bundle: org.inqle.core,
  org.eclipse.rap.jface,
  org.eclipse.rap.ui,
  org.inqle.ui.rap,
+ org.inqle.rdf.beans,
  org.inqle.data.rdf.jenabean,
  org.eclipse.rap.ui;bundle-version="1.2.0"
 Import-Package: com.hp.hpl.jena.rdf.model,

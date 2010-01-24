@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
-import org.inqle.data.rdf.jenabean.TargetModelName;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.sampling.IDataTable;
 import org.inqle.experiment.rapidminer.util.RapidMinerProcessCreator;
 
 import org.inqle.experiment.rapidminer.PerformanceVectorResult;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.GlobalJenabean;
 
 import com.rapidminer.example.Attribute;
 import com.rapidminer.example.ExampleSet;
