@@ -27,6 +27,8 @@ public class BeanTool {
 		return replica;
 	}
 	
+	
+	
 	/**
 	 * This creates a clone of the original, with a distinct random ID.
 	 * @param original
@@ -36,6 +38,26 @@ public class BeanTool {
 		J clone = replicate(original);
 		clone.setRandomId();
 		return clone;
+	}
+
+
+
+	/**
+	 * This creates an exact replica of the original
+	 * @param <T>
+	 * @param original
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T replicateToLikeClass(Class<T> newClass, Object original) {
+		T replica = null;
+		try {
+			replica = newClass.newInstance();
+			BeanUtils.copyProperties(replica, original);
+		} catch (Exception e) {
+			log.error("Unable to replicate bean: ", e);
+		}
+		return replica;
 	}
 	
 //	public static String getStringRepresentation(Object bean) {
