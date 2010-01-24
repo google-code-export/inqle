@@ -8,6 +8,7 @@ import org.inqle.qa.beans.Question;
 import org.inqle.qa.services.IQAObjectService;
 import org.inqle.rdf.beans.util.BeanTool;
 
+@Deprecated
 public class QAObjectService implements IQAObjectService {
 
 	private String serverId;
@@ -43,10 +44,10 @@ public class QAObjectService implements IQAObjectService {
 	 * @param question
 	 * @return
 	 */
-	public String storeQuestion(org.inqle.qa.beans.Question incommingQuestion) {
-		log.info("Storing question: " + incommingQuestion);
-		Question questionToStore = BeanTool.replicateToLikeClass(Question.class, incommingQuestion);
-		String msg = new RdfObjectService().storeObject(questionToStore);
+	public String storeQuestion(Question question) {
+		log.info("Storing question: " + question);
+//		Question questionToStore = BeanTool.replicateToLikeClass(Question.class, incommingQuestion);
+		String msg = new RdfObjectService().storeObject(question);
 		log.info("Stored it, msg=" + msg);
 		return msg;
 	}
@@ -54,10 +55,10 @@ public class QAObjectService implements IQAObjectService {
 	/**
 	 * convert a client question to a server question, and store it in the specified datamodel
 	 */
-	public String storeQuestion(String databaseId, String modelName, org.inqle.qa.beans.Question incommingQuestion) {
-		log.info("Storing question: " + incommingQuestion);
-		Question questionToStore = BeanTool.replicateToLikeClass(Question.class, incommingQuestion);
-		String msg = new RdfObjectService().storeObject(databaseId, modelName, questionToStore);
+	public String storeQuestion(String databaseId, String modelName, Question question) {
+		log.info("Storing question: " + question);
+//		Question questionToStore = BeanTool.replicateToLikeClass(Question.class, question);
+		String msg = new RdfObjectService().storeObject(databaseId, modelName, question);
 		log.info("Stored it, msg=" + msg);
 		return msg;
 	}
