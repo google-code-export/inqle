@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.qa.server.beans.Question;
+import org.inqle.qa.beans.Question;
 import org.inqle.qa.services.IQAObjectService;
 import org.inqle.rdf.beans.util.BeanTool;
 
