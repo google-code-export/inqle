@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 public class DropdownFieldShower implements IDataFieldShower {
 

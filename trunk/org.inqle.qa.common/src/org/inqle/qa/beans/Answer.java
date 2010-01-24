@@ -1,31 +1,36 @@
 package org.inqle.qa.beans;
 
-import java.util.Collection;
-import java.io.Serializable;
+import org.inqle.qa.common.QAConstants;
 
-import org.inqle.core.data.ModelObject;
+import thewebsemantic.Id;
+import thewebsemantic.Namespace;
+import thewebsemantic.RdfProperty;
+import thewebsemantic.TypeWrapper;
 
-public class Answer extends ModelObject implements Serializable {
+@TargetModelName(QAConstants.DEFAULT_ANSWER_MODEL)
+@Namespace(RDF.INQLE)
+public class Answer extends org.inqle.qa.beans.Answer 
+implements IUniqueJenabean{
 
-	private static final long serialVersionUID = -5195167656076619583L;
-	private Question question;
-	private Collection<Option> selectedOptions;
+	private static final long serialVersionUID = 4758619924199193098L;
 	
-	public Question getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
-
-	public void setSelectedOptions(Collection<Option> selectedOptions) {
-		this.selectedOptions = selectedOptions;
-	}
-
-	public Collection<Option> getSelectedOptions() {
-		return selectedOptions;
+	@Id
+	public String getId() {
+		return super.getId();
 	}
 	
-	
+	public String getUri() {
+		return TypeWrapper.instanceURI(this);
+	}
+
+	@RdfProperty(RDF.DESCRIPTION_PREDICATE)
+	public String getDescription() {
+		return super.getDescription();
+	}
+
+	@RdfProperty(RDF.NAME_PREDICATE)
+	public String getName() {
+		return super.getName();
+	}
+
 }

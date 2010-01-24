@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.inqle.core.domain.INamedAndDescribed;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 
 public class BeanViewer extends Viewer implements ISelectionListener {
 

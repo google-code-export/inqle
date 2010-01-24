@@ -26,7 +26,7 @@ import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
+import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.widgets.TextFieldShower;
 

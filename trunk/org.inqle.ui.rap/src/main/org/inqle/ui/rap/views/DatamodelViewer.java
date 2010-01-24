@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.Text;
 import org.inqle.core.domain.INamedAndDescribed;
 import org.inqle.core.util.DateFormatter;
 import org.inqle.data.rdf.jena.Jenamodel;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 import org.inqle.ui.rap.IDisposableViewer;
 
 import com.hp.hpl.jena.rdf.model.Model;

@@ -12,6 +12,12 @@ import org.inqle.qa.services.IRdfObjectService;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
+/**
+ * This service can be used if the client has access to bundle org.inqle.data.rdf.jenabean.
+ * In that case, the client can send & receive persistable Jenabean objects directly from this service
+ * @author David Donohue
+ *
+ */
 public class RdfObjectService implements IRdfObjectService {
 
 	private String serverId;

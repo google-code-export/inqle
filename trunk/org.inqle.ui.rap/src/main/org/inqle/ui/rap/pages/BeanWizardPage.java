@@ -23,7 +23,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 
 /**
  * Abstract class for wizard pages, which is designed to be extended w/ minimal effort.

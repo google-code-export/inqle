@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.util.DateUtil;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.datatypes.xsd.XSDDateTime;
 import com.hp.hpl.jena.rdf.model.Literal;

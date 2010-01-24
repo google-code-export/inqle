@@ -6,9 +6,9 @@ package org.inqle.ui.rap.actions;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.pages.SingleTextPage;
 

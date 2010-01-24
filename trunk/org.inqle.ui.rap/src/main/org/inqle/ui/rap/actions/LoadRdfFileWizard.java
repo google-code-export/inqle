@@ -18,11 +18,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.load.Loader;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.rdf.model.Model;
 

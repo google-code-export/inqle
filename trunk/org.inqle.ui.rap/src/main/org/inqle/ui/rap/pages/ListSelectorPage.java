@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 
 /**
  * This generates a wizard page which has a list selector, without validation.  

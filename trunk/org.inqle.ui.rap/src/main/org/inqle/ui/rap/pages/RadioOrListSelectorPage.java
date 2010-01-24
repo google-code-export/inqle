@@ -12,7 +12,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 
 public class RadioOrListSelectorPage extends ListSelectorPage implements SelectionListener {
 

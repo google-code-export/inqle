@@ -11,7 +11,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 
 import com.hp.hpl.jena.query.QuerySolution;
 

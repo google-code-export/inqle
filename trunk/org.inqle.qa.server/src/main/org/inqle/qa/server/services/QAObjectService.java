@@ -1,10 +1,12 @@
 package org.inqle.qa.server.services;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.qa.beans.Question;
+import org.inqle.qa.server.beans.Question;
 import org.inqle.qa.services.IQAObjectService;
+import org.inqle.rdf.beans.util.BeanTool;
 
 public class QAObjectService implements IQAObjectService {
 
@@ -25,48 +27,39 @@ public class QAObjectService implements IQAObjectService {
 	 * @param questionId
 	 * @return
 	 */
-	public Question getQuestion(String questionId) {
+	public org.inqle.qa.beans.Question getQuestion(String questionId) {
 		return new RdfObjectService().getObject(Question.class, questionId);
 	}
 	
 	/**
 	 * Get a question from the specified datamodel
 	 */
-	public Question getQuestion(String databaseId, String modelName, String objectId) {
-		return new RdfObjectService().getObject(Question.class, databaseId, modelName, objectId);
+	public org.inqle.qa.beans.Question getQuestion(String questionId, String databaseId, String modelName) {
+		return new RdfObjectService().getObject(Question.class, databaseId, modelName, questionId);
 	}
 
 	/**
-	 * Store a question to the default datamodel
+	 * convert a client question to a server question, and store it in the default datamodel
 	 * @param question
 	 * @return
 	 */
-	public String storeQuestion(Question question) {
-		log.info("Storing question: " + question);
-		String msg = new RdfObjectService().storeObject(question);
+	public String storeQuestion(org.inqle.qa.beans.Question incommingQuestion) {
+		log.info("Storing question: " + incommingQuestion);
+		Question questionToStore = BeanTool.replicateToLikeClass(Question.class, incommingQuestion);
+		String msg = new RdfObjectService().storeObject(questionToStore);
 		log.info("Stored it, msg=" + msg);
 		return msg;
 	}
 	
 	/**
-	 * Store a question to the specified datamodel
+	 * convert a client question to a server question, and store it in the specified datamodel
 	 */
-	public String storeQuestion(String databaseId, String modelName, Question question) {
-		return new RdfObjectService().storeObject(databaseId, modelName, question);
-	}
-
-	/**
-	 * List all questions from the default datamodel
-	 */
-	public Collection<Question> listAllQuestions() {
-		return new RdfObjectService().listObjectsOfClass(Question.class);
-	}
-	
-	/**
-	 * List all questions from the specified datamodel
-	 */
-	public Collection<Question> listAllQuestions(String databaseId, String modelName) {
-		return new RdfObjectService().listObjectsOfClass(Question.class, databaseId, modelName);
+	public String storeQuestion(String databaseId, String modelName, org.inqle.qa.beans.Question incommingQuestion) {
+		log.info("Storing question: " + incommingQuestion);
+		Question questionToStore = BeanTool.replicateToLikeClass(Question.class, incommingQuestion);
+		String msg = new RdfObjectService().storeObject(databaseId, modelName, questionToStore);
+		log.info("Stored it, msg=" + msg);
+		return msg;
 	}
 
 }

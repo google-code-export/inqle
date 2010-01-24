@@ -4,10 +4,10 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.util.TypeConverter;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
 import org.inqle.data.rdf.jenabean.mapping.*;
+import org.inqle.rdf.RDF;
 import org.inqle.ui.rap.csv.CsvReader;
 
 import com.hp.hpl.jena.ontology.Individual;
