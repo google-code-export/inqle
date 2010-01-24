@@ -3,7 +3,8 @@ package org.inqle.data.rdf.jenabean;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.GlobalJenabean;
 
 import thewebsemantic.Namespace;
 

@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetModelName;
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+
 import thewebsemantic.Namespace;
 
 /**

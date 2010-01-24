@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
+import org.inqle.rdf.beans.GlobalJenabean;
 
 import thewebsemantic.Id;
 

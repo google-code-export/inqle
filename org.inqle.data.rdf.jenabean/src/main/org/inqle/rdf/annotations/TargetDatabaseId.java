@@ -1,4 +1,4 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -7,17 +7,16 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 
 /**
- * Annotation for any classes which are intended to be persisted to a datamodel of a consistent type
- * (e.g. system or data).
+ * Annotation for any classes which are intended to be persisted in an SystemDatamodel.
+ * The value should be the role ID of the datamodel, to which objects of this class should
+ * be persisted.
  * 
  * @author David Donohue
- * Nov 9, 2009
+ * Jul 3, 2008
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TargetModelType {
-
+public @interface TargetDatabaseId {
 	String value();
-
 }

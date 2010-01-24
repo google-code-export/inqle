@@ -8,14 +8,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.inqle.core.util.InqleInfo;
 import org.inqle.core.util.RandomListChooser;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jena.QueryCriteria;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jenabean.Finder;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.SubjectClassCache;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.util.JenabeanWriter;
 
 import com.hp.hpl.jena.query.ResultSetRewindable;
 

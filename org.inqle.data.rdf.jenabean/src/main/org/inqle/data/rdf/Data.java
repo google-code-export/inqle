@@ -2,6 +2,7 @@ package org.inqle.data.rdf;
 
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Namespace;
 

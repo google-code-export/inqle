@@ -1,9 +1,9 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.beans.util;
 
 import java.io.ByteArrayOutputStream;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.load.Loader;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Bean2RDF;
 

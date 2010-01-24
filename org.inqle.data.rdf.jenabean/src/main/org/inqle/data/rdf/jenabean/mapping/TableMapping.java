@@ -1,9 +1,9 @@
 package org.inqle.data.rdf.jenabean.mapping;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
 
 import thewebsemantic.Namespace;
 

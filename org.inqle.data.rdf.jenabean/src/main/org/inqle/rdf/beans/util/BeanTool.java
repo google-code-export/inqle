@@ -1,8 +1,8 @@
-package org.inqle.data.rdf.jenabean.util;
+package org.inqle.rdf.beans.util;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.jenabean.IJenabean;
+import org.inqle.rdf.beans.IJenabean;
 
 public class BeanTool {
 

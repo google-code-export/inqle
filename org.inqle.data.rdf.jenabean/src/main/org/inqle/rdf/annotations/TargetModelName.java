@@ -1,4 +1,4 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

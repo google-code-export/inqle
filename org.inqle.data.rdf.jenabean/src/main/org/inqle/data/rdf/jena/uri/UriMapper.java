@@ -6,8 +6,8 @@ package org.inqle.data.rdf.jena.uri;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.util.FileUtils;

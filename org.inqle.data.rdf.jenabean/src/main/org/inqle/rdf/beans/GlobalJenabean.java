@@ -1,7 +1,8 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.beans;
 
 import org.inqle.core.util.JavaHasher;
-import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.NamedAndDescribedJenabean;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

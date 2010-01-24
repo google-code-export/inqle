@@ -7,10 +7,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.GlobalJenabean;
+import org.inqle.rdf.beans.IUniqueJenabean;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

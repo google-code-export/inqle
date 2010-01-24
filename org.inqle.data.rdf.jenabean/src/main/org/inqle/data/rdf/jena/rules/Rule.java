@@ -2,9 +2,9 @@ package org.inqle.data.rdf.jena.rules;
 
 import java.util.Collection;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapping;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 

@@ -1,7 +1,10 @@
 package org.inqle.data.rdf.jenabean;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.NamespaceMapping;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Namespace;
 

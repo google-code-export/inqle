@@ -3,7 +3,7 @@ package org.inqle.data.rdf.jena;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
