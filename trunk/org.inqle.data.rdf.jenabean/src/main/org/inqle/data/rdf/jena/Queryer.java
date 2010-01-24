@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.util.ArcSparqlBuilder;
 import org.inqle.data.rdf.jena.util.Converter;
 import org.inqle.data.rdf.jenabean.ArcSet;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.TypeWrapper;
 

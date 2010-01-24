@@ -3,10 +3,10 @@ package org.inqle.data.rdf.jenabean.cache;
 import java.net.URI;
 import java.util.Collection;
 
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.AJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.AJenabean;
 
 import thewebsemantic.Namespace;
 

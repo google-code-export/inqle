@@ -1,4 +1,4 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.beans;
 
 import java.util.Date;
 

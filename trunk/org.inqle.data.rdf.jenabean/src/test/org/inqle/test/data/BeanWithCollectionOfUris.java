@@ -6,7 +6,7 @@ import java.util.Collection;
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 @Namespace(RDF.INQLE)
 public class BeanWithCollectionOfUris {

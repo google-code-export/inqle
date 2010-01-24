@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.inqle.data.rdf.jenabean.Site;
-import org.inqle.data.rdf.jenabean.UniqueJenabean;
 import org.inqle.data.rdf.jenabean.UserAccount;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

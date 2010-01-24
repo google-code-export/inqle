@@ -3,9 +3,9 @@
  */
 package org.inqle.data.rdf.jena;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
 
 import thewebsemantic.Namespace;
 

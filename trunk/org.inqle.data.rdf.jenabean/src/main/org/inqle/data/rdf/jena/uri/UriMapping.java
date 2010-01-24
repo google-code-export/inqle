@@ -4,7 +4,8 @@
 package org.inqle.data.rdf.jena.uri;
 
 import thewebsemantic.Namespace;
-import org.inqle.data.rdf.RDF;
+
+import org.inqle.rdf.RDF;
 
 /**
  * This class maps a string (e.g. a column header)

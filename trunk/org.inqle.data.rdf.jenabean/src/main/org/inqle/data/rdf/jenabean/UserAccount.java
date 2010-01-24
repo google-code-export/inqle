@@ -1,6 +1,6 @@
 package org.inqle.data.rdf.jenabean;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

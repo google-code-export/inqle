@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.beans;
 
 import java.util.UUID;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

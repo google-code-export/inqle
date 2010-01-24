@@ -1,8 +1,9 @@
-package org.inqle.data.rdf.jenabean;
+package org.inqle.rdf.beans;
 
 import java.util.Date;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.NamedAndDescribedJenabean;
+import org.inqle.rdf.RDF;
 
 import thewebsemantic.Namespace;
 

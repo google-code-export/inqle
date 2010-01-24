@@ -3,7 +3,9 @@
  */
 package org.inqle.data.rdf.jenabean;
 
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.AJenabean;
+import org.inqle.rdf.beans.IJenabean;
 
 import thewebsemantic.Namespace;
 import thewebsemantic.RdfProperty;

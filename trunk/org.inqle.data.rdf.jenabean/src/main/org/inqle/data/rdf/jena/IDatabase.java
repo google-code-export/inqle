@@ -1,6 +1,6 @@
 package org.inqle.data.rdf.jena;
 
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.rdf.beans.IUniqueJenabean;
 
 public interface IDatabase extends IUniqueJenabean {
 

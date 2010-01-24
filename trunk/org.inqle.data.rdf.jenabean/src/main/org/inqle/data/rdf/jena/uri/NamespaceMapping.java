@@ -2,11 +2,11 @@
  * 
  */
 package org.inqle.data.rdf.jena.uri;
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.GlobalJenabean;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.GlobalJenabean;
 
 import thewebsemantic.Namespace;
 

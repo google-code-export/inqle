@@ -1,7 +1,8 @@
 package org.inqle.data.rdf.jenabean;
 
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.uri.UriMapper;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.beans.GlobalJenabean;
 
 import thewebsemantic.Namespace;
 

@@ -1,4 +1,4 @@
-package org.inqle.data.rdf;
+package org.inqle.rdf;
 
 import java.net.URI;
 import java.util.UUID;
