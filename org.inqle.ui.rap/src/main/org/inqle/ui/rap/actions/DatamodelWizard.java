@@ -26,6 +26,7 @@ import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.rdf.RDF;
 import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.tree.parts.DatabasePart;
 import org.inqle.ui.rap.widgets.TextFieldShower;
@@ -300,7 +301,7 @@ public class DatamodelWizard extends Wizard {
 			log.info("Created new model ");
 			databasePart.fireUpdate(databasePart);
 		} else if (this.mode == DatamodelWizardAction.MODE_EDIT) {
-			String targetDatamodelId = Persister.getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId());
+			String targetDatamodelId = RDF.getTargetDatamodelId(datamodel.getClass(), datamodel.getDatabaseId());
 			persister.persist(datamodel, targetDatamodelId);
 			databasePart.fireUpdatePart();
 		}

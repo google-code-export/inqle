@@ -2,7 +2,7 @@ package org.inqle.ecf.common;
 
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.extensions.util.IJavaExtension;
-import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.rdf.RDF;
 import org.inqle.rdf.annotations.TargetDatabaseId;
@@ -17,10 +17,11 @@ import thewebsemantic.Namespace;
  * This class can be assembled from <ecfServer> extensions (in plugin.xml)
  * and it is a persistable class so it can be stored in a datamodel.
  */
-@TargetDatabaseId(Persister.CORE_DATABASE_ID)
-@TargetModelName(Site.SITE_DATASET_ROLE_ID)
+@TargetDatabaseId(InqleInfo.CORE_DATABASE_ID)
+@TargetModelName(EcfService.ECF_MODEL_NAME)
 @Namespace(RDF.INQLE)
 public class EcfService implements IJavaExtension {
+	public static final String ECF_MODEL_NAME = "_ECF";
 	private String serviceClassName;
 	private String serviceInterfaceName;
 	private String serverProtocol;

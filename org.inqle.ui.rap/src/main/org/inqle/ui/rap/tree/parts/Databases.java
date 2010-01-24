@@ -14,6 +14,7 @@ import org.inqle.data.rdf.jena.DBConnectorFactory;
 import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.rdf.RDF;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatabaseWizardAction;
@@ -45,7 +46,7 @@ public class Databases extends PartType {
 		List<IDatabase> databases = new ArrayList<IDatabase>();
 		for (String databaseId: databaseIds) {
 			if (databaseId==null) continue;
-			String targetDatamodelId = Persister.getTargetDatamodelId(baseDatabaseObject.getClass(), databaseId);
+			String targetDatamodelId = RDF.getTargetDatamodelId(baseDatabaseObject.getClass(), databaseId);
 			IDatabase database = persister.reconstitute(baseDatabaseObject.getClass(), databaseId, targetDatamodelId, true);
 			//if the database object is not stored in the metarepository, create it
 			if (database==null) {

@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.inqle.experiment.rapidminer;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: INQLING, LLC
 Require-Bundle: org.inqle.core,
- org.inqle.rdf.beans,
- org.inqle.data.rdf.jenabean,
+ org.inqle.rdf.core,
+ org.inqle.rdf.jena,
  org.inqle.core.extensions,
  org.eclipse.rap.jface,
  org.eclipse.rap.ui,

@@ -12,6 +12,7 @@ import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.rdf.RDF;
 import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
@@ -92,9 +93,9 @@ public class DatabasePart extends PartType {
 		
 		//for Datamodel, add a ModelPart
 		IDBConnector connector = DBConnectorFactory.getDBConnector(database.getId());
-		List<String> modelNames = connector.listModelNames(IDBConnector.SUBDATABASE_DATA);
+		List<String> modelNames = connector.listModelNames(RDF.SUBDATABASE_DATA);
 		for (String modelName: modelNames) {
-			String modelId = database.getId() + "/" + IDBConnector.SUBDATABASE_DATA + "/" + modelName;
+			String modelId = database.getId() + "/" + RDF.SUBDATABASE_DATA + "/" + modelName;
 			PurposefulDatamodel datamodel = persister.getDatabaseBackedDatamodel(PurposefulDatamodel.class, modelId);
 			if (datamodel==null) {
 				log.warn("Model of ID " + modelId + " does not exist but should.");
@@ -106,7 +107,7 @@ public class DatabasePart extends PartType {
 			modelParts.add(modelPart);
 		}
 		
-		modelNames = connector.listModelNames(IDBConnector.SUBDATABASE_SYSTEM);
+		modelNames = connector.listModelNames(RDF.SUBDATABASE_SYSTEM);
 		for (String modelName: modelNames) {
 //			String modelId = database.getId() + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/"  + modelName;
 			SystemDatamodel datamodel = new SystemDatamodel();

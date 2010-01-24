@@ -6,7 +6,7 @@ import org.inqle.ecf.common.IInqleEcfService;
 import org.inqle.qa.beans.Option;
 import org.inqle.qa.beans.Question;
 
-
+@Deprecated
 public interface IQAObjectService extends IInqleEcfService {
 	//Methods for questions
 	public String storeQuestion(Question questionToStore);
