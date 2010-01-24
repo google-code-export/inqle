@@ -3,7 +3,7 @@ package org.inqle.qa.services;
 import java.util.Collection;
 
 import org.inqle.ecf.common.IInqleEcfService;
-import org.inqle.qa.beans.Question;
+
 
 public interface IRdfObjectService extends IInqleEcfService {
 	

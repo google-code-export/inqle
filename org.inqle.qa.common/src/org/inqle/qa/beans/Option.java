@@ -1,47 +1,41 @@
 package org.inqle.qa.beans;
 
-import java.io.Serializable;
-import java.util.Collection;
+import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
+import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.qa.common.QAConstants;
 
-import org.inqle.core.data.GlobalModelObject;
+import thewebsemantic.Id;
+import thewebsemantic.Namespace;
+import thewebsemantic.RdfProperty;
+import thewebsemantic.TypeWrapper;
 
-/**
- * Represents an option for questions and answers
- * @author David Donohue
- *
- */
-public class Option extends GlobalModelObject implements Serializable {
+@TargetDatabaseId(QAConstants.QA_DATABASE)
+@TargetModelName(QAConstants.DEFAULT_QUESTION_MODEL)
+@Namespace(RDF.INQLE)
+public class Option extends org.inqle.qa.beans.Option 
+implements IUniqueJenabean{
 
-	private Collection<Translation> translations;
+	private static final long serialVersionUID = 4758619924199193098L;
 	
-	public void setOptionTranslations(Collection<Translation> translations) {
-		this.translations = translations;
-	}
-
-	public Collection<Translation> getOptionTranslations() {
-		return translations;
-	}
-	
-	public void addOptionTranslation(Translation translation) {
-		translations.add(translation);
+	@Id
+	public String getId() {
+		return super.getId();
 	}
 	
-	public Translation getOptionTranslation(String lang) {
-		for (Translation translation: getOptionTranslations()) {
-			if (translation.getLang().equals(lang)) return translation;
-		}
-		return null;
-	}
-	public Translation getDefaultOptionTranslation() {
-		return getOptionTranslation(QAInfo.DEFAULT_LANG);
+	public String getUri() {
+		return TypeWrapper.instanceURI(this);
 	}
 
-	@Override
-	/**
-	 * So any 2 option objects with the same English text will have the same ID.
-	 * Any difference in characters will cause the IDs to be different
-	 */
-	public String getDefiningStringRepresentation() {
-		return getClass().getName() + "_" + getDefaultOptionTranslation();
+	@RdfProperty(RDF.DESCRIPTION_PREDICATE)
+	public String getDescription() {
+		return super.getDescription();
 	}
+
+	@RdfProperty(RDF.NAME_PREDICATE)
+	public String getName() {
+		return super.getName();
+	}
+
 }

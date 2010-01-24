@@ -8,7 +8,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 
 /**
  * This generates a wizard page which has a single text field, without validation.  

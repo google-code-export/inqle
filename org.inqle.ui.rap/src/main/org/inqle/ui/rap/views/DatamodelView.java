@@ -7,9 +7,9 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Queryer;
 import org.inqle.data.rdf.jena.util.SubjectClassLister;
+import org.inqle.rdf.RDF;
 import org.inqle.ui.rap.widgets.ResultSetTable.UriValData;
 
 /**

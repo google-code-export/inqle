@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.inqle.data.rdf.RDF;
 import org.inqle.data.rdf.jena.Jenamodel;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -69,8 +69,8 @@ public class WikiData {
 				return title;
 			}
 			
-			if (subject.hasProperty(RDF.LABEL_PROPERTY)) {
-				title = subject.getProperty(RDF.LABEL_PROPERTY).getString();
+			if (subject.hasProperty(ResourceFactory.createProperty(RDF.NAME_PREDICATE))) {
+				title = subject.getProperty(ResourceFactory.createProperty(RDF.DESCRIPTION_PREDICATE)).getString();
 				return title;
 			}
 			
@@ -90,8 +90,8 @@ public class WikiData {
 				return description;
 			}
 			
-			if (subject.hasProperty(RDF.LABEL_PROPERTY)) {
-				description = subject.getProperty(RDF.COMMENT_PROPERTY).getString();
+			if (subject.hasProperty(ResourceFactory.createProperty(RDF.NAME_PREDICATE))) {
+				description = subject.getProperty(ResourceFactory.createProperty(RDF.DESCRIPTION_PREDICATE)).getString();
 				return description;
 			}
 		}

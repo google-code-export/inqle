@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.inqle.data.rdf.jena.RdfTable;
-import org.inqle.data.rdf.jenabean.INamedAndDescribedJenabean;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
+import org.inqle.rdf.beans.INamedAndDescribedJenabean;
 import org.inqle.ui.rap.pages.BeanWizardPage;
 import org.inqle.ui.rap.pages.DynaWizardPage;
 

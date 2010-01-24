@@ -12,7 +12,7 @@ import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.PurposefulDatamodel;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jenabean.Persister;
-import org.inqle.data.rdf.jenabean.util.BeanTool;
+import org.inqle.rdf.beans.util.BeanTool;
 import org.inqle.ui.rap.IPart;
 import org.inqle.ui.rap.PartType;
 import org.inqle.ui.rap.actions.DatamodelWizardAction;

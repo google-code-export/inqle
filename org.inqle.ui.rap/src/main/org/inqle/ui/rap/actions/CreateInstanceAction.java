@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jenabean.JenabeanWriter;
+import org.inqle.data.rdf.jenabean.util.JenabeanWriter;
 import org.inqle.ui.rap.widgets.InstanceDialog;
 
 import com.hp.hpl.jena.ontology.OntClass;

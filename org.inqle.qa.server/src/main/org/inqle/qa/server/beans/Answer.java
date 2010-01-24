@@ -1,9 +1,9 @@
 package org.inqle.qa.server.beans;
 
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.inqle.qa.common.QAConstants;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.IUniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;

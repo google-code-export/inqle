@@ -2,7 +2,7 @@ package org.inqle.ui.rap.widgets;
 
 
 import org.eclipse.swt.widgets.Shell;
-import org.inqle.data.rdf.RDF;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;

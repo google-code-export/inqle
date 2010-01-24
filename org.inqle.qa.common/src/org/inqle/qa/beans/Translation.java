@@ -1,32 +1,31 @@
 package org.inqle.qa.beans;
 
-import java.io.Serializable;
+import org.inqle.data.rdf.RDF;
+import org.inqle.data.rdf.jenabean.IGlobalJenabean;
+import org.inqle.data.rdf.jenabean.IUniqueJenabean;
+import org.inqle.data.rdf.jenabean.TargetDatabaseId;
+import org.inqle.data.rdf.jenabean.TargetModelName;
+import org.inqle.qa.common.QAConstants;
 
-import org.inqle.core.data.GlobalModelObject;
+import thewebsemantic.Id;
+import thewebsemantic.Namespace;
+import thewebsemantic.RdfProperty;
+import thewebsemantic.TypeWrapper;
 
-public class Translation extends GlobalModelObject implements Serializable {
+@TargetDatabaseId(QAConstants.QA_DATABASE)
+@TargetModelName(QAConstants.DEFAULT_QUESTION_MODEL)
+@Namespace(RDF.INQLE)
+public class Translation extends org.inqle.qa.beans.Translation 
+implements IGlobalJenabean {
 
-	private static final long serialVersionUID = 551131315984762079L;
-	public String text;
-	public String lang;
+	private static final long serialVersionUID = 4758619924199193098L;
 	
-	public String getLang() {
-		return lang;
+	@Id
+	public String getId() {
+		return super.getId();
 	}
 	
-	public void setLang(String lang) {
-		this.lang = lang;
-	}
-	
-	public String getText() {
-		return text;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
-	}
-	
-	public String getDefiningStringRepresentation() {
-		return "Translation [lang=" + lang + ", text=" + text + "]";
+	public String getUri() {
+		return TypeWrapper.instanceURI(this);
 	}
 }
