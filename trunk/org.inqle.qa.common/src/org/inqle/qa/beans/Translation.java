@@ -1,31 +1,40 @@
 package org.inqle.qa.beans;
 
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.IGlobalJenabean;
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.inqle.qa.common.QAConstants;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.GlobalJenabean;
 
-import thewebsemantic.Id;
 import thewebsemantic.Namespace;
-import thewebsemantic.RdfProperty;
-import thewebsemantic.TypeWrapper;
 
 @TargetDatabaseId(QAConstants.QA_DATABASE)
 @TargetModelName(QAConstants.DEFAULT_QUESTION_MODEL)
 @Namespace(RDF.INQLE)
-public class Translation extends org.inqle.qa.beans.Translation 
-implements IGlobalJenabean {
+public class Translation extends GlobalJenabean {
 
 	private static final long serialVersionUID = 4758619924199193098L;
 	
-	@Id
-	public String getId() {
-		return super.getId();
+	public String text;
+	public String lang;
+	
+	public String getLang() {
+		return lang;
 	}
 	
-	public String getUri() {
-		return TypeWrapper.instanceURI(this);
+	public void setLang(String lang) {
+		this.lang = lang;
+	}
+	
+	public String getText() {
+		return text;
+	}
+	
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	public String getStringRepresentation() {
+		return "Translation [lang=" + lang + ", text=" + text + "]";
 	}
 }

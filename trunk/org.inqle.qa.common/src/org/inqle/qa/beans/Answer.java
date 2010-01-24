@@ -1,6 +1,9 @@
 package org.inqle.qa.beans;
 
 import org.inqle.qa.common.QAConstants;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -9,8 +12,7 @@ import thewebsemantic.TypeWrapper;
 
 @TargetModelName(QAConstants.DEFAULT_ANSWER_MODEL)
 @Namespace(RDF.INQLE)
-public class Answer extends org.inqle.qa.beans.Answer 
-implements IUniqueJenabean{
+public class Answer extends UniqueJenabean{
 
 	private static final long serialVersionUID = 4758619924199193098L;
 	

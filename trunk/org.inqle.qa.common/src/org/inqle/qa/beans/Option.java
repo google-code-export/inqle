@@ -1,10 +1,10 @@
 package org.inqle.qa.beans;
 
-import org.inqle.data.rdf.RDF;
-import org.inqle.data.rdf.jenabean.IUniqueJenabean;
-import org.inqle.data.rdf.jenabean.TargetDatabaseId;
-import org.inqle.data.rdf.jenabean.TargetModelName;
 import org.inqle.qa.common.QAConstants;
+import org.inqle.rdf.RDF;
+import org.inqle.rdf.annotations.TargetDatabaseId;
+import org.inqle.rdf.annotations.TargetModelName;
+import org.inqle.rdf.beans.UniqueJenabean;
 
 import thewebsemantic.Id;
 import thewebsemantic.Namespace;
@@ -14,8 +14,7 @@ import thewebsemantic.TypeWrapper;
 @TargetDatabaseId(QAConstants.QA_DATABASE)
 @TargetModelName(QAConstants.DEFAULT_QUESTION_MODEL)
 @Namespace(RDF.INQLE)
-public class Option extends org.inqle.qa.beans.Option 
-implements IUniqueJenabean{
+public class Option extends UniqueJenabean{
 
 	private static final long serialVersionUID = 4758619924199193098L;
 	
