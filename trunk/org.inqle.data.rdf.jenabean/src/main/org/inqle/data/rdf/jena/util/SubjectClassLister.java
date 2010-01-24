@@ -212,7 +212,7 @@ public class SubjectClassLister {
 	 */
 	private static void cacheSubjectClasses(String cacheDatabaseId, String datamodelId, Collection<String> subjectClasses) {
 		String cacheId = getSubjectClassCacheId(datamodelId);
-		String cacheDatamodelId = Persister.getTargetDatamodelId(SubjectClassCache.class, cacheDatabaseId);
+		String cacheDatamodelId = RDF.getTargetDatamodelId(SubjectClassCache.class, cacheDatabaseId);
 		Persister persister = Persister.getInstance();
 		SubjectClassCache subjectClassCache = null;
 		try {
@@ -246,7 +246,7 @@ public class SubjectClassLister {
 	@SuppressWarnings("unchecked")
 	public static void invalidateCache(String cacheDatabaseId, String datamodelId) {
 		Persister persister = Persister.getInstance();
-		String cacheDatamodelId = Persister.getTargetDatamodelId(SubjectClassCache.class, cacheDatabaseId);
+		String cacheDatamodelId = RDF.getTargetDatamodelId(SubjectClassCache.class, cacheDatabaseId);
 		Collection<SubjectClassCache> subjectClassCacheObjectsToRemove = 
 			(Collection<SubjectClassCache>)Finder.listJenabeansWithStringValue(
 					cacheDatamodelId, 

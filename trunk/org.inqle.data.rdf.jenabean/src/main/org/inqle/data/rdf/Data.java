@@ -1,7 +1,6 @@
 package org.inqle.data.rdf;
 
-import org.inqle.data.rdf.jena.IDBConnector;
-import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.rdf.RDF;
 
 import thewebsemantic.Namespace;
@@ -22,6 +21,6 @@ public class Data {
 
 	private static final String DATAMODEL_NAME_FOR_DATA_SUBJECT = "_DataSubject";
 	private static final String DATAMODEL_NAME_FOR_DATA_PROPERTY = "_DataProperty";
-	public static final String DATAMODEL_ID_FOR_DATA_PROPERTY = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_PROPERTY;
-	public static final String DATAMODEL_ID_FOR_DATA_SUBJECT = Persister.CORE_DATABASE_ID + "/" + IDBConnector.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_SUBJECT;
+	public static final String DATAMODEL_ID_FOR_DATA_PROPERTY = InqleInfo.CORE_DATABASE_ID + "/" + RDF.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_PROPERTY;
+	public static final String DATAMODEL_ID_FOR_DATA_SUBJECT = InqleInfo.CORE_DATABASE_ID + "/" + RDF.SUBDATABASE_SYSTEM + "/" + DATAMODEL_NAME_FOR_DATA_SUBJECT;
 }

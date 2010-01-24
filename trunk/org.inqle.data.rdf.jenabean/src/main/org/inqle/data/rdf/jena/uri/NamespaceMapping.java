@@ -2,7 +2,7 @@
  * 
  */
 package org.inqle.data.rdf.jena.uri;
-import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.rdf.RDF;
 import org.inqle.rdf.annotations.TargetDatabaseId;
 import org.inqle.rdf.annotations.TargetModelName;
@@ -15,7 +15,7 @@ import thewebsemantic.Namespace;
  * @author David Donohue
  * May 31, 2008
  */
-@TargetDatabaseId(Persister.CORE_DATABASE_ID)
+@TargetDatabaseId(InqleInfo.CORE_DATABASE_ID)
 @TargetModelName(NamespaceMapping.NAMESPACE_MAPPING_DATASET)
 @Namespace(RDF.INQLE)
 public class NamespaceMapping extends GlobalJenabean {

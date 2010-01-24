@@ -61,7 +61,7 @@ public class PurposefulDatamodel extends DatabaseBackedJenamodel {
 	
 	@Override
 	public String getModelType() {
-		return IDBConnector.SUBDATABASE_DATA;
+		return RDF.SUBDATABASE_DATA;
 	}
 	
 }

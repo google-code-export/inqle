@@ -383,7 +383,7 @@ public class ArcLister {
 		String arcCacheId = getArcCacheId(sourceDatamodelId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
 		SubjectArcsCache arcsCache = null;
-		String targetDatamodelId = Persister.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
+		String targetDatamodelId = RDF.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
 		try {
 			arcsCache = persister.reconstitute(SubjectArcsCache.class, arcCacheId, targetDatamodelId, true);
 		} catch (Exception e) {
@@ -415,7 +415,7 @@ public class ArcLister {
 	public static Collection<Arc> getArcsFromCache(String cacheDatabaseId, String sourceDatamodelId, String subjectClassUri, int depth, String type) {
 		String arcCacheId = getArcCacheId(sourceDatamodelId, subjectClassUri, depth, type);
 		Persister persister = Persister.getInstance();
-		String targetDatamodelId = Persister.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
+		String targetDatamodelId = RDF.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
 		SubjectArcsCache arcsCache = persister.reconstitute(SubjectArcsCache.class, arcCacheId, targetDatamodelId, true);
 		if (arcsCache == null) return null;
 //		log.info("Retrieved ArcsCache from cache:" + JenabeanWriter.toString(arcsCache));
@@ -452,7 +452,7 @@ public class ArcLister {
 					SubjectArcsCache.class, 
 					RDF.INQLE + "datamodelId", 
 					datamodelId);
-		String cacheDatamodelId = Persister.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
+		String cacheDatamodelId = RDF.getTargetDatamodelId(SubjectArcsCache.class, cacheDatabaseId);
 		for (SubjectArcsCache arcCacheObject: arcCacheObjectsToRemove) {
 			persister.remove(arcCacheObject, cacheDatamodelId);
 		}

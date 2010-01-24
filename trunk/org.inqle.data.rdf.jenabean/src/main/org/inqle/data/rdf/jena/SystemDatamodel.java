@@ -20,6 +20,6 @@ import thewebsemantic.Namespace;
 public class SystemDatamodel extends DatabaseBackedJenamodel {
 	@Override
 	public String getModelType() {
-		return IDBConnector.SUBDATABASE_SYSTEM;
+		return RDF.SUBDATABASE_SYSTEM;
 	}
 }
