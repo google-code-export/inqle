@@ -9,6 +9,7 @@ import org.inqle.agent.AgentInfo;
 import org.inqle.agent.rap.AAgentWizard;
 import org.inqle.agent.rap.AgentWizardAction;
 import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.rdf.RDF;
 import org.inqle.rdf.annotations.TargetModelName;
 import org.inqle.ui.rap.pages.NameDescriptionPage;
 
@@ -42,7 +43,7 @@ public class JUnitTestRunnerAgentWizard extends AAgentWizard {
 		juAgent.setName(nameDescriptionPage.getName());
 		juAgent.setDescription(nameDescriptionPage.getDescription());
 		Persister persister = Persister.getInstance();
-		String datamodelId = Persister.getTargetDatamodelId(JUnitTestRunnerAgent.class, AgentInfo.AGENT_DB);
+		String datamodelId = RDF.getTargetDatamodelId(JUnitTestRunnerAgent.class, AgentInfo.AGENT_DB);
 		persister.persist(juAgent, datamodelId);
 		return true;
 	}

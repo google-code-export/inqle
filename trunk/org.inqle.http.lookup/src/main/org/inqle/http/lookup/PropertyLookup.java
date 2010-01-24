@@ -378,7 +378,7 @@ public class PropertyLookup {
 	 */
 	public static String lookupPropertiesInSchemaDatamodels(String subjectClassUri, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(InqleInfo.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
 		
 		String sparql = getSparqlFindProperties(subjectClassUri, countSearchResults, offset);
 		log.info("lookupPropertiesInSchemaDatamodels(): Querying w/ this sparql:\n" + sparql);
@@ -398,7 +398,7 @@ public class PropertyLookup {
 	 */
 	public static String lookupPropertiesInPreferredOntologyDatamodels(String subjectClassUri, int countSearchResults, int offset) {
 //		Persister persister = Persister.getInstance();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(InqleInfo.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
 		
 //		queryCriteria.addDatamodel(persister.getInternalDatamodel(DataMapping.MAPPING_DATASET_ROLE_ID));
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());

@@ -340,7 +340,7 @@ public class SubjectsSearcher {
 	public static String lookupSubclassesInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(InqleInfo.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");
@@ -380,7 +380,7 @@ public class SubjectsSearcher {
 	public static String lookupPreferredOntologySubjectsInSchemaDatamodels(String searchTermForRdfClass, int countSearchResults, int offset) {
 		Persister persister = Persister.getInstance();
 //		QueryCriteria queryCriteria = new QueryCriteria();
-		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(Persister.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
+		QueryCriteria queryCriteria = QueryCriteriaFactory.createQueryCriteriaForDatamodelPurpose(InqleInfo.CORE_DATABASE_ID, Persister.EXTENSION_DATAMODEL_PURPOSES);
 		//add any internal RDF schemas
 //		DatafileUtil.addDatafiles(queryCriteria, InqleInfo.getRdfSchemaFilesDirectory());
 		log.trace("Get/Create index of Model...");

@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.inqle.ui.rap;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: INQLING, LLC
 Require-Bundle: org.eclipse.rap.ui,
- org.inqle.rdf.beans,
- org.inqle.data.rdf.jenabean,
+ org.inqle.rdf.core,
+ org.inqle.rdf.jena,
  org.inqle.core.extensions,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,

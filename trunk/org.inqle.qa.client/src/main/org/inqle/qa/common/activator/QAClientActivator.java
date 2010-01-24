@@ -5,11 +5,10 @@ import org.inqle.ecf.client.Servicer;
 import org.inqle.ecf.services.IHello;
 import org.inqle.qa.beans.Question;
 import org.inqle.qa.ecf.services.IHello2;
-import org.inqle.qa.services.IQAObjectService;
-import org.inqle.rdf.sparql.ISparqlService;
+import org.inqle.rdf.services.ISparqlService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-//import org.inqle.rdf.object.services.IRdfObjectService;
+import org.inqle.rdf.services.IRdfObjectService;
 
 public class QAClientActivator implements BundleActivator{
 
@@ -31,13 +30,13 @@ public class QAClientActivator implements BundleActivator{
 		log.info("hello2.hello() to hello2 service object: " + hello2);
 		if (hello2 != null) log.info("hello2.hello()" + hello2.hello("QA Client (to ECF server #1, IHello2 service)"));
 		
-		IQAObjectService qaObjectService = servicer.getServiceObject(
-				IQAObjectService.class, 
+		IRdfObjectService rdfObjectService = servicer.getServiceObject(
+				IRdfObjectService.class, 
 				"ecftcp://localhost:3787/server1");
 		Question question = new Question();
 		question.setQuestionType(Question.QUESTION_TYPE_MULTIPLE_SELECTION);
-		if (qaObjectService != null) {
-			String response = qaObjectService.storeQuestion(question);
+		if (rdfObjectService != null) {
+			String response = rdfObjectService.storeObject(question);
 			log.info("Stored question, got error message: " + response);
 		}
 		ISparqlService sparqlService = servicer.getServiceObject(

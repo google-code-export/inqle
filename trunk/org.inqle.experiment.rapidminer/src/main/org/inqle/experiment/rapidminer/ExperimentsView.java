@@ -10,11 +10,9 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jena.IDBConnector;
 import org.inqle.data.rdf.jena.IDatabase;
 import org.inqle.data.rdf.jena.SystemDatamodel;
 import org.inqle.data.rdf.jena.Jenamodel;
-import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.rdf.RDF;
 import org.inqle.ui.rap.views.SparqlView;
 import org.inqle.ui.rap.views.SubjectStatementsView;
@@ -79,7 +77,7 @@ public class ExperimentsView extends SparqlView {
 //		Persister persister = Persister.getInstance();
 //		SystemDatamodel datamodel = persister.getSystemDatamodel(IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME);
 //		return datamodel;
-		return Persister.getDatamodelId(IExperimentResult.EXPERIMENT_RESULTS_DB_ID, IDBConnector.SUBDATABASE_SYSTEM, IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME);
+		return RDF.getDatamodelId(IExperimentResult.EXPERIMENT_RESULTS_DB_ID, RDF.SUBDATABASE_SYSTEM, IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_NAME);
 //		return IExperimentResult.EXPERIMENT_RESULTS_DATAMODEL_ID;
 	}
 	

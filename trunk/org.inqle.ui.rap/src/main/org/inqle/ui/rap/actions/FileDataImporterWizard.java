@@ -11,6 +11,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jena.Jenamodel;
 import org.inqle.data.rdf.jenabean.Persister;
 import org.inqle.data.rdf.jenabean.cache.CacheTool;
@@ -199,7 +200,7 @@ public class FileDataImporterWizard extends DynaWizard implements ICsvReaderWiza
 			persister.flushIndexes(datamodel);
 			
 			//invalidate the cache for this dataset
-			CacheTool.invalidateDataCache(Persister.CORE_DATABASE_ID, datamodel.getId());
+			CacheTool.invalidateDataCache(InqleInfo.CORE_DATABASE_ID, datamodel.getId());
 		}
 		
 		log.info("Finished saving.  Model now has " + saveToModel.size() + " statements.");

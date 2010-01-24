@@ -151,6 +151,8 @@ public class InqleInfo {
 	}
 
 	public static final String URI_VARIABLE = "URI";
+
+	public static final String CORE_DATABASE_ID = "_Core";
 	
 //	public static String getSystemDatabaseRootFilePath() {
 //		return getDatabaseRootFilePath() + SYSTEM_DATABASE_ROOT + "/";

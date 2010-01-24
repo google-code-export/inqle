@@ -32,7 +32,7 @@
    			serverProtocol="ecf.generic.server"
    			consume="true"
    			produce="false"/>
-   			
+   		
    		<ecfService
    			serviceInterfaceName="org.inqle.qa.services.IQAObjectService"
    			serviceClassName="org.inqle.qa.services.QAObjectService"

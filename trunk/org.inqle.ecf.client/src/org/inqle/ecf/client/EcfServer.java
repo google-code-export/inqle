@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.extensions.util.IJavaExtension;
-import org.inqle.data.rdf.jenabean.Persister;
+import org.inqle.core.util.InqleInfo;
 import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.rdf.RDF;
 import org.inqle.rdf.annotations.TargetDatabaseId;
@@ -22,7 +22,7 @@ import thewebsemantic.Namespace;
  * This class can be assembled from <ecfServer> extensions (in plugin.xml)
  * and it is a persistable class so it can be stored in a datamodel.
  */
-@TargetDatabaseId(Persister.CORE_DATABASE_ID)
+@TargetDatabaseId(InqleInfo.CORE_DATABASE_ID)
 @TargetModelName(Site.SITE_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class EcfServer implements IJavaExtension {
