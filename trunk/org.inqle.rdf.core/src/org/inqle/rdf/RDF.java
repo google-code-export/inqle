@@ -54,6 +54,8 @@ public class RDF {
 	
 	public static final String SUBDATABASE_SYSTEM = "system";
 	public static final String SUBDATABASE_DATA = "data";
+
+	public static final String TEXT_MATCH = PF + "textMatch";
 	/**
 	 * This method is intended to be called in cases where the URI fragment 
 	 * is guaranteed to be a legitimate string for the purposes
@@ -167,4 +169,6 @@ public class RDF {
 		if (modelName==null) return null;
 		return getDatamodelId(databaseId, modelType, modelName);
 	}
+
+	public static final String MINIMUM_SCORE_THRESHOLD = "0.01";
 }

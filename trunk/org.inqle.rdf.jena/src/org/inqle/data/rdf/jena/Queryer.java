@@ -483,7 +483,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 		sparql += "GRAPH ?g {\n";
 		sparql += "?uri a <" + classUri + "> \n";
 		sparql += " . ?uri <" + idPredicate + "> ?id \n";
-		sparql += ArcSparqlBuilder.getSparqlWhereFromArcs("?uri", arcSet);
+		sparql += ArcSparqlBuilder.getSparqlClauseFromArcs("?uri", arcSet);
 		sparql += "} }\n";
 		return sparql;
 	}

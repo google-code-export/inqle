@@ -20,8 +20,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 public class SubjectsSearcher {
 
 	private static final Logger log = Logger.getLogger(SubjectsSearcher.class);
-	private static final String MINIMUM_SCORE_THRESHOLD = "0.01";
-	
 	/**
 	 * Generate SPARQL for finding subclasses of owlClassUri,
 	 * matching the searchTerm.  If owlClassUri is null, search all classes
@@ -41,7 +39,7 @@ public class SubjectsSearcher {
 				"SELECT DISTINCT ?URI ?Label ?Comment \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n";
+				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + RDF.MINIMUM_SCORE_THRESHOLD + " ) \n";
 //				". ?URI rdf:type rdfs:Class \n";
 				if (superClassUri != null) {
 					sparql += ". ?URI rdfs:subClassOf <" + superClassUri + "> \n";
@@ -75,7 +73,7 @@ public class SubjectsSearcher {
 				"SELECT DISTINCT ?URI ?Label ?Comment \n" +
 				"{\n" +
 				"GRAPH ?g {\n" +
-				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+				"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + RDF.MINIMUM_SCORE_THRESHOLD + " ) \n" +
 				". { \n" +
 				"{ ?URI rdfs:subClassOf <" + superClassUri + "> } \n" +
 				"UNION \n" +
@@ -136,7 +134,7 @@ public class SubjectsSearcher {
 			"PREFIX skos: <" + RDF.SKOS + ">\n" +
 			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
 			"{ GRAPH ?g {\n" +
-			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + RDF.MINIMUM_SCORE_THRESHOLD + " ) \n" +
 			". FILTER ( isURI(?URI) ) \n" +	
 			". OPTIONAL {?URI rdfs:subPropertyOf ?superProperty }\n" +
 			". FILTER ( ! bound(?superProperty) ) \n" +	
@@ -167,7 +165,7 @@ public class SubjectsSearcher {
 			"PREFIX umbel: <" + RDF.UMBEL + ">\n" +
 			"SELECT DISTINCT ?URI ?Label ?Comment \n" +
 			"{ GRAPH ?g {\n" +
-			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + MINIMUM_SCORE_THRESHOLD + " ) \n" +
+			"(?URI ?Score) pf:textMatch ( '" + searchTerm + "' " + RDF.MINIMUM_SCORE_THRESHOLD + " ) \n" +
 			". ?URI a umbel:SubjectConcept \n" +
 //			". OPTIONAL { ?URI skos:prefLabel ?Label }\n" +
 			". OPTIONAL { ?URI umbel:hasSemset ?semset \n" +

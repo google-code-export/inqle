@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.inqle.data.rdf.jenabean.Arc;
 import org.inqle.data.rdf.jenabean.ArcSet;
 import org.inqle.data.rdf.jenabean.ArcStep;
+import org.inqle.rdf.RDF;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -34,12 +35,12 @@ public class ArcSparqlBuilder {
 		attributeCounter = 0;
 	}
 
-	public String getSparqlWhereFromArcs(String subject) {
+	public String getSparqlClauseFromArcs(String subject) {
 		String sparql = "";
 		String subjectStr ="?" + SUBJECT_VARIABLE_NAME;
 		sparql += subjectStr + " a <" + subject + ">";
 		for (Arc arc: arcs) {
-			sparql += getSparqlWhereFromArc(subjectStr, arc, null);
+			sparql += getSparqlClauseFromArc(subjectStr, arc, null);
 		}
 		return sparql;
 	}
@@ -54,8 +55,9 @@ public class ArcSparqlBuilder {
 	 * 
 	 * TODO support bidirectional ArcSteps (incomming)
 	 */
-	public String getSparqlWhereFromArc(String subjectVariableName, Arc arc, Object object) {
+	public String getSparqlClauseFromArc(String subjectVariableName, Arc arc, Object object) {
 		String sparql = "";
+		String objectStr = arc.getObject();
 //		String subjectStr = "";
 //		String newNode = subject;
 		
@@ -71,14 +73,18 @@ public class ArcSparqlBuilder {
 				//log.info("SSSSSSSSSSSSSSSSSS Step already stored: " + stepsSoFar + "; setting next subjectStr to =" + subjectStr);
 				continue;
 			}
-			String objectStr = null;
 			
-			if (object == null) {
+			if (predicate.equals(RDF.TEXT_MATCH)) {
+				sparql += "\n . ";
+				sparql += "(?" + subjectStr + " ?Score) <" + RDF.TEXT_MATCH + "> ( \"" + objectStr.replaceAll("\"", "'") + "\" " + RDF.MINIMUM_SCORE_THRESHOLD + " )";
+			} else if (object == null) {
 				objectStr = getVariableName(stepsSoFar);
 				//log.info("NNNNNNNNNNNNNN Step NOT stored: " + stepsSoFar + "; setting next subjectStr to =" + objectStr);
-			} else if (object instanceof URI) {
-				objectStr = "<" + ((URI)object).toString() + ">";
-			} 
+//			} else if (object instanceof URI) {
+//				objectStr = "<" + ((URI)object).toString() + ">";
+			} else {
+				objectStr = "<" + objectStr + ">";
+			}
 //				else if (object instanceof String) {
 //					objectStr = "\"" + object.toString() + "\"";
 //				} else {
@@ -123,7 +129,7 @@ public class ArcSparqlBuilder {
 	 * @return
 	 */
 	public String generateSparqlConstruct(Resource subjectClass, boolean randomize, int offset, int limit) {
-		String where = getSparqlWhereFromArcs(subjectClass.toString());
+		String where = getSparqlClauseFromArcs(subjectClass.toString());
 		String sparql = "";
 		if (randomize) {
 			sparql += "PREFIX inqle-fn: <java:org.inqle.data.rdf.jena.fn.> \n";
@@ -136,7 +142,6 @@ public class ArcSparqlBuilder {
 		}
 		sparql += "\n} }\n";
 		if (randomize) {
-//			sparql += "ORDER BY inqle-fn:Rand() \n";
 			sparql += "ORDER BY DESC(?rand) \n";
 		}
 		sparql += "LIMIT " + limit + " OFFSET " + offset + "\n";
@@ -150,18 +155,18 @@ public class ArcSparqlBuilder {
 	
 	
 	
-	public static String getSparqlWhereFromArcs(String subject, ArcSet arcSet) {
+	public static String getSparqlClauseFromArcs(String subject, ArcSet arcSet) {
 		String sparql = "";
 		int k=0;
 		for (Arc arc: arcSet.getArcList()) {
 			Object value = arcSet.getValue(arc);
-			sparql += getStaticSparqlWhereFromArc(subject, arc, value, String.valueOf(k));
+			sparql += getStaticSparqlClauseFromArc(subject, arc, value, String.valueOf(k));
 			k++;
 		}
 		return sparql;
 	}
 	
-	public static String getStaticSparqlWhereFromArc(String subject, Arc arc, Object object, String identifier) {
+	public static String getStaticSparqlClauseFromArc(String subject, Arc arc, Object object, String identifier) {
 		String sparql = "";
 //		String subjectStr = "";
 //		String newNode = subject;
