@@ -21,7 +21,8 @@ import thewebsemantic.Namespace;
 	@Namespace(RDF.INQLE)
 	public class Arc extends GlobalJenabean implements Comparable<Arc> {
 		private List<ArcStep> arcStepList = new ArrayList<ArcStep>();
-		
+		private String object;
+
 		public Arc() {}
 		
 		public Arc(ArcStep firstArcStep) {
@@ -32,12 +33,45 @@ import thewebsemantic.Namespace;
 			addArcStep(firstArcStep);
 		}
 
-		public void addArcStep(ArcStep arcStep) {
+		public Arc addArcStep(ArcStep arcStep) {
 			arcStepList.add(arcStep);
+			return this;
 		}
 		
-		public void addArcStep(String arcStepString) {
+		public Arc addArcStep(String arcStepString) {
 			arcStepList.add(new ArcStep(arcStepString));
+			return this;
+		}
+		
+		/**
+		 * Convenience method for adding a ArcStep which contains only a predicate and a variable
+		 * @param predicate
+		 * @return
+		 */
+		public Arc add(String predicate) {
+			ArcStep arcStep = new ArcStep(predicate);
+			arcStepList.add(arcStep);
+			return this;
+		}
+		
+		/**
+		 * Convenience method for adding an ArcStep which contains only a predicate and a variable
+		 * @param predicate
+		 * @return
+		 */
+		public Arc add(String predicate, String object) {
+			ArcStep arcStep = new ArcStep(predicate);
+			arcStepList.add(arcStep);
+			setObject(object);
+			return this;
+		}
+
+		public String getObject() {
+			return object;
+		}
+		
+		private void setObject(String object) {
+			this.object = object;
 		}
 
 		public void setArcSteps(ArcStep[] arcSteps) {
@@ -49,8 +83,7 @@ import thewebsemantic.Namespace;
 		}
 		
 		public ArcStep[] getArcSteps() {
-			ArcStep[] arcStepArr = new ArcStep[] {};
-			return arcStepList.toArray(arcStepArr);
+			return arcStepList.toArray(new ArcStep[] {});
 		}
 		
 //		public void clone(Arc objectToBeCloned) {
@@ -132,4 +165,5 @@ import thewebsemantic.Namespace;
 //		public void setValue(Object value) {
 //			this.value = value;
 //		}
+
 	}

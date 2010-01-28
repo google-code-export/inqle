@@ -7,7 +7,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/antlr-2.7.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/antlr.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/arq-extra.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/arq.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/arq.jar" sourcepath="C:/Documents and Settings/gd9345/Desktop/downloads/Jena/tdb-0.8.1/TDB-0.8.1/lib/arq.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/concurrent.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/icu4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/iri.jar"/>
