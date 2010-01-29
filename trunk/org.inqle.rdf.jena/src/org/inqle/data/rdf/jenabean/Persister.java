@@ -491,12 +491,15 @@ public class Persister {
 	}
 	
 	/**
-	 * Create or attach to an index builder
+	 * Get an IndexWriter pointing to the index of the provided index
+	 * This can be used to configure a custom index builder, as in
+	 * <code>
+	 * myIndexBuilder = new MyIndexBuilder(indexWriter);
+	 * </code>
 	 * @param indexId
-	 * @param textIndexType
 	 * @return
 	 */
-	public IndexBuilderModel attachIndexBuilder(String indexId, String textIndexType) {
+	public IndexWriter getIndexWriter(String indexId) {
 		indexId = sanitizeIndexId(indexId);
 		String indexFilePath = InqleInfo.getRdfDirectory() + InqleInfo.INDEXES_FOLDER + "/" + indexId;
 		//if possible, retrieve the Lucene IndexWriter, such that existing index can be used
@@ -519,7 +522,18 @@ public class Persister {
 		} catch (Exception e) {
 			log.error("Unable to connect to existing Lucene index or to create new Lucene index", e);
 		}
-		
+		return indexWriter;
+	}
+	
+	/**
+	 * Create or attach to an index builder
+	 * @param indexId
+	 * @param textIndexType
+	 * @return
+	 */
+	public IndexBuilderModel attachIndexBuilder(String indexId, String textIndexType) {
+		IndexWriter indexWriter = getIndexWriter(indexId);
+
 		textIndexType = textIndexType.toLowerCase();
 		IndexBuilderModel larqBuilder = null;
 		
@@ -527,21 +541,19 @@ public class Persister {
 //		log.info("got internalmodel for " + datamodelId + ".  Is null?" + (internalModel==null));
 		if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_SUBJECT)) {
 			larqBuilder = new IndexBuilderSubject(indexWriter);
-			
 		} else if (indexWriter != null && textIndexType.equals(TEXT_INDEX_TYPE_LITERAL)) {
 //			larqBuilder = new IndexBuilderString(indexFilePath);
 			larqBuilder = new IndexBuilderString(indexWriter);
 		}
 		return larqBuilder;
 	}
-	
 
 	private String sanitizeIndexId(String indexId) {
 		if (indexId.indexOf("/") < 0) return indexId;
 		String newIndexId = indexId.replaceAll("/", "--");
 		return newIndexId;
 	}
-
+	
 	public Map<String, IndexBuilderModel> getIndexBuilders() {
 		if (indexBuilders!=null && indexBuilders.size() > 0) {
 			return indexBuilders;
