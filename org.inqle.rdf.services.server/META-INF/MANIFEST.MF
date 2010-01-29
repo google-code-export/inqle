@@ -1,0 +1,28 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: INQLE SPARQL service
+Bundle-SymbolicName: org.inqle.rdf.services.server;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: INQLING, LLC
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.ecf.core;version="3.0.0",
+ org.eclipse.ecf.core.identity;version="3.0.0",
+ org.eclipse.ecf.osgi.services.distribution;version="1.0.0",
+ org.eclipse.ecf.remoteservice,
+ org.eclipse.equinox.app;version="1.0.0",
+ org.eclipse.equinox.concurrent.future;version="1.0.0",
+ org.osgi.framework,
+ org.osgi.util.tracker;version="1.4.2"
+Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.inqle.core;bundle-version="1.0.0",
+ org.eclipse.ecf.remoteservice;bundle-version="3.1.0",
+ org.inqle.core.extensions;bundle-version="1.0.0",
+ org.inqle.rdf.jena;bundle-version="1.0.0",
+ org.inqle.ecf.common;bundle-version="1.0.0",
+ org.inqle.rdf.services.common;bundle-version="1.0.0",
+ org.inqle.rdf.core;bundle-version="1.0.0",
+ thewebsemantic.jenabean;bundle-version="1.0.0"
+Bundle-ClassPath: bin/,
+ .
+Eclipse-BuddyPolicy: global
+Bundle-BuddyPolicy: global
+Export-Package: org.inqle.rdf.services.server
