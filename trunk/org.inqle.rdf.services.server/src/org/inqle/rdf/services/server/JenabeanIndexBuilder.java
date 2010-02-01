@@ -10,6 +10,7 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.sparql.ARQNotImplemented;
 
 
 /**
@@ -21,11 +22,27 @@ import com.hp.hpl.jena.rdf.model.Statement;
 public class JenabeanIndexBuilder extends IndexBuilderModel {
 
 	private String subjectString;
+	private IndexWriter jenabeanIndexWriter;
 
-	public JenabeanIndexBuilder(IndexWriter existingWriter, String subjectString) {
-        super(existingWriter);
+	public JenabeanIndexBuilder(IndexWriter indexWriter, String subjectString) {
+        super(indexWriter);
         this.subjectString = subjectString;
+        this.jenabeanIndexWriter = indexWriter;
     }
+	
+	@Override
+    public void unindexStatement(Statement s) {
+		Resource subjectResource = ResourceFactory.createResource(subjectString);
+        Node subject = subjectResource.asNode() ;
+        
+		if ( ! s.getObject().isLiteral() ||
+                ! LARQ.isString(s.getLiteral()) )
+               return ;
+           
+           Node object  = s.getObject().asNode() ;
+           jenabeanIndexWriter.deleteDocuments(term)
+           index.(subject, object.getLiteralLexicalForm()) ;
+	}
 	
 	@Override
 	public void indexStatement(Statement s) {
