@@ -1,0 +1,24 @@
+#summary INQLE uses a somewhat distinctive method for taking RDF graphs and converting this into a learnable, tabular example set
+
+= Introduction =
+
+INQLE uses the term _sampling_ to mean the process of extracting a machine learnable table of data (aka an example set) from an RDF graph.
+As INQLE is designed to have plug-ins provide functionality, it can support many algorithms for producing an example set from an RDF graph.  INQLE comes packaged with a single sampling algorithm, Simple Subject SPARQL Sampler (SSSS), which accomplishes this using a somewhat distinctive method.
+
+
+= Details =
+
+The SSSS performs the following steps
+ # Identify the RDF graph or Jena model from which to sample.
+ # From the selected RDF graph, select a subject class
+ # 
+
+The Java implementation of SSSS is a Java class, SimpleSubjectSparqlSampler.  Instances of this class represent samplers which have been configured to run against a particular graph, and/or use a particular subject class, and/or use a particular label, and/or use a particular range of learnable attribute arcs (e.g. between 3 and 6).
+When an instance of class SSSS lacks values for any or all of these parameters, then it selects the value randomly from among all available choices.  E.g. if an instance of SSSS lacks any configuration, it will do this:
+ # randomly select a Jena model, from all available
+ # randomly select a subject class from within that model, by running SPARQL like this
+SELECT DISTINCT ?classUri { GRAPH ?anyGraph {
+?subject a ?classUri .
+ [filter out common classes like rdfs:Class, etc.]
+} } \n";
+ # 
