@@ -18,7 +18,7 @@ The SSSS performs the following steps
 The Java implementation of SSSS is a Java class, !SimpleSubjectSparqlSampler.  Instances of this class represent samplers which have been configured to run against a particular graph, and/or use a particular subject class, and/or use a particular label, and/or use a particular range of learnable attribute arcs (e.g. between 3 and 6).
 When an instance of class SSSS lacks values for any or all of these parameters, then it selects the value randomly from among all available choices.  E.g. if an instance of SSSS lacks any configuration, it will do this:
  # randomly select a Jena model, from all available
- # randomly select a subject class from within that model, by running SPARQL like this: SELECT DISTINCT ?classUri { GRAPH ?anyGraph {?subject a ?classUri .[filter out common classes like rdfs:Class]} }
+ # randomly select a subject class from within that model, by running SPARQL like this: SELECT DISTINCT ?classUri { GRAPH ?anyGraph {?subject a ?classUri .[filter out common classes like rdfs:!Class]} }
  # From the selected subject class, select all existing arcs, which traverse 1 to n steps, where n=the desired depth to which you wish to sample
  # From the list of all available arcs, select one arc to be the label, and 1 to m other arcs to be the learnable attributes.
  # Dynamically create a SPARQL CONSTRUCT query, which will retrieve the data as an RDF graph.  Execute this query
