@@ -82,7 +82,10 @@ Your development environment should now be ready to go!
 
 ===Building and Deploying INQLE===
 This is the way to do a full build of INQLE.  This build will erase any INQLE files that might have existed before, such as databases you might have previously created.
-To deploy INQLE, right click the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.  Next you start INQLE, by running inqle-console.sh (Mac, Linux) or inqle-console.bat (Windows).
+To deploy INQLE, right click the !InqleFeature project.  Next, select "Export...", then under "Plug-in Development", select "Deployable features".  Select the directory of your choice to export to.  
+*Note that under the Options tab, you should uncheck this box: "Package as individual jar archives"*
+
+Next you start INQLE, by running inqle-console.sh (Mac, Linux) or inqle-console.bat (Windows).
 
 ===Testing Code and Deploying Individual Bundle(s)===
 If you are developing on some INQLE bundles, and wish to do a quicker deploy, you can select in Eclipse Packages View, the bundle you wish to export.  Select 
