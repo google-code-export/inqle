@@ -66,7 +66,7 @@ from http://www.eclipse.org/downloads/
 (2) Add the Eclipse RAP plugin, and set up your Eclipse to use RAP as the target platform.
 [http://www.eclipse.org/rap/gettingstarted.php This is described here].
 
-(3) ~~Add the Subclipse plugin to Eclipse, [http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA as described here].~~
+(3) Add the Subclipse plugin to Eclipse, [http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA as described here].
 
 (4) Download the latest team project file from here
 http://inqle.org/downloads/
