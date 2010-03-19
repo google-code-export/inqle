@@ -300,4 +300,16 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.hp.hpl.jena"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.inqle.logging_dependencies"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>
