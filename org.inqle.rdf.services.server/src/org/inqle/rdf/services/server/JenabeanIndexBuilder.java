@@ -1,6 +1,8 @@
 package org.inqle.rdf.services.server;
 
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.document.Document;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.query.larq.ARQLuceneException;
@@ -30,19 +32,24 @@ public class JenabeanIndexBuilder extends IndexBuilderModel {
         this.jenabeanIndexWriter = indexWriter;
     }
 	
-	@Override
-    public void unindexStatement(Statement s) {
-		Resource subjectResource = ResourceFactory.createResource(subjectString);
-        Node subject = subjectResource.asNode() ;
-        
-		if ( ! s.getObject().isLiteral() ||
-                ! LARQ.isString(s.getLiteral()) )
-               return ;
-           
-           Node object  = s.getObject().asNode() ;
-           jenabeanIndexWriter.deleteDocuments(term)
-           index.(subject, object.getLiteralLexicalForm()) ;
-	}
+//	@Override
+//    public void unindexStatement(Statement s) {
+//		Resource subjectResource = ResourceFactory.createResource(subjectString);
+//        Node subject = subjectResource.asNode() ;
+//        
+//		if ( ! s.getObject().isLiteral() ||
+//                ! LARQ.isString(s.getLiteral()) )
+//               return ;
+//           
+//           Node object  = s.getObject().asNode() ;
+////           IndexReader reader;
+////           LARQ.
+////           reader.
+//          
+//           
+//           jenabeanIndexWriter.deleteDocuments(term);
+////           index.(subject, object.getLiteralLexicalForm()) ;
+//	}
 	
 	@Override
 	public void indexStatement(Statement s) {
@@ -62,6 +69,16 @@ public class JenabeanIndexBuilder extends IndexBuilderModel {
         } catch (Exception e)
         { throw new ARQLuceneException("indexStatement", e) ; }
 		
+	}
+	
+	/**
+	 * This is not a lARQ method.  Rather, it can be called once upon removing a Jenabean from a model.
+	 * This method removes the Jenabean fromt he index
+	 */
+	public void unindexJenabean() {
+		Document doc = new Document();
+		Term term = new Term();
+		jenabeanIndexWriter.deleteDocuments(term);
 	}
 
 }

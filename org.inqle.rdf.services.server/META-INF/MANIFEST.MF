@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
  org.inqle.ecf.common;bundle-version="1.0.0",
  org.inqle.rdf.services.common;bundle-version="1.0.0",
  org.inqle.rdf.core;bundle-version="1.0.0",
- thewebsemantic.jenabean;bundle-version="1.0.0"
+ thewebsemantic.jenabean;bundle-version="1.0.0",
+ org.inqle.logging_dependencies;bundle-version="1.0.0"
 Bundle-ClassPath: bin/,
  .
 Eclipse-BuddyPolicy: global
