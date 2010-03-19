@@ -39,7 +39,9 @@ Require-Bundle: org.inqle.core,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.rap.jface.databinding,
- org.eclipse.rap.ui
+ org.eclipse.rap.ui,
+ com.hp.hpl.jena,
+ org.inqle.logging_dependencies;bundle-version="1.0.0"
 Export-Package: org.inqle.data.sampling,
  org.inqle.data.sampling.rap
 Eclipse-RegisterBuddy: org.inqle.core.extensions,
