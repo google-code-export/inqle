@@ -206,13 +206,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.inqle.data.rdf.jenabean"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.inqle.data.sampling"
          download-size="0"
          install-size="0"
@@ -285,6 +278,26 @@
          install-size="0"
          version="0.0.0"
          fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="thewebsemantic.jenabean"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.inqle.rdf.jena"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.inqle.rdf.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
