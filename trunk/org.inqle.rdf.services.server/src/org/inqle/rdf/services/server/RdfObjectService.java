@@ -108,11 +108,17 @@ public class RdfObjectService implements IRdfObjectService {
 		this.serverId = containerId;
 	}
 
-	public <T> List<T> searchForObjects(SearchCriteria<T> searchCriteria, String modelId) {
-		String sparql = searchCriteria.getSparqlToFindObjects();
-		QueryCriteria qc = new QueryCriteria();
-		qc.setQuery(sparql);
-		List<String> uris = Queryer.selectUriList(qc);
-		
+//	public <T> List<T> searchForObjects(SearchCriteria<T> searchCriteria, String modelId) {
+//		String sparql = searchCriteria.getSparqlToFindObjects();
+//		QueryCriteria qc = new QueryCriteria();
+//		qc.setQuery(sparql);
+//		List<String> uris = Queryer.selectUriList(qc);
+//		
+//	}
+
+	public <T> List<T> searchForObjects(Class<T> objectClass, String queryTerm,
+			String databaseId, String modelName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
