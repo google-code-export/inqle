@@ -75,10 +75,10 @@ public class JenabeanIndexBuilder extends IndexBuilderModel {
 	 * This is not a lARQ method.  Rather, it can be called once upon removing a Jenabean from a model.
 	 * This method removes the Jenabean fromt he index
 	 */
-	public void unindexJenabean() {
-		Document doc = new Document();
-		Term term = new Term();
-		jenabeanIndexWriter.deleteDocuments(term);
-	}
+//	public void unindexJenabean() {
+//		Document doc = new Document();
+//		Term term = new Term();
+//		jenabeanIndexWriter.deleteDocuments(term);
+//	}
 
 }

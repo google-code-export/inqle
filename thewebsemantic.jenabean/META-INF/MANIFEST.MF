@@ -17,4 +17,4 @@ Export-Package: example,
  thewebsemantic.vocabulary
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: com.hp.hpl.jena;bundle-version="1.0.0",
- org.inqle.logging_dependencies;bundle-version="1.0.0"
+ org.inqle.logging-dependencies;bundle-version="1.0.0"
