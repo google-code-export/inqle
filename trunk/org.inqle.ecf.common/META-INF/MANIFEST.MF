@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.equinox.common;bundle-version="3.5.0",
  org.inqle.rdf.core,
  org.inqle.rdf.jena;bundle-version="1.0.0",
  thewebsemantic.jenabean;bundle-version="1.0.0",
- org.inqle.logging_dependencies;bundle-version="1.0.0"
+ org.inqle.logging-dependencies;bundle-version="1.0.0"
 Export-Package: org.inqle.ecf.common,
  org.inqle.ecf.services
 Bundle-ClassPath: bin/,

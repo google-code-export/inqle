@@ -33,6 +33,7 @@
    			consume="true"
    			produce="false"/>
    		
+   		<!--
    		<ecfService
    			serviceInterfaceName="org.inqle.qa.services.IQAObjectService"
    			serviceClassName="org.inqle.qa.services.QAObjectService"
@@ -40,9 +41,10 @@
    			serverProtocol="ecf.generic.server"
    			consume="true"
    			produce="false"/>
+   			-->
    			
    		<ecfService
-   			serviceInterfaceName="org.inqle.rdf.sparql.ISparqlService"
+   			serviceInterfaceName="org.inqle.rdf.services.ISparqlService"
    			serviceClassName="org.inqle.rdf.sparql.SparqlService"
    			clientProtocol="ecf.rest.client"
    			serverProtocol="ecf.rest.client"

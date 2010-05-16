@@ -33,4 +33,4 @@ Export-Package: junit.extensions,
  org.junit.runner.manipulation,
  org.junit.runner.notification,
  org.junit.runners
-Require-Bundle: org.inqle.logging_dependencies;bundle-version="1.0.0"
+Require-Bundle: org.inqle.logging-dependencies
