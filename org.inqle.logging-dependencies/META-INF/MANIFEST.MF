@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Logging_dependencies
-Bundle-SymbolicName: org.inqle.logging_dependencies
+Bundle-SymbolicName: org.inqle.logging-dependencies
 Bundle-Version: 1.0.0
 Bundle-ClassPath: commons-logging.jar,
  log4j.jar,
