@@ -307,7 +307,7 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.inqle.logging_dependencies"
+         id="org.inqle.logging-dependencies"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
