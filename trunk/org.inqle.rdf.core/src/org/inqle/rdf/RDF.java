@@ -171,4 +171,6 @@ public class RDF {
 	}
 
 	public static final String MINIMUM_SCORE_THRESHOLD = "0.01";
+
+	public static final String SITE_DATASET_ROLE_ID = "_Sites";
 }

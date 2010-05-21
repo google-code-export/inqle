@@ -3,7 +3,6 @@ package org.inqle.ecf.common;
 import org.inqle.core.extensions.util.IExtensionSpec;
 import org.inqle.core.extensions.util.IJavaExtension;
 import org.inqle.core.util.InqleInfo;
-import org.inqle.data.rdf.jenabean.Site;
 import org.inqle.rdf.RDF;
 import org.inqle.rdf.annotations.TargetDatabaseId;
 import org.inqle.rdf.annotations.TargetModelName;
