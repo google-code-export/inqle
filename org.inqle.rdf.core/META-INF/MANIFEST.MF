@@ -13,7 +13,8 @@ Import-Package: org.apache.commons.logging,
  org.apache.log4j
 Eclipse-BuddyPolicy: registered
 Bundle-BuddyPolicy: registered
-Export-Package: org.inqle.rdf,
+Export-Package: org.inqle.data.rdf.jenabean,
+ org.inqle.rdf,
  org.inqle.rdf.annotations,
  org.inqle.rdf.beans,
  org.inqle.rdf.beans.util

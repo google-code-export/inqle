@@ -19,12 +19,10 @@ import thewebsemantic.Namespace;
  * or description
  */
 @TargetDatabaseId(InqleInfo.CORE_DATABASE_ID)
-@TargetModelName(Site.SITE_DATASET_ROLE_ID)
+@TargetModelName(RDF.SITE_DATASET_ROLE_ID)
 @Namespace(RDF.INQLE)
 public class Site extends UniqueJenabean {
 
-	public static final String SITE_DATASET_ROLE_ID = "_Sites";
-	
 	private String url;
 	private String ip;
 	private String ownerEmail;
