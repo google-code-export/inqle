@@ -27,12 +27,13 @@ public class GaeQueryer implements Queryer {
 		
 		List<T> results = null;
 		Query q = null;
+		PersistenceManager pm = pmf.getPersistenceManager();
 		try {
-			PersistenceManager pm = pmf.getPersistenceManager();
 			q = pm.newQuery(classToQuery, filterClause);
 			results = (List<T>) q.execute();
 		} finally {
 	        q.closeAll();
+	        pm.close();
 	    }
 		return results;
 	}

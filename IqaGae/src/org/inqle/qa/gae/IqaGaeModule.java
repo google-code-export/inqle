@@ -12,17 +12,15 @@ import javax.servlet.ServletContext;
 
 import org.inqle.qa.Queryer;
 
+import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.SessionScoped;
+import org.inqle.qa.AppConstants;
 
 public class IqaGaeModule extends AbstractModule implements Module {
-
-	private static final String CONFIGURATION_FOLDER = "WEB-INF/config";
-	private static final String PROPERTIES_FILE = "iqa.properties";
-	
 
 	@Override
 	protected void configure() {
@@ -50,7 +48,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 	Properties getAppConfig(ServletContext servletContext) {
 		Properties properties = new Properties();
 		String realPath = servletContext.getRealPath("");
-		String fullFileName = realPath + "/" + CONFIGURATION_FOLDER + "/" + PROPERTIES_FILE;
+		String fullFileName = realPath + "/" + AppConstants.CONFIGURATION_FOLDER + "/" + AppConstants.PROPERTIES_FILE;
 //		System.out.println("Loading application properties.  fullFileName=" + fullFileName);
 		try {
 			FileInputStream fis = new FileInputStream(fullFileName);
@@ -65,4 +63,12 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		}
 		return properties;
 	}
+	
+	@Provides
+	SpreadsheetService provideSpreadSheetService(@AppConfig Properties properties) {
+		SpreadsheetService service = new SpreadsheetService("inqle.com-qa-0.1");
+		service.setUserCredentials(properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT), properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
+		return service;
+	}
+	
 }

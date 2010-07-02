@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
+import org.inqle.qa.gae.AppConfig;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +46,11 @@ public class IqaGaeTest {
 	 	private final static LocalServiceTestHelper helper =
 	        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
+		private Properties appProps;
+
+	 	public IqaGaeTest(@AppConfig Properties appProps) {
+	 		this.appProps = appProps;
+	 	}
 	    @BeforeClass
 	    public static void setUp() {	    	
 	        helper.setUp();
@@ -88,7 +96,9 @@ public class IqaGaeTest {
 	    	System.setProperty("https.proxyHost", "webproxy-na.dupont.com");
 	    	System.setProperty("https.proxyPort", "80");
 			SpreadsheetService service = new SpreadsheetService("inqle.com-qa-0.1");
-			service.setUserCredentials("auser@inqle.com", "pwd_auser");
+			service.setUserCredentials(
+					appProps.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT),
+					appProps.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
 			URL metafeedUrl = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
 			SpreadsheetFeed spreadsheetsFeed = service.getFeed(metafeedUrl, SpreadsheetFeed.class);
 			List<SpreadsheetEntry> spreadsheets = spreadsheetsFeed.getEntries();
