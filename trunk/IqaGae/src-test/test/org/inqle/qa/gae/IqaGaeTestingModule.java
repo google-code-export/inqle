@@ -10,7 +10,7 @@ import org.inqle.qa.gae.GaeQueryer;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.servlet.SessionScoped;
+import com.google.inject.Singleton;
 
 
 public class IqaGaeTestingModule extends AbstractModule {
@@ -20,14 +20,14 @@ public class IqaGaeTestingModule extends AbstractModule {
 	}
 	
 	@Provides
-//	@SessionScoped
+	@Singleton
 	EntityManagerFactory provideEmf() {
 		EntityManagerFactory emfInstance = Persistence.createEntityManagerFactory("transactions-optional");
 		return emfInstance;
 	}
 	
 	@Provides
-//	@SessionScoped
+	@Singleton
 	PersistenceManagerFactory providePmf() {
 		PersistenceManagerFactory pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 		return pmfInstance;

@@ -15,6 +15,7 @@ import org.inqle.qa.Queryer;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.servlet.SessionScoped;
 
 public class IqaGaeModule extends AbstractModule implements Module {
@@ -29,14 +30,14 @@ public class IqaGaeModule extends AbstractModule implements Module {
 	}
 	
 	@Provides
-	@SessionScoped
+	@Singleton
 	EntityManagerFactory provideEmf() {
 		EntityManagerFactory emfInstance = Persistence.createEntityManagerFactory("transactions-optional");
 		return emfInstance;
 	}
 	
 	@Provides
-	@SessionScoped
+	@Singleton
 	PersistenceManagerFactory providePmf() {
 		PersistenceManagerFactory pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 		return pmfInstance;
@@ -44,7 +45,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 	
 
 	@Provides
-	@SessionScoped
+	@Singleton
 	@AppConfig
 	Properties getAppConfig(ServletContext servletContext) {
 		Properties properties = new Properties();
