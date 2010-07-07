@@ -1,5 +1,12 @@
 package org.inqle.qa.gdata;
 
+import java.io.IOException;
+
+import com.google.gdata.util.ServiceException;
+
 public interface GdataSpreadsheetImporter {
-	public String importData(String worksheetFeedUrl);
+
+	String importSpreadsheet(String worksheetFeedUrl) throws IOException, ServiceException;
+
+	String importWorksheet(String cellFeedUrl) throws IOException, ServiceException;
 }

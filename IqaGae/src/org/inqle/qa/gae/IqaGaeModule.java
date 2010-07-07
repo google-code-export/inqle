@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 import org.inqle.qa.Queryer;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import com.google.gdata.util.AuthenticationException;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
@@ -66,8 +67,14 @@ public class IqaGaeModule extends AbstractModule implements Module {
 	
 	@Provides
 	SpreadsheetService provideSpreadSheetService(@AppConfig Properties properties) {
-		SpreadsheetService service = new SpreadsheetService("inqle.com-qa-0.1");
-		service.setUserCredentials(properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT), properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
+		SpreadsheetService service = new SpreadsheetService(AppConstants.APP_ID + "-" + AppConstants.APP_VERSION);
+		try {
+			service.setUserCredentials(
+				properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT), 
+				properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
+		} catch (AuthenticationException e) {
+			e.printStackTrace();
+		}
 		return service;
 	}
 	

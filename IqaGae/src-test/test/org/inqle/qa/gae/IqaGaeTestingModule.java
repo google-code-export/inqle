@@ -3,6 +3,7 @@ package test.org.inqle.qa.gae;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
@@ -14,7 +15,10 @@ import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gae.GaeQueryer;
+import org.inqle.qa.gdata.SpreadsheetServiceProvider;
 
+import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import com.google.gdata.util.AuthenticationException;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -24,6 +28,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(Queryer.class).to(GaeQueryer.class);
+		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 	}
 	
 	@Provides
@@ -43,11 +48,11 @@ public class IqaGaeTestingModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@AppConfig
-	Properties getAppConfig() {
+	Properties getAppConfig(Logger log) {
 		Properties properties = new Properties();
 		String realPath = System.getProperty("INQLE_QA_PATH");
 		String fullFileName = realPath + "/" + AppConstants.CONFIGURATION_FOLDER + "/" + AppConstants.TEST_PROPERTIES_FILE;
-//		System.out.println("Loading application properties.  fullFileName=" + fullFileName);
+		log.info("Loading application properties.  fullFileName=" + fullFileName);
 		try {
 			FileInputStream fis = new FileInputStream(fullFileName);
 			properties.load(fis); 
