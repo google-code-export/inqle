@@ -33,7 +33,7 @@ public class GaeQueryer implements Queryer {
 			results = (List<T>) q.execute();
 		} finally {
 	        q.closeAll();
-	        pm.close();
+//	        pm.close();
 	    }
 		return results;
 	}

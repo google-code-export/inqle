@@ -20,17 +20,15 @@ import org.junit.Test;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
-import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
-import com.google.gdata.data.spreadsheet.ListEntry;
-import com.google.gdata.data.spreadsheet.ListFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
 import com.google.gdata.data.spreadsheet.WorksheetEntry;
 import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.ServiceException;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 public class IqaGaeTest {
@@ -46,16 +44,18 @@ public class IqaGaeTest {
 	 	private final static LocalServiceTestHelper helper =
 	        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
-		private Properties appProps;
+		private static SpreadsheetService spreadsheetService;
 
-	 	public IqaGaeTest(@AppConfig Properties appProps) {
-	 		this.appProps = appProps;
-	 	}
+		@Inject
+		@AppConfig
+		private Properties appProps;
+		
 	    @BeforeClass
 	    public static void setUp() {	    	
 	        helper.setUp();
 	        Injector injector = Guice.createInjector(new IqaGaeTestingModule());
 			queryer = injector.getInstance(Queryer.class);
+			spreadsheetService = injector.getInstance(SpreadsheetService.class);
 	    }
 
 	    @AfterClass
@@ -91,16 +91,12 @@ public class IqaGaeTest {
 		
 		@Test
 		public void connectGoogleSpreadsheet() throws MalformedURLException, IOException, ServiceException {
-			System.setProperty("http.proxyHost", "webproxy-na.dupont.com");
-	    	System.setProperty("http.proxyPort", "80");
-	    	System.setProperty("https.proxyHost", "webproxy-na.dupont.com");
-	    	System.setProperty("https.proxyPort", "80");
-			SpreadsheetService service = new SpreadsheetService("inqle.com-qa-0.1");
-			service.setUserCredentials(
-					appProps.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT),
-					appProps.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
-			URL metafeedUrl = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
-			SpreadsheetFeed spreadsheetsFeed = service.getFeed(metafeedUrl, SpreadsheetFeed.class);
+//			SpreadsheetService service = new SpreadsheetService("inqle.com-qa-0.1");
+//			service.setUserCredentials(
+//					appProps.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT),
+//					appProps.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
+			URL metafeedUrl = new URL(AppConstants.GOOGLE_SPREADSHEETS_METAFEED);
+			SpreadsheetFeed spreadsheetsFeed = spreadsheetService.getFeed(metafeedUrl, SpreadsheetFeed.class);
 			List<SpreadsheetEntry> spreadsheets = spreadsheetsFeed.getEntries();
 			assertNotNull(spreadsheets);
 			assert(spreadsheets.size()==1);
@@ -112,7 +108,7 @@ public class IqaGaeTest {
 			}
 			
 			URL worksheetFeedUrl = spreadsheetEntry.getWorksheetFeedUrl();
-			WorksheetFeed worksheetFeed = service.getFeed(worksheetFeedUrl, WorksheetFeed.class);
+			WorksheetFeed worksheetFeed = spreadsheetService.getFeed(worksheetFeedUrl, WorksheetFeed.class);
 			WorksheetEntry worksheetEntry = worksheetFeed.getEntries().get(1);
 			int i=0;
 			for (WorksheetEntry entry : worksheetFeed.getEntries()) {
@@ -123,7 +119,7 @@ public class IqaGaeTest {
 			}
 			
 			URL cellFeedUrl = worksheetEntry.getCellFeedUrl();
-			CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
+			CellFeed cellFeed = spreadsheetService.getFeed(cellFeedUrl, CellFeed.class);
 			System.out.println("CellFeed: URL=" + cellFeedUrl);
 			for (CellEntry cellEntry : cellFeed.getEntries()) {
 				  System.out.println(cellEntry.getTitle().getPlainText() + "=" + cellEntry.getPlainTextContent());
