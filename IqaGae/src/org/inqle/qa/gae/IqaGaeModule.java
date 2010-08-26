@@ -20,12 +20,17 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.SessionScoped;
 import org.inqle.qa.AppConstants;
+import org.inqle.qa.gdata.GdataSpreadsheetImporter;
+import org.inqle.qa.gdata.SpreadsheetServiceProvider;
+import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
 public class IqaGaeModule extends AbstractModule implements Module {
 
 	@Override
 	protected void configure() {
 		bind(Queryer.class).to(GaeQueryer.class);
+		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
+		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 	}
 	
 	@Provides
@@ -65,17 +70,17 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		return properties;
 	}
 	
-	@Provides
-	SpreadsheetService provideSpreadSheetService(@AppConfig Properties properties) {
-		SpreadsheetService service = new SpreadsheetService(AppConstants.APP_ID + "-" + AppConstants.APP_VERSION);
-		try {
-			service.setUserCredentials(
-				properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT), 
-				properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
-		} catch (AuthenticationException e) {
-			e.printStackTrace();
-		}
-		return service;
-	}
+//	@Provides
+//	SpreadsheetService provideSpreadSheetService(@AppConfig Properties properties) {
+//		SpreadsheetService service = new SpreadsheetService(AppConstants.APP_ID + "-" + AppConstants.APP_VERSION);
+//		try {
+//			service.setUserCredentials(
+//				properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_ACCOUNT), 
+//				properties.getProperty(AppConstants.PROP_GOOGLE_SPREADSHEET_PASSWORD));
+//		} catch (AuthenticationException e) {
+//			e.printStackTrace();
+//		}
+//		return service;
+//	}
 	
 }

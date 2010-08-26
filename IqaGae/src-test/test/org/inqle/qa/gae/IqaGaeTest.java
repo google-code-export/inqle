@@ -8,11 +8,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.gae.AppConfig;
+import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,6 +48,10 @@ public class IqaGaeTest {
 
 		private static SpreadsheetService spreadsheetService;
 
+		private static GdataSpreadsheetImporter gdataSpreadsheetImporter;
+
+		private static Logger log;
+
 		@Inject
 		@AppConfig
 		private Properties appProps;
@@ -54,8 +60,11 @@ public class IqaGaeTest {
 	    public static void setUp() {	    	
 	        helper.setUp();
 	        Injector injector = Guice.createInjector(new IqaGaeTestingModule());
+	        log = injector.getInstance(Logger.class);
+	        log.setLevel(Level.FINE);
 			queryer = injector.getInstance(Queryer.class);
 			spreadsheetService = injector.getInstance(SpreadsheetService.class);
+			gdataSpreadsheetImporter = injector.getInstance(GdataSpreadsheetImporter.class);
 	    }
 
 	    @AfterClass
@@ -63,12 +72,12 @@ public class IqaGaeTest {
 	        helper.tearDown();
 	    }
 	
-	    @Test
+//	    @Test
 		public void doNothing() {
 			//do nothing
 		}
 	    
-		@Test
+//		@Test
 		public void queryerStoreAndLoadObjects() {
 			Logger log = Logger.getLogger(IqaGaeTest.class.getName());
 			
@@ -89,7 +98,7 @@ public class IqaGaeTest {
 			assert(persistmes.size()==5);
 		}
 		
-		@Test
+//		@Test
 		public void connectGoogleSpreadsheet() throws MalformedURLException, IOException, ServiceException {
 //			SpreadsheetService service = new SpreadsheetService("inqle.com-qa-0.1");
 //			service.setUserCredentials(
@@ -104,7 +113,7 @@ public class IqaGaeTest {
 			for (int i = 0; i < spreadsheets.size(); i++) {
 			  spreadsheetEntry = spreadsheets.get(i);
 			  spreadsheetEntry.getSpreadsheetLink();
-			  System.out.println("Spreadsheet ID=" + spreadsheetEntry.getId() + "; Title=" + spreadsheetEntry.getTitle().getPlainText() + "; worksheet feed URL=" + spreadsheetEntry.getSpreadsheetLink().getHref());
+			  log.info("Spreadsheet ID=" + spreadsheetEntry.getId() + "; Title=" + spreadsheetEntry.getTitle().getPlainText() + "; worksheet feed URL=" + spreadsheetEntry.getWorksheetFeedUrl());
 			}
 			
 			URL worksheetFeedUrl = spreadsheetEntry.getWorksheetFeedUrl();
@@ -114,31 +123,25 @@ public class IqaGaeTest {
 			for (WorksheetEntry entry : worksheetFeed.getEntries()) {
 			  String currTitle = entry.getTitle().getPlainText();
 //			  worksheetEntry = entry;
-			  System.out.println("Worksheet # " + i + ": Title=" + currTitle);
+			  log.info("Worksheet # " + i + ": Title=" + currTitle);
 			  i++;
 			}
 			
 			URL cellFeedUrl = worksheetEntry.getCellFeedUrl();
 			CellFeed cellFeed = spreadsheetService.getFeed(cellFeedUrl, CellFeed.class);
-			System.out.println("CellFeed: URL=" + cellFeedUrl);
+			log.info("CellFeed: URL=" + cellFeedUrl);
 			for (CellEntry cellEntry : cellFeed.getEntries()) {
-				  System.out.println(cellEntry.getTitle().getPlainText() + "=" + cellEntry.getPlainTextContent());
+				  log.info(cellEntry.getTitle().getPlainText() + "=" + cellEntry.getPlainTextContent());
 				  String shortId = cellEntry.getId().substring(cellEntry.getId().lastIndexOf('/') + 1);
-				  System.out.println(" -- Cell(" + shortId + "/" + cellEntry.getTitle().getPlainText()
+				  log.info(" -- Cell(" + shortId + "/" + cellEntry.getTitle().getPlainText()
 				      + ") formula(" + cellEntry.getCell().getInputValue() + ") numeric("
 				      + cellEntry.getCell().getNumericValue() + ") value("
 				      + cellEntry.getCell().getValue() + ")");
 				}
-			
-//			URL iqaObjectsUrl = new URL("http://spreadsheets.google.com/feeds/worksheets/ttsuVNlppfKmjNer07Q0Teg/private/full");
-//			WorksheetFeed worksheetsFeed = service.getFeed(iqaObjectsUrl, WorksheetFeed.class);
-//			assertNotNull(worksheetsFeed);
-//			List<WorksheetEntry> worksheets = worksheetsFeed.getEntries();
-//			assertNotNull(worksheets);
-//			assert(worksheets.size()>1);
-//			for (int i = 0; i < worksheets.size(); i++) {
-//			  WorksheetEntry entry = worksheets.get(i);
-//			  System.out.println("\tWorksheet ID=" + entry.getId() + "; Title=" + entry.getTitle().getPlainText() + "; toString=" + entry);
-//			}
+		}
+		
+		@Test
+		public void testGdataSpreadsheetImporter() throws IOException, ServiceException {
+			gdataSpreadsheetImporter.importSpreadsheet("https://spreadsheets.google.com/feeds/worksheets/ttsuVNlppfKmjNer07Q0Teg/private/full");
 		}
 }

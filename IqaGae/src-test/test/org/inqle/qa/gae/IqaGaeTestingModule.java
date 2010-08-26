@@ -15,7 +15,9 @@ import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gae.GaeQueryer;
+import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.SpreadsheetServiceProvider;
+import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.util.AuthenticationException;
@@ -28,6 +30,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(Queryer.class).to(GaeQueryer.class);
+		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 	}
 	
