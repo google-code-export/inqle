@@ -1,6 +1,7 @@
 package test.org.inqle.qa.gae;
 
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
+import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -72,6 +74,39 @@ public class IqaGaeTest {
 	        helper.tearDown();
 	    }
 	
+	    @Test
+	    public void testIsShortUri() {
+	    	assertTrue(GaeGdataSpreadsheetImporter.isShortUri("stooge1:whateVer"));
+	    	assertTrue(GaeGdataSpreadsheetImporter.isShortUri("stooge_1:whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("stooge_1::whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("stooge_1:whate-Ver "));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("stooge_1:whate:Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri(" stooge1:whateVer"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("stooge_1 whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("stooge 1:whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("stooge_1:whate Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri("whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri(""));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isShortUri(null));
+	    }
+	    
+	    @Test
+	    public void testLocalizedString() {
+	    	assertTrue(GaeGdataSpreadsheetImporter.isLocalizedString("sto=whateVer"));
+	    	assertTrue(GaeGdataSpreadsheetImporter.isLocalizedString("st-oo=sto=whateVer"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("st-oosto=whateVer"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("stooge_1::whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("stooge_1 whate-Ver "));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("stooge_1=whate:Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString(" st=whatever"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("sg =whatever"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("stooge 1:whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("stooge_1:whate Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString("whate-Ver"));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString(""));
+	    	assertFalse(GaeGdataSpreadsheetImporter.isLocalizedString(null));
+	    }
+	    
 //	    @Test
 		public void doNothing() {
 			//do nothing

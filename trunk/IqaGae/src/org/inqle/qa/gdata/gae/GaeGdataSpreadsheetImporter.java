@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.inqle.qa.Queryer;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
@@ -89,7 +91,7 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 				entity = new Entity(classUri, objectUri);
 			} else {
 //				String cellTitle = getHeader(col);
-				entity.setProperty(headerUris.get(col-1), cellEntry.getPlainTextContent());
+				entity.setProperty(headerUris.get(col-1), getCellValues(cellEntry.getPlainTextContent()));
 			}
 //			log.info(cellEntry.getTitle().getPlainText() + "=" + cellEntry.getPlainTextContent());
 //			String shortId = cellEntry.getId().substring(cellEntry.getId().lastIndexOf('/') + 1);
@@ -101,6 +103,24 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 			lastRow = row;
 		}
 		return SUCCESS;
+	}
+
+	private Object getCellValues(String plainTextContent) {
+		if (plainTextContent == null) return null;
+		if (! plainTextContent.contains("\\n")) {
+			return getCellValue(plainTextContent);
+		}
+		return "multiple lines...";
+	}
+
+	private Object getCellValue(String plainTextContent) {
+		if (isShortUri(plainTextContent)) return "uri: " + plainTextContent;
+		if (isLocalizedString(plainTextContent)) return "localized string: " + plainTextContent;
+		return "unlocalized string:" + plainTextContent;
+	}
+
+	public static boolean isLocalizedString(String string) {
+		return string.matches("[\\w\\-]{2,5}=.*");
 	}
 
 	private String getUri(String unknownUri) {
@@ -135,10 +155,10 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 	}
 
 	public static boolean isShortUri(String unknownUri) {
-		if (unknownUri == null) return false;
-		String[] uriArr = unknownUri.split(":");
-		if (uriArr.length==2) return true;
-		return false;
+		if (unknownUri==null) return false;
+		
+		String regex = "([\\w\\-]+):([\\w\\-]+)";
+		return unknownUri.matches(regex);
 	}
 
 	@Override
