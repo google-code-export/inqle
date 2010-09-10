@@ -8,7 +8,7 @@ public interface GdataSpreadsheetImporter {
 
 	String importSpreadsheet(String worksheetFeedUrl) throws IOException, ServiceException;
 
-	String importNamespacesFromWorksheet(String cellFeedUrl) throws IOException, ServiceException;
+//	String importNamespacesFromWorksheet(String cellFeedUrl) throws IOException, ServiceException;
 	
 	String importDataFromWorksheet(String classUri, String cellFeedUrl) throws IOException, ServiceException;
 }
