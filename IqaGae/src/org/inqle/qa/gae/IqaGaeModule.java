@@ -12,6 +12,8 @@ import javax.servlet.ServletContext;
 
 import org.inqle.qa.Queryer;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.util.AuthenticationException;
 import com.google.inject.AbstractModule;
@@ -31,6 +33,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(Queryer.class).to(GaeQueryer.class);
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
+		bind(QuestionerFactory.class).to(GaeQuestionerFactory.class);
 	}
 	
 	@Provides
@@ -47,6 +50,12 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		return pmfInstance;
 	}
 	
+	@Provides
+	@Singleton
+	DatastoreService provideDatastoreService() {
+		return DatastoreServiceFactory.getDatastoreService();
+	}
+
 
 	@Provides
 	@Singleton

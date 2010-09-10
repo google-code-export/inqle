@@ -15,7 +15,9 @@ import org.inqle.qa.Queryer;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.mortbay.log.Log;
 
+import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
@@ -27,16 +29,15 @@ import com.google.inject.Inject;
 public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 
 	public static final String SUCCESS = "success";
-	private final Queryer queryer;
+	private final DatastoreService datastoreService;
 	private final SpreadsheetService spreadsheetService;
 	private final Logger log;
-	private Map<String, String> prefixes = new HashMap<String, String>();
-	private List<String> headerUris = new ArrayList<String>();
-	private String defaultPrefix;
+//	private Map<String, String> prefixes = new HashMap<String, String>();
+//	private String defaultPrefix;
 
 	@Inject
-	private GaeGdataSpreadsheetImporter(Logger log, Queryer queryer, SpreadsheetService spreadsheetService) {
-		this.queryer = queryer;
+	private GaeGdataSpreadsheetImporter(Logger log, DatastoreService datastoreService, SpreadsheetService spreadsheetService) {
+		this.datastoreService = datastoreService;
 		this.spreadsheetService = spreadsheetService;
 		this.log = log;
 	}
@@ -50,12 +51,8 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		for (WorksheetEntry worksheetEntry : worksheetFeed.getEntries()) {
 		  String currTitle = worksheetEntry.getTitle().getPlainText();
 		  log.info("Import worksheet # " + i + ": Title=" + currTitle + "...");
-		  if (i==0) {
-			  importNamespacesFromWorksheet(worksheetEntry.getCellFeedUrl().toExternalForm());
-		  } else {
-			  String worsheetName = worksheetEntry.getTitle().getPlainText();
-			  importDataFromWorksheet(worsheetName, worksheetEntry.getCellFeedUrl().toExternalForm());
-		  }
+		  String worsheetName = worksheetEntry.getTitle().getPlainText();
+		  importDataFromWorksheet(worsheetName, worksheetEntry.getCellFeedUrl().toExternalForm());
 		  i++;
 		}
 		return SUCCESS;
@@ -69,29 +66,36 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		int lastCol = 0;
 		int lastRow = 0;
 		Entity entity = null;
+		List<String> headers = new ArrayList<String>();
+		
 		for (CellEntry cellEntry : cellFeed.getEntries()) {
 			int col = cellEntry.getCell().getCol();
 			int row = cellEntry.getCell().getRow();
 			
-			String shortObjectUri = cellEntry.getCell().getValue();
-			String objectUri = getUri(shortObjectUri);
+//			String cellValue = cellEntry.getCell().getValue();
+			String cellText = cellEntry.getPlainTextContent();
 			
+			//the 1st row contains the headers
 			if (row == 1) {
-				headerUris.add(col-1, objectUri);
+				headers.add(col-1, cellText);
 				continue;
 			}
 			boolean isNewRow = false;
 			if (row != lastRow) isNewRow = true;
 			
 			if (isNewRow) {
-				//store last entity
-				log.info("created Entity: " + entity);
+				//store last entity, if not null
+				if (entity != null) datastoreService.put(entity);
+				log.info("creating Entity: " + entity);
 				
 				//create new entity
-				entity = new Entity(classUri, objectUri);
+				entity = new Entity(classUri, cellText);
 			} else {
 //				String cellTitle = getHeader(col);
-				entity.setProperty(headerUris.get(col-1), getCellValues(cellEntry.getPlainTextContent()));
+				Object val = getObjectContainingCellValues(cellText, headers.get(col-1), entity.getKey());
+				if (val != null) {
+					entity.setProperty(headers.get(col-1), val);
+				}
 			}
 //			log.info(cellEntry.getTitle().getPlainText() + "=" + cellEntry.getPlainTextContent());
 //			String shortId = cellEntry.getId().substring(cellEntry.getId().lastIndexOf('/') + 1);
@@ -105,92 +109,161 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		return SUCCESS;
 	}
 
-	private Object getCellValues(String plainTextContent) {
-		if (plainTextContent == null) return null;
-		if (! plainTextContent.contains("\\n")) {
-			return getCellValue(plainTextContent);
+	private Object getObjectContainingCellValues(String cellText, String columnTitle, Key parentKey) {
+		if (cellText == null) return null;
+		if (cellText.indexOf("\n") < 0) {
+			if (isShortUri(cellText)) {
+				return cellText;
+			} else if (isLocalizedString(cellText)) {
+				Entity ls = getLocalizedStringEntity(cellText, columnTitle, parentKey);
+				datastoreService.put(ls);
+				return null;
+			} else {
+				return cellText;
+			}
+		} else {
+			String[] lines = cellText.split("\\n");
+			String line1 = lines[0];
+			if (isShortUri(line1)) {
+				List<String> values = new ArrayList<String>();
+				for (String line: lines) {
+					values.add(line);
+				}
+				return values;
+			} else if (isLocalizedString(line1)) {
+				for (String line: lines) {
+					Entity ls = getLocalizedStringEntity(line, columnTitle, parentKey);
+					datastoreService.put(ls);
+				}
+				return null;
+			} else {
+				List<String> values = new ArrayList<String>();
+				for (String line: lines) {
+					values.add(line);
+				}
+				return values;
+			}
 		}
-		return "multiple lines...";
 	}
 
-	private Object getCellValue(String plainTextContent) {
-		if (isShortUri(plainTextContent)) return "uri: " + plainTextContent;
-		if (isLocalizedString(plainTextContent)) return "localized string: " + plainTextContent;
-		return "unlocalized string:" + plainTextContent;
+	private Entity getLocalizedStringEntity(String cellText, String columnTitle, Key parentKey) {
+		String lang = getLangFromLocalizedString(cellText);
+		String text = getTextFromLocalizedString(cellText);
+		Entity ls = new Entity("LocalizedString", columnTitle + "/" + lang, parentKey);
+		ls.setProperty("lang", lang);
+		ls.setProperty("text", text);
+		return ls;
 	}
+
+//	private Entity getLocalizedString(String line, String stringName, Key parentKey) {
+//		Entity entity = new Entity("LocalizedString", stringName, parentKey);
+//		int equalsPos = line.indexOf("=");
+//		entity.setProperty("lang", line.substring(0, equalsPos));
+//		entity.setProperty("text", line.substring(equalsPos + 1));
+//		return entity;
+//	}
+
+//	private Object getCellValue(String plainTextContent) {
+//		if (isShortUri(plainTextContent)) return getUri(plainTextContent);
+//		if (isLocalizedString(plainTextContent)) {
+//			Map<String, Object> cell = return "localized string: " + plainTextContent;
+//		}
+//		return "unlocalized string:" + plainTextContent;
+//	}
 
 	public static boolean isLocalizedString(String string) {
+		if (string==null) return false;
 		return string.matches("[\\w\\-]{2,5}=.*");
 	}
-
-	private String getUri(String unknownUri) {
-		if (isShortUri(unknownUri)) {
-			String qnamePrefix = unknownUri.split(":")[0].trim();
-			String qnameSuffix = unknownUri.substring(unknownUri.indexOf(":")).trim();
-			return createUri(getPrefix(qnamePrefix), qnameSuffix);
-		} else {
-			return createUri(getDefaultPrefix(), unknownUri);
-		}
+	
+	public static String getLangFromLocalizedString(String localizedString) {
+		if (localizedString==null) return null;
+		return localizedString.substring(0, localizedString.indexOf("=")).trim();
+	}
+	
+	public static String getTextFromLocalizedString(String localizedString) {
+		if (localizedString==null) return null;
+		return localizedString.substring(localizedString.indexOf("=") + 1).trim();
 	}
 
-	/**
-	 * Get the full prefix as a URI.  If the prefix is recognized from the prefixes worksheet, use that
-	 * If not, then use the default prefix appended with the provided string
-	 * @param qnamePrefix
-	 * @return
-	 */
-	private String getPrefix(String qnamePrefix) {
-		String prefix = prefixes.get(qnamePrefix);
-		if (prefix != null) return prefix;
-		prefix = getDefaultPrefix() + qnamePrefix + "/";
-		return prefix;
+//	private String getUri(String unknownUri) {
+//		if (isShortUri(unknownUri)) {
+//			String qnamePrefix = unknownUri.split(":")[0].trim();
+//			String qnameSuffix = unknownUri.substring(unknownUri.indexOf(":")).trim();
+//			return createUri(getPrefix(qnamePrefix), qnameSuffix);
+//		} else {
+//			return createUri(getDefaultPrefix(), unknownUri);
+//		}
+//	}
+	
+	public static String getIdFromShortUri(String shortUri) {
+		String id = shortUri.substring(shortUri.indexOf(":")).trim();
+		return id;
 	}
-
-	private String getDefaultPrefix() {
-		return defaultPrefix;
-	}
-
-	public static String createUri(String prefix, String suffix) {
-		return prefix + suffix;
+	
+	public static String getPrefixFromShortUri(String shortUri) {
+		String qnamePrefix = shortUri.split(":")[0].trim();
+		return qnamePrefix;
 	}
 
 	public static boolean isShortUri(String unknownUri) {
-		if (unknownUri==null) return false;
-		
-		String regex = "([\\w\\-]+):([\\w\\-]+)";
-		return unknownUri.matches(regex);
-	}
+	if (unknownUri==null) return false;
+	
+	String regex = "([\\w\\-]+):([\\w\\-\\/]+)";
+	return unknownUri.matches(regex);
+}
+	
+//	/**
+//	 * Get the full prefix as a URI.  If the prefix is recognized from the prefixes worksheet, use that
+//	 * If not, then use the default prefix appended with the provided string
+//	 * @param qnamePrefix
+//	 * @return
+//	 */
+//	private String getPrefix(String qnamePrefix) {
+//		String prefix = prefixes.get(qnamePrefix);
+//		if (prefix != null) return prefix;
+//		prefix = getDefaultPrefix() + qnamePrefix + "/";
+//		return prefix;
+//	}
+//
+//	private String getDefaultPrefix() {
+//		return defaultPrefix;
+//	}
+//
+//	public static String createUri(String prefix, String suffix) {
+//		return prefix + suffix;
+//	}
 
-	@Override
-	public String importNamespacesFromWorksheet(String cellFeedUrl)
-			throws IOException, ServiceException {
-		//reinitialize the prefixes
-		defaultPrefix = "";
-		prefixes = new HashMap<String, String>();
-		
-		URL cellFeedUrlUrl = new URL(cellFeedUrl);
-		CellFeed cellFeed = spreadsheetService.getFeed(cellFeedUrlUrl, CellFeed.class);
-		System.out.println("CellFeed: URL=" + cellFeedUrl);
-		String qnamePrefix = "";
-		
-		for (CellEntry cellEntry : cellFeed.getEntries()) {
-			int col = cellEntry.getCell().getCol();
-			int row = cellEntry.getCell().getRow();
-			//skip the first row
-			if (row==1) continue;
-			if (col==1) {
-				qnamePrefix = cellEntry.getPlainTextContent();
-			} else if (col==2) {
-				String uriPrefix = cellEntry.getPlainTextContent();
-				prefixes.put(qnamePrefix, uriPrefix);
-				
-				if (defaultPrefix.length()==0) {
-					defaultPrefix = uriPrefix;
-					log.info("Stored default prefix=" + uriPrefix);
-				}
-				log.info("Stored prefix mapping: " + qnamePrefix + "=" + uriPrefix);
-			}
-		}
-		return SUCCESS;
-	}
+//	@Override
+//	public String importNamespacesFromWorksheet(String cellFeedUrl)
+//			throws IOException, ServiceException {
+//		//reinitialize the prefixes
+//		defaultPrefix = "";
+//		prefixes = new HashMap<String, String>();
+//		
+//		URL cellFeedUrlUrl = new URL(cellFeedUrl);
+//		CellFeed cellFeed = spreadsheetService.getFeed(cellFeedUrlUrl, CellFeed.class);
+//		System.out.println("CellFeed: URL=" + cellFeedUrl);
+//		String qnamePrefix = "";
+//		
+//		for (CellEntry cellEntry : cellFeed.getEntries()) {
+//			int col = cellEntry.getCell().getCol();
+//			int row = cellEntry.getCell().getRow();
+//			//skip the first row
+//			if (row==1) continue;
+//			if (col==1) {
+//				qnamePrefix = cellEntry.getPlainTextContent();
+//			} else if (col==2) {
+//				String uriPrefix = cellEntry.getPlainTextContent();
+//				prefixes.put(qnamePrefix, uriPrefix);
+//				
+//				if (defaultPrefix.length()==0) {
+//					defaultPrefix = uriPrefix;
+//					log.info("Stored default prefix=" + uriPrefix);
+//				}
+//				log.info("Stored prefix mapping: " + qnamePrefix + "=" + uriPrefix);
+//			}
+//		}
+//		return SUCCESS;
+//	}
 }

@@ -19,6 +19,8 @@ import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.SpreadsheetServiceProvider;
 import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.util.AuthenticationException;
 import com.google.inject.AbstractModule;
@@ -46,6 +48,12 @@ public class IqaGaeTestingModule extends AbstractModule {
 	PersistenceManagerFactory providePmf() {
 		PersistenceManagerFactory pmfInstance = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 		return pmfInstance;
+	}
+	
+	@Provides
+	@Singleton
+	DatastoreService provideDatastoreService() {
+		return DatastoreServiceFactory.getDatastoreService();
 	}
 	
 	@Provides
