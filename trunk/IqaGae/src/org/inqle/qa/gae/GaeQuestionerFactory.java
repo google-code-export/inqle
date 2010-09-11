@@ -4,7 +4,9 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,7 +50,14 @@ public class GaeQuestionerFactory implements QuestionerFactory {
 		lsQuery.setAncestor(questionKey);
 		lsQuery.addFilter("lang", FilterOperator.EQUAL, lang);
 		List<Entity> questionTexts = datastoreService.prepare(lsQuery).asList(FetchOptions.Builder.withDefaults());
-
+		//add the localized text of desired language to a map for later use
+		Map<String, String> stringsOfDesiredLocalization = new HashMap<String, String>();
+		for (Entity questionText: questionTexts) {
+			String parentProperty = (String)questionText.getProperty("parentProperty");
+			String text = (String)questionText.getProperty("text");
+			stringsOfDesiredLocalization.put(parentProperty, text);
+		}
+		
 		Questioner questioner = new Questioner();
 		BeanInfo questionBeanInfo = null;
 		try {
@@ -57,9 +66,10 @@ public class GaeQuestionerFactory implements QuestionerFactory {
 			log.log(Level.SEVERE, "Error introspecting Questioner.class", e);
 			return null;
 		}
+		
 		for (PropertyDescriptor pDescriptor: questionBeanInfo.getPropertyDescriptors()) {
 			String propertyName = pDescriptor.getName();
-			qEntity.getProperty(propertyName);
+			Object value = qEntity.getProperty(propertyName);
 		}
 		questioner.setQuestionText((String)qEntity.getProperty("questionText"));
 		

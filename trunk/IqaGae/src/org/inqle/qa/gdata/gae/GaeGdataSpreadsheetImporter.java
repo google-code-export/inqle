@@ -151,10 +151,11 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 	private Entity getMappingEntity(String line, String columnTitle, Key parentKey) {
 		String type = getPrefixFromShortUri(line);
 		String id = getIdFromShortUri(line);
-		Entity ls = new Entity("Mapping", columnTitle + "/" + line, parentKey);
-		ls.setProperty("type", type);
-		ls.setProperty("id", id);
-		return ls;
+		Entity mapping = new Entity("Mapping", columnTitle + "/" + line, parentKey);
+		mapping.setProperty("type", type);
+		mapping.setProperty("id", id);
+		mapping.setProperty("parentProperty", columnTitle);
+		return mapping;
 	}
 
 	private Entity getLocalizedStringEntity(String line, String columnTitle, Key parentKey) {
@@ -163,6 +164,7 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		Entity ls = new Entity("LocalizedString", columnTitle + "/" + lang, parentKey);
 		ls.setProperty("lang", lang);
 		ls.setProperty("text", text);
+		ls.setProperty("parentProperty", columnTitle);
 		return ls;
 	}
 
