@@ -113,7 +113,9 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		if (cellText == null) return null;
 		if (cellText.indexOf("\n") < 0) {
 			if (isShortUri(cellText)) {
-				return cellText;
+				Entity mapping = getMappingEntity(cellText, columnTitle, parentKey);
+				datastoreService.put(mapping);
+				return null;
 			} else if (isLocalizedString(cellText)) {
 				Entity ls = getLocalizedStringEntity(cellText, columnTitle, parentKey);
 				datastoreService.put(ls);
@@ -125,11 +127,11 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 			String[] lines = cellText.split("\\n");
 			String line1 = lines[0];
 			if (isShortUri(line1)) {
-				List<String> values = new ArrayList<String>();
 				for (String line: lines) {
-					values.add(line);
+					Entity mapping = getMappingEntity(line, columnTitle, parentKey);
+					datastoreService.put(mapping);
 				}
-				return values;
+				return null;
 			} else if (isLocalizedString(line1)) {
 				for (String line: lines) {
 					Entity ls = getLocalizedStringEntity(line, columnTitle, parentKey);
@@ -146,9 +148,18 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		}
 	}
 
-	private Entity getLocalizedStringEntity(String cellText, String columnTitle, Key parentKey) {
-		String lang = getLangFromLocalizedString(cellText);
-		String text = getTextFromLocalizedString(cellText);
+	private Entity getMappingEntity(String line, String columnTitle, Key parentKey) {
+		String type = getPrefixFromShortUri(line);
+		String id = getIdFromShortUri(line);
+		Entity ls = new Entity("Mapping", columnTitle + "/" + line, parentKey);
+		ls.setProperty("type", type);
+		ls.setProperty("id", id);
+		return ls;
+	}
+
+	private Entity getLocalizedStringEntity(String line, String columnTitle, Key parentKey) {
+		String lang = getLangFromLocalizedString(line);
+		String text = getTextFromLocalizedString(line);
 		Entity ls = new Entity("LocalizedString", columnTitle + "/" + lang, parentKey);
 		ls.setProperty("lang", lang);
 		ls.setProperty("text", text);
