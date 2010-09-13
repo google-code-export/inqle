@@ -1,6 +1,5 @@
-package org.inqle.qa.gae;
+package org.inqle.qa;
 
-import org.inqle.qa.AskableQuestion;
 
 public interface AskableQuestionFactory {
 

@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.AskableQuestion;
+import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.RuleFactory;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -56,7 +58,7 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		try {
 			GaeBeanPopulator.populateBean(askableQuestion, qEntity, datastoreService, lang);
 		} catch (IntrospectionException e) {
-			log.log(Level.SEVERE, "Error introspecting Questioner.class.  Returning null (no Questioner)", e);
+			log.log(Level.SEVERE, "Error introspecting AskableQuestion.class.  Returning null (no Questioner)", e);
 			return null;
 		}
 		
