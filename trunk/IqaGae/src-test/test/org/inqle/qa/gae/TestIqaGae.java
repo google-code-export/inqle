@@ -203,14 +203,22 @@ public class TestIqaGae {
 			//load localized strings
 			Query lsQuery = new Query("LocalizedString");
 			lsQuery.setAncestor(q1.getKey());
-			List<Entity> rls1 = datastoreService.prepare(lsQuery).asList(FetchOptions.Builder.withLimit(500));
-			assertNotNull(rls1);
-			log.info("Localized strings for question 1=" + rls1);
-			assertEquals(rls1.size(), 5);
+			List<Entity> rls = datastoreService.prepare(lsQuery).asList(FetchOptions.Builder.withLimit(500));
+			assertNotNull(rls);
+			log.info("Localized strings for question 1=" + rls);
+			assertEquals(rls.size(), 5);
+			
+			//load Mappings
+			Query mappingQuery = new Query("Mapping");
+			mappingQuery.setAncestor(q1.getKey());
+			List<Entity> rmapping = datastoreService.prepare(mappingQuery).asList(FetchOptions.Builder.withLimit(500));
+			assertNotNull(rmapping);
+			log.info("Mappings for question 1=" + rmapping);
+			assertEquals(rmapping.size(), 3);
 		}
 		
 		@Test
 		public void testQuestioner() {
-			Questioner questioner = questionerFactory.getQuestioner(KeyFactory.createKey("Question", "weight").toString(), "en");
+			Questioner questioner = questionerFactory.getQuestioner(KeyFactory.createKey("Question", "weight"), "en");
 		}
 }

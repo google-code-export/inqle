@@ -4,6 +4,8 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +36,9 @@ public class GaeQuestionerFactory implements QuestionerFactory {
 	}
 	
 	@Override
-	public Questioner getQuestioner(String questionId, String lang) {
+	public Questioner getQuestioner(Object questionKeyObj, String lang) {
 		String kind = "Question";
-		Key questionKey = KeyFactory.createKey(kind, questionId);
+		Key questionKey = (Key)questionKeyObj;
 		Entity qEntity = null;
 		try {
 			qEntity = datastoreService.get(questionKey);
@@ -63,15 +65,33 @@ public class GaeQuestionerFactory implements QuestionerFactory {
 		try {
 			questionBeanInfo = Introspector.getBeanInfo(Questioner.class);
 		} catch (IntrospectionException e) {
-			log.log(Level.SEVERE, "Error introspecting Questioner.class", e);
+			log.log(Level.SEVERE, "Error introspecting Questioner.class.  Returning null (no Questioner)", e);
 			return null;
 		}
 		
 		for (PropertyDescriptor pDescriptor: questionBeanInfo.getPropertyDescriptors()) {
 			String propertyName = pDescriptor.getName();
 			Object value = qEntity.getProperty(propertyName);
+			if (value==null) {
+				value = stringsOfDesiredLocalization.get(propertyName);
+			}
+			Method setter = pDescriptor.getWriteMethod();
+			if (setter == null) {
+				log.info("No setter for property: " + propertyName);
+				continue;
+			}
+			try {
+				setter.invoke(questioner, value);
+			} catch (IllegalArgumentException e) {
+				log.log(Level.SEVERE, "Error setting property: " + propertyName + " on new Questioner object.  Skipping this property.", e);
+			} catch (IllegalAccessException e) {
+				log.log(Level.SEVERE, "Error setting property: " + propertyName + " on new Questioner object.  Skipping this property.", e);
+			} catch (InvocationTargetException e) {
+				log.log(Level.SEVERE, "Error setting property: " + propertyName + " on new Questioner object.  Skipping this property.", e);
+			}
 		}
-		questioner.setQuestionText((String)qEntity.getProperty("questionText"));
+
+		//TODO add some URI fields
 		
 		return questioner;
 	}
