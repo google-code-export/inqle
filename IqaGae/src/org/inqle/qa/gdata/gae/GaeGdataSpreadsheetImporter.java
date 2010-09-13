@@ -210,7 +210,7 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 //	}
 	
 	public static String getIdFromShortUri(String shortUri) {
-		String id = shortUri.substring(shortUri.indexOf(":")).trim();
+		String id = shortUri.substring(shortUri.indexOf(":") + 1).trim();
 		return id;
 	}
 	
