@@ -4,18 +4,21 @@ import java.beans.IntrospectionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.inqle.qa.AskableQuestion;
+import org.inqle.qa.Rule;
+import org.inqle.qa.RuleFactory;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
+import com.google.inject.Inject;
 
 public class GaeRuleFactory implements RuleFactory {
 
 	private DatastoreService datastoreService;
 	private Logger log;
 	
+	@Inject
 	public GaeRuleFactory(Logger log, DatastoreService datastoreService) {
 		this.log = log;
 		this.datastoreService = datastoreService;

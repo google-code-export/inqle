@@ -10,7 +10,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 
+import org.inqle.qa.AskableQuestionFactory;
 import org.inqle.qa.Queryer;
+import org.inqle.qa.RuleFactory;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -34,6 +36,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
+		bind(RuleFactory.class).to(GaeRuleFactory.class);
 	}
 	
 	@Provides
