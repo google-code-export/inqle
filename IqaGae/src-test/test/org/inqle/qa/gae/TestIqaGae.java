@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 
 import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
-import org.inqle.qa.Questioner;
+import org.inqle.qa.AskableQuestion;
 import org.inqle.qa.gae.AppConfig;
-import org.inqle.qa.gae.QuestionerFactory;
+import org.inqle.qa.gae.AskableQuestionFactory;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 import org.junit.AfterClass;
@@ -66,7 +66,7 @@ public class TestIqaGae {
 
 		private static DatastoreService datastoreService;
 
-		private static QuestionerFactory questionerFactory;
+		private static AskableQuestionFactory askableQuestion;
 		
 		@Inject
 		@AppConfig
@@ -82,7 +82,7 @@ public class TestIqaGae {
 			spreadsheetService = injector.getInstance(SpreadsheetService.class);
 			gdataSpreadsheetImporter = injector.getInstance(GdataSpreadsheetImporter.class);
 			datastoreService = injector.getInstance(DatastoreService.class); 
-			questionerFactory = injector.getInstance(QuestionerFactory.class);
+			askableQuestion = injector.getInstance(AskableQuestionFactory.class);
 	    }
 
 	    @AfterClass
@@ -219,6 +219,6 @@ public class TestIqaGae {
 		
 		@Test
 		public void testQuestioner() {
-			Questioner questioner = questionerFactory.getQuestioner(KeyFactory.createKey("Question", "weight"), "en");
+			AskableQuestion askableQuestion = askableQuestion.getAskableQuestion(KeyFactory.createKey("Question", "weight"), "en");
 		}
 }

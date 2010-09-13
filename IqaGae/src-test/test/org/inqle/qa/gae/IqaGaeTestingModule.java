@@ -15,8 +15,8 @@ import org.inqle.qa.AppConstants;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gae.GaeQueryer;
-import org.inqle.qa.gae.GaeQuestionerFactory;
-import org.inqle.qa.gae.QuestionerFactory;
+import org.inqle.qa.gae.GaeAskableQuestionFactory;
+import org.inqle.qa.gae.AskableQuestionFactory;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.SpreadsheetServiceProvider;
 import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
@@ -36,7 +36,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 		bind(Queryer.class).to(GaeQueryer.class);
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
-		bind(QuestionerFactory.class).to(GaeQuestionerFactory.class);
+		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
 	}
 	
 	@Provides

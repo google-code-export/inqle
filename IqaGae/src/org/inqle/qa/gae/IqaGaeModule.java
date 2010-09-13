@@ -33,7 +33,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(Queryer.class).to(GaeQueryer.class);
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
-		bind(QuestionerFactory.class).to(GaeQuestionerFactory.class);
+		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
 	}
 	
 	@Provides

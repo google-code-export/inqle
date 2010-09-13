@@ -1,6 +1,6 @@
 package org.inqle.qa;
 
-public class Questioner {
+public class AskableQuestion {
 
 	private String questionText;
 
