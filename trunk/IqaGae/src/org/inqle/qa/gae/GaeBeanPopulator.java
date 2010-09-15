@@ -60,14 +60,28 @@ public class GaeBeanPopulator {
 		for (PropertyDescriptor pDescriptor: beanInfo.getPropertyDescriptors()) {
 			String propertyName = pDescriptor.getName();
 			Object value = entity.getProperty(propertyName);
+
+			if ("id".equals(propertyName)) {
+				value = entity.getKey().getName();
+			}
+			if ("entityKey".equals(propertyName)) {
+				value = entity.getKey().toString();
+			}
 			if (value==null) {
 				value = stringsOfDesiredLocalization.get(propertyName);
 			}
 			if (value==null) {
-				msg += "\nNo value found in entity, for bean property: " + propertyName;
+				msg += "\nNo value found in entity '" + entity.getKey().toString() + "', for bean property: " + propertyName;
 				continue;
 			}
+			String strVal = String.valueOf(value);
 			Method setter = pDescriptor.getWriteMethod();
+			Class<?> pClass = pDescriptor.getPropertyType();
+			if (Integer.class.equals(pClass)) {
+				value = Integer.parseInt(strVal);
+			} else if (Double.class.equals(pClass)) {
+				value = Double.parseDouble(strVal);
+			}
 			if (setter == null) {
 				msg += "\nNo setter for bean property: " + propertyName;
 				continue;
@@ -75,11 +89,11 @@ public class GaeBeanPopulator {
 			try {
 				setter.invoke(bean, value);
 			} catch (IllegalArgumentException e) {
-				msg += "IllegalArgumentException setting property: " + propertyName + " on new Questioner object.  Skipping this property.";
+				msg += "\nIllegalArgumentException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
 			} catch (IllegalAccessException e) {
-				msg += "IllegalAccessException setting property: " + propertyName + " on new Questioner object.  Skipping this property.";
+				msg += "\nIllegalAccessException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
 			} catch (InvocationTargetException e) {
-				msg += "InvocationTargetException setting property: " + propertyName + " on new Questioner object.  Skipping this property.";
+				msg += "\nInvocationTargetException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
 			}
 		}
 		if (msg.length() == 0) msg = null;

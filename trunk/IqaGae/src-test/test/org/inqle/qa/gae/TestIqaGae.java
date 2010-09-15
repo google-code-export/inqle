@@ -186,7 +186,7 @@ public class TestIqaGae {
 		@Test
 		public void testGdataSpreadsheetImporter() throws IOException, ServiceException, EntityNotFoundException {
 			gdataSpreadsheetImporter.importSpreadsheet("https://spreadsheets.google.com/feeds/worksheets/ttsuVNlppfKmjNer07Q0Teg/private/full");
-			Entity q1 = datastoreService.get(KeyFactory.createKey("Question", "weight"));
+			Entity q1 = datastoreService.get(KeyFactory.createKey("Question", "Weight"));
 			assertNotNull(q1);
 			log.info("q1=" + q1);
 			Query findQuestionsQuery = new Query("Question");
@@ -206,7 +206,7 @@ public class TestIqaGae {
 			List<Entity> rls = datastoreService.prepare(lsQuery).asList(FetchOptions.Builder.withLimit(500));
 			assertNotNull(rls);
 			log.info("Localized strings for question 1=" + rls);
-			assertEquals(rls.size(), 5);
+			assertEquals(5, rls.size());
 			
 			//load Mappings
 			Query mappingQuery = new Query("Mapping");
@@ -214,11 +214,13 @@ public class TestIqaGae {
 			List<Entity> rmapping = datastoreService.prepare(mappingQuery).asList(FetchOptions.Builder.withLimit(500));
 			assertNotNull(rmapping);
 			log.info("Mappings for question 1=" + rmapping);
-			assertEquals(rmapping.size(), 3);
+			assertEquals(3, rmapping.size());
 		}
 		
 		@Test
 		public void testQuestioner() {
-			AskableQuestion askableQuestion = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "weight"), "en");
+			AskableQuestion askableQuestion = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Weight"), "en");
+			log.info("askableQuestion=" + askableQuestion);
+			assert(askableQuestion.getQuestionText() != null);
 		}
 }

@@ -113,7 +113,7 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		if (cellText == null) return null;
 		if (cellText.indexOf("\n") < 0) {
 			if (isShortUri(cellText)) {
-				Entity mapping = getMappingEntity(cellText, columnTitle, parentKey);
+				Entity mapping = getMappingEntity(cellText, 1, columnTitle, parentKey);
 				datastoreService.put(mapping);
 				return null;
 			} else if (isLocalizedString(cellText)) {
@@ -127,8 +127,10 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 			String[] lines = cellText.split("\\n");
 			String line1 = lines[0];
 			if (isShortUri(line1)) {
+				int i=0;
 				for (String line: lines) {
-					Entity mapping = getMappingEntity(line, columnTitle, parentKey);
+					i++;
+					Entity mapping = getMappingEntity(line, i, columnTitle, parentKey);
 					datastoreService.put(mapping);
 				}
 				return null;
@@ -148,13 +150,14 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		}
 	}
 
-	private Entity getMappingEntity(String line, String columnTitle, Key parentKey) {
+	private Entity getMappingEntity(String line, int itemNumber, String columnTitle, Key parentKey) {
 		String type = getPrefixFromShortUri(line);
 		String id = getIdFromShortUri(line);
 		Entity mapping = new Entity("Mapping", columnTitle + "/" + line, parentKey);
 		mapping.setProperty("type", type);
 		mapping.setProperty("id", id);
 		mapping.setProperty("parentProperty", columnTitle);
+		mapping.setProperty("iqa_orderBy", itemNumber);
 		return mapping;
 	}
 
