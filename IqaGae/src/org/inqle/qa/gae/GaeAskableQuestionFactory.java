@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import org.inqle.qa.AskableQuestion;
 import org.inqle.qa.AskableQuestionFactory;
 import org.inqle.qa.RuleFactory;
+import org.inqle.qa.Unit;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -56,58 +57,46 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		
 		AskableQuestion askableQuestion = new AskableQuestion();
 		try {
-			GaeBeanPopulator.populateBean(askableQuestion, qEntity, datastoreService, lang);
+			String msg = GaeBeanPopulator.populateBean(askableQuestion, qEntity, datastoreService, lang);
+			log.info(msg);
 		} catch (IntrospectionException e) {
 			log.log(Level.SEVERE, "Error introspecting AskableQuestion.class.  Returning null (no Questioner)", e);
 			return null;
 		}
 		
-		//TODO add some URI fields
+		//TODO add unit & option fields
+		askableQuestion.setAnswerUnits(getAnswerUnits(questionKey, lang));
+		askableQuestion.setAnswerOptions(getAnswerOptions(questionKey, lang));
 		
 		return askableQuestion;
 		
-//		//get localized text of requested language
-//		Query lsQuery = new Query("LocalizedString");
-//		lsQuery.setAncestor(questionKey);
-//		lsQuery.addFilter("lang", FilterOperator.EQUAL, lang);
-//		List<Entity> questionTexts = datastoreService.prepare(lsQuery).asList(FetchOptions.Builder.withDefaults());
-//		//add the localized text of desired language to a map for later use
-//		Map<String, String> stringsOfDesiredLocalization = new HashMap<String, String>();
-//		for (Entity questionText: questionTexts) {
-//			String parentProperty = (String)questionText.getProperty("parentProperty");
-//			String text = (String)questionText.getProperty("text");
-//			stringsOfDesiredLocalization.put(parentProperty, text);
-//		}
+
+	}
+
+	private Map<String, Unit> getAnswerUnits(Key questionKey, String lang) {
+		Map<String, Unit> answerUnits = new HashMap<String, Unit>();
 		
-//		BeanInfo questionBeanInfo = null;
-//		try {
-//			questionBeanInfo = Introspector.getBeanInfo(AskableQuestion.class);
-//		} catch (IntrospectionException e) {
-//			log.log(Level.SEVERE, "Error introspecting Questioner.class.  Returning null (no Questioner)", e);
-//			return null;
-//		}
-//		
-//		for (PropertyDescriptor pDescriptor: questionBeanInfo.getPropertyDescriptors()) {
-//			String propertyName = pDescriptor.getName();
-//			Object value = qEntity.getProperty(propertyName);
-//			if (value==null) {
-//				value = stringsOfDesiredLocalization.get(propertyName);
-//			}
-//			Method setter = pDescriptor.getWriteMethod();
-//			if (setter == null) {
-//				log.info("No setter for property: " + propertyName);
-//				continue;
-//			}
-//			try {
-//				setter.invoke(askableQuestion, value);
-//			} catch (IllegalArgumentException e) {
-//				log.log(Level.SEVERE, "Error setting property: " + propertyName + " on new Questioner object.  Skipping this property.", e);
-//			} catch (IllegalAccessException e) {
-//				log.log(Level.SEVERE, "Error setting property: " + propertyName + " on new Questioner object.  Skipping this property.", e);
-//			} catch (InvocationTargetException e) {
-//				log.log(Level.SEVERE, "Error setting property: " + propertyName + " on new Questioner object.  Skipping this property.", e);
-//			}
-//		}
+		//first get the Measure entity
+		Query measuresQuery = new Query("Mapping");
+		measuresQuery.setAncestor(questionKey);
+		measuresQuery.addFilter("parentProperty", FilterOperator.EQUAL, "measure");
+		List<Entity> measures = datastoreService.prepare(measuresQuery).asList(FetchOptions.Builder.withDefaults());
+		Entity measure = measures.get(1);
+		
+		//next get the Unit objects
+		Query unitQuery = new Query("Mapping");
+		unitQuery.setAncestor(measure.getKey());
+		unitQuery.addFilter("parentProperty", FilterOperator.EQUAL, "unit");
+		List<Entity> units = datastoreService.prepare(measuresQuery).asList(FetchOptions.Builder.withDefaults());
+		Entity measure = measures.get(1);
+		
+		//add the localized text of desired language to a map for later use
+		Map<String, String> stringsOfDesiredLocalization = new HashMap<String, String>();
+		for (Entity localizedText: localizedTexts) {
+			String parentProperty = (String)localizedText.getProperty("parentProperty");
+			String text = (String)localizedText.getProperty("text");
+			stringsOfDesiredLocalization.put(parentProperty, text);
+		}
 	}
 
 }

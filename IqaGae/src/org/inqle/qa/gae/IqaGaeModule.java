@@ -10,23 +10,21 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 
+import org.inqle.qa.AppConstants;
 import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
-import org.inqle.qa.RuleFactory;
+import org.inqle.qa.gdata.GdataSpreadsheetImporter;
+import org.inqle.qa.gdata.SpreadsheetServiceProvider;
+import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
-import com.google.gdata.util.AuthenticationException;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.servlet.SessionScoped;
-import org.inqle.qa.AppConstants;
-import org.inqle.qa.gdata.GdataSpreadsheetImporter;
-import org.inqle.qa.gdata.SpreadsheetServiceProvider;
-import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
 public class IqaGaeModule extends AbstractModule implements Module {
 
@@ -36,7 +34,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
-		bind(RuleFactory.class).to(GaeRuleFactory.class);
+		bind(GenericLocalizedObjectFactory.class).to(GaeGenericLocalizedObjectFactory.class);
 	}
 	
 	@Provides

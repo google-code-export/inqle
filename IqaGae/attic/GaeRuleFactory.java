@@ -13,6 +13,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.inject.Inject;
 
+@Deprecated
 public class GaeRuleFactory implements RuleFactory {
 
 	private DatastoreService datastoreService;
@@ -38,7 +39,8 @@ public class GaeRuleFactory implements RuleFactory {
 		
 		Rule rule = new Rule();
 		try {
-			GaeBeanPopulator.populateBean(rule, entity, datastoreService, lang);
+			String msg = GaeBeanPopulator.populateBean(rule, entity, datastoreService, lang);
+			log.info(msg);
 		} catch (IntrospectionException e) {
 			log.log(Level.SEVERE, "Error introspecting Questioner.class.  Returning null (no Questioner)", e);
 			return null;
