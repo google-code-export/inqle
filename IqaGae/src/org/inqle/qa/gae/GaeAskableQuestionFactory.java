@@ -25,6 +25,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.inject.Inject;
 
 public class GaeAskableQuestionFactory implements AskableQuestionFactory {
@@ -84,18 +85,18 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		Entity measure = measures.get(1);
 		
 		//next get the Unit objects
-		Query unitQuery = new Query("Mapping");
-		unitQuery.setAncestor(measure.getKey());
-		unitQuery.addFilter("parentProperty", FilterOperator.EQUAL, "unit");
-		List<Entity> units = datastoreService.prepare(measuresQuery).asList(FetchOptions.Builder.withDefaults());
-		Entity measure = measures.get(1);
+		Query unitsQuery = new Query("Mapping");
+		unitsQuery.setAncestor(measure.getKey());
+		unitsQuery.addFilter("parentProperty", FilterOperator.EQUAL, "unit");
+		unitsQuery.addSort("iqa_orderBy", SortDirection.ASCENDING);
+		List<Entity> units = datastoreService.prepare(unitsQuery).asList(FetchOptions.Builder.withDefaults());
+		
 		
 		//add the localized text of desired language to a map for later use
-		Map<String, String> stringsOfDesiredLocalization = new HashMap<String, String>();
-		for (Entity localizedText: localizedTexts) {
-			String parentProperty = (String)localizedText.getProperty("parentProperty");
-			String text = (String)localizedText.getProperty("text");
-			stringsOfDesiredLocalization.put(parentProperty, text);
+		Map<String, String> unitsMap = new HashMap<String, Unit>();
+		for (Entity unitEntity: units) {
+			String type = (String)localizedText.getProperty("type");
+			untisMap.put(type, unit);
 		}
 	}
 
