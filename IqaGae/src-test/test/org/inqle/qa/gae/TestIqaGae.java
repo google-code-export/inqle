@@ -214,13 +214,21 @@ public class TestIqaGae {
 			List<Entity> rmapping = datastoreService.prepare(mappingQuery).asList(FetchOptions.Builder.withLimit(500));
 			assertNotNull(rmapping);
 			log.info("Mappings for question 1=" + rmapping);
-			assertEquals(3, rmapping.size());
+			assertEquals(1, rmapping.size());
 		}
 		
 		@Test
 		public void testQuestioner() {
-			AskableQuestion askableQuestion = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Weight"), "en");
-			log.info("askableQuestion=" + askableQuestion);
-			assert(askableQuestion.getQuestionText() != null);
+			AskableQuestion askableQuestion1 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Weight"), "en");
+			log.info("askableQuestion1=" + askableQuestion1);
+			assert(askableQuestion1.getQuestionText() != null);
+			
+			AskableQuestion askableQuestion2 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Height"), "en");
+			log.info("askableQuestion2=" + askableQuestion2);
+			assert(askableQuestion2.getQuestionText() != null);
+			
+			AskableQuestion askableQuestion3 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Gender"), "en");
+			log.info("askableQuestion3=" + askableQuestion3);
+			assert(askableQuestion3.getQuestionText() != null);
 		}
 }

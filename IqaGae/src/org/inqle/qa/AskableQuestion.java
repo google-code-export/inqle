@@ -15,8 +15,9 @@ public class AskableQuestion {
 	private String answerPrefix;
 	private String answerSuffix;
 	private String answerType;
-	private Map<String, Unit> answerUnits;
-	private List<Option> answerOptions;
+	private String measureId;
+	private String referenceUnitId;
+	private List<Option> options;
 	private Double answerMinimum;
 	private Double answerMaximum;
 	
@@ -38,8 +39,9 @@ public class AskableQuestion {
 		s += "\n  answerPrefix=" + answerPrefix;
 		s += "\n  answerSuffix=" + answerSuffix;
 		s += "\n  answerType=" + answerType;
-		s += "\n  answerUnits=" + answerUnits;
-		s += "\n  answerOptions=" + answerOptions;
+		s += "\n  measureId=" + measureId;
+		s += "\n  referenceUnitId=" + referenceUnitId;
+		s += "\n  options=" + options;
 		s += "\n  answerMinimum=" + answerMinimum;
 		s += "\n  answerMaximum=" + answerMaximum;
 		s += "]";
@@ -102,20 +104,12 @@ public class AskableQuestion {
 		this.answerType = answerType;
 	}
 
-	public Map<String, Unit> getAnswerUnits() {
-		return answerUnits;
+	public List<Option> getOptions() {
+		return options;
 	}
 
-	public void setAnswerUnits(Map<String, Unit> answerUnits) {
-		this.answerUnits = answerUnits;
-	}
-
-	public List<Option> getAnswerOptions() {
-		return answerOptions;
-	}
-
-	public void setAnswerOptions(List<Option> answerOptions) {
-		this.answerOptions = answerOptions;
+	public void setOptions(List<Option> options) {
+		this.options = options;
 	}
 
 	public Double getAnswerMinimum() {
@@ -132,6 +126,22 @@ public class AskableQuestion {
 
 	public void setAnswerMaximum(Double answerMaximum) {
 		this.answerMaximum = answerMaximum;
+	}
+
+	public String getMeasureId() {
+		return measureId;
+	}
+
+	public void setMeasureId(String measureId) {
+		this.measureId = measureId;
+	}
+
+	public void setReferenceUnitId(String referenceUnitId) {
+		this.referenceUnitId = referenceUnitId;
+	}
+
+	public String getReferenceUnitId() {
+		return referenceUnitId;
 	}
 	
 }
