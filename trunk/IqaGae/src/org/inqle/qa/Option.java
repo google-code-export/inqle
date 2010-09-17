@@ -30,4 +30,14 @@ public class Option {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public String toString() {
+		String s = "Option [";
+		s+= "\n  entityKey=" + entityKey;
+		s+= "\n  id=" + id;
+		s+= "\n  text=" + text;
+		s+= "\n  description=" + description;
+		s+= "]";
+		return s;
+	}
 }

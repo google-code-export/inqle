@@ -1,20 +1,15 @@
 package org.inqle.qa.gae;
 
-import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.AskableQuestion;
 import org.inqle.qa.AskableQuestionFactory;
-import org.inqle.qa.RuleFactory;
+import org.inqle.qa.GenericLocalizedObjectFactory;
+import org.inqle.qa.Option;
 import org.inqle.qa.Unit;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -32,16 +27,16 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 
 	private DatastoreService datastoreService;
 	private Logger log;
-	private RuleFactory ruleFactory;
+	private GenericLocalizedObjectFactory genericLocalizedObjectFactory;
 	
 	@Inject
 	public GaeAskableQuestionFactory(
 			Logger log, 
 			DatastoreService datastoreService, 
-			RuleFactory ruleFactory) {
+			GenericLocalizedObjectFactory genericLocalizedObjectFactory) {
 		this.datastoreService = datastoreService;
 		this.log = log;
-		this.ruleFactory = ruleFactory;
+		this.genericLocalizedObjectFactory = genericLocalizedObjectFactory;
 	}
 	
 	@Override
@@ -66,38 +61,40 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		}
 		
 		//TODO add unit & option fields
-		askableQuestion.setAnswerUnits(getAnswerUnits(questionKey, lang));
-		askableQuestion.setAnswerOptions(getAnswerOptions(questionKey, lang));
+		try {
+			askableQuestion.setOptions(getOptions(questionKey, lang));
+		} catch (InstantiationException e) {
+			log.log(Level.SEVERE, "InstantiationException creating child object of AskableQuestion " + askableQuestion.getId());
+		} catch (IllegalAccessException e) {
+			log.log(Level.SEVERE, "IllegalAccessException creating child object of AskableQuestion " + askableQuestion.getId());
+		}
 		
 		return askableQuestion;
 		
 
 	}
 
-	private Map<String, Unit> getAnswerUnits(Key questionKey, String lang) {
-		Map<String, Unit> answerUnits = new HashMap<String, Unit>();
+	private List<Option> getOptions(Key questionKey, String lang) throws InstantiationException, IllegalAccessException {
+		List<Option> answerOptions = new ArrayList<Option>();
 		
 		//first get the Measure entity
-		Query measuresQuery = new Query("Mapping");
-		measuresQuery.setAncestor(questionKey);
-		measuresQuery.addFilter("parentProperty", FilterOperator.EQUAL, "measure");
-		List<Entity> measures = datastoreService.prepare(measuresQuery).asList(FetchOptions.Builder.withDefaults());
-		Entity measure = measures.get(1);
-		
-		//next get the Unit objects
-		Query unitsQuery = new Query("Mapping");
-		unitsQuery.setAncestor(measure.getKey());
-		unitsQuery.addFilter("parentProperty", FilterOperator.EQUAL, "unit");
-		unitsQuery.addSort("iqa_orderBy", SortDirection.ASCENDING);
-		List<Entity> units = datastoreService.prepare(unitsQuery).asList(FetchOptions.Builder.withDefaults());
-		
-		
-		//add the localized text of desired language to a map for later use
-		Map<String, String> unitsMap = new HashMap<String, Unit>();
-		for (Entity unitEntity: units) {
-			String type = (String)localizedText.getProperty("type");
-			untisMap.put(type, unit);
+		Query optionsQuery = new Query("Mapping");
+		optionsQuery.setAncestor(questionKey);
+		optionsQuery.addFilter("parentProperty", FilterOperator.EQUAL, "options");
+		optionsQuery.addSort("iqa_orderBy", SortDirection.ASCENDING);
+		List<Entity> optionMappingEntities = datastoreService.prepare(optionsQuery).asList(FetchOptions.Builder.withDefaults());
+		for (Entity optionMappingEntity: optionMappingEntities) {
+//			String optionMappingId = optionMappingEntity.getKey().getName();
+			String optionId = (String)optionMappingEntity.getProperty("id");
+			String optionKind = (String)optionMappingEntity.getProperty("kind");
+			Key optionKey = KeyFactory.createKey(optionKind, optionId);
+//			String optionEntityKeyStr = (String)optionMappingEntity.getProperty("entityKey");
+//			Key optionKey = KeyFactory.stringToKey(optionEntityKeyStr);
+			log.info("Found option entity: " + optionMappingEntity);
+			Option option = genericLocalizedObjectFactory.create(Option.class, optionKey, lang);
+			answerOptions.add(option);
 		}
+		return answerOptions;
 	}
 
 }

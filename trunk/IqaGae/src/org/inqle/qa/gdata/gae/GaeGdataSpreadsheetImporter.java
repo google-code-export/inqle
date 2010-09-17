@@ -18,6 +18,7 @@ import org.mortbay.log.Log;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
@@ -85,8 +86,10 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 			
 			if (isNewRow) {
 				//store last entity, if not null
-				if (entity != null) datastoreService.put(entity);
-				log.info("creating Entity: " + entity);
+				if (entity != null) {
+					datastoreService.put(entity);
+					log.info("stored Entity: " + entity);
+				}
 				
 				//create new entity
 				entity = new Entity(classUri, cellText);
@@ -106,6 +109,14 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 			lastCol = col;
 			lastRow = row;
 		}
+		
+		//store the last entity
+		if (entity != null) {
+			datastoreService.put(entity);
+			log.info("stored Entity: " + entity);
+		}
+		
+		
 		return SUCCESS;
 	}
 
@@ -114,6 +125,7 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 		if (cellText.indexOf("\n") < 0) {
 			if (isShortUri(cellText)) {
 				Entity mapping = getMappingEntity(cellText, 1, columnTitle, parentKey);
+				log.info("Storing MMMMapping: " + mapping);
 				datastoreService.put(mapping);
 				return null;
 			} else if (isLocalizedString(cellText)) {
@@ -121,7 +133,14 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 				datastoreService.put(ls);
 				return null;
 			} else {
-				return cellText;
+				//cast the text as the appropriate data type
+				try {
+					Double doubleVal = Double.parseDouble(cellText);
+					return doubleVal;
+				} catch (NumberFormatException e) {
+					return cellText;
+				}
+				
 			}
 		} else {
 			String[] lines = cellText.split("\\n");
@@ -153,8 +172,10 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 	private Entity getMappingEntity(String line, int itemNumber, String columnTitle, Key parentKey) {
 		String type = getPrefixFromShortUri(line);
 		String id = getIdFromShortUri(line);
+		Key entityKey = KeyFactory.createKey(type, id);
 		Entity mapping = new Entity("Mapping", columnTitle + "/" + line, parentKey);
-		mapping.setProperty("type", type);
+		mapping.setProperty("entityKey", entityKey.toString());
+		mapping.setProperty("kind", type);
 		mapping.setProperty("id", id);
 		mapping.setProperty("parentProperty", columnTitle);
 		mapping.setProperty("iqa_orderBy", itemNumber);
