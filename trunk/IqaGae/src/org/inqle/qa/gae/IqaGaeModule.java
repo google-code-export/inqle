@@ -18,6 +18,8 @@ import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.SpreadsheetServiceProvider;
 import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
+import test.org.inqle.qa.QuestionRuleApplier;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
@@ -35,6 +37,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
 		bind(GenericLocalizedObjectFactory.class).to(GaeGenericLocalizedObjectFactory.class);
+		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
 	}
 	
 	@Provides
