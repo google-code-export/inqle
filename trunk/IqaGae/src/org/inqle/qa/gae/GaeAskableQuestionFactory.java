@@ -40,20 +40,37 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 	}
 	
 	@Override
+	public List<AskableQuestion> listAllAskableQuestions(String lang) {
+		List<AskableQuestion> allAskableQuestions = new ArrayList<AskableQuestion>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
+		for (Entity questionEntity: allQuestionEntities) {
+			AskableQuestion askableQuestion = getAskableQuestion(questionEntity, lang);
+			allAskableQuestions.add(askableQuestion);
+		}
+		return allAskableQuestions;
+	}
+	
+	@Override
 	public AskableQuestion getAskableQuestion(Object questionKeyObj, String lang) {
 		String kind = "Question";
 		Key questionKey = (Key)questionKeyObj;
-		Entity qEntity = null;
+		Entity questionEntity = null;
 		try {
-			qEntity = datastoreService.get(questionKey);
+			questionEntity = datastoreService.get(questionKey);
 		} catch (EntityNotFoundException e) {
 			log.log(Level.SEVERE, "Error retrieving Entity of kind=" + kind + " and key=" + questionKey, e);
 			return null;
 		}
-		
+		return getAskableQuestion(questionEntity, lang);
+	}
+	
+	@Override
+	public AskableQuestion getAskableQuestion(Entity questionEntity, String lang) {
 		AskableQuestion askableQuestion = new AskableQuestion();
 		try {
-			String msg = GaeBeanPopulator.populateBean(askableQuestion, qEntity, datastoreService, lang);
+			String msg = GaeBeanPopulator.populateBean(askableQuestion, questionEntity, datastoreService, lang);
 			log.info(msg);
 		} catch (IntrospectionException e) {
 			log.log(Level.SEVERE, "Error introspecting AskableQuestion.class.  Returning null (no Questioner)", e);
@@ -62,7 +79,7 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		
 		//TODO add unit & option fields
 		try {
-			askableQuestion.setOptions(getOptions(qEntity, lang));
+			askableQuestion.setOptions(getOptions(questionEntity, lang));
 		} catch (InstantiationException e) {
 			log.log(Level.SEVERE, "InstantiationException creating child object of AskableQuestion " + askableQuestion.getId());
 		} catch (IllegalAccessException e) {

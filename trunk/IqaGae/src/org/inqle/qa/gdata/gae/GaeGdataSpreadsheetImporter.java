@@ -127,7 +127,7 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 				Entity mapping = getMappingEntity(cellText, 1, columnTitle, parentKey);
 				log.info("Storing MMMMapping: " + mapping);
 				datastoreService.put(mapping);
-				return null;
+				return cellText;
 			} else if (isLocalizedString(cellText)) {
 				Entity ls = getLocalizedStringEntity(cellText, columnTitle, parentKey);
 				datastoreService.put(ls);
@@ -146,11 +146,14 @@ public class GaeGdataSpreadsheetImporter implements GdataSpreadsheetImporter {
 			String[] lines = cellText.split("\\n");
 			String line1 = lines[0];
 			if (isShortUri(line1)) {
+				List<String> values = new ArrayList<String>();
 				int i=0;
 				for (String line: lines) {
 					i++;
 					Entity mapping = getMappingEntity(line, i, columnTitle, parentKey);
 					datastoreService.put(mapping);
+					String id = (String)mapping.getProperty("id");
+					values.add(id);
 				}
 				return null;
 			} else if (isLocalizedString(line1)) {
