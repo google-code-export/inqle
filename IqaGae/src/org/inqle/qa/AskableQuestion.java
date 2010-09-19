@@ -1,8 +1,6 @@
 package org.inqle.qa;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AskableQuestion {
 
@@ -18,6 +16,7 @@ public class AskableQuestion {
 	private String measureId;
 	private String referenceUnitId;
 	private List<Option> options;
+	private List<String> rules;
 	private Double answerMinimum;
 	private Double answerMaximum;
 	
@@ -142,6 +141,22 @@ public class AskableQuestion {
 
 	public String getReferenceUnitId() {
 		return referenceUnitId;
+	}
+
+	public void setRules(List<String> rules) {
+		this.rules = rules;
+	}
+
+	public List<String> getRules() {
+		return rules;
+	}
+
+	public void setEntityKey(String entityKey) {
+		this.entityKey = entityKey;
+	}
+
+	public String getEntityKey() {
+		return entityKey;
 	}
 	
 }

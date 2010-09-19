@@ -47,7 +47,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
-public class TestIqaGae {
+public class TestIqaGaeBasic {
 
 	private static Queryer queryer;
 	
@@ -132,7 +132,7 @@ public class TestIqaGae {
 	    
 //		@Test
 		public void queryerStoreAndLoadObjects() {
-			Logger log = Logger.getLogger(TestIqaGae.class.getName());
+			Logger log = Logger.getLogger(TestIqaGaeBasic.class.getName());
 			
 			List<Persistme> persistmesBeforeStoring = queryer.getList(Persistme.class, null);
 	//		assertNull(persistmesBeforeStoring);
@@ -237,8 +237,9 @@ public class TestIqaGae {
 			assert(askableQuestion3.getQuestionText().equals("What is your sex?"));
 		}
 		
-//		@Test
-//		public void testQuestionRules() {
-//			questionRuleApplier.
-//		}
+		@Test
+		public void testApplyQuestionRules() {
+			String userId = "dummy";
+			List<AskableQuestion> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+		}
 }
