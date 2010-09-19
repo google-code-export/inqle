@@ -23,6 +23,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import test.org.inqle.qa.QuestionRuleApplier;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -68,6 +70,8 @@ public class TestIqaGae {
 
 		private static AskableQuestionFactory askableQuestionFactory;
 		
+		private static QuestionRuleApplier questionRuleApplier;
+		
 		@Inject
 		@AppConfig
 		private Properties appProps;
@@ -83,6 +87,7 @@ public class TestIqaGae {
 			gdataSpreadsheetImporter = injector.getInstance(GdataSpreadsheetImporter.class);
 			datastoreService = injector.getInstance(DatastoreService.class); 
 			askableQuestionFactory = injector.getInstance(AskableQuestionFactory.class);
+			questionRuleApplier = injector.getInstance(QuestionRuleApplier.class);
 	    }
 
 	    @AfterClass
@@ -214,11 +219,11 @@ public class TestIqaGae {
 			List<Entity> rmapping = datastoreService.prepare(mappingQuery).asList(FetchOptions.Builder.withLimit(500));
 			assertNotNull(rmapping);
 			log.info("Mappings for question 1=" + rmapping);
-			assertEquals(1, rmapping.size());
+			assertEquals(0, rmapping.size());
 		}
 		
 		@Test
-		public void testQuestioner() {
+		public void testBuildingAskableQuestions() {
 			AskableQuestion askableQuestion1 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Weight"), "en");
 			log.info("askableQuestion1=" + askableQuestion1);
 			assert(askableQuestion1.getQuestionText() != null);
@@ -229,6 +234,11 @@ public class TestIqaGae {
 			
 			AskableQuestion askableQuestion3 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Gender"), "en");
 			log.info("askableQuestion3=" + askableQuestion3);
-			assert(askableQuestion3.getQuestionText() != null);
+			assert(askableQuestion3.getQuestionText().equals("What is your sex?"));
 		}
+		
+//		@Test
+//		public void testQuestionRules() {
+//			questionRuleApplier.
+//		}
 }

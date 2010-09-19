@@ -62,7 +62,7 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		
 		//TODO add unit & option fields
 		try {
-			askableQuestion.setOptions(getOptions(questionKey, lang));
+			askableQuestion.setOptions(getOptions(qEntity, lang));
 		} catch (InstantiationException e) {
 			log.log(Level.SEVERE, "InstantiationException creating child object of AskableQuestion " + askableQuestion.getId());
 		} catch (IllegalAccessException e) {
@@ -74,6 +74,7 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 
 	}
 
+	@Deprecated
 	private List<Option> getOptions(Key questionKey, String lang) throws InstantiationException, IllegalAccessException {
 		List<Option> answerOptions = new ArrayList<Option>();
 		
@@ -91,6 +92,32 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 //			String optionEntityKeyStr = (String)optionMappingEntity.getProperty("entityKey");
 //			Key optionKey = KeyFactory.stringToKey(optionEntityKeyStr);
 			log.info("Found option entity: " + optionMappingEntity);
+			Option option = genericLocalizedObjectFactory.create(Option.class, optionKey, lang);
+			answerOptions.add(option);
+		}
+		return answerOptions;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<Option> getOptions(Entity questionEntity, String lang) throws InstantiationException, IllegalAccessException {
+		List<Option> answerOptions = new ArrayList<Option>();
+		
+		if (questionEntity.getProperty("options")==null) return null;
+		Object optsObj = questionEntity.getProperty("options");
+		List<String> optIds = new ArrayList<String>();
+		if (optsObj instanceof String) {
+			optIds.add((String)optsObj);
+		} else if (optsObj instanceof List<?>) {
+			optIds = (List<String>)optsObj;
+			log.warning("Question property 'options' should have a list of 1 or more strings, but instead has value: " + optsObj);
+		} else {
+			return null;
+		}
+		//first get the Measure entity
+		String optionKind = "Option";
+		for (String optionId: optIds) {
+			
+			Key optionKey = KeyFactory.createKey(optionKind, optionId);
 			Option option = genericLocalizedObjectFactory.create(Option.class, optionKey, lang);
 			answerOptions.add(option);
 		}
