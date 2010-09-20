@@ -36,9 +36,6 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
 		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
 		for (Entity questionEntity: allQuestionEntities) {
-			
-		}
-		for (Entity questionEntity questionEntities: allQuestions) {
 			if (shouldAskQuestion(questionId)) {
 				
 			}
