@@ -1,4 +1,4 @@
-package test.org.inqle.qa;
+package org.inqle.qa;
 
 import java.util.List;
 
