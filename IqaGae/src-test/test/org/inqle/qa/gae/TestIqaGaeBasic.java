@@ -16,14 +16,13 @@ import org.inqle.qa.AppConstants;
 import org.inqle.qa.AskableQuestionFactory;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.AskableQuestion;
+import org.inqle.qa.QuestionRuleApplier;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import test.org.inqle.qa.QuestionRuleApplier;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -241,5 +240,7 @@ public class TestIqaGaeBasic {
 		public void testApplyQuestionRules() {
 			String userId = "dummy";
 			List<AskableQuestion> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			log.info("Found these askable questions: " + applicableAskableQuestions);
+			assert(applicableAskableQuestions.size() > 30);
 		}
 }

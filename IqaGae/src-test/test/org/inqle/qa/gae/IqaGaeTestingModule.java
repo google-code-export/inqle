@@ -19,11 +19,13 @@ import org.inqle.qa.gae.GaeAskableQuestionFactory;
 import org.inqle.qa.gae.GaeGenericLocalizedObjectFactory;
 import org.inqle.qa.gae.GaeQueryer;
 import org.inqle.qa.gae.GaeQuestionRuleApplier;
+import org.inqle.qa.gae.GaeRuleApplier;
+import org.inqle.qa.RuleApplier;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.SpreadsheetServiceProvider;
 import org.inqle.qa.gdata.gae.GaeGdataSpreadsheetImporter;
 
-import test.org.inqle.qa.QuestionRuleApplier;
+import org.inqle.qa.QuestionRuleApplier;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -41,6 +43,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
 		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
 		bind(GenericLocalizedObjectFactory.class).to(GaeGenericLocalizedObjectFactory.class);
+		bind(RuleApplier.class).to(GaeRuleApplier.class);
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
 	}
 	
