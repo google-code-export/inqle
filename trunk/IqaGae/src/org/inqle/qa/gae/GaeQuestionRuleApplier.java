@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.inqle.qa.AskableQuestion;
 import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.QuestionRuleApplier;
+import org.inqle.qa.Rule;
 import org.inqle.qa.RuleApplier;
+import org.mortbay.log.Log;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -26,12 +31,16 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 	private DatastoreService datastoreService;
 	private AskableQuestionFactory askableQuestionFactory;
 	private RuleApplier ruleApplier;
+	private RuleFactory ruleFactory;
+	private Logger log;
 
 	@Inject
-	public GaeQuestionRuleApplier(DatastoreService datastoreService, AskableQuestionFactory askableQuestionFactory, RuleApplier ruleApplier) {
+	public GaeQuestionRuleApplier(Logger log, DatastoreService datastoreService, AskableQuestionFactory askableQuestionFactory, RuleApplier ruleApplier, RuleFactory ruleFactory) {
 		this.datastoreService = datastoreService;
 		this.askableQuestionFactory = askableQuestionFactory;
 		this.ruleApplier = ruleApplier;
+		this.ruleFactory = ruleFactory;
+		this.log = log;
 	}
 	
 	@Override
@@ -57,10 +66,12 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 	 * @return
 	 */
 	private boolean shouldAskQuestion(String userId, Entity questionEntity) {
-		Query answersQuery = new Query("Answer");
+		if (questionEntity==null) return false;
+		//test whether the question has been answered too recently
+		Query recentAnswersQuery = new Query("Answer");
 		Key userKey = KeyFactory.createKey("Person", userId);
-		answersQuery.setAncestor(userKey);
-		answersQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
+		recentAnswersQuery.setAncestor(userKey);
+		recentAnswersQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
 //		answersQuery.addSort("answerDate", SortDirection.DESCENDING);
 		Date latestAcceptableDate = new Date();
 		Calendar c = Calendar.getInstance();
@@ -68,17 +79,58 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		int minIntervalInt = minInterval.intValue();
 		c.add(Calendar.DATE, minIntervalInt * -1);
 		latestAcceptableDate = c.getTime();
-		answersQuery.addFilter("answerDate", FilterOperator.GREATER_THAN, latestAcceptableDate);
-		int countRecentAnswers = datastoreService.prepare(answersQuery).countEntities();
-		
+		recentAnswersQuery.addFilter("answerDate", FilterOperator.GREATER_THAN_OR_EQUAL, latestAcceptableDate);
+		int countRecentAnswers = datastoreService.prepare(recentAnswersQuery).countEntities();
 		if (countRecentAnswers > 0) {
+			Log.info("User: " + userId + " already answered question: " + questionEntity.getKey().getId() + " within the last " + latestAcceptableDate + " days");
 			//latest response was too recent
 			return false;
 		}
 		
-		//TODO test rules!
+		//test whether the user has said not to ask again
+		Query dontAskAnswersQuery = new Query("Answer");
+		dontAskAnswersQuery.setAncestor(userKey);
+		dontAskAnswersQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
+		dontAskAnswersQuery.addFilter("dontAsk", FilterOperator.EQUAL, "1");
+		int countDontAskAnswers = datastoreService.prepare(dontAskAnswersQuery).countEntities();
+		if (countDontAskAnswers > 0) {
+			Log.info("User: " + userId + " has said don't ask question: " + questionEntity.getKey().getId());
+			//user has said "don't ask this"
+			return false;
+		}
 		
-		return true;
+		//TODO test rules!
+		Object rulesObj = questionEntity.getProperty("rules");
+		if (rulesObj == null) {
+			//no rules, return true
+			return true;
+		}
+		
+		List<String> ruleIds = new ArrayList<String>();
+		if (rulesObj instanceof String) {
+			ruleIds.add((String)rulesObj);
+		} else if (rulesObj instanceof List<?>){
+			for (Object ruleObj: (List<?>)rulesObj) {
+				ruleIds.add(String.valueOf(ruleObj));
+			}
+		}
+		
+		//loop thru each rule, return true if any rule is true
+		for (String ruleId: ruleIds) {
+			Key ruleKey = KeyFactory.createKey("Rule", ruleId);
+			Rule rule = null;
+			try {
+				rule = ruleFactory.getRule(ruleKey);
+			} catch (InstantiationException e) {
+				log.log(Level.SEVERE, "InstantiationException prevents creating Rule object: " + ruleId + ", therefore unable to test this rule against question: " + questionEntity.getKey().getId());
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//rules present but none returns true: return false
+		return false;
 	}
 
 }

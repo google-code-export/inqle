@@ -52,5 +52,29 @@ public class GaeGenericLocalizedObjectFactory implements GenericLocalizedObjectF
 		
 		return theObj;
 	}
+
+	@Override
+	public <T> T create(Class<T> objClass, Object keyObj) throws InstantiationException, IllegalAccessException {
+		Key key = (Key)keyObj;
+		String kind = key.getKind();
+		Entity entity = null;
+		try {
+			entity = datastoreService.get(key);
+		} catch (EntityNotFoundException e) {
+			log.log(Level.SEVERE, "Error retrieving Entity of kind=" + kind + " and key=" + key, e);
+			return null;
+		}
+		
+		T theObj = objClass.newInstance();
+		try {
+			String msg = GaeBeanPopulator.populateBean(theObj, entity, datastoreService);
+			log.info(msg);
+		} catch (IntrospectionException e) {
+			log.log(Level.SEVERE, "Error introspecting class " + objClass + ".  Returning null (no Questioner)", e);
+			return null;
+		}
+		
+		return theObj;
+	}
 	
 }
