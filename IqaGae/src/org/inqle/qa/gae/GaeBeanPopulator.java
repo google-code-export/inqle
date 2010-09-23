@@ -100,5 +100,61 @@ public class GaeBeanPopulator {
 		return msg;
 		
 	}
+	
+	/**
+	 * To a bean, add all corresponding properties from the entity.
+	 * Do not add localized strings
+	 * @param <T>
+	 * @param bean
+	 * @param entity
+	 * @param datastoreService
+	 * @param lang
+	 * @return a log message
+	 * @throws IntrospectionException 
+	 */
+	public static <T> String populateBean(T bean, Entity entity, DatastoreService datastoreService) throws IntrospectionException {
+		String msg = "";
+		BeanInfo beanInfo = null;
+		beanInfo = Introspector.getBeanInfo(bean.getClass());
+		
+		for (PropertyDescriptor pDescriptor: beanInfo.getPropertyDescriptors()) {
+			String propertyName = pDescriptor.getName();
+			Object value = entity.getProperty(propertyName);
+
+			if ("id".equals(propertyName)) {
+				value = entity.getKey().getName();
+			}
+			if ("entityKey".equals(propertyName)) {
+				value = entity.getKey().toString();
+			}
+			if (value==null) {
+				msg += "\nNo value found in entity '" + entity.getKey().toString() + "', for bean property: " + propertyName;
+				continue;
+			}
+			String strVal = String.valueOf(value);
+			Method setter = pDescriptor.getWriteMethod();
+			Class<?> pClass = pDescriptor.getPropertyType();
+			if (Integer.class.equals(pClass)) {
+				value = Integer.parseInt(strVal);
+			} else if (Double.class.equals(pClass)) {
+				value = Double.parseDouble(strVal);
+			}
+			if (setter == null) {
+				msg += "\nNo setter for bean property: " + propertyName;
+				continue;
+			}
+			try {
+				setter.invoke(bean, value);
+			} catch (IllegalArgumentException e) {
+				msg += "\nIllegalArgumentException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+			} catch (IllegalAccessException e) {
+				msg += "\nIllegalAccessException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+			} catch (InvocationTargetException e) {
+				msg += "\nInvocationTargetException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+			}
+		}
+		if (msg.length() == 0) msg = null;
+		return msg;
+	}
 
 }
