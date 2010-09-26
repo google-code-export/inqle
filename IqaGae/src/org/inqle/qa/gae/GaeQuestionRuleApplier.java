@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.AskableQuestion;
 import org.inqle.qa.AskableQuestionFactory;
-import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.QuestionRuleApplier;
 import org.inqle.qa.Rule;
 import org.inqle.qa.RuleApplier;
+import org.inqle.qa.RuleFactory;
 import org.mortbay.log.Log;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -118,14 +117,9 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		//loop thru each rule, return true if any rule is true
 		for (String ruleId: ruleIds) {
 			Key ruleKey = KeyFactory.createKey("Rule", ruleId);
-			Rule rule = null;
-			try {
-				rule = ruleFactory.getRule(ruleKey);
-			} catch (InstantiationException e) {
-				log.log(Level.SEVERE, "InstantiationException prevents creating Rule object: " + ruleId + ", therefore unable to test this rule against question: " + questionEntity.getKey().getId());
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Rule rule = ruleFactory.getRule(ruleKey);
+			if (ruleApplier.applyRule(rule, userId)) {
+				return true;
 			}
 		}
 		

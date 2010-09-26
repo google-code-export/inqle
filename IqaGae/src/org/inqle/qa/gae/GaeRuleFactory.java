@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.inqle.qa.AskableQuestion;
-import org.inqle.qa.AskableQuestionFactory;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Option;
-import org.inqle.qa.Unit;
+import org.inqle.qa.Rule;
+import org.inqle.qa.RuleFactory;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -23,14 +22,14 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.inject.Inject;
 
-public class GaeAskableQuestionFactory implements AskableQuestionFactory {
+public class GaeRuleFactory implements RuleFactory {
 
 	private DatastoreService datastoreService;
 	private Logger log;
 	private GenericLocalizedObjectFactory genericLocalizedObjectFactory;
 	
 	@Inject
-	public GaeAskableQuestionFactory(
+	public GaeRuleFactory(
 			Logger log, 
 			DatastoreService datastoreService, 
 			GenericLocalizedObjectFactory genericLocalizedObjectFactory) {
@@ -40,64 +39,72 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 	}
 	
 	@Override
-	public List<AskableQuestion> listAllAskableQuestions(String lang) {
-		List<AskableQuestion> allAskableQuestions = new ArrayList<AskableQuestion>();
-		Query findQuestionsQuery = new Query("Question");
-		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
-		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
-		for (Entity questionEntity: allQuestionEntities) {
-			AskableQuestion askableQuestion = getAskableQuestion(questionEntity, lang);
-			allAskableQuestions.add(askableQuestion);
+	public List<Rule> listAllRules() {
+		List<Rule> allRules = new ArrayList<Rule>();
+		Query findRulesQuery = new Query("Rule");
+		findRulesQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allRuleEntities = datastoreService.prepare(findRulesQuery).asList(FetchOptions.Builder.withLimit(500));
+		for (Entity ruleEntity: allRuleEntities) {
+			Rule rule = getRule(ruleEntity);
+			allRules.add(rule);
 		}
-		return allAskableQuestions;
+		return allRules;
+	}
+	
+	public Rule getRule(String ruleId) {
+		Key ruleKey = KeyFactory.createKey("Rule", ruleId);
+		return getRule(ruleKey);
 	}
 	
 	@Override
-	public AskableQuestion getAskableQuestion(Object questionKeyObj, String lang) {
-		String kind = "Question";
-		Key questionKey = (Key)questionKeyObj;
-		Entity questionEntity = null;
+	public Rule getRule(Object ruleKeyObj) {
+		String kind = "Rule";
+		Key ruleKey = (Key)ruleKeyObj;
+		Entity ruleEntity = null;
 		try {
-			questionEntity = datastoreService.get(questionKey);
+			ruleEntity = datastoreService.get(ruleKey);
 		} catch (EntityNotFoundException e) {
-			log.log(Level.SEVERE, "Error retrieving Entity of kind=" + kind + " and key=" + questionKey, e);
+			log.log(Level.SEVERE, "Error retrieving Entity of kind=" + kind + " and key=" + ruleKey, e);
 			return null;
 		}
-		return getAskableQuestion(questionEntity, lang);
+		return getRule(ruleEntity);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public AskableQuestion getAskableQuestion(Entity questionEntity, String lang) {
-		AskableQuestion askableQuestion = new AskableQuestion();
+	public Rule getRule(Entity ruleEntity) {
+		Rule rule = new Rule();
 		try {
-			String msg = GaeBeanPopulator.populateBean(askableQuestion, questionEntity, datastoreService, lang);
+			String msg = GaeBeanPopulator.populateBean(rule, ruleEntity, datastoreService);
 			log.info(msg);
 		} catch (IntrospectionException e) {
-			log.log(Level.SEVERE, "Error introspecting AskableQuestion.class.  Returning null (no Questioner)", e);
+			log.log(Level.SEVERE, "Error introspecting Rule.class.  Returning null (no Rule)", e);
 			return null;
 		}
 		
-		//add unit & option fields
-		try {
-			askableQuestion.setOptions(getOptions(questionEntity, lang));
-		} catch (InstantiationException e) {
-			log.log(Level.SEVERE, "InstantiationException creating child object of AskableQuestion " + askableQuestion.getId());
-		} catch (IllegalAccessException e) {
-			log.log(Level.SEVERE, "IllegalAccessException creating child object of AskableQuestion " + askableQuestion.getId());
+		List<String> subRules = (List<String>)ruleEntity.getProperty("andRules");
+		List<Rule> andRules = new ArrayList<Rule>();
+		for (String ruleId: subRules) {
+			andRules.add(getRule(ruleId));
 		}
+		rule.setAndRules(andRules);
 		
-		return askableQuestion;
-		
-
+		subRules = (List<String>)ruleEntity.getProperty("orRules");
+		List<Rule> orRules = new ArrayList<Rule>();
+		for (String ruleId: subRules) {
+			orRules.add(getRule(ruleId));
+		}
+		rule.setOrRules(orRules);
+		return rule;
 	}
 
 	@Deprecated
-	private List<Option> getOptions(Key questionKey, String lang) throws InstantiationException, IllegalAccessException {
+	private List<Option> getOptions(Key ruleKey, String lang) throws InstantiationException, IllegalAccessException {
 		List<Option> answerOptions = new ArrayList<Option>();
 		
 		//first get the Measure entity
 		Query optionsQuery = new Query("Mapping");
-		optionsQuery.setAncestor(questionKey);
+		optionsQuery.setAncestor(ruleKey);
 		optionsQuery.addFilter("parentProperty", FilterOperator.EQUAL, "options");
 		optionsQuery.addSort("iqa_orderBy", SortDirection.ASCENDING);
 		List<Entity> optionMappingEntities = datastoreService.prepare(optionsQuery).asList(FetchOptions.Builder.withDefaults());
@@ -116,17 +123,17 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<Option> getOptions(Entity questionEntity, String lang) throws InstantiationException, IllegalAccessException {
+	private List<Option> getOptions(Entity ruleEntity, String lang) throws InstantiationException, IllegalAccessException {
 		List<Option> answerOptions = new ArrayList<Option>();
 		
-		if (questionEntity.getProperty("options")==null) return null;
-		Object optsObj = questionEntity.getProperty("options");
+		if (ruleEntity.getProperty("options")==null) return null;
+		Object optsObj = ruleEntity.getProperty("options");
 		List<String> optIds = new ArrayList<String>();
 		if (optsObj instanceof String) {
 			optIds.add((String)optsObj);
 		} else if (optsObj instanceof List<?>) {
 			optIds = (List<String>)optsObj;
-			log.warning("Question property 'options' should have a list of 1 or more strings, but instead has value: " + optsObj);
+			log.warning("Rule property 'options' should have a list of 1 or more strings, but instead has value: " + optsObj);
 		} else {
 			return null;
 		}
