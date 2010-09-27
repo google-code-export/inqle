@@ -87,13 +87,13 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		}
 		
 		//test whether the user has said not to ask again
-		Query dontAskAnswersQuery = new Query("Answer");
-		dontAskAnswersQuery.setAncestor(userKey);
-		dontAskAnswersQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
-		dontAskAnswersQuery.addFilter("dontAsk", FilterOperator.EQUAL, "1");
-		int countDontAskAnswers = datastoreService.prepare(dontAskAnswersQuery).countEntities();
+		Query moratoriumPreferencesQuery = new Query("Preference");
+		moratoriumPreferencesQuery.setAncestor(userKey);
+		moratoriumPreferencesQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
+		moratoriumPreferencesQuery.addFilter("moratoriumUntil", FilterOperator.GREATER_THAN, new Date());
+		int countDontAskAnswers = datastoreService.prepare(moratoriumPreferencesQuery).countEntities();
 		if (countDontAskAnswers > 0) {
-			Log.info("User: " + userId + " has said don't ask question: " + questionEntity.getKey().getId());
+			log.info("User: " + userId + " has said don't ask question: " + questionEntity.getKey().getId());
 			//user has said "don't ask this"
 			return false;
 		}

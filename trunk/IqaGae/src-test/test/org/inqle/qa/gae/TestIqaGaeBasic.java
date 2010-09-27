@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -241,6 +243,13 @@ public class TestIqaGaeBasic {
 			String userId = "dummy";
 			List<AskableQuestion> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
 			log.info("Found these askable questions: " + applicableAskableQuestions);
-			assert(applicableAskableQuestions.size() > 30);
+			assertEquals(20, applicableAskableQuestions.size());
+			
+			Entity answer1 = new Entity("Answer", "1001");
+			answer1.setProperty("question", "Height");
+			answer1.setProperty("date", new Date());
+			
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(19, applicableAskableQuestions.size());
 		}
 }
