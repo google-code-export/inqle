@@ -14,12 +14,14 @@ import org.inqle.qa.AppConstants;
 import org.inqle.qa.AskableQuestionFactory;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
+import org.inqle.qa.RuleFactory;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gae.GaeAskableQuestionFactory;
 import org.inqle.qa.gae.GaeGenericLocalizedObjectFactory;
 import org.inqle.qa.gae.GaeQueryer;
 import org.inqle.qa.gae.GaeQuestionRuleApplier;
 import org.inqle.qa.gae.GaeRuleApplier;
+import org.inqle.qa.gae.GaeRuleFactory;
 import org.inqle.qa.RuleApplier;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
 import org.inqle.qa.gdata.SpreadsheetServiceProvider;
@@ -45,6 +47,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 		bind(GenericLocalizedObjectFactory.class).to(GaeGenericLocalizedObjectFactory.class);
 		bind(RuleApplier.class).to(GaeRuleApplier.class);
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
+		bind(RuleFactory.class).to(GaeRuleFactory.class);
 	}
 	
 	@Provides
