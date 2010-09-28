@@ -30,6 +30,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -245,11 +246,61 @@ public class TestIqaGaeBasic {
 			log.info("Found these askable questions: " + applicableAskableQuestions);
 			assertEquals(20, applicableAskableQuestions.size());
 			
-			Entity answer1 = new Entity("Answer", "1001");
-			answer1.setProperty("question", "Height");
-			answer1.setProperty("date", new Date());
+			Key userKey = KeyFactory.createKey("Person", userId);
 			
+			Entity answer = new Entity("Answer", "1001", userKey);
+			answer.setProperty("question", "Height");
+			answer.setProperty("date", new Date());
+			datastoreService.put(answer);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
 			assertEquals(19, applicableAskableQuestions.size());
+			
+			answer = new Entity("Answer", "1002", userKey);
+			answer.setProperty("question", "Weight");
+			answer.setProperty("date", new Date());
+			datastoreService.put(answer);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(18, applicableAskableQuestions.size());
+			
+			answer = new Entity("Answer", "1003", userKey);
+			answer.setProperty("question", "WaistCircumference");
+			answer.setProperty("date", new Date());
+			datastoreService.put(answer);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(17, applicableAskableQuestions.size());
+			
+			answer = new Entity("Answer", "1004", userKey);
+			answer.setProperty("question", "Gender");
+			answer.setProperty("wrong_date_field", new Date());
+			datastoreService.put(answer);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(17, applicableAskableQuestions.size());
+			
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.DATE, -1);
+			Entity preference = new Entity("Preference", "1005", userKey);
+			preference.setProperty("question", "HoursOfExercise");
+			preference.setProperty("moratoriumUntil", c.getTime());
+			datastoreService.put(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(17, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, 1);
+			preference = new Entity("Preference", "1006", userKey);
+			preference.setProperty("question", "HoursOfExercise");
+			preference.setProperty("moratoriumUntil", c.getTime());
+			datastoreService.put(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(16, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, 100000000);
+			preference = new Entity("Preference", "1007", userKey);
+			preference.setProperty("question", "AvgDailyFruitVeg");
+			preference.setProperty("moratoriumUntil", c.getTime());
+			datastoreService.put(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(15, applicableAskableQuestions.size());
 		}
 }
