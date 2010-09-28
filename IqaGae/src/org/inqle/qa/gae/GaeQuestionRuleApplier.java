@@ -70,18 +70,17 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		Query recentAnswersQuery = new Query("Answer");
 		Key userKey = KeyFactory.createKey("Person", userId);
 		recentAnswersQuery.setAncestor(userKey);
-		recentAnswersQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
-//		answersQuery.addSort("answerDate", SortDirection.DESCENDING);
+		recentAnswersQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getKey().getName());
 		Date latestAcceptableDate = new Date();
 		Calendar c = Calendar.getInstance();
 		Double minInterval = (Double)questionEntity.getProperty("minInterval");
 		int minIntervalInt = minInterval.intValue();
 		c.add(Calendar.DATE, minIntervalInt * -1);
 		latestAcceptableDate = c.getTime();
-		recentAnswersQuery.addFilter("answerDate", FilterOperator.GREATER_THAN_OR_EQUAL, latestAcceptableDate);
+		recentAnswersQuery.addFilter("date", FilterOperator.GREATER_THAN_OR_EQUAL, latestAcceptableDate);
 		int countRecentAnswers = datastoreService.prepare(recentAnswersQuery).countEntities();
 		if (countRecentAnswers > 0) {
-			Log.info("User: " + userId + " already answered question: " + questionEntity.getKey().getId() + " within the last " + latestAcceptableDate + " days");
+			log.info("User: " + userId + " already answered question: " + questionEntity.getKey().getName() + " since " + latestAcceptableDate);
 			//latest response was too recent
 			return false;
 		}
@@ -89,15 +88,15 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		//test whether the user has said not to ask again
 		Query moratoriumPreferencesQuery = new Query("Preference");
 		moratoriumPreferencesQuery.setAncestor(userKey);
-		moratoriumPreferencesQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getProperty("id"));
+		moratoriumPreferencesQuery.addFilter("question", FilterOperator.EQUAL, questionEntity.getKey().getName());
 		moratoriumPreferencesQuery.addFilter("moratoriumUntil", FilterOperator.GREATER_THAN, new Date());
 		int countDontAskAnswers = datastoreService.prepare(moratoriumPreferencesQuery).countEntities();
 		if (countDontAskAnswers > 0) {
-			log.info("User: " + userId + " has said don't ask question: " + questionEntity.getKey().getId());
+			log.info("User: " + userId + " has said don't ask question: " + questionEntity.getKey().getName());
 			//user has said "don't ask this"
 			return false;
 		}
-		
+
 		//TODO test rules!
 		Object rulesObj = questionEntity.getProperty("rules");
 		if (rulesObj == null) {

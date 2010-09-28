@@ -71,7 +71,7 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 		AskableQuestion askableQuestion = new AskableQuestion();
 		try {
 			String msg = GaeBeanPopulator.populateBean(askableQuestion, questionEntity, datastoreService, lang);
-			log.info(msg);
+			log.fine(msg);
 		} catch (IntrospectionException e) {
 			log.log(Level.SEVERE, "Error introspecting AskableQuestion.class.  Returning null (no Questioner)", e);
 			return null;
@@ -108,7 +108,7 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 			Key optionKey = KeyFactory.createKey(optionKind, optionId);
 //			String optionEntityKeyStr = (String)optionMappingEntity.getProperty("entityKey");
 //			Key optionKey = KeyFactory.stringToKey(optionEntityKeyStr);
-			log.info("Found option entity: " + optionMappingEntity);
+			log.fine("Found option entity: " + optionMappingEntity);
 			Option option = genericLocalizedObjectFactory.create(Option.class, optionKey, lang);
 			answerOptions.add(option);
 		}
