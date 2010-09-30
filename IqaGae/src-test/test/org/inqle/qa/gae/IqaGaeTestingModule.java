@@ -11,12 +11,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.inqle.qa.AppConstants;
-import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.QuestionFactory;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.RuleFactory;
 import org.inqle.qa.gae.AppConfig;
-import org.inqle.qa.gae.GaeAskableQuestionFactory;
+import org.inqle.qa.gae.GaeQuestionFactory;
 import org.inqle.qa.gae.GaeGenericLocalizedObjectFactory;
 import org.inqle.qa.gae.GaeQueryer;
 import org.inqle.qa.gae.GaeQuestionRuleApplier;
@@ -43,7 +43,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 		bind(Queryer.class).to(GaeQueryer.class);
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
-		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
+		bind(QuestionFactory.class).to(GaeQuestionFactory.class);
 		bind(GenericLocalizedObjectFactory.class).to(GaeGenericLocalizedObjectFactory.class);
 		bind(RuleApplier.class).to(GaeRuleApplier.class);
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);

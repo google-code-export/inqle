@@ -15,9 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.AppConstants;
-import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.QuestionFactory;
 import org.inqle.qa.Queryer;
-import org.inqle.qa.AskableQuestion;
+import org.inqle.qa.Question;
 import org.inqle.qa.QuestionRuleApplier;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
@@ -70,7 +70,7 @@ public class TestIqaGaeBasic {
 
 		private static DatastoreService datastoreService;
 
-		private static AskableQuestionFactory askableQuestionFactory;
+		private static QuestionFactory questionFactory;
 		
 		private static QuestionRuleApplier questionRuleApplier;
 		
@@ -88,7 +88,7 @@ public class TestIqaGaeBasic {
 			spreadsheetService = injector.getInstance(SpreadsheetService.class);
 			gdataSpreadsheetImporter = injector.getInstance(GdataSpreadsheetImporter.class);
 			datastoreService = injector.getInstance(DatastoreService.class); 
-			askableQuestionFactory = injector.getInstance(AskableQuestionFactory.class);
+			questionFactory = injector.getInstance(QuestionFactory.class);
 			questionRuleApplier = injector.getInstance(QuestionRuleApplier.class);
 	    }
 
@@ -226,15 +226,15 @@ public class TestIqaGaeBasic {
 		
 		@Test
 		public void testBuildingAskableQuestions() {
-			AskableQuestion askableQuestion1 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Weight"), "en");
+			Question askableQuestion1 = questionFactory.getQuestion(KeyFactory.createKey("Question", "Weight"), "en");
 			log.info("askableQuestion1=" + askableQuestion1);
 			assert(askableQuestion1.getQuestionText() != null);
 			
-			AskableQuestion askableQuestion2 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Height"), "en");
+			Question askableQuestion2 = questionFactory.getQuestion(KeyFactory.createKey("Question", "Height"), "en");
 			log.info("askableQuestion2=" + askableQuestion2);
 			assert(askableQuestion2.getQuestionText() != null);
 			
-			AskableQuestion askableQuestion3 = askableQuestionFactory.getAskableQuestion(KeyFactory.createKey("Question", "Gender"), "en");
+			Question askableQuestion3 = questionFactory.getQuestion(KeyFactory.createKey("Question", "Gender"), "en");
 			log.info("askableQuestion3=" + askableQuestion3);
 			assert(askableQuestion3.getQuestionText().equals("What is your sex?"));
 		}
@@ -242,7 +242,7 @@ public class TestIqaGaeBasic {
 		@Test
 		public void testApplyQuestionRules() {
 			String userId = "dummy";
-			List<AskableQuestion> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			List<Question> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
 			log.info("Found these askable questions: " + applicableAskableQuestions);
 			assertEquals(20, applicableAskableQuestions.size());
 			
@@ -250,6 +250,7 @@ public class TestIqaGaeBasic {
 			
 			Entity answer = new Entity("Answer", "1001", userKey);
 			answer.setProperty("question", "Height");
+			answer.setProperty("user", userId);
 			answer.setProperty("date", new Date());
 			datastoreService.put(answer);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
@@ -257,6 +258,7 @@ public class TestIqaGaeBasic {
 			
 			answer = new Entity("Answer", "1002", userKey);
 			answer.setProperty("question", "Weight");
+			answer.setProperty("user", userId);
 			answer.setProperty("date", new Date());
 			datastoreService.put(answer);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
@@ -264,6 +266,7 @@ public class TestIqaGaeBasic {
 			
 			answer = new Entity("Answer", "1003", userKey);
 			answer.setProperty("question", "WaistCircumference");
+			answer.setProperty("user", userId);
 			answer.setProperty("date", new Date());
 			datastoreService.put(answer);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
@@ -271,6 +274,7 @@ public class TestIqaGaeBasic {
 			
 			answer = new Entity("Answer", "1004", userKey);
 			answer.setProperty("question", "Gender");
+			answer.setProperty("user", userId);
 			answer.setProperty("wrong_date_field", new Date());
 			datastoreService.put(answer);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
@@ -278,8 +282,9 @@ public class TestIqaGaeBasic {
 			
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, -1);
-			Entity preference = new Entity("Preference", "1005", userKey);
+			Entity preference = new Entity("Preference", "moratoriumUntil/Question/HoursOfExercise", userKey);
 			preference.setProperty("question", "HoursOfExercise");
+			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
@@ -287,20 +292,32 @@ public class TestIqaGaeBasic {
 			
 			c = Calendar.getInstance();
 			c.add(Calendar.DATE, 1);
-			preference = new Entity("Preference", "1006", userKey);
+			preference = new Entity("Preference", "moratoriumUntil/Question/HoursOfExercise", userKey);
 			preference.setProperty("question", "HoursOfExercise");
+			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
-			c.add(Calendar.DATE, 100000000);
-			preference = new Entity("Preference", "1007", userKey);
-			preference.setProperty("question", "AvgDailyFruitVeg");
+			c.add(Calendar.DATE, -100);
+			preference = new Entity("Preference", "moratoriumUntil/Question/HoursOfExercise", userKey);
+			preference.setProperty("question", "HoursOfExercise");
+			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-			assertEquals(15, applicableAskableQuestions.size());
+			assertEquals(17, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, 100000000);
+			preference = new Entity("Preference", "moratoriumUntil/Question/AvgDailyFruitVeg", userKey);
+			preference.setProperty("question", "AvgDailyFruitVeg");
+			preference.setProperty("user", userId);
+			preference.setProperty("moratoriumUntil", c.getTime());
+			datastoreService.put(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(16, applicableAskableQuestions.size());
 		}
 }

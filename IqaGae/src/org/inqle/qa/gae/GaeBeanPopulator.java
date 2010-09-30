@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import org.inqle.qa.AskableQuestion;
+import org.inqle.qa.Question;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -89,11 +89,11 @@ public class GaeBeanPopulator {
 			try {
 				setter.invoke(bean, value);
 			} catch (IllegalArgumentException e) {
-				msg += "\nIllegalArgumentException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+				msg += "\nIllegalArgumentException setting property: " + propertyName + " on new Question object.  Skipping this property.";
 			} catch (IllegalAccessException e) {
-				msg += "\nIllegalAccessException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+				msg += "\nIllegalAccessException setting property: " + propertyName + " on new Question object.  Skipping this property.";
 			} catch (InvocationTargetException e) {
-				msg += "\nInvocationTargetException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+				msg += "\nInvocationTargetException setting property: " + propertyName + " on new Question object.  Skipping this property.";
 			}
 		}
 		if (msg.length() == 0) msg = null;
@@ -146,11 +146,11 @@ public class GaeBeanPopulator {
 			try {
 				setter.invoke(bean, value);
 			} catch (IllegalArgumentException e) {
-				msg += "\nIllegalArgumentException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+				msg += "\nIllegalArgumentException setting property: " + propertyName + " on new Question object.  Skipping this property.";
 			} catch (IllegalAccessException e) {
-				msg += "\nIllegalAccessException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+				msg += "\nIllegalAccessException setting property: " + propertyName + " on new Question object.  Skipping this property.";
 			} catch (InvocationTargetException e) {
-				msg += "\nInvocationTargetException setting property: " + propertyName + " on new AskableQuestion object.  Skipping this property.";
+				msg += "\nInvocationTargetException setting property: " + propertyName + " on new Question object.  Skipping this property.";
 			}
 		}
 		if (msg.length() == 0) msg = null;

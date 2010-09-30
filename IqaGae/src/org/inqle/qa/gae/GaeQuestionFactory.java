@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.inqle.qa.AskableQuestion;
-import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.Question;
+import org.inqle.qa.QuestionFactory;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Option;
 import org.inqle.qa.Unit;
@@ -23,14 +23,14 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.inject.Inject;
 
-public class GaeAskableQuestionFactory implements AskableQuestionFactory {
+public class GaeQuestionFactory implements QuestionFactory {
 
 	private DatastoreService datastoreService;
 	private Logger log;
 	private GenericLocalizedObjectFactory genericLocalizedObjectFactory;
 	
 	@Inject
-	public GaeAskableQuestionFactory(
+	public GaeQuestionFactory(
 			Logger log, 
 			DatastoreService datastoreService, 
 			GenericLocalizedObjectFactory genericLocalizedObjectFactory) {
@@ -40,20 +40,20 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 	}
 	
 	@Override
-	public List<AskableQuestion> listAllAskableQuestions(String lang) {
-		List<AskableQuestion> allAskableQuestions = new ArrayList<AskableQuestion>();
+	public List<Question> listAllQuestions(String lang) {
+		List<Question> allAskableQuestions = new ArrayList<Question>();
 		Query findQuestionsQuery = new Query("Question");
 		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
 		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
 		for (Entity questionEntity: allQuestionEntities) {
-			AskableQuestion askableQuestion = getAskableQuestion(questionEntity, lang);
-			allAskableQuestions.add(askableQuestion);
+			Question question = getQuestion(questionEntity, lang);
+			allAskableQuestions.add(question);
 		}
 		return allAskableQuestions;
 	}
 	
 	@Override
-	public AskableQuestion getAskableQuestion(Object questionKeyObj, String lang) {
+	public Question getQuestion(Object questionKeyObj, String lang) {
 		String kind = "Question";
 		Key questionKey = (Key)questionKeyObj;
 		Entity questionEntity = null;
@@ -63,30 +63,30 @@ public class GaeAskableQuestionFactory implements AskableQuestionFactory {
 			log.log(Level.SEVERE, "Error retrieving Entity of kind=" + kind + " and key=" + questionKey, e);
 			return null;
 		}
-		return getAskableQuestion(questionEntity, lang);
+		return getQuestion(questionEntity, lang);
 	}
 	
 	@Override
-	public AskableQuestion getAskableQuestion(Entity questionEntity, String lang) {
-		AskableQuestion askableQuestion = new AskableQuestion();
+	public Question getQuestion(Entity questionEntity, String lang) {
+		Question question = new Question();
 		try {
-			String msg = GaeBeanPopulator.populateBean(askableQuestion, questionEntity, datastoreService, lang);
+			String msg = GaeBeanPopulator.populateBean(question, questionEntity, datastoreService, lang);
 			log.fine(msg);
 		} catch (IntrospectionException e) {
-			log.log(Level.SEVERE, "Error introspecting AskableQuestion.class.  Returning null (no Questioner)", e);
+			log.log(Level.SEVERE, "Error introspecting Question.class.  Returning null (no Questioner)", e);
 			return null;
 		}
 		
 		//add unit & option fields
 		try {
-			askableQuestion.setOptions(getOptions(questionEntity, lang));
+			question.setOptions(getOptions(questionEntity, lang));
 		} catch (InstantiationException e) {
-			log.log(Level.SEVERE, "InstantiationException creating child object of AskableQuestion " + askableQuestion.getId());
+			log.log(Level.SEVERE, "InstantiationException creating child object of Question " + question.getId());
 		} catch (IllegalAccessException e) {
-			log.log(Level.SEVERE, "IllegalAccessException creating child object of AskableQuestion " + askableQuestion.getId());
+			log.log(Level.SEVERE, "IllegalAccessException creating child object of Question " + question.getId());
 		}
 		
-		return askableQuestion;
+		return question;
 		
 
 	}
