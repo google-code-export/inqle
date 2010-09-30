@@ -2,7 +2,7 @@ package org.inqle.qa;
 
 import java.util.List;
 
-public class AskableQuestion {
+public class Question {
 
 	private String entityKey;
 	private String id;

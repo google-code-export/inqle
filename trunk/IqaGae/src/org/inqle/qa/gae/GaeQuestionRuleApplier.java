@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.inqle.qa.AskableQuestion;
-import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.Question;
+import org.inqle.qa.QuestionFactory;
 import org.inqle.qa.QuestionRuleApplier;
 import org.inqle.qa.Rule;
 import org.inqle.qa.RuleApplier;
@@ -28,33 +28,33 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 
 	
 	private DatastoreService datastoreService;
-	private AskableQuestionFactory askableQuestionFactory;
+	private QuestionFactory questionFactory;
 	private RuleApplier ruleApplier;
 	private RuleFactory ruleFactory;
 	private Logger log;
 
 	@Inject
-	public GaeQuestionRuleApplier(Logger log, DatastoreService datastoreService, AskableQuestionFactory askableQuestionFactory, RuleApplier ruleApplier, RuleFactory ruleFactory) {
+	public GaeQuestionRuleApplier(Logger log, DatastoreService datastoreService, QuestionFactory questionFactory, RuleApplier ruleApplier, RuleFactory ruleFactory) {
 		this.datastoreService = datastoreService;
-		this.askableQuestionFactory = askableQuestionFactory;
+		this.questionFactory = questionFactory;
 		this.ruleApplier = ruleApplier;
 		this.ruleFactory = ruleFactory;
 		this.log = log;
 	}
 	
 	@Override
-	public List<AskableQuestion> getApplicableQuestions(String userId, String lang) {
-		List<AskableQuestion> askableQuestions = new ArrayList<AskableQuestion>();
+	public List<Question> getApplicableQuestions(String userId, String lang) {
+		List<Question> questions = new ArrayList<Question>();
 		Query findQuestionsQuery = new Query("Question");
 		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
 		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
 		for (Entity questionEntity: allQuestionEntities) {
 			if (shouldAskQuestion(userId, questionEntity)) {
-				AskableQuestion askableQuestion = askableQuestionFactory.getAskableQuestion(questionEntity, lang);
-				askableQuestions.add(askableQuestion);
+				Question question = questionFactory.getQuestion(questionEntity, lang);
+				questions.add(question);
 			}
 		}
-		return askableQuestions;
+		return questions;
 	}
 
 	/**

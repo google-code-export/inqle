@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 
 import org.inqle.qa.AppConstants;
-import org.inqle.qa.AskableQuestionFactory;
+import org.inqle.qa.QuestionFactory;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.RuleApplier;
@@ -37,11 +37,12 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(Queryer.class).to(GaeQueryer.class);
 		bind(GdataSpreadsheetImporter.class).to(GaeGdataSpreadsheetImporter.class);
 		bind(SpreadsheetService.class).toProvider(SpreadsheetServiceProvider.class);
-		bind(AskableQuestionFactory.class).to(GaeAskableQuestionFactory.class);
+		bind(QuestionFactory.class).to(GaeQuestionFactory.class);
 		bind(GenericLocalizedObjectFactory.class).to(GaeGenericLocalizedObjectFactory.class);
 		bind(RuleApplier.class).to(GaeRuleApplier.class);
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
 		bind(RuleFactory.class).to(GaeRuleFactory.class);
+		bind(AnswerBroker.class).to(GaeAnswerBroker.class);
 	}
 	
 	@Provides
