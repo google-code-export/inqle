@@ -2,9 +2,9 @@ package org.inqle.qa;
 
 import java.util.List;
 
-public class Question {
+public class Question implements IQABean {
 
-	private String entityKey;
+	private String key;
 	private String id;
 	private String questionText;
 	private String priority;
@@ -30,7 +30,8 @@ public class Question {
 	
 	public String toString() {
 		String s = "Question:[";
-		s+= "\n  id=" + id;
+		s += "\n  key=" + key;
+		s += "\n  id=" + id;
 		s += "\n  questionText=" + questionText;
 		s += "\n  hint=" + hint;
 		s += "\n  priority=" + priority;
@@ -151,12 +152,12 @@ public class Question {
 		return rules;
 	}
 
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
-	public String getEntityKey() {
-		return entityKey;
+	public String getKey() {
+		return key;
 	}
 	
 }

@@ -2,9 +2,9 @@ package org.inqle.qa;
 
 import java.util.List;
 
-public class Rule {
+public class Rule implements IQABean {
 
-	private String entityKey;
+	private String key;
 	private String id;
 	private String name;
 	private String description;
@@ -27,11 +27,11 @@ public class Rule {
 	public String getDescription() {
 		return description;
 	}
-	public String getEntityKey() {
-		return entityKey;
+	public String getKey() {
+		return key;
 	}
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
 	public String getId() {
 		return id;

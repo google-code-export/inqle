@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.inqle.qa.Question;
-import org.inqle.qa.QuestionFactory;
+import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.QuestionRuleApplier;
 import org.inqle.qa.Rule;
 import org.inqle.qa.RuleApplier;
@@ -28,13 +28,13 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 
 	
 	private DatastoreService datastoreService;
-	private QuestionFactory questionFactory;
+	private QuestionBroker questionFactory;
 	private RuleApplier ruleApplier;
 	private RuleFactory ruleFactory;
 	private Logger log;
 
 	@Inject
-	public GaeQuestionRuleApplier(Logger log, DatastoreService datastoreService, QuestionFactory questionFactory, RuleApplier ruleApplier, RuleFactory ruleFactory) {
+	public GaeQuestionRuleApplier(Logger log, DatastoreService datastoreService, QuestionBroker questionFactory, RuleApplier ruleApplier, RuleFactory ruleFactory) {
 		this.datastoreService = datastoreService;
 		this.questionFactory = questionFactory;
 		this.ruleApplier = ruleApplier;

@@ -1,17 +1,17 @@
 package org.inqle.qa;
 
 public class Unit {
-	private String entityKey;
+	private String key;
 	private String id;
 	private String text;
 	private String abbreviation;
 	private Double relativeAmplitude;
 	
-	public String getEntityKey() {
-		return entityKey;
+	public String getKey() {
+		return key;
 	}
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
 	public String getId() {
 		return id;
@@ -36,5 +36,16 @@ public class Unit {
 	}
 	public void setRelativeAmplitude(Double relativeAmplitude) {
 		this.relativeAmplitude = relativeAmplitude;
+	}
+	
+	public String toString() {
+		String s = "Unit [";
+		s+= "\n  key=" + key;
+		s+= "\n  id=" + id;
+		s+= "\n  text=" + text;
+		s+= "\n  abbreviation=" + abbreviation;
+		s+= "\n  relativeAmplitude=" + relativeAmplitude;
+		s+= "]";
+		return s;
 	}
 }
