@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.AppConstants;
-import org.inqle.qa.QuestionFactory;
+import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.Question;
 import org.inqle.qa.QuestionRuleApplier;
@@ -70,7 +70,7 @@ public class TestIqaGaeBasic {
 
 		private static DatastoreService datastoreService;
 
-		private static QuestionFactory questionFactory;
+		private static QuestionBroker questionFactory;
 		
 		private static QuestionRuleApplier questionRuleApplier;
 		
@@ -88,7 +88,7 @@ public class TestIqaGaeBasic {
 			spreadsheetService = injector.getInstance(SpreadsheetService.class);
 			gdataSpreadsheetImporter = injector.getInstance(GdataSpreadsheetImporter.class);
 			datastoreService = injector.getInstance(DatastoreService.class); 
-			questionFactory = injector.getInstance(QuestionFactory.class);
+			questionFactory = injector.getInstance(QuestionBroker.class);
 			questionRuleApplier = injector.getInstance(QuestionRuleApplier.class);
 	    }
 

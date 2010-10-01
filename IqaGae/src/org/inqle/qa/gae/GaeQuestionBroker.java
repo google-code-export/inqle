@@ -3,11 +3,12 @@ package org.inqle.qa.gae;
 import java.beans.IntrospectionException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.inqle.qa.Question;
-import org.inqle.qa.QuestionFactory;
+import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Option;
 import org.inqle.qa.Unit;
@@ -23,14 +24,14 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.inject.Inject;
 
-public class GaeQuestionFactory implements QuestionFactory {
+public class GaeQuestionBroker implements QuestionBroker {
 
 	private DatastoreService datastoreService;
 	private Logger log;
 	private GenericLocalizedObjectFactory genericLocalizedObjectFactory;
 	
 	@Inject
-	public GaeQuestionFactory(
+	public GaeQuestionBroker(
 			Logger log, 
 			DatastoreService datastoreService, 
 			GenericLocalizedObjectFactory genericLocalizedObjectFactory) {
@@ -44,7 +45,7 @@ public class GaeQuestionFactory implements QuestionFactory {
 		List<Question> allAskableQuestions = new ArrayList<Question>();
 		Query findQuestionsQuery = new Query("Question");
 		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
-		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withDefaults());
 		for (Entity questionEntity: allQuestionEntities) {
 			Question question = getQuestion(questionEntity, lang);
 			allAskableQuestions.add(question);
@@ -66,14 +67,13 @@ public class GaeQuestionFactory implements QuestionFactory {
 		return getQuestion(questionEntity, lang);
 	}
 	
-	@Override
 	public Question getQuestion(Entity questionEntity, String lang) {
 		Question question = new Question();
 		try {
 			String msg = GaeBeanPopulator.populateBean(question, questionEntity, datastoreService, lang);
 			log.fine(msg);
 		} catch (IntrospectionException e) {
-			log.log(Level.SEVERE, "Error introspecting Question.class.  Returning null (no Questioner)", e);
+			log.log(Level.SEVERE, "Error introspecting Question.class.  Returning null (no QuestionBroker)", e);
 			return null;
 		}
 		
@@ -139,6 +139,93 @@ public class GaeQuestionFactory implements QuestionFactory {
 			answerOptions.add(option);
 		}
 		return answerOptions;
+	}
+
+	@Override
+	public List<Question> listTopQuestions(String lang, int numberOfQuestions) {
+		List<Question> topAskableQuestions = new ArrayList<Question>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(numberOfQuestions));
+		for (Entity questionEntity: allQuestionEntities) {
+			Question question = getQuestion(questionEntity, lang);
+			topAskableQuestions.add(question);
+		}
+		return topAskableQuestions;
+	}
+
+	@Override
+	/*
+	 * TODO: ensure we can reach all questions with a single query (max for GAE datastore = 500 per query?)
+	 */
+	public List<Question> listRandomQuestions(String lang, int numberOfQuestions) {
+		List<Question> randomQuestions = new ArrayList<Question>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withDefaults());
+		
+		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions, allQuestionEntities.size());
+		for (int randomIndex: randomIndexes) {
+			Entity randomQuestionEntity = allQuestionEntities.get(randomIndex);
+			Question question = getQuestion(randomQuestionEntity, lang);
+			randomQuestions.add(question);
+		}
+		return randomQuestions;
+	}
+
+	@Override
+	public List<Question> listTopPlusRandomQuestions(String lang, int numberOfQuestions, int priorityThreshold) {
+		List<Question> topPlusRandomQuestions = new ArrayList<Question>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withDefaults());
+		
+		//first add questions of high enough priority
+		int numberOfTopQuestions = 0;
+		for (Entity questionEntity: allQuestionEntities) {
+			String priorityStr = (String) questionEntity.getProperty("priority");
+			int priority;
+			try {
+				priority = Integer.parseInt(priorityStr);
+			} catch (NumberFormatException e) {
+				log.warning("Unable to get integer priority for this question entity, so excluding it:" + questionEntity);
+				continue;
+			}
+			if (priority > priorityThreshold) break;
+			topPlusRandomQuestions.add(getQuestion(questionEntity, lang));
+			numberOfTopQuestions++;
+		}
+		
+		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions - numberOfTopQuestions, allQuestionEntities.size());
+		for (int randomIndex: randomIndexes) {
+			Entity randomQuestionEntity = allQuestionEntities.get(randomIndex);
+			Question question = getQuestion(randomQuestionEntity, lang);
+			topPlusRandomQuestions.add(question);
+		}
+		return topPlusRandomQuestions;
+	}
+	
+	/**
+	 * return a list containing count nonrepeated integers, from 0 to size
+	 * @param count
+	 * @param size
+	 * @return
+	 */
+	private List<Integer> getRandomIndexesList(int count, int size) {
+		List<Integer> randomIndexes = new ArrayList<Integer>();
+		Random randomGenerator = new Random();
+		
+		//get a list of <numberOfQuestions> indexes
+		for (int i=0; i<count; i++) {
+			int randomIndex = randomGenerator.nextInt(size);
+			int counter = 0;
+			while (randomIndexes.contains(randomIndex) && counter < 10000) {
+				randomIndex = randomGenerator.nextInt(size);
+				counter++;
+			}
+			randomIndexes.add(randomIndex);
+		}
+		return randomIndexes;
 	}
 
 }

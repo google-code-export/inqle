@@ -1,16 +1,16 @@
 package org.inqle.qa;
 
-public class Option {
-	private String entityKey;
+public class Option  implements IQABean{
+	private String key;
 	private String id;
 	private String text;
 	private String description;
 	
-	public String getEntityKey() {
-		return entityKey;
+	public String getKey() {
+		return key;
 	}
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
 	public String getId() {
 		return id;
@@ -33,7 +33,7 @@ public class Option {
 	
 	public String toString() {
 		String s = "Option [";
-		s+= "\n  entityKey=" + entityKey;
+		s+= "\n  key=" + key;
 		s+= "\n  id=" + id;
 		s+= "\n  text=" + text;
 		s+= "\n  description=" + description;

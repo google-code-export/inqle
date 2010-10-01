@@ -3,9 +3,9 @@ package org.inqle.qa;
 import java.util.Date;
 import java.util.List;
 
-public class Answer {
+public class Answer implements IQABean {
 
-	private String entityKey;
+	private String key;
 	private String id;
 	private String user;
 	private Date date;
@@ -18,11 +18,11 @@ public class Answer {
 	private Unit answerUnit;
 	private Unit referenceUnit;
 	
-	public String getEntityKey() {
-		return entityKey;
+	public String getKey() {
+		return key;
 	}
-	public void setEntityKey(String entityKey) {
-		this.entityKey = entityKey;
+	public void setKey(String key) {
+		this.key = key;
 	}
 	public String getId() {
 		return id;
@@ -93,7 +93,7 @@ public class Answer {
 	}
 	public String toString() {
 		String s = "Answer:[";
-		s += "\n  entityKey=" + entityKey;
+		s += "\n  entityKey=" + key;
 		s += "\n  id=" + id;
 		s += "\n  text=" + text;
 		s += "\n  date=" + date;

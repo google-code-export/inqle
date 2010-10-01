@@ -41,8 +41,7 @@ public class GaeBeanPopulator {
 	 */
 	public static <T> String populateBean(T bean, Entity entity, DatastoreService datastoreService, String lang) throws IntrospectionException {
 		String msg = "";
-		BeanInfo beanInfo = null;
-		beanInfo = Introspector.getBeanInfo(bean.getClass());
+		BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
 		
 		//get localized text of requested language
 		Query lsQuery = new Query("LocalizedString");
