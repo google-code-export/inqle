@@ -93,7 +93,7 @@ public class Answer implements IQABean {
 	}
 	public String toString() {
 		String s = "Answer:[";
-		s += "\n  entityKey=" + key;
+		s += "\n  key=" + key;
 		s += "\n  id=" + id;
 		s += "\n  text=" + text;
 		s += "\n  date=" + date;

@@ -7,12 +7,12 @@ import java.util.logging.Logger;
 
 import org.inqle.qa.Answer;
 import org.inqle.qa.AnswerBroker;
-import org.inqle.qa.Answer;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.inject.Inject;
 
 public class GaeAnswerBroker implements AnswerBroker {
@@ -31,6 +31,13 @@ public class GaeAnswerBroker implements AnswerBroker {
 	@Override
 	public void storeAnswer(Answer answer) {
 		Entity answerEntity = null;
+		if (answer.getKey() == null && answer.getId() != null) {
+			Key userKey = KeyFactory.createKey("Person", answer.getUser());
+			Key answerKey = KeyFactory.createKey(userKey, "Answer", answer.getId());
+			answer.setKey(KeyFactory.keyToString(answerKey));
+		}
+		log.info("Storing answer: " + answer);
+		
 		try {
 			answerEntity = gaeEntityFactory.getEntity(answer);
 		} catch (IllegalArgumentException e) {
@@ -46,6 +53,7 @@ public class GaeAnswerBroker implements AnswerBroker {
 			log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
 			return;
 		}
+		
 		datastoreService.put(answerEntity);
 	}
 
