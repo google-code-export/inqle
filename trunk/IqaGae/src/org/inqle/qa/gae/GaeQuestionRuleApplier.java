@@ -50,7 +50,7 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
 		for (Entity questionEntity: allQuestionEntities) {
 			if (shouldAskQuestion(userId, questionEntity)) {
-				Question question = questionFactory.getQuestion(questionEntity, lang);
+				Question question = questionFactory.getQuestion(questionEntity.getKey(), lang);
 				questions.add(question);
 			}
 		}
@@ -75,7 +75,7 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		Calendar c = Calendar.getInstance();
 		Double minInterval = (Double)questionEntity.getProperty("minInterval");
 		int minIntervalInt = minInterval.intValue();
-		c.add(Calendar.DATE, minIntervalInt * -1);
+		c.add(Calendar.DAY_OF_MONTH, minIntervalInt * -1);
 		latestAcceptableDate = c.getTime();
 		recentAnswersQuery.addFilter("date", FilterOperator.GREATER_THAN_OR_EQUAL, latestAcceptableDate);
 		int countRecentAnswers = datastoreService.prepare(recentAnswersQuery).countEntities();

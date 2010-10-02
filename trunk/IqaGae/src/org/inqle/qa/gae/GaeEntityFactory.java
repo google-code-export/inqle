@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.inqle.qa.Answer;
 import org.inqle.qa.IQABean;
+import org.mortbay.log.Log;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
@@ -30,7 +31,14 @@ public class GaeEntityFactory {
 	private static final List<String> IGNORABLE_PROPERTIES = Arrays.asList(IGNORABLE_PROPERTIES_ARRAY);
 	
 	public Entity getEntity(IQABean bean) throws IntrospectionException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Key key = KeyFactory.stringToKey(bean.getKey());
+		if (bean == null) return null;
+		Key key = null;
+		if (bean.getKey()!=null) {
+			Log.info("parsing key: " + bean.getKey());
+			key = KeyFactory.stringToKey(bean.getKey());
+		} else if (bean.getId()!=null) {
+			key = KeyFactory.createKey(bean.getClass().getSimpleName(), bean.getId());
+		}
 		Entity entity = new Entity(key);
 		BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
 		

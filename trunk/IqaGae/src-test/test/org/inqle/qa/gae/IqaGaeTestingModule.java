@@ -10,12 +10,14 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.inqle.qa.AnswerBroker;
 import org.inqle.qa.AppConstants;
 import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.RuleFactory;
 import org.inqle.qa.gae.AppConfig;
+import org.inqle.qa.gae.GaeAnswerBroker;
 import org.inqle.qa.gae.GaeQuestionBroker;
 import org.inqle.qa.gae.GaeGenericLocalizedObjectFactory;
 import org.inqle.qa.gae.GaeQueryer;
@@ -36,8 +38,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-
 public class IqaGaeTestingModule extends AbstractModule {
+	
 	@Override
 	protected void configure() {
 		bind(Queryer.class).to(GaeQueryer.class);
@@ -48,6 +50,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 		bind(RuleApplier.class).to(GaeRuleApplier.class);
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
 		bind(RuleFactory.class).to(GaeRuleFactory.class);
+		bind(AnswerBroker.class).to(GaeAnswerBroker.class);
 	}
 	
 	@Provides
