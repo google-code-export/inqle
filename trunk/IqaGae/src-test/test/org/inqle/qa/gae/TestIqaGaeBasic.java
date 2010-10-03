@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 import org.inqle.qa.Answer;
 import org.inqle.qa.AnswerBroker;
 import org.inqle.qa.AppConstants;
+import org.inqle.qa.Preference;
+import org.inqle.qa.PreferenceBroker;
 import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.Question;
@@ -77,6 +79,8 @@ public class TestIqaGaeBasic {
 		private static QuestionRuleApplier questionRuleApplier;
 
 		private static AnswerBroker answerBroker;
+
+		private static PreferenceBroker preferenceBroker;
 		
 		@Inject
 		@AppConfig
@@ -95,6 +99,7 @@ public class TestIqaGaeBasic {
 			questionFactory = injector.getInstance(QuestionBroker.class);
 			questionRuleApplier = injector.getInstance(QuestionRuleApplier.class);
 			answerBroker = injector.getInstance(AnswerBroker.class);
+			preferenceBroker = injector.getInstance(PreferenceBroker.class);
 	    }
 
 	    @AfterClass
@@ -388,60 +393,75 @@ public class TestIqaGaeBasic {
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
 			assertEquals(18, applicableAskableQuestions.size());
 			
-//			answer = new Entity("Answer", "1003", userKey);
-//			answer.setProperty("question", "WaistCircumference");
-//			answer.setProperty("user", userId);
-//			answer.setProperty("date", new Date());
-//			datastoreService.put(answer);
-//			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-//			assertEquals(17, applicableAskableQuestions.size());
-//			
-//			answer = new Entity("Answer", "1004", userKey);
-//			answer.setProperty("question", "Gender");
-//			answer.setProperty("user", userId);
-//			answer.setProperty("wrong_date_field", new Date());
-//			datastoreService.put(answer);
-//			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-//			assertEquals(17, applicableAskableQuestions.size());
-//			
-//			Calendar c = Calendar.getInstance();
-//			c.add(Calendar.DATE, -1);
-//			Entity preference = new Entity("Preference", "moratoriumUntil/Question/HoursOfExercise", userKey);
-//			preference.setProperty("question", "HoursOfExercise");
-//			preference.setProperty("user", userId);
-//			preference.setProperty("moratoriumUntil", c.getTime());
-//			datastoreService.put(preference);
-//			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-//			assertEquals(17, applicableAskableQuestions.size());
-//			
-//			c = Calendar.getInstance();
-//			c.add(Calendar.DATE, 1);
-//			preference = new Entity("Preference", "moratoriumUntil/Question/HoursOfExercise", userKey);
-//			preference.setProperty("question", "HoursOfExercise");
-//			preference.setProperty("user", userId);
-//			preference.setProperty("moratoriumUntil", c.getTime());
-//			datastoreService.put(preference);
-//			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-//			assertEquals(16, applicableAskableQuestions.size());
-//			
-//			c = Calendar.getInstance();
-//			c.add(Calendar.DATE, -100);
-//			preference = new Entity("Preference", "moratoriumUntil/Question/HoursOfExercise", userKey);
-//			preference.setProperty("question", "HoursOfExercise");
-//			preference.setProperty("user", userId);
-//			preference.setProperty("moratoriumUntil", c.getTime());
-//			datastoreService.put(preference);
-//			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-//			assertEquals(17, applicableAskableQuestions.size());
-//			
-//			c = Calendar.getInstance();
-//			c.add(Calendar.DATE, 100000000);
-//			preference = new Entity("Preference", "moratoriumUntil/Question/AvgDailyFruitVeg", userKey);
-//			preference.setProperty("question", "AvgDailyFruitVeg");
-//			preference.setProperty("user", userId);
-//			preference.setProperty("moratoriumUntil", c.getTime());
-//			datastoreService.put(preference);
-//			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
-//			assertEquals(16, applicableAskableQuestions.size());
+			answer = new Answer();
+			answer.setId("1006");
+			answer.setQuestion("WaistCircumference");
+			answer.setUser(userId);
+			answer.setDate(new Date());
+			answerBroker.storeAnswer(answer);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(17, applicableAskableQuestions.size());
+
+			answer = new Answer();
+			answer.setId("1007");
+			answer.setQuestion("Gender");
+			answer.setUser(userId);
+			answer.setDate(new Date());
+			answerBroker.storeAnswer(answer);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(16, applicableAskableQuestions.size());
+			
+			Preference preference = new Preference();
+			preference.setId("1001");
+			preference.setQuestion("HoursOfExercise");
+			preference.setUser(userId);
+			preference.setMoratoriumUntil(new Date());
+			preferenceBroker.storePreference(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(16, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, 1);
+			preference = new Preference();
+			preference.setId("1001");
+			preference.setQuestion("HoursOfExercise");
+			preference.setUser(userId);
+			preference.setMoratoriumUntil(c.getTime());
+			preferenceBroker.storePreference(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(15, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, -100);
+			preference = new Preference();
+			preference.setId("1001");
+			preference.setQuestion("HoursOfExercise");
+			preference.setUser(userId);
+			preference.setMoratoriumUntil(c.getTime());
+			preferenceBroker.storePreference(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(16, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, -100);
+			preference = new Preference();
+			preference.setId("1002");
+			preference.setQuestion("AvgDailyFruitVeg");
+			preference.setUser(userId);
+			preference.setMoratoriumUntil(c.getTime());
+			preferenceBroker.storePreference(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(16, applicableAskableQuestions.size());
+			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, 100);
+			preference = new Preference();
+			preference.setId("1002");
+			preference.setQuestion("AvgDailyFruitVeg");
+			preference.setUser(userId);
+			preference.setMoratoriumUntil(c.getTime());
+			preferenceBroker.storePreference(preference);
+			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			assertEquals(15, applicableAskableQuestions.size());
 		}
 }
