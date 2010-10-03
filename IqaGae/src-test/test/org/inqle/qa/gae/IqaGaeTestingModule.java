@@ -12,12 +12,14 @@ import javax.persistence.Persistence;
 
 import org.inqle.qa.AnswerBroker;
 import org.inqle.qa.AppConstants;
+import org.inqle.qa.PreferenceBroker;
 import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.RuleFactory;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gae.GaeAnswerBroker;
+import org.inqle.qa.gae.GaePreferenceBroker;
 import org.inqle.qa.gae.GaeQuestionBroker;
 import org.inqle.qa.gae.GaeGenericLocalizedObjectFactory;
 import org.inqle.qa.gae.GaeQueryer;
@@ -51,6 +53,7 @@ public class IqaGaeTestingModule extends AbstractModule {
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
 		bind(RuleFactory.class).to(GaeRuleFactory.class);
 		bind(AnswerBroker.class).to(GaeAnswerBroker.class);
+		bind(PreferenceBroker.class).to(GaePreferenceBroker.class);
 	}
 	
 	@Provides

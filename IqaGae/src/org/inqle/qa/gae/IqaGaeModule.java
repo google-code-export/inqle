@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 
 import org.inqle.qa.AnswerBroker;
 import org.inqle.qa.AppConstants;
+import org.inqle.qa.PreferenceBroker;
 import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.GenericLocalizedObjectFactory;
 import org.inqle.qa.Queryer;
@@ -44,6 +45,7 @@ public class IqaGaeModule extends AbstractModule implements Module {
 		bind(QuestionRuleApplier.class).to(GaeQuestionRuleApplier.class);
 		bind(RuleFactory.class).to(GaeRuleFactory.class);
 		bind(AnswerBroker.class).to(GaeAnswerBroker.class);
+		bind(PreferenceBroker.class).to(GaePreferenceBroker.class);
 	}
 	
 	@Provides
