@@ -464,4 +464,7 @@ public class TestIqaGaeBasic {
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
 			assertEquals(15, applicableAskableQuestions.size());
 		}
+		
+		@Test
+		public void test
 }
