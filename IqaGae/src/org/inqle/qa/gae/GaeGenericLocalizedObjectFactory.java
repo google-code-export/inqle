@@ -44,7 +44,7 @@ public class GaeGenericLocalizedObjectFactory implements GenericLocalizedObjectF
 		T theObj = objClass.newInstance();
 		try {
 			String msg = GaeBeanPopulator.populateBean(theObj, entity, datastoreService, lang);
-			log.info(msg);
+			log.fine(msg);
 		} catch (IntrospectionException e) {
 			log.log(Level.SEVERE, "Error introspecting class " + objClass + ".  Returning null (no Questioner)", e);
 			return null;

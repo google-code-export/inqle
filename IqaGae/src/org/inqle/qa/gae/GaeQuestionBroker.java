@@ -126,8 +126,8 @@ public class GaeQuestionBroker implements QuestionBroker {
 			optIds.add((String)optsObj);
 		} else if (optsObj instanceof List<?>) {
 			optIds = (List<String>)optsObj;
-			log.warning("Question property 'options' should have a list of 1 or more strings, but instead has value: " + optsObj);
 		} else {
+			log.warning("Question property 'options' should have a list of 1 or more strings, but instead has value: " + optsObj);
 			return null;
 		}
 		//first get the Measure entity
@@ -181,24 +181,24 @@ public class GaeQuestionBroker implements QuestionBroker {
 		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withDefaults());
 		
 		//first add questions of high enough priority
+		List<Entity> nonTopQuestionEntities = new ArrayList<Entity>(allQuestionEntities);
 		int numberOfTopQuestions = 0;
 		for (Entity questionEntity: allQuestionEntities) {
-			String priorityStr = (String) questionEntity.getProperty("priority");
-			int priority;
-			try {
-				priority = Integer.parseInt(priorityStr);
-			} catch (NumberFormatException e) {
-				log.warning("Unable to get integer priority for this question entity, so excluding it:" + questionEntity);
-				continue;
+			Double priorityDouble = (Double) questionEntity.getProperty("priority");
+			int priority = priorityDouble.intValue();
+			
+			if (priority > priorityThreshold) {
+				break;
 			}
-			if (priority > priorityThreshold) break;
 			topPlusRandomQuestions.add(getQuestion(questionEntity, lang));
+			nonTopQuestionEntities.remove(questionEntity);
 			numberOfTopQuestions++;
 		}
 		
-		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions - numberOfTopQuestions, allQuestionEntities.size());
+		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions - numberOfTopQuestions, nonTopQuestionEntities.size());
+		log.info("randomIndexes=" + randomIndexes);
 		for (int randomIndex: randomIndexes) {
-			Entity randomQuestionEntity = allQuestionEntities.get(randomIndex);
+			Entity randomQuestionEntity = nonTopQuestionEntities.get(randomIndex);
 			Question question = getQuestion(randomQuestionEntity, lang);
 			topPlusRandomQuestions.add(question);
 		}
@@ -211,7 +211,7 @@ public class GaeQuestionBroker implements QuestionBroker {
 	 * @param size
 	 * @return
 	 */
-	private List<Integer> getRandomIndexesList(int count, int size) {
+	public List<Integer> getRandomIndexesList(int count, int size) {
 		List<Integer> randomIndexes = new ArrayList<Integer>();
 		Random randomGenerator = new Random();
 		

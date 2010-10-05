@@ -7,10 +7,14 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -365,7 +369,7 @@ public class TestIqaGaeBasic {
 			answer.setQuestion("Weight");
 			answer.setUser(userId);
 			c = Calendar.getInstance();
-			c.add(Calendar.DATE, -1);
+			c.add(Calendar.DATE, -2);
 			answer.setDate(c.getTime());
 			answerBroker.storeAnswer(answer);
 			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
@@ -466,5 +470,29 @@ public class TestIqaGaeBasic {
 		}
 		
 		@Test
-		public void test
+		public void testGet5Questions() {
+			List<Question> allQuestions = questionFactory.listAllQuestions("en");
+			List<Question> questionsToAsk = questionFactory.listTopPlusRandomQuestions("en", 5, 1);
+			log.info("questionsToAsk=" + questionsToAsk);
+			assertEquals(5, questionsToAsk.size());
+			Question q1 = questionsToAsk.get(0);
+			assertEquals("Weight", q1.getId());
+			
+			//generate 1000 different lists of 5 questions
+			Set<String> allQuestionsEverAsked = new HashSet<String>();
+			for (int j=0; j<1000; j++) {
+				questionsToAsk = questionFactory.listTopPlusRandomQuestions("en", 5, 1);
+				
+				int i=0;
+				List<String> qids = new ArrayList<String>();
+				for (Question q: questionsToAsk) {
+					allQuestionsEverAsked.add(q.getId());
+					assertFalse(qids.contains(q.getId()));
+					qids.add(q.getId());
+					i++;
+				}
+			}
+			log.info("allQuestionsEverAsked=" + allQuestionsEverAsked);
+			assertEquals(allQuestions.size(), allQuestionsEverAsked.size());
+		}
 }
