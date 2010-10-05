@@ -159,5 +159,14 @@ public class Question implements IQABean {
 	public String getKey() {
 		return key;
 	}
+
+//	@Override
+//	public boolean equals(Object o) {
+//		if (o==null) return false;
+//		if (!(o instanceof Question)) return false;
+//		Question q = (Question)o;
+//		if (this.getId().equals(q.getId())) return true;
+//		return false;
+//	}
 	
 }
