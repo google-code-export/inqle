@@ -1,5 +1,6 @@
 package org.inqle.qa;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,37 @@ public class Answer implements IQABean {
 	private Unit answerUnit;
 	private Unit referenceUnit;
 	
+	public Answer() { }
+	
+	/**
+	 * Construct an Answer, setting the ID according to the user ID, question ID, and current date
+	 * @param user
+	 * @param question
+	 * @param date
+	 */
+	public Answer(String user, String question) {
+		this(user, question, new Date());
+	}
+	
+	/**
+	 * Construct an Answer, setting the ID according to the user ID, question ID, and date
+	 * @param user
+	 * @param question
+	 * @param date
+	 */
+	public Answer(String user, String question, Date date) {
+		this.user = user;
+		this.question = question;
+		this.date = date;
+		updateId();
+	}
+	
+	private void updateId() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd-HHmmss");	
+		String dateTimeStr = format.format(date);
+		id = user + "/" + question + "/" + dateTimeStr;
+	}
+
 	public String getKey() {
 		return key;
 	}
@@ -35,12 +67,14 @@ public class Answer implements IQABean {
 	}
 	public void setDate(Date date) {
 		this.date = date;
+		updateId();
 	}
 	public String getQuestion() {
 		return question;
 	}
 	public void setQuestion(String question) {
 		this.question = question;
+		updateId();
 	}
 	public List<Option> getSelectedOptions() {
 		return selectedOptions;
@@ -84,6 +118,7 @@ public class Answer implements IQABean {
 	}
 	public void setUser(String user) {
 		this.user = user;
+		updateId();
 	}
 	public void setReferenceUnit(Unit referenceUnit) {
 		this.referenceUnit = referenceUnit;
