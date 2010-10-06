@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import org.inqle.qa.Question;
@@ -43,7 +44,7 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 	}
 	
 	@Override
-	public List<Question> getApplicableQuestions(String userId, String lang) {
+	public List<Question> listAllApplicableQuestions(String userId, String lang) {
 		List<Question> questions = new ArrayList<Question>();
 		Query findQuestionsQuery = new Query("Question");
 		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
@@ -124,6 +125,104 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		
 		//rules present but none returns true: return false
 		return false;
+	}
+
+	@Override
+	public List<Question> listTopQuestions(String lang, int numberOfQuestions) {
+		List<Question> topAskableQuestions = new ArrayList<Question>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(numberOfQuestions));
+		for (Entity questionEntity: allQuestionEntities) {
+			Question question = questionFactory.getQuestion(questionEntity, lang);
+			topAskableQuestions.add(question);
+		}
+		return topAskableQuestions;
+	}
+
+	@Override
+	/*
+	 * TODO: ensure we can reach all questions with a single query (max for GAE datastore = 500 per query?)
+	 */
+	public List<Question> listRandomQuestions(String lang, int numberOfQuestions) {
+		List<Question> randomQuestions = new ArrayList<Question>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withDefaults());
+		
+		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions, allQuestionEntities.size());
+		for (int randomIndex: randomIndexes) {
+			Entity randomQuestionEntity = allQuestionEntities.get(randomIndex);
+			Question question = questionFactory.getQuestion(randomQuestionEntity, lang);
+			randomQuestions.add(question);
+		}
+		return randomQuestions;
+	}
+
+	@Override
+	public List<Question> listTopPlusRandomQuestions(String lang, int numberOfQuestions, int priorityThreshold) {
+		List<Question> topPlusRandomQuestions = new ArrayList<Question>();
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withDefaults());
+		
+		//first add questions of high enough priority
+		List<Entity> nonTopQuestionEntities = new ArrayList<Entity>(allQuestionEntities);
+		int numberOfTopQuestions = 0;
+		for (Entity questionEntity: allQuestionEntities) {
+			Double priorityDouble = (Double) questionEntity.getProperty("priority");
+			int priority = priorityDouble.intValue();
+			
+			if (priority > priorityThreshold) {
+				break;
+			}
+			topPlusRandomQuestions.add(questionFactory.getQuestion(questionEntity, lang));
+			nonTopQuestionEntities.remove(questionEntity);
+			numberOfTopQuestions++;
+		}
+		
+		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions - numberOfTopQuestions, nonTopQuestionEntities.size());
+		log.info("randomIndexes=" + randomIndexes);
+		for (int randomIndex: randomIndexes) {
+			Entity randomQuestionEntity = nonTopQuestionEntities.get(randomIndex);
+			Question question = questionFactory.getQuestion(randomQuestionEntity, lang);
+			topPlusRandomQuestions.add(question);
+		}
+		return topPlusRandomQuestions;
+	}
+	
+
+	/**
+	 * return a list containing count nonrepeated integers, from 0 to size
+	 * @param count
+	 * @param size
+	 * @return
+	 */
+	public List<Integer> getRandomIndexesList(int count, int size) {
+		List<Integer> randomIndexes = new ArrayList<Integer>();
+		Random randomGenerator = new Random();
+		
+		//get a list of <numberOfQuestions> indexes
+		for (int i=0; i<count; i++) {
+			int randomIndex = randomGenerator.nextInt(size);
+			int counter = 0;
+			while (randomIndexes.contains(randomIndex) && counter < 10000) {
+				randomIndex = randomGenerator.nextInt(size);
+				counter++;
+			}
+			randomIndexes.add(randomIndex);
+		}
+		return randomIndexes;
+	}
+
+	@Override
+	public List<Question> listApplicableTopPlusRandomQuestions(String lang, String user, int numberOfQuestions, int priorityThreshold) {
+		List<Question> allQuestions = questionFactory.listAllQuestions(lang);
+		Key userKey = KeyFactory.createKey("Person", user);
+		Query findQuestionHistoriesQuery = new Query("QuestionHistory");
+		findQuestionHistoriesQuery.setAncestor(userKey);
+		List<Entity> allQuestionHistoryEntities = datastoreService.prepare(findQuestionHistoriesQuery).asList(FetchOptions.Builder.withLimit(numberOfQuestions));
+		
 	}
 
 }

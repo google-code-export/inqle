@@ -256,7 +256,7 @@ public class TestIqaGaeBasic {
 //		@Test
 		public void testApplyQuestionRulesAmidstAnswerEntities() {
 			String userId = "dummy";
-			List<Question> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			List<Question> applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			log.info("Found these askable questions: " + applicableAskableQuestions);
 			assertEquals(20, applicableAskableQuestions.size());
 			
@@ -267,7 +267,7 @@ public class TestIqaGaeBasic {
 			answer.setProperty("user", userId);
 			answer.setProperty("date", new Date());
 			datastoreService.put(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(19, applicableAskableQuestions.size());
 			
 			answer = new Entity("Answer", "1002", userKey);
@@ -275,7 +275,7 @@ public class TestIqaGaeBasic {
 			answer.setProperty("user", userId);
 			answer.setProperty("date", new Date());
 			datastoreService.put(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(18, applicableAskableQuestions.size());
 			
 			answer = new Entity("Answer", "1003", userKey);
@@ -283,7 +283,7 @@ public class TestIqaGaeBasic {
 			answer.setProperty("user", userId);
 			answer.setProperty("date", new Date());
 			datastoreService.put(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(17, applicableAskableQuestions.size());
 			
 			answer = new Entity("Answer", "1004", userKey);
@@ -291,7 +291,7 @@ public class TestIqaGaeBasic {
 			answer.setProperty("user", userId);
 			answer.setProperty("wrong_date_field", new Date());
 			datastoreService.put(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(17, applicableAskableQuestions.size());
 			
 			Calendar c = Calendar.getInstance();
@@ -301,7 +301,7 @@ public class TestIqaGaeBasic {
 			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(17, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -311,7 +311,7 @@ public class TestIqaGaeBasic {
 			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -321,7 +321,7 @@ public class TestIqaGaeBasic {
 			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(17, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -331,88 +331,61 @@ public class TestIqaGaeBasic {
 			preference.setProperty("user", userId);
 			preference.setProperty("moratoriumUntil", c.getTime());
 			datastoreService.put(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 		}
 		
 		@Test
 		public void testApplyQuestionRulesAmidstAnswers() {
 			String userId = "dummy";
-			List<Question> applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			List<Question> applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			log.info("Found these askable questions: " + applicableAskableQuestions);
 			assertEquals(20, applicableAskableQuestions.size());
 			
 			Key userKey = KeyFactory.createKey("Person", userId);
 			
-			Answer answer = new Answer();
-			answer.setId("1001");
-			answer.setQuestion("Height");
-			answer.setUser(userId);
-			answer.setDate(new Date());
+			Answer answer = new Answer(userId, "Height");
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(19, applicableAskableQuestions.size());
 			
-			answer = new Answer();
-			answer.setId("1002");
-			answer.setQuestion("Weight");
-			answer.setUser(userId);
+			
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.DATE, -5);
-			answer.setDate(c.getTime());
+			answer = new Answer(userId, "Weight", c.getTime());
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(19, applicableAskableQuestions.size());
 			
-			answer = new Answer();
-			answer.setId("1003");
-			answer.setQuestion("Weight");
-			answer.setUser(userId);
 			c = Calendar.getInstance();
 			c.add(Calendar.DATE, -2);
-			answer.setDate(c.getTime());
+			answer = new Answer(userId, "Weight", c.getTime());
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(19, applicableAskableQuestions.size());
 			
-			answer = new Answer();
-			answer.setId("1004");
-			answer.setQuestion("Weight");
-			answer.setUser(userId);
 			c = Calendar.getInstance();
 			c.add(Calendar.HOUR, -25);
-			answer.setDate(c.getTime());
+			answer = new Answer(userId, "Weight", c.getTime());
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(19, applicableAskableQuestions.size());
-//			
-			answer = new Answer();
-			answer.setId("1005");
-			answer.setQuestion("Weight");
-			answer.setUser(userId);
+		
 			c = Calendar.getInstance();
 			c.add(Calendar.HOUR, -23);
-			answer.setDate(c.getTime());
+			answer = new Answer(userId, "Weight", c.getTime());
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(18, applicableAskableQuestions.size());
 			
-			answer = new Answer();
-			answer.setId("1006");
-			answer.setQuestion("WaistCircumference");
-			answer.setUser(userId);
-			answer.setDate(new Date());
+			answer = new Answer(userId, "WaistCircumference");
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(17, applicableAskableQuestions.size());
 
-			answer = new Answer();
-			answer.setId("1007");
-			answer.setQuestion("Gender");
-			answer.setUser(userId);
-			answer.setDate(new Date());
+			answer = new Answer(userId, "Gender");
 			answerBroker.storeAnswer(answer);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
 			Preference preference = new Preference();
@@ -421,7 +394,7 @@ public class TestIqaGaeBasic {
 			preference.setUser(userId);
 			preference.setMoratoriumUntil(new Date());
 			preferenceBroker.storePreference(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -432,7 +405,7 @@ public class TestIqaGaeBasic {
 			preference.setUser(userId);
 			preference.setMoratoriumUntil(c.getTime());
 			preferenceBroker.storePreference(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(15, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -443,7 +416,7 @@ public class TestIqaGaeBasic {
 			preference.setUser(userId);
 			preference.setMoratoriumUntil(c.getTime());
 			preferenceBroker.storePreference(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -454,7 +427,7 @@ public class TestIqaGaeBasic {
 			preference.setUser(userId);
 			preference.setMoratoriumUntil(c.getTime());
 			preferenceBroker.storePreference(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
 			c = Calendar.getInstance();
@@ -465,14 +438,14 @@ public class TestIqaGaeBasic {
 			preference.setUser(userId);
 			preference.setMoratoriumUntil(c.getTime());
 			preferenceBroker.storePreference(preference);
-			applicableAskableQuestions = questionRuleApplier.getApplicableQuestions(userId, "en");
+			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(15, applicableAskableQuestions.size());
 		}
 		
 		@Test
 		public void testGet5Questions() {
 			List<Question> allQuestions = questionFactory.listAllQuestions("en");
-			List<Question> questionsToAsk = questionFactory.listTopPlusRandomQuestions("en", 5, 1);
+			List<Question> questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
 			log.info("questionsToAsk=" + questionsToAsk);
 			assertEquals(5, questionsToAsk.size());
 			Question q1 = questionsToAsk.get(0);
@@ -481,7 +454,7 @@ public class TestIqaGaeBasic {
 			//generate 1000 different lists of 5 questions
 			Set<String> allQuestionsEverAsked = new HashSet<String>();
 			for (int j=0; j<1000; j++) {
-				questionsToAsk = questionFactory.listTopPlusRandomQuestions("en", 5, 1);
+				questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
 				
 				int i=0;
 				List<String> qids = new ArrayList<String>();
