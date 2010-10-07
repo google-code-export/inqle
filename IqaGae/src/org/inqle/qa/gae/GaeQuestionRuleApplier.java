@@ -3,7 +3,9 @@ package org.inqle.qa.gae;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -46,9 +48,7 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 	@Override
 	public List<Question> listAllApplicableQuestions(String userId, String lang) {
 		List<Question> questions = new ArrayList<Question>();
-		Query findQuestionsQuery = new Query("Question");
-		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
-		List<Entity> allQuestionEntities = datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
+		List<Entity> allQuestionEntities = listAllQuestionEntities();
 		for (Entity questionEntity: allQuestionEntities) {
 			if (shouldAskQuestion(userId, questionEntity)) {
 				Question question = questionFactory.getQuestion(questionEntity.getKey(), lang);
@@ -56,6 +56,12 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 			}
 		}
 		return questions;
+	}
+
+	private List<Entity> listAllQuestionEntities() {
+		Query findQuestionsQuery = new Query("Question");
+		findQuestionsQuery.addSort("priority", SortDirection.ASCENDING);
+		return datastoreService.prepare(findQuestionsQuery).asList(FetchOptions.Builder.withLimit(500));
 	}
 
 	/**
@@ -127,6 +133,17 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		return false;
 	}
 
+	/**
+	 * If the question has not been asked too recently and if its rules apply, then return true.  
+	 * Otherwise return false
+	 * @param userId
+	 * @param questionEntity
+	 * @return
+	 */
+	private boolean shouldAskQuestion(String userId, Entity questionEntity, Entity questionHistoryEntity) {
+		
+	}
+	
 	@Override
 	public List<Question> listTopQuestions(String lang, int numberOfQuestions) {
 		List<Question> topAskableQuestions = new ArrayList<Question>();
@@ -217,12 +234,24 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 
 	@Override
 	public List<Question> listApplicableTopPlusRandomQuestions(String lang, String user, int numberOfQuestions, int priorityThreshold) {
-		List<Question> allQuestions = questionFactory.listAllQuestions(lang);
+		List<Entity> allQuestionEntities = listAllQuestionEntities();
 		Key userKey = KeyFactory.createKey("Person", user);
 		Query findQuestionHistoriesQuery = new Query("QuestionHistory");
 		findQuestionHistoriesQuery.setAncestor(userKey);
 		List<Entity> allQuestionHistoryEntities = datastoreService.prepare(findQuestionHistoriesQuery).asList(FetchOptions.Builder.withLimit(numberOfQuestions));
 		
+		//build qhMap=a map of entities
+		Map<String, Entity> qhMap = new HashMap<String, Entity>();
+		for (Entity qhEntity: allQuestionHistoryEntities) {
+			qhMap.put((String)qhEntity.getProperty("question"), qhEntity);
+		}
+		
+		List<Question> targetQuestions = new ArrayList<Question>();
+		
+		for (Entity questionEntity: allQuestionEntities) {
+			String questionId = questionEntity.getKey().getName();
+			if (shouldAskQuestion(user, questionEntity, qhMap.get(questionId)));
+		}
 	}
 
 }
