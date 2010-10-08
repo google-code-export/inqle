@@ -59,6 +59,16 @@ public class Question implements IQABean {
 	public String getPriority() {
 		return priority;
 	}
+	
+	public Double getPriorityVal() {
+		try {
+			double val = Double.parseDouble(priority);
+			return new Double(val);
+		} catch (Exception e) {
+			//cannot parse priority - return null
+		}
+		return null;
+	}
 
 	public void setPriority(String priority) {
 		this.priority = priority;
