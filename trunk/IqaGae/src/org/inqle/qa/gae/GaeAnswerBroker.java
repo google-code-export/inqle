@@ -55,6 +55,22 @@ public class GaeAnswerBroker implements AnswerBroker {
 		}
 		
 		datastoreService.put(answerEntity);
+		
+		//load the QuestionHistory
+		Key qhKey = KeyFactory.createKey("QuestionHistory", answer.getUser() + "/" + answer.getQuestion());
+		Entity qhEntity = null;
+		try {
+			qhEntity = datastoreService.get(qhKey);
+		} catch (EntityNotFoundException e) {
+			qhEntity = createQuestionHistory(answer);
+		}
+		updateWithLatestAnswer(qhEntity, answer);
+		datastoreService.put(qhEntity);
+	}
+
+	private Entity createQuestionHistory(Answer answer) {
+		Key userKey = KeyFactory.createKey("Person", answer.getUser());
+		Entity qhEntity = new Entity("QuestionHistory", , userKey);
 	}
 
 	@Override
