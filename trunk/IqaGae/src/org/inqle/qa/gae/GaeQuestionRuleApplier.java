@@ -140,8 +140,48 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 	 * @param questionEntity
 	 * @return
 	 */
-	private boolean shouldAskQuestion(String userId, Entity questionEntity, Entity questionHistoryEntity) {
+	private boolean shouldAskQuestion(String userId, Question question, Entity questionHistoryEntity) {
+		//test whether the question has been answered too recently
+		Date lastAnswerDate = (Date)questionHistoryEntity.getProperty("lastAnswerDate");
+		Date latestAcceptableDate = new Date();
+		Calendar c = Calendar.getInstance();
+		Double minInterval = question.getMinInterval();
+		int minIntervalInt = minInterval.intValue();
+		c.add(Calendar.DAY_OF_MONTH, minIntervalInt * -1);
+		latestAcceptableDate = c.getTime();
+		if(lastAnswerDate.compareTo(latestAcceptableDate) > 0) {
+			log.info("User: " + userId + " already answered question: " + question.getId() + ", on " + lastAnswerDate + ".  Latest acceptable date was " + latestAcceptableDate);
+			//latest response was too recent
+			return false;
+		}
 		
+		//test whether the user has said not to ask again
+		Date moratoriumUntilDate = (Date)questionHistoryEntity.getProperty("moratoriumUntil");
+		Date now = new Date();
+		if (moratoriumUntilDate != null && moratoriumUntilDate.compareTo(now) > 0) {
+			log.info("User: " + userId + " has said don't ask question: " + question.getId() + " until " + moratoriumUntilDate);
+			//user has said "don't ask this"
+			return false;
+		}
+
+		//TODO test rules!
+		List<String> rulesList = question.getRules();
+		if (rulesList == null) {
+			//no rules, return true
+			return true;
+		}
+		
+		//loop thru each rule, return true if any rule is true
+		for (String ruleId: rulesList) {
+			Key ruleKey = KeyFactory.createKey("Rule", ruleId);
+			Rule rule = ruleFactory.getRule(ruleKey);
+			if (ruleApplier.applyRule(rule, userId)) {
+				return true;
+			}
+		}
+		
+		//rules present but none returns true: return false
+		return false;
 	}
 	
 	@Override
@@ -234,7 +274,8 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 
 	@Override
 	public List<Question> listApplicableTopPlusRandomQuestions(String lang, String user, int numberOfQuestions, int priorityThreshold) {
-		List<Entity> allQuestionEntities = listAllQuestionEntities();
+//		List<Entity> allQuestionEntities = listAllQuestionEntities();
+		List<Question> allQuestions = questionFactory.listAllQuestions(lang);
 		Key userKey = KeyFactory.createKey("Person", user);
 		Query findQuestionHistoriesQuery = new Query("QuestionHistory");
 		findQuestionHistoriesQuery.setAncestor(userKey);
@@ -247,11 +288,26 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		}
 		
 		List<Question> targetQuestions = new ArrayList<Question>();
+		List<Question> lowerPriorityQuestions = new ArrayList<Question>();
 		
-		for (Entity questionEntity: allQuestionEntities) {
-			String questionId = questionEntity.getKey().getName();
-			if (shouldAskQuestion(user, questionEntity, qhMap.get(questionId)));
+		for (Question question: allQuestions) {
+			String questionId = question.getId();
+			if (shouldAskQuestion(user, question, qhMap.get(questionId))) {
+				if (question.getPriorityVal() <= priorityThreshold) {
+					targetQuestions.add(question);
+				} else {
+					lowerPriorityQuestions.add(question);
+				}
+			}
 		}
+		
+		//add randomly selected questions from the lower priority ones.
+		List<Integer> randomIndexes = getRandomIndexesList(numberOfQuestions - targetQuestions.size(), lowerPriorityQuestions.size());
+		for (int questionIndex: randomIndexes) {
+			targetQuestions.add(lowerPriorityQuestions.get(questionIndex));
+		}
+		
+		return targetQuestions;
 	}
 
 }
