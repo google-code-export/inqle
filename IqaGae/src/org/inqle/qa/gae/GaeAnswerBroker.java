@@ -30,31 +30,35 @@ public class GaeAnswerBroker implements AnswerBroker {
 	
 	@Override
 	public void storeAnswer(Answer answer) {
-		Entity answerEntity = null;
-		if (answer.getKey() == null && answer.getId() != null) {
-			Key userKey = KeyFactory.createKey("Person", answer.getUser());
-			Key answerKey = KeyFactory.createKey(userKey, "Answer", answer.getId());
-			answer.setKey(KeyFactory.keyToString(answerKey));
-		}
-		log.info("Storing answer: " + answer);
 		
-		try {
-			answerEntity = gaeEntityFactory.getEntity(answer);
-		} catch (IllegalArgumentException e) {
-			log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
-			return;
-		} catch (IntrospectionException e) {
-			log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
-			return;
-		} catch (IllegalAccessException e) {
-			log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
-			return;
-		} catch (InvocationTargetException e) {
-			log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
-			return;
+		//if moratorium answer was given, do not store the answer
+		if (answer.getMoratoriumUntil() != null) {
+			Entity answerEntity = null;
+			if (answer.getKey() == null && answer.getId() != null) {
+				Key userKey = KeyFactory.createKey("Person", answer.getUser());
+				Key answerKey = KeyFactory.createKey(userKey, "Answer", answer.getId());
+				answer.setKey(KeyFactory.keyToString(answerKey));
+			}
+			log.info("Storing answer: " + answer);
+			
+			try {
+				answerEntity = gaeEntityFactory.getEntity(answer);
+			} catch (IllegalArgumentException e) {
+				log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
+				return;
+			} catch (IntrospectionException e) {
+				log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
+				return;
+			} catch (IllegalAccessException e) {
+				log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
+				return;
+			} catch (InvocationTargetException e) {
+				log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
+				return;
+			}
+			
+			datastoreService.put(answerEntity);
 		}
-		
-		datastoreService.put(answerEntity);
 		
 		//load the QuestionHistory
 		Key qhKey = KeyFactory.createKey("QuestionHistory", answer.getUser() + "/" + answer.getQuestion());
@@ -68,9 +72,23 @@ public class GaeAnswerBroker implements AnswerBroker {
 		datastoreService.put(qhEntity);
 	}
 
-	private Entity createQuestionHistory(Answer answer) {
+	private static void updateWithLatestAnswer(Entity qhEntity, Answer answer) {
+		qhEntity.setProperty("question", answer.getQuestion());
+		qhEntity.setProperty("user", answer.getUser());
+		qhEntity.setProperty("lastAnswer", answer.getId());
+		qhEntity.setProperty("lastAnswerDate", answer.getDate());
+		qhEntity.setProperty("lastAnswerVal", answer.getText());
+		qhEntity.setProperty("moratoriumUntil", answer.getMoratoriumUntil());
+	}
+
+	private static Entity createQuestionHistory(Answer answer) {
 		Key userKey = KeyFactory.createKey("Person", answer.getUser());
-		Entity qhEntity = new Entity("QuestionHistory", , userKey);
+		String qhId = answer.getUser() + "/" + answer.getQuestion();
+		Entity qhEntity = new Entity("QuestionHistory", qhId, userKey);
+		qhEntity.setProperty("firstAnswer", answer.getId());
+		qhEntity.setProperty("firstAnswerDate", answer.getDate());
+		qhEntity.setProperty("firstAnswerVal", answer.getText());
+		return qhEntity;
 	}
 
 	@Override

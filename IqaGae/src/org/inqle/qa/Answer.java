@@ -18,6 +18,7 @@ public class Answer implements IQABean {
 	private Double referenceValue;
 	private Unit answerUnit;
 	private Unit referenceUnit;
+	private Date moratoriumUntil;
 	
 	public Answer() { }
 	
@@ -141,5 +142,13 @@ public class Answer implements IQABean {
 		s += "\n  referenceUnit=" + referenceUnit;
 		s += "]";
 		return s;
+	}
+
+	public void setMoratoriumUntil(Date moratoriumUntil) {
+		this.moratoriumUntil = moratoriumUntil;
+	}
+
+	public Date getMoratoriumUntil() {
+		return moratoriumUntil;
 	}
 }

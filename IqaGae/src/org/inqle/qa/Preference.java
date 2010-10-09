@@ -7,8 +7,8 @@ public class Preference implements IQABean {
 	private String id;
 	private String key;
 	private String user;
-	private String question;
-	private Date moratoriumUntil;
+//	private String question;
+//	private Date moratoriumUntil;
 	
 	@Override
 	public String getId() {
@@ -30,21 +30,21 @@ public class Preference implements IQABean {
 		this.key = key;
 	}
 
-	public String getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(String question) {
-		this.question = question;
-	}
-
-	public Date getMoratoriumUntil() {
-		return moratoriumUntil;
-	}
-
-	public void setMoratoriumUntil(Date moratoriumUntil) {
-		this.moratoriumUntil = moratoriumUntil;
-	}
+//	public String getQuestion() {
+//		return question;
+//	}
+//
+//	public void setQuestion(String question) {
+//		this.question = question;
+//	}
+//
+//	public Date getMoratoriumUntil() {
+//		return moratoriumUntil;
+//	}
+//
+//	public void setMoratoriumUntil(Date moratoriumUntil) {
+//		this.moratoriumUntil = moratoriumUntil;
+//	}
 
 	public void setUser(String user) {
 		this.user = user;
