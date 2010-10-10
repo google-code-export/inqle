@@ -49,7 +49,7 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		List<Question> questions = new ArrayList<Question>();
 		List<Entity> allQuestionEntities = listAllQuestionEntities();
 		Key userKey = KeyFactory.createKey("Person", user);
-		Map<String, Entity> qhMap = getAllQuestionHisotriesMap(userKey);
+		Map<String, Entity> qhMap = getAllQuestionHistoriesMap(userKey);
 		for (Entity questionEntity: allQuestionEntities) {
 			Question question = questionFactory.getQuestion(questionEntity.getKey(), lang);
 			if (shouldAskQuestion(user, question, qhMap.get(questionEntity.getKey().getName()))) {
@@ -142,27 +142,29 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 	 * @return
 	 */
 	private boolean shouldAskQuestion(String userId, Question question, Entity questionHistoryEntity) {
-		//test whether the question has been answered too recently
-		Date lastAnswerDate = (Date)questionHistoryEntity.getProperty("lastAnswerDate");
-		Date latestAcceptableDate = new Date();
-		Calendar c = Calendar.getInstance();
-		Double minInterval = question.getMinInterval();
-		int minIntervalInt = minInterval.intValue();
-		c.add(Calendar.DAY_OF_MONTH, minIntervalInt * -1);
-		latestAcceptableDate = c.getTime();
-		if(lastAnswerDate.compareTo(latestAcceptableDate) > 0) {
-			log.info("User: " + userId + " already answered question: " + question.getId() + ", on " + lastAnswerDate + ".  Latest acceptable date was " + latestAcceptableDate);
-			//latest response was too recent
-			return false;
-		}
-		
-		//test whether the user has said not to ask again
-		Date moratoriumUntilDate = (Date)questionHistoryEntity.getProperty("moratoriumUntil");
-		Date now = new Date();
-		if (moratoriumUntilDate != null && moratoriumUntilDate.compareTo(now) > 0) {
-			log.info("User: " + userId + " has said don't ask question: " + question.getId() + " until " + moratoriumUntilDate);
-			//user has said "don't ask this"
-			return false;
+		if (questionHistoryEntity != null) {
+			//test whether the question has been answered too recently
+			Date lastAnswerDate = (Date)questionHistoryEntity.getProperty("lastAnswerDate");
+			Date latestAcceptableDate = new Date();
+			Calendar c = Calendar.getInstance();
+			Double minInterval = question.getMinInterval();
+			int minIntervalInt = minInterval.intValue();
+			c.add(Calendar.DAY_OF_MONTH, minIntervalInt * -1);
+			latestAcceptableDate = c.getTime();
+			if(lastAnswerDate.compareTo(latestAcceptableDate) >= 0) {
+				log.info("ANSWEREDANSWERED User: " + userId + " already answered question: " + question.getId() + ", on " + lastAnswerDate + ".  Latest acceptable date was " + latestAcceptableDate);
+				//latest response was too recent
+				return false;
+			}
+			
+			//test whether the user has said not to ask again
+			Date moratoriumUntilDate = (Date)questionHistoryEntity.getProperty("moratoriumUntil");
+			Date now = new Date();
+			if (moratoriumUntilDate != null && moratoriumUntilDate.compareTo(now) > 0) {
+				log.info("DONTDONTDONT User: " + userId + " has said don't ask question: " + question.getId() + " until " + moratoriumUntilDate);
+				//user has said "don't ask this"
+				return false;
+			}
 		}
 
 		//TODO test rules!
@@ -279,15 +281,20 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		List<Question> allQuestions = questionFactory.listAllQuestions(lang);
 		Key userKey = KeyFactory.createKey("Person", user);
 		
-		Map<String, Entity> qhMap = getAllQuestionHisotriesMap(userKey);
+		Map<String, Entity> qhMap = getAllQuestionHistoriesMap(userKey);
 		
 		List<Question> targetQuestions = new ArrayList<Question>();
 		List<Question> lowerPriorityQuestions = new ArrayList<Question>();
 		
 		for (Question question: allQuestions) {
+			if (question.getPriority()==null) {
+				log.warning("QNQNQNQNQNQN question.getPriority() is null for question: " + question);
+			} else {
+				
+			}
 			String questionId = question.getId();
 			if (shouldAskQuestion(user, question, qhMap.get(questionId))) {
-				if (question.getPriorityVal() <= priorityThreshold) {
+				if (question.getPriority() <= priorityThreshold) {
 					targetQuestions.add(question);
 				} else {
 					lowerPriorityQuestions.add(question);
@@ -304,7 +311,7 @@ public class GaeQuestionRuleApplier implements QuestionRuleApplier {
 		return targetQuestions;
 	}
 
-	private Map<String, Entity> getAllQuestionHisotriesMap(Key userKey) {
+	private Map<String, Entity> getAllQuestionHistoriesMap(Key userKey) {
 		Query findQuestionHistoriesQuery = new Query("QuestionHistory");
 		findQuestionHistoriesQuery.setAncestor(userKey);
 		List<Entity> allQuestionHistoryEntities = datastoreService.prepare(findQuestionHistoriesQuery).asList(FetchOptions.Builder.withLimit(500));

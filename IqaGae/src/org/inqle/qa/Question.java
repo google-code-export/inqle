@@ -2,12 +2,14 @@ package org.inqle.qa;
 
 import java.util.List;
 
+import org.mortbay.log.Log;
+
 public class Question implements IQABean {
 
 	private String key;
 	private String id;
 	private String questionText;
-	private String priority;
+	private Double priority;
 	private Double minInterval;
 	private String hint;
 	private String answerPrefix;
@@ -56,21 +58,23 @@ public class Question implements IQABean {
 		return id;
 	}
 
-	public String getPriority() {
+	public Double getPriority() {
 		return priority;
 	}
 	
-	public Double getPriorityVal() {
-		try {
-			double val = Double.parseDouble(priority);
-			return new Double(val);
-		} catch (Exception e) {
-			//cannot parse priority - return null
-		}
-		return null;
-	}
+//	public Double getPriorityVal() {
+//		try {
+//			double val = Double.parseDouble(priority);
+//			return new Double(val);
+//		} catch (Exception e) {
+//			//cannot parse priority - return null
+//			System.out.println("Unable to get double form priority=" + priority);
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 
-	public void setPriority(String priority) {
+	public void setPriority(Double priority) {
 		this.priority = priority;
 	}
 

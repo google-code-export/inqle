@@ -383,8 +383,13 @@ public class TestIqaGaeBasic {
 			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
 			
+			c = Calendar.getInstance();
+			c.add(Calendar.DATE, -1);
+			Calendar answerC = Calendar.getInstance();
+			answerC.add(Calendar.DATE, -8);
 			answer = new Answer(userId, "HoursOfExercise");
-			answer.setMoratoriumUntil(new Date());
+			answer.setMoratoriumUntil(c.getTime());
+			answer.setDate(answerC.getTime());
 			answerBroker.storeAnswer(answer);
 			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
@@ -393,6 +398,9 @@ public class TestIqaGaeBasic {
 			c.add(Calendar.DATE, 1);
 			answer = new Answer(userId, "HoursOfExercise");
 			answer.setMoratoriumUntil(c.getTime());
+			answerC = Calendar.getInstance();
+			answerC.add(Calendar.DATE, -8);
+			answer.setDate(answerC.getTime());
 			answerBroker.storeAnswer(answer);
 			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(15, applicableAskableQuestions.size());
@@ -401,6 +409,9 @@ public class TestIqaGaeBasic {
 			c.add(Calendar.DATE, -100);
 			answer = new Answer(userId, "HoursOfExercise");
 			answer.setMoratoriumUntil(c.getTime());
+			answerC = Calendar.getInstance();
+			answerC.add(Calendar.DATE, -8);
+			answer.setDate(answerC.getTime());
 			answerBroker.storeAnswer(answer);
 			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
@@ -409,6 +420,9 @@ public class TestIqaGaeBasic {
 			c.add(Calendar.DATE, -100);
 			answer = new Answer(userId, "AvgDailyFruitVeg");
 			answer.setMoratoriumUntil(c.getTime());
+			answerC = Calendar.getInstance();
+			answerC.add(Calendar.DATE, -108);
+			answer.setDate(answerC.getTime());
 			answerBroker.storeAnswer(answer);
 			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(16, applicableAskableQuestions.size());
@@ -417,25 +431,36 @@ public class TestIqaGaeBasic {
 			c.add(Calendar.DATE, 100);
 			answer = new Answer(userId, "AvgDailyFruitVeg");
 			answer.setMoratoriumUntil(c.getTime());
+			answerC = Calendar.getInstance();
+			answerC.add(Calendar.DATE, -8);
+			answer.setDate(answerC.getTime());
 			answerBroker.storeAnswer(answer);
 			applicableAskableQuestions = questionRuleApplier.listAllApplicableQuestions(userId, "en");
 			assertEquals(15, applicableAskableQuestions.size());
 		}
 		
+		/**
+		 * Test questionRuleApplier.listTopPlusRandomQuestions()
+		 */
 		@Test
 		public void testGet5Questions() {
 			List<Question> allQuestions = questionFactory.listAllQuestions("en");
-			List<Question> questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
-			log.info("questionsToAsk=" + questionsToAsk);
-			assertEquals(5, questionsToAsk.size());
-			Question q1 = questionsToAsk.get(0);
-			assertEquals("Weight", q1.getId());
+//			List<Question> questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
+//			log.info("questionsToAsk=" + questionsToAsk);
+//			assertEquals(5, questionsToAsk.size());
+//			Question q1 = questionsToAsk.get(0);
+//			assertEquals("Weight", q1.getId());
 			
 			//generate 1000 different lists of 5 questions
 			Set<String> allQuestionsEverAsked = new HashSet<String>();
-			for (int j=0; j<1000; j++) {
-				questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
+			for (int j=0; j<100; j++) {
+				List<Question> questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
 				
+				assertEquals(5, questionsToAsk.size());
+				Question q1 = questionsToAsk.get(0);
+				assertEquals("Weight", q1.getId());
+				
+				//make sure no repeats per set of questions
 				int i=0;
 				List<String> qids = new ArrayList<String>();
 				for (Question q: questionsToAsk) {
@@ -447,5 +472,45 @@ public class TestIqaGaeBasic {
 			}
 			log.info("allQuestionsEverAsked=" + allQuestionsEverAsked);
 			assertEquals(allQuestions.size(), allQuestionsEverAsked.size());
+		}
+		
+		/**
+		 * Test questionRuleApplier.listApplicableTopPlusRandomQuestions()
+		 */
+		@Test
+		public void testGet5ApplicableQuestions() {
+			log.info("=================== testGet5ApplicableQuestions() =======================");
+			List<Question> allQuestions = questionFactory.listAllQuestions("en");
+//			List<Question> questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
+//			log.info("questionsToAsk=" + questionsToAsk);
+//			assertEquals(5, questionsToAsk.size());
+//			Question q1 = questionsToAsk.get(0);
+//			assertEquals("Weight", q1.getId());
+			
+			//generate 1000 different lists of 5 questions
+			Set<String> allQuestionsAskedNow = new HashSet<String>();
+			for (int j=0; j<100; j++) {
+				List<Question> questionsToAsk = questionRuleApplier.listApplicableTopPlusRandomQuestions("en", "dummy", 5, 1);
+				
+				assertEquals(5, questionsToAsk.size());
+				
+				
+				//make sure no repeats per set of questions
+				int i=0;
+				List<String> qids = new ArrayList<String>();
+				for (Question q: questionsToAsk) {
+					assertFalse("Weight".equals(q.getId()));
+					assertFalse("Height".equals(q.getId()));
+					assertFalse("WaistCircumference".equals(q.getId()));
+					assertFalse("Gender".equals(q.getId()));
+					assertFalse("AvgDailyFruitVeg".equals(q.getId()));
+					allQuestionsAskedNow.add(q.getId());
+					assertFalse(qids.contains(q.getId()));
+					qids.add(q.getId());
+					i++;
+				}
+			}
+			log.info("allQuestionsAskedNow=" + allQuestionsAskedNow);
+			assertEquals(15, allQuestionsAskedNow.size());
 		}
 }
