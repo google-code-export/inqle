@@ -31,8 +31,9 @@ public class GaeAnswerBroker implements AnswerBroker {
 	@Override
 	public void storeAnswer(Answer answer) {
 		
+		
 		//if moratorium answer was given, do not store the answer
-		if (answer.getMoratoriumUntil() != null) {
+		if (answer.getMoratoriumUntil() == null) {
 			Entity answerEntity = null;
 			if (answer.getKey() == null && answer.getId() != null) {
 				Key userKey = KeyFactory.createKey("Person", answer.getUser());
@@ -56,8 +57,10 @@ public class GaeAnswerBroker implements AnswerBroker {
 				log.log(Level.SEVERE, "Error creating entity from Answer object: " + answer, e);
 				return;
 			}
-			
+			log.info("SASASASA Storing Answer Entity" + answerEntity);
 			datastoreService.put(answerEntity);
+		} else {
+			log.info("NSANSANSA NOT Storing Answer as it is a moratorium answer" + answer);
 		}
 		
 		//load the QuestionHistory
@@ -69,6 +72,7 @@ public class GaeAnswerBroker implements AnswerBroker {
 			qhEntity = createQuestionHistory(answer);
 		}
 		updateWithLatestAnswer(qhEntity, answer);
+		log.info("SSSSSSS Storing Question History Entity=" + qhEntity);
 		datastoreService.put(qhEntity);
 	}
 

@@ -140,6 +140,7 @@ public class Answer implements IQABean {
 		s += "\n  answerDouble=" + answerDouble;
 		s += "\n  referenceValue=" + referenceValue;
 		s += "\n  referenceUnit=" + referenceUnit;
+		s += "\n  moratoriumUntil=" + moratoriumUntil;
 		s += "]";
 		return s;
 	}

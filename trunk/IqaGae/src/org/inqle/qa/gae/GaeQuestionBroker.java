@@ -55,6 +55,9 @@ public class GaeQuestionBroker implements QuestionBroker {
 	
 	@Override
 	public Question getQuestion(Object questionKeyObj, String lang) {
+		if (questionKeyObj instanceof Entity) {
+			return getQuestion((Entity)questionKeyObj, lang);
+		}
 		String kind = "Question";
 		Key questionKey = (Key)questionKeyObj;
 		Entity questionEntity = null;

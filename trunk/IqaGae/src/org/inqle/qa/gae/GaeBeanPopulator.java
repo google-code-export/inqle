@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.inqle.qa.Question;
+import org.mortbay.log.Log;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
@@ -80,6 +81,7 @@ public class GaeBeanPopulator {
 				value = Integer.parseInt(strVal);
 			} else if (Double.class.equals(pClass)) {
 				value = Double.parseDouble(strVal);
+				Log.info("PPPPPPPPP Property " + propertyName + " is a Double.  Parsed value=" + value);
 			}
 			if (setter == null) {
 				msg += "\nNo setter for bean property: " + propertyName;
