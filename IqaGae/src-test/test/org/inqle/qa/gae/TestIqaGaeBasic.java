@@ -1,17 +1,15 @@
 package test.org.inqle.qa.gae;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -20,10 +18,9 @@ import java.util.logging.Logger;
 
 import org.inqle.qa.Answer;
 import org.inqle.qa.AnswerBroker;
-import org.inqle.qa.AppConstants;
-import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.Queryer;
 import org.inqle.qa.Question;
+import org.inqle.qa.QuestionBroker;
 import org.inqle.qa.QuestionRuleApplier;
 import org.inqle.qa.gae.AppConfig;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
@@ -39,17 +36,10 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
-import com.google.gdata.data.spreadsheet.CellEntry;
-import com.google.gdata.data.spreadsheet.CellFeed;
-import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
-import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
-import com.google.gdata.data.spreadsheet.WorksheetEntry;
-import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.ServiceException;
 import com.google.inject.Guice;
 import com.google.inject.Inject;

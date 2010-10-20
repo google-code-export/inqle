@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import org.inqle.qa.Answer;
 import org.inqle.qa.IQABean;
 import org.mortbay.log.Log;
 

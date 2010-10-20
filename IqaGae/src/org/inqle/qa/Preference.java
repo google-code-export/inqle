@@ -1,6 +1,5 @@
 package org.inqle.qa;
 
-import java.util.Date;
 
 public class Preference implements IQABean {
 

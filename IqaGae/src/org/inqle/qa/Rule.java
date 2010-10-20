@@ -69,4 +69,10 @@ public class Rule implements IQABean {
 	public void setValues(String values) {
 		this.values = values;
 	}
+	public List<Rule> getAndRules() {
+		return andRules;
+	}
+	public List<Rule> getOrRules() {
+		return orRules;
+	}
 }
