@@ -1,19 +1,12 @@
 package org.inqle.qa.gdata.gae;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.inqle.qa.Queryer;
 import org.inqle.qa.gdata.GdataSpreadsheetImporter;
-import org.mortbay.log.Log;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;

@@ -1,6 +1,5 @@
 package org.inqle.qa;
 
-import com.google.appengine.api.datastore.Key;
 
 public interface GenericLocalizedObjectFactory {
 

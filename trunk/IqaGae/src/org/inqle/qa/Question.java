@@ -2,8 +2,6 @@ package org.inqle.qa;
 
 import java.util.List;
 
-import org.mortbay.log.Log;
-
 public class Question implements IQABean {
 
 	private String key;
