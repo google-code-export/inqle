@@ -481,11 +481,6 @@ public class TestIqaGaeBasic {
 		public void testGet5ApplicableQuestions() {
 			log.info("=================== testGet5ApplicableQuestions() =======================");
 			List<Question> allQuestions = questionFactory.listAllQuestions("en");
-//			List<Question> questionsToAsk = questionRuleApplier.listTopPlusRandomQuestions("en", 5, 1);
-//			log.info("questionsToAsk=" + questionsToAsk);
-//			assertEquals(5, questionsToAsk.size());
-//			Question q1 = questionsToAsk.get(0);
-//			assertEquals("Weight", q1.getId());
 			
 			//generate 1000 different lists of 5 questions
 			Set<String> allQuestionsAskedNow = new HashSet<String>();
