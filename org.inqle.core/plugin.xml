@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="org.inqle.core.factory" name="INQLE Core Factory Service" schema="schema/org.inqle.core.factory.exsd"/>
+
+	
+</plugin>

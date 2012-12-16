@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.inqle.ecf.servers">
+   		<ecfServer
+   			uri="ecftcp://localhost:3787/server1"
+   			port="3787"
+   			protocol="ecf.generic.client"/>
+   		
+   		<ecfServer
+   			uri="http://localhost:3797/server1"
+   			port="3797"
+   			protocol="ecf.rest.client"/>
+   			
+   </extension>
+   
+   <extension
+         point="org.inqle.ecf.services">
+   		<ecfService
+   			serviceInterfaceName="org.inqle.ecf.services.IHello"
+   			serviceClassName="org.inqle.ecf.services.Hello"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			consume="true"
+   			produce="false"/>
+
+   		<ecfService
+   			serviceInterfaceName="org.inqle.qa.ecf.services.IHello2"
+   			serviceClassName="org.inqle.qa.ecf.services.Hello2"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			consume="true"
+   			produce="false"/>
+   		
+   		<!--
+   		<ecfService
+   			serviceInterfaceName="org.inqle.qa.services.IQAObjectService"
+   			serviceClassName="org.inqle.qa.services.QAObjectService"
+   			clientProtocol="ecf.generic.client"
+   			serverProtocol="ecf.generic.server"
+   			consume="true"
+   			produce="false"/>
+   			-->
+   			
+   		<ecfService
+   			serviceInterfaceName="org.inqle.rdf.services.ISparqlService"
+   			serviceClassName="org.inqle.rdf.sparql.SparqlService"
+   			clientProtocol="ecf.rest.client"
+   			serverProtocol="ecf.rest.client"
+   			consume="true"
+   			produce="false"/>
+   </extension>
+</plugin>

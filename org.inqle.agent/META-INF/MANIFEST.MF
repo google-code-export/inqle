@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Agent Plug-in
+Bundle-SymbolicName: org.inqle.agent;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Vendor: INQLING, LLC
+Require-Bundle: org.inqle.core,
+ org.inqle.core.extensions,
+ org.eclipse.rap.jface,
+ org.eclipse.rap.ui,
+ org.inqle.ui.rap,
+ org.inqle.rdf.core,
+ org.inqle.rdf.jena,
+ org.eclipse.rap.ui;bundle-version="1.2.0",
+ thewebsemantic.jenabean;bundle-version="1.0.0",
+ com.hp.hpl.jena,
+ org.inqle.logging-dependencies;bundle-version="1.0.0"
+Import-Package: com.hp.hpl.jena.rdf.model,
+ org.eclipse.jface.action,
+ org.eclipse.jface.wizard,
+ org.eclipse.swt.widgets,
+ org.junit.runner
+Bundle-ClassPath: bin/main/
+Eclipse-RegisterBuddy: org.inqle.core.extensions,
+ org.inqle.data.rdf.jenabean,
+ org.inqle.ui.rap
+Bundle-RegisterBuddy: org.inqle.core.extensions,
+ org.inqle.data.rdf.jenabean,
+ org.inqle.ui.rap
+Export-Package: org.inqle.agent,
+ org.inqle.agent.images,
+ org.inqle.agent.rap,
+ org.inqle.testing
+Eclipse-BuddyPolicy: registered
+Bundle-BuddyPolicy: registered

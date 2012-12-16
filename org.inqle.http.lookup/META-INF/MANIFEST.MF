@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Lookup Plug-in
+Bundle-SymbolicName: org.inqle.http.lookup;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.inqle.http.lookup.Activator
+Bundle-Vendor: INQLING, LLC
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.rap.rwt,
+ org.inqle.rdf.core,
+ org.inqle.rdf.jena,
+ org.inqle.core,
+ com.hp.hpl.jena
+Import-Package: com.hp.hpl.jena.rdf.model,
+ javax.servlet;version="[2.3.0,2.5.0]",
+ javax.servlet.http;version="[2.3.0,2.5.0]",
+ javax.xml.parsers,
+ org.apache.log4j,
+ org.w3c.dom,
+ org.xml.sax,
+ org.xml.sax.ext,
+ org.xml.sax.helpers
+Export-Package: org.inqle.http.lookup,
+ org.inqle.http.lookup.util
+Bundle-ClassPath: bin/main/,
+ .

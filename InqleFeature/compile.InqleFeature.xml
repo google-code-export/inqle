@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Compile InqleFeature" default="main">
+	<target name="main">
+		<ant antfile="build.xml" dir="../org.inqle.logging-dependencies" target="build.jars"/>
+		<ant antfile="build.xml" dir="../com.hp.hpl.jena" target="build.jars"/>
+		<ant antfile="build.xml" dir="../thewebsemantic.jenabean" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.log4j.properties" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.core" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.rdf.core" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.eclipse.rwt.widgets.upload" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.core.extensions" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.rdf.jena" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.http.lookup" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.ui.rap" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.data.sampling" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.agent" target="build.jars"/>
+		<ant antfile="build.xml" dir="../org.inqle.experiment.rapidminer" target="build.jars"/>
+	</target>
+</project>

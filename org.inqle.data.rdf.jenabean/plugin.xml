@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <!--extension-point id="org.inqle.data.datamodels" name="Internal Datamodel Role" schema="schema/org.inqle.data.datamodels.exsd"/-->
+   <!--extension-point id="org.inqle.data.databases" name="Database Role" schema="schema/org.inqle.data.databases.exsd"/-->
+   <extension-point id="org.inqle.data.purposes" name="Data Purpose" schema="schema/org.inqle.data.purposes.exsd"/>
+   
+   <!--
+   <extension
+         point="org.inqle.data.datamodels">
+			 
+			<datamodel
+           id="org.inqle.datamodels.ns"
+           weight="2000"
+           description="contains mappings from namespace abbreviations to their full URIs"
+					 cacheInMemory="true">
+			</datamodel>
+			
+			<datamodel
+           id="org.inqle.datamodels.metaRepository"
+           weight="2000"
+           description="contains mappings from namespace abbreviations to their full URIs"
+					 cacheInMemory="true">
+			</datamodel>
+			
+			<datamodel
+           id="org.inqle.datamodels.mapping"
+           weight="3000"
+           description="contains DataMapping and related objects, which map CSV values to RDF attributes"
+					 cacheInMemory="false"
+					 >
+			</datamodel>
+			
+			<datamodel
+           id="org.inqle.datamodels.dataSubject"
+           weight="4000"
+           description="contains subclasses of the OWL class inqle:DataSubject.  These subclasses can be any native OWL class.  They are used as subjects of data."
+					 cacheInMemory="true"
+					 textIndexType="subject"
+					 > 
+			</datamodel>
+			
+			<datamodel
+           id="org.inqle.datamodels.dataProperty"
+           weight="5000"
+           description="contains RDF properties used for INQLE data, including their rdfs:label and rdfs:comment."
+					 cacheInMemory="true"
+					 textIndexType="subject"
+					 >
+					 
+			</datamodel>
+			
+			<datamodel
+           id="org.inqle.datamodels.cache.subjectClass"
+           weight="6000"
+           description="contains objects which store info about which RDF subject classes are available, per datamodel."
+					 > 
+			</datamodel>
+			
+			<datamodel
+           id="org.inqle.datamodels.cache.arc"
+           weight="7000"
+           description="contains objects which store info about which RDF arcs are available, per datamodel per RDF subject class."
+					 > 
+			</datamodel>
+   </extension>
+	-->
+	
+	<!--extension
+         point="org.inqle.data.cacheDatamodels">
+      
+      <cacheDatamodel
+           id="org.inqle.cacheDatamodels.subjectClass"
+           weight="1000"
+           description="contains RDF subject classes."
+					 cacheInMemory="false">
+			</cacheDatamodel>
+			
+			<cacheDatamodel
+           id="org.inqle.cacheDatamodels.arc"
+           weight="1000"
+           description="contains RDF Arcs, from a given subject class."
+					 cacheInMemory="false">
+			</cacheDatamodel>
+			
+	</extension-->
+
+	<extension
+         point="org.inqle.data.purposes">
+      
+      <datamodelPurpose
+           id="org.inqle.data.purposes.minable"
+           name="General Minable Data"
+           weight="1000"
+           description="General purpose data, usable for learning experiments."
+					 checkedByDefault="true">
+			</datamodelPurpose>
+			<datamodelPurpose
+           id="org.inqle.data.purposes.schemas"
+           name="Schemas, Ontologies"
+           weight="2000"
+           textIndexType="subject"
+           description="RDFS or OWL ontology, containing semantic types and properties for classifying General Data to be imported.">
+			</datamodelPurpose>
+	</extension>
+</plugin>

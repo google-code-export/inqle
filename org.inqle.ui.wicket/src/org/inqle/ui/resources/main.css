@@ -1,0 +1,52 @@
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color: #f9f2f2;  
+	height: 100%;
+}
+
+.test {
+	background-color: red;
+}
+
+td.tbodycol {
+	overflow: hidden;
+	white-space: normal;
+	word-wrap: break-word;	
+}
+
+div.iheader {
+ 	height: 70px;
+ 	background-image: url('back_blue.png');
+ 	background-repeat: repeat-x;
+}
+
+div.ilogo {
+	height: 70px;
+	width: 200px;
+ 	background-image: url('Inqle_blue.png');
+ 	background-repeat: no-repeat;
+ 	background-position: center;
+}
+
+div.ipage {	
+	border: 1px solid gray;
+	color: #424b49;
+	width: 1200px;
+	margin-top: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	overflow: auto;
+	height: 800px;
+	background-color: #dbe6ff;
+}
+
+div.smallheader {
+	padding-left: 5px;
+	background-image: url('title_blue.png');
+	background-repeat: repeat-x;
+	font-weight: bold;
+	height: 20px;
+	color: white;
+}

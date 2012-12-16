@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<extension
+			id="org.inqle.ui.wiki.httpcontexts"
+          point="org.eclipse.equinox.http.registry.httpcontexts">
+       <httpcontext
+             id="org.inqle.ui.wiki.httpcontext">
+          <resource-mapping
+                bundle="org.inqle.ui.wiki"
+                path="/jsp">
+          </resource-mapping>
+     </httpcontext>
+  </extension>
+
+	<extension
+			id="org.inqle.ui.wiki.jsp"
+    	point="org.eclipse.equinox.http.registry.servlets">
+    <servlet
+    	alias="/wiki/*.jsp"
+    	class="org.eclipse.equinox.jsp.jasper.registry.JSPFactory:/jsp"
+    	>
+    	<!-- httpcontextId="org.inqle.ui.wiki.httpcontext" -->
+    </servlet>
+  </extension>
+</plugin>

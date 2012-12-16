@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+  <!ENTITY ns "http://inqle.org/ns/">
+  <!ENTITY owl "http://www.w3.org/2002/07/owl#">
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#">
+  <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#">
+]>
+<rdf:RDF xml:base="&ns;"
+         xmlns:owl="&owl;"
+         xmlns:rdf="&rdf;"
+         xmlns:rdfs="&rdfs;">
+
+<!-- Ontology Information -->
+  <owl:Ontology rdf:about=""
+                rdfs:comment="Describes data, experimental data"
+                rdfs:label="The INQLE Ontology"
+                owl:versionInfo="0.1"/>
+
+<!-- Classes -->
+  <owl:Class rdf:about="Subject"
+             rdfs:label="Subject of Data">
+    <rdfs:comment xml:lang="en">a superclass of semantic classes, which have been used as subjects of data imported into INQLE.</rdfs:comment>
+  </owl:Class>
+
+<!-- Annotation Properties -->
+  <owl:AnnotationProperty rdf:about="&rdfs;comment"/>
+  <owl:AnnotationProperty rdf:about="&rdfs;label"/>
+  <owl:AnnotationProperty rdf:about="&owl;versionInfo"/>
+
+<!-- Object Properties -->
+  <owl:ObjectProperty rdf:about="identifier"
+                      rdfs:label="identifier">
+    <rdfs:comment>a universally-accepted identifier for this all inqle:Subject instances and their subclasses.</rdfs:comment>
+    <rdfs:domain rdf:resource="Subject"/>
+    <rdfs:subPropertyOf rdf:resource="subjectProperty"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="subjectProperty"
+                      rdfs:comment="a property of an inqle:Subject"
+                      rdfs:label="Subject Property"/>
+</rdf:RDF>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	
+  <extension
+      id="org.inqle.ui.google.jsapi"
+      point="org.eclipse.rap.ui.resources">
+    <resource class="org.inqle.ui.google.jsapi.GoogleAPIResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.MotionChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.MotionChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.ColumnChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.ColumnChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.TableAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.TableResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.ScatterChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.ScatterChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.LineChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.LineChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.PieChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.PieChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.AnnotatedTimeLineAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.AnnotatedTimeLineResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.BarChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.BarChartResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.GaugeAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.GaugeResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.GeomapAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.GeomapResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.IntensityMapAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.IntensityMapResource"/>
+    
+    <resource class="org.inqle.ui.google.jsapi.AreaChartAPIResource"/>
+    <resource class="org.inqle.ui.google.jsapi.AreaChartResource"/>
+  </extension>
+</plugin>
