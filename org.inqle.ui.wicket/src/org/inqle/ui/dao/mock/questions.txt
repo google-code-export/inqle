@@ -1,4 +1,0 @@
-Do you drink milk every day | SC(Yes,No)
-Do you drink coffee every day | SC(Yes,No)
-Which colors you do prefer | MC(read, green, blue)
-Grade your reading speed | IR(1, 10)

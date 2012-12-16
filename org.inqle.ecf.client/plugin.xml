@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
-<plugin>
-   <extension-point id="org.inqle.ecf.servers" name="ECF Servers" schema="schema/org.inqle.ecf.servers.exsd"/>
-</plugin>
