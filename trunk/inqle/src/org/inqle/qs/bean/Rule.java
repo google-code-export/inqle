@@ -1,4 +1,6 @@
 package org.inqle.qs.bean;
+import java.util.Collection;
+
 import org.openrdf.annotations.Iri;
 import org.openrdf.model.URI;
 
@@ -9,7 +11,8 @@ public class Rule {
 
 	private URI deliversQuestion;
 	private URI firesOnAnswerToQuestion;
-	private URI assertsSubject;
 	private URI assertsPredicate;
-	private SemanticCondition semanticCondition;
+	private Collection<Condition> conditions;
+	private String formula;
+	private String sparql;
 }
