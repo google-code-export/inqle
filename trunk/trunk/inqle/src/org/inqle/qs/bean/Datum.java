@@ -14,4 +14,8 @@ public class Datum {
 	private Date lastModified;
 	private URI choice;
 	
+	/**
+	 * The unique ID of the information that this datum contains
+	 */
+	private String info;
 }

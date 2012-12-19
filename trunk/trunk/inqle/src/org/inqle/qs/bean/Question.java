@@ -9,6 +9,10 @@ import org.openrdf.repository.object.LangString;
 public class Question {
 	private LangString title;
 	private LangString question;	
+	/**
+	 * The unique ID of the information that this question defines
+	 */
+	private String info;
 	
 	public LangString getTitle() {
 		return title;
