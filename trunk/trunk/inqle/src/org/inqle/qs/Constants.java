@@ -9,4 +9,5 @@ public class Constants {
 	public static final String NS_DATUM = NS + "Datum/";
 	public static final String NS_DERIVATION = NS + "Derivation/";
 	public static final String NS_Q = NS + "Question/";
+	public static final String NS_RULE = NS + "Rule/";
 }
