@@ -20,7 +20,7 @@ privileged aspect QuestionController_Roo_Controller_Json {
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> QuestionController.showJson(@PathVariable("id") Long id) {
-        Question question = asker.findQuestion(id);
+        Question question = Question.findQuestion(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         if (question == null) {
@@ -34,14 +34,14 @@ privileged aspect QuestionController_Roo_Controller_Json {
     public ResponseEntity<String> QuestionController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        List<Question> result = asker.findAllQuestions();
+        List<Question> result = Question.findAllQuestions();
         return new ResponseEntity<String>(Question.toJsonArray(result), headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> QuestionController.createFromJson(@RequestBody String json) {
         Question question = Question.fromJsonToQuestion(json);
-        asker.saveQuestion(question);
+        question.persist();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -50,7 +50,7 @@ privileged aspect QuestionController_Roo_Controller_Json {
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> QuestionController.createFromJsonArray(@RequestBody String json) {
         for (Question question: Question.fromJsonArrayToQuestions(json)) {
-            asker.saveQuestion(question);
+            question.persist();
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -62,7 +62,7 @@ privileged aspect QuestionController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         Question question = Question.fromJsonToQuestion(json);
-        if (asker.updateQuestion(question) == null) {
+        if (question.merge() == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
@@ -73,7 +73,7 @@ privileged aspect QuestionController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         for (Question question: Question.fromJsonArrayToQuestions(json)) {
-            if (asker.updateQuestion(question) == null) {
+            if (question.merge() == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
         }
@@ -82,13 +82,13 @@ privileged aspect QuestionController_Roo_Controller_Json {
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<String> QuestionController.deleteFromJson(@PathVariable("id") Long id) {
-        Question question = asker.findQuestion(id);
+        Question question = Question.findQuestion(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         if (question == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        asker.deleteQuestion(question);
+        question.remove();
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     

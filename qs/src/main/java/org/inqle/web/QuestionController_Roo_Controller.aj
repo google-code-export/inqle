@@ -11,10 +11,8 @@ import javax.validation.Valid;
 import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Question;
-import org.inqle.service.Asker;
 import org.inqle.web.QuestionController;
 import org.joda.time.format.DateTimeFormat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,9 +25,6 @@ import org.springframework.web.util.WebUtils;
 
 privileged aspect QuestionController_Roo_Controller {
     
-    @Autowired
-    Asker QuestionController.asker;
-    
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String QuestionController.create(@Valid Question question, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
@@ -37,7 +32,7 @@ privileged aspect QuestionController_Roo_Controller {
             return "questions/create";
         }
         uiModel.asMap().clear();
-        asker.saveQuestion(question);
+        question.persist();
         return "redirect:/questions/" + encodeUrlPathSegment(question.getId().toString(), httpServletRequest);
     }
     
@@ -55,7 +50,7 @@ privileged aspect QuestionController_Roo_Controller {
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String QuestionController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("question", asker.findQuestion(id));
+        uiModel.addAttribute("question", Question.findQuestion(id));
         uiModel.addAttribute("itemId", id);
         return "questions/show";
     }
@@ -65,11 +60,11 @@ privileged aspect QuestionController_Roo_Controller {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("questions", asker.findQuestionEntries(firstResult, sizeNo));
-            float nrOfPages = (float) asker.countAllQuestions() / sizeNo;
+            uiModel.addAttribute("questions", Question.findQuestionEntries(firstResult, sizeNo));
+            float nrOfPages = (float) Question.countQuestions() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("questions", asker.findAllQuestions());
+            uiModel.addAttribute("questions", Question.findAllQuestions());
         }
         addDateTimeFormatPatterns(uiModel);
         return "questions/list";
@@ -82,20 +77,20 @@ privileged aspect QuestionController_Roo_Controller {
             return "questions/update";
         }
         uiModel.asMap().clear();
-        asker.updateQuestion(question);
+        question.merge();
         return "redirect:/questions/" + encodeUrlPathSegment(question.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String QuestionController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, asker.findQuestion(id));
+        populateEditForm(uiModel, Question.findQuestion(id));
         return "questions/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String QuestionController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Question question = asker.findQuestion(id);
-        asker.deleteQuestion(question);
+        Question question = Question.findQuestion(id);
+        question.remove();
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());

@@ -16,7 +16,6 @@ import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
 import org.inqle.domain.Question;
 import org.inqle.domain.QuestionDataOnDemand;
-import org.inqle.service.Asker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +29,6 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     ConceptDataOnDemand QuestionDataOnDemand.conceptDataOnDemand;
-    
-    @Autowired
-    Asker QuestionDataOnDemand.asker;
     
     public Question QuestionDataOnDemand.getNewTransientQuestion(int index) {
         Question obj = new Question();
@@ -94,14 +90,14 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         }
         Question obj = data.get(index);
         Long id = obj.getId();
-        return asker.findQuestion(id);
+        return Question.findQuestion(id);
     }
     
     public Question QuestionDataOnDemand.getRandomQuestion() {
         init();
         Question obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return asker.findQuestion(id);
+        return Question.findQuestion(id);
     }
     
     public boolean QuestionDataOnDemand.modifyQuestion(Question obj) {
@@ -111,7 +107,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     public void QuestionDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = asker.findQuestionEntries(from, to);
+        data = Question.findQuestionEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Question' illegally returned null");
         }
@@ -123,7 +119,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Question obj = getNewTransientQuestion(i);
             try {
-                asker.saveQuestion(obj);
+                obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
