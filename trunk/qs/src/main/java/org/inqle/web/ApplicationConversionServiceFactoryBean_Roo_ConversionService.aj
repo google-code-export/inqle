@@ -8,9 +8,7 @@ import org.inqle.domain.ConceptTranslation;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Question;
-import org.inqle.service.Asker;
 import org.inqle.web.ApplicationConversionServiceFactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
@@ -18,9 +16,6 @@ import org.springframework.format.FormatterRegistry;
 privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService {
     
     declare @type: ApplicationConversionServiceFactoryBean: @Configurable;
-    
-    @Autowired
-    Asker ApplicationConversionServiceFactoryBean.asker;
     
     public Converter<Concept, String> ApplicationConversionServiceFactoryBean.getConceptToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Concept, java.lang.String>() {
@@ -129,7 +124,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Question> ApplicationConversionServiceFactoryBean.getIdToQuestionConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Question>() {
             public org.inqle.domain.Question convert(java.lang.Long id) {
-                return asker.findQuestion(id);
+                return Question.findQuestion(id);
             }
         };
     }

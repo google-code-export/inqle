@@ -13,11 +13,10 @@ import org.inqle.domain.Choice;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Participant;
+import org.inqle.domain.Question;
 import org.inqle.domain.Unit;
-import org.inqle.service.Asker;
 import org.inqle.web.DatumController;
 import org.joda.time.format.DateTimeFormat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,9 +28,6 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 privileged aspect DatumController_Roo_Controller {
-    
-    @Autowired
-    Asker DatumController.asker;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String DatumController.create(@Valid Datum datum, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -117,7 +113,7 @@ privileged aspect DatumController_Roo_Controller {
         uiModel.addAttribute("choices", Choice.findAllChoices());
         uiModel.addAttribute("formulas", Formula.findAllFormulas());
         uiModel.addAttribute("participants", Participant.findAllParticipants());
-        uiModel.addAttribute("questions", asker.findAllQuestions());
+        uiModel.addAttribute("questions", Question.findAllQuestions());
         uiModel.addAttribute("units", Unit.findAllUnits());
     }
     
