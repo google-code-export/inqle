@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_org_inqle_domain_Question" modelAttribute="question" path="/questions" versionField="Version" z="sicf5+fvoYVerMBOYM7Oaa0JJQA=">
+        <field:input field="chronicity" id="c_org_inqle_domain_Question_chronicity" max="256" min="0" required="true" validationMessageCode="field_invalid_integer" z="TkS4w3X/08fw2HDpWS6E+FWOsSE="/>
+        <field:input field="lang" id="c_org_inqle_domain_Question_lang" z="ySg/c3ldq49EAZ5whFT+WpnLXkg="/>
+        <field:select field="concept" id="c_org_inqle_domain_Question_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="JqQiTCbT3GEBtQA3jyzs5e4ngeE="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Question_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="N5GVDi5xzxEi65Xz6v3qmLuHwF0="/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Question_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="CgWYsr7n0fxeKHm3dC/WLN7JcfQ="/>
+        <field:datetime dateTimePattern="${question_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Question_updated" required="true" z="0ddZM+WVzipLbliAcgm0CDjLTqQ="/>
+    </form:update>
+</div>

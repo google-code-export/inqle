@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Answer" items="${answers}" z="6SXjOB53FUQahuH8LX1JZEqeuR8=">
+        <table:table data="${answers}" id="l_org_inqle_domain_Answer" path="/answers" z="vWaPLYEScI53Y32ld/EhONS9kko=">
+            <table:column date="true" dateTimePattern="${answer_created_date_format}" id="c_org_inqle_domain_Answer_created" property="created" z="jz9nT2Ch7+Oc8vJH88HELIRED00="/>
+            <table:column id="c_org_inqle_domain_Answer_lang" property="lang" z="z62tvilfv1iSaHhqbI+czWKM/fk="/>
+            <table:column id="c_org_inqle_domain_Answer_datum" property="datum" z="nYd3BDL5gVpJt54fXaknVZ0Fhac="/>
+            <table:column id="c_org_inqle_domain_Answer_question" property="question" z="wFp10gQB0PrL9byih9EguS1+u30="/>
+        </table:table>
+    </page:list>
+</div>

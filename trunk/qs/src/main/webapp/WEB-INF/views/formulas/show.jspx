@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_Formula" object="${formula}" path="/formulas" z="6bvuRwE4b6rZUwIi0UoRX7IxQoI=">
+        <field:display field="concept" id="s_org_inqle_domain_Formula_concept" object="${formula}" z="+aoi7szJqNW8+geFQ9yT7mUKeRg="/>
+        <field:display field="expression" id="s_org_inqle_domain_Formula_expression" object="${formula}" z="3Vz/0iNPNE1iQot+/UieQ3SRp9M="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_Formula_updatedBy" object="${formula}" z="JkTSB94w+8wT6mxI+2aLiyVw60Y="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_Formula_createdBy" object="${formula}" z="Ah623AcUVmBtiiZ4kp+VqPxXc0A="/>
+        <field:display date="true" dateTimePattern="${formula_updated_date_format}" field="updated" id="s_org_inqle_domain_Formula_updated" object="${formula}" z="7MoBY1wLhNu63Ds7Zt/vduccKkQ="/>
+    </page:show>
+</div>

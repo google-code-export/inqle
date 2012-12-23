@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Datum" items="${data}" z="LDVnK5cmrj9R9bnzmKWCMrCAn00=">
+        <table:table data="${data}" id="l_org_inqle_domain_Datum" path="/data" z="dxrwg0G2dqDMA6SsLcpKLRPnR28=">
+            <table:column date="true" dateTimePattern="${datum_created_date_format}" id="c_org_inqle_domain_Datum_created" property="created" z="er5TZLRXiGlXblhXnONqS4ZJH3A="/>
+            <table:column id="c_org_inqle_domain_Datum_question" property="question" z="ZCVa+YqoowEVr9F/yTcwO2WHZWI="/>
+            <table:column id="c_org_inqle_domain_Datum_formula" property="formula" z="gpAGQKs7RV2nAAiJn5RRQg6L0Z0="/>
+            <table:column id="c_org_inqle_domain_Datum_participant" property="participant" z="SPf2+vxgZucpPxR6x9XEDom5eqE="/>
+            <table:column id="c_org_inqle_domain_Datum_updatedBy" property="updatedBy" z="f/ltd4iGGYWIWqv1sStASfqW+jo="/>
+            <table:column date="true" dateTimePattern="${datum_updated_date_format}" id="c_org_inqle_domain_Datum_updated" property="updated" z="TY3v7TogoYWhOE455AcyueR7arA="/>
+        </table:table>
+    </page:list>
+</div>

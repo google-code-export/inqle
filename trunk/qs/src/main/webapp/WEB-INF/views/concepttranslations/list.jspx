@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_ConceptTranslation" items="${concepttranslations}" z="6m14enOyo2mXEuyBGv9jHdP9oeY=">
+        <table:table data="${concepttranslations}" id="l_org_inqle_domain_ConceptTranslation" path="/concepttranslations" z="6UC/QekK57D5MO0m2jBQEJfhxak=">
+            <table:column date="true" dateTimePattern="${conceptTranslation_created_date_format}" id="c_org_inqle_domain_ConceptTranslation_created" property="created" z="oPxQPMN36UmyTnu7tvSZob9DLUo="/>
+            <table:column id="c_org_inqle_domain_ConceptTranslation_lang" property="lang" z="+jxQKH5Ruwnzx4vgd5Mrvt7uU0g="/>
+            <table:column id="c_org_inqle_domain_ConceptTranslation_concept" property="concept" z="2svkymJj5RLEkwg+94FeF9GdFGs="/>
+            <table:column id="c_org_inqle_domain_ConceptTranslation_conceptName" property="conceptName" z="snfsjROzNpw0zF3j4q6HNleijYo="/>
+            <table:column id="c_org_inqle_domain_ConceptTranslation_conceptDescription" property="conceptDescription" z="aHJcXtM3Ykgbfqk5azIbVz6KSkU="/>
+            <table:column date="true" dateTimePattern="${conceptTranslation_updated_date_format}" id="c_org_inqle_domain_ConceptTranslation_updated" property="updated" z="OpPvt2W5rYhfPUNTp9D8UG4c9hU="/>
+        </table:table>
+    </page:list>
+</div>

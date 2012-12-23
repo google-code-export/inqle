@@ -1,0 +1,17 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-20 10:20:37
+hint
+project --topLevelPackage org.inqle --java 6 --projectName qs
+hint
+jpa setup --database HYPERSONIC_IN_MEMORY --provider HIBERNATE
+hint
+entity jpa --class ~.domain.Question --testAutomatically 
+hint
+field date --type java.util.Date --fieldName created --future --notNull 
+field number --fieldName chronicity --type java.lang.Integer --digitsInteger 3 --min 0 --max 256 --digitsFraction 0
+entity jpa --class ~.domain.Concept --testAutomatically 
+field date --type java.util.Date --fieldName created --notNull --future
+field string --fieldName key --unique --sizeMax 255 --regexp "^[_a-zA-Z0-9]+$"
+field string --fieldName uri
+field reference --type ~.domain.Concept --fieldName concept --class ~.domain.Question --cardinality MANY_TO_ONE 
+controller all --package ~.web
+logging setup --level INFO --package ALL_SPRING

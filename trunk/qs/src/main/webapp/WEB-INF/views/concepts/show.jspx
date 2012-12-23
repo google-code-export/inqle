@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_Concept" object="${concept}" path="/concepts" z="bMFb6jATv77AUU20wjOnM8YH+is=">
+        <field:display field="conceptkey" id="s_org_inqle_domain_Concept_conceptkey" object="${concept}" z="esWXR+HQXt0naLNJYSux5PyAglQ="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_Concept_createdBy" object="${concept}" z="YN6GciXeFRmpaDSuEpN60Sn8KjE="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_Concept_updatedBy" object="${concept}" z="Tys5cXhAGwm4E3Lvxu/e5MYCL0Q="/>
+        <field:display date="true" dateTimePattern="${concept_updated_date_format}" field="updated" id="s_org_inqle_domain_Concept_updated" object="${concept}" z="L1QlOZdUWodayttF94h7Nh4OvcE="/>
+    </page:show>
+</div>
