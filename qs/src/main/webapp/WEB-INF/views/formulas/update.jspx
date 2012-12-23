@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_org_inqle_domain_Formula" modelAttribute="formula" path="/formulas" versionField="Version" z="6vH6UTEeo8NEirDlTI/5CiiFlVc=">
+        <field:select field="concept" id="c_org_inqle_domain_Formula_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="5zxsZTv+tlpZCEx404WDbNVmX6w="/>
+        <field:input field="expression" id="c_org_inqle_domain_Formula_expression" required="true" z="g6XeuZ0IZyeDueYmKcvV1n7q0mk="/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Formula_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="U6OG5nL6rU522+qExA6f5RCs7HY="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Formula_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="2UFrua5DMhhAwNRzyVCKbWLhV+s="/>
+        <field:datetime dateTimePattern="${formula_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Formula_updated" required="true" z="zB97+BjWe8o2b/rf3VpgS7r7UqA="/>
+    </form:update>
+</div>

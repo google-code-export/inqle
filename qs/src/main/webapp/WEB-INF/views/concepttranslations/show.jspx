@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_ConceptTranslation" object="${concepttranslation}" path="/concepttranslations" z="Wo1oSJAfg4nDF+AYudLjSeFwiZk=">
+        <field:display field="lang" id="s_org_inqle_domain_ConceptTranslation_lang" object="${concepttranslation}" z="8CqLB8HOtCYr2LVqP/kawueciEc="/>
+        <field:display field="concept" id="s_org_inqle_domain_ConceptTranslation_concept" object="${concepttranslation}" z="qnSJSQ3d8iwGwktjudFWDDJs0qg="/>
+        <field:display field="conceptName" id="s_org_inqle_domain_ConceptTranslation_conceptName" object="${concepttranslation}" z="2VLSiU72Bgur9Kw+Fc+sztWq2HI="/>
+        <field:display field="conceptDescription" id="s_org_inqle_domain_ConceptTranslation_conceptDescription" object="${concepttranslation}" z="3P1eHj3Ny6lRtRWJcYMNO+sduXQ="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_ConceptTranslation_createdBy" object="${concepttranslation}" z="lOcMLMNhKBzgGemYV8IFcx9/4Ho="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_ConceptTranslation_updatedBy" object="${concepttranslation}" z="VHptvjshSWrfawouBHH+hXyJRLw="/>
+        <field:display date="true" dateTimePattern="${conceptTranslation_updated_date_format}" field="updated" id="s_org_inqle_domain_ConceptTranslation_updated" object="${concepttranslation}" z="VM4jkiQ5Kk7EKiKKcyk3gUdn824="/>
+    </page:show>
+</div>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_org_inqle_domain_Answer" modelAttribute="answer" path="/answers" versionField="Version" z="E45DOJcS/oL+5EUHyqqUxudEt84=">
+        <field:input field="lang" id="c_org_inqle_domain_Answer_lang" z="PJQTqrGu3/1kKRcBnzpqP9d0cdA="/>
+        <field:select field="datum" id="c_org_inqle_domain_Answer_datum" itemValue="id" items="${data}" path="/data" required="true" z="1aAZC4/PX6Q59Xf05XABsAer12w="/>
+        <field:select field="question" id="c_org_inqle_domain_Answer_question" itemValue="id" items="${questions}" path="/questions" required="true" z="nPXF8nBmd75Ir3ERSkd5c43KEBM="/>
+    </form:update>
+</div>

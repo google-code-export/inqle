@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_Question" object="${question}" path="/questions" z="RU+i2qgluDnv6fYqU8SjIoV0veM=">
+        <field:display field="chronicity" id="s_org_inqle_domain_Question_chronicity" object="${question}" z="kP05Vcaa8OkLrAJxJjF9lFGA5co="/>
+        <field:display field="lang" id="s_org_inqle_domain_Question_lang" object="${question}" z="bkMiy1KxT42+4iocOMnT3Kq95Lw="/>
+        <field:display field="concept" id="s_org_inqle_domain_Question_concept" object="${question}" z="oZ8+/vMc89PGMRwEtDa/U6qFN60="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_Question_createdBy" object="${question}" z="NGWm75Gi/wo1QRM6nHkaAOfrUts="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_Question_updatedBy" object="${question}" z="azHL/lbsvBaKWefSIxl2u0sNS2Q="/>
+        <field:display date="true" dateTimePattern="${question_updated_date_format}" field="updated" id="s_org_inqle_domain_Question_updated" object="${question}" z="5GQBlWdVZlbd9si8rCZp4vhXZ0g="/>
+    </page:show>
+</div>

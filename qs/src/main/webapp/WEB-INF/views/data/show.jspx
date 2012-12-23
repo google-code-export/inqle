@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_Datum" object="${datum}" path="/data" z="Btpt05ninHQRLkXfmgzWlIGoN0M=">
+        <field:display field="question" id="s_org_inqle_domain_Datum_question" object="${datum}" z="UybryIAHw+G7kkfozfF52D/IR70="/>
+        <field:display field="formula" id="s_org_inqle_domain_Datum_formula" object="${datum}" z="FFMja0KhRBHzlIzgJWUgq7KhdVM="/>
+        <field:display field="participant" id="s_org_inqle_domain_Datum_participant" object="${datum}" z="fSvKJXBnB17j5cVVmTHNk6ktmYE="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_Datum_updatedBy" object="${datum}" z="CwXMMChD9UG6yvQN0IGu3MJCjMM="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_Datum_createdBy" object="${datum}" z="PRYRZBmRw7NHQQJVwIMVM4JN2J8="/>
+        <field:display date="true" dateTimePattern="${datum_updated_date_format}" field="updated" id="s_org_inqle_domain_Datum_updated" object="${datum}" z="CqQ0V0Gw4q3OiPoqovv/XWPe/ds="/>
+        <field:display field="numericValue" id="s_org_inqle_domain_Datum_numericValue" object="${datum}" z="6bjFCHuj3mbvGFF/q1zanx1fFWo="/>
+        <field:display field="textValue" id="s_org_inqle_domain_Datum_textValue" object="${datum}" z="D6KPNFmyGmWDmwT7MdHOc3BeyQo="/>
+        <field:display field="choice" id="s_org_inqle_domain_Datum_choice" object="${datum}" z="RpCWxp8vuxY7cRSRwevP5Qup31U="/>
+        <field:display field="normalizedValue" id="s_org_inqle_domain_Datum_normalizedValue" object="${datum}" z="ASXixP+e7q7RXWY3ObFI6aAuUXo="/>
+        <field:display field="unit" id="s_org_inqle_domain_Datum_unit" object="${datum}" z="SLHrz7ovXGF93ZW7DTVL7IZZ1KQ="/>
+        <field:display field="canonicalUnit" id="s_org_inqle_domain_Datum_canonicalUnit" object="${datum}" z="pwbM6fGfDjfhG+o4GHJIyaCIcgs="/>
+        <field:display field="canonicalValue" id="s_org_inqle_domain_Datum_canonicalValue" object="${datum}" z="r+NCqEzU4qM6qny9SHy5oYRkggw="/>
+    </page:show>
+</div>

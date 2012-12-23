@@ -1,0 +1,172 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 06:51:07
+hint
+project --topLevelPackage org.inqle --java 6 --projectName qs
+hint
+jpa setup --database HYPERSONIC_IN_MEMORY --provider HIBERNATE
+hint
+entity jpa --class ~.domain.Question --testAutomatically 
+hint
+field date --type java.util.Date --fieldName created --future --notNull 
+field number --fieldName chronicity --type java.lang.Integer --digitsInteger 3 --min 0 --max 256 --digitsFraction 0
+entity jpa --class ~.domain.Concept --testAutomatically 
+field date --type java.util.Date --fieldName created --notNull --future
+// [failed] field string --fieldName key --unique --sizeMax 255 --regexp "^[_a-zA-Z0-9]+$"
+// [failed] script --file qs.roo
+hint
+entity jpa --class ~.domain.ConceptTranslation --testAutomatically 
+entity jpa --class ~.domain.Answer --testAutomatically 
+entity jpa --class ~.domain.Datum --testAutomatically 
+entity jpa --class ~.domain.Formula --testAutomatically 
+hint
+field date --type java.util.Date --fieldName created --future --notNull --persistenceType JPA_TIMESTAMP 
+field date --type java.util.Date --fieldName created --future --notNull --persistenceType JPA_TIMESTAMP --class ~.domain.Answer
+field date --type java.util.Date --fieldName created --future --notNull --persistenceType JPA_TIMESTAMP --class ~.domain.Datum
+// [failed] field date --type java.util.Date --fieldName created --future --notNull --persistenceType JPA_TIMESTAMP --class ~.domain.Concept
+field date --type java.util.Date --fieldName created --future --notNull --persistenceType JPA_TIMESTAMP --class ~.domain.ConceptTranslation
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 09:25:35
+hint
+help
+addon list
+hint
+field string --fieldName lang --class ~.domain.Answer
+field string --fieldName lang --class ~.domain.ConceptTranslation
+field string --fieldName lang --class ~.domain.Question
+// [failed] field string --fieldName lang --class ~.domain.Question --sizeMin 2 --sizeMax 255
+hint
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 09:48:15
+hint
+help
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-21 09:55:43
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 09:55:49
+hint --topic selenium
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-21 09:57:35
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 10:13:58
+controller all --package ~.web
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-21 10:15:45
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 10:20:09
+// [failed] selenium test --controller ~.domain.Question
+security setup
+// [failed] entity jpa --class ~.domain.Account --testAutomatically
+// [failed] field string --class ~.domain.Account --fieldName username --notNull
+// [failed] entity jpa --class ~.domain.Account --testAutomatically --permitReservedWords 
+// [failed] entity jpa --class ~.domain.Acct --testAutomatically --permitReservedWords 
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-21 11:23:32
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 11:23:38
+entity jpa --class ~.domain.Account
+field string --fieldName username --notNull --sizeMax 255 --sizeMin 1 
+field string --fieldName password --notNull --sizeMax 255 --sizeMin 1 
+// [failed] field string --fieldName password --notNull --sizeMax 255 --sizeMin 1
+// [failed] field string --fieldName password --notNull --sizeMax 255 --sizeMin 1
+// [failed] entity jpa --class ~.domain.Role --testAutomatically 
+entity jpa --class ~.domain.UserRole --testAutomatically 
+focus --class ~.domain.Account
+field set --type ~.domain.UserRole --fieldName roles
+focus --class ~.domain.Concept
+focus --class ~.domain.ConceptTranslation
+field reference --type ~.domain.Concept --fieldName concept --cardinality MANY_TO_ONE --notNull 
+focus --class answer
+field reference --fieldName datum --type datum --notNull --cardinality ONE_TO_ONE 
+focus --class formula
+field reference --fieldName concept --type concept --notNull --cardinality MANY_TO_ONE 
+focus --class question
+field reference --fieldName concept --type concept --notNull --cardinality MANY_TO_ONE 
+focus --class answer
+field reference --fieldName question --type question --notNull --cardinality MANY_TO_ONE 
+focus --class question
+focus --class formula
+field string --fieldName expression
+// [failed] focus --class conce
+focus --class concept
+// [failed] field string --fieldName key --unique --regexp "^[_A-Za-z0-9]$"
+field string --fieldName conceptkey --unique --regexp "^[_A-Za-z0-9]$"
+// [failed] focus --class concepttranslation
+focus --class conceptTranslation
+field string --fieldName conceptName
+field string --fieldName conceptDescription
+focus --class datum
+field reference --fieldName question --type ~.domain.Question --cardinality MANY_TO_ONE
+// [failed] field reference --fieldName question --type ~.domain.Formula --cardinality MANY_TO_ONE
+field reference --fieldName formula --type ~.domain.Formula --cardinality MANY_TO_ONE
+field reference --fieldName answer --type ~.domain.Answer --cardinality ONE_TO_ONE
+entity jpa --class ~.domain.LatestUserDatum --testAutomatically
+field reference --type Concept --fieldName concept --cardinality MANY_TO_ONE --notNull
+field reference --type Datum --fieldName datum --cardinality MANY_TO_ONE --notNull
+// [failed] entity jpa --class ~.domain.User --testAutomatically
+entity jpa --class ~.domain.Participant --testAutomatically
+entity jpa --class ~.domain.LatestParticipantDatum --testAutomatically
+field reference --type Datum --fieldName datum --cardinality MANY_TO_ONE --notNull
+field reference --type Concept --fieldName concept --cardinality MANY_TO_ONE --notNull
+field reference --type Participant --fieldName participant --cardinality MANY_TO_ONE --notNull
+focus --class datum
+field reference --type Participant --fieldName participant --cardinality MANY_TO_ONE --notNull
+focus --class ~.domain.LatestParticipantDatum
+// [failed] field reference --type Participant --fieldName participant --cardinality MANY_TO_ONE --notNull
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-21 17:16:32
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 17:21:24
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-21 17:21:57
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-21 21:18:58
+service --interface ~.service.Asker --entity ~.domain.Question
+web mvc json all
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-22 11:17:19
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-22 11:17:31
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-22 14:39:17
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-22 14:55:39
+entity jpa --class ~.domain.Choice --testAutomatically 
+entity jpa --class ~.domain.ChoiceTranslation --testAutomatically 
+field reference --type Choice --fieldName choice --cardinality MANY_TO_ONE --notNull
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+focus --class Choice
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+focus --class Concept
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+focus --class Choice
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+focus --class choiceTranslation
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+focus --class datum
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+focus --class conceptTranslation
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+focus --class participant
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+focus --class question
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+focus --class formula
+field reference --type Account --fieldName updatedBy --cardinality MANY_TO_ONE
+field reference --type Account --fieldName createdBy --cardinality MANY_TO_ONE
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-22 22:27:37
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-22 22:27:46
+// [failed] focus --class formula
+// [failed] focus --class Formula
+focus --class ~.domain.Formula
+field number --fieldName doubleValue --type java.lang.Double
+focus --class datum
+field number --fieldName numericValue --type java.lang.Double
+field string --fieldName textValue --notNull
+field reference --fieldName choice --type Choice --cardinality MANY_TO_ONE 
+field number --fieldName normalizedValue --type java.lang.Double
+field number --fieldName referenceValue --type java.lang.Double
+entity jpa --class ~.domain.Unit --testAutomatically 
+focus --class datum
+field reference --type Unit --fieldName unit
+field reference --type Unit --fieldName canonicalUnit
+field number --fieldName canonicalValue --type java.lang.Double
+finder list 
+finder list --filter Participant,Concept
+finder list --filter "Participant,Concept"
+finder list --filter "Participant,Concept" --depth 2
+finder add --finderName findDataByParticipantAndConcept

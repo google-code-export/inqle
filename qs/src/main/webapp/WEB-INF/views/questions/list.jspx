@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Question" items="${questions}" z="t5ujL1mJZf8KmJvHuwy7d910XsE=">
+        <table:table data="${questions}" id="l_org_inqle_domain_Question" path="/questions" z="JkdSXfTgjFpfea8LfcKXM0OtSl8=">
+            <table:column date="true" dateTimePattern="${question_created_date_format}" id="c_org_inqle_domain_Question_created" property="created" z="4Hjq7AGiuuMlE7T2jnCTOkfmhZM="/>
+            <table:column id="c_org_inqle_domain_Question_chronicity" property="chronicity" z="1XUckqkCplnDeABkSy/bMTr3eCo="/>
+            <table:column id="c_org_inqle_domain_Question_lang" property="lang" z="l8gVMJvL66OhJqewGAHTlshjbo0="/>
+            <table:column id="c_org_inqle_domain_Question_concept" property="concept" z="WcKTeFQTZ5ROOWN6QLy/3JWldds="/>
+            <table:column id="c_org_inqle_domain_Question_createdBy" property="createdBy" z="biW9mpSCLUSwcEUdANM/4+c6TW4="/>
+            <table:column date="true" dateTimePattern="${question_updated_date_format}" id="c_org_inqle_domain_Question_updated" property="updated" z="c1l0iAb5zRfXi+Yx9UbL/rNzrdk="/>
+        </table:table>
+    </page:list>
+</div>

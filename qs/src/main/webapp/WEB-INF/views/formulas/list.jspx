@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Formula" items="${formulas}" z="5Fl0FsSuKvsC04vvawZ4LDlIb/4=">
+        <table:table data="${formulas}" id="l_org_inqle_domain_Formula" path="/formulas" z="bDKyqLZHyaXw0+ssUD2fcfcP6hs=">
+            <table:column date="true" dateTimePattern="${formula_created_date_format}" id="c_org_inqle_domain_Formula_created" property="created" z="7/f90CjqPAjdZNQXt9HdZ2MBNkA="/>
+            <table:column id="c_org_inqle_domain_Formula_concept" property="concept" z="BY86xF3IMeGNXF1VOYzIm0sxBeE="/>
+            <table:column id="c_org_inqle_domain_Formula_expression" property="expression" z="dWfaRL9p7EZvL3YKtKVrIwGXN1k="/>
+            <table:column id="c_org_inqle_domain_Formula_updatedBy" property="updatedBy" z="evNzqSDXpm2k+UcUKqASSFOHjZQ="/>
+            <table:column id="c_org_inqle_domain_Formula_createdBy" property="createdBy" z="PNfzv8dM9+1DQhcyAePf3BZWqr8="/>
+            <table:column date="true" dateTimePattern="${formula_updated_date_format}" id="c_org_inqle_domain_Formula_updated" property="updated" z="cIzrQSiMk1DQKPJswKDcV86plII="/>
+        </table:table>
+    </page:list>
+</div>
