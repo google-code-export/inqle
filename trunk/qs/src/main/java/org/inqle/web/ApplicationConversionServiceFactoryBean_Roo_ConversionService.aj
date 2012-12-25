@@ -8,7 +8,10 @@ import org.inqle.domain.ConceptTranslation;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Question;
+import org.inqle.repository.DatumRepository;
+import org.inqle.repository.QuestionRepository;
 import org.inqle.web.ApplicationConversionServiceFactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
@@ -16,6 +19,12 @@ import org.springframework.format.FormatterRegistry;
 privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService {
     
     declare @type: ApplicationConversionServiceFactoryBean: @Configurable;
+    
+    @Autowired
+    DatumRepository ApplicationConversionServiceFactoryBean.datumRepository;
+    
+    @Autowired
+    QuestionRepository ApplicationConversionServiceFactoryBean.questionRepository;
     
     public Converter<Concept, String> ApplicationConversionServiceFactoryBean.getConceptToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Concept, java.lang.String>() {
@@ -76,7 +85,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Datum> ApplicationConversionServiceFactoryBean.getIdToDatumConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Datum>() {
             public org.inqle.domain.Datum convert(java.lang.Long id) {
-                return Datum.findDatum(id);
+                return datumRepository.findOne(id);
             }
         };
     }
@@ -124,7 +133,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Question> ApplicationConversionServiceFactoryBean.getIdToQuestionConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Question>() {
             public org.inqle.domain.Question convert(java.lang.Long id) {
-                return Question.findQuestion(id);
+                return questionRepository.findOne(id);
             }
         };
     }

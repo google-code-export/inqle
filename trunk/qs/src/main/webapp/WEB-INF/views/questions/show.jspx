@@ -9,5 +9,6 @@
         <field:display field="createdBy" id="s_org_inqle_domain_Question_createdBy" object="${question}" z="NGWm75Gi/wo1QRM6nHkaAOfrUts="/>
         <field:display field="updatedBy" id="s_org_inqle_domain_Question_updatedBy" object="${question}" z="azHL/lbsvBaKWefSIxl2u0sNS2Q="/>
         <field:display date="true" dateTimePattern="${question_updated_date_format}" field="updated" id="s_org_inqle_domain_Question_updated" object="${question}" z="5GQBlWdVZlbd9si8rCZp4vhXZ0g="/>
+        <field:display field="priority" id="s_org_inqle_domain_Question_priority" object="${question}" z="VmKqYIbo1zXAk5WoQkTCmZ7xkXs="/>
     </page:show>
 </div>

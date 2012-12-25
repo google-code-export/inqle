@@ -5,7 +5,9 @@ package org.inqle.domain;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -41,11 +43,17 @@ privileged aspect LatestParticipantDatumDataOnDemand_Roo_DataOnDemand {
     
     public LatestParticipantDatum LatestParticipantDatumDataOnDemand.getNewTransientLatestParticipantDatum(int index) {
         LatestParticipantDatum obj = new LatestParticipantDatum();
+        setAskableAfter(obj, index);
         setConcept(obj, index);
         setCreated(obj, index);
         setDatum(obj, index);
         setParticipant(obj, index);
         return obj;
+    }
+    
+    public void LatestParticipantDatumDataOnDemand.setAskableAfter(LatestParticipantDatum obj, int index) {
+        Date askableAfter = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
+        obj.setAskableAfter(askableAfter);
     }
     
     public void LatestParticipantDatumDataOnDemand.setConcept(LatestParticipantDatum obj, int index) {

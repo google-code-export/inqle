@@ -20,7 +20,7 @@ privileged aspect DatumController_Roo_Controller_Json {
     @RequestMapping(value = "/{id}", headers = "Accept=application/json")
     @ResponseBody
     public ResponseEntity<String> DatumController.showJson(@PathVariable("id") Long id) {
-        Datum datum = Datum.findDatum(id);
+        Datum datum = datumRepository.findOne(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         if (datum == null) {
@@ -34,14 +34,14 @@ privileged aspect DatumController_Roo_Controller_Json {
     public ResponseEntity<String> DatumController.listJson() {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        List<Datum> result = Datum.findAllData();
+        List<Datum> result = datumRepository.findAll();
         return new ResponseEntity<String>(Datum.toJsonArray(result), headers, HttpStatus.OK);
     }
     
     @RequestMapping(method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> DatumController.createFromJson(@RequestBody String json) {
         Datum datum = Datum.fromJsonToDatum(json);
-        datum.persist();
+        datumRepository.save(datum);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -50,7 +50,7 @@ privileged aspect DatumController_Roo_Controller_Json {
     @RequestMapping(value = "/jsonArray", method = RequestMethod.POST, headers = "Accept=application/json")
     public ResponseEntity<String> DatumController.createFromJsonArray(@RequestBody String json) {
         for (Datum datum: Datum.fromJsonArrayToData(json)) {
-            datum.persist();
+            datumRepository.save(datum);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -62,7 +62,7 @@ privileged aspect DatumController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         Datum datum = Datum.fromJsonToDatum(json);
-        if (datum.merge() == null) {
+        if (datumRepository.save(datum) == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<String>(headers, HttpStatus.OK);
@@ -73,7 +73,7 @@ privileged aspect DatumController_Roo_Controller_Json {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         for (Datum datum: Datum.fromJsonArrayToData(json)) {
-            if (datum.merge() == null) {
+            if (datumRepository.save(datum) == null) {
                 return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
             }
         }
@@ -82,13 +82,13 @@ privileged aspect DatumController_Roo_Controller_Json {
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = "Accept=application/json")
     public ResponseEntity<String> DatumController.deleteFromJson(@PathVariable("id") Long id) {
-        Datum datum = Datum.findDatum(id);
+        Datum datum = datumRepository.findOne(id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         if (datum == null) {
             return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
         }
-        datum.remove();
+        datumRepository.delete(datum);
         return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
     
