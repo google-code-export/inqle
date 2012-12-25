@@ -16,6 +16,7 @@ import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
 import org.inqle.domain.Question;
 import org.inqle.domain.QuestionDataOnDemand;
+import org.inqle.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,9 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     @Autowired
     ConceptDataOnDemand QuestionDataOnDemand.conceptDataOnDemand;
     
+    @Autowired
+    QuestionRepository QuestionDataOnDemand.questionRepository;
+    
     public Question QuestionDataOnDemand.getNewTransientQuestion(int index) {
         Question obj = new Question();
         setChronicity(obj, index);
@@ -37,6 +41,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         setCreated(obj, index);
         setCreatedBy(obj, index);
         setLang(obj, index);
+        setPriority(obj, index);
         setUpdated(obj, index);
         setUpdatedBy(obj, index);
         return obj;
@@ -70,6 +75,11 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         obj.setLang(lang);
     }
     
+    public void QuestionDataOnDemand.setPriority(Question obj, int index) {
+        int priority = index;
+        obj.setPriority(priority);
+    }
+    
     public void QuestionDataOnDemand.setUpdated(Question obj, int index) {
         Date updated = new Date(new Date().getTime() + 10000000L);
         obj.setUpdated(updated);
@@ -90,14 +100,14 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         }
         Question obj = data.get(index);
         Long id = obj.getId();
-        return Question.findQuestion(id);
+        return questionRepository.findOne(id);
     }
     
     public Question QuestionDataOnDemand.getRandomQuestion() {
         init();
         Question obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Question.findQuestion(id);
+        return questionRepository.findOne(id);
     }
     
     public boolean QuestionDataOnDemand.modifyQuestion(Question obj) {
@@ -107,7 +117,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     public void QuestionDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Question.findQuestionEntries(from, to);
+        data = questionRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Question' illegally returned null");
         }
@@ -119,7 +129,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Question obj = getNewTransientQuestion(i);
             try {
-                obj.persist();
+                questionRepository.save(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -128,7 +138,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new RuntimeException(msg.toString(), e);
             }
-            obj.flush();
+            questionRepository.flush();
             data.add(obj);
         }
     }

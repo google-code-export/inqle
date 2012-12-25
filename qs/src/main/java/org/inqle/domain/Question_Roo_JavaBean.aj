@@ -66,4 +66,12 @@ privileged aspect Question_Roo_JavaBean {
         this.updatedBy = updatedBy;
     }
     
+    public int Question.getPriority() {
+        return this.priority;
+    }
+    
+    public void Question.setPriority(int priority) {
+        this.priority = priority;
+    }
+    
 }

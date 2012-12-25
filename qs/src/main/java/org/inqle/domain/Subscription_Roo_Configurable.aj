@@ -3,11 +3,11 @@
 
 package org.inqle.domain;
 
-import org.inqle.domain.Question;
+import org.inqle.domain.Subscription;
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect Question_Roo_Configurable {
+privileged aspect Subscription_Roo_Configurable {
     
-    declare @type: Question: @Configurable;
+    declare @type: Subscription: @Configurable;
     
 }

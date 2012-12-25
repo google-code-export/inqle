@@ -43,4 +43,12 @@ privileged aspect LatestParticipantDatum_Roo_JavaBean {
         this.participant = participant;
     }
     
+    public Date LatestParticipantDatum.getAskableAfter() {
+        return this.askableAfter;
+    }
+    
+    public void LatestParticipantDatum.setAskableAfter(Date askableAfter) {
+        this.askableAfter = askableAfter;
+    }
+    
 }

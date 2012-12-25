@@ -7,6 +7,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -15,7 +16,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
-public class LatestParticipantDatum {
+public class Subscription {
 
     @NotNull
     @Column(updatable = false)
@@ -24,19 +25,18 @@ public class LatestParticipantDatum {
     @DateTimeFormat(style = "M-")
     private Date created = new Date();
 
+    @ManyToOne
+    private Account createdBy;
+    
     @NotNull
     @ManyToOne
-    private Datum datum;
-
-    @NotNull
-    @ManyToOne
-    private Concept concept;
+    private Question question;
 
     @NotNull
     @ManyToOne
     private Participant participant;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
-    private Date askableAfter;
+    @NotNull
+    @Value("0")
+    private int rank;
 }

@@ -9,6 +9,7 @@
         <field:select field="createdBy" id="c_org_inqle_domain_Question_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="N5GVDi5xzxEi65Xz6v3qmLuHwF0="/>
         <field:select field="updatedBy" id="c_org_inqle_domain_Question_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="CgWYsr7n0fxeKHm3dC/WLN7JcfQ="/>
         <field:datetime dateTimePattern="${question_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Question_updated" required="true" z="0ddZM+WVzipLbliAcgm0CDjLTqQ="/>
+        <field:input field="priority" id="c_org_inqle_domain_Question_priority" required="true" z="6GEKjA47TogZEbv2LYKW8P17ieo="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_org_inqle_domain_Question" render="${not empty dependencies}" z="Y2RVpl2KBolIzj61i9ebTGaSswo="/>
 </div>

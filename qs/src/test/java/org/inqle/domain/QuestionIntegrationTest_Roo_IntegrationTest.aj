@@ -4,9 +4,9 @@
 package org.inqle.domain;
 
 import java.util.List;
-import org.inqle.domain.Question;
 import org.inqle.domain.QuestionDataOnDemand;
 import org.inqle.domain.QuestionIntegrationTest;
+import org.inqle.repository.QuestionRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,42 +26,45 @@ privileged aspect QuestionIntegrationTest_Roo_IntegrationTest {
     @Autowired
     QuestionDataOnDemand QuestionIntegrationTest.dod;
     
+    @Autowired
+    QuestionRepository QuestionIntegrationTest.questionRepository;
+    
     @Test
-    public void QuestionIntegrationTest.testCountQuestions() {
+    public void QuestionIntegrationTest.testCount() {
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", dod.getRandomQuestion());
-        long count = Question.countQuestions();
+        long count = questionRepository.count();
         Assert.assertTrue("Counter for 'Question' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void QuestionIntegrationTest.testFindQuestion() {
+    public void QuestionIntegrationTest.testFind() {
         Question obj = dod.getRandomQuestion();
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Question' failed to provide an identifier", id);
-        obj = Question.findQuestion(id);
+        obj = questionRepository.findOne(id);
         Assert.assertNotNull("Find method for 'Question' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Question' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void QuestionIntegrationTest.testFindAllQuestions() {
+    public void QuestionIntegrationTest.testFindAll() {
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", dod.getRandomQuestion());
-        long count = Question.countQuestions();
+        long count = questionRepository.count();
         Assert.assertTrue("Too expensive to perform a find all test for 'Question', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Question> result = Question.findAllQuestions();
+        List<Question> result = questionRepository.findAll();
         Assert.assertNotNull("Find all method for 'Question' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Question' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void QuestionIntegrationTest.testFindQuestionEntries() {
+    public void QuestionIntegrationTest.testFindEntries() {
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", dod.getRandomQuestion());
-        long count = Question.countQuestions();
+        long count = questionRepository.count();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Question> result = Question.findQuestionEntries(firstResult, maxResults);
+        List<Question> result = questionRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
         Assert.assertNotNull("Find entries method for 'Question' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Question' returned an incorrect number of entries", count, result.size());
     }
@@ -72,50 +75,50 @@ privileged aspect QuestionIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Question' failed to provide an identifier", id);
-        obj = Question.findQuestion(id);
+        obj = questionRepository.findOne(id);
         Assert.assertNotNull("Find method for 'Question' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyQuestion(obj);
         Integer currentVersion = obj.getVersion();
-        obj.flush();
+        questionRepository.flush();
         Assert.assertTrue("Version for 'Question' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void QuestionIntegrationTest.testMergeUpdate() {
+    public void QuestionIntegrationTest.testSaveUpdate() {
         Question obj = dod.getRandomQuestion();
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Question' failed to provide an identifier", id);
-        obj = Question.findQuestion(id);
+        obj = questionRepository.findOne(id);
         boolean modified =  dod.modifyQuestion(obj);
         Integer currentVersion = obj.getVersion();
-        Question merged = obj.merge();
-        obj.flush();
+        Question merged = questionRepository.save(obj);
+        questionRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Question' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void QuestionIntegrationTest.testPersist() {
+    public void QuestionIntegrationTest.testSave() {
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", dod.getRandomQuestion());
         Question obj = dod.getNewTransientQuestion(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Question' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Question' identifier to be null", obj.getId());
-        obj.persist();
-        obj.flush();
+        questionRepository.save(obj);
+        questionRepository.flush();
         Assert.assertNotNull("Expected 'Question' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void QuestionIntegrationTest.testRemove() {
+    public void QuestionIntegrationTest.testDelete() {
         Question obj = dod.getRandomQuestion();
         Assert.assertNotNull("Data on demand for 'Question' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Question' failed to provide an identifier", id);
-        obj = Question.findQuestion(id);
-        obj.remove();
-        obj.flush();
-        Assert.assertNull("Failed to remove 'Question' with identifier '" + id + "'", Question.findQuestion(id));
+        obj = questionRepository.findOne(id);
+        questionRepository.delete(obj);
+        questionRepository.flush();
+        Assert.assertNull("Failed to remove 'Question' with identifier '" + id + "'", questionRepository.findOne(id));
     }
     
 }

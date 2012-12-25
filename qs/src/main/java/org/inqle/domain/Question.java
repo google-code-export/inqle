@@ -10,16 +10,19 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
+import org.springframework.roo.addon.solr.RooSolrSearchable;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJson
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord
+@RooJpaEntity
+@RooSolrSearchable
 public class Question {
 
     @NotNull
@@ -34,7 +37,7 @@ public class Question {
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date updated = null;
-    
+
     @Min(0L)
     @Max(256L)
     @Digits(integer = 3, fraction = 0)
@@ -51,4 +54,8 @@ public class Question {
 
     @ManyToOne
     private Account updatedBy;
+
+    @NotNull
+    @Value("100")
+    private int priority;
 }

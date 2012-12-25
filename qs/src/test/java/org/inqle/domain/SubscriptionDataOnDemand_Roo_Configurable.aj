@@ -3,11 +3,11 @@
 
 package org.inqle.domain;
 
-import org.inqle.domain.Datum;
+import org.inqle.domain.SubscriptionDataOnDemand;
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect Datum_Roo_Configurable {
+privileged aspect SubscriptionDataOnDemand_Roo_Configurable {
     
-    declare @type: Datum: @Configurable;
+    declare @type: SubscriptionDataOnDemand: @Configurable;
     
 }
