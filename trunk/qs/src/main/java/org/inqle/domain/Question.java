@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.solr.RooSolrSearchable;
@@ -27,20 +28,14 @@ public class Question {
 
     @NotNull
     @Column(updatable = false)
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date created = new Date();
 
-    @NotNull
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date updated = null;
 
-    @Min(0L)
-    @Max(256L)
-    @Digits(integer = 3, fraction = 0)
     private Integer chronicity;
 
     private String lang;
@@ -58,4 +53,11 @@ public class Question {
     @NotNull
     @Value("100")
     private int priority;
+
+    private String text;
+
+    @NotNull
+    private String tag;
+
+    private String abbreviation;
 }

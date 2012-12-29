@@ -11,8 +11,10 @@ import javax.validation.Valid;
 import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Question;
+import org.inqle.repository.QuestionRepository;
 import org.inqle.web.QuestionController;
 import org.joda.time.format.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,9 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 privileged aspect QuestionController_Roo_Controller {
+    
+    @Autowired
+    QuestionRepository QuestionController.questionRepository;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String QuestionController.create(@Valid Question question, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {

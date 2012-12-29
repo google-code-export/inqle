@@ -14,7 +14,6 @@ import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Participant;
 import org.inqle.domain.Unit;
-import org.inqle.repository.DatumRepository;
 import org.inqle.repository.QuestionRepository;
 import org.inqle.web.DatumController;
 import org.joda.time.format.DateTimeFormat;
@@ -32,9 +31,6 @@ import org.springframework.web.util.WebUtils;
 privileged aspect DatumController_Roo_Controller {
     
     @Autowired
-    DatumRepository DatumController.datumRepository;
-    
-    @Autowired
     QuestionRepository DatumController.questionRepository;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
@@ -44,7 +40,7 @@ privileged aspect DatumController_Roo_Controller {
             return "data/create";
         }
         uiModel.asMap().clear();
-        datumRepository.save(datum);
+        datum.persist();
         return "redirect:/data/" + encodeUrlPathSegment(datum.getId().toString(), httpServletRequest);
     }
     
@@ -62,7 +58,7 @@ privileged aspect DatumController_Roo_Controller {
     @RequestMapping(value = "/{id}", produces = "text/html")
     public String DatumController.show(@PathVariable("id") Long id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("datum", datumRepository.findOne(id));
+        uiModel.addAttribute("datum", Datum.findDatum(id));
         uiModel.addAttribute("itemId", id);
         return "data/show";
     }
@@ -72,11 +68,11 @@ privileged aspect DatumController_Roo_Controller {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             final int firstResult = page == null ? 0 : (page.intValue() - 1) * sizeNo;
-            uiModel.addAttribute("data", datumRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / sizeNo, sizeNo)).getContent());
-            float nrOfPages = (float) datumRepository.count() / sizeNo;
+            uiModel.addAttribute("data", Datum.findDatumEntries(firstResult, sizeNo));
+            float nrOfPages = (float) Datum.countData() / sizeNo;
             uiModel.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            uiModel.addAttribute("data", datumRepository.findAll());
+            uiModel.addAttribute("data", Datum.findAllData());
         }
         addDateTimeFormatPatterns(uiModel);
         return "data/list";
@@ -89,20 +85,20 @@ privileged aspect DatumController_Roo_Controller {
             return "data/update";
         }
         uiModel.asMap().clear();
-        datumRepository.save(datum);
+        datum.merge();
         return "redirect:/data/" + encodeUrlPathSegment(datum.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String DatumController.updateForm(@PathVariable("id") Long id, Model uiModel) {
-        populateEditForm(uiModel, datumRepository.findOne(id));
+        populateEditForm(uiModel, Datum.findDatum(id));
         return "data/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
     public String DatumController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Datum datum = datumRepository.findOne(id);
-        datumRepository.delete(datum);
+        Datum datum = Datum.findDatum(id);
+        datum.remove();
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());

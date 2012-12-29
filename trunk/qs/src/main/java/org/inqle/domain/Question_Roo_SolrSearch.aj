@@ -56,9 +56,12 @@ privileged aspect Question_Roo_SolrSearch {
             sid.addField("question.createdby_t", question.getCreatedBy());
             sid.addField("question.updatedby_t", question.getUpdatedBy());
             sid.addField("question.priority_i", question.getPriority());
+            sid.addField("question.text_s", question.getText());
+            sid.addField("question.tag_s", question.getTag());
+            sid.addField("question.abbreviation_s", question.getAbbreviation());
             sid.addField("question.id_l", question.getId());
             // Add summary field to allow searching documents for objects of this type
-            sid.addField("question_solrsummary_t", new StringBuilder().append(question.getCreated()).append(" ").append(question.getUpdated()).append(" ").append(question.getChronicity()).append(" ").append(question.getLang()).append(" ").append(question.getConcept()).append(" ").append(question.getCreatedBy()).append(" ").append(question.getUpdatedBy()).append(" ").append(question.getPriority()).append(" ").append(question.getId()));
+            sid.addField("question_solrsummary_t", new StringBuilder().append(question.getCreated()).append(" ").append(question.getUpdated()).append(" ").append(question.getChronicity()).append(" ").append(question.getLang()).append(" ").append(question.getConcept()).append(" ").append(question.getCreatedBy()).append(" ").append(question.getUpdatedBy()).append(" ").append(question.getPriority()).append(" ").append(question.getText()).append(" ").append(question.getTag()).append(" ").append(question.getAbbreviation()).append(" ").append(question.getId()));
             documents.add(sid);
         }
         try {

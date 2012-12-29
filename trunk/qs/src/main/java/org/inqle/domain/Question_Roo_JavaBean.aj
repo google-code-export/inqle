@@ -74,4 +74,28 @@ privileged aspect Question_Roo_JavaBean {
         this.priority = priority;
     }
     
+    public String Question.getText() {
+        return this.text;
+    }
+    
+    public void Question.setText(String text) {
+        this.text = text;
+    }
+    
+    public String Question.getTag() {
+        return this.tag;
+    }
+    
+    public void Question.setTag(String tag) {
+        this.tag = tag;
+    }
+    
+    public String Question.getAbbreviation() {
+        return this.abbreviation;
+    }
+    
+    public void Question.setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
+    
 }

@@ -5,11 +5,13 @@ package org.inqle.domain;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.inqle.domain.Account;
 import org.inqle.domain.Survey;
 import org.inqle.domain.SurveyDataOnDemand;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,19 @@ privileged aspect SurveyDataOnDemand_Roo_DataOnDemand {
     
     public Survey SurveyDataOnDemand.getNewTransientSurvey(int index) {
         Survey obj = new Survey();
+        setCreated(obj, index);
+        setCreatedBy(obj, index);
         return obj;
+    }
+    
+    public void SurveyDataOnDemand.setCreated(Survey obj, int index) {
+        Date created = new Date(new Date().getTime() + 10000000L);
+        obj.setCreated(created);
+    }
+    
+    public void SurveyDataOnDemand.setCreatedBy(Survey obj, int index) {
+        Account createdBy = null;
+        obj.setCreatedBy(createdBy);
     }
     
     public Survey SurveyDataOnDemand.getSpecificSurvey(int index) {

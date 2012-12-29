@@ -17,7 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson
 @RooJavaBean
 @RooToString
-@RooJpaEntity
+@RooJpaActiveRecord
 public class Datum {
 
     @NotNull

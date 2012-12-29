@@ -20,7 +20,6 @@ import org.inqle.domain.Participant;
 import org.inqle.domain.ParticipantDataOnDemand;
 import org.inqle.domain.QuestionDataOnDemand;
 import org.inqle.domain.UnitDataOnDemand;
-import org.inqle.repository.DatumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,9 +45,6 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     QuestionDataOnDemand DatumDataOnDemand.questionDataOnDemand;
-    
-    @Autowired
-    DatumRepository DatumDataOnDemand.datumRepository;
     
     public Datum DatumDataOnDemand.getNewTransientDatum(int index) {
         Datum obj = new Datum();
@@ -119,14 +115,14 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
         }
         Datum obj = data.get(index);
         Long id = obj.getId();
-        return datumRepository.findOne(id);
+        return Datum.findDatum(id);
     }
     
     public Datum DatumDataOnDemand.getRandomDatum() {
         init();
         Datum obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return datumRepository.findOne(id);
+        return Datum.findDatum(id);
     }
     
     public boolean DatumDataOnDemand.modifyDatum(Datum obj) {
@@ -136,7 +132,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     public void DatumDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = datumRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = Datum.findDatumEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Datum' illegally returned null");
         }
@@ -148,7 +144,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Datum obj = getNewTransientDatum(i);
             try {
-                datumRepository.save(obj);
+                obj.persist();
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -157,7 +153,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new RuntimeException(msg.toString(), e);
             }
-            datumRepository.flush();
+            obj.flush();
             data.add(obj);
         }
     }

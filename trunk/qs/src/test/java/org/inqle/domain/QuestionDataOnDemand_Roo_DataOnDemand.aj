@@ -5,7 +5,9 @@ package org.inqle.domain;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -36,22 +38,27 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     
     public Question QuestionDataOnDemand.getNewTransientQuestion(int index) {
         Question obj = new Question();
+        setAbbreviation(obj, index);
         setChronicity(obj, index);
         setConcept(obj, index);
         setCreated(obj, index);
         setCreatedBy(obj, index);
         setLang(obj, index);
         setPriority(obj, index);
+        setTag(obj, index);
+        setText(obj, index);
         setUpdated(obj, index);
         setUpdatedBy(obj, index);
         return obj;
     }
     
+    public void QuestionDataOnDemand.setAbbreviation(Question obj, int index) {
+        String abbreviation = "abbreviation_" + index;
+        obj.setAbbreviation(abbreviation);
+    }
+    
     public void QuestionDataOnDemand.setChronicity(Question obj, int index) {
         Integer chronicity = new Integer(index);
-        if (chronicity < 0 || chronicity > 256) {
-            chronicity = 256;
-        }
         obj.setChronicity(chronicity);
     }
     
@@ -61,7 +68,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void QuestionDataOnDemand.setCreated(Question obj, int index) {
-        Date created = new Date(new Date().getTime() + 10000000L);
+        Date created = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setCreated(created);
     }
     
@@ -80,8 +87,18 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
         obj.setPriority(priority);
     }
     
+    public void QuestionDataOnDemand.setTag(Question obj, int index) {
+        String tag = "tag_" + index;
+        obj.setTag(tag);
+    }
+    
+    public void QuestionDataOnDemand.setText(Question obj, int index) {
+        String text = "text_" + index;
+        obj.setText(text);
+    }
+    
     public void QuestionDataOnDemand.setUpdated(Question obj, int index) {
-        Date updated = new Date(new Date().getTime() + 10000000L);
+        Date updated = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setUpdated(updated);
     }
     

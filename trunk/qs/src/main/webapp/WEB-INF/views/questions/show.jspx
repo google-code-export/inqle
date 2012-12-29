@@ -10,5 +10,8 @@
         <field:display field="updatedBy" id="s_org_inqle_domain_Question_updatedBy" object="${question}" z="azHL/lbsvBaKWefSIxl2u0sNS2Q="/>
         <field:display date="true" dateTimePattern="${question_updated_date_format}" field="updated" id="s_org_inqle_domain_Question_updated" object="${question}" z="5GQBlWdVZlbd9si8rCZp4vhXZ0g="/>
         <field:display field="priority" id="s_org_inqle_domain_Question_priority" object="${question}" z="VmKqYIbo1zXAk5WoQkTCmZ7xkXs="/>
+        <field:display field="text" id="s_org_inqle_domain_Question_text" object="${question}" z="zooaYjT5Gu58Xm4ln+VIty75XtE="/>
+        <field:display field="tag" id="s_org_inqle_domain_Question_tag" object="${question}" z="G6F5ZoUSnebYJBzJjeDbYUAl9dQ="/>
+        <field:display field="abbreviation" id="s_org_inqle_domain_Question_abbreviation" object="${question}" z="pJ4CT3R++ApNU281k3I8yKCMHYc="/>
     </page:show>
 </div>

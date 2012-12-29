@@ -4,9 +4,9 @@
 package org.inqle.domain;
 
 import java.util.List;
+import org.inqle.domain.Datum;
 import org.inqle.domain.DatumDataOnDemand;
 import org.inqle.domain.DatumIntegrationTest;
-import org.inqle.repository.DatumRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,45 +26,42 @@ privileged aspect DatumIntegrationTest_Roo_IntegrationTest {
     @Autowired
     DatumDataOnDemand DatumIntegrationTest.dod;
     
-    @Autowired
-    DatumRepository DatumIntegrationTest.datumRepository;
-    
     @Test
-    public void DatumIntegrationTest.testCount() {
+    public void DatumIntegrationTest.testCountData() {
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", dod.getRandomDatum());
-        long count = datumRepository.count();
+        long count = Datum.countData();
         Assert.assertTrue("Counter for 'Datum' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void DatumIntegrationTest.testFind() {
+    public void DatumIntegrationTest.testFindDatum() {
         Datum obj = dod.getRandomDatum();
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Datum' failed to provide an identifier", id);
-        obj = datumRepository.findOne(id);
+        obj = Datum.findDatum(id);
         Assert.assertNotNull("Find method for 'Datum' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Datum' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void DatumIntegrationTest.testFindAll() {
+    public void DatumIntegrationTest.testFindAllData() {
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", dod.getRandomDatum());
-        long count = datumRepository.count();
+        long count = Datum.countData();
         Assert.assertTrue("Too expensive to perform a find all test for 'Datum', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Datum> result = datumRepository.findAll();
+        List<Datum> result = Datum.findAllData();
         Assert.assertNotNull("Find all method for 'Datum' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Datum' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void DatumIntegrationTest.testFindEntries() {
+    public void DatumIntegrationTest.testFindDatumEntries() {
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", dod.getRandomDatum());
-        long count = datumRepository.count();
+        long count = Datum.countData();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Datum> result = datumRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<Datum> result = Datum.findDatumEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Datum' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Datum' returned an incorrect number of entries", count, result.size());
     }
@@ -75,50 +72,50 @@ privileged aspect DatumIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Datum' failed to provide an identifier", id);
-        obj = datumRepository.findOne(id);
+        obj = Datum.findDatum(id);
         Assert.assertNotNull("Find method for 'Datum' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyDatum(obj);
         Integer currentVersion = obj.getVersion();
-        datumRepository.flush();
+        obj.flush();
         Assert.assertTrue("Version for 'Datum' failed to increment on flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void DatumIntegrationTest.testSaveUpdate() {
+    public void DatumIntegrationTest.testMergeUpdate() {
         Datum obj = dod.getRandomDatum();
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Datum' failed to provide an identifier", id);
-        obj = datumRepository.findOne(id);
+        obj = Datum.findDatum(id);
         boolean modified =  dod.modifyDatum(obj);
         Integer currentVersion = obj.getVersion();
-        Datum merged = datumRepository.save(obj);
-        datumRepository.flush();
+        Datum merged = obj.merge();
+        obj.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Datum' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void DatumIntegrationTest.testSave() {
+    public void DatumIntegrationTest.testPersist() {
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", dod.getRandomDatum());
         Datum obj = dod.getNewTransientDatum(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Datum' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Datum' identifier to be null", obj.getId());
-        datumRepository.save(obj);
-        datumRepository.flush();
+        obj.persist();
+        obj.flush();
         Assert.assertNotNull("Expected 'Datum' identifier to no longer be null", obj.getId());
     }
     
     @Test
-    public void DatumIntegrationTest.testDelete() {
+    public void DatumIntegrationTest.testRemove() {
         Datum obj = dod.getRandomDatum();
         Assert.assertNotNull("Data on demand for 'Datum' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Datum' failed to provide an identifier", id);
-        obj = datumRepository.findOne(id);
-        datumRepository.delete(obj);
-        datumRepository.flush();
-        Assert.assertNull("Failed to remove 'Datum' with identifier '" + id + "'", datumRepository.findOne(id));
+        obj = Datum.findDatum(id);
+        obj.remove();
+        obj.flush();
+        Assert.assertNull("Failed to remove 'Datum' with identifier '" + id + "'", Datum.findDatum(id));
     }
     
 }
