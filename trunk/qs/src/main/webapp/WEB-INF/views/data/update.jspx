@@ -16,5 +16,7 @@
         <field:select field="unit" id="c_org_inqle_domain_Datum_unit" itemValue="id" items="${units}" path="/units" z="CuVb/UuO2SegrMonKB6Jp5DaTgA="/>
         <field:select field="canonicalUnit" id="c_org_inqle_domain_Datum_canonicalUnit" itemValue="id" items="${units}" path="/units" z="8nEOh7+rfjom2yDNATjg4Lm5J/A="/>
         <field:input field="canonicalValue" id="c_org_inqle_domain_Datum_canonicalValue" validationMessageCode="field_invalid_number" z="ON73vG1oL5QsriC4RZonaoXHHtI="/>
+        <field:input field="status" id="c_org_inqle_domain_Datum_status" required="true" validationMessageCode="field_invalid_integer" z="oAHA/CpNoBKKgtVbCAtqP1zhQS4="/>
+        <field:select field="concept" id="c_org_inqle_domain_Datum_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="PmBWE61cZBmNqylmFm2ZeOcJwwY="/>
     </form:update>
 </div>

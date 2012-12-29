@@ -6,6 +6,7 @@ package org.inqle.domain;
 import java.util.Date;
 import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
+import org.inqle.domain.Concept;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Participant;
@@ -124,6 +125,22 @@ privileged aspect Datum_Roo_JavaBean {
     
     public void Datum.setCanonicalValue(Double canonicalValue) {
         this.canonicalValue = canonicalValue;
+    }
+    
+    public Integer Datum.getStatus() {
+        return this.status;
+    }
+    
+    public void Datum.setStatus(Integer status) {
+        this.status = status;
+    }
+    
+    public Concept Datum.getConcept() {
+        return this.concept;
+    }
+    
+    public void Datum.setConcept(Concept concept) {
+        this.concept = concept;
     }
     
 }

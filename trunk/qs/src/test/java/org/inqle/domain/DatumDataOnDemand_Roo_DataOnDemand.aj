@@ -13,6 +13,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.inqle.domain.Account;
 import org.inqle.domain.ChoiceDataOnDemand;
+import org.inqle.domain.Concept;
+import org.inqle.domain.ConceptDataOnDemand;
 import org.inqle.domain.Datum;
 import org.inqle.domain.DatumDataOnDemand;
 import org.inqle.domain.FormulaDataOnDemand;
@@ -20,6 +22,7 @@ import org.inqle.domain.Participant;
 import org.inqle.domain.ParticipantDataOnDemand;
 import org.inqle.domain.QuestionDataOnDemand;
 import org.inqle.domain.UnitDataOnDemand;
+import org.inqle.repository.DatumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +41,9 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     ChoiceDataOnDemand DatumDataOnDemand.choiceDataOnDemand;
     
     @Autowired
+    ConceptDataOnDemand DatumDataOnDemand.conceptDataOnDemand;
+    
+    @Autowired
     FormulaDataOnDemand DatumDataOnDemand.formulaDataOnDemand;
     
     @Autowired
@@ -46,14 +52,19 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     @Autowired
     QuestionDataOnDemand DatumDataOnDemand.questionDataOnDemand;
     
+    @Autowired
+    DatumRepository DatumDataOnDemand.datumRepository;
+    
     public Datum DatumDataOnDemand.getNewTransientDatum(int index) {
         Datum obj = new Datum();
         setCanonicalValue(obj, index);
+        setConcept(obj, index);
         setCreated(obj, index);
         setCreatedBy(obj, index);
         setNormalizedValue(obj, index);
         setNumericValue(obj, index);
         setParticipant(obj, index);
+        setStatus(obj, index);
         setTextValue(obj, index);
         setUpdated(obj, index);
         setUpdatedBy(obj, index);
@@ -63,6 +74,11 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     public void DatumDataOnDemand.setCanonicalValue(Datum obj, int index) {
         Double canonicalValue = new Integer(index).doubleValue();
         obj.setCanonicalValue(canonicalValue);
+    }
+    
+    public void DatumDataOnDemand.setConcept(Datum obj, int index) {
+        Concept concept = conceptDataOnDemand.getRandomConcept();
+        obj.setConcept(concept);
     }
     
     public void DatumDataOnDemand.setCreated(Datum obj, int index) {
@@ -90,6 +106,11 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
         obj.setParticipant(participant);
     }
     
+    public void DatumDataOnDemand.setStatus(Datum obj, int index) {
+        Integer status = new Integer(index);
+        obj.setStatus(status);
+    }
+    
     public void DatumDataOnDemand.setTextValue(Datum obj, int index) {
         String textValue = "textValue_" + index;
         obj.setTextValue(textValue);
@@ -115,14 +136,14 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
         }
         Datum obj = data.get(index);
         Long id = obj.getId();
-        return Datum.findDatum(id);
+        return datumRepository.findOne(id);
     }
     
     public Datum DatumDataOnDemand.getRandomDatum() {
         init();
         Datum obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return Datum.findDatum(id);
+        return datumRepository.findOne(id);
     }
     
     public boolean DatumDataOnDemand.modifyDatum(Datum obj) {
@@ -132,7 +153,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     public void DatumDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = Datum.findDatumEntries(from, to);
+        data = datumRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Datum' illegally returned null");
         }
@@ -144,7 +165,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Datum obj = getNewTransientDatum(i);
             try {
-                obj.persist();
+                datumRepository.save(obj);
             } catch (ConstraintViolationException e) {
                 StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -153,7 +174,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
                 }
                 throw new RuntimeException(msg.toString(), e);
             }
-            obj.flush();
+            datumRepository.flush();
             data.add(obj);
         }
     }
