@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_org_inqle_domain_Concept" modelAttribute="concept" path="/concepts" versionField="Version" z="64qMNfjAYjUMuANa1y3AW4C29IM=">
-        <field:input field="conceptkey" id="c_org_inqle_domain_Concept_conceptkey" validationRegex="^[_A-Za-z0-9]$" z="KlP9iAL1DG04Ujyv2JNZnxcC6Sw="/>
+        <field:input field="conceptkey" id="c_org_inqle_domain_Concept_conceptkey" z="gu8BUABFaE/wJgGo4YA8wiiYHXQ="/>
         <field:select field="createdBy" id="c_org_inqle_domain_Concept_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="DSRAYZvVlPfo3OI6dD6zxJ9HRZE="/>
         <field:select field="updatedBy" id="c_org_inqle_domain_Concept_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="Wsxz3Jd7Rf44KzejlIP0gFeo07U="/>
         <field:datetime dateTimePattern="${concept_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Concept_updated" required="true" z="0MH5JrciPyF/NLP53PxFJYZJeKs="/>

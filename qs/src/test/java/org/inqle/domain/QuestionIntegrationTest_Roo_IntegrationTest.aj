@@ -6,7 +6,6 @@ package org.inqle.domain;
 import java.util.List;
 import org.inqle.domain.QuestionDataOnDemand;
 import org.inqle.domain.QuestionIntegrationTest;
-import org.inqle.repository.QuestionRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +24,6 @@ privileged aspect QuestionIntegrationTest_Roo_IntegrationTest {
     
     @Autowired
     QuestionDataOnDemand QuestionIntegrationTest.dod;
-    
-    @Autowired
-    QuestionRepository QuestionIntegrationTest.questionRepository;
     
     @Test
     public void QuestionIntegrationTest.testCount() {

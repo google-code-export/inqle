@@ -225,3 +225,83 @@ solr add --class ~.domain.ConceptTranslation
 q
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-25 12:21:31
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-25 12:21:39
+perform tests
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-25 15:25:40
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-25 15:25:53
+focus --class ~.domain.Question
+field string --fieldName text
+field string --fieldName tag --notNull
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-25 21:40:15
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-25 21:40:24
+entity jpa --class ~.domain.SurveyQuestion --testAutomatically 
+// [failed] field reference --type Survey --fieldName survey --cardinality MANY_TO_MANY
+field reference --type Survey --fieldName survey --cardinality MANY_TO_ONE
+field reference --type Question --fieldName question --cardinality MANY_TO_ONE
+field number --fieldName priority --type java.lang.Integer
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-26 06:57:30
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-26 06:57:39
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-26 19:23:26
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-26 19:23:36
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-26 22:53:02
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-26 22:53:11
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-26 22:54:51
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-26 22:54:59
+focus --class ~.domain.Question
+focus --class ~.domain.Subscription
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-27 07:55:37
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-27 07:55:45
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-27 16:13:59
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-27 16:14:29
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-27 17:36:04
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-27 17:36:10
+test integration --entity ~.domain.Question --transactional
+focus --class ~.repository.QuestionRepository
+// [failed] test integration --entity QuestionRepository --transactional 
+// [failed] test integration 
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-27 17:53:01
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-27 18:11:32
+perform tests
+perform tests
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-28 05:18:48
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 05:19:03
+perform tests
+perform tests -e
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-28 05:45:30
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 05:59:40
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-28 06:03:59
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 06:05:02
+perform tests
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-28 06:16:06
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 06:57:34
+perform clean
+perform tests
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 07:16:13
+perform tests
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-28 07:26:58
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 07:27:10
+repository jpa --interface ~.repository.QuestionRepository --entity ~.domain.Question
+perform tests
+perform tests
+// [failed] field reference --class ~.domain.Subscription --type ~.domain.Question --fieldName question --cardinality ONE_TO_ONE --referencedColumnName questionId
+// [failed] field reference --class ~.domain.Subscription --type ~.domain.Question --fieldName question --cardinality ONE_TO_ONE --referencedColumnName questionId --joinColumnName id
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-28 11:04:20
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-28 11:04:26
+// [failed] focus --class Question
+focus --class ~.domain.Question
+field string --fieldName abbreviation

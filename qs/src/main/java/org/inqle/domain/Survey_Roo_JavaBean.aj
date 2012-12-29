@@ -3,18 +3,26 @@
 
 package org.inqle.domain;
 
-import java.util.List;
-import org.inqle.domain.Question;
+import java.util.Date;
+import org.inqle.domain.Account;
 import org.inqle.domain.Survey;
 
 privileged aspect Survey_Roo_JavaBean {
     
-    public List<Question> Survey.getQuestions() {
-        return this.questions;
+    public Date Survey.getCreated() {
+        return this.created;
     }
     
-    public void Survey.setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void Survey.setCreated(Date created) {
+        this.created = created;
+    }
+    
+    public Account Survey.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void Survey.setCreatedBy(Account createdBy) {
+        this.createdBy = createdBy;
     }
     
 }

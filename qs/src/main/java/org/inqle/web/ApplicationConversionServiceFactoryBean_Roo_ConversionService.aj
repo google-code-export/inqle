@@ -8,7 +8,6 @@ import org.inqle.domain.ConceptTranslation;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Question;
-import org.inqle.repository.DatumRepository;
 import org.inqle.repository.QuestionRepository;
 import org.inqle.web.ApplicationConversionServiceFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import org.springframework.format.FormatterRegistry;
 privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService {
     
     declare @type: ApplicationConversionServiceFactoryBean: @Configurable;
-    
-    @Autowired
-    DatumRepository ApplicationConversionServiceFactoryBean.datumRepository;
     
     @Autowired
     QuestionRepository ApplicationConversionServiceFactoryBean.questionRepository;
@@ -85,7 +81,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Long, Datum> ApplicationConversionServiceFactoryBean.getIdToDatumConverter() {
         return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Datum>() {
             public org.inqle.domain.Datum convert(java.lang.Long id) {
-                return datumRepository.findOne(id);
+                return Datum.findDatum(id);
             }
         };
     }

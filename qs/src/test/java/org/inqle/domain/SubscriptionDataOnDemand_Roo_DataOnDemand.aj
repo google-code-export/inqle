@@ -56,12 +56,12 @@ privileged aspect SubscriptionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void SubscriptionDataOnDemand.setParticipant(Subscription obj, int index) {
-        Participant participant = participantDataOnDemand.getRandomParticipant();
+        Participant participant = participantDataOnDemand.getSpecificParticipant(index);
         obj.setParticipant(participant);
     }
     
     public void SubscriptionDataOnDemand.setQuestion(Subscription obj, int index) {
-        Question question = questionDataOnDemand.getRandomQuestion();
+        Question question = questionDataOnDemand.getSpecificQuestion(index);
         obj.setQuestion(question);
     }
     

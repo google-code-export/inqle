@@ -20,19 +20,16 @@ public class Concept {
 
     @NotNull
     @Column(updatable = false)
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date created = new Date();
 
-    @NotNull
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date updated = null;
     
     @Column(unique = true)
-    @Pattern(regexp = "^[_A-Za-z0-9]$")
+//    @Pattern(regexp = "^[_A-Za-z0-9]$")
     private String conceptkey;
 
     @ManyToOne
