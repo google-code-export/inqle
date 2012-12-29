@@ -16,5 +16,7 @@
         <field:display field="unit" id="s_org_inqle_domain_Datum_unit" object="${datum}" z="SLHrz7ovXGF93ZW7DTVL7IZZ1KQ="/>
         <field:display field="canonicalUnit" id="s_org_inqle_domain_Datum_canonicalUnit" object="${datum}" z="pwbM6fGfDjfhG+o4GHJIyaCIcgs="/>
         <field:display field="canonicalValue" id="s_org_inqle_domain_Datum_canonicalValue" object="${datum}" z="r+NCqEzU4qM6qny9SHy5oYRkggw="/>
+        <field:display field="status" id="s_org_inqle_domain_Datum_status" object="${datum}" z="SLmn+27uDLksw7g8Syyn2f884sQ="/>
+        <field:display field="concept" id="s_org_inqle_domain_Datum_concept" object="${datum}" z="7G6A6RzJF+Awf2WRIT3C3r+DDw8="/>
     </page:show>
 </div>

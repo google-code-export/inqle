@@ -15,7 +15,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
-import org.inqle.domain.Datum;
 import org.inqle.domain.DatumDataOnDemand;
 import org.inqle.domain.LatestParticipantDatum;
 import org.inqle.domain.LatestParticipantDatumDataOnDemand;
@@ -46,7 +45,6 @@ privileged aspect LatestParticipantDatumDataOnDemand_Roo_DataOnDemand {
         setAskableAfter(obj, index);
         setConcept(obj, index);
         setCreated(obj, index);
-        setDatum(obj, index);
         setParticipant(obj, index);
         return obj;
     }
@@ -62,13 +60,8 @@ privileged aspect LatestParticipantDatumDataOnDemand_Roo_DataOnDemand {
     }
     
     public void LatestParticipantDatumDataOnDemand.setCreated(LatestParticipantDatum obj, int index) {
-        Date created = new Date(new Date().getTime() + 10000000L);
+        Date created = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), Calendar.getInstance().get(Calendar.SECOND) + new Double(Math.random() * 1000).intValue()).getTime();
         obj.setCreated(created);
-    }
-    
-    public void LatestParticipantDatumDataOnDemand.setDatum(LatestParticipantDatum obj, int index) {
-        Datum datum = datumDataOnDemand.getRandomDatum();
-        obj.setDatum(datum);
     }
     
     public void LatestParticipantDatumDataOnDemand.setParticipant(LatestParticipantDatum obj, int index) {

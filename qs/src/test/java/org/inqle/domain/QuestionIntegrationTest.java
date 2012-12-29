@@ -16,7 +16,7 @@ public class QuestionIntegrationTest {
     private QuestionRepository questionRepository;
 
 	@Test
-    public void testMarkerMethod() {
+    public void testSaveQuestions() {
 		if (questionRepository==null) System.out.println("questionRepository is null");
 		Concept c1 = new Concept();
 		c1.setConceptkey("Weight");

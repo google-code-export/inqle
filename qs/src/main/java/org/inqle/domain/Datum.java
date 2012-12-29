@@ -7,9 +7,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -17,8 +17,14 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJson
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord
+@RooJpaEntity
 public class Datum {
+
+    public static final Integer STATUS_ASKED_BUT_NO_ANSWER = -1;
+
+    public static final Integer STATUS_DECLINED_ANSWER = -2;
+
+    public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
 
     @NotNull
     @Column(updatable = false)
@@ -57,9 +63,6 @@ public class Datum {
     @ManyToOne
     private Choice choice;
 
-    /**
-     * typically a value of 0 to 1
-     */
     private Double normalizedValue;
 
     @ManyToOne
@@ -69,4 +72,12 @@ public class Datum {
     private Unit canonicalUnit;
 
     private Double canonicalValue;
+
+    @NotNull
+    @Value("0")
+    private Integer status;
+
+    @NotNull
+    @ManyToOne
+    private Concept concept;
 }

@@ -305,3 +305,7 @@ q
 // [failed] focus --class Question
 focus --class ~.domain.Question
 field string --fieldName abbreviation
+focus --class Datum
+field number --type java.lang.Integer --fieldName status
+repository jpa --interface ~.repository.DatumRepository --entity Datum
+field reference --type Concept --fieldName concept --notNull --cardinality MANY_TO_ONE
