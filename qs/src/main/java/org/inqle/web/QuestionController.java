@@ -33,6 +33,14 @@ public class QuestionController {
 	    return new ResponseEntity<String>(Question.toJsonArray(questions), headers, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/availableSubscribedQuestions", method = RequestMethod.GET, headers = "Accept=application/json")
+	public ResponseEntity<String> getAvailableSubscribedQuestions(@RequestParam Long participantId) {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    List<Question> questions = questionRepository.getSubscribedQuestions(participantId);
+	    return new ResponseEntity<String>(Question.toJsonArray(questions), headers, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/searchQuestions", method = RequestMethod.GET, headers = "Accept=application/json")
 	public ResponseEntity<String> getSubscribedQuestions(@RequestParam Long participantId, @RequestParam String query) {
 	    HttpHeaders headers = new HttpHeaders();
