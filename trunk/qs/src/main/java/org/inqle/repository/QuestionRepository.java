@@ -28,6 +28,22 @@ public interface QuestionRepository {
 	List<Question> getSubscribedQuestions(Long participantId);
 	
 	/**
+	 * Get a list of questions to which this participant has subscribed, that have not
+	 * been answered too recently
+	 * @param participantId
+	 * @return list of questions, ordered by question priority then creation date
+	 */
+	@Query("select distinct q from Question q, Subscription s " +
+			" where s.participant.id=?1 and s.question.id = q.id" +
+			" and not exists" +
+				" (select lpd.id from LatestParticipantDatum lpd" +
+				" where lpd.participant.id=?1 and lpd.datum.question.id = q.id" +
+				" and lpd.askableAfter > current_timestamp())" +
+			" order by q.priority asc, s.created desc "
+			)
+	List<Question> getAvailableSubscribedQuestions(Long participantId);
+	
+	/**
 	 * Get all questions to which this participant has not subscribed
 	 * @param participantId
 	 * @return list of questions, ordered by question priority
