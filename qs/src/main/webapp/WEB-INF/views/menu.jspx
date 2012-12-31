@@ -27,5 +27,8 @@
             <menu:item id="i_concept_new" messageCode="global_menu_new" url="/concepts?form" z="k/7/xzFe8LUvpO/kA2XuAsEtAKc="/>
             <menu:item id="i_concept_list" messageCode="global_menu_list" url="/concepts?page=1&amp;size=${empty param.size ? 10 : param.size}" z="84CAgzdKS/3AsW4/ampTnmUN8C4="/>
         </menu:category>
+        <menu:category id="c_seleniumtests" z="PPLMd2yNB6/LSbjIWogAacRPU+Q=">
+            <menu:item id="si_seleniumtests_test" messageCode="selenium_menu_test_suite" url="/resources/selenium/test-suite.xhtml" z="wwunW/IPDcunN97u41MvMJZQ2to="/>
+        </menu:category>
     </menu:menu>
 </div>
