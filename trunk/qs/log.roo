@@ -309,3 +309,11 @@ focus --class Datum
 field number --type java.lang.Integer --fieldName status
 repository jpa --interface ~.repository.DatumRepository --entity Datum
 field reference --type Concept --fieldName concept --notNull --cardinality MANY_TO_ONE
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-30 03:34:12
+selenium test --controller ~.web.QuestionController
+logging setup --level INFO 
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-30 03:47:51
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-30 04:16:04
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-30 06:03:38

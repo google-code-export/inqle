@@ -27,12 +27,12 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class Question {
 
     @NotNull
-    @Column(updatable = false)
+//    @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date created = new Date();
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date updated = null;
 
