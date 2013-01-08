@@ -20,11 +20,10 @@
 		  class="org.inqle.web.security.QSAuthenticationProvider">
 		</beans:bean>
 		
-<!-- Configure Authentication mechanism 
+<!-- Configure Authentication mechanism -->
 		<authentication-manager alias="authenticationManager">
 		  <authentication-provider ref="qsAuthenticationProvider"/>
 		</authentication-manager>
--->
 
     <!--<SHA-256 values can be produced using 'echo -n your_desired_password | sha256sum' (using normal *nix environments)-->
     <authentication-manager alias="authenticationManager">

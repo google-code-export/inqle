@@ -6,7 +6,7 @@ package org.inqle.domain;
 import java.util.Date;
 import java.util.Set;
 import org.inqle.domain.Account;
-import org.inqle.domain.UserRole;
+import org.inqle.security.Privilege;
 
 privileged aspect Account_Roo_JavaBean {
     
@@ -42,12 +42,12 @@ privileged aspect Account_Roo_JavaBean {
         this.password = password;
     }
     
-    public Set<UserRole> Account.getRoles() {
-        return this.roles;
+    public Set<Privilege> Account.getPrivs() {
+        return this.privs;
     }
     
-    public void Account.setRoles(Set<UserRole> roles) {
-        this.roles = roles;
+    public void Account.setPrivs(Set<Privilege> privs) {
+        this.privs = privs;
     }
     
 }
