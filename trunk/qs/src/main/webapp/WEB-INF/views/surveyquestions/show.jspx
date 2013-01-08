@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_SurveyQuestion" object="${surveyquestion}" path="/surveyquestions" z="Oh091iLkAhVWjNOBX6FJ8c1nQGA=">
+        <field:display field="survey" id="s_org_inqle_domain_SurveyQuestion_survey" object="${surveyquestion}" z="hqSEKwR/wCt9Ip5g0M8lZ5yRZ0w="/>
+        <field:display field="question" id="s_org_inqle_domain_SurveyQuestion_question" object="${surveyquestion}" z="+ow0cC9Zlx+68jFdDlQnQ/IMNI4="/>
+        <field:display field="priority" id="s_org_inqle_domain_SurveyQuestion_priority" object="${surveyquestion}" z="8EDhEQRGjPPyEFjiykQjAWL+86M="/>
+    </page:show>
+</div>

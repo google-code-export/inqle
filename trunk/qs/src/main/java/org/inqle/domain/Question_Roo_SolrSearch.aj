@@ -48,20 +48,20 @@ privileged aspect Question_Roo_SolrSearch {
         for (Question question : questions) {
             SolrInputDocument sid = new SolrInputDocument();
             sid.addField("id", "question_" + question.getId());
+            sid.addField("question.text_s", question.getText());
+            sid.addField("question.tag_s", question.getTag());
+            sid.addField("question.abbreviation_s", question.getAbbreviation());
+            sid.addField("question.latency_i", question.getLatency());
             sid.addField("question.created_dt", question.getCreated());
             sid.addField("question.updated_dt", question.getUpdated());
-            sid.addField("question.chronicity_i", question.getChronicity());
-            sid.addField("question.lang_s", question.getLang());
             sid.addField("question.concept_t", question.getConcept());
             sid.addField("question.createdby_t", question.getCreatedBy());
             sid.addField("question.updatedby_t", question.getUpdatedBy());
             sid.addField("question.priority_i", question.getPriority());
-            sid.addField("question.text_s", question.getText());
-            sid.addField("question.tag_s", question.getTag());
-            sid.addField("question.abbreviation_s", question.getAbbreviation());
+            sid.addField("question.lang_s", question.getLang());
             sid.addField("question.id_l", question.getId());
             // Add summary field to allow searching documents for objects of this type
-            sid.addField("question_solrsummary_t", new StringBuilder().append(question.getCreated()).append(" ").append(question.getUpdated()).append(" ").append(question.getChronicity()).append(" ").append(question.getLang()).append(" ").append(question.getConcept()).append(" ").append(question.getCreatedBy()).append(" ").append(question.getUpdatedBy()).append(" ").append(question.getPriority()).append(" ").append(question.getText()).append(" ").append(question.getTag()).append(" ").append(question.getAbbreviation()).append(" ").append(question.getId()));
+            sid.addField("question_solrsummary_t", new StringBuilder().append(question.getText()).append(" ").append(question.getTag()).append(" ").append(question.getAbbreviation()).append(" ").append(question.getLatency()).append(" ").append(question.getCreated()).append(" ").append(question.getUpdated()).append(" ").append(question.getConcept()).append(" ").append(question.getCreatedBy()).append(" ").append(question.getUpdatedBy()).append(" ").append(question.getPriority()).append(" ").append(question.getLang()).append(" ").append(question.getId()));
             documents.add(sid);
         }
         try {

@@ -3,11 +3,20 @@
 
 package org.inqle.web;
 
+import org.inqle.domain.Account;
+import org.inqle.domain.Choice;
+import org.inqle.domain.ChoiceTranslation;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptTranslation;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
+import org.inqle.domain.LatestParticipantDatum;
+import org.inqle.domain.Participant;
 import org.inqle.domain.Question;
+import org.inqle.domain.Subscription;
+import org.inqle.domain.Survey;
+import org.inqle.domain.SurveyQuestion;
+import org.inqle.domain.Unit;
 import org.inqle.repository.DatumRepository;
 import org.inqle.repository.QuestionRepository;
 import org.inqle.web.ApplicationConversionServiceFactoryBean;
@@ -25,6 +34,78 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     
     @Autowired
     QuestionRepository ApplicationConversionServiceFactoryBean.questionRepository;
+    
+    public Converter<Account, String> ApplicationConversionServiceFactoryBean.getAccountToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Account, java.lang.String>() {
+            public String convert(Account account) {
+                return new StringBuilder().append(account.getUsername()).append(' ').append(account.getPassword()).append(' ').append(account.getCreated()).append(' ').append(account.getUpdated()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Account> ApplicationConversionServiceFactoryBean.getIdToAccountConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Account>() {
+            public org.inqle.domain.Account convert(java.lang.Long id) {
+                return Account.findAccount(id);
+            }
+        };
+    }
+    
+    public Converter<String, Account> ApplicationConversionServiceFactoryBean.getStringToAccountConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Account>() {
+            public org.inqle.domain.Account convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Account.class);
+            }
+        };
+    }
+    
+    public Converter<Choice, String> ApplicationConversionServiceFactoryBean.getChoiceToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Choice, java.lang.String>() {
+            public String convert(Choice choice) {
+                return new StringBuilder().append(choice.getCreated()).append(' ').append(choice.getUpdated()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Choice> ApplicationConversionServiceFactoryBean.getIdToChoiceConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Choice>() {
+            public org.inqle.domain.Choice convert(java.lang.Long id) {
+                return Choice.findChoice(id);
+            }
+        };
+    }
+    
+    public Converter<String, Choice> ApplicationConversionServiceFactoryBean.getStringToChoiceConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Choice>() {
+            public org.inqle.domain.Choice convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Choice.class);
+            }
+        };
+    }
+    
+    public Converter<ChoiceTranslation, String> ApplicationConversionServiceFactoryBean.getChoiceTranslationToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.ChoiceTranslation, java.lang.String>() {
+            public String convert(ChoiceTranslation choiceTranslation) {
+                return new StringBuilder().append(choiceTranslation.getCreated()).append(' ').append(choiceTranslation.getUpdated()).append(' ').append(choiceTranslation.getLang()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, ChoiceTranslation> ApplicationConversionServiceFactoryBean.getIdToChoiceTranslationConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.ChoiceTranslation>() {
+            public org.inqle.domain.ChoiceTranslation convert(java.lang.Long id) {
+                return ChoiceTranslation.findChoiceTranslation(id);
+            }
+        };
+    }
+    
+    public Converter<String, ChoiceTranslation> ApplicationConversionServiceFactoryBean.getStringToChoiceTranslationConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.ChoiceTranslation>() {
+            public org.inqle.domain.ChoiceTranslation convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), ChoiceTranslation.class);
+            }
+        };
+    }
     
     public Converter<Concept, String> ApplicationConversionServiceFactoryBean.getConceptToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Concept, java.lang.String>() {
@@ -122,10 +203,58 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
+    public Converter<LatestParticipantDatum, String> ApplicationConversionServiceFactoryBean.getLatestParticipantDatumToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.LatestParticipantDatum, java.lang.String>() {
+            public String convert(LatestParticipantDatum latestParticipantDatum) {
+                return new StringBuilder().append(latestParticipantDatum.getCreated()).append(' ').append(latestParticipantDatum.getAskableAfter()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, LatestParticipantDatum> ApplicationConversionServiceFactoryBean.getIdToLatestParticipantDatumConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.LatestParticipantDatum>() {
+            public org.inqle.domain.LatestParticipantDatum convert(java.lang.Long id) {
+                return LatestParticipantDatum.findLatestParticipantDatum(id);
+            }
+        };
+    }
+    
+    public Converter<String, LatestParticipantDatum> ApplicationConversionServiceFactoryBean.getStringToLatestParticipantDatumConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.LatestParticipantDatum>() {
+            public org.inqle.domain.LatestParticipantDatum convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), LatestParticipantDatum.class);
+            }
+        };
+    }
+    
+    public Converter<Participant, String> ApplicationConversionServiceFactoryBean.getParticipantToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Participant, java.lang.String>() {
+            public String convert(Participant participant) {
+                return new StringBuilder().append(participant.getCreated()).append(' ').append(participant.getUpdated()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Participant> ApplicationConversionServiceFactoryBean.getIdToParticipantConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Participant>() {
+            public org.inqle.domain.Participant convert(java.lang.Long id) {
+                return Participant.findParticipant(id);
+            }
+        };
+    }
+    
+    public Converter<String, Participant> ApplicationConversionServiceFactoryBean.getStringToParticipantConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Participant>() {
+            public org.inqle.domain.Participant convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Participant.class);
+            }
+        };
+    }
+    
     public Converter<Question, String> ApplicationConversionServiceFactoryBean.getQuestionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Question, java.lang.String>() {
             public String convert(Question question) {
-                return new StringBuilder().append(question.getCreated()).append(' ').append(question.getUpdated()).append(' ').append(question.getChronicity()).append(' ').append(question.getLang()).toString();
+                return new StringBuilder().append(question.getText()).append(' ').append(question.getTag()).append(' ').append(question.getAbbreviation()).append(' ').append(question.getLatency()).toString();
             }
         };
     }
@@ -146,7 +275,112 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
+    public Converter<Subscription, String> ApplicationConversionServiceFactoryBean.getSubscriptionToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Subscription, java.lang.String>() {
+            public String convert(Subscription subscription) {
+                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getRank()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Subscription> ApplicationConversionServiceFactoryBean.getIdToSubscriptionConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Subscription>() {
+            public org.inqle.domain.Subscription convert(java.lang.Long id) {
+                return Subscription.findSubscription(id);
+            }
+        };
+    }
+    
+    public Converter<String, Subscription> ApplicationConversionServiceFactoryBean.getStringToSubscriptionConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Subscription>() {
+            public org.inqle.domain.Subscription convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Subscription.class);
+            }
+        };
+    }
+    
+    public Converter<Survey, String> ApplicationConversionServiceFactoryBean.getSurveyToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Survey, java.lang.String>() {
+            public String convert(Survey survey) {
+                return new StringBuilder().append(survey.getCreated()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Survey> ApplicationConversionServiceFactoryBean.getIdToSurveyConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Survey>() {
+            public org.inqle.domain.Survey convert(java.lang.Long id) {
+                return Survey.findSurvey(id);
+            }
+        };
+    }
+    
+    public Converter<String, Survey> ApplicationConversionServiceFactoryBean.getStringToSurveyConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Survey>() {
+            public org.inqle.domain.Survey convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Survey.class);
+            }
+        };
+    }
+    
+    public Converter<SurveyQuestion, String> ApplicationConversionServiceFactoryBean.getSurveyQuestionToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.SurveyQuestion, java.lang.String>() {
+            public String convert(SurveyQuestion surveyQuestion) {
+                return new StringBuilder().append(surveyQuestion.getPriority()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, SurveyQuestion> ApplicationConversionServiceFactoryBean.getIdToSurveyQuestionConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.SurveyQuestion>() {
+            public org.inqle.domain.SurveyQuestion convert(java.lang.Long id) {
+                return SurveyQuestion.findSurveyQuestion(id);
+            }
+        };
+    }
+    
+    public Converter<String, SurveyQuestion> ApplicationConversionServiceFactoryBean.getStringToSurveyQuestionConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.SurveyQuestion>() {
+            public org.inqle.domain.SurveyQuestion convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), SurveyQuestion.class);
+            }
+        };
+    }
+    
+    public Converter<Unit, String> ApplicationConversionServiceFactoryBean.getUnitToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Unit, java.lang.String>() {
+            public String convert(Unit unit) {
+                return "(no displayable fields)";
+            }
+        };
+    }
+    
+    public Converter<Long, Unit> ApplicationConversionServiceFactoryBean.getIdToUnitConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Unit>() {
+            public org.inqle.domain.Unit convert(java.lang.Long id) {
+                return Unit.findUnit(id);
+            }
+        };
+    }
+    
+    public Converter<String, Unit> ApplicationConversionServiceFactoryBean.getStringToUnitConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Unit>() {
+            public org.inqle.domain.Unit convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Unit.class);
+            }
+        };
+    }
+    
     public void ApplicationConversionServiceFactoryBean.installLabelConverters(FormatterRegistry registry) {
+        registry.addConverter(getAccountToStringConverter());
+        registry.addConverter(getIdToAccountConverter());
+        registry.addConverter(getStringToAccountConverter());
+        registry.addConverter(getChoiceToStringConverter());
+        registry.addConverter(getIdToChoiceConverter());
+        registry.addConverter(getStringToChoiceConverter());
+        registry.addConverter(getChoiceTranslationToStringConverter());
+        registry.addConverter(getIdToChoiceTranslationConverter());
+        registry.addConverter(getStringToChoiceTranslationConverter());
         registry.addConverter(getConceptToStringConverter());
         registry.addConverter(getIdToConceptConverter());
         registry.addConverter(getStringToConceptConverter());
@@ -159,9 +393,27 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         registry.addConverter(getFormulaToStringConverter());
         registry.addConverter(getIdToFormulaConverter());
         registry.addConverter(getStringToFormulaConverter());
+        registry.addConverter(getLatestParticipantDatumToStringConverter());
+        registry.addConverter(getIdToLatestParticipantDatumConverter());
+        registry.addConverter(getStringToLatestParticipantDatumConverter());
+        registry.addConverter(getParticipantToStringConverter());
+        registry.addConverter(getIdToParticipantConverter());
+        registry.addConverter(getStringToParticipantConverter());
         registry.addConverter(getQuestionToStringConverter());
         registry.addConverter(getIdToQuestionConverter());
         registry.addConverter(getStringToQuestionConverter());
+        registry.addConverter(getSubscriptionToStringConverter());
+        registry.addConverter(getIdToSubscriptionConverter());
+        registry.addConverter(getStringToSubscriptionConverter());
+        registry.addConverter(getSurveyToStringConverter());
+        registry.addConverter(getIdToSurveyConverter());
+        registry.addConverter(getStringToSurveyConverter());
+        registry.addConverter(getSurveyQuestionToStringConverter());
+        registry.addConverter(getIdToSurveyQuestionConverter());
+        registry.addConverter(getStringToSurveyQuestionConverter());
+        registry.addConverter(getUnitToStringConverter());
+        registry.addConverter(getIdToUnitConverter());
+        registry.addConverter(getStringToUnitConverter());
     }
     
     public void ApplicationConversionServiceFactoryBean.afterPropertiesSet() {

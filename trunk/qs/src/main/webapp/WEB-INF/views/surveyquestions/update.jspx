@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_org_inqle_domain_SurveyQuestion" modelAttribute="surveyQuestion" path="/surveyquestions" versionField="Version" z="1cnXEXG1e8q0IWmt4IdBwpCNBOM=">
+        <field:select field="survey" id="c_org_inqle_domain_SurveyQuestion_survey" itemValue="id" items="${surveys}" path="/surveys" z="zZS/PUon+igWz+iuzEe8j3ouz0E="/>
+        <field:select field="question" id="c_org_inqle_domain_SurveyQuestion_question" itemValue="id" items="${questions}" path="/questions" z="KWvX7AYje2yTr65XTMF++arO8Rg="/>
+        <field:input field="priority" id="c_org_inqle_domain_SurveyQuestion_priority" validationMessageCode="field_invalid_integer" z="cAvqK0UukaevSgK8Fapx9sbcAYc="/>
+    </form:update>
+</div>

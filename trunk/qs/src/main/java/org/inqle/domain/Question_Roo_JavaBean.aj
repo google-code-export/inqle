@@ -10,6 +10,38 @@ import org.inqle.domain.Question;
 
 privileged aspect Question_Roo_JavaBean {
     
+    public String Question.getText() {
+        return this.text;
+    }
+    
+    public void Question.setText(String text) {
+        this.text = text;
+    }
+    
+    public String Question.getTag() {
+        return this.tag;
+    }
+    
+    public void Question.setTag(String tag) {
+        this.tag = tag;
+    }
+    
+    public String Question.getAbbreviation() {
+        return this.abbreviation;
+    }
+    
+    public void Question.setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
+    
+    public int Question.getLatency() {
+        return this.latency;
+    }
+    
+    public void Question.setLatency(int latency) {
+        this.latency = latency;
+    }
+    
     public Date Question.getCreated() {
         return this.created;
     }
@@ -24,22 +56,6 @@ privileged aspect Question_Roo_JavaBean {
     
     public void Question.setUpdated(Date updated) {
         this.updated = updated;
-    }
-    
-    public Integer Question.getChronicity() {
-        return this.chronicity;
-    }
-    
-    public void Question.setChronicity(Integer chronicity) {
-        this.chronicity = chronicity;
-    }
-    
-    public String Question.getLang() {
-        return this.lang;
-    }
-    
-    public void Question.setLang(String lang) {
-        this.lang = lang;
     }
     
     public Concept Question.getConcept() {
@@ -74,28 +90,12 @@ privileged aspect Question_Roo_JavaBean {
         this.priority = priority;
     }
     
-    public String Question.getText() {
-        return this.text;
+    public String Question.getLang() {
+        return this.lang;
     }
     
-    public void Question.setText(String text) {
-        this.text = text;
-    }
-    
-    public String Question.getTag() {
-        return this.tag;
-    }
-    
-    public void Question.setTag(String tag) {
-        this.tag = tag;
-    }
-    
-    public String Question.getAbbreviation() {
-        return this.abbreviation;
-    }
-    
-    public void Question.setAbbreviation(String abbreviation) {
-        this.abbreviation = abbreviation;
+    public void Question.setLang(String lang) {
+        this.lang = lang;
     }
     
 }

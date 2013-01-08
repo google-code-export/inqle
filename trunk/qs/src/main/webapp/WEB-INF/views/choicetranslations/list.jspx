@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_ChoiceTranslation" items="${choicetranslations}" z="fVsEg19s4aDN0VDgXHb3fqs4ROg=">
+        <table:table data="${choicetranslations}" id="l_org_inqle_domain_ChoiceTranslation" path="/choicetranslations" z="N6JuldazurGjxb1pYyi5FEW3qcw=">
+            <table:column id="c_org_inqle_domain_ChoiceTranslation_choice" property="choice" z="4uKVb/dBGWDs+TpzGbzUuUS8Mug="/>
+            <table:column date="true" dateTimePattern="${choiceTranslation_created_date_format}" id="c_org_inqle_domain_ChoiceTranslation_created" property="created" z="53D4aDFe8/ggBQW/aMuzbx7if60="/>
+            <table:column date="true" dateTimePattern="${choiceTranslation_updated_date_format}" id="c_org_inqle_domain_ChoiceTranslation_updated" property="updated" z="EssSRqmaaDp296QJRWN2Dmwhh3k="/>
+            <table:column id="c_org_inqle_domain_ChoiceTranslation_lang" property="lang" z="hjJZ0v/S3pq9M43rpFfDmTCFr3k="/>
+            <table:column id="c_org_inqle_domain_ChoiceTranslation_createdBy" property="createdBy" z="lafG1H6LxgfzaZtJqrsPF91fflM="/>
+            <table:column id="c_org_inqle_domain_ChoiceTranslation_updatedBy" property="updatedBy" z="O6oVdvTv7o1nmUKVG8vV5zRm6Vg="/>
+        </table:table>
+    </page:list>
+</div>

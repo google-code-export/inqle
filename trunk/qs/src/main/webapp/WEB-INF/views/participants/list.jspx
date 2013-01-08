@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Participant" items="${participants}" z="CE/sestipSFiCaZz2ZNxf2F4rWI=">
+        <table:table data="${participants}" id="l_org_inqle_domain_Participant" path="/participants" z="ww9/8xMhujJMG4K+LljaXnq7P3A=">
+            <table:column date="true" dateTimePattern="${participant_created_date_format}" id="c_org_inqle_domain_Participant_created" property="created" z="NLiqBVCPNRmItxWsvRIyPkMntBI="/>
+            <table:column date="true" dateTimePattern="${participant_updated_date_format}" id="c_org_inqle_domain_Participant_updated" property="updated" z="lDtrwfG2Q41uksAOdGQWbi1MYiA="/>
+            <table:column id="c_org_inqle_domain_Participant_updatedBy" property="updatedBy" z="OzLth6boZ/ImS8GCOJV1dAyvX1g="/>
+            <table:column id="c_org_inqle_domain_Participant_createdBy" property="createdBy" z="v2pCO0QtXfaZ1nO4US4NFYWkec4="/>
+        </table:table>
+    </page:list>
+</div>

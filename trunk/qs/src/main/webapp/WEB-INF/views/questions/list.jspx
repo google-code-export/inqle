@@ -5,11 +5,11 @@
     <page:list id="pl_org_inqle_domain_Question" items="${questions}" z="t5ujL1mJZf8KmJvHuwy7d910XsE=">
         <table:table data="${questions}" id="l_org_inqle_domain_Question" path="/questions" z="JkdSXfTgjFpfea8LfcKXM0OtSl8=">
             <table:column date="true" dateTimePattern="${question_created_date_format}" id="c_org_inqle_domain_Question_created" property="created" z="4Hjq7AGiuuMlE7T2jnCTOkfmhZM="/>
-            <table:column id="c_org_inqle_domain_Question_chronicity" property="chronicity" z="1XUckqkCplnDeABkSy/bMTr3eCo="/>
-            <table:column id="c_org_inqle_domain_Question_lang" property="lang" z="l8gVMJvL66OhJqewGAHTlshjbo0="/>
-            <table:column id="c_org_inqle_domain_Question_concept" property="concept" z="WcKTeFQTZ5ROOWN6QLy/3JWldds="/>
-            <table:column id="c_org_inqle_domain_Question_createdBy" property="createdBy" z="biW9mpSCLUSwcEUdANM/4+c6TW4="/>
             <table:column date="true" dateTimePattern="${question_updated_date_format}" id="c_org_inqle_domain_Question_updated" property="updated" z="c1l0iAb5zRfXi+Yx9UbL/rNzrdk="/>
+            <table:column id="c_org_inqle_domain_Question_text" property="text" z="8M4dB/bAtkykAFFhQX8tDug8Fek="/>
+            <table:column id="c_org_inqle_domain_Question_tag" property="tag" z="DNf7EQlbSE0mjlPOUG7VaCFAdJU="/>
+            <table:column id="c_org_inqle_domain_Question_abbreviation" property="abbreviation" z="eXnTreWJQ5ukyXFVdYpnOkUC9cE="/>
+            <table:column id="c_org_inqle_domain_Question_latency" property="latency" z="Ms2ZwQbmSw3CAGYI7ElEGy6VQCM="/>
         </table:table>
     </page:list>
 </div>

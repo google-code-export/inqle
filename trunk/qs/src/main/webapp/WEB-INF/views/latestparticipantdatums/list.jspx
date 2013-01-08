@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_LatestParticipantDatum" items="${latestparticipantdatums}" z="dOllNHED8kdAhjdzzn7usvlJzRE=">
+        <table:table data="${latestparticipantdatums}" id="l_org_inqle_domain_LatestParticipantDatum" path="/latestparticipantdatums" z="eke1M5BMqrKQb8sDKW30npjxME8=">
+            <table:column date="true" dateTimePattern="${latestParticipantDatum_created_date_format}" id="c_org_inqle_domain_LatestParticipantDatum_created" property="created" z="PG2mwSahy+hlK9QJ6hwJJ+R+khE="/>
+            <table:column id="c_org_inqle_domain_LatestParticipantDatum_datum" property="datum" z="gr0AjBNiQbi28rd1NPLdIEQxlas="/>
+            <table:column id="c_org_inqle_domain_LatestParticipantDatum_concept" property="concept" z="kXZHMjR0siq/IEuOFFtwtpwKIFc="/>
+            <table:column id="c_org_inqle_domain_LatestParticipantDatum_participant" property="participant" z="3jWgcgBMPFznJlQt7b2nYKp1V3M="/>
+            <table:column date="true" dateTimePattern="${latestParticipantDatum_askableafter_date_format}" id="c_org_inqle_domain_LatestParticipantDatum_askableAfter" property="askableAfter" z="mY0hkrq3GkQBap312hxdk3QPhyg="/>
+        </table:table>
+    </page:list>
+</div>
