@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_Choice" object="${choice}" path="/choices" z="i625Xj9gX1FZXZq2Lse/dVXIYT4=">
+        <field:display date="true" dateTimePattern="${choice_updated_date_format}" field="updated" id="s_org_inqle_domain_Choice_updated" object="${choice}" z="W1b+k0x7a94teC9QwOyLhUGA9eE="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_Choice_createdBy" object="${choice}" z="p9vlp21EQNxyGqQgdxSFe6/c1jo="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_Choice_updatedBy" object="${choice}" z="/URVoSkxUBdSgcKeh6LznH8lhhU="/>
+    </page:show>
+</div>

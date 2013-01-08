@@ -14,7 +14,7 @@ import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
-@RooToString
+@RooToString(toStringMethod="getStringRep")
 @RooJpaActiveRecord
 public class Concept {
 
@@ -37,4 +37,8 @@ public class Concept {
 
     @ManyToOne
     private Account updatedBy;
+    
+    public String getStringRep() {
+    	return conceptkey;
+    }
 }

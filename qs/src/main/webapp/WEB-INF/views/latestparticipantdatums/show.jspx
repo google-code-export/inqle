@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_LatestParticipantDatum" object="${latestparticipantdatum}" path="/latestparticipantdatums" z="hMl5pFT9dIPspK9pVZYqY71QcSw=">
+        <field:display field="datum" id="s_org_inqle_domain_LatestParticipantDatum_datum" object="${latestparticipantdatum}" z="y/v0EXlmsJ7yt4FXyCCz9ZnxY1E="/>
+        <field:display field="concept" id="s_org_inqle_domain_LatestParticipantDatum_concept" object="${latestparticipantdatum}" z="NtWFz5zI9hMNa6ZMVWI/haw+nVM="/>
+        <field:display field="participant" id="s_org_inqle_domain_LatestParticipantDatum_participant" object="${latestparticipantdatum}" z="4o17T7zvAAFI1mGUJ4cDIMdFHjA="/>
+        <field:display date="true" dateTimePattern="${latestParticipantDatum_askableafter_date_format}" field="askableAfter" id="s_org_inqle_domain_LatestParticipantDatum_askableAfter" object="${latestparticipantdatum}" z="LkqbGY5LMI638NRz6dIjilJEaZs="/>
+    </page:show>
+</div>

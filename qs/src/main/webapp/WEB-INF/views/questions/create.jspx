@@ -3,9 +3,8 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_org_inqle_domain_Question" modelAttribute="question" path="/questions" render="${empty dependencies}" z="3ALDMPd2m8Ha1uGJBM4IdzBN0ug=">
-        <field:input field="chronicity" id="c_org_inqle_domain_Question_chronicity" validationMessageCode="field_invalid_integer" z="NZG9SWkQN6c9Lmc3MuBQuz8wDCk="/>
         <field:input field="lang" id="c_org_inqle_domain_Question_lang" z="ySg/c3ldq49EAZ5whFT+WpnLXkg="/>
-        <field:select field="concept" id="c_org_inqle_domain_Question_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="JqQiTCbT3GEBtQA3jyzs5e4ngeE="/>
+        <field:select field="concept" id="c_org_inqle_domain_Question_concept" itemValue="id" items="${concepts}" path="/concepts" z="hQwgLwodeb2xzGZdmEt5E41uo+k="/>
         <field:select field="createdBy" id="c_org_inqle_domain_Question_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="N5GVDi5xzxEi65Xz6v3qmLuHwF0="/>
         <field:select field="updatedBy" id="c_org_inqle_domain_Question_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="CgWYsr7n0fxeKHm3dC/WLN7JcfQ="/>
         <field:datetime dateTimePattern="${question_updated_date_format}" field="updated" id="c_org_inqle_domain_Question_updated" z="qcj1t02NFuzUDHdBAbfdN+216v0="/>
@@ -13,6 +12,7 @@
         <field:input field="text" id="c_org_inqle_domain_Question_text" z="XJVK1qV2NwOweisQmu27Lc87KhE="/>
         <field:input field="tag" id="c_org_inqle_domain_Question_tag" required="true" z="bgccLh3COgS62tSJweifVF55P7U="/>
         <field:input field="abbreviation" id="c_org_inqle_domain_Question_abbreviation" z="nG5u2GbqZdmP3zP6kz9ZPEl4Ouw="/>
+        <field:input field="latency" id="c_org_inqle_domain_Question_latency" z="DrExcPYbdeHirU6ZvVY4LT3GfZ0="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_org_inqle_domain_Question" render="${not empty dependencies}" z="Y2RVpl2KBolIzj61i9ebTGaSswo="/>
 </div>

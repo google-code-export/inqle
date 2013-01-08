@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_ChoiceTranslation" object="${choicetranslation}" path="/choicetranslations" z="xaqU/aWlaue1ggs+bleKrEI9I3M=">
+        <field:display field="choice" id="s_org_inqle_domain_ChoiceTranslation_choice" object="${choicetranslation}" z="X1g8fGgWvaW9pxE8uDkRgL43thM="/>
+        <field:display date="true" dateTimePattern="${choiceTranslation_updated_date_format}" field="updated" id="s_org_inqle_domain_ChoiceTranslation_updated" object="${choicetranslation}" z="zX1gIPnmo+zrSV7I58zcVW0pRoo="/>
+        <field:display field="lang" id="s_org_inqle_domain_ChoiceTranslation_lang" object="${choicetranslation}" z="l3YxmVe2xPuSaFCcdTwxsrOhTWI="/>
+        <field:display field="createdBy" id="s_org_inqle_domain_ChoiceTranslation_createdBy" object="${choicetranslation}" z="6H/piBasnZr+LTL0tJr30Qpey5w="/>
+        <field:display field="updatedBy" id="s_org_inqle_domain_ChoiceTranslation_updatedBy" object="${choicetranslation}" z="PJknA1Xht8hVEB/Q0ovbUO3T30Q="/>
+    </page:show>
+</div>

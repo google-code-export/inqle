@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_UserRole" items="${userroles}" z="pB8LfsvCuJt4jC9005c2wmxLOZQ=">
+        <table:table data="${userroles}" id="l_org_inqle_domain_UserRole" path="/userroles" z="Dd7PeJPd+A/9pZLvSph07qZftV4=">
+            <table:column date="true" dateTimePattern="${userRole_created_date_format}" id="c_org_inqle_domain_UserRole_created" property="created" z="X6Epl4GWmH8VUZ5zj8X/8Qtj7No="/>
+            <table:column date="true" dateTimePattern="${userRole_updated_date_format}" id="c_org_inqle_domain_UserRole_updated" property="updated" z="QDT6os8F5DfnZABU7B7b+Jte60k="/>
+        </table:table>
+    </page:list>
+</div>

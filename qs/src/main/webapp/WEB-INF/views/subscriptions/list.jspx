@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Subscription" items="${subscriptions}" z="8T6MMKbaWBgyxODFCQVp35T6Tv8=">
+        <table:table data="${subscriptions}" id="l_org_inqle_domain_Subscription" path="/subscriptions" z="r+iFUwAGfmkswr59aMtouoMVTyo=">
+            <table:column date="true" dateTimePattern="${subscription_created_date_format}" id="c_org_inqle_domain_Subscription_created" property="created" z="2M78hP7ZDrHl5kkezDK9VwU7i+M="/>
+            <table:column id="c_org_inqle_domain_Subscription_createdBy" property="createdBy" z="eK8k4vhYriVxSd8zwHlaDEgijEg="/>
+            <table:column id="c_org_inqle_domain_Subscription_question" property="question" z="YvLEfRDYoIsyxJP5Glhh1noFrMA="/>
+            <table:column id="c_org_inqle_domain_Subscription_participant" property="participant" z="ejgNuLfl+lyZC4Z2/EkLomPaZt4="/>
+            <table:column id="c_org_inqle_domain_Subscription_rank" property="rank" z="4VK6BndNQoEoixPyL8jlhKdqzx4="/>
+        </table:table>
+    </page:list>
+</div>

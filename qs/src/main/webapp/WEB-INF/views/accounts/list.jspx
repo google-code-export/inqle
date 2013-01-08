@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_Account" items="${accounts}" z="VHqV00LEWy2ailZbhBwjcB3QTps=">
+        <table:table data="${accounts}" id="l_org_inqle_domain_Account" path="/accounts" z="bTqjDeEBVDok+XNL7a2ohLXsnVc=">
+            <table:column date="true" dateTimePattern="${account_created_date_format}" id="c_org_inqle_domain_Account_created" property="created" z="0RQ7AOQ2fyIMudWQSeo2xBHHgxw="/>
+            <table:column date="true" dateTimePattern="${account_updated_date_format}" id="c_org_inqle_domain_Account_updated" property="updated" z="Ba3c3MEIXWKvkwM6+7Q7sZOJs44="/>
+            <table:column id="c_org_inqle_domain_Account_username" property="username" z="EwPo2o6B5exYFLe5y8ZTXlYxcQA="/>
+            <table:column id="c_org_inqle_domain_Account_password" property="password" z="oiQyQi54rsR1tiaZQW6VvEeMmvU="/>
+            <table:column id="c_org_inqle_domain_Account_privs" property="privs" z="6y3s2oF0b7zMvrxU/LsgMdnYBZc="/>
+        </table:table>
+    </page:list>
+</div>

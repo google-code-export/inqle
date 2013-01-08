@@ -3,7 +3,6 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:show id="ps_org_inqle_domain_Question" object="${question}" path="/questions" z="RU+i2qgluDnv6fYqU8SjIoV0veM=">
-        <field:display field="chronicity" id="s_org_inqle_domain_Question_chronicity" object="${question}" z="kP05Vcaa8OkLrAJxJjF9lFGA5co="/>
         <field:display field="lang" id="s_org_inqle_domain_Question_lang" object="${question}" z="bkMiy1KxT42+4iocOMnT3Kq95Lw="/>
         <field:display field="concept" id="s_org_inqle_domain_Question_concept" object="${question}" z="oZ8+/vMc89PGMRwEtDa/U6qFN60="/>
         <field:display field="createdBy" id="s_org_inqle_domain_Question_createdBy" object="${question}" z="NGWm75Gi/wo1QRM6nHkaAOfrUts="/>
@@ -13,5 +12,6 @@
         <field:display field="text" id="s_org_inqle_domain_Question_text" object="${question}" z="zooaYjT5Gu58Xm4ln+VIty75XtE="/>
         <field:display field="tag" id="s_org_inqle_domain_Question_tag" object="${question}" z="G6F5ZoUSnebYJBzJjeDbYUAl9dQ="/>
         <field:display field="abbreviation" id="s_org_inqle_domain_Question_abbreviation" object="${question}" z="pJ4CT3R++ApNU281k3I8yKCMHYc="/>
+        <field:display field="latency" id="s_org_inqle_domain_Question_latency" object="${question}" z="GH1yxQEpgYBQPoJ21JElbgfbS4M="/>
     </page:show>
 </div>

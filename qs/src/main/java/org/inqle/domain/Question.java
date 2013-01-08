@@ -26,21 +26,25 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooSolrSearchable
 public class Question {
 
+    private String text;
+
     @NotNull
-//    @Column(updatable = false)
+    private String tag;
+
+    private String abbreviation;
+
+    @Value("0")
+    private int latency;
+    
+    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date created = new Date();
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
-    private Date updated = null;
+    private Date updated = new Date();
 
-    private Integer chronicity;
-
-    private String lang;
-
-    @NotNull
     @ManyToOne
     private Concept concept;
 
@@ -53,11 +57,6 @@ public class Question {
     @NotNull
     @Value("100")
     private int priority;
-
-    private String text;
-
-    @NotNull
-    private String tag;
-
-    private String abbreviation;
+    
+    private String lang;
 }

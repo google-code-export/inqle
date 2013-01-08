@@ -4,8 +4,6 @@
 package org.inqle.web;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.inqle.domain.Account;
@@ -39,11 +37,6 @@ privileged aspect QuestionController_Roo_Controller {
     @RequestMapping(params = "form", produces = "text/html")
     public String QuestionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Question());
-        List<String[]> dependencies = new ArrayList<String[]>();
-        if (Concept.countConcepts() == 0) {
-            dependencies.add(new String[] { "concept", "concepts" });
-        }
-        uiModel.addAttribute("dependencies", dependencies);
         return "questions/create";
     }
     

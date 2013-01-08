@@ -14,7 +14,6 @@ import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.inqle.domain.Account;
-import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
 import org.inqle.domain.Question;
 import org.inqle.domain.QuestionDataOnDemand;
@@ -39,11 +38,10 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     public Question QuestionDataOnDemand.getNewTransientQuestion(int index) {
         Question obj = new Question();
         setAbbreviation(obj, index);
-        setChronicity(obj, index);
-        setConcept(obj, index);
         setCreated(obj, index);
         setCreatedBy(obj, index);
         setLang(obj, index);
+        setLatency(obj, index);
         setPriority(obj, index);
         setTag(obj, index);
         setText(obj, index);
@@ -55,16 +53,6 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     public void QuestionDataOnDemand.setAbbreviation(Question obj, int index) {
         String abbreviation = "abbreviation_" + index;
         obj.setAbbreviation(abbreviation);
-    }
-    
-    public void QuestionDataOnDemand.setChronicity(Question obj, int index) {
-        Integer chronicity = new Integer(index);
-        obj.setChronicity(chronicity);
-    }
-    
-    public void QuestionDataOnDemand.setConcept(Question obj, int index) {
-        Concept concept = conceptDataOnDemand.getRandomConcept();
-        obj.setConcept(concept);
     }
     
     public void QuestionDataOnDemand.setCreated(Question obj, int index) {
@@ -80,6 +68,11 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     public void QuestionDataOnDemand.setLang(Question obj, int index) {
         String lang = "lang_" + index;
         obj.setLang(lang);
+    }
+    
+    public void QuestionDataOnDemand.setLatency(Question obj, int index) {
+        int latency = index;
+        obj.setLatency(latency);
     }
     
     public void QuestionDataOnDemand.setPriority(Question obj, int index) {

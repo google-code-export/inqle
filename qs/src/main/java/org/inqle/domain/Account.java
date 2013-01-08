@@ -24,26 +24,24 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class Account {
 
     @NotNull
+    @Size(min = 1, max = 256)
+    private String username;
+
+    @NotNull
+    @Size(min = 1, max = 256)
+    private String password;
+
+    @ElementCollection
+    private Set<Privilege> privs = new HashSet<Privilege>();
+    
+    @NotNull
     @Column(updatable = false)
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date created = new Date();
 
     @NotNull
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
-    private Date updated = null;
-
-    @NotNull
-    @Size(min = 1, max = 255)
-    private String username;
-
-    @NotNull
-    @Size(min = 1, max = 255)
-    private String password;
-
-    @ElementCollection
-    private Set<Privilege> privs = new HashSet<Privilege>();
+    private Date updated = new Date();
 }

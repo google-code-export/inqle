@@ -10,22 +10,6 @@ import org.inqle.security.Privilege;
 
 privileged aspect Account_Roo_JavaBean {
     
-    public Date Account.getCreated() {
-        return this.created;
-    }
-    
-    public void Account.setCreated(Date created) {
-        this.created = created;
-    }
-    
-    public Date Account.getUpdated() {
-        return this.updated;
-    }
-    
-    public void Account.setUpdated(Date updated) {
-        this.updated = updated;
-    }
-    
     public String Account.getUsername() {
         return this.username;
     }
@@ -48,6 +32,22 @@ privileged aspect Account_Roo_JavaBean {
     
     public void Account.setPrivs(Set<Privilege> privs) {
         this.privs = privs;
+    }
+    
+    public Date Account.getCreated() {
+        return this.created;
+    }
+    
+    public void Account.setCreated(Date created) {
+        this.created = created;
+    }
+    
+    public Date Account.getUpdated() {
+        return this.updated;
+    }
+    
+    public void Account.setUpdated(Date updated) {
+        this.updated = updated;
     }
     
 }

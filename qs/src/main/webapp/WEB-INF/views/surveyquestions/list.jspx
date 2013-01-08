@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_org_inqle_domain_SurveyQuestion" items="${surveyquestions}" z="+VKrZ8kc97uQJjPZZhtSdW+YxBI=">
+        <table:table data="${surveyquestions}" id="l_org_inqle_domain_SurveyQuestion" path="/surveyquestions" z="IZFucr6UalizhxPaLHbdNJxZ7CA=">
+            <table:column id="c_org_inqle_domain_SurveyQuestion_survey" property="survey" z="2BMKHNcTWeusg6XS3sLSGo1LVJA="/>
+            <table:column id="c_org_inqle_domain_SurveyQuestion_question" property="question" z="6sYBXFt6z7DdMstARm9CnYB0G0Y="/>
+            <table:column id="c_org_inqle_domain_SurveyQuestion_priority" property="priority" z="AFNVrdpywjfJFza0iAjvibzhqOs="/>
+        </table:table>
+    </page:list>
+</div>
