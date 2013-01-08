@@ -22,18 +22,21 @@
 		
 <!-- Configure Authentication mechanism -->
 		<authentication-manager alias="authenticationManager">
-		  <authentication-provider ref="qsAuthenticationProvider"/>
-		</authentication-manager>
-
-    <!--<SHA-256 values can be produced using 'echo -n your_desired_password | sha256sum' (using normal *nix environments)-->
-    <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <password-encoder hash="sha-256" />
-            <user-service>
-                <user name="admin" password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" authorities="ROLE_ADMIN" />
-                <user name="user" password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb" authorities="ROLE_USER" />
-            </user-service>
-        </authentication-provider>
+		  <authentication-provider ref="qsAuthenticationProvider">
+		    <password-encoder hash="sha-256" >
+          <salt-source user-property="username"/>
+        </password-encoder>
+      </authentication-provider>
+      
+      <authentication-provider>
+          <password-encoder hash="sha-256" />
+          <user-service>
+              <user name="super" password="73d1b1b1bc1dabfb97f216d897b7968e44b06457920f00f2dc6c1ed3be25ad4c" authorities="ROLE_SUPER" />
+              <user name="investigator" password="ea077ff913f0f89b0fb8c4f9616935ded44aaba80246d5baf57982bab74f50bf" authorities="ROLE_INVESTIGATOR" />
+              <user name="guardian" password="dde6e8974b46a1eddcd7ea3bbb899342f48cad896b47275a6f806062ec5ca14c" authorities="ROLE_GUARDIAN" />
+              <user name="participant" password="c0cde073e7e5fc1c872c3f89860466367d3a0da31a7c4b85882757a6b7dd4ba3" authorities="ROLE_PARTICIPANT" />
+          </user-service>
+      </authentication-provider>
     </authentication-manager>
     
 </beans:beans>
