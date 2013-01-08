@@ -317,3 +317,19 @@ q
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2012-12-30 04:16:04
 q
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2012-12-30 06:03:38
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-01-07 21:53:20
+enum type --class ~.security.Privilege
+enum constant --name ROLE_PARTICIPANT
+enum constant --name ROLE_GUARDIAN
+enum constant --name ROLE_INVESTIGATOR
+enum constant --name ROLE_SUPER
+// [failed] focus --class Account
+// [failed] field set --type ~.security.Privilege --fieldName privileges
+// [failed] field set --type ~.security.Privilege --fieldName privileges --class ~.domain.Account
+field set --type ~.security.Privilege --fieldName privs --class ~.domain.Account
+focus --class ~.security.Privilege
+enum constant --name ROLE_AUTHENTICATED
+focus --class ~.domain.Account
+finder list --depth 2 --filter password
+finder add --finderName findAccountsByUsernameEqualsAndPasswordEquals 
+finder list --depth 1 --filter password
