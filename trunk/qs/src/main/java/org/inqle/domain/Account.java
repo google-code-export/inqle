@@ -3,15 +3,16 @@ package org.inqle.domain;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.ManyToMany;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.inqle.security.Privilege;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -32,6 +33,7 @@ public class Account {
     private String password;
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<Privilege> privs = new HashSet<Privilege>();
     
     @NotNull

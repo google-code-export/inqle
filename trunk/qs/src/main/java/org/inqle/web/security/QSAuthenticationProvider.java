@@ -50,6 +50,7 @@ UsernamePasswordAuthenticationToken authentication)
             	throw new BadCredentialsException("Non-unique user, contact administrator");
             }
             Account account = accounts.get(0);
+            logger.info("got account: " + account);
         	authorities.add(new GrantedAuthorityImpl(Privilege.ROLE_AUTHENTICATED.toString()));
         	for (Privilege priv: account.getPrivs()) {
         		authorities.add(new GrantedAuthorityImpl(priv.toString()));
