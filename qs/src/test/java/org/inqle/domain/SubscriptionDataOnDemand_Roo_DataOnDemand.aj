@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.Participant;
 import org.inqle.domain.ParticipantDataOnDemand;
 import org.inqle.domain.Question;
 import org.inqle.domain.QuestionDataOnDemand;
 import org.inqle.domain.Subscription;
 import org.inqle.domain.SubscriptionDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,7 +51,7 @@ privileged aspect SubscriptionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void SubscriptionDataOnDemand.setCreatedBy(Subscription obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     

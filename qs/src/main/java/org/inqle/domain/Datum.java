@@ -1,12 +1,15 @@
 package org.inqle.domain;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
+
+import org.inqle.domain.security.Principal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -30,13 +33,13 @@ public class Datum {
     @Column(updatable = false)
     @Future
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(style = "FF")
     private Date created = new Date();
 
     @NotNull
     @Future
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(style = "FF")
     private Date updated = null;
 
     @ManyToOne
@@ -50,10 +53,10 @@ public class Datum {
     private Participant participant;
 
     @ManyToOne
-    private Account updatedBy;
+    private Principal updatedBy;
 
     @ManyToOne
-    private Account createdBy;
+    private Principal createdBy;
 
     private Double numericValue;
 

@@ -1,6 +1,6 @@
-2012-12-28 07:35:27,754 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - HHH000389: Unsuccessful: alter table account_roles drop constraint FKE093662B7BF43295
+2012-12-28 07:35:27,754 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - HHH000389: Unsuccessful: alter table principal_roles drop constraint FKE093662B7BF43295
 2012-12-28 07:35:27,755 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - user lacks privilege or object not found: PUBLIC.ACCOUNT_ROLES
-2012-12-28 07:35:27,755 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - HHH000389: Unsuccessful: alter table account_roles drop constraint FKE093662BC246F883
+2012-12-28 07:35:27,755 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - HHH000389: Unsuccessful: alter table principal_roles drop constraint FKE093662BC246F883
 2012-12-28 07:35:27,755 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - user lacks privilege or object not found: PUBLIC.ACCOUNT_ROLES
 2012-12-28 07:35:27,756 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - HHH000389: Unsuccessful: alter table choice drop constraint FKAEDD5DA15A171764
 2012-12-28 07:35:27,756 [main] ERROR org.hibernate.tool.hbm2ddl.SchemaExport - user lacks privilege or object not found: PUBLIC.CHOICE

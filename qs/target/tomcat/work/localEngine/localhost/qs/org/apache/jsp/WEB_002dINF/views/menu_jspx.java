@@ -582,10 +582,10 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fcategory_005f8);
     _jspx_th_menu_005fcategory_005f8.setJspContext(_jspx_page_context);
     _jspx_th_menu_005fcategory_005f8.setParent(_jspx_parent);
-    // /WEB-INF/views/menu.jspx(37,72) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fcategory_005f8.setZ("/ObionklNVMvfxU5oSj2hEUJNu0=");
-    // /WEB-INF/views/menu.jspx(37,72) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fcategory_005f8.setId("c_account");
+    // /WEB-INF/views/menu.jspx(37,58) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fcategory_005f8.setZ("user-managed");
+    // /WEB-INF/views/menu.jspx(37,58) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fcategory_005f8.setId("c_principal");
     _jspx_th_menu_005fcategory_005f8.setJspBody(new Helper( 9, _jspx_page_context, _jspx_th_menu_005fcategory_005f8, null));
     _jspx_th_menu_005fcategory_005f8.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fcategory_005f8);
@@ -601,14 +601,14 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f15);
     _jspx_th_menu_005fitem_005f15.setJspContext(_jspx_page_context);
     _jspx_th_menu_005fitem_005f15.setParent(_jspx_parent);
-    // /WEB-INF/views/menu.jspx(38,128) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fitem_005f15.setZ("7ISq6pJsfrDJexgk1yAmzNiIcp8=");
-    // /WEB-INF/views/menu.jspx(38,128) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fitem_005f15.setUrl("/accounts?form");
-    // /WEB-INF/views/menu.jspx(38,128) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/menu.jspx(38,116) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f15.setZ("user-managed");
+    // /WEB-INF/views/menu.jspx(38,116) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f15.setUrl("/principals?form");
+    // /WEB-INF/views/menu.jspx(38,116) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_menu_005fitem_005f15.setMessageCode("global_menu_new");
-    // /WEB-INF/views/menu.jspx(38,128) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fitem_005f15.setId("i_account_new");
+    // /WEB-INF/views/menu.jspx(38,116) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f15.setId("i_principal_new");
     _jspx_th_menu_005fitem_005f15.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f15);
     return false;
@@ -623,14 +623,14 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f16);
     _jspx_th_menu_005fitem_005f16.setJspContext(_jspx_page_context);
     _jspx_th_menu_005fitem_005f16.setParent(_jspx_parent);
-    // /WEB-INF/views/menu.jspx(39,179) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fitem_005f16.setZ("VeXZsM9n5bR9ZvhjdYhrVsG24uw=");
-    // /WEB-INF/views/menu.jspx(39,179) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fitem_005f16.setUrl((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("/accounts?page=1&size=${empty param.size ? 10 : param.size}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/menu.jspx(39,179) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/menu.jspx(39,167) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f16.setZ("user-managed");
+    // /WEB-INF/views/menu.jspx(39,167) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f16.setUrl((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("/principals?page=1&size=${empty param.size ? 10 : param.size}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/menu.jspx(39,167) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_menu_005fitem_005f16.setMessageCode("global_menu_list");
-    // /WEB-INF/views/menu.jspx(39,179) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_menu_005fitem_005f16.setId("i_account_list");
+    // /WEB-INF/views/menu.jspx(39,167) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f16.setId("i_principal_list");
     _jspx_th_menu_005fitem_005f16.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f16);
     return false;
@@ -1014,6 +1014,132 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
     return false;
   }
 
+  private boolean _jspx_meth_menu_005fcategory_005f15(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  menu:category
+    org.apache.jsp.tag.web.menu.category_tagx _jspx_th_menu_005fcategory_005f15 = new org.apache.jsp.tag.web.menu.category_tagx();
+    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fcategory_005f15);
+    _jspx_th_menu_005fcategory_005f15.setJspContext(_jspx_page_context);
+    _jspx_th_menu_005fcategory_005f15.setParent(_jspx_parent);
+    // /WEB-INF/views/menu.jspx(65,74) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fcategory_005f15.setZ("FnLFWXB/U5tWagL29D8k2ZPp4KM=");
+    // /WEB-INF/views/menu.jspx(65,74) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fcategory_005f15.setId("c_principal");
+    _jspx_th_menu_005fcategory_005f15.setJspBody(new Helper( 16, _jspx_page_context, _jspx_th_menu_005fcategory_005f15, null));
+    _jspx_th_menu_005fcategory_005f15.doTag();
+    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fcategory_005f15);
+    return false;
+  }
+
+  private boolean _jspx_meth_menu_005fitem_005f29(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  menu:item
+    org.apache.jsp.tag.web.menu.item_tagx _jspx_th_menu_005fitem_005f29 = new org.apache.jsp.tag.web.menu.item_tagx();
+    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f29);
+    _jspx_th_menu_005fitem_005f29.setJspContext(_jspx_page_context);
+    _jspx_th_menu_005fitem_005f29.setParent(_jspx_parent);
+    // /WEB-INF/views/menu.jspx(66,136) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f29.setZ("6j8zS/LbvDWl/oqZ8HUh7BeNF1I=");
+    // /WEB-INF/views/menu.jspx(66,136) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f29.setUrl("/security/users?form");
+    // /WEB-INF/views/menu.jspx(66,136) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f29.setMessageCode("global_menu_new");
+    // /WEB-INF/views/menu.jspx(66,136) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f29.setId("i_principal_new");
+    _jspx_th_menu_005fitem_005f29.doTag();
+    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f29);
+    return false;
+  }
+
+  private boolean _jspx_meth_menu_005fitem_005f30(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  menu:item
+    org.apache.jsp.tag.web.menu.item_tagx _jspx_th_menu_005fitem_005f30 = new org.apache.jsp.tag.web.menu.item_tagx();
+    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f30);
+    _jspx_th_menu_005fitem_005f30.setJspContext(_jspx_page_context);
+    _jspx_th_menu_005fitem_005f30.setParent(_jspx_parent);
+    // /WEB-INF/views/menu.jspx(67,187) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f30.setZ("8dS8JWBi//b31LIKAyhANwlewho=");
+    // /WEB-INF/views/menu.jspx(67,187) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f30.setUrl((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("/security/users?page=1&size=${empty param.size ? 10 : param.size}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/menu.jspx(67,187) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f30.setMessageCode("global_menu_list");
+    // /WEB-INF/views/menu.jspx(67,187) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f30.setId("i_principal_list");
+    _jspx_th_menu_005fitem_005f30.doTag();
+    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f30);
+    return false;
+  }
+
+  private boolean _jspx_meth_menu_005fcategory_005f16(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  menu:category
+    org.apache.jsp.tag.web.menu.category_tagx _jspx_th_menu_005fcategory_005f16 = new org.apache.jsp.tag.web.menu.category_tagx();
+    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fcategory_005f16);
+    _jspx_th_menu_005fcategory_005f16.setJspContext(_jspx_page_context);
+    _jspx_th_menu_005fcategory_005f16.setParent(_jspx_parent);
+    // /WEB-INF/views/menu.jspx(69,74) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fcategory_005f16.setZ("GIU2CEy7lITDknErfBZQNPQ7WFs=");
+    // /WEB-INF/views/menu.jspx(69,74) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fcategory_005f16.setId("c_authority");
+    _jspx_th_menu_005fcategory_005f16.setJspBody(new Helper( 17, _jspx_page_context, _jspx_th_menu_005fcategory_005f16, null));
+    _jspx_th_menu_005fcategory_005f16.doTag();
+    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fcategory_005f16);
+    return false;
+  }
+
+  private boolean _jspx_meth_menu_005fitem_005f31(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  menu:item
+    org.apache.jsp.tag.web.menu.item_tagx _jspx_th_menu_005fitem_005f31 = new org.apache.jsp.tag.web.menu.item_tagx();
+    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f31);
+    _jspx_th_menu_005fitem_005f31.setJspContext(_jspx_page_context);
+    _jspx_th_menu_005fitem_005f31.setParent(_jspx_parent);
+    // /WEB-INF/views/menu.jspx(70,136) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f31.setZ("ic1VJI/lUEk+gvBIBpev512GBag=");
+    // /WEB-INF/views/menu.jspx(70,136) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f31.setUrl("/security/roles?form");
+    // /WEB-INF/views/menu.jspx(70,136) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f31.setMessageCode("global_menu_new");
+    // /WEB-INF/views/menu.jspx(70,136) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f31.setId("i_authority_new");
+    _jspx_th_menu_005fitem_005f31.doTag();
+    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f31);
+    return false;
+  }
+
+  private boolean _jspx_meth_menu_005fitem_005f32(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
+          throws Throwable {
+    PageContext pageContext = _jspx_page_context;
+    JspWriter out = _jspx_page_context.getOut();
+    //  menu:item
+    org.apache.jsp.tag.web.menu.item_tagx _jspx_th_menu_005fitem_005f32 = new org.apache.jsp.tag.web.menu.item_tagx();
+    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f32);
+    _jspx_th_menu_005fitem_005f32.setJspContext(_jspx_page_context);
+    _jspx_th_menu_005fitem_005f32.setParent(_jspx_parent);
+    // /WEB-INF/views/menu.jspx(71,187) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f32.setZ("KdCWOMYIRNTbRpUaEFZQW1jX1YI=");
+    // /WEB-INF/views/menu.jspx(71,187) name = url type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f32.setUrl((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("/security/roles?page=1&size=${empty param.size ? 10 : param.size}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/menu.jspx(71,187) name = messageCode type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f32.setMessageCode("global_menu_list");
+    // /WEB-INF/views/menu.jspx(71,187) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_menu_005fitem_005f32.setId("i_authority_list");
+    _jspx_th_menu_005fitem_005f32.doTag();
+    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_menu_005fitem_005f32);
+    return false;
+  }
+
   private class Helper
       extends org.apache.jasper.runtime.JspFragmentHelper
   {
@@ -1057,6 +1183,10 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
       if (_jspx_meth_menu_005fcategory_005f13(_jspx_parent, _jspx_page_context))
         return true;
       if (_jspx_meth_menu_005fcategory_005f14(_jspx_parent, _jspx_page_context))
+        return true;
+      if (_jspx_meth_menu_005fcategory_005f15(_jspx_parent, _jspx_page_context))
+        return true;
+      if (_jspx_meth_menu_005fcategory_005f16(_jspx_parent, _jspx_page_context))
         return true;
       return false;
     }
@@ -1193,6 +1323,24 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
         return true;
       return false;
     }
+    public boolean invoke16( JspWriter out ) 
+      throws Throwable
+    {
+      if (_jspx_meth_menu_005fitem_005f29(_jspx_parent, _jspx_page_context))
+        return true;
+      if (_jspx_meth_menu_005fitem_005f30(_jspx_parent, _jspx_page_context))
+        return true;
+      return false;
+    }
+    public boolean invoke17( JspWriter out ) 
+      throws Throwable
+    {
+      if (_jspx_meth_menu_005fitem_005f31(_jspx_parent, _jspx_page_context))
+        return true;
+      if (_jspx_meth_menu_005fitem_005f32(_jspx_parent, _jspx_page_context))
+        return true;
+      return false;
+    }
     public void invoke( java.io.Writer writer )
       throws JspException
     {
@@ -1252,6 +1400,12 @@ public final class menu_jspx extends org.apache.jasper.runtime.HttpJspBase
             break;
           case 15:
             invoke15( out );
+            break;
+          case 16:
+            invoke16( out );
+            break;
+          case 17:
+            invoke17( out );
             break;
         }
       }

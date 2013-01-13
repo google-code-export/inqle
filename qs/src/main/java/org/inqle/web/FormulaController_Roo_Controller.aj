@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Formula;
+import org.inqle.domain.security.Principal;
 import org.inqle.web.FormulaController;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -98,15 +98,15 @@ privileged aspect FormulaController_Roo_Controller {
     }
     
     void FormulaController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("formula_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("formula_updated_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("formula_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("formula_updated_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void FormulaController.populateEditForm(Model uiModel, Formula formula) {
         uiModel.addAttribute("formula", formula);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("accounts", Account.findAllAccounts());
         uiModel.addAttribute("concepts", Concept.findAllConcepts());
+        uiModel.addAttribute("principals", Principal.findAllPrincipals());
     }
     
     String FormulaController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

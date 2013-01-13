@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.Survey;
 import org.inqle.domain.SurveyDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.springframework.stereotype.Component;
 
 privileged aspect SurveyDataOnDemand_Roo_DataOnDemand {
@@ -37,7 +37,7 @@ privileged aspect SurveyDataOnDemand_Roo_DataOnDemand {
     }
     
     public void SurveyDataOnDemand.setCreatedBy(Survey obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     

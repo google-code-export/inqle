@@ -4,8 +4,8 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Concept_Roo_JavaBean {
     
@@ -33,19 +33,19 @@ privileged aspect Concept_Roo_JavaBean {
         this.conceptkey = conceptkey;
     }
     
-    public Account Concept.getCreatedBy() {
+    public Principal Concept.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Concept.setCreatedBy(Account createdBy) {
+    public void Concept.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     
-    public Account Concept.getUpdatedBy() {
+    public Principal Concept.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Concept.setUpdatedBy(Account updatedBy) {
+    public void Concept.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     

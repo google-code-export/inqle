@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_org_inqle_domain_security_Principal" object="${principal}" path="/security/users" z="i/qd9vXEp2+idc8bHV12qZFsSBE=">
+        <field:display field="username" id="s_org_inqle_domain_security_Principal_username" object="${principal}" z="5x+rl06xg0wjRPK28Dhz3JDIx1E="/>
+        <field:display field="password" id="s_org_inqle_domain_security_Principal_password" object="${principal}" z="KVJkTYiJi1sMCV8MNwEUUZX9agQ="/>
+        <field:display date="true" dateTimePattern="${principal_updated_date_format}" field="updated" id="s_org_inqle_domain_security_Principal_updated" object="${principal}" z="kXerrb0koiU8zTFn69TYCtlKbZI="/>
+        <field:display field="enabled" id="s_org_inqle_domain_security_Principal_enabled" object="${principal}" z="ekvBILlqiQfNhpUWjPC3BzFWEUM="/>
+    </page:show>
+</div>

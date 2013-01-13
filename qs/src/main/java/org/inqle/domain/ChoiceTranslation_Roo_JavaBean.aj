@@ -4,9 +4,9 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
 import org.inqle.domain.ChoiceTranslation;
+import org.inqle.domain.security.Principal;
 
 privileged aspect ChoiceTranslation_Roo_JavaBean {
     
@@ -42,19 +42,19 @@ privileged aspect ChoiceTranslation_Roo_JavaBean {
         this.lang = lang;
     }
     
-    public Account ChoiceTranslation.getCreatedBy() {
+    public Principal ChoiceTranslation.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void ChoiceTranslation.setCreatedBy(Account createdBy) {
+    public void ChoiceTranslation.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     
-    public Account ChoiceTranslation.getUpdatedBy() {
+    public Principal ChoiceTranslation.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void ChoiceTranslation.setUpdatedBy(Account updatedBy) {
+    public void ChoiceTranslation.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     

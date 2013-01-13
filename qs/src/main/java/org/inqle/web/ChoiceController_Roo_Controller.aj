@@ -6,8 +6,8 @@ package org.inqle.web;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
+import org.inqle.domain.security.Principal;
 import org.inqle.web.ChoiceController;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -90,14 +90,14 @@ privileged aspect ChoiceController_Roo_Controller {
     }
     
     void ChoiceController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("choice_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("choice_updated_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("choice_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("choice_updated_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void ChoiceController.populateEditForm(Model uiModel, Choice choice) {
         uiModel.addAttribute("choice", choice);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("accounts", Account.findAllAccounts());
+        uiModel.addAttribute("principals", Principal.findAllPrincipals());
     }
     
     String ChoiceController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

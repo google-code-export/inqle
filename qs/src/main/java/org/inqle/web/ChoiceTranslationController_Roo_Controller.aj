@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
 import org.inqle.domain.ChoiceTranslation;
+import org.inqle.domain.security.Principal;
 import org.inqle.web.ChoiceTranslationController;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -98,15 +98,15 @@ privileged aspect ChoiceTranslationController_Roo_Controller {
     }
     
     void ChoiceTranslationController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("choiceTranslation_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("choiceTranslation_updated_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("choiceTranslation_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("choiceTranslation_updated_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void ChoiceTranslationController.populateEditForm(Model uiModel, ChoiceTranslation choiceTranslation) {
         uiModel.addAttribute("choiceTranslation", choiceTranslation);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("accounts", Account.findAllAccounts());
         uiModel.addAttribute("choices", Choice.findAllChoices());
+        uiModel.addAttribute("principals", Principal.findAllPrincipals());
     }
     
     String ChoiceTranslationController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

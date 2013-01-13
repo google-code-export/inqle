@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.ChoiceDataOnDemand;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
@@ -22,6 +21,7 @@ import org.inqle.domain.Participant;
 import org.inqle.domain.ParticipantDataOnDemand;
 import org.inqle.domain.QuestionDataOnDemand;
 import org.inqle.domain.UnitDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.inqle.repository.DatumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -87,7 +87,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     }
     
     public void DatumDataOnDemand.setCreatedBy(Datum obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     
@@ -122,7 +122,7 @@ privileged aspect DatumDataOnDemand_Roo_DataOnDemand {
     }
     
     public void DatumDataOnDemand.setUpdatedBy(Datum obj, int index) {
-        Account updatedBy = null;
+        Principal updatedBy = null;
         obj.setUpdatedBy(updatedBy);
     }
     

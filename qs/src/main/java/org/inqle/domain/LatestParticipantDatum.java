@@ -22,7 +22,7 @@ public class LatestParticipantDatum {
     @NotNull
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(style = "FF")
     private Date created = new Date();
 
 //    @NotNull
@@ -38,6 +38,6 @@ public class LatestParticipantDatum {
     private Participant participant;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(style = "FF")
     private Date askableAfter;
 }

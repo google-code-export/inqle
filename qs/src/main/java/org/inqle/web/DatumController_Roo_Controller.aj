@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Datum;
 import org.inqle.domain.Formula;
 import org.inqle.domain.Participant;
 import org.inqle.domain.Unit;
+import org.inqle.domain.security.Principal;
 import org.inqle.repository.DatumRepository;
 import org.inqle.repository.QuestionRepository;
 import org.inqle.web.DatumController;
@@ -114,20 +114,20 @@ privileged aspect DatumController_Roo_Controller {
     }
     
     void DatumController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("datum_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("datum_updated_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("datum_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("datum_updated_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void DatumController.populateEditForm(Model uiModel, Datum datum) {
         uiModel.addAttribute("datum", datum);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("accounts", Account.findAllAccounts());
         uiModel.addAttribute("choices", Choice.findAllChoices());
         uiModel.addAttribute("concepts", Concept.findAllConcepts());
         uiModel.addAttribute("formulas", Formula.findAllFormulas());
         uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questions", questionRepository.findAll());
         uiModel.addAttribute("units", Unit.findAllUnits());
+        uiModel.addAttribute("principals", Principal.findAllPrincipals());
     }
     
     String DatumController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

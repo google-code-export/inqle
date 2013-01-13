@@ -4,8 +4,8 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_org_inqle_domain_Choice" modelAttribute="choice" path="/choices" render="${empty dependencies}" z="1PgaFVROWmSQ6JCBGkOJOUzWi4s=">
         <field:datetime dateTimePattern="${choice_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Choice_updated" required="true" z="Ho1vvzh028GU3srbS495JT1n8g8="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_Choice_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="hxRWFJwFbqgocZEgQ9sXt2SDB2k="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_Choice_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="GgFnNJkhYE4Ax+92zwr+WYRqIjk="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Choice_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Choice_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_org_inqle_domain_Choice" render="${not empty dependencies}" z="GZMOpXhSUODwQfhauBAaHJIMeME="/>
 </div>

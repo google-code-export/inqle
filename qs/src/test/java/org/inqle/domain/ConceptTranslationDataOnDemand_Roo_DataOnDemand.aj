@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
 import org.inqle.domain.ConceptTranslation;
 import org.inqle.domain.ConceptTranslationDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -64,7 +64,7 @@ privileged aspect ConceptTranslationDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ConceptTranslationDataOnDemand.setCreatedBy(ConceptTranslation obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     
@@ -79,7 +79,7 @@ privileged aspect ConceptTranslationDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ConceptTranslationDataOnDemand.setUpdatedBy(ConceptTranslation obj, int index) {
-        Account updatedBy = null;
+        Principal updatedBy = null;
         obj.setUpdatedBy(updatedBy);
     }
     

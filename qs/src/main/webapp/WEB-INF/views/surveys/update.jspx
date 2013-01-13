@@ -3,6 +3,6 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_org_inqle_domain_Survey" modelAttribute="survey" path="/surveys" versionField="Version" z="aTHWi8qVZfMgC/tD/sVwr4DppmQ=">
-        <field:select field="createdBy" id="c_org_inqle_domain_Survey_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="TJ7f0EWKdu6YCUQOZHUNrimVwHk="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Survey_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
     </form:update>
 </div>

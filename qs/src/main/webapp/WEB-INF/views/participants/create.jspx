@@ -4,8 +4,8 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_org_inqle_domain_Participant" modelAttribute="participant" path="/participants" render="${empty dependencies}" z="AhtiTk312dnPAGwmODwLZ9DeB7w=">
         <field:datetime dateTimePattern="${participant_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Participant_updated" required="true" z="Vp1P3CBXb9oqDM3C3DR+shp6taY="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_Participant_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="d7usQPMcZLlUwcPeTSsujlQdumU="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_Participant_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="IQ4+twhtt5jyFuqoLCfbxfke2aM="/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Participant_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Participant_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_org_inqle_domain_Participant" render="${not empty dependencies}" z="9pqVMz8EedfmwTW7EYOEdwUb29Q="/>
 </div>

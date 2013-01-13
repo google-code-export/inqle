@@ -2,10 +2,10 @@
 <div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <page:show id="ps_org_inqle_domain_Account" object="${account}" path="/accounts" z="FydJUbVpendsrl23Fg9blP4PzR4=">
-        <field:display date="true" dateTimePattern="${account_updated_date_format}" field="updated" id="s_org_inqle_domain_Account_updated" object="${account}" z="xL7fapsuDK8aDbcPILpoYsH1RJc="/>
-        <field:display field="username" id="s_org_inqle_domain_Account_username" object="${account}" z="Y8TmwBt83kdYyvpYkdSFUm9IXTc="/>
-        <field:display field="password" id="s_org_inqle_domain_Account_password" object="${account}" z="ep9V+fiONDCLq/o802fyOSLaEW4="/>
-        <field:display field="privs" id="s_org_inqle_domain_Account_privs" object="${account}" z="ZxIUFSUxXh2yYCMIyqOSisNej3M="/>
+    <page:show id="ps_org_inqle_domain_Principal" object="${principal}" path="/principals" z="FydJUbVpendsrl23Fg9blP4PzR4=">
+        <field:display date="true" dateTimePattern="${principal_updated_date_format}" field="updated" id="s_org_inqle_domain_Principal_updated" object="${principal}" z="xL7fapsuDK8aDbcPILpoYsH1RJc="/>
+        <field:display field="username" id="s_org_inqle_domain_Principal_username" object="${principal}" z="Y8TmwBt83kdYyvpYkdSFUm9IXTc="/>
+        <field:display field="password" id="s_org_inqle_domain_Principal_password" object="${principal}" z="ep9V+fiONDCLq/o802fyOSLaEW4="/>
+        <field:display field="enabled" id="s_org_inqle_domain_Principal_enabled" object="${principal}" z="NHAfiStFW2Ax2W0qYoMoL7KORdQ="/>
     </page:show>
 </div>

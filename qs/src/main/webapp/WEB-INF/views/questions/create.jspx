@@ -5,8 +5,8 @@
     <form:create id="fc_org_inqle_domain_Question" modelAttribute="question" path="/questions" render="${empty dependencies}" z="3ALDMPd2m8Ha1uGJBM4IdzBN0ug=">
         <field:input field="lang" id="c_org_inqle_domain_Question_lang" z="ySg/c3ldq49EAZ5whFT+WpnLXkg="/>
         <field:select field="concept" id="c_org_inqle_domain_Question_concept" itemValue="id" items="${concepts}" path="/concepts" z="hQwgLwodeb2xzGZdmEt5E41uo+k="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_Question_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="N5GVDi5xzxEi65Xz6v3qmLuHwF0="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_Question_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="CgWYsr7n0fxeKHm3dC/WLN7JcfQ="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Question_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Question_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
         <field:datetime dateTimePattern="${question_updated_date_format}" field="updated" id="c_org_inqle_domain_Question_updated" z="qcj1t02NFuzUDHdBAbfdN+216v0="/>
         <field:input field="priority" id="c_org_inqle_domain_Question_priority" required="true" z="6GEKjA47TogZEbv2LYKW8P17ieo="/>
         <field:input field="text" id="c_org_inqle_domain_Question_text" z="XJVK1qV2NwOweisQmu27Lc87KhE="/>

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptTranslation;
+import org.inqle.domain.security.Principal;
 import org.inqle.web.ConceptTranslationController;
 import org.joda.time.format.DateTimeFormat;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -98,15 +98,15 @@ privileged aspect ConceptTranslationController_Roo_Controller {
     }
     
     void ConceptTranslationController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("conceptTranslation_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("conceptTranslation_updated_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("conceptTranslation_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("conceptTranslation_updated_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void ConceptTranslationController.populateEditForm(Model uiModel, ConceptTranslation conceptTranslation) {
         uiModel.addAttribute("conceptTranslation", conceptTranslation);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("accounts", Account.findAllAccounts());
         uiModel.addAttribute("concepts", Concept.findAllConcepts());
+        uiModel.addAttribute("principals", Principal.findAllPrincipals());
     }
     
     String ConceptTranslationController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

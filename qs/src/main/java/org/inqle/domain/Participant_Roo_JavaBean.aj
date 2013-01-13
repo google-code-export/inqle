@@ -4,8 +4,8 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Participant;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Participant_Roo_JavaBean {
     
@@ -25,19 +25,19 @@ privileged aspect Participant_Roo_JavaBean {
         this.updated = updated;
     }
     
-    public Account Participant.getUpdatedBy() {
+    public Principal Participant.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Participant.setUpdatedBy(Account updatedBy) {
+    public void Participant.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     
-    public Account Participant.getCreatedBy() {
+    public Principal Participant.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Participant.setCreatedBy(Account createdBy) {
+    public void Participant.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     

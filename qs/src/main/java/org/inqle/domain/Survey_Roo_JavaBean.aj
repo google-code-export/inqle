@@ -4,8 +4,8 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Survey;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Survey_Roo_JavaBean {
     
@@ -17,11 +17,11 @@ privileged aspect Survey_Roo_JavaBean {
         this.created = created;
     }
     
-    public Account Survey.getCreatedBy() {
+    public Principal Survey.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Survey.setCreatedBy(Account createdBy) {
+    public void Survey.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     

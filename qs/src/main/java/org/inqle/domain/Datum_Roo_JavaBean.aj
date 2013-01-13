@@ -4,7 +4,6 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Datum;
@@ -12,6 +11,7 @@ import org.inqle.domain.Formula;
 import org.inqle.domain.Participant;
 import org.inqle.domain.Question;
 import org.inqle.domain.Unit;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Datum_Roo_JavaBean {
     
@@ -55,19 +55,19 @@ privileged aspect Datum_Roo_JavaBean {
         this.participant = participant;
     }
     
-    public Account Datum.getUpdatedBy() {
+    public Principal Datum.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Datum.setUpdatedBy(Account updatedBy) {
+    public void Datum.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     
-    public Account Datum.getCreatedBy() {
+    public Principal Datum.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Datum.setCreatedBy(Account createdBy) {
+    public void Datum.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     

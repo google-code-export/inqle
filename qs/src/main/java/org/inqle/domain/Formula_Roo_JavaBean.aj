@@ -4,9 +4,9 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Formula;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Formula_Roo_JavaBean {
     
@@ -42,19 +42,19 @@ privileged aspect Formula_Roo_JavaBean {
         this.expression = expression;
     }
     
-    public Account Formula.getUpdatedBy() {
+    public Principal Formula.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Formula.setUpdatedBy(Account updatedBy) {
+    public void Formula.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     
-    public Account Formula.getCreatedBy() {
+    public Principal Formula.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Formula.setCreatedBy(Account createdBy) {
+    public void Formula.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     

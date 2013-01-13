@@ -4,9 +4,9 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptTranslation;
+import org.inqle.domain.security.Principal;
 
 privileged aspect ConceptTranslation_Roo_JavaBean {
     
@@ -58,19 +58,19 @@ privileged aspect ConceptTranslation_Roo_JavaBean {
         this.conceptDescription = conceptDescription;
     }
     
-    public Account ConceptTranslation.getCreatedBy() {
+    public Principal ConceptTranslation.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void ConceptTranslation.setCreatedBy(Account createdBy) {
+    public void ConceptTranslation.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     
-    public Account ConceptTranslation.getUpdatedBy() {
+    public Principal ConceptTranslation.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void ConceptTranslation.setUpdatedBy(Account updatedBy) {
+    public void ConceptTranslation.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     

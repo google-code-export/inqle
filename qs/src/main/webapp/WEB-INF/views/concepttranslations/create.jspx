@@ -7,8 +7,8 @@
         <field:select field="concept" id="c_org_inqle_domain_ConceptTranslation_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="P/Gt+eb/LsT/jp63aV7Hb6CPzXs="/>
         <field:input field="conceptName" id="c_org_inqle_domain_ConceptTranslation_conceptName" required="true" z="gm+zyAr/Qg+vxWbhgv8Q/2SagQw="/>
         <field:input field="conceptDescription" id="c_org_inqle_domain_ConceptTranslation_conceptDescription" z="zSsbw4O9y+gMBR4iGD0eKXOzew4="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_ConceptTranslation_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="LNCC/8n4o7uX56AhiMTBV+BIxLI="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_ConceptTranslation_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="miGzRv01cHwh93ylq1ofFDFrMUg="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_ConceptTranslation_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_ConceptTranslation_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
         <field:datetime dateTimePattern="${conceptTranslation_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_ConceptTranslation_updated" required="true" z="Nb+5Ilf9L/nu/hTJUqkQZOWKVpI="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_org_inqle_domain_ConceptTranslation" render="${not empty dependencies}" z="hS1/o41aPhDIS5qT5V0HlQJFZU0="/>

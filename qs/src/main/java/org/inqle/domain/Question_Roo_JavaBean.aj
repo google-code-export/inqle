@@ -4,9 +4,9 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.Question;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Question_Roo_JavaBean {
     
@@ -66,19 +66,19 @@ privileged aspect Question_Roo_JavaBean {
         this.concept = concept;
     }
     
-    public Account Question.getCreatedBy() {
+    public Principal Question.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Question.setCreatedBy(Account createdBy) {
+    public void Question.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     
-    public Account Question.getUpdatedBy() {
+    public Principal Question.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Question.setUpdatedBy(Account updatedBy) {
+    public void Question.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     

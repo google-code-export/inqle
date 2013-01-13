@@ -207,9 +207,9 @@ public final class create_jspx extends org.apache.jasper.runtime.HttpJspBase
     // /WEB-INF/views/concepttranslations/create.jspx(10,180) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fselect_005f1.setZ("LNCC/8n4o7uX56AhiMTBV+BIxLI=");
     // /WEB-INF/views/concepttranslations/create.jspx(10,180) name = path type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fselect_005f1.setPath("/accounts");
+    _jspx_th_field_005fselect_005f1.setPath("/principals");
     // /WEB-INF/views/concepttranslations/create.jspx(10,180) name = items type = java.util.Collection reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fselect_005f1.setItems((java.util.Collection) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${accounts}", java.util.Collection.class, (PageContext)_jspx_page_context, null, false));
+    _jspx_th_field_005fselect_005f1.setItems((java.util.Collection) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principals}", java.util.Collection.class, (PageContext)_jspx_page_context, null, false));
     // /WEB-INF/views/concepttranslations/create.jspx(10,180) name = itemValue type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fselect_005f1.setItemValue("id");
     // /WEB-INF/views/concepttranslations/create.jspx(10,180) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
@@ -233,9 +233,9 @@ public final class create_jspx extends org.apache.jasper.runtime.HttpJspBase
     // /WEB-INF/views/concepttranslations/create.jspx(11,180) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fselect_005f2.setZ("miGzRv01cHwh93ylq1ofFDFrMUg=");
     // /WEB-INF/views/concepttranslations/create.jspx(11,180) name = path type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fselect_005f2.setPath("/accounts");
+    _jspx_th_field_005fselect_005f2.setPath("/principals");
     // /WEB-INF/views/concepttranslations/create.jspx(11,180) name = items type = java.util.Collection reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fselect_005f2.setItems((java.util.Collection) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${accounts}", java.util.Collection.class, (PageContext)_jspx_page_context, null, false));
+    _jspx_th_field_005fselect_005f2.setItems((java.util.Collection) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principals}", java.util.Collection.class, (PageContext)_jspx_page_context, null, false));
     // /WEB-INF/views/concepttranslations/create.jspx(11,180) name = itemValue type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fselect_005f2.setItemValue("id");
     // /WEB-INF/views/concepttranslations/create.jspx(11,180) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
