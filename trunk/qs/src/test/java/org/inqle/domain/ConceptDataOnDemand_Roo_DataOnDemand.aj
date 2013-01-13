@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.Concept;
 import org.inqle.domain.ConceptDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.springframework.stereotype.Component;
 
 privileged aspect ConceptDataOnDemand_Roo_DataOnDemand {
@@ -47,7 +47,7 @@ privileged aspect ConceptDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ConceptDataOnDemand.setCreatedBy(Concept obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     
@@ -57,7 +57,7 @@ privileged aspect ConceptDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ConceptDataOnDemand.setUpdatedBy(Concept obj, int index) {
-        Account updatedBy = null;
+        Principal updatedBy = null;
         obj.setUpdatedBy(updatedBy);
     }
     

@@ -4,8 +4,8 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Choice_Roo_JavaBean {
     
@@ -25,19 +25,19 @@ privileged aspect Choice_Roo_JavaBean {
         this.updated = updated;
     }
     
-    public Account Choice.getCreatedBy() {
+    public Principal Choice.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Choice.setCreatedBy(Account createdBy) {
+    public void Choice.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     
-    public Account Choice.getUpdatedBy() {
+    public Principal Choice.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Choice.setUpdatedBy(Account updatedBy) {
+    public void Choice.setUpdatedBy(Principal updatedBy) {
         this.updatedBy = updatedBy;
     }
     

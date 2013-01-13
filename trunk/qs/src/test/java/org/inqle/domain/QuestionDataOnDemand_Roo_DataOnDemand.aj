@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.ConceptDataOnDemand;
 import org.inqle.domain.Question;
 import org.inqle.domain.QuestionDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.inqle.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -61,7 +61,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void QuestionDataOnDemand.setCreatedBy(Question obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     
@@ -96,7 +96,7 @@ privileged aspect QuestionDataOnDemand_Roo_DataOnDemand {
     }
     
     public void QuestionDataOnDemand.setUpdatedBy(Question obj, int index) {
-        Account updatedBy = null;
+        Principal updatedBy = null;
         obj.setUpdatedBy(updatedBy);
     }
     

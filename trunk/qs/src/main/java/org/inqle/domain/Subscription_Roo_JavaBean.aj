@@ -4,10 +4,10 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import org.inqle.domain.Account;
 import org.inqle.domain.Participant;
 import org.inqle.domain.Question;
 import org.inqle.domain.Subscription;
+import org.inqle.domain.security.Principal;
 
 privileged aspect Subscription_Roo_JavaBean {
     
@@ -19,11 +19,11 @@ privileged aspect Subscription_Roo_JavaBean {
         this.created = created;
     }
     
-    public Account Subscription.getCreatedBy() {
+    public Principal Subscription.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Subscription.setCreatedBy(Account createdBy) {
+    public void Subscription.setCreatedBy(Principal createdBy) {
         this.createdBy = createdBy;
     }
     

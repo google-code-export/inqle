@@ -5,8 +5,8 @@
     <form:create id="fc_org_inqle_domain_Formula" modelAttribute="formula" path="/formulas" render="${empty dependencies}" z="WK3CLKDG3lbYsNe5J/qssMdrZ2c=">
         <field:select field="concept" id="c_org_inqle_domain_Formula_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="5zxsZTv+tlpZCEx404WDbNVmX6w="/>
         <field:input field="expression" id="c_org_inqle_domain_Formula_expression" required="true" z="g6XeuZ0IZyeDueYmKcvV1n7q0mk="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_Formula_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="U6OG5nL6rU522+qExA6f5RCs7HY="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_Formula_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="2UFrua5DMhhAwNRzyVCKbWLhV+s="/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Formula_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Formula_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
         <field:datetime dateTimePattern="${formula_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Formula_updated" required="true" z="zB97+BjWe8o2b/rf3VpgS7r7UqA="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_org_inqle_domain_Formula" render="${not empty dependencies}" z="Z5GAFMc1YA3HQqcZJfaUkxRcm3w="/>

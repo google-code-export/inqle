@@ -3,7 +3,6 @@
 
 package org.inqle.web;
 
-import org.inqle.domain.Account;
 import org.inqle.domain.Choice;
 import org.inqle.domain.ChoiceTranslation;
 import org.inqle.domain.Concept;
@@ -17,6 +16,8 @@ import org.inqle.domain.Subscription;
 import org.inqle.domain.Survey;
 import org.inqle.domain.SurveyQuestion;
 import org.inqle.domain.Unit;
+import org.inqle.domain.security.Authority;
+import org.inqle.domain.security.Principal;
 import org.inqle.repository.DatumRepository;
 import org.inqle.repository.QuestionRepository;
 import org.inqle.web.ApplicationConversionServiceFactoryBean;
@@ -34,30 +35,6 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     
     @Autowired
     QuestionRepository ApplicationConversionServiceFactoryBean.questionRepository;
-    
-    public Converter<Account, String> ApplicationConversionServiceFactoryBean.getAccountToStringConverter() {
-        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Account, java.lang.String>() {
-            public String convert(Account account) {
-                return new StringBuilder().append(account.getUsername()).append(' ').append(account.getPassword()).append(' ').append(account.getCreated()).append(' ').append(account.getUpdated()).toString();
-            }
-        };
-    }
-    
-    public Converter<Long, Account> ApplicationConversionServiceFactoryBean.getIdToAccountConverter() {
-        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.Account>() {
-            public org.inqle.domain.Account convert(java.lang.Long id) {
-                return Account.findAccount(id);
-            }
-        };
-    }
-    
-    public Converter<String, Account> ApplicationConversionServiceFactoryBean.getStringToAccountConverter() {
-        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.Account>() {
-            public org.inqle.domain.Account convert(String id) {
-                return getObject().convert(getObject().convert(id, Long.class), Account.class);
-            }
-        };
-    }
     
     public Converter<Choice, String> ApplicationConversionServiceFactoryBean.getChoiceToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<org.inqle.domain.Choice, java.lang.String>() {
@@ -371,10 +348,55 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
+    public Converter<Authority, String> ApplicationConversionServiceFactoryBean.getAuthorityToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.security.Authority, java.lang.String>() {
+            public String convert(Authority authority) {
+                return new StringBuilder().append(authority.getRoleId()).append(' ').append(authority.getAuthority()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Authority> ApplicationConversionServiceFactoryBean.getIdToAuthorityConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.security.Authority>() {
+            public org.inqle.domain.security.Authority convert(java.lang.Long id) {
+                return Authority.findAuthority(id);
+            }
+        };
+    }
+    
+    public Converter<String, Authority> ApplicationConversionServiceFactoryBean.getStringToAuthorityConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.security.Authority>() {
+            public org.inqle.domain.security.Authority convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Authority.class);
+            }
+        };
+    }
+    
+    public Converter<Principal, String> ApplicationConversionServiceFactoryBean.getPrincipalToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<org.inqle.domain.security.Principal, java.lang.String>() {
+            public String convert(Principal principal) {
+                return new StringBuilder().append(principal.getUsername()).append(' ').append(principal.getPassword()).append(' ').append(principal.getCreated()).append(' ').append(principal.getUpdated()).toString();
+            }
+        };
+    }
+    
+    public Converter<Long, Principal> ApplicationConversionServiceFactoryBean.getIdToPrincipalConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, org.inqle.domain.security.Principal>() {
+            public org.inqle.domain.security.Principal convert(java.lang.Long id) {
+                return Principal.findPrincipal(id);
+            }
+        };
+    }
+    
+    public Converter<String, Principal> ApplicationConversionServiceFactoryBean.getStringToPrincipalConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, org.inqle.domain.security.Principal>() {
+            public org.inqle.domain.security.Principal convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Principal.class);
+            }
+        };
+    }
+    
     public void ApplicationConversionServiceFactoryBean.installLabelConverters(FormatterRegistry registry) {
-        registry.addConverter(getAccountToStringConverter());
-        registry.addConverter(getIdToAccountConverter());
-        registry.addConverter(getStringToAccountConverter());
         registry.addConverter(getChoiceToStringConverter());
         registry.addConverter(getIdToChoiceConverter());
         registry.addConverter(getStringToChoiceConverter());
@@ -414,6 +436,12 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         registry.addConverter(getUnitToStringConverter());
         registry.addConverter(getIdToUnitConverter());
         registry.addConverter(getStringToUnitConverter());
+        registry.addConverter(getAuthorityToStringConverter());
+        registry.addConverter(getIdToAuthorityConverter());
+        registry.addConverter(getStringToAuthorityConverter());
+        registry.addConverter(getPrincipalToStringConverter());
+        registry.addConverter(getIdToPrincipalConverter());
+        registry.addConverter(getStringToPrincipalConverter());
     }
     
     public void ApplicationConversionServiceFactoryBean.afterPropertiesSet() {

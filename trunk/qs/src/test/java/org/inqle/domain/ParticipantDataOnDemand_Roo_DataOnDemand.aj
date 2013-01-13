@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Random;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.inqle.domain.Account;
 import org.inqle.domain.Participant;
 import org.inqle.domain.ParticipantDataOnDemand;
+import org.inqle.domain.security.Principal;
 import org.springframework.stereotype.Component;
 
 privileged aspect ParticipantDataOnDemand_Roo_DataOnDemand {
@@ -39,7 +39,7 @@ privileged aspect ParticipantDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ParticipantDataOnDemand.setCreatedBy(Participant obj, int index) {
-        Account createdBy = null;
+        Principal createdBy = null;
         obj.setCreatedBy(createdBy);
     }
     
@@ -49,7 +49,7 @@ privileged aspect ParticipantDataOnDemand_Roo_DataOnDemand {
     }
     
     public void ParticipantDataOnDemand.setUpdatedBy(Participant obj, int index) {
-        Account updatedBy = null;
+        Principal updatedBy = null;
         obj.setUpdatedBy(updatedBy);
     }
     

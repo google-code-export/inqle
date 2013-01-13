@@ -1,19 +1,16 @@
 package org.inqle.domain;
 
 import java.util.Date;
-import javax.persistence.Column;
+
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.inqle.domain.security.Principal;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.solr.RooSolrSearchable;
@@ -38,21 +35,21 @@ public class Question {
     
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(style = "FF")
     private Date created = new Date();
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(style = "M-")
+    @DateTimeFormat(style = "FF")
     private Date updated = new Date();
 
     @ManyToOne
     private Concept concept;
 
     @ManyToOne
-    private Account createdBy;
+    private Principal createdBy;
 
     @ManyToOne
-    private Account updatedBy;
+    private Principal updatedBy;
 
     @NotNull
     @Value("100")

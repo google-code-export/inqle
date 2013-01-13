@@ -6,8 +6,8 @@
         <field:select field="question" id="c_org_inqle_domain_Datum_question" itemValue="id" items="${questions}" path="/questions" z="H/B6uzcGdrUiL7plQPBgey2A1c4="/>
         <field:select field="formula" id="c_org_inqle_domain_Datum_formula" itemValue="id" items="${formulas}" path="/formulas" z="5FH1oz0At8wllxYiOUwk7hrEsNc="/>
         <field:select field="participant" id="c_org_inqle_domain_Datum_participant" itemValue="id" items="${participants}" path="/participants" required="true" z="VjqhD0s5g9uernzZA6h0lEm4cWQ="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_Datum_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="WZZHivjDltsTwvPBnq2wx/zac/s="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_Datum_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="7WiGCTxdKhdIvobAFiRCeEFdsV4="/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Datum_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Datum_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
         <field:datetime dateTimePattern="${datum_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Datum_updated" required="true" z="zwOIfunmGibC50edZZRsITfV+NQ="/>
         <field:input field="numericValue" id="c_org_inqle_domain_Datum_numericValue" validationMessageCode="field_invalid_number" z="N4GGVnwQIWl9CnhDLGqVlaPPneE="/>
         <field:input field="textValue" id="c_org_inqle_domain_Datum_textValue" required="true" z="qOGrvnOpN2eAj/1IupMmYo4i8hk="/>

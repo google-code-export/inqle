@@ -4,7 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_org_inqle_domain_Choice" modelAttribute="choice" path="/choices" versionField="Version" z="h3kgGxL2N+Is5zWP9k47OELZNec=">
         <field:datetime dateTimePattern="${choice_updated_date_format}" field="updated" future="true" id="c_org_inqle_domain_Choice_updated" required="true" z="Ho1vvzh028GU3srbS495JT1n8g8="/>
-        <field:select field="createdBy" id="c_org_inqle_domain_Choice_createdBy" itemValue="id" items="${accounts}" path="/accounts" z="hxRWFJwFbqgocZEgQ9sXt2SDB2k="/>
-        <field:select field="updatedBy" id="c_org_inqle_domain_Choice_updatedBy" itemValue="id" items="${accounts}" path="/accounts" z="GgFnNJkhYE4Ax+92zwr+WYRqIjk="/>
+        <field:select field="createdBy" id="c_org_inqle_domain_Choice_createdBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
+        <field:select field="updatedBy" id="c_org_inqle_domain_Choice_updatedBy" itemValue="id" items="${principals}" path="/principals" z="user-managed"/>
     </form:update>
 </div>

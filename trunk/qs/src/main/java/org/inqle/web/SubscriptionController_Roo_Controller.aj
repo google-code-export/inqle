@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import org.inqle.domain.Account;
 import org.inqle.domain.Participant;
 import org.inqle.domain.Question;
 import org.inqle.domain.Subscription;
+import org.inqle.domain.security.Principal;
 import org.inqle.repository.QuestionRepository;
 import org.inqle.web.SubscriptionController;
 import org.joda.time.format.DateTimeFormat;
@@ -107,15 +107,15 @@ privileged aspect SubscriptionController_Roo_Controller {
     }
     
     void SubscriptionController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("subscription_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("subscription_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void SubscriptionController.populateEditForm(Model uiModel, Subscription subscription) {
         uiModel.addAttribute("subscription", subscription);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("accounts", Account.findAllAccounts());
         uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questions", questionRepository.findAll());
+        uiModel.addAttribute("principals", Principal.findAllPrincipals());
     }
     
     String SubscriptionController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

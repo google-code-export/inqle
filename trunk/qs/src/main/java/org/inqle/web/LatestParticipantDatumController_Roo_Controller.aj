@@ -106,8 +106,8 @@ privileged aspect LatestParticipantDatumController_Roo_Controller {
     }
     
     void LatestParticipantDatumController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("latestParticipantDatum_created_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("latestParticipantDatum_askableafter_date_format", DateTimeFormat.patternForStyle("M-", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("latestParticipantDatum_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("latestParticipantDatum_askableafter_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
     }
     
     void LatestParticipantDatumController.populateEditForm(Model uiModel, LatestParticipantDatum latestParticipantDatum) {

@@ -1,4 +1,4 @@
-package org.apache.jsp.WEB_002dINF.views.accounts;
+package org.apache.jsp.WEB_002dINF.views.principals;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -81,14 +81,14 @@ public final class show_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jsp.tag.web.form.show_tagx _jspx_th_page_005fshow_005f0 = new org.apache.jsp.tag.web.form.show_tagx();
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_page_005fshow_005f0);
     _jspx_th_page_005fshow_005f0.setJspContext(_jspx_page_context);
-    // /WEB-INF/views/accounts/show.jspx(5,119) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(5,119) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_page_005fshow_005f0.setZ("FydJUbVpendsrl23Fg9blP4PzR4=");
-    // /WEB-INF/views/accounts/show.jspx(5,119) name = path type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_page_005fshow_005f0.setPath("/accounts");
-    // /WEB-INF/views/accounts/show.jspx(5,119) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_page_005fshow_005f0.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${account}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/accounts/show.jspx(5,119) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_page_005fshow_005f0.setId("ps_org_inqle_domain_Account");
+    // /WEB-INF/views/principals/show.jspx(5,119) name = path type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_page_005fshow_005f0.setPath("/principals");
+    // /WEB-INF/views/principals/show.jspx(5,119) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_page_005fshow_005f0.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principal}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/principals/show.jspx(5,119) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_page_005fshow_005f0.setId("ps_org_inqle_domain_Principal");
     _jspx_th_page_005fshow_005f0.setJspBody(new Helper( 0, _jspx_page_context, _jspx_th_page_005fshow_005f0, null));
     _jspx_th_page_005fshow_005f0.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_page_005fshow_005f0);
@@ -104,17 +104,17 @@ public final class show_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f0);
     _jspx_th_field_005fdisplay_005f0.setJspContext(_jspx_page_context);
     _jspx_th_field_005fdisplay_005f0.setParent(_jspx_parent);
-    // /WEB-INF/views/accounts/show.jspx(6,195) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(6,195) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f0.setZ("xL7fapsuDK8aDbcPILpoYsH1RJc=");
-    // /WEB-INF/views/accounts/show.jspx(6,195) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f0.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${account}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/accounts/show.jspx(6,195) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f0.setId("s_org_inqle_domain_Account_updated");
-    // /WEB-INF/views/accounts/show.jspx(6,195) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(6,195) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f0.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principal}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/principals/show.jspx(6,195) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f0.setId("s_org_inqle_domain_Principal_updated");
+    // /WEB-INF/views/principals/show.jspx(6,195) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f0.setField("updated");
-    // /WEB-INF/views/accounts/show.jspx(6,195) name = dateTimePattern type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f0.setDateTimePattern((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${account_updated_date_format}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/accounts/show.jspx(6,195) name = date type = java.lang.Boolean reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(6,195) name = dateTimePattern type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f0.setDateTimePattern((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principal_updated_date_format}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/principals/show.jspx(6,195) name = date type = java.lang.Boolean reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f0.setDate(new Boolean(true));
     _jspx_th_field_005fdisplay_005f0.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f0);
@@ -130,13 +130,13 @@ public final class show_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f1);
     _jspx_th_field_005fdisplay_005f1.setJspContext(_jspx_page_context);
     _jspx_th_field_005fdisplay_005f1.setParent(_jspx_parent);
-    // /WEB-INF/views/accounts/show.jspx(7,136) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(7,136) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f1.setZ("Y8TmwBt83kdYyvpYkdSFUm9IXTc=");
-    // /WEB-INF/views/accounts/show.jspx(7,136) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f1.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${account}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/accounts/show.jspx(7,136) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f1.setId("s_org_inqle_domain_Account_username");
-    // /WEB-INF/views/accounts/show.jspx(7,136) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(7,136) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f1.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principal}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/principals/show.jspx(7,136) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f1.setId("s_org_inqle_domain_Principal_username");
+    // /WEB-INF/views/principals/show.jspx(7,136) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f1.setField("username");
     _jspx_th_field_005fdisplay_005f1.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f1);
@@ -152,38 +152,16 @@ public final class show_jspx extends org.apache.jasper.runtime.HttpJspBase
     org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f2);
     _jspx_th_field_005fdisplay_005f2.setJspContext(_jspx_page_context);
     _jspx_th_field_005fdisplay_005f2.setParent(_jspx_parent);
-    // /WEB-INF/views/accounts/show.jspx(8,136) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(8,136) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f2.setZ("ep9V+fiONDCLq/o802fyOSLaEW4=");
-    // /WEB-INF/views/accounts/show.jspx(8,136) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f2.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${account}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/accounts/show.jspx(8,136) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f2.setId("s_org_inqle_domain_Account_password");
-    // /WEB-INF/views/accounts/show.jspx(8,136) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    // /WEB-INF/views/principals/show.jspx(8,136) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f2.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${principal}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
+    // /WEB-INF/views/principals/show.jspx(8,136) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
+    _jspx_th_field_005fdisplay_005f2.setId("s_org_inqle_domain_Principal_password");
+    // /WEB-INF/views/principals/show.jspx(8,136) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
     _jspx_th_field_005fdisplay_005f2.setField("password");
     _jspx_th_field_005fdisplay_005f2.doTag();
     org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f2);
-    return false;
-  }
-
-  private boolean _jspx_meth_field_005fdisplay_005f3(javax.servlet.jsp.tagext.JspTag _jspx_parent, PageContext _jspx_page_context)
-          throws Throwable {
-    PageContext pageContext = _jspx_page_context;
-    JspWriter out = _jspx_page_context.getOut();
-    //  field:display
-    org.apache.jsp.tag.web.form.fields.display_tagx _jspx_th_field_005fdisplay_005f3 = new org.apache.jsp.tag.web.form.fields.display_tagx();
-    org.apache.jasper.runtime.AnnotationHelper.postConstruct(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f3);
-    _jspx_th_field_005fdisplay_005f3.setJspContext(_jspx_page_context);
-    _jspx_th_field_005fdisplay_005f3.setParent(_jspx_parent);
-    // /WEB-INF/views/accounts/show.jspx(9,130) name = z type = java.lang.String reqTime = true required = false fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f3.setZ("ZxIUFSUxXh2yYCMIyqOSisNej3M=");
-    // /WEB-INF/views/accounts/show.jspx(9,130) name = object type = java.lang.Object reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f3.setObject((java.lang.Object) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${account}", java.lang.Object.class, (PageContext)_jspx_page_context, null, false));
-    // /WEB-INF/views/accounts/show.jspx(9,130) name = id type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f3.setId("s_org_inqle_domain_Account_privs");
-    // /WEB-INF/views/accounts/show.jspx(9,130) name = field type = java.lang.String reqTime = true required = true fragment = false deferredValue = false expectedTypeName = java.lang.String deferredMethod = false methodSignature = null
-    _jspx_th_field_005fdisplay_005f3.setField("privs");
-    _jspx_th_field_005fdisplay_005f3.doTag();
-    org.apache.jasper.runtime.AnnotationHelper.preDestroy(_jsp_annotationprocessor, _jspx_th_field_005fdisplay_005f3);
     return false;
   }
 
@@ -206,8 +184,6 @@ public final class show_jspx extends org.apache.jasper.runtime.HttpJspBase
       if (_jspx_meth_field_005fdisplay_005f1(_jspx_parent, _jspx_page_context))
         return true;
       if (_jspx_meth_field_005fdisplay_005f2(_jspx_parent, _jspx_page_context))
-        return true;
-      if (_jspx_meth_field_005fdisplay_005f3(_jspx_parent, _jspx_page_context))
         return true;
       return false;
     }
