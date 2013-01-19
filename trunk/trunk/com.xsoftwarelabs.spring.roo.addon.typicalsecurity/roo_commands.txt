@@ -1,0 +1,136 @@
+
+addon remove --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+osgi start --url file:///C:\dev\roo\ts2\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+
+osgi update --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity --url file:///C:\dev\roo\ts2\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+
+osgi start --url http://spring-roo-addon-typical-security.googlecode.com/files/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.1.5.BUILD-SNAPSHOT.jar
+
+typicalsecurity setup --entityPackage domain --controllerPackage ~.web
+
+
+
+
+
+roo> typicalsecurity setup --controllerPackage ~.web --entityPackage ~.dom
+typicalsecurity setup --controllerPackage ~.web --entityPackage ~.dom
+optional --entityPackage: Package where entities are placed. Default: ~.domain; default: '~.domain'
+roo> typicalsecurity setup --controllerPackage ~.web --entityPackage ~.domain
+Command 'entity --class ~.domain.User --testAutomatically --permitReservedWords' not found (for assistance press TAB or type "hint" then hit ENTER)
+Located add-on that may offer this command
+1 found, sorted by rank; T = trusted developer; R = Roo 1.2 compatible
+ID T R DESCRIPTION -------------------------------------------------------------
+01 Y Y 1.2.0.M1 Support for the creation and management of domain entities.
+--------------------------------------------------------------------------------
+[HINT] use 'addon info id --searchResultId ..' to see details about a search result
+[HINT] use 'addon install id --searchResultId ..' to install a specific search result, or
+[HINT] use 'addon install bundle --bundleSymbolicName TAB' to install a specific add-on version
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+Command 'entity --class ~.domain.Role --testAutomatically --permitReservedWords' not found (for assistance press TAB or type "hint" then hit ENTER)
+Located add-on that may offer this command
+1 found, sorted by rank; T = trusted developer; R = Roo 1.2 compatible
+ID T R DESCRIPTION -------------------------------------------------------------
+01 Y Y 1.2.0.M1 Support for the creation and management of domain entities.
+--------------------------------------------------------------------------------
+[HINT] use 'addon info id --searchResultId ..' to see details about a search result
+[HINT] use 'addon install id --searchResultId ..' to install a specific search result, or
+[HINT] use 'addon install bundle --bundleSymbolicName TAB' to install a specific add-on version
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+Command 'entity --class ~.domain.UserRole --testAutomatically' not found (for assistance press TAB or type "hint" then hit ENTER)
+Located add-on that may offer this command
+1 found, sorted by rank; T = trusted developer; R = Roo 1.2 compatible
+ID T R DESCRIPTION -------------------------------------------------------------
+01 Y Y 1.2.0.M1 Support for the creation and management of domain entities.
+--------------------------------------------------------------------------------
+[HINT] use 'addon info id --searchResultId ..' to see details about a search result
+[HINT] use 'addon install id --searchResultId ..' to install a specific search result, or
+[HINT] use 'addon install bundle --bundleSymbolicName TAB' to install a specific add-on version
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+java.lang.IllegalStateException: Failed to convert '*' to type JavaType for option 'class'
+Unknown type; please indicate the type as a command option (ie --xxxx)
+Cannot locate source for 'org.inqle.domain.User'
+Updated ROOT\pom.xml [added dependency net.tanesha.recaptcha4j:recaptcha4j:0.0.7]
+Cannot locate source for 'org.inqle.domain.User'
+Cannot locate source for 'org.inqle.domain.UserRole'
+This command has been deprecated and will be disabled soon! Please use 'web mvc setup' followed by 'web mvc scaffold' instead.
+The specified entity can not be resolved to a type in your project
+This command has been deprecated and will be disabled soon! Please use 'web mvc setup' followed by 'web mvc scaffold' instead.
+The specified entity can not be resolved to a type in your project
+This command has been deprecated and will be disabled soon! Please use 'web mvc setup' followed by 'web mvc scaffold' instead.
+The specified entity can not be resolved to a type in your project
+Command 'security setup' was found but is not currently available (type 'help' then ENTER to learn about this command)
+Created SRC_MAIN_WEBAPP\WEB-INF\views\changepassword
+Created SRC_MAIN_WEBAPP\WEB-INF\views\changepassword\index.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\ForgotPasswordController.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\forgotpassword
+Created SRC_MAIN_WEBAPP\WEB-INF\views\forgotpassword\index.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\ChangePasswordController.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\forgotpassword\views.xml
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\SignUpController.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\signup
+Created SRC_MAIN_WEBAPP\WEB-INF\views\signup\error.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\ChangePasswordForm.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\UserController.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\SignUpValidator.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\provider
+Created SRC_MAIN_JAVA\org\inqle\provider\DatabaseAuthenticationProvider.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\UserRegistrationForm.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\signup\views.xml
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\changepassword\views.xml
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\signup\index.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\signup\thanks.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\changepassword\thanks.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\ForgotPasswordForm.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_WEBAPP\WEB-INF\views\forgotpassword\thanks.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Created SRC_MAIN_JAVA\org\inqle\web\ChangePasswordValidator.java
+Updated SRC_MAIN_WEBAPP\WEB-INF\i18n\application.properties
+Updated SPRING_CONFIG_ROOT\applicationContext-security.xml
+Updated SPRING_CONFIG_ROOT\applicationContext.xml
+Created SPRING_CONFIG_ROOT\email.properties
+Updated SPRING_CONFIG_ROOT\applicationContext.xml
+Updated ROOT\pom.xml [added dependencies org.springframework:spring-context-support:${spring.version}, javax.mail:mail:1.4.1, javax.activation:activat
+ion:1.1.1]
+Error tailoring, cancelled command execution: You cannot add more than one default option ('Recovery') in a single command
+Option '' is not available for this command. Use tab assist or the "help" command to see the legal options
+Updated SRC_MAIN_WEBAPP\WEB-INF\views\login.jspx
+Updated SRC_MAIN_WEBAPP\WEB-INF\views\footer.jspx
+Done
+~.domain.UserRole roo> typicalsecurity

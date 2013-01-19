@@ -1,0 +1,28 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-01-18 19:20:34
+addon create advanced --topLevelPackage com.xsoftwarelabs.spring.roo.addon.typicalsecurity --projectName typicalsecurity --description "Adds authentication, authorization, forgot password, and other typical, web-based security to your project.  Uses Spring MVC"
+osgi uninstall --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+addon remove --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-01-18 20:44:58
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-01-18 20:46:17
+osgi start --url file:///C:\dev\eclipse\ws\com.xsoftwarelabs.spring.roo.addon.typicalsecurity\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+osgi start --url file:///C:\dev\roo\ts2\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-01-18 20:49:25
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-01-18 20:55:39
+osgi update --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity --url file:///C:\dev\roo\ts2\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+osgi start --url file:///C:\dev\roo\ts2\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+osgi ps
+osgi ps
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-01-18 20:59:09
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-01-18 21:42:36
+osgi obr url add --url https://gvnix.googlecode.com/svn/repo/repository.xml
+osgi obr start --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+osgi obr url remove --url https://gvnix.googlecode.com/svn/repo/repository.xml
+addon install bundle --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+osgi uninstall --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+addon remove --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity
+osgi ps
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-01-18 21:45:48
