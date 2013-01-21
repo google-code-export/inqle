@@ -1,0 +1,8 @@
+osgi update --bundleSymbolicName com.xsoftwarelabs.spring.roo.addon.typicalsecurity --url file:///C:\dev\roo\ts2\target/com.xsoftwarelabs.spring.roo.addon.typicalsecurity-0.2.0.BUILD-SNAPSHOT.jar
+project --topLevelPackage testts4 --projectName testts4
+hint
+jpa setup --database HYPERSONIC_IN_MEMORY --provider HIBERNATE 
+entity jpa --class ~.domain.Tent
+field string --fieldName title
+web mvc setup
+typicalsecurity setup --adminUsername admin8 --adminPassword admin8 --entityPackage ~.domain --controllerPackage ~.web
