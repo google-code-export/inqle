@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration>
+  <typicalsecurity>
+    <applicationContext>
+      <bean class="org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder" id="messageDigestPasswordEncoder">
+        <constructor-arg value="sha-256"/>
+      </bean>
+      <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename"><value>messages</value></property>
+	    </bean>
+	    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+	        <property name="defaultLocale" value="en"/>
+	    </bean>
+    </applicationContext>
+  </typicalsecurity>
 	<batch>
 		<dependencies>
 			<!-- Ivy-style dependency definition -->

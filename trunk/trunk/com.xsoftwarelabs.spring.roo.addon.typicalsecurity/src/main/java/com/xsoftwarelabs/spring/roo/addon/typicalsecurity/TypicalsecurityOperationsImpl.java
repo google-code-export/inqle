@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +28,6 @@ import org.springframework.roo.model.JavaType;
 import org.springframework.roo.process.manager.FileManager;
 import org.springframework.roo.process.manager.MutableFile;
 import org.springframework.roo.project.Dependency;
-import org.springframework.roo.project.DependencyScope;
-import org.springframework.roo.project.DependencyType;
 import org.springframework.roo.project.Path;
 import org.springframework.roo.project.PathResolver;
 import org.springframework.roo.project.ProjectOperations;
@@ -74,6 +74,10 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
     
     private String entityPackage;// = projectOperations.getFocusedTopLevelPackage() + ".security";
 	private String controllerPackage;// = projectOperations.getFocusedTopLevelPackage() + ".web";
+
+	private String adminUsername;
+
+	private String adminPassword;
     
 	private static char separator = File.separatorChar;
 	
@@ -84,6 +88,74 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
     }
 
     /** {@inheritDoc} */
+    @CliCommand(value = "typicalsecurity setup", help = "Install TypicalSecurity for MVC project")
+    public void setup(String entityPackage, String controllerPackage, String adminUsername, String adminPassword) {
+    	this.entityPackage = entityPackage;
+    	this.controllerPackage = controllerPackage;
+    	if (adminUsername == null || adminUsername.trim().length() == 0) {
+    		adminUsername = "admin";
+    	}
+    	this.adminUsername = adminUsername;
+    	if (adminPassword == null || adminPassword.trim().length() == 0) {
+    		adminPassword = "admin";
+    	}
+    	this.adminPassword = sha256(adminPassword);
+    	
+        // Install the add-on Google code repository needed to get the annotation 
+        projectOperations.addRepository("", new Repository("Typicalsecurity Roo add-on repository", "Typicalsecurity Roo add-on repository", "https://typicalsecurity.googlecode.com/svn/repo"));
+        List<Dependency> dependencies = new ArrayList<Dependency>();
+        
+        //add captcha dependency
+        dependencies.add(new Dependency("net.tanesha.recaptcha4j", "recaptcha4j", "0.0.7"));
+        
+        // Install dependencies defined in external XML file
+        for (Element dependencyElement : XmlUtils.findElements("/configuration/batch/dependencies/dependency", XmlUtils.getConfiguration(getClass()))) {
+            dependencies.add(new Dependency(dependencyElement));
+        }
+
+        // Add all new dependencies to pom.xml
+        projectOperations.addDependencies("", dependencies);
+        
+		createUserRoleEntities();
+		createControllers();
+		injectDatabasebasedSecurity();
+		injectApplicationContext();
+    }
+    
+    private void injectApplicationContext() {
+    	Element configuration = XmlUtils.getConfiguration(this.getClass());
+    	Collection<Element> appContextElementsToAdd = XmlUtils.findElements("/configuration/typicalsecurity/applicationContext/*", configuration);
+    	
+    	String springAppContext = pathResolver.getFocusedIdentifier(
+				Path.SRC_MAIN_RESOURCES,
+				"META-INF/spring/applicationContext.xml");
+
+		MutableFile mutableConfigXml = null;
+		Document webConfigDoc = null;
+		try {
+			if (fileManager.exists(springAppContext)) {
+				mutableConfigXml = fileManager.updateFile(springAppContext);
+				
+				webConfigDoc = XmlUtils.getDocumentBuilder().parse(
+						mutableConfigXml.getInputStream());
+				Element rootElement = webConfigDoc.getDocumentElement();
+				for (Element elementToAdd: appContextElementsToAdd) {
+					Element importedElement = (Element)webConfigDoc.importNode(elementToAdd, true);
+					webConfigDoc.adoptNode(importedElement);
+					rootElement.appendChild(importedElement);
+				}
+				XmlUtils.writeXml(mutableConfigXml.getOutputStream(), webConfigDoc);
+			} else {
+				throw new IllegalStateException("Could not acquire "
+						+ springAppContext);
+			}
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		}
+		
+	}
+
+	/** {@inheritDoc} */
     public void annotateType(JavaType javaType) {
         // Use Roo's Assert type for null checks
         Validate.notNull(javaType, "Java type required");
@@ -116,35 +188,6 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
             annotateType(type);
         }
     }
-    
-    /** {@inheritDoc} */
-    @CliCommand(value = "typicalsecurity setup", help = "Install TypicalSecurity for MVC project")
-    public void setup(String entityPackage, String controllerPackage) {
-    	this.entityPackage = entityPackage;
-    	this.controllerPackage = controllerPackage;
-    	
-        // Install the add-on Google code repository needed to get the annotation 
-        projectOperations.addRepository("", new Repository("Typicalsecurity Roo add-on repository", "Typicalsecurity Roo add-on repository", "https://typicalsecurity.googlecode.com/svn/repo"));
-        List<Dependency> dependencies = new ArrayList<Dependency>();
-        
-//        // Install the dependency on the add-on jar (
-//        dependencies.add(new Dependency("com.xsoftwarelabs.spring.roo.addon.typicalsecurity", "com.xsoftwarelabs.spring.roo.addon.typicalsecurity", "0.1.0.BUILD-SNAPSHOT", DependencyType.JAR, DependencyScope.PROVIDED));
-        
-        //add captcha dependency
-        dependencies.add(new Dependency("net.tanesha.recaptcha4j", "recaptcha4j", "0.0.7"));
-        
-        // Install dependencies defined in external XML file
-        for (Element dependencyElement : XmlUtils.findElements("/configuration/batch/dependencies/dependency", XmlUtils.getConfiguration(getClass()))) {
-            dependencies.add(new Dependency(dependencyElement));
-        }
-
-        // Add all new dependencies to pom.xml
-        projectOperations.addDependencies("", dependencies);
-        
-		createUserRoleEntities();
-		createControllers();
-		injectDatabasebasedSecurity();
-    }
 
 	private void injectDatabasebasedSecurity() {
 		// ----------------------------------------------------------------------
@@ -166,7 +209,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 		// ----------------------------------------------------------------------
 		// Autowire MessageDigestPasswordEncoder in applicationContext.xml
 		// ----------------------------------------------------------------------
-		autowireMessageDigestPasswordEncoder();
+//		autowireMessageDigestPasswordEncoder();
 
 		createMailSender();
 		addForgotPasswordRegisterUserToLoginPage();
@@ -276,38 +319,38 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 		shell.executeCommand("email template setup --from rohitsghatoltest@gmail.com --subject PasswordRecovery");
 	}
 
-	private void autowireMessageDigestPasswordEncoder() {
-		String applicationContext = pathResolver.getFocusedIdentifier(
-				Path.SRC_MAIN_RESOURCES,
-				"META-INF/spring/applicationContext.xml");
-
-		MutableFile mutableConfigXml = null;
-		Document webConfigDoc;
-		try {
-			if (fileManager.exists(applicationContext)) {
-				mutableConfigXml = fileManager.updateFile(applicationContext);
-				webConfigDoc = XmlUtils.getDocumentBuilder().parse(
-						mutableConfigXml.getInputStream());
-			} else {
-				throw new IllegalStateException("Could not acquire "
-						+ applicationContext);
-			}
-		} catch (Exception e) {
-			throw new IllegalStateException(e);
-		}
-
-		Element messageDigestPasswordEncoder = new XmlElementBuilder("bean", webConfigDoc)
-			.addAttribute("id", "messageDigestPasswordEncoder")
-			.addAttribute("class", "org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder")
-			.addChild(
-				new XmlElementBuilder("constructor-arg", webConfigDoc)
-						.addAttribute("value", "sha-256").build()).build();
-		
-		webConfigDoc.getDocumentElement().appendChild(messageDigestPasswordEncoder);
-		
-		XmlUtils.writeXml(mutableConfigXml.getOutputStream(), webConfigDoc);
-		
-	}
+//	private void autowireMessageDigestPasswordEncoder() {
+//		String applicationContext = pathResolver.getFocusedIdentifier(
+//				Path.SRC_MAIN_RESOURCES,
+//				"META-INF/spring/applicationContext.xml");
+//
+//		MutableFile mutableConfigXml = null;
+//		Document webConfigDoc;
+//		try {
+//			if (fileManager.exists(applicationContext)) {
+//				mutableConfigXml = fileManager.updateFile(applicationContext);
+//				webConfigDoc = XmlUtils.getDocumentBuilder().parse(
+//						mutableConfigXml.getInputStream());
+//			} else {
+//				throw new IllegalStateException("Could not acquire "
+//						+ applicationContext);
+//			}
+//		} catch (Exception e) {
+//			throw new IllegalStateException(e);
+//		}
+//
+//		Element messageDigestPasswordEncoder = new XmlElementBuilder("bean", webConfigDoc)
+//			.addAttribute("id", "messageDigestPasswordEncoder")
+//			.addAttribute("class", "org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder")
+//			.addChild(
+//				new XmlElementBuilder("constructor-arg", webConfigDoc)
+//						.addAttribute("value", "sha-256").build()).build();
+//		
+//		webConfigDoc.getDocumentElement().appendChild(messageDigestPasswordEncoder);
+//		
+//		XmlUtils.writeXml(mutableConfigXml.getOutputStream(), webConfigDoc);
+//		
+//	}
 
 	private void injectDatabasebasedAuthProviderInXml() {
 		String springSecurity = pathResolver.getFocusedIdentifier(
@@ -353,11 +396,11 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				.addChild(
 						new XmlElementBuilder("beans:property", webConfigDoc)
 								.addAttribute("name", "adminUser")
-								.addAttribute("value", "admin").build())
+								.addAttribute("value", adminUsername).build())
 				.addChild(
 						new XmlElementBuilder("beans:property", webConfigDoc)
 								.addAttribute("name", "adminPassword")
-								.addAttribute("value", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918").build())
+								.addAttribute("value", adminPassword).build())
 				.build();
 
 		Element authenticationManager = XmlUtils.findFirstElementByName(
@@ -536,6 +579,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 						mutableApplicationProperties.getOutputStream()));
 
 				out.write(originalData);
+				out.write("\n#typicalsecurity\n");
 				out.write("label_com_training_spring_roo_model_user_id=Id\n");
 				out.write("label_com_training_spring_roo_model_user_lastname=Last Name\n");
 				out.write("label_com_training_spring_roo_model_user_failedloginattempts=Failed\n");
@@ -558,6 +602,39 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 			} else {
 				throw new IllegalStateException("Could not acquire "
 						+ applicationProperties);
+			}
+		} catch (Exception e) {
+			System.out.println("---> " + e.getMessage());
+			throw new IllegalStateException(e);
+		}
+		
+		String messagesProperties = pathResolver.getFocusedIdentifier(
+				Path.SRC_MAIN_WEBAPP, "WEB-INF/i18n/messages.properties");
+
+		MutableFile mutableMessagesProperties = null;
+
+		try {
+			if (fileManager.exists(messagesProperties)) {
+				mutableMessagesProperties = fileManager
+						.updateFile(messagesProperties);
+				String originalData = StreamUtils.convertStreamToString(mutableMessagesProperties
+						.getInputStream());
+
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+						mutableMessagesProperties.getOutputStream()));
+
+				out.write(originalData);
+				out.write("\n#typicalsecurity\n");
+				out.write("typicalsecurity_validate_signup_email_subject=Validate your account with {0}\n");
+				out.write("typicalsecurity_forgotpassword_email_subject=New password requested for {0}\n");
+				out.write("typicalsecurity_validate_signup_email_body=Hello, {0},\\nThanks for signing up for a new account with {1}.  Please click this link to activate your account:\\n{2}\n");
+				out.write("typicalsecurity_forgotpassword_email_body=Hello, {0},\\nYou have requested that your password be reset for {1}.  Here is your new password:\\n{2}\\n\\nYou can log in at this address:\\n{3}\n");
+
+				out.close();
+
+			} else {
+				throw new IllegalStateException("Could not acquire "
+						+ messagesProperties);
 			}
 		} catch (Exception e) {
 			System.out.println("---> " + e.getMessage());
@@ -640,6 +717,24 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 		shell.executeCommand("finder add findUserRolesByUserEntry --class " + entityPackage
 				+ ".UserRole");
 		
+	}
+	
+	public static String sha256(String base) {
+	    try{
+	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	        byte[] hash = digest.digest(base.getBytes("UTF-8"));
+	        StringBuffer hexString = new StringBuffer();
+
+	        for (int i = 0; i < hash.length; i++) {
+	            String hex = Integer.toHexString(0xff & hash[i]);
+	            if(hex.length() == 1) hexString.append('0');
+	            hexString.append(hex);
+	        }
+
+	        return hexString.toString();
+	    } catch(Exception ex){
+	       throw new RuntimeException(ex);
+	    }
 	}
     
    

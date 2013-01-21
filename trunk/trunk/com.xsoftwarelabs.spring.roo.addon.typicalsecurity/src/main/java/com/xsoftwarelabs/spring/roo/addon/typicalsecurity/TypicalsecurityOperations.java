@@ -29,5 +29,5 @@ public interface TypicalsecurityOperations {
     /**
      * Setup all add-on artifacts (dependencies in this case)
      */
-    void setup(String entityPackage, String controllerPackage);
+    void setup(String entityPackage, String controllerPackage, String adminUsername, String adminPassword);
 }
