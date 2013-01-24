@@ -379,10 +379,16 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 
 		firstInterceptUrl.getParentNode().insertBefore(
 				new XmlElementBuilder("intercept-url", webConfigDoc)
+						.addAttribute("pattern", "/admin/**")
+						.addAttribute("access", "hasRole('ROLE_ADMIN')").build(),
+				firstInterceptUrl);
+
+		firstInterceptUrl.getParentNode().insertBefore(
+				new XmlElementBuilder("intercept-url", webConfigDoc)
 						.addAttribute("pattern", "/")
 						.addAttribute("access", "isAuthenticated()").build(),
 				firstInterceptUrl);
-
+		
 		JavaPackage topLevelPackage = projectOperations.getFocusedTopLevelPackage();
 		
 		String authenticationProviderClass = topLevelPackage
@@ -511,6 +517,9 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 		map.put(pathResolver.getFocusedIdentifier(Path.SRC_MAIN_WEBAPP, prefix
 				+ separator + "signup" + separator + "views.xml"),
 				"signup/views.xml");
+		map.put(pathResolver.getFocusedIdentifier(Path.SRC_MAIN_WEBAPP, prefix
+				+ separator + "signup" + separator + "activated.jspx"),
+				"signup/activated.jspx");
 
 		map.put(pathResolver.getFocusedIdentifier(Path.SRC_MAIN_WEBAPP, prefix
 				+ separator + "forgotpassword" + separator + "index.jspx"),
@@ -652,7 +661,8 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				+ ".UserController");
 		shell.executeCommand("web mvc scaffold --class " + controllerPackage
 				+ ".UserController --backingType " + entityPackage
-				+ ".User");
+				+ ".User --path /admin/users");
+		
 		// -----------------------------------------------------------------------------------
 		// Controller for Role
 		// -----------------------------------------------------------------------------------
@@ -660,7 +670,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				+ ".RoleController");
 		shell.executeCommand("web mvc scaffold --class " + controllerPackage
 				+ ".RoleController --backingType " + entityPackage
-				+ ".Role");
+				+ ".Role --path /admin/roles");
 		
 		// -----------------------------------------------------------------------------------
 		// Controller for User Role
@@ -669,7 +679,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				+ ".UserRoleController");
 		shell.executeCommand("web mvc scaffold --class " + controllerPackage
 				+ ".UserRoleController --backingType " + entityPackage
-				+ ".UserRole");
+				+ ".UserRole --path /admin/userRoles");
 		
 	}
 

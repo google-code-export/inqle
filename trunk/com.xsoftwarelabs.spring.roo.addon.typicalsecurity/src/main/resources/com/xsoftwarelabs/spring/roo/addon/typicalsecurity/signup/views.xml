@@ -12,4 +12,8 @@
 		<put-attribute name="body" value="/WEB-INF/views/signup/error.jspx" />
 	</definition>
 
+  <definition extends="default" name="signup/activated">
+    <put-attribute name="body" value="/WEB-INF/views/signup/activated.jspx" />
+  </definition>
+  
 </tiles-definitions>
