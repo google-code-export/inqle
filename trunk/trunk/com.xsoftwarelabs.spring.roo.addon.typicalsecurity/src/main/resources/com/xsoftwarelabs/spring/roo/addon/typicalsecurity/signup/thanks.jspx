@@ -11,6 +11,6 @@
     SignUp Successful
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: 'SignUp Successful'}})); </script>
 
-    <h3>Your signup is successful. You should receive an activation email from us shortly. Incase you do not get the email, please check the junk folder.</h3>
+    <h3>Your signup is successful. You should receive an activation email from us shortly. If you do not get the email, please check your Junk Mail or Spam folder.</h3>
   </div>
 </div>
