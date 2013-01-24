@@ -1,8 +1,12 @@
 package com.xsoftwarelabs.spring.roo.addon.typicalsecurity;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -120,6 +124,8 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 		createControllers();
 		injectDatabasebasedSecurity();
 		injectApplicationContext();
+		
+		insertI18nMessages();
     }
     
     private void injectApplicationContext() {
@@ -561,8 +567,6 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				StreamUtils.replaceAndCopy(
 						FileUtils.getInputStream(getClass(), file),
 						mutableFile.getOutputStream(), properties);
-						
-				insertI18nMessages();
 
 			} catch (IOException ioe) {
 				throw new IllegalStateException(ioe);
@@ -572,15 +576,14 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 	}
 
 	private void insertI18nMessages() {
-		String applicationProperties = pathResolver.getFocusedIdentifier(
+		String appPropertiesPath = pathResolver.getFocusedIdentifier(
 				Path.SRC_MAIN_WEBAPP, "WEB-INF/i18n/application.properties");
 
 		MutableFile mutableApplicationProperties = null;
 
 		try {
-			if (fileManager.exists(applicationProperties)) {
-				mutableApplicationProperties = fileManager
-						.updateFile(applicationProperties);
+			if (fileManager.exists(appPropertiesPath)) {
+				mutableApplicationProperties = fileManager.updateFile(appPropertiesPath);
 				String originalData = StreamUtils.convertStreamToString(mutableApplicationProperties
 						.getInputStream());
 
@@ -588,7 +591,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 						mutableApplicationProperties.getOutputStream()));
 
 				out.write(originalData);
-				out.write("\n#typicalsecurity\n");
+				out.write("\n\n#typicalsecurity\n");
 				out.write("label_com_training_spring_roo_model_user_id=Id\n");
 				out.write("label_com_training_spring_roo_model_user_lastname=Last Name\n");
 				out.write("label_com_training_spring_roo_model_user_failedloginattempts=Failed\n");
@@ -607,43 +610,77 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				out.write("label_com_training_spring_roo_model_user_activationdate=Activation Date\n");
 
 				out.close();
+				
+//				InputStream in = fileManager.getInputStream(appPropertiesPath);
+//				OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(appPropertiesPath)));
+//				Properties appProperties = new Properties();
+//				appProperties.load(in);
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_id", "Id");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_lastname", "Last Name");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_failedloginattempts", "Failed");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_password", "Password");
+//				appProperties.setProperty("label_com_training_spring_roo_model_userstatusmodel_failedloginattempts", "Failed Login Attempts");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_repeat_password", "Repeat Password");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_version", "Version");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_firstname", "First Name");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_plural", "Users");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user", "User");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_enabled", "Enabled");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_repeatpassword", "Repeat Password");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_locked", "Locked");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_activationkey", "Activation Key");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_emailaddress", "Email Address");
+//				appProperties.setProperty("label_com_training_spring_roo_model_user_activationdate", "Activation Date");
+//				appProperties.store(out, "typicalsecurity setup");
+//				out.close();
 
 			} else {
 				throw new IllegalStateException("Could not acquire "
-						+ applicationProperties);
+						+ appPropertiesPath);
 			}
 		} catch (Exception e) {
 			System.out.println("---> " + e.getMessage());
 			throw new IllegalStateException(e);
 		}
 		
-		String messagesProperties = pathResolver.getFocusedIdentifier(
+		String msgPropertiesPath = pathResolver.getFocusedIdentifier(
 				Path.SRC_MAIN_WEBAPP, "WEB-INF/i18n/messages.properties");
 
 		MutableFile mutableMessagesProperties = null;
 
 		try {
-			if (fileManager.exists(messagesProperties)) {
-				mutableMessagesProperties = fileManager
-						.updateFile(messagesProperties);
-				String originalData = StreamUtils.convertStreamToString(mutableMessagesProperties
-						.getInputStream());
+			if (fileManager.exists(msgPropertiesPath)) {
+				mutableMessagesProperties = fileManager.updateFile(msgPropertiesPath);
+				String originalData = StreamUtils.convertStreamToString(mutableMessagesProperties.getInputStream());
 
-				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-						mutableMessagesProperties.getOutputStream()));
+				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(mutableMessagesProperties.getOutputStream()));
 
+				//change original values
+				originalData = originalData.replace("security_login_form_name=Name", "security_login_form_name=Email");
+				originalData = originalData.replace("security_login_form_name_message=Enter your name", "security_login_form_name_message=Log in using your email address");
+				
+				
 				out.write(originalData);
-				out.write("\n#typicalsecurity\n");
+				out.write("\n\n#typicalsecurity\n");
 				out.write("typicalsecurity_validate_signup_email_subject=Validate your account with {0}\n");
 				out.write("typicalsecurity_forgotpassword_email_subject=New password requested for {0}\n");
 				out.write("typicalsecurity_validate_signup_email_body=Hello, {0},\\nThanks for signing up for a new account with {1}.  Please click this link to activate your account:\\n{2}\n");
 				out.write("typicalsecurity_forgotpassword_email_body=Hello, {0},\\nYou have requested that your password be reset for {1}.  Here is your new password:\\n{2}\\n\\nYou can log in at this address:\\n{3}\n");
 
+//				InputStream in = fileManager.getInputStream(msgPropertiesPath);
+//				OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(msgPropertiesPath)));
+//				Properties msgProperties = new Properties();
+//				msgProperties.load(in);
+//				msgProperties.setProperty("typicalsecurity_validate_signup_email_subject", "Validate your account with {0}");
+//				msgProperties.setProperty("typicalsecurity_forgotpassword_email_subject", "New password requested for {0}");
+//				msgProperties.setProperty("typicalsecurity_validate_signup_email_body", "Hello, {0},\\nThanks for signing up for a new account with {1}.  Please click this link to activate your account:\\n{2}");
+//				msgProperties.setProperty("typicalsecurity_forgotpassword_email_body", "Hello, {0},\\nYou have requested that your password be reset for {1}.  Here is your new password:\\n{2}\\n\\nYou can log in at this address:\\n{3}");
+//				msgProperties.store(out, "typicalsecurity setup");
 				out.close();
 
 			} else {
 				throw new IllegalStateException("Could not acquire "
-						+ messagesProperties);
+						+ msgPropertiesPath);
 			}
 		} catch (Exception e) {
 			System.out.println("---> " + e.getMessage());
