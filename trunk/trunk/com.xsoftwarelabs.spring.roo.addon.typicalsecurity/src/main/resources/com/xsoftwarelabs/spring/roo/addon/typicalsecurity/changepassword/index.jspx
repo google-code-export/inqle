@@ -7,29 +7,29 @@
   <jsp:output omit-xml-declaration="yes"/>
   <script type="text/javascript">dojo.require('dijit.TitlePane');dojo.require('dijit.form.SimpleTextarea');dojo.require('dijit.form.FilteringSelect');</script>
   <div id="_title_div">
-    Change Password
+    <spring:message code="typicalsecurity_label_change_password"/>
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
     <spring:url value="/changepassword" var="form_url"/>
-    Change Password
+    <spring:message code="typicalsecurity_label_change_password"/>
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
     <form:form action="update" method="POST" commandName="changePasswordForm">
       <br/>
       <div id="changepassword_oldpassword">
-        <label for="_oldpassword_id">Current Password:</label>
+        <label for="_oldpassword_id"><spring:message code="typicalsecurity_label_current_password"/></label>
         <form:password cssStyle="width:250px" id="_changepassword_oldpassword" maxlength="30" path="oldPassword"/>
         <br/>
         <form:errors cssClass="errors" path="oldPassword"/>
       </div>
       <br/>
       <div id="changepassword_newpassword">
-        <label for="_newpassword_id">New Password:</label>
+        <label for="_newpassword_id"><spring:message code="typicalsecurity_label_new_password"/></label>
         <form:password cssStyle="width:250px" id="_changepassword_newpassword" maxlength="30" path="newPassword"/>
         <br/>
         <form:errors cssClass="errors" path="newPassword"/>
       </div>
       <br/>
       <div id="changepassword_newpasswordagain">
-        <label for="_newpasswordagain_id">New Password (again):</label>
+        <label for="_newpasswordagain_id"><spring:message code="typicalsecurity_label_new_password_repeat"/></label>
         <form:password cssStyle="width:250px" id="_changepassword_newpasswordagain" maxlength="30" path="newPasswordAgain"/>
         <br/>
         <form:errors cssClass="errors" path="newPasswordAgain"/>

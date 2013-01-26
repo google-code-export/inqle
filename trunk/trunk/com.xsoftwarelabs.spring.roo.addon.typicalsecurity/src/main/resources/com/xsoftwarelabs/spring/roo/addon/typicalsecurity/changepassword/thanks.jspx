@@ -5,12 +5,12 @@
   <jsp:output omit-xml-declaration="yes"/>
   <script type="text/javascript">dojo.require('dijit.TitlePane');dojo.require('dijit.form.SimpleTextarea');dojo.require('dijit.form.FilteringSelect');</script>
   <div id="_title_div">
-    Change Password
+    <spring:message code="typicalsecurity_label_change_password"/>
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
     <spring:url value="/changepassword" var="form_url"/>
-    Change Password
+    <spring:message code="typicalsecurity_label_change_password"/>
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
     
-    <h3>You password has been successfully been changed.</h3>
+    <h3><spring:message code="typicalsecurity_msg_password_changed"/></h3>
   </div>
 </div>

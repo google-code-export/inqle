@@ -10,6 +10,6 @@
     <spring:url value="/signup" var="form_url"/>
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: 'User Registration'}})); </script>
 
-    <h3>Thank you for registering, you will receive an activation email from us soon</h3>
+    <h3><spring:message code="typicalsecurity_header_thanks_for_registering"/></h3>
   </div>
 </div>

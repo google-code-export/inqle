@@ -8,9 +8,10 @@
     
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
     <spring:url value="/forgotpassword" var="form_url"/>
-    Forgot Password
+   <spring:message code="typicalsecurity_label_forgot_password"/>
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: '${title_msg}'}})); </script>
     
-    <h3>Your new password is sent to your email address.</h3>
+    <h3><spring:message code="typicalsecurity_header_new_password_emailed"/></h3>
+    <spring:message code="typicalsecurity_msg_new_password_emailed"/>
   </div>
 </div>

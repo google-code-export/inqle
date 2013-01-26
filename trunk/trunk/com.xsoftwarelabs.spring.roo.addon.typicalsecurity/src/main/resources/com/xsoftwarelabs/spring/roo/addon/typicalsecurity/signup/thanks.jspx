@@ -6,11 +6,10 @@
   <script type="text/javascript">dojo.require('dijit.TitlePane');dojo.require('dijit.form.SimpleTextarea');dojo.require('dijit.form.FilteringSelect');</script>
   <div id="_title_div">
     
-    <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: 'SignUp Successful'}})); </script>
     <spring:url value="/signup" var="form_url"/>
-    SignUp Successful
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: 'SignUp Successful'}})); </script>
 
-    <h3>Your signup is successful. You should receive an activation email from us shortly. If you do not get the email, please check your Junk Mail or Spam folder.</h3>
+    <h3><spring:message code="typicalsecurity_header_thanks_for_signing_up"/></h3>
+   <spring:message code="typicalsecurity_msg_thanks_for_signing_up"/>
   </div>
 </div>
