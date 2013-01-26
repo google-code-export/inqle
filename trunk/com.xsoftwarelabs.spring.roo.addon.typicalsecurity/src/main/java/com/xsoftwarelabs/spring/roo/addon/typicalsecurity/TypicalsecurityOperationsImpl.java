@@ -217,7 +217,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 		// ----------------------------------------------------------------------
 //		autowireMessageDigestPasswordEncoder();
 
-		createMailSender();
+//		createMailSender();
 		addForgotPasswordRegisterUserToLoginPage();
 		addChangePasswordToFooter();
 		
@@ -249,7 +249,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 								+ footerJspx);
 
 				logout.getParentNode().appendChild(
-						new XmlElementBuilder("div", footerJspxDoc).addChild(
+						new XmlElementBuilder("span", footerJspxDoc).addChild(
 								footerJspxDoc.createTextNode("|")).build());
 //					String contextPath = projectOperations.getFocusedProjectName();
 				String contextPath = projectOperations.getFocusedProjectName();
@@ -261,7 +261,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 												+ "/changepassword/index")
 								.addChild(
 										footerJspxDoc
-												.createTextNode("password"))
+												.createTextNode("Change Password"))
 								.build());
 				XmlUtils.writeXml(mutableFooterJspx.getOutputStream(),
 						footerJspxDoc);
@@ -298,7 +298,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				Validate.notNull(form, "Could not find form in " + loginJspx);
 
 				String contextPath = projectOperations.getFocusedProjectName();
-				form.appendChild(new XmlElementBuilder("div", loginJspxDoc)
+				form.appendChild(new XmlElementBuilder("span", loginJspxDoc)
 						.addChild(
 								loginJspxDoc
 										.createTextNode("<br/><a href =\"/"
@@ -322,7 +322,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 
 	private void createMailSender() {
 		shell.executeCommand("email sender setup --hostServer smtp.gmail.com --port 587 --protocol SMTP --username rohitsghatoltest@gmail.com --password password4me");
-		shell.executeCommand("email template setup --from rohitsghatoltest@gmail.com --subject PasswordRecovery");
+//		shell.executeCommand("email template setup --from rohitsghatoltest@gmail.com --subject PasswordRecovery");
 	}
 
 //	private void autowireMessageDigestPasswordEncoder() {
@@ -658,7 +658,7 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				//change original values
 				originalData = originalData.replace("security_login_form_name=Name", "security_login_form_name=Email");
 				originalData = originalData.replace("security_login_form_name_message=Enter your name", "security_login_form_name_message=Log in using your email address");
-				
+				originalData = originalData.replace("security_login_message=You have tried to access a protected area of this application. By default you can login as \"admin\", with a password of \"admin\".", "security_login_message=Please log in.");
 				
 				out.write(originalData);
 				out.write("\n\n#typicalsecurity\n");
@@ -666,16 +666,27 @@ public class TypicalsecurityOperationsImpl implements TypicalsecurityOperations 
 				out.write("typicalsecurity_forgotpassword_email_subject=New password requested for {0}\n");
 				out.write("typicalsecurity_validate_signup_email_body=Hello, {0},\\nThanks for signing up for a new account with {1}.  Please click this link to activate your account:\\n{2}\n");
 				out.write("typicalsecurity_forgotpassword_email_body=Hello, {0},\\nYou have requested that your password be reset for {1}.  Here is your new password:\\n{2}\\n\\nYou can log in at this address:\\n{3}\n");
-
-//				InputStream in = fileManager.getInputStream(msgPropertiesPath);
-//				OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(msgPropertiesPath)));
-//				Properties msgProperties = new Properties();
-//				msgProperties.load(in);
-//				msgProperties.setProperty("typicalsecurity_validate_signup_email_subject", "Validate your account with {0}");
-//				msgProperties.setProperty("typicalsecurity_forgotpassword_email_subject", "New password requested for {0}");
-//				msgProperties.setProperty("typicalsecurity_validate_signup_email_body", "Hello, {0},\\nThanks for signing up for a new account with {1}.  Please click this link to activate your account:\\n{2}");
-//				msgProperties.setProperty("typicalsecurity_forgotpassword_email_body", "Hello, {0},\\nYou have requested that your password be reset for {1}.  Here is your new password:\\n{2}\\n\\nYou can log in at this address:\\n{3}");
-//				msgProperties.store(out, "typicalsecurity setup");
+				out.write("typicalsecurity_label_change_password=Change Password\n");
+				out.write("typicalsecurity_label_current_password=Current Password\n");
+				out.write("typicalsecurity_label_new_password=New Password\n");
+				out.write("typicalsecurity_label_new_password_repeat=New Password (repeat)\n");
+				out.write("typicalsecurity_label_change_password=Change Password\n");
+				out.write("typicalsecurity_msg_password_changed=Your password has been changed.\n");
+				out.write("typicalsecurity_label_forgot_password=Forgot Password\n");
+				out.write("typicalsecurity_label_forgot_password_email=Enter your Email\n");
+				out.write("typicalsecurity_msg_new_password_emailed=A temporary password has been sent to your email address.\n");
+				out.write("typicalsecurity_msg_registration_error=Sorry, we encountered an error creating your account.  <a href='{0}'>Click here try again.</a>\n");
+				out.write("typicalsecurity_header_registration_error=Unable to create account\n");
+				out.write("typicalsecurity_header_thanks_for_registering=Thank you for registering.  You will receive an activation email from us soon.\n");
+				out.write("typicalsecurity_msg_thanks_for_registering=If you do not receive this email, please check your Spam or Junk folder.\n");
+				out.write("typicalsecurity_header_account_activated=Your account is activated\n");
+				out.write("typicalsecurity_msg_activated_login=You may now click here to log in.\n");
+				out.write("typicalsecurity_header_registration_failed=User Registration Failed\n");
+				out.write("typicalsecurity_header_thanks_for_signing_up=Thanks for signing up\n");
+				out.write("typicalsecurity_msg_thanks_for_signing_up=You should receive an activation email from us shortly. If you do not get the email, please check your Junk Mail or Spam folder.\n");
+				out.write("typicalsecurity_label_forgot_password=Forgot Password\n");
+				out.write("typicalsecurity_label_change_password=Change Password\n");
+				out.write("typicalsecurity_label_sign_up=Sign Up\n");
 				out.close();
 
 			} else {

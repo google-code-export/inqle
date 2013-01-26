@@ -8,9 +8,8 @@
     
     <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_title_div', widgetType : 'dijit.TitlePane', widgetAttrs : {title: 'Account Activated'}})); </script>
     <spring:url value="/login" var="loginUrl"/>
-    Account Activated
 
-    <h3>Your account is activated</h3>
-    <a href="${loginUrl}">You may now click here to log in.</a>
+    <h3><spring:message code="typicalsecurity_header_account_activated"/></h3>
+    <a href="${loginUrl}"><spring:message code="typicalsecurity_msg_activated_login"/></a>
   </div>
 </div>
