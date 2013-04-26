@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
 
 public class TagdayViewImpl extends Composite implements TagdayView {
@@ -44,7 +45,7 @@ public class TagdayViewImpl extends Composite implements TagdayView {
                 addTagButton.addTouchEndHandler(new TouchEndHandler() {
 					@Override
 					public void onTouchEnd(TouchEndEvent event) {
-						App.eventBus.fireEvent(new NewTagEvent());
+						App.eventBus.fireEvent(new NewTagEvent(getCurrentDay()));
 					}
                 });
                 tagsPanel.add(addTagButton);
@@ -54,6 +55,15 @@ public class TagdayViewImpl extends Composite implements TagdayView {
                 carousel.setWidth("100%");
                 daysPanel.setHeight("100%");
                 daysPanel.setWidth("100%");
+                
+//                daysPanel.setHeight(Window.getClientHeight() + "px");
+//                Window.addResizeHandler(new ResizeHandler() {
+//                 public void onResize(ResizeEvent event) {
+//                   int height = event.getHeight();
+//                   daysPanel.setHeight(height + "px");
+//                 }
+//                });
+                
                 daysPanel.add(carousel);
         }
 
@@ -62,7 +72,14 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //                presenter.goTo(new GoodbyePlace(name));
 //        }
 
-        private void loadDayPicker() {
+        public Day getCurrentDay() {
+        	if (carousel.getCurrentWidget() != null && carousel.getCurrentWidget() instanceof Day) {
+        		return (Day)carousel.getCurrentWidget();
+        	}
+        	return null;
+		}
+
+		private void loadDayPicker() {
         	WeekView weekView = new WeekView();
         	dayPicker.add(weekView);
 		}
@@ -74,6 +91,10 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 
 		@Override
 		public void addDay(Day day) {
-			carousel   .add(day);
+//			ScrollPanel scrollPanel = new ScrollPanel();
+//			scrollPanel.setWidth("90%");
+//            scrollPanel.setScrollingEnabledX(false);
+//            scrollPanel.add(day);
+			carousel.addWidget(day);
 		}
 }
