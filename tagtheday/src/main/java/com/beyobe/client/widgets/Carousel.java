@@ -78,7 +78,8 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
   private com.google.web.bindery.event.shared.HandlerRegistration refreshHandler;
 
 //  private static final CarouselImpl IMPL = GWT.create(CarouselImpl.class);
-  private static final CarouselImpl IMPL = new CarouselImplGecko();
+//  private static final CarouselImpl IMPL = new CarouselImplGecko();
+  private static final CarouselImpl IMPL = new CarouselImplSafari();
 
   /**
    * Construct a carousel widget with the default css
@@ -179,10 +180,26 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
 
   }
 
+  public void addWidget(Widget w) {
+  	ScrollPanel pageHolder = new ScrollPanel();
+  	pageHolder.setWidth("90%");
+  	pageHolder.setScrollingEnabledX(false);
+  	pageHolder.setWidget(w);
+//    pageHolder.getElement().getStyle().setProperty("float", "left");
+    add(pageHolder);
+//    if (w instanceof ScrollPanel) {
+//      w.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
+//    }
+    //dd
+//    w.getElement().getStyle().setProperty("float", "left");
+//    w.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
+  }
+  
   @Override
   public void add(Widget w) {
 
     WidgetHolder widgetHolder = new WidgetHolder(css);
+    widgetHolder.getElement().getStyle().setProperty("float", "left");
     widgetHolder.add(w);
 
     childToHolder.put(w, widgetHolder);
@@ -332,6 +349,10 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
 
     }
 
+  }
+  
+  public Widget getCurrentWidget() {
+	  return container.getWidget(currentPage);
   }
 
 }

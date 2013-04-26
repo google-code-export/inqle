@@ -14,12 +14,15 @@
             of the ScrollPanel */
     }
   </ui:style>
-  <g:VerticalPanel styleName="{style.tagdayArea}">
-		<g:FlowPanel ui:field="tagsPanel" styleName='{style.tagsPanel}'/>
-		<g:FlowPanel ui:field="dayPicker" styleName='{style.dayPicker}'/>
-<!-- 		<g:ScrollPanel addStyleNames="scrollHorizontal"> -->
-		    <g:FlowPanel ui:field="daysPanel"/>
-<!-- 		</g:ScrollPanel> -->
-	  
-  </g:VerticalPanel>
+  <g:DockLayoutPanel styleName="{style.tagdayArea}">
+    <g:north size="50">
+      <g:VerticalPanel>
+		  <g:FlowPanel ui:field="tagsPanel" styleName='{style.tagsPanel}'/>
+		  <g:FlowPanel ui:field="dayPicker" styleName='{style.dayPicker}'/>
+		  </g:VerticalPanel>
+		</g:north>
+    <g:center>
+      <g:FlowPanel ui:field="daysPanel"/>
+    </g:center>
+  </g:DockLayoutPanel>
 </ui:UiBinder>
