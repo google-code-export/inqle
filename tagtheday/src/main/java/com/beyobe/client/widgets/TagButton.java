@@ -5,7 +5,8 @@ import com.beyobe.client.beans.Question;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class TagButton extends Button {
-
+	private Question question;
+	private Datum datum;
 
 
 //	public TagButton() {
@@ -21,17 +22,7 @@ public class TagButton extends Button {
 		this.addStyleName("ttd-TagButton");
 		this.question = question;
 		this.datum = datum;
-		if(datum == null) {
-			setText(question.getShortForm() + "?");
-			setTitle(question.getLongForm());
-//			this.addStyleName("ttd-TagButton-unanswered");
-			this.setImportant(true);
-		} else {
-			setText(question.getAbbreviation() + " " + datum.getTextValue());
-			setTitle(question.getLongForm() + " " + datum.getTextValue());
-//			this.addStyleName("ttd-TagButton-answered");
-			if (datum.getStatus()!=Datum.STATUS_INFERRED) this.setConfirm(true);
-		}
+		refreshAppearance();
 		
 	}
 
@@ -61,6 +52,19 @@ public class TagButton extends Button {
 		this.datum = datum;
 	}
 
-	private Question question;
-	private Datum datum;
+	
+	public void refreshAppearance() {
+		if(datum == null) {
+			setText(question.getShortForm() + "?");
+			setTitle(question.getLongForm());
+//			this.addStyleName("ttd-TagButton-unanswered");
+			this.setImportant(true);
+		} else {
+			setText(question.getAbbreviation() + " " + datum.getTextValue());
+			setTitle(question.getLongForm() + " " + datum.getTextValue());
+//			this.addStyleName("ttd-TagButton-answered");
+			if (datum.getStatus()!=Datum.STATUS_INFERRED) this.setConfirm(true);
+		}
+		
+	}
 }

@@ -16,7 +16,9 @@ public class Datum {
     private long questionId;
     private long participantId;
     private Double numericValue;
+    private Integer integerValue;
     private String textValue;
+    private String longTextValue;
     private Choice choice;
     private Double normalizedValue;
     private Unit unit;
@@ -24,6 +26,8 @@ public class Datum {
     private Double canonicalValue;
     private Integer status;
     private long conceptId;
+	private Integer dataType;
+	
 	public long getId() {
 		return id;
 	}
@@ -116,5 +120,23 @@ public class Datum {
 	}
 	public static Integer getStatusNeverAskAgain() {
 		return STATUS_NEVER_ASK_AGAIN;
+	}
+	public Integer getIntegerValue() {
+		return integerValue;
+	}
+	public void setIntegerValue(Integer integerValue) {
+		this.integerValue = integerValue;
+	}
+	public Integer getDataType() {
+		return dataType;
+	}
+	public void setDataType(Integer dataType) {
+		this.dataType = dataType;
+	}
+	public String getLongTextValue() {
+		return longTextValue;
+	}
+	public void setLongTextValue(String longTextValue) {
+		this.longTextValue = longTextValue;
 	}
 }

@@ -1,8 +1,17 @@
 package com.beyobe.client.beans;
 
 import java.util.Date;
+import java.util.List;
 
 public class Question {
+	public static final int DATA_TYPE_UNSPECIFIED = 0;
+	public static final int DATA_TYPE_DOUBLE = 1;
+	public static final int DATA_TYPE_INTEGER = 2;
+	public static final int DATA_TYPE_MULTIPLE_CHOICE = 3;
+	public static final int DATA_TYPE_SHORT_TEXT = 4;
+	public static final int DATA_TYPE_LONG_TEXT = 5;
+	public static final int DATA_TYPE_STARS = 6;
+	
 	private long id;
 	private String longForm;
 	private String shortForm;
@@ -12,10 +21,31 @@ public class Question {
     private long conceptId;
     private long creatorId;
     private String creatorName;
-    private int priority;
+    private Integer priority;
     private String lang;
+    private int dataType = DATA_TYPE_UNSPECIFIED;
+    private Unit referenceUnit;
+	private List<Choice> choices;
+	private Double minValue;
+	public Double getMinValue() {
+		return minValue;
+	}
+	public void setMinValue(Double minValue) {
+		this.minValue = minValue;
+	}
+	public Double getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(Double maxValue) {
+		this.maxValue = maxValue;
+	}
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+	private Double maxValue;
     
-    public String getLongForm() {
+   
+	public String getLongForm() {
 		return longForm;
 	}
 	public void setLongForm(String longForm) {
@@ -63,12 +93,6 @@ public class Question {
 	public void setCreatorName(String creatorName) {
 		this.creatorName = creatorName;
 	}
-	public int getPriority() {
-		return priority;
-	}
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
 	public String getLang() {
 		return lang;
 	}
@@ -80,5 +104,23 @@ public class Question {
 	}
 	public void setId(long id) {
 		this.id = id;
+	}
+	public int getDataType() {
+		return dataType;
+	}
+	public void setDataType(int answerType) {
+		this.dataType = answerType;
+	}
+	public Unit getReferenceUnit() {
+		return referenceUnit;
+	}
+	public void setReferenceUnit(Unit referenceUnit) {
+		this.referenceUnit = referenceUnit;
+	}
+	public List<Choice> getChoices() {
+		return choices;
+	}
+	public void setChoices(List<Choice> choices) {
+		this.choices = choices;
 	}
 }

@@ -33,17 +33,23 @@ import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.mvp.client.AnimatableDisplay;
 import com.googlecode.mgwt.mvp.client.AnimatingActivityManager;
 import com.googlecode.mgwt.mvp.client.AnimationMapper;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
+import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
 import com.googlecode.mgwt.ui.client.dialog.TabletPortraitOverlay;
 import com.googlecode.mgwt.ui.client.layout.MasterRegionHandler;
 import com.googlecode.mgwt.ui.client.layout.OrientationRegionHandler;
+import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.RoundPanel;
 
 /**
  * @author Daniel Kurka
@@ -58,7 +64,7 @@ public class MgwtAppEntryPoint implements EntryPoint {
 	  //set viewport and other settings for mobile
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		
-		registerEvents();
+		App.registerEvents();
 
 //		final ClientFactory clientFactory = new ClientFactoryImpl();
 
@@ -86,29 +92,6 @@ public class MgwtAppEntryPoint implements EntryPoint {
 		}
 		historyHandler.handleCurrentHistory();
 
-	}
-
-	private void registerEvents() {
-		App.eventBus.addHandler(NewTagEvent.TYPE, new NewTagEventHandler() {
-			//TODO add real event
-			@Override
-			public void onNewTag(NewTagEvent event) {
-				log.log(Level.INFO, "New Tag");
-				Window.alert("New Tag");
-			}
-			
-		});
-		App.eventBus.addHandler(TagClickedEvent.TYPE, new TagClickedEventHandler() {
-			//TODO add real event
-			@Override
-			public void onTagClicked(TagClickedEvent event) {
-				TagButton clickedTagButton = event.getTagButton();
-				log.log(Level.INFO, "Tag clicked: " + clickedTagButton.getQuestion().getLongForm());
-				Window.alert("Tag clicked: " + clickedTagButton.getQuestion().getLongForm());
-			}
-			
-		});
-		
 	}
 
 	private void createPhoneDisplay() {
