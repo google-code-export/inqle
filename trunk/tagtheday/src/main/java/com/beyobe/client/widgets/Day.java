@@ -24,7 +24,7 @@ import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.ui.client.widget.RoundPanel;
 
 public class Day extends Composite implements Block, TapHandler {
-	private static final String DAY_LABEL_FORMAT = "MMMM d, y";
+	private static final String DAY_LABEL_FORMAT = "EEEE, MMMM d, y";
 	public static final int MILLISECONDS_IN_A_DAY = 86400000;
 	protected Date start;
 	protected Date end;
@@ -134,10 +134,11 @@ public class Day extends Composite implements Block, TapHandler {
 
 	@Override
 	public void onTap(TapEvent event) {
+		
 		if (event.getSource() instanceof TagButton) {
 			App.eventBus.fireEvent(new TagClickedEvent((TagButton)event.getSource()));
-		} else if (event.getSource() instanceof Day){
-			App.eventBus.fireEvent(new NewTagEvent((Day)event.getSource()));
+		} else if (event.getSource().equals(tagsPanel)){
+			App.eventBus.fireEvent(new NewTagEvent(this));
 		}
 	}
 

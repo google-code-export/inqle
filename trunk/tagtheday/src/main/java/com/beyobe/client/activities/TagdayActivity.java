@@ -5,6 +5,7 @@ import java.util.Date;
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.beans.Unit;
 import com.beyobe.client.views.TagdayView;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
@@ -42,6 +43,8 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
         q1.setLongForm("What is your weight?");
         q1.setShortForm("Weight");
         q1.setAbbreviation("Wt");
+        q1.setDataType(Question.DATA_TYPE_DOUBLE);
+        q1.setReferenceUnit(Unit.KG);
         Question q2 = new Question();
         q2.setId(2L);
         q2.setLongForm("How happy are you?");
