@@ -16,6 +16,7 @@ import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
+import com.googlecode.mgwt.ui.client.widget.MSlider;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
@@ -31,9 +32,9 @@ public class AnswerForm extends Composite implements TapHandler {
 	private MTextArea textArea;
 	private ChoicePicker choicePicker;
 	private TagButton tagButton;
+	private MSlider slider;
 
 	public AnswerForm(TagButton tagButton) {
-		Window.alert("New AnswerForm loading...");
 		this.tagButton = tagButton;
 		if (tagButton.getQuestion() == null) return;
 		this.q = tagButton.getQuestion();
@@ -60,13 +61,19 @@ public class AnswerForm extends Composite implements TapHandler {
 		
 		//INTEGER
 		if (q.getDataType()==Question.DATA_TYPE_INTEGER) {
-			integerBox = new MIntegerBox();
-			panel.add(integerBox);
-			if (q.getReferenceUnit() != null) {
-				unitPicker = new UnitPicker(q.getReferenceUnit());
-				panel.add(unitPicker);
+			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
+				slider = new MSlider();
+				slider.setMax((int)Math.round(q.getMaxValue()));
+				if (d != null) slider.setValue(d.getIntegerValue());
+			} else {
+				integerBox = new MIntegerBox();
+				panel.add(integerBox);
+				if (q.getReferenceUnit() != null) {
+					unitPicker = new UnitPicker(q.getReferenceUnit());
+					panel.add(unitPicker);
+				}
+				if (d != null) integerBox.setText(d.getTextValue());
 			}
-			if (d != null) integerBox.setText(d.getTextValue());
 		}
 		
 		//SHORT TEXT
@@ -91,7 +98,9 @@ public class AnswerForm extends Composite implements TapHandler {
 		}
 		
 		saveButton = new Button("Save");
+		saveButton.setSmall(true);
 		saveButton.addTapHandler(this);
+		panel.add(saveButton);
 		initWidget(panel);
 	}
 
@@ -144,24 +153,34 @@ public class AnswerForm extends Composite implements TapHandler {
 		//INTEGER
 		if (q.getDataType()==Question.DATA_TYPE_INTEGER) {
 			Integer val = null;
-			try {
-				val = Integer.valueOf(integerBox.getText());
-			} catch (NumberFormatException e) {
-				validateMessage("Unable to recognize your answer.  It should be an integer.");
-				return;
-			}
-			if (q.getMinValue() != null && q.getMinValue() > val) {
-				validateMessage("Your answer must be at least " + q.getMinValue());
-				return;
-			}
-			if (q.getMaxValue() != null && q.getMaxValue() < val) {
-				validateMessage("Your answer must be no more than " + q.getMaxValue());
-				return;
-			}
-			d.setTextValue(integerBox.getText());
-			d.setLongTextValue(integerBox.getText());
 			
-			d.setIntegerValue(val);
+			//Slider
+			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
+				val = slider.getValue();
+				d.setTextValue(String.valueOf(val));
+				d.setLongTextValue(String.valueOf(val));
+			} else {
+				try {
+					val = Integer.valueOf(integerBox.getText());
+				} catch (NumberFormatException e) {
+					validateMessage("Unable to recognize your answer.  It should be an integer.");
+					return;
+				}
+				if (q.getMinValue() != null && q.getMinValue() > val) {
+					validateMessage("Your answer must be at least " + q.getMinValue());
+					return;
+				}
+				if (q.getMaxValue() != null && q.getMaxValue() < val) {
+					validateMessage("Your answer must be no more than " + q.getMaxValue());
+					return;
+				}
+				d.setTextValue(integerBox.getText());
+				d.setLongTextValue(integerBox.getText());
+				
+				d.setIntegerValue(val);
+			}
+			
+			//handle units if present
 			if (q.getReferenceUnit() != null) {
 				d.setUnit(unitPicker.getSelectedUnit());
 				double normalizedValue = unitPicker.getSelectedUnit().toReferenceValue(val);

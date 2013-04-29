@@ -6,9 +6,13 @@ import java.util.List;
 import com.beyobe.client.beans.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
+import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MRadioButton;
 
-public class UnitPicker extends Composite {
+public class UnitPicker extends Composite implements TapHandler {
 
 	public List<Unit> units;
 	public List<MRadioButton> radioButtons;
@@ -18,9 +22,16 @@ public class UnitPicker extends Composite {
 		radioButtons = new ArrayList<MRadioButton>();
 		FlowPanel panel = new FlowPanel();
 		for (Unit unit: units) {
+			FlowPanel choicePanel = new FlowPanel();
+//			choicePanel.getElement().getStyle().setProperty("float", "left");
 			MRadioButton button = new MRadioButton(unit.getAbbrev());
+			button.addTapHandler(this);
 			radioButtons.add(button);
-			panel.add(button);
+			button.getElement().getStyle().setProperty("float", "left");
+			choicePanel.add(button);
+			Label label = new Label(unit.getAbbrev());
+			choicePanel.add(label);
+			panel.add(choicePanel);
 		}
 		initWidget(panel);
 	}
@@ -55,5 +66,19 @@ public class UnitPicker extends Composite {
 				button.setValue(false);
 			}
 		}
+	}
+
+	@Override
+	public void onTap(TapEvent event) {
+		MRadioButton clickedButton = (MRadioButton)event.getSource();
+		for (int i = 0; i<radioButtons.size(); i++) {
+			MRadioButton button = radioButtons.get(i);
+			if (button.equals(clickedButton)) {
+				button.setValue(true);
+			} else {
+				button.setValue(false);
+			}
+		}
+		
 	}
 }
