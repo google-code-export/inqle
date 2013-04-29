@@ -18,6 +18,7 @@ package com.beyobe.client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
@@ -70,6 +71,14 @@ public class App {
 				log.log(Level.INFO, "Tag clicked: " + tagButton.getQuestion().getLongForm());
 				answerPopin = new PopinDialog();
 				RoundPanel answerPanel = new RoundPanel();
+				Datum d = tagButton.getDatum();
+				if (d==null) {
+					answerPanel.getElement().getStyle().setBackgroundColor("pink");
+				} else if (d.getStatus()!=Datum.STATUS_INFERRED) {
+					answerPanel.getElement().getStyle().setBackgroundColor("light-green");
+				} else {
+					answerPanel.getElement().getStyle().setBackgroundColor("light-gray");
+				}
 				Button closeButton = new Button("x");
 				closeButton.setImportant(true);
 				closeButton.setSmall(true);
@@ -103,5 +112,14 @@ public class App {
 	public static long getParticipantId() {
 		if (participant != null) return participant.getId();
 		return 0;
+	}
+
+	/**
+	 * Get the participant (current user)
+	 */
+	public static void loadParticipant() {
+		participant = new Participant();
+		participant.setId(1L);
+		
 	}
 }

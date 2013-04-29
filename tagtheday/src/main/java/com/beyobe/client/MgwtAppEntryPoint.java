@@ -61,9 +61,10 @@ public class MgwtAppEntryPoint implements EntryPoint {
     
 	private void start() {
 		
-	  //set viewport and other settings for mobile
+		//set viewport and other settings for mobile
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		
+		App.loadParticipant();
 		App.registerEvents();
 
 //		final ClientFactory clientFactory = new ClientFactoryImpl();
