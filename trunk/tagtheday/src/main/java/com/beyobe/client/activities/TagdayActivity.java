@@ -54,8 +54,8 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
         d2.setQuestionId(q2.getId());
         d2.setNumericValue(4.0);
         d2.setTextValue("4");
-        TagButton tb1 = new TagButton(q1, null);
-        TagButton tb2 = new TagButton(q2, d2);
+        TagButton tb1 = new TagButton(date, q1, null);
+        TagButton tb2 = new TagButton(date, q2, d2);
         todayDay.addTagButton(tb1);
         todayDay.addTagButton(tb2);
     	

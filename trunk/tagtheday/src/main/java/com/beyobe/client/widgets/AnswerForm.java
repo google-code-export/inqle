@@ -54,6 +54,7 @@ public class AnswerForm extends Composite implements TapHandler {
 			panel.add(doubleBox);
 			if (q.getReferenceUnit() != null) {
 				unitPicker = new UnitPicker(q.getReferenceUnit());
+				if (d != null) unitPicker.setSelectedUnit(d.getUnit());
 				panel.add(unitPicker);
 			}
 			if (d != null) doubleBox.setText(d.getTextValue());
@@ -111,8 +112,11 @@ public class AnswerForm extends Composite implements TapHandler {
 		}
 	}
 	
-	private void saveData() {
-		if (d==null) d = new Datum();
+	public boolean saveData() {
+		if (d==null) {
+			d = new Datum();
+			d.setEffectiveDate(tagButton.getEffectiveDate());
+		}
 		d.setParticipantId(App.participant.getId());
 		d.setQuestionId(q.getId());
 		d.setConceptId(q.getConceptId());
@@ -127,15 +131,15 @@ public class AnswerForm extends Composite implements TapHandler {
 				val = Double.valueOf(doubleBox.getText());
 			} catch (NumberFormatException e) {
 				validateMessage("Unable to recognize your answer.  It should be a number.");
-				return;
+				return false;
 			}
 			if (q.getMinValue() != null && q.getMinValue() > val) {
 				validateMessage("Your answer must be at least " + q.getMinValue());
-				return;
+				return false;
 			}
 			if (q.getMaxValue() != null && q.getMaxValue() < val) {
 				validateMessage("Your answer must be no more than " + q.getMaxValue());
-				return;
+				return false;
 			}
 			d.setTextValue(doubleBox.getText());
 			d.setLongTextValue(doubleBox.getText());
@@ -164,15 +168,15 @@ public class AnswerForm extends Composite implements TapHandler {
 					val = Integer.valueOf(integerBox.getText());
 				} catch (NumberFormatException e) {
 					validateMessage("Unable to recognize your answer.  It should be an integer.");
-					return;
+					return false;
 				}
 				if (q.getMinValue() != null && q.getMinValue() > val) {
 					validateMessage("Your answer must be at least " + q.getMinValue());
-					return;
+					return false;
 				}
 				if (q.getMaxValue() != null && q.getMaxValue() < val) {
 					validateMessage("Your answer must be no more than " + q.getMaxValue());
-					return;
+					return false;
 				}
 				d.setTextValue(integerBox.getText());
 				d.setLongTextValue(integerBox.getText());
@@ -212,7 +216,9 @@ public class AnswerForm extends Composite implements TapHandler {
 				d.setChoice(choice);
 			}
 		}
+		tagButton.setDatum(d);
 		App.eventBus.fireEvent(new DataCapturedEvent(tagButton));
+		return true;
 	}
 
 	private void validateMessage(String message) {
