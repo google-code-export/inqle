@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
+import com.beyobe.client.data.DataBus;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
 import com.beyobe.client.event.NewTagEvent;
@@ -50,6 +51,7 @@ public class App {
 	public static final PlaceController placeController = new PlaceController(eventBus);
 	public static final TagdayView tagdayView = new TagdayViewImpl();
 	public static Participant participant;
+	public static DataBus dataBus = new DataBus();
 	
 	protected static PopinDialog answerPopin;
 	private static Logger log = Logger.getLogger(App.class.getName());
@@ -101,9 +103,10 @@ public class App {
 			@Override
 			public void onDataCaptured(DataCapturedEvent event) {
 				TagButton tagButton = event.getTagButton();
+				
+				answerPopin.hide();
 				tagButton.refreshAppearance();
 				//TODO real event
-				Window.alert("Saving data...");
 			}
 		});
 		

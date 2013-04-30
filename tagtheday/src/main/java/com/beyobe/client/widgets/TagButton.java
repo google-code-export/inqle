@@ -1,5 +1,7 @@
 package com.beyobe.client.widgets;
 
+import java.util.Date;
+
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.googlecode.mgwt.ui.client.widget.Button;
@@ -7,19 +9,21 @@ import com.googlecode.mgwt.ui.client.widget.Button;
 public class TagButton extends Button {
 	private Question question;
 	private Datum datum;
+	private Date effectiveDate;
 
 
 //	public TagButton() {
 //		// TODO Auto-generated constructor stub
 //	}
 
-	public TagButton(Question question, Datum datum) {
+	public TagButton(Date effectiveDate, Question question, Datum datum) {
 		super();
 //		this.addStyleName("mgwt-Button-small");
 //		this.addStyleName("mgwt-Button-round");
 		this.setSmall(true);
         this.setRound(true);
 		this.addStyleName("ttd-TagButton");
+		this.setEffectiveDate(effectiveDate);
 		this.question = question;
 		this.datum = datum;
 		refreshAppearance();
@@ -66,5 +70,13 @@ public class TagButton extends Button {
 			if (datum.getStatus()!=Datum.STATUS_INFERRED) this.setConfirm(true);
 		}
 		
+	}
+
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
 	}
 }

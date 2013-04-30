@@ -13,6 +13,7 @@ public class Datum {
     private long id;
     private Date created = new Date();
     private Date updated = null;
+    private Date effectiveDate;
     private long questionId;
     private long participantId;
     private Double numericValue;
@@ -138,5 +139,11 @@ public class Datum {
 	}
 	public void setLongTextValue(String longTextValue) {
 		this.longTextValue = longTextValue;
+	}
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
 	}
 }
