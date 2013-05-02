@@ -61,8 +61,24 @@ public class App {
 			//TODO add real event
 			@Override
 			public void onNewTag(NewTagEvent event) {
-				log.log(Level.INFO, "New Tag");
-				Window.alert("New Tag");
+				answerPopin = new PopinDialog();
+				RoundPanel newTagPanel = new RoundPanel();
+				Button closeButton = new Button("x");
+				closeButton.setImportant(true);
+				closeButton.setSmall(true);
+				closeButton.getElement().getStyle().setProperty("float", "right");
+				closeButton.addTapHandler(new TapHandler() {
+					@Override
+					public void onTap(TapEvent event) {
+						answerPopin.hide();
+						answerPopin.clear();
+					}
+				});
+				newTagPanel.add(closeButton);
+				newTagPanel.add(new QuestionForm());
+				answerPopin.add(newTagPanel);
+				
+				answerPopin.show();
 			}
 		});
 		
@@ -89,6 +105,7 @@ public class App {
 					@Override
 					public void onTap(TapEvent event) {
 						answerPopin.hide();
+						answerPopin.clear();
 					}
 				});
 				answerPanel.add(closeButton);
@@ -106,7 +123,8 @@ public class App {
 				
 				answerPopin.hide();
 				tagButton.refreshAppearance();
-				//TODO real event
+				
+				dataBus.saveDatum(tagButton.getDatum());
 			}
 		});
 		

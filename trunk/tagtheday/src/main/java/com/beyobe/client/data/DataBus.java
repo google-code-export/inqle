@@ -3,6 +3,7 @@ package com.beyobe.client.data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -10,15 +11,17 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 public class DataBus {
 
 	private Logger log = Logger.getLogger(getClass().getName());
 	
 	private Map<Long, Question> knownQuestions = new HashMap<Long, Question>();
-	private Map<String, List<Datum>> dataByDate = new HashMap<String, List<Datum>>();
+	private LinkedHashMap<String, List<Datum>> dataByDate = new LinkedHashMap<String, List<Datum>>();
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -64,7 +67,7 @@ public class DataBus {
 //		String dateStr = DataBus.getDateString(effectiveDate);
 		
 		//first save in memory
-		List<Datum> dataForDay = getDataForDate(datumToSave.getEffectiveDate());
+		List<Datum> dataForDay = getDataForDate(effectiveDate);
 		int index = 0;
 		boolean replaced = false;
 		for (Datum datum: dataForDay) {
@@ -82,5 +85,60 @@ public class DataBus {
 		//TODO save in local storage
 		
 		//TODO send to server
+	}
+	
+	public List<Day> getAllDays() {
+		List<Day> allDays = new ArrayList<Day>();
+		
+		//add days from the start of data collection to the present.
+		DateTimeFormat format = DateTimeFormat.getFormat("yyyy-MM-dd");
+		Date startOfToday = format.parse(format.format(new Date()));
+		
+		//if no data, just return today's day
+		if (dataByDate != null && dataByDate.size()>0) {
+			Day day = new Day(startOfToday);
+			allDays.add(day);
+			return allDays;
+		}
+				
+		//find earliest date
+		Date earliestDate = null;
+		for (Map.Entry<String,  List<Datum>> entry : dataByDate.entrySet()) {
+		    String key = entry.getKey();
+		    earliestDate = format.parse(key);
+		    break;
+		}	
+		
+		Date date = new Date(startOfToday.getTime());
+		if (earliestDate != null) {
+			date = earliestDate;
+		}
+		
+		while(date.before(startOfToday) || date.equals(startOfToday)) {
+			String key = format.format(date);
+			List<Datum> dataForDay = dataByDate.get(key);
+			Day day = new Day(date);
+			//advance date 24 hours
+			CalendarUtil.addDaysToDate(date, 1);
+			date = new Date(date.getTime());
+			
+			if (dataForDay == null || dataForDay.size()==0) {
+				allDays.add(day);
+				continue;
+			}
+			
+			//add all tagbuttons to this day
+			for (Datum d: dataForDay) {
+				Question q = knownQuestions.get(d.getQuestionId());
+				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+				day.addTagButton(tagButton);
+			}
+			
+			allDays.add(day);
+			
+		}
+		
+		
+		return allDays;
 	}
 }

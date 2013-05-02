@@ -28,7 +28,7 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 
         @UiField FlowPanel tagsPanel;
         @UiField FlowPanel daysPanel;
-        @UiField FlowPanel dayPicker;
+//        @UiField FlowPanel dayPicker;
         private Presenter presenter;
 //        private List<Day> days = new ArrayList<Day>();
 		private Date date;
@@ -41,15 +41,15 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //                addTagButton.addStyleName("mgwt-Button-small");
 //                addTagButton.addStyleName("mgwt-Button-round");
                 addTagButton.setSmall(true);
-                addTagButton.setRound(true);
                 addTagButton.addTouchEndHandler(new TouchEndHandler() {
 					@Override
 					public void onTouchEnd(TouchEndEvent event) {
 						App.eventBus.fireEvent(new NewTagEvent(getCurrentDay()));
 					}
                 });
+                addTagButton.getElement().getStyle().setProperty("float", "right");
                 tagsPanel.add(addTagButton);
-                loadDayPicker();
+//                loadDayPicker();
                 carousel = new Carousel();
                 carousel.setHeight("100%");
                 carousel.setWidth("100%");
@@ -79,10 +79,10 @@ public class TagdayViewImpl extends Composite implements TagdayView {
         	return null;
 		}
 
-		private void loadDayPicker() {
-        	WeekView weekView = new WeekView();
-        	dayPicker.add(weekView);
-		}
+//		private void loadDayPicker() {
+//        	WeekView weekView = new WeekView();
+//        	dayPicker.add(weekView);
+//		}
 
 		@Override
         public void setPresenter(Presenter presenter) {

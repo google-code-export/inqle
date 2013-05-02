@@ -4,7 +4,7 @@
                          xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 .tagdayArea { width: 100%; height: 100%;}
-.tagsPanel { width: 100%; height: 7px;}
+.tagsPanel { width: 100%; height: 28px;}
 .daysPanel { width: 100%; height: 100%;}
 .dayPicker { width: 100%; height: 7px;}
 .scrollHorizontal{
@@ -15,10 +15,10 @@
     }
   </ui:style>
   <g:DockLayoutPanel styleName="{style.tagdayArea}">
-    <g:north size="50">
+    <g:north size="28">
       <g:VerticalPanel>
 		  <g:FlowPanel ui:field="tagsPanel" styleName='{style.tagsPanel}'/>
-		  <g:FlowPanel ui:field="dayPicker" styleName='{style.dayPicker}'/>
+<!-- 		  <g:FlowPanel ui:field="dayPicker" styleName='{style.dayPicker}'/> -->
 		  </g:VerticalPanel>
 		</g:north>
     <g:center>
