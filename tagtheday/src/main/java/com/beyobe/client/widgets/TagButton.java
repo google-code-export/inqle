@@ -59,7 +59,7 @@ public class TagButton extends Button {
 	
 	public void refreshAppearance() {
 		if(datum == null) {
-			setText(question.getShortForm() + "?");
+			setText(question.getAbbreviation() + "?");
 			setTitle(question.getLongForm());
 //			this.addStyleName("ttd-TagButton-unanswered");
 			this.setImportant(true);

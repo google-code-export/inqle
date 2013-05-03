@@ -1,12 +1,16 @@
 package com.beyobe.client.widgets;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Choice;
-import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.event.DataCapturedEvent;
+import com.beyobe.client.util.UUID;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -16,21 +20,27 @@ import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
-import com.googlecode.mgwt.ui.client.widget.MSlider;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
-public class QuestionForm extends Composite implements TapHandler {
+public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice> {
 
+	private static final int LONG_FORM_MAX_LENGTH = 250;
 	private Question q;
-	private MTextBox shortForm;
+//	private MTextBox shortForm;
 	private MTextBox abbrev;
 	private MTextArea longForm;
 	private ChoicePicker dataType;
+	private ChoicePicker measurmentPicker;
 	private MDoubleBox minVal;
 	private MDoubleBox maxVal;
 	private MIntegerBox maxLength;
-
+	private Button saveButton;
+	private VerticalPanel minMaxPanel;
+	private MTextBox minBox;
+	private MTextBox maxBox;
+	private VerticalPanel maxLengthPanel;
+	
 	public QuestionForm(Question q) {
 		this.q = q;
 		
@@ -41,23 +51,59 @@ public class QuestionForm extends Composite implements TapHandler {
 		panel.add(questionFull);
 		
 		//add input elements
-		
-			textBox = new MTextBox();
-			panel.add(textBox);
-			if (d != null) textBox.setText(d.getTextValue());
-		
-		//LONG TEXT
-		if (q.getDataType()==Question.DATA_TYPE_LONG_TEXT) {
-			textArea = new MTextArea();
-			panel.add(textArea);
-			if (d != null) textArea.setText(d.getTextValue());
+		//long form
+		panel.add(new Label("Long version of the question - Example: How happy are you today?"));
+		longForm = new MTextArea();
+		longForm.setAutoCorrectEnabled(true);
+		if (q != null) {
+			longForm.setText(q.getLongForm());
 		}
+		panel.add(longForm);
+			
+//		//short form
+//		panel.add(new Label("Abbreviated version of the question - Example: Happy?"));
+//		shortForm = new MTextBox();
+//		shortForm.setMaxLength(14);
+//		panel.add(shortForm);
 		
-		//MULTIPLE CHOICE
-		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
-			choicePicker = new ChoicePicker(q.getChoices());
-			panel.add(choicePicker);
-			if (d != null) choicePicker.setSelectedChoice(d.getChoice());
+		//abbrev
+		panel.add(new Label("Abbreviation of the question - Example: Happy"));
+		abbrev = new MTextBox();
+		abbrev.setMaxLength(7);
+		if (q != null) {
+			abbrev.setText(q.getAbbreviation());
+		}
+		panel.add(abbrev);
+		
+		dataType = new ChoicePicker(getDataTypeChoices());
+		if (q != null && q.getDataType() > 0) {
+			dataType.setSelectedId(q.getDataType());
+		}
+		dataType.addValueChangeHandler(this);
+		
+		//minMaxPanel for numeric questions
+		minMaxPanel = new VerticalPanel();
+		minMaxPanel.setVisible(false);
+		if (Question.DATA_TYPE_DOUBLE == dataType.getSelectedId() || Question.DATA_TYPE_INTEGER == dataType.getSelectedId()) {
+			minMaxPanel.setVisible(true);
+		}
+		minMaxPanel.add(new Label("Minimum numeric value allowed (Leave blank if no minimum"));
+		minBox = new MTextBox();
+		if (q != null && q.getMinValue() != null) {
+			minBox.setValue(String.valueOf(q.getMinValue()));
+		} else {
+			minBox.setValue("0");
+		}
+		minMaxPanel.add(minBox);
+		minMaxPanel.add(new Label("Maximum numeric value allowed (Leave blank if no maximum"));
+		maxBox = new MTextBox();
+		if (q != null && q.getMaxValue() != null) {
+			maxBox.setValue(String.valueOf(q.getMaxValue()));
+		}
+		minMaxPanel.add(maxBox);
+		measurmentPicker = new ChoicePicker(getMeasurementChoices());
+		if (q != null && q.getMeasurement() != null) {
+			measurmentPicker.setSelectedId(q.getMeasurement().getId());
 		}
 		
 		saveButton = new Button("Save");
@@ -67,124 +113,114 @@ public class QuestionForm extends Composite implements TapHandler {
 		initWidget(panel);
 	}
 
+	private List<Choice> getDataTypeChoices() {
+		List<Choice> dataTypeChoices = new ArrayList<Choice>();
+		Choice c = new Choice(Question.DATA_TYPE_DOUBLE, "Number", "Number");
+		dataTypeChoices.add(c);
+//		c = new Choice(Question.DATA_TYPE_INTEGER, "Integer", "for discreet values like a rating system");
+//		dataTypeChoices.add(c);
+//		c = new Choice(Question.DATA_TYPE_MULTIPLE_CHOICE, "Multiple Choice", "Multiple Choice");
+//		dataTypeChoices.add(c);
+		c = new Choice(Question.DATA_TYPE_SHORT_TEXT, "Label", "Label");
+		dataTypeChoices.add(c);
+		c = new Choice(Question.DATA_TYPE_LONG_TEXT, "Memo", "Memo");
+		dataTypeChoices.add(c);
+//		c = new Choice(Question.DATA_TYPE_STARS, "Stars", "Stars");
+//		dataTypeChoices.add(c);
+		return dataTypeChoices;
+	}
+
+	private List<Choice> getMeasurementChoices() {
+		List<Choice> choices = new ArrayList<Choice>();
+		for (Measurement m: Measurement.values()) {
+			Choice c = new Choice(m.getId(), m.getLabel(), m.getLabel());
+			choices.add(c);
+		}
+		return choices;
+	}
+	
 	@Override
 	public void onTap(TapEvent event) {
 		if (saveButton.equals(event.getSource())) {
-			saveData();
+			saveQuestion();
 		}
 	}
 	
-	public boolean saveData() {
-		if (d==null) {
-			d = new Datum();
-			d.setEffectiveDate(tagButton.getEffectiveDate());
+	public boolean saveQuestion() {
+		if (q==null) {
+			q = new Question();
+			q.setUid(UUID.uuid());
+			q.setCreated(new Date());
+			q.setCreatorId(App.getParticipantId());
+			q.setLang(App.participant.getPreferredLang());
+			q.setCreatorName(App.participant.getName());
 		}
-		d.setParticipantId(App.participant.getId());
-		d.setQuestionId(q.getId());
-		d.setConceptId(q.getConceptId());
-		d.setDataType(q.getDataType());
-		d.setStatus(Datum.STATUS_ANSWERED_PERSONALLY);
-		d.setUpdated(new Date());
+		String longFormStr = longForm.getText();
+		if (longFormStr==null || longFormStr.trim().length()==0) {
+			validateMessage("Please enter a Long Version");
+			return false;
+		}
+		if (longFormStr==null || longFormStr.trim().length() > LONG_FORM_MAX_LENGTH) {
+			validateMessage("Please enter a Long Version");
+			return false;
+		}
+//		String shortFormStr = shortForm.getText();
+//		if (shortFormStr==null || shortFormStr.trim().length()==0) {
+//			validateMessage("Please enter a Short Version");
+//			return false;
+//		}
+		String abbrevStr = abbrev.getText();
+		if (abbrevStr==null || abbrevStr.trim().length()==0) {
+			validateMessage("Please enter an Abbreviation");
+			return false;
+		}
 		
-		//DOUBLE
-		if (q.getDataType()==Question.DATA_TYPE_DOUBLE) {
-			Double val;
+		q.setLongForm(longFormStr);
+		q.setAbbreviation(abbrevStr);
+		
+		q.setMinValue(null);
+		if (minBox != null && minBox.getValue() != null) {
 			try {
-				val = Double.valueOf(doubleBox.getText());
+				double minVal = Double.parseDouble(minBox.getValue());
+				q.setMinValue(minVal);
 			} catch (NumberFormatException e) {
-				validateMessage("Unable to recognize your answer.  It should be a number.");
-				return false;
-			}
-			if (q.getMinValue() != null && q.getMinValue() > val) {
-				validateMessage("Your answer must be at least " + q.getMinValue());
-				return false;
-			}
-			if (q.getMaxValue() != null && q.getMaxValue() < val) {
-				validateMessage("Your answer must be no more than " + q.getMaxValue());
-				return false;
-			}
-			d.setTextValue(doubleBox.getText());
-			d.setLongTextValue(doubleBox.getText());
-			
-			d.setNumericValue(val);
-			if (q.getReferenceUnit() != null) {
-				d.setUnit(unitPicker.getSelectedUnit());
-				double normalizedValue = unitPicker.getSelectedUnit().toReferenceValue(val);
-				d.setNormalizedValue(normalizedValue);
-			} else {
-				d.setNormalizedValue(val);
+				//leave as null
 			}
 		}
 		
-		//INTEGER
-		if (q.getDataType()==Question.DATA_TYPE_INTEGER) {
-			Integer val = null;
-			
-			//Slider
-			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
-				val = slider.getValue();
-				d.setTextValue(String.valueOf(val));
-				d.setLongTextValue(String.valueOf(val));
-			} else {
-				try {
-					val = Integer.valueOf(integerBox.getText());
-				} catch (NumberFormatException e) {
-					validateMessage("Unable to recognize your answer.  It should be an integer.");
-					return false;
-				}
-				if (q.getMinValue() != null && q.getMinValue() > val) {
-					validateMessage("Your answer must be at least " + q.getMinValue());
-					return false;
-				}
-				if (q.getMaxValue() != null && q.getMaxValue() < val) {
-					validateMessage("Your answer must be no more than " + q.getMaxValue());
-					return false;
-				}
-				d.setTextValue(integerBox.getText());
-				d.setLongTextValue(integerBox.getText());
-				
-				d.setIntegerValue(val);
-			}
-			
-			//handle units if present
-			if (q.getReferenceUnit() != null) {
-				d.setUnit(unitPicker.getSelectedUnit());
-				double normalizedValue = unitPicker.getSelectedUnit().toReferenceValue(val);
-				d.setNormalizedValue(normalizedValue);
-			} else {
-				d.setNormalizedValue((double)val);
+		q.setMaxValue(null);
+		if (maxBox != null && maxBox.getValue() != null) {
+			try {
+				double maxVal = Double.parseDouble(maxBox.getValue());
+				q.setMaxValue(maxVal);
+			} catch (NumberFormatException e) {
+				//leave as null
 			}
 		}
 		
-		//SHORT TEXT
-		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
-			d.setTextValue(textBox.getText());
-			d.setLongTextValue(textBox.getText());
+		if (measurmentPicker != null && measurmentPicker.getSelectedChoice() != null) {
+			q.setMeasurement(Measurement.getMeasurement(measurmentPicker.getSelectedId()));
+		} else {
+			q.setMeasurement(null);
 		}
-		
-		//LONG TEXT
-		if (q.getDataType()==Question.DATA_TYPE_LONG_TEXT) {
-			d.setTextValue(textArea.getText());
-			d.setLongTextValue(textArea.getText());
-		}
-		
-		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
-			Choice choice = choicePicker.getSelectedChoice();
-			if (choice == null) {
-				validateMessage("No choice selected");
-			} else {
-				d.setTextValue(choice.getShortForm());
-				d.setLongTextValue(choice.getLongForm());
-				d.setChoice(choice);
-			}
-		}
-		tagButton.setDatum(d);
-		App.eventBus.fireEvent(new DataCapturedEvent(tagButton));
+		App.eventBus.fireEvent(new QuestionSavedEvent(q));
 		return true;
 	}
 
 	private void validateMessage(String message) {
 		Window.alert(message);
+	}
+
+	@Override
+	public void onValueChange(ValueChangeEvent<Choice> event) {
+		Choice selectedChoice = event.getValue();
+		long dataType = selectedChoice.getId();
+		if (dataType==Question.DATA_TYPE_DOUBLE || dataType==Question.DATA_TYPE_INTEGER) {
+			minMaxPanel.setVisible(true);
+		} else {
+			minMaxPanel.setVisible(false);
+		}
+		
 	}
 	
 	

@@ -1,11 +1,22 @@
 package com.beyobe.client.beans;
 
 import java.util.Date;
+import java.util.Locale;
+
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.i18n.client.constants.LocaleConstants;
 
 public class Participant {
 
 	private long id;
-    public long getId() {
+	private Date created = new Date();
+    private Date updated = null;
+    private String preferredLang = Locale.ENGLISH.getLanguage();
+    private UnitSystem preferredUnitSystem = UnitSystem.ENGLISH;
+	private String name;
+    
+   
+	public long getId() {
 		return id;
 	}
 	public void setId(long id) {
@@ -23,6 +34,23 @@ public class Participant {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	private Date created = new Date();
-    private Date updated = null;
+	public String getPreferredLang() {
+		return preferredLang;
+	}
+	public void setPreferredLang(String preferredLang) {
+		this.preferredLang = preferredLang;
+	}
+	public UnitSystem getPreferredUnitSystem() {
+		return preferredUnitSystem;
+	}
+	public void setPreferredUnitSystem(UnitSystem preferredUnitSystem) {
+		this.preferredUnitSystem = preferredUnitSystem;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

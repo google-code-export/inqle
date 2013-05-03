@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.beyobe.client.beans.Choice;
-import com.beyobe.client.beans.Unit;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.Label;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MRadioButton;
 
-public class ChoicePicker extends Composite implements TapHandler {
+public class ChoicePicker extends Composite implements TapHandler, ValueChangeHandler<Boolean>, HasValueChangeHandlers<Choice>, HasValue<Choice> {
 
 	public List<Choice> choices;
 	public List<MRadioButton> radioButtons;
@@ -25,6 +28,7 @@ public class ChoicePicker extends Composite implements TapHandler {
 		for (Choice choice: choices) {
 			MRadioButton button = new MRadioButton(choice.getLongForm());
 			button.addTapHandler(this);
+			button.addValueChangeHandler(this);
 			radioButtons.add(button);
 			FlowPanel choicePanel = new FlowPanel();
 			button.getElement().getStyle().setProperty("float", "left");
@@ -45,6 +49,12 @@ public class ChoicePicker extends Composite implements TapHandler {
 			}
 		}
 		return null;
+	}
+	
+	public Long getSelectedId() {
+		Choice selectedChoice = getSelectedChoice();
+		if (selectedChoice==null) return null;
+		return selectedChoice.getId();
 	}
 	
 	public void setSelectedChoice(Choice selectedChoice) {
@@ -71,5 +81,52 @@ public class ChoicePicker extends Composite implements TapHandler {
 			}
 		}
 		
+	}
+
+	public void setSelectedId(long selectedId) {
+		for (int i = 0; i<choices.size(); i++) {
+			Choice choice = choices.get(i);
+			MRadioButton button = radioButtons.get(i);
+			if (choice.getId()==selectedId) {
+				button.setValue(true);
+			} else {
+				button.setValue(false);
+			}
+		}
+		
+	}
+
+
+	@Override
+	public HandlerRegistration addValueChangeHandler(ValueChangeHandler<Choice> handler) {
+		return addHandler(handler, ValueChangeEvent.getType());
+	}
+
+	@Override
+	public void onValueChange(ValueChangeEvent<Boolean> event) {
+		ValueChangeEvent.fire(this, getValue());
+	}
+
+	@Override
+	public Choice getValue() {
+		return getSelectedChoice();
+	}
+
+	@Override
+	public void setValue(Choice value) {
+		setSelectedChoice(value);
+	}
+
+	@Override
+	public void setValue(Choice value, boolean fireEvents) {
+		Choice oldValue = getValue();
+		setSelectedChoice(value);
+		
+		if (value.equals(oldValue)) {
+			return;
+		}
+		if (fireEvents) {
+			ValueChangeEvent.fire(this, value);
+		}
 	}
 }
