@@ -3,13 +3,13 @@ package com.beyobe.client.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MRadioButton;
 
 public class UnitPicker extends Composite implements TapHandler {
@@ -17,8 +17,8 @@ public class UnitPicker extends Composite implements TapHandler {
 	public List<Unit> units;
 	public List<MRadioButton> radioButtons;
 	
-	public UnitPicker(Unit baseUnit) {
-		units = getApplicableUnits(baseUnit);
+	public UnitPicker(Measurement measurement) {
+		units = measurement.getUnits();
 		radioButtons = new ArrayList<MRadioButton>();
 		FlowPanel panel = new FlowPanel();
 		for (Unit unit: units) {
@@ -36,15 +36,15 @@ public class UnitPicker extends Composite implements TapHandler {
 		initWidget(panel);
 	}
 	
-	public static List<Unit> getApplicableUnits(Unit baseUnit) {
-		List<Unit> units = new ArrayList<Unit>();
-		for (Unit unit: Unit.values()) {
-			if (unit.getReferenceUnit().equals(baseUnit)) {
-				units.add(unit);
-			}
-		}
-		return units;
-	}
+//	public static List<Unit> getApplicableUnits(Unit baseUnit) {
+//		List<Unit> units = new ArrayList<Unit>();
+//		for (Unit unit: Unit.values()) {
+//			if (unit.getReferenceUnit().equals(baseUnit)) {
+//				units.add(unit);
+//			}
+//		}
+//		return units;
+//	}
 	
 	public Unit getSelectedUnit() {
 		for (int i = 0; i<radioButtons.size(); i++) {

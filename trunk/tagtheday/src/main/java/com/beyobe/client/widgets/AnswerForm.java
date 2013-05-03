@@ -1,6 +1,7 @@
 package com.beyobe.client.widgets;
 
 import java.util.Date;
+import java.util.List;
 
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Choice;
@@ -52,8 +53,8 @@ public class AnswerForm extends Composite implements TapHandler {
 		if (q.getDataType()==Question.DATA_TYPE_DOUBLE) {
 			doubleBox = new MDoubleBox();
 			panel.add(doubleBox);
-			if (q.getReferenceUnit() != null) {
-				unitPicker = new UnitPicker(q.getReferenceUnit());
+			if (q.getMeasurement() != null) {
+				unitPicker = new UnitPicker(q.getMeasurement());
 				if (d != null) unitPicker.setSelectedUnit(d.getUnit());
 				panel.add(unitPicker);
 			}
@@ -69,8 +70,8 @@ public class AnswerForm extends Composite implements TapHandler {
 			} else {
 				integerBox = new MIntegerBox();
 				panel.add(integerBox);
-				if (q.getReferenceUnit() != null) {
-					unitPicker = new UnitPicker(q.getReferenceUnit());
+				if (q.getMeasurement() != null) {
+					unitPicker = new UnitPicker(q.getMeasurement());
 					panel.add(unitPicker);
 				}
 				if (d != null) integerBox.setText(d.getTextValue());
@@ -79,6 +80,7 @@ public class AnswerForm extends Composite implements TapHandler {
 		
 		//SHORT TEXT
 		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
+			List<String> pastAnswers = App.dataBus.getPastAnswers(q);
 			textBox = new MTextBox();
 			panel.add(textBox);
 			if (d != null) textBox.setText(d.getTextValue());
@@ -116,9 +118,9 @@ public class AnswerForm extends Composite implements TapHandler {
 		if (d==null) {
 			d = new Datum();
 			d.setEffectiveDate(tagButton.getEffectiveDate());
+			d.setParticipantId(App.participant.getId());
+			d.setQuestionUid(q.getUid());
 		}
-		d.setParticipantId(App.participant.getId());
-		d.setQuestionId(q.getId());
 		d.setConceptId(q.getConceptId());
 		d.setDataType(q.getDataType());
 		d.setStatus(Datum.STATUS_ANSWERED_PERSONALLY);
@@ -145,7 +147,7 @@ public class AnswerForm extends Composite implements TapHandler {
 			d.setLongTextValue(doubleBox.getText());
 			
 			d.setNumericValue(val);
-			if (q.getReferenceUnit() != null) {
+			if (q.getMeasurement() != null) {
 				d.setUnit(unitPicker.getSelectedUnit());
 				double normalizedValue = unitPicker.getSelectedUnit().toReferenceValue(val);
 				d.setNormalizedValue(normalizedValue);
@@ -185,7 +187,7 @@ public class AnswerForm extends Composite implements TapHandler {
 			}
 			
 			//handle units if present
-			if (q.getReferenceUnit() != null) {
+			if (q.getMeasurement() != null) {
 				d.setUnit(unitPicker.getSelectedUnit());
 				double normalizedValue = unitPicker.getSelectedUnit().toReferenceValue(val);
 				d.setNormalizedValue(normalizedValue);

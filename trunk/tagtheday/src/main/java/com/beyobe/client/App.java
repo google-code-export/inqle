@@ -23,16 +23,16 @@ import com.beyobe.client.beans.Participant;
 import com.beyobe.client.data.DataBus;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
-import com.beyobe.client.event.NewTagEvent;
-import com.beyobe.client.event.NewTagEventHandler;
+import com.beyobe.client.event.EditTagEvent;
+import com.beyobe.client.event.EditTagEventHandler;
 import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.views.TagdayView;
 import com.beyobe.client.views.TagdayViewImpl;
 import com.beyobe.client.widgets.AnswerForm;
+import com.beyobe.client.widgets.QuestionForm;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Window;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -57,10 +57,10 @@ public class App {
 	private static Logger log = Logger.getLogger(App.class.getName());
 	
 	public static void registerEvents() {
-		eventBus.addHandler(NewTagEvent.TYPE, new NewTagEventHandler() {
+		eventBus.addHandler(EditTagEvent.TYPE, new EditTagEventHandler() {
 			//TODO add real event
 			@Override
-			public void onNewTag(NewTagEvent event) {
+			public void onNewTag(EditTagEvent event) {
 				answerPopin = new PopinDialog();
 				RoundPanel newTagPanel = new RoundPanel();
 				Button closeButton = new Button("x");
@@ -75,7 +75,7 @@ public class App {
 					}
 				});
 				newTagPanel.add(closeButton);
-				newTagPanel.add(new QuestionForm());
+				newTagPanel.add(new QuestionForm(event.getQuestion()));
 				answerPopin.add(newTagPanel);
 				
 				answerPopin.show();
@@ -141,6 +141,5 @@ public class App {
 	public static void loadParticipant() {
 		participant = new Participant();
 		participant.setId(1L);
-		
 	}
 }

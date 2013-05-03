@@ -14,7 +14,7 @@ public class Datum {
     private Date created = new Date();
     private Date updated = null;
     private Date effectiveDate;
-    private long questionId;
+    private String questionUid;
     private long participantId;
     private Double numericValue;
     private Integer integerValue;
@@ -47,11 +47,11 @@ public class Datum {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	public long getQuestionId() {
-		return questionId;
+	public String getQuestionUid() {
+		return questionUid;
 	}
-	public void setQuestionId(long questionId) {
-		this.questionId = questionId;
+	public void setQuestionUid(String questionUid) {
+		this.questionUid = questionUid;
 	}
 	public long getParticipantId() {
 		return participantId;

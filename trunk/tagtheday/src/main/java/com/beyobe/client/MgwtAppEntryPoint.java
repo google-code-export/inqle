@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.activities.HomePlace;
 import com.beyobe.client.css.AppBundle;
-import com.beyobe.client.event.NewTagEvent;
-import com.beyobe.client.event.NewTagEventHandler;
+import com.beyobe.client.event.EditTagEvent;
+import com.beyobe.client.event.EditTagEventHandler;
 import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.widgets.TagButton;
@@ -64,8 +64,9 @@ public class MgwtAppEntryPoint implements EntryPoint {
 		//set viewport and other settings for mobile
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		
-		App.loadParticipant();
 		App.registerEvents();
+		App.loadParticipant();
+		App.loadData();
 
 //		final ClientFactory clientFactory = new ClientFactoryImpl();
 

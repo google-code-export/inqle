@@ -13,8 +13,9 @@ public class Question {
 	public static final int DATA_TYPE_STARS = 6;
 	
 	private long id;
+	private String uid;
 	private String longForm;
-	private String shortForm;
+//	private String shortForm;
     private String abbreviation;
     private Date created;
     private Date updated;
@@ -24,7 +25,9 @@ public class Question {
     private Integer priority;
     private String lang;
     private int dataType = DATA_TYPE_UNSPECIFIED;
-    private Unit referenceUnit;
+//    private Unit referenceUnit;
+    private Measurement measurement;
+    
 	private List<Choice> choices;
 	private Double minValue;
 	public Double getMinValue() {
@@ -51,12 +54,12 @@ public class Question {
 	public void setLongForm(String longForm) {
 		this.longForm = longForm;
 	}
-	public String getShortForm() {
-		return shortForm;
-	}
-	public void setShortForm(String shortForm) {
-		this.shortForm = shortForm;
-	}
+//	public String getShortForm() {
+//		return shortForm;
+//	}
+//	public void setShortForm(String shortForm) {
+//		this.shortForm = shortForm;
+//	}
 	public String getAbbreviation() {
 		return abbreviation;
 	}
@@ -111,16 +114,28 @@ public class Question {
 	public void setDataType(int answerType) {
 		this.dataType = answerType;
 	}
-	public Unit getReferenceUnit() {
-		return referenceUnit;
-	}
-	public void setReferenceUnit(Unit referenceUnit) {
-		this.referenceUnit = referenceUnit;
-	}
+//	public Unit getReferenceUnit() {
+//		return referenceUnit;
+//	}
+//	public void setReferenceUnit(Unit referenceUnit) {
+//		this.referenceUnit = referenceUnit;
+//	}
 	public List<Choice> getChoices() {
 		return choices;
 	}
 	public void setChoices(List<Choice> choices) {
 		this.choices = choices;
+	}
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	public Measurement getMeasurement() {
+		return measurement;
+	}
+	public void setMeasurement(Measurement measurement) {
+		this.measurement = measurement;
 	}
 }

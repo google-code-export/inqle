@@ -10,18 +10,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 
 public class DataBus {
 
-	private Logger log = Logger.getLogger(getClass().getName());
+	public final EventBus eventBus = new SimpleEventBus();
 	
-	private Map<Long, Question> knownQuestions = new HashMap<Long, Question>();
-	private LinkedHashMap<String, List<Datum>> dataByDate = new LinkedHashMap<String, List<Datum>>();
+	private static Logger log = Logger.getLogger(EventBus.class.getName());
+	
+	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
+	private static LinkedHashMap<String, List<Datum>> dataByDate = new LinkedHashMap<String, List<Datum>>();
+
+	public Participant participant;
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -33,14 +40,14 @@ public class DataBus {
 		return DateTimeFormat.getFormat("yyyy-MM-dd").format(date);
 	}
 	
-	public List<TagButton> getTagButtonsForDate(Date effectiveDate) {
+	public static List<TagButton> getTagButtonsForDate(Date effectiveDate) {
 		List<TagButton> buttons = new ArrayList<TagButton>();
 		List<Datum> data = getDataForDate(effectiveDate);
 		if (data==null) return null;
 		for (Datum datum: data) {
-			Question theQuestion = getQuestion(datum.getQuestionId());
+			Question theQuestion = getQuestion(datum.getQuestionUid());
 			if (theQuestion==null) {
-				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionId());
+				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionUid());
 			}
 			TagButton button = new TagButton(effectiveDate, theQuestion, datum);
 			buttons.add(button);
@@ -48,13 +55,13 @@ public class DataBus {
 		return buttons;
 	}
 
-	private List<Datum> getDataForDate(Date date) {
+	private static List<Datum> getDataForDate(Date date) {
 		return dataByDate.get(DataBus.getDateString(date));
 	}
 
-	private Question getQuestion(long questionId) {
-		if (knownQuestions.get(questionId) != null) {
-			return knownQuestions.get(questionId);
+	private static Question getQuestion(String questionUid) {
+		if (knownQuestions.get(questionUid) != null) {
+			return knownQuestions.get(questionUid);
 		}
 		//TODO try to retrieve the question from the server
 		
@@ -71,7 +78,7 @@ public class DataBus {
 		int index = 0;
 		boolean replaced = false;
 		for (Datum datum: dataForDay) {
-			if (datumToSave.getQuestionId() == datum.getQuestionId()) {
+			if (datumToSave.getQuestionUid() == datum.getQuestionUid()) {
 				dataForDay.remove(index);
 				dataForDay.add(index, datumToSave);
 				replaced = true;
@@ -129,7 +136,7 @@ public class DataBus {
 			
 			//add all tagbuttons to this day
 			for (Datum d: dataForDay) {
-				Question q = knownQuestions.get(d.getQuestionId());
+				Question q = knownQuestions.get(d.getQuestionUid());
 				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
 				day.addTagButton(tagButton);
 			}
