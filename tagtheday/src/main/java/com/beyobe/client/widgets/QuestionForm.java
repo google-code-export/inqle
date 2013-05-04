@@ -8,6 +8,7 @@ import com.beyobe.client.App;
 import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,15 +23,17 @@ import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
+import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
 public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice> {
 
 	private static final int LONG_FORM_MAX_LENGTH = 250;
+	private static final int ABBREV_LENGTH = 10;
 	private Question q;
 //	private MTextBox shortForm;
 	private MTextBox abbrev;
 	private MTextArea longForm;
-	private ChoicePicker dataType;
+	private ChoicePicker dataTypePicker;
 	private ChoicePicker measurmentPicker;
 	private MDoubleBox minVal;
 	private MDoubleBox maxVal;
@@ -40,21 +43,39 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private MTextBox minBox;
 	private MTextBox maxBox;
 	private VerticalPanel maxLengthPanel;
+	private ScrollPanel scrollPanel;
 	
 	public QuestionForm(Question q) {
 		this.q = q;
-		
+		scrollPanel = new ScrollPanel();
+		scrollPanel.setShowScrollBarX(false);
+	    scrollPanel.setShowScrollBarY(true);
+	    scrollPanel.setScrollingEnabledX(false);
+	    scrollPanel.setAutoHandleResize(true);
+	    scrollPanel.setSnap(false);
+	    scrollPanel.setBounce(false);
+	    scrollPanel.setUsePos(true);
 		VerticalPanel panel = new VerticalPanel();
+		scrollPanel.add(panel);
 		panel.setWidth("100%");
 		panel.setHeight("100%");
 		Label questionFull = new Label("Add a Question");
+		questionFull.addStyleName("ttd-form-header");
 		panel.add(questionFull);
 		
 		//add input elements
 		//long form
-		panel.add(new Label("Long version of the question - Example: How happy are you today?"));
+//		HTML spacer = new HTML("<br/>");
+//		spacer.getElement().getStyle().setFontSize(0.7, Unit.EM);
+//		panel.add(spacer);
+		Label longLabel = new Label("Question (example: How happy were you?)");
+		longLabel.addStyleName("ttd-form-label");
+//		longLabel.getElement().getStyle().setFontSize(0.7, Unit.EM);
+		panel.add(longLabel);
 		longForm = new MTextArea();
 		longForm.setAutoCorrectEnabled(true);
+		longForm.setCharacterWidth(30);
+		longForm.setVisibleLines(3);
 		if (q != null) {
 			longForm.setText(q.getLongForm());
 		}
@@ -67,27 +88,37 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //		panel.add(shortForm);
 		
 		//abbrev
-		panel.add(new Label("Abbreviation of the question - Example: Happy"));
+//		panel.add(spacer);
+		Label abbrevLabel = new Label("Short Label (example: Happy)");
+		abbrevLabel.addStyleName("ttd-form-label");
+		panel.add(abbrevLabel);
 		abbrev = new MTextBox();
-		abbrev.setMaxLength(7);
+		abbrev.setMaxLength(ABBREV_LENGTH);
+		abbrev.setVisibleLength(ABBREV_LENGTH);
 		if (q != null) {
 			abbrev.setText(q.getAbbreviation());
 		}
 		panel.add(abbrev);
 		
-		dataType = new ChoicePicker(getDataTypeChoices());
+		Label dtLabel = new Label("What type of answer?");
+		dtLabel.addStyleName("ttd-form-label");
+		panel.add(dtLabel);
+		dataTypePicker = new ChoicePicker(getDataTypeChoices(), 1);
 		if (q != null && q.getDataType() > 0) {
-			dataType.setSelectedId(q.getDataType());
+			dataTypePicker.setSelectedId(q.getDataType());
 		}
-		dataType.addValueChangeHandler(this);
+		dataTypePicker.addValueChangeHandler(this);
+		panel.add(dataTypePicker);
 		
 		//minMaxPanel for numeric questions
 		minMaxPanel = new VerticalPanel();
 		minMaxPanel.setVisible(false);
-		if (Question.DATA_TYPE_DOUBLE == dataType.getSelectedId() || Question.DATA_TYPE_INTEGER == dataType.getSelectedId()) {
+		if (dataTypePicker.getSelectedId() != null && (Question.DATA_TYPE_DOUBLE == dataTypePicker.getSelectedId() || Question.DATA_TYPE_INTEGER == dataTypePicker.getSelectedId())) {
 			minMaxPanel.setVisible(true);
 		}
-		minMaxPanel.add(new Label("Minimum numeric value allowed (Leave blank if no minimum"));
+		Label minLabel = new Label("Minimum value (if any)");
+		minLabel.addStyleName("ttd-form-label");
+		minMaxPanel.add(minLabel);
 		minBox = new MTextBox();
 		if (q != null && q.getMinValue() != null) {
 			minBox.setValue(String.valueOf(q.getMinValue()));
@@ -95,35 +126,39 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			minBox.setValue("0");
 		}
 		minMaxPanel.add(minBox);
-		minMaxPanel.add(new Label("Maximum numeric value allowed (Leave blank if no maximum"));
+		Label maxLabel = new Label("Maximum value (if any)");
+		maxLabel.addStyleName("ttd-form-label");
+		minMaxPanel.add(maxLabel);
 		maxBox = new MTextBox();
 		if (q != null && q.getMaxValue() != null) {
 			maxBox.setValue(String.valueOf(q.getMaxValue()));
 		}
 		minMaxPanel.add(maxBox);
-		measurmentPicker = new ChoicePicker(getMeasurementChoices());
+		measurmentPicker = new ChoicePicker(getMeasurementChoices(), 2);
 		if (q != null && q.getMeasurement() != null) {
 			measurmentPicker.setSelectedId(q.getMeasurement().getId());
 		}
+		panel.add(minMaxPanel);
+		minMaxPanel.add(measurmentPicker);
 		
 		saveButton = new Button("Save");
 		saveButton.setSmall(true);
 		saveButton.addTapHandler(this);
 		panel.add(saveButton);
-		initWidget(panel);
+		initWidget(scrollPanel);
 	}
 
 	private List<Choice> getDataTypeChoices() {
 		List<Choice> dataTypeChoices = new ArrayList<Choice>();
-		Choice c = new Choice(Question.DATA_TYPE_DOUBLE, "Number", "Number");
+		Choice c = new Choice(Question.DATA_TYPE_DOUBLE, "Number", null);
 		dataTypeChoices.add(c);
 //		c = new Choice(Question.DATA_TYPE_INTEGER, "Integer", "for discreet values like a rating system");
 //		dataTypeChoices.add(c);
 //		c = new Choice(Question.DATA_TYPE_MULTIPLE_CHOICE, "Multiple Choice", "Multiple Choice");
 //		dataTypeChoices.add(c);
-		c = new Choice(Question.DATA_TYPE_SHORT_TEXT, "Label", "Label");
+		c = new Choice(Question.DATA_TYPE_SHORT_TEXT, "Label", null);
 		dataTypeChoices.add(c);
-		c = new Choice(Question.DATA_TYPE_LONG_TEXT, "Memo", "Memo");
+		c = new Choice(Question.DATA_TYPE_LONG_TEXT, "Memo", null);
 		dataTypeChoices.add(c);
 //		c = new Choice(Question.DATA_TYPE_STARS, "Stars", "Stars");
 //		dataTypeChoices.add(c);
@@ -133,7 +168,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private List<Choice> getMeasurementChoices() {
 		List<Choice> choices = new ArrayList<Choice>();
 		for (Measurement m: Measurement.values()) {
-			Choice c = new Choice(m.getId(), m.getLabel(), m.getLabel());
+			Choice c = new Choice(m.getId(), m.getLabel(), null);
 			choices.add(c);
 		}
 		return choices;
@@ -147,21 +182,19 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	}
 	
 	public boolean saveQuestion() {
-		if (q==null) {
-			q = new Question();
-			q.setUid(UUID.uuid());
-			q.setCreated(new Date());
-			q.setCreatorId(App.getParticipantId());
-			q.setLang(App.participant.getPreferredLang());
-			q.setCreatorName(App.participant.getName());
+		Long dataTypeId = dataTypePicker.getSelectedId();
+		if (dataTypeId==null) {
+			validateMessage("Please select a Type of Question.");
+			return false;
 		}
+		
 		String longFormStr = longForm.getText();
 		if (longFormStr==null || longFormStr.trim().length()==0) {
-			validateMessage("Please enter a Long Version");
+			validateMessage("Please enter a Question");
 			return false;
 		}
 		if (longFormStr==null || longFormStr.trim().length() > LONG_FORM_MAX_LENGTH) {
-			validateMessage("Please enter a Long Version");
+			validateMessage("Your question should be shorter than " + LONG_FORM_MAX_LENGTH + " characters.");
 			return false;
 		}
 //		String shortFormStr = shortForm.getText();
@@ -171,12 +204,23 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //		}
 		String abbrevStr = abbrev.getText();
 		if (abbrevStr==null || abbrevStr.trim().length()==0) {
-			validateMessage("Please enter an Abbreviation");
+			validateMessage("Please enter a Label, which is an abbreviated form of your question.");
 			return false;
 		}
 		
+		if (q==null) {
+			q = new Question();
+			q.setUid(UUID.uuid());
+			q.setCreated(new Date());
+			q.setCreatorId(App.getParticipantId());
+			q.setLang(App.participant.getPreferredLang());
+			q.setCreatorName(App.participant.getName());
+		}
+		
+		q.setDataType(dataTypeId.intValue());
 		q.setLongForm(longFormStr);
 		q.setAbbreviation(abbrevStr);
+		q.setUpdated(new Date());
 		
 		q.setMinValue(null);
 		if (minBox != null && minBox.getValue() != null) {
@@ -215,12 +259,13 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	public void onValueChange(ValueChangeEvent<Choice> event) {
 		Choice selectedChoice = event.getValue();
 		long dataType = selectedChoice.getId();
+		
 		if (dataType==Question.DATA_TYPE_DOUBLE || dataType==Question.DATA_TYPE_INTEGER) {
 			minMaxPanel.setVisible(true);
 		} else {
 			minMaxPanel.setVisible(false);
 		}
-		
+		scrollPanel.refresh();
 	}
 	
 	

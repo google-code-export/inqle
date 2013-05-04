@@ -114,7 +114,7 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
     scrollPanel.setWidget(container);
 
     scrollPanel.setSnap(true);
-    scrollPanel.setMomentum(false);
+    scrollPanel.setMomentum(true);
     scrollPanel.setShowScrollBarX(false);
     scrollPanel.setShowScrollBarY(false);
     scrollPanel.setScrollingEnabledY(true);

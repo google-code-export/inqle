@@ -12,6 +12,7 @@ public enum Measurement {
 	WEIGHT(4, "Weight", Unit.KG),
 	SMALL_VOLUME(5, "Small Volume", Unit.ML),
 	VOLUME(6, "Volume", Unit.L),
+	DURATION(7, "Duration", Unit.SEC),
 	OTHER(100, "Other", null)
 	;
 	

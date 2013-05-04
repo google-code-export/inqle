@@ -15,6 +15,7 @@ import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.thirdparty.guava.common.collect.Lists;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -26,9 +27,12 @@ public class DataBus {
 	private static Logger log = Logger.getLogger(EventBus.class.getName());
 	
 	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
+	private static List<Question> questionQueue = new ArrayList<Question>();
 	private static LinkedHashMap<String, List<Datum>> dataByDate = new LinkedHashMap<String, List<Datum>>();
 
 	public Participant participant;
+
+	private ArrayList<Day> allDays;
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -75,6 +79,7 @@ public class DataBus {
 		
 		//first save in memory
 		List<Datum> dataForDay = getDataForDate(effectiveDate);
+		if (dataForDay == null) dataForDay = new ArrayList<Datum>();
 		int index = 0;
 		boolean replaced = false;
 		for (Datum datum: dataForDay) {
@@ -92,10 +97,13 @@ public class DataBus {
 		//TODO save in local storage
 		
 		//TODO send to server
+		
+		//save back to our in-memory map
+		 dataByDate.put(DataBus.getDateString(effectiveDate), dataForDay);
 	}
 	
-	public List<Day> getAllDays() {
-		List<Day> allDays = new ArrayList<Day>();
+	public List<Day> loadAllDays() {
+		allDays = new ArrayList<Day>();
 		
 		//add days from the start of data collection to the present.
 		DateTimeFormat format = DateTimeFormat.getFormat("yyyy-MM-dd");
@@ -147,5 +155,42 @@ public class DataBus {
 		
 		
 		return allDays;
+	}
+
+	public List<Day> getAllDays() {
+		return allDays;
+	}
+	
+	public List<String> getPastAnswers(Question q) {
+		List<String> answers = new ArrayList<String>();
+		for (Map.Entry<String, List<Datum>> entry: dataByDate.entrySet()) {
+			List<Datum> data = entry.getValue();
+			for (Datum datum: data) {
+				if (datum.getQuestionUid().equals(q.getUid())) {
+					String pastAnswer = datum.getTextValue();
+					if (! answers.contains(pastAnswer)) {
+						answers.add(pastAnswer);
+					}
+				}
+			}
+		}
+		//TODO: reverse
+//		answers = Lists.reverse(answers);
+		return answers;
+	}
+
+	public void saveQuestion(Question question) {
+		if (! questionQueue.contains(question)) {
+			questionQueue.add(question);
+		}
+		knownQuestions.put(question.getUid(), question);
+		
+		//add the question to each day
+		for (Day day: getAllDays()) {
+			day.addQuestion(question);
+		}
+		
+		//TODO send question to server
+		//TODO save locally
 	}
 }

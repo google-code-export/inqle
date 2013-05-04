@@ -3,7 +3,7 @@ package com.beyobe.client.views;
 import java.util.Date;
 
 import com.beyobe.client.App;
-import com.beyobe.client.event.EditTagEvent;
+import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.WeekView;
@@ -44,7 +44,7 @@ public class TagdayViewImpl extends Composite implements TagdayView {
                 addTagButton.addTouchEndHandler(new TouchEndHandler() {
 					@Override
 					public void onTouchEnd(TouchEndEvent event) {
-						App.eventBus.fireEvent(new EditTagEvent(null));
+						App.eventBus.fireEvent(new EditQuestionEvent(null));
 					}
                 });
                 addTagButton.getElement().getStyle().setProperty("float", "right");

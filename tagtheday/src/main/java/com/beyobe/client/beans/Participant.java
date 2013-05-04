@@ -1,17 +1,13 @@
 package com.beyobe.client.beans;
 
 import java.util.Date;
-import java.util.Locale;
-
-import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.i18n.client.constants.LocaleConstants;
 
 public class Participant {
 
 	private long id;
 	private Date created = new Date();
     private Date updated = null;
-    private String preferredLang = Locale.ENGLISH.getLanguage();
+    private String preferredLang = "en";
     private UnitSystem preferredUnitSystem = UnitSystem.ENGLISH;
 	private String name;
     
