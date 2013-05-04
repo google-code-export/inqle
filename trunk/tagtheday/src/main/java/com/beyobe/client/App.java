@@ -20,11 +20,14 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
+import com.beyobe.client.beans.Question;
 import com.beyobe.client.data.DataBus;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
-import com.beyobe.client.event.EditTagEvent;
-import com.beyobe.client.event.EditTagEventHandler;
+import com.beyobe.client.event.EditQuestionEvent;
+import com.beyobe.client.event.EditQuestionEventHandler;
+import com.beyobe.client.event.QuestionSavedEvent;
+import com.beyobe.client.event.QuestionSavedEventHandler;
 import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.views.TagdayView;
@@ -57,12 +60,13 @@ public class App {
 	private static Logger log = Logger.getLogger(App.class.getName());
 	
 	public static void registerEvents() {
-		eventBus.addHandler(EditTagEvent.TYPE, new EditTagEventHandler() {
+		eventBus.addHandler(EditQuestionEvent.TYPE, new EditQuestionEventHandler() {
 			//TODO add real event
 			@Override
-			public void onNewTag(EditTagEvent event) {
+			public void onEditQuestion(EditQuestionEvent event) {
 				answerPopin = new PopinDialog();
-				RoundPanel newTagPanel = new RoundPanel();
+				RoundPanel editQuestionPanel = new RoundPanel();
+				editQuestionPanel.addStyleName("ttd-editQuestionPanel");
 				Button closeButton = new Button("x");
 				closeButton.setImportant(true);
 				closeButton.setSmall(true);
@@ -74,9 +78,9 @@ public class App {
 						answerPopin.clear();
 					}
 				});
-				newTagPanel.add(closeButton);
-				newTagPanel.add(new QuestionForm(event.getQuestion()));
-				answerPopin.add(newTagPanel);
+				editQuestionPanel.add(closeButton);
+				editQuestionPanel.add(new QuestionForm(event.getQuestion()));
+				answerPopin.add(editQuestionPanel);
 				
 				answerPopin.show();
 			}
@@ -128,6 +132,17 @@ public class App {
 			}
 		});
 		
+		eventBus.addHandler(QuestionSavedEvent.TYPE, new QuestionSavedEventHandler() {
+			@Override
+			public void onQuestionSaved(QuestionSavedEvent event) {
+				Question question = event.getQuestion();
+				
+				answerPopin.hide();
+				
+				dataBus.saveQuestion(question);
+			}
+		});
+		
 	}
 
 	public static long getParticipantId() {
@@ -141,5 +156,10 @@ public class App {
 	public static void loadParticipant() {
 		participant = new Participant();
 		participant.setId(1L);
+	}
+
+	public static void loadData() {
+		// TODO load dataBus
+		
 	}
 }

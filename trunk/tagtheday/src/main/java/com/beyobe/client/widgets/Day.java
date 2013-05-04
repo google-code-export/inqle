@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.beyobe.client.App;
-import com.beyobe.client.event.EditTagEvent;
+import com.beyobe.client.beans.Question;
+import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.event.TagClickedEvent;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -138,8 +139,24 @@ public class Day extends Composite implements Block, TapHandler {
 		if (event.getSource() instanceof TagButton) {
 			App.eventBus.fireEvent(new TagClickedEvent((TagButton)event.getSource()));
 		} else if (event.getSource().equals(tagsPanel)){
-			App.eventBus.fireEvent(new EditTagEvent(null));
+			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
+	}
+
+	public void addQuestion(Question question) {
+		if (question==null) return;
+		boolean foundQuestion = false;
+		for (TagButton tagButton: tagButtons) {
+			if(question.getUid().equals(tagButton.getQuestion().getUid())) {
+				foundQuestion = true;
+				tagButton.setQuestion(question);
+			}
+		}
+		if (! foundQuestion) {
+			TagButton tagButton = new TagButton(this.timepoint, question, null);
+			addTagButton(tagButton);
+		}
+		
 	}
 
 }

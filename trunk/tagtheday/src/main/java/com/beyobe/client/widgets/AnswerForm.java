@@ -1,5 +1,6 @@
 package com.beyobe.client.widgets;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,9 @@ import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.event.DataCapturedEvent;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -21,7 +25,7 @@ import com.googlecode.mgwt.ui.client.widget.MSlider;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
-public class AnswerForm extends Composite implements TapHandler {
+public class AnswerForm extends Composite implements TapHandler, ValueChangeHandler<Choice> {
 
 	private Question q;
 	private Datum d;
@@ -34,6 +38,7 @@ public class AnswerForm extends Composite implements TapHandler {
 	private ChoicePicker choicePicker;
 	private TagButton tagButton;
 	private MSlider slider;
+	private ChoicePicker pastAnswersPicker;
 
 	public AnswerForm(TagButton tagButton) {
 		this.tagButton = tagButton;
@@ -45,6 +50,7 @@ public class AnswerForm extends Composite implements TapHandler {
 		panel.setWidth("100%");
 		panel.setHeight("100%");
 		Label questionFull = new Label(q.getLongForm());
+//		questionFull.getElement().getStyle().setFontSize(0.7, Unit.EM);
 		panel.add(questionFull);
 		
 		//add input elements
@@ -81,6 +87,22 @@ public class AnswerForm extends Composite implements TapHandler {
 		//SHORT TEXT
 		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
 			List<String> pastAnswers = App.dataBus.getPastAnswers(q);
+			int i=0;
+			List<Choice> choices = new ArrayList<Choice>();
+			for (String pastAnswer: pastAnswers) {
+				Choice c  = new Choice(i, pastAnswer, pastAnswer);
+				choices.add(c);
+				i++;
+			}
+			if (choices.size() > 3) {
+				pastAnswersPicker = new ChoicePicker(choices, 2);
+				pastAnswersPicker.addValueChangeHandler(this);
+				panel.add(pastAnswersPicker);
+			} else if (choices.size() > 0) {
+				pastAnswersPicker = new ChoicePicker(choices, 1);
+				pastAnswersPicker.addValueChangeHandler(this);
+				panel.add(pastAnswersPicker);
+			}
 			textBox = new MTextBox();
 			panel.add(textBox);
 			if (d != null) textBox.setText(d.getTextValue());
@@ -95,8 +117,14 @@ public class AnswerForm extends Composite implements TapHandler {
 		
 		//MULTIPLE CHOICE
 		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
-			choicePicker = new ChoicePicker(q.getChoices());
-			panel.add(choicePicker);
+			if (q.getChoices() != null) {
+				if (q.getChoices().size() > 3) {
+					choicePicker = new ChoicePicker(q.getChoices(), 2);
+				} else {
+					choicePicker = new ChoicePicker(q.getChoices(), 1);
+				}
+				panel.add(choicePicker);
+			}
 			if (d != null) choicePicker.setSelectedChoice(d.getChoice());
 		}
 		
@@ -225,6 +253,12 @@ public class AnswerForm extends Composite implements TapHandler {
 
 	private void validateMessage(String message) {
 		Window.alert(message);
+	}
+
+	@Override
+	public void onValueChange(ValueChangeEvent<Choice> event) {
+		String selection = pastAnswersPicker.getSelectedChoice().getLongForm();
+		textBox.setText(selection);
 	}
 	
 	

@@ -36,7 +36,23 @@
 	
 	
 }
-
-  .ttd-Carousel-Indicator-Container {
-    display: none;
+  
+  .ttd-form-header {
+    text-align: center;
+    font-size: 1.1em;
+  }
+  
+  .ttd-editQuestionPanel {
+    background-color: #ffff99 !important;
+  }
+  
+  .ttd-form-label {
+    margin-top: 1em;
+    font-size: 0.8em;
+  }
+  
+  .ttd-choice {
+    font-size: 0.7em;
+    font-weight: normal;
+    margin-top: 0.3em;
   }

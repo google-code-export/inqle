@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.activities.HomePlace;
 import com.beyobe.client.css.AppBundle;
-import com.beyobe.client.event.EditTagEvent;
-import com.beyobe.client.event.EditTagEventHandler;
+import com.beyobe.client.event.EditQuestionEvent;
+import com.beyobe.client.event.EditQuestionEventHandler;
 import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.widgets.TagButton;
