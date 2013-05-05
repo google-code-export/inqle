@@ -6,14 +6,14 @@ import java.util.List;
 
 
 public enum Measurement {
-	LENGTH(1, "Short Length", Unit.CM),
+	NONE(0, "None", null),
+	LENGTH(1, "Length", Unit.CM),
 	DISTANCE(2, "Distance", Unit.KM),
 	LIGHT_WEIGHT(3, "Light Weight", Unit.GM),
 	WEIGHT(4, "Weight", Unit.KG),
 	SMALL_VOLUME(5, "Small Volume", Unit.ML),
 	VOLUME(6, "Volume", Unit.L),
-	DURATION(7, "Duration", Unit.SEC),
-	OTHER(100, "Other", null)
+	DURATION(7, "Duration", Unit.SEC)
 	;
 	
 	private Unit referenceUnit;
@@ -48,7 +48,8 @@ public enum Measurement {
 
 	public List<Unit> getUnits() {
 		List<Unit> units = new ArrayList<Unit>();
-		units.add(referenceUnit);
+		if (referenceUnit==null) return units;
+//		units.add(referenceUnit);
 		for (Unit unit: Unit.values()) {
 			if (referenceUnit.equals(unit.getReferenceUnit())) {
 				units.add(unit);
