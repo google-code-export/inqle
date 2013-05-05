@@ -93,6 +93,7 @@ public class App {
 				log.log(Level.INFO, "Tag clicked: " + tagButton.getQuestion().getLongForm());
 				answerPopin = new PopinDialog();
 				RoundPanel answerPanel = new RoundPanel();
+				answerPanel.addStyleName("ttd-editAnswerPanel");
 				Datum d = tagButton.getDatum();
 				if (d==null) {
 					answerPanel.getElement().getStyle().setBackgroundColor("pink");

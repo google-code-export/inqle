@@ -8,6 +8,7 @@ import com.beyobe.client.App;
 import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.beans.Unit;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -39,7 +40,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private MDoubleBox maxVal;
 	private MIntegerBox maxLength;
 	private Button saveButton;
-	private VerticalPanel minMaxPanel;
+	private VerticalPanel numericParamsPanel;
 	private MTextBox minBox;
 	private MTextBox maxBox;
 	private VerticalPanel maxLengthPanel;
@@ -51,10 +52,11 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		scrollPanel.setShowScrollBarX(false);
 	    scrollPanel.setShowScrollBarY(true);
 	    scrollPanel.setScrollingEnabledX(false);
+	    scrollPanel.setScrollingEnabledY(true);
 	    scrollPanel.setAutoHandleResize(true);
 	    scrollPanel.setSnap(false);
 	    scrollPanel.setBounce(false);
-	    scrollPanel.setUsePos(true);
+//	    scrollPanel.setUsePos(true);
 		VerticalPanel panel = new VerticalPanel();
 		scrollPanel.add(panel);
 		panel.setWidth("100%");
@@ -111,35 +113,42 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		panel.add(dataTypePicker);
 		
 		//minMaxPanel for numeric questions
-		minMaxPanel = new VerticalPanel();
-		minMaxPanel.setVisible(false);
+		numericParamsPanel = new VerticalPanel();
+		numericParamsPanel.setVisible(false);
 		if (dataTypePicker.getSelectedId() != null && (Question.DATA_TYPE_DOUBLE == dataTypePicker.getSelectedId() || Question.DATA_TYPE_INTEGER == dataTypePicker.getSelectedId())) {
-			minMaxPanel.setVisible(true);
+			numericParamsPanel.setVisible(true);
 		}
 		Label minLabel = new Label("Minimum value (if any)");
 		minLabel.addStyleName("ttd-form-label");
-		minMaxPanel.add(minLabel);
+		numericParamsPanel.add(minLabel);
 		minBox = new MTextBox();
 		if (q != null && q.getMinValue() != null) {
 			minBox.setValue(String.valueOf(q.getMinValue()));
 		} else {
 			minBox.setValue("0");
 		}
-		minMaxPanel.add(minBox);
+		minBox.setMaxLength(8);
+		minBox.setVisibleLength(8);
+		numericParamsPanel.add(minBox);
 		Label maxLabel = new Label("Maximum value (if any)");
 		maxLabel.addStyleName("ttd-form-label");
-		minMaxPanel.add(maxLabel);
+		numericParamsPanel.add(maxLabel);
 		maxBox = new MTextBox();
 		if (q != null && q.getMaxValue() != null) {
 			maxBox.setValue(String.valueOf(q.getMaxValue()));
 		}
-		minMaxPanel.add(maxBox);
+		maxBox.setMaxLength(8);
+		maxBox.setVisibleLength(8);
+		numericParamsPanel.add(maxBox);
+		Label measLabel = new Label("Unit of measure (if any)");
+		measLabel.addStyleName("ttd-form-label");
+		numericParamsPanel.add(measLabel);
 		measurmentPicker = new ChoicePicker(getMeasurementChoices(), 2);
 		if (q != null && q.getMeasurement() != null) {
 			measurmentPicker.setSelectedId(q.getMeasurement().getId());
 		}
-		panel.add(minMaxPanel);
-		minMaxPanel.add(measurmentPicker);
+		panel.add(numericParamsPanel);
+		numericParamsPanel.add(measurmentPicker);
 		
 		saveButton = new Button("Save");
 		saveButton.setSmall(true);
@@ -168,7 +177,13 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private List<Choice> getMeasurementChoices() {
 		List<Choice> choices = new ArrayList<Choice>();
 		for (Measurement m: Measurement.values()) {
-			Choice c = new Choice(m.getId(), m.getLabel(), null);
+			String unitsStr = "";
+			for (Unit unit: m.getUnits()) {
+				if (unitsStr.length() > 0) unitsStr += ",";
+				unitsStr += unit.getAbbrev();
+			}
+			if (unitsStr.length()==0) unitsStr = null;
+			Choice c = new Choice(m.getId(), m.getLabel(), unitsStr);
 			choices.add(c);
 		}
 		return choices;
@@ -242,7 +257,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			}
 		}
 		
-		if (measurmentPicker != null && measurmentPicker.getSelectedChoice() != null) {
+		if (measurmentPicker != null && measurmentPicker.getSelectedChoice() != null && measurmentPicker.getSelectedId() != Measurement.NONE.getId()) {
 			q.setMeasurement(Measurement.getMeasurement(measurmentPicker.getSelectedId()));
 		} else {
 			q.setMeasurement(null);
@@ -261,9 +276,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		long dataType = selectedChoice.getId();
 		
 		if (dataType==Question.DATA_TYPE_DOUBLE || dataType==Question.DATA_TYPE_INTEGER) {
-			minMaxPanel.setVisible(true);
+			numericParamsPanel.setVisible(true);
 		} else {
-			minMaxPanel.setVisible(false);
+			numericParamsPanel.setVisible(false);
 		}
 		scrollPanel.refresh();
 	}
