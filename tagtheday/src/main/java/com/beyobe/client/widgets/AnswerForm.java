@@ -27,6 +27,8 @@ import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class AnswerForm extends Composite implements TapHandler, ValueChangeHandler<Choice> {
 
+	private static final int MAXIMUM_LENGTH_SHORT_TEXT = 12;
+	private static final int MAXIMUM_LENGTH_LONG_TEXT = 1000;
 	private Question q;
 	private Datum d;
 	private MDoubleBox doubleBox;
@@ -171,8 +173,8 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				validateMessage("Your answer must be no more than " + q.getMaxValue());
 				return false;
 			}
-			d.setTextValue(doubleBox.getText());
-			d.setLongTextValue(doubleBox.getText());
+			d.setTextValue(getShortenedText(doubleBox.getText()));
+			d.setLongTextValue(getLongText(doubleBox.getText()));
 			
 			d.setNumericValue(val);
 			if (q.getMeasurement() != null) {
@@ -191,8 +193,8 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			//Slider
 			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
 				val = slider.getValue();
-				d.setTextValue(String.valueOf(val));
-				d.setLongTextValue(String.valueOf(val));
+				d.setTextValue(getShortenedText(String.valueOf(val)));
+				d.setLongTextValue(getLongText(String.valueOf(val)));
 			} else {
 				try {
 					val = Integer.valueOf(integerBox.getText());
@@ -208,8 +210,8 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 					validateMessage("Your answer must be no more than " + q.getMaxValue());
 					return false;
 				}
-				d.setTextValue(integerBox.getText());
-				d.setLongTextValue(integerBox.getText());
+				d.setTextValue(getShortenedText(integerBox.getText()));
+				d.setLongTextValue(getLongText(integerBox.getText()));
 				
 				d.setIntegerValue(val);
 			}
@@ -226,14 +228,14 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		
 		//SHORT TEXT
 		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
-			d.setTextValue(textBox.getText());
-			d.setLongTextValue(textBox.getText());
+			d.setTextValue(getShortenedText(textBox.getText()));
+			d.setLongTextValue(getLongText(textBox.getText()));
 		}
 		
 		//LONG TEXT
 		if (q.getDataType()==Question.DATA_TYPE_LONG_TEXT) {
-			d.setTextValue(textArea.getText());
-			d.setLongTextValue(textArea.getText());
+			d.setTextValue(getShortenedText(textArea.getText()));
+			d.setLongTextValue(getLongText(textArea.getText()));
 		}
 		
 		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
@@ -241,14 +243,27 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			if (choice == null) {
 				validateMessage("No choice selected");
 			} else {
-				d.setTextValue(choice.getShortForm());
-				d.setLongTextValue(choice.getLongForm());
+				d.setTextValue(getShortenedText(choice.getShortForm()));
+				d.setLongTextValue(getLongText(choice.getLongForm()));
 				d.setChoice(choice);
 			}
 		}
 		tagButton.setDatum(d);
 		App.eventBus.fireEvent(new DataCapturedEvent(tagButton));
 		return true;
+	}
+
+	private String getLongText(String text) {
+		if (text==null) return "";
+		return text.substring(0, MAXIMUM_LENGTH_LONG_TEXT);
+	}
+
+	private String getShortenedText(String text) {
+		if (text==null) return "";
+		if (text.length() < MAXIMUM_LENGTH_SHORT_TEXT) {
+			return text;
+		}
+		return text.substring(0, MAXIMUM_LENGTH_SHORT_TEXT-3) + "...";
 	}
 
 	private void validateMessage(String message) {
