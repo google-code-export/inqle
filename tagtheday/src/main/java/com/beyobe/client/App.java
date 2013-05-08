@@ -30,6 +30,8 @@ import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.event.QuestionSavedEventHandler;
 import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
+import com.beyobe.client.views.LoginView;
+import com.beyobe.client.views.LoginViewImpl;
 import com.beyobe.client.views.TagdayView;
 import com.beyobe.client.views.TagdayViewImpl;
 import com.beyobe.client.widgets.AnswerForm;
@@ -53,6 +55,7 @@ public class App {
 	public static final EventBus eventBus = new SimpleEventBus();
 	public static final PlaceController placeController = new PlaceController(eventBus);
 	public static final TagdayView tagdayView = new TagdayViewImpl();
+	public static final LoginView loginView = new LoginViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
 	
@@ -129,7 +132,7 @@ public class App {
 				answerPopin.hide();
 				tagButton.refreshAppearance();
 				
-				dataBus.saveDatum(tagButton.getDatum());
+				dataBus.setDatum(tagButton.getDatum());
 			}
 		});
 		
@@ -162,5 +165,9 @@ public class App {
 	public static void loadData() {
 		
 		
+	}
+
+	public static boolean isUserLoggedIn() {
+		return (participant != null);
 	}
 }

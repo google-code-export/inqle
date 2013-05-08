@@ -15,7 +15,6 @@ import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.thirdparty.guava.common.collect.Lists;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -38,6 +37,14 @@ public class DataBus {
 		//TODO load questions and data from local storage
 		//populate dataByDate, knownQuestions
 		//TODO sync questions and data with remote DB
+	}
+	
+	public void addQuestionToQueue(Question q) {
+		questionQueue.add(q);
+	}
+	
+	public void addQuestionToKnownQuestions(Question question) {
+		knownQuestions.put(question.getUid(), question);
 	}
 	
 	public static String getDateString(Date date) {
@@ -73,16 +80,17 @@ public class DataBus {
 		return null;
 	}
 	
-	public void saveDatum(Datum datumToSave) {
+	public void setDatum(Datum datumToSave) {
 		Date effectiveDate = datumToSave.getEffectiveDate();
 //		String dateStr = DataBus.getDateString(effectiveDate);
 		
 		//first save in memory
 		List<Datum> dataForDay = getDataForDate(effectiveDate);
 		if (dataForDay == null) dataForDay = new ArrayList<Datum>();
+		List<Datum> dataForLooping = new ArrayList<Datum>(dataForDay);
 		int index = 0;
 		boolean replaced = false;
-		for (Datum datum: dataForDay) {
+		for (Datum datum: dataForLooping) {
 			if (datumToSave.getQuestionUid() == datum.getQuestionUid()) {
 				dataForDay.remove(index);
 				dataForDay.add(index, datumToSave);
@@ -102,7 +110,7 @@ public class DataBus {
 		 dataByDate.put(DataBus.getDateString(effectiveDate), dataForDay);
 	}
 	
-	public List<Day> loadAllDays() {
+	public List<Day> createAllDays() {
 		allDays = new ArrayList<Day>();
 		
 		//add days from the start of data collection to the present.

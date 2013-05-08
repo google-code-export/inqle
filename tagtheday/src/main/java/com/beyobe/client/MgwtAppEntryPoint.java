@@ -15,16 +15,10 @@
  */
 package com.beyobe.client;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.beyobe.client.activities.HomePlace;
+import com.beyobe.client.activities.LoginPlace;
 import com.beyobe.client.css.AppBundle;
-import com.beyobe.client.event.EditQuestionEvent;
-import com.beyobe.client.event.EditQuestionEventHandler;
-import com.beyobe.client.event.TagClickedEvent;
-import com.beyobe.client.event.TagClickedEventHandler;
-import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -33,23 +27,17 @@ import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
-import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.mvp.client.AnimatableDisplay;
 import com.googlecode.mgwt.mvp.client.AnimatingActivityManager;
 import com.googlecode.mgwt.mvp.client.AnimationMapper;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTSettings;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
-import com.googlecode.mgwt.ui.client.dialog.PopinDialog;
 import com.googlecode.mgwt.ui.client.dialog.TabletPortraitOverlay;
 import com.googlecode.mgwt.ui.client.layout.MasterRegionHandler;
 import com.googlecode.mgwt.ui.client.layout.OrientationRegionHandler;
-import com.googlecode.mgwt.ui.client.widget.Button;
-import com.googlecode.mgwt.ui.client.widget.RoundPanel;
 
 /**
  * @author Daniel Kurka
@@ -65,22 +53,20 @@ public class MgwtAppEntryPoint implements EntryPoint {
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		
 		App.registerEvents();
-		App.loadParticipant();
-		App.loadData();
-
+		
 //		final ClientFactory clientFactory = new ClientFactoryImpl();
 
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper
 		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
 
-		historyHandler.register(App.placeController, App.eventBus, new HomePlace());
+		historyHandler.register(App.placeController, App.eventBus, new LoginPlace());
 
 		//this will create a link element at the end of head
 		MGWTStyle.getTheme().getMGWTClientBundle().getMainCss().ensureInjected();
 
 		//append your own css as last thing in the head
-		MGWTStyle.injectStyleSheet("tagtheday.css");
+//		MGWTStyle.injectStyleSheet("tagtheday.css");
 		
 		if ((MGWT.getOsDetection().isTablet())) {
 			// very nasty workaround because GWT does not corretly support

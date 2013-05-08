@@ -7,6 +7,7 @@
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="com.google.gwt.activity.Activity" />
 	<inherits name="com.googlecode.mgwt.MGWT"/>
+	<inherits name="com.google.gwt.json.JSON" />
 	
 <!-- 	<inherits name="com.google.gwt.inject.Inject"/> -->
 	
