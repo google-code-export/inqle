@@ -1,6 +1,8 @@
 package com.beyobe.client;
 
+import com.beyobe.client.activities.LoginActivity;
 import com.beyobe.client.activities.TagdayActivity;
+import com.beyobe.client.activities.TagdayPlace;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
@@ -14,9 +16,12 @@ public class TabletMainActivityMapper implements ActivityMapper {
 //
 //	}
 
-	@Override
 	public Activity getActivity(Place place) {
-		return new TagdayActivity(place);
+		if (place instanceof TagdayPlace) {
+			return new TagdayActivity(place);
+		}
+		//default: login
+		return new LoginActivity(place);
 	}
 
 }

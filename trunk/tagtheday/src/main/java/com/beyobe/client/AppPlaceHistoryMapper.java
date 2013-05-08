@@ -15,15 +15,15 @@
  */
 package com.beyobe.client;
 
+import com.beyobe.client.activities.LoginPlace.LoginPlaceTokenizer;
+import com.beyobe.client.activities.TagdayPlace.TagdayPlaceTokenizer;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
-
-import com.beyobe.client.activities.HomePlace.HomePlaceTokenizer;
 
 /**
  * @author Daniel Kurka
  * 
  */
-@WithTokenizers({ HomePlaceTokenizer.class })
+@WithTokenizers({ LoginPlaceTokenizer.class,  TagdayPlaceTokenizer.class })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 }
