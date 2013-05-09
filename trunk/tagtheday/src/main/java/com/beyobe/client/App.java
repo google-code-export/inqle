@@ -22,6 +22,7 @@ import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.data.DataBus;
+import com.beyobe.client.data.Teller;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
 import com.beyobe.client.event.EditQuestionEvent;
@@ -58,6 +59,7 @@ public class App {
 	public static final LoginView loginView = new LoginViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
+	public static Teller teller = new Teller();
 	
 	protected static PopinDialog answerPopin;
 	private static Logger log = Logger.getLogger(App.class.getName());
@@ -152,14 +154,6 @@ public class App {
 	public static long getParticipantId() {
 		if (participant != null) return participant.getId();
 		return 0;
-	}
-
-	/**
-	 * Get the participant (current user)
-	 */
-	public static void loadParticipant() {
-		participant = new Participant();
-		participant.setId(1L);
 	}
 
 	public static void loadData() {
