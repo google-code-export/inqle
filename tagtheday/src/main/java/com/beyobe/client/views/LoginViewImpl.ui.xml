@@ -15,11 +15,15 @@
 		.fieldsPanel {
     
     }
+    .message {
+	    color: red;
+	  }
 	</ui:style>
 	<g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}">
 	<mgwt:RoundPanel ui:field="roundPanel" styleName="{style.roundPanel}">
 	 <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
 		 <g:Label styleName="ttd-form-title" text="Welcome to Beyobe!"/>
+		 <g:Label ui:field="message" styleName="{style.message}"/>
 		 <g:Label styleName="ttd-form-label" text="Login"/>
 		 <g:TextBox ui:field="userName"/>
 		 <g:Label styleName="ttd-form-label" text="Password"/>
