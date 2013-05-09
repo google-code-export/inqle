@@ -7,12 +7,15 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class LoginViewImpl extends Composite implements LoginView {
 
+	@UiField Label message;
 	@UiField TextBox userName;
 	@UiField TextBox password;
 	
@@ -43,8 +46,13 @@ public class LoginViewImpl extends Composite implements LoginView {
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
 		
 		//TODO: try to login
-		App.teller.loginUser(userName.getText(), password.getText());
-		presenter.goTo(new TagdayPlace());
+		int status = App.teller.loginUser(userName.getText(), password.getText());
+		Window.alert("Tried to login.  Success? " + status);
+		if (App.isUserLoggedIn()) {
+			presenter.goTo(new TagdayPlace());
+		} else {
+			message.setText("Login failed: " + status);
+		}
 	}
 
 }
