@@ -10,7 +10,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.mgwt.ui.client.widget.RoundPanel;
 
 public class LoginViewImpl extends Composite implements LoginView {
 
@@ -44,7 +43,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
 		
 		//TODO: try to login
-		App.loadParticipant();
+		App.teller.loginUser(userName.getText(), password.getText());
 		presenter.goTo(new TagdayPlace());
 	}
 

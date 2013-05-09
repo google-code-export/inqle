@@ -228,7 +228,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			q.setUid(UUID.uuid());
 			q.setCreated(new Date());
 			q.setCreatorId(App.getParticipantId());
-			q.setLang(App.participant.getPreferredLang());
+			q.setLang(App.participant.getLang());
 			q.setCreatorName(App.participant.getName());
 		}
 		
