@@ -46,13 +46,16 @@ public class LoginViewImpl extends Composite implements LoginView {
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
 		
 		//TODO: try to login
-		int status = App.teller.loginUser(userName.getText(), password.getText());
+		int status = App.teller.loginUser(presenter, userName.getText(), password.getText());
 		Window.alert("Tried to login.  Success? " + status);
-		if (App.isUserLoggedIn()) {
-			presenter.goTo(new TagdayPlace());
-		} else {
+		if (status < 1) {
 			message.setText("Login failed: " + status);
 		}
+//		if (App.isUserLoggedIn()) {
+//			presenter.goTo(new TagdayPlace());
+//		} else {
+//			message.setText("Login failed: " + status);
+//		}
 	}
 
 }
