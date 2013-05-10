@@ -5,7 +5,10 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
+import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.Participant;
+import com.beyobe.client.views.LoginView;
+import com.beyobe.client.views.LoginView.Presenter;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -22,11 +25,12 @@ import com.google.gwt.user.client.Window;
 
 public class Teller {
 
-	private static final int STATUS_ALREADY_RUNNING = 0;
-	private static final int STATUS_LOGIN_COMPLETED = 1;
-	private static final int STATUS_LOGIN_FAILED = -1;
-	protected static final int STATUS_LOGIN_TIMED_OUT = -2;
+	public static final int STATUS_ALREADY_RUNNING = 0;
+	public static final int STATUS_LOGIN_COMPLETED = 1;
+	public static final int STATUS_LOGIN_FAILED = -1;
+	public static final int STATUS_LOGIN_TIMED_OUT = -2;
 	private static final int STATUS_LOGIN_ERROR_CONNECTING = -3;
+	private static final long MAX_COUNTER = 10000;
 	private int loginStatus;
 
 	private static Logger log = Logger.getLogger(Teller.class.getName());
@@ -37,8 +41,11 @@ public class Teller {
 
 	// An indicator when the computation should quit
 	private boolean abortFlag = false;
-	  
-	public int loginUser(String login, String password) {
+	 
+	private LoginView.Presenter loginPresenter;
+	
+	public int loginUser(final LoginView.Presenter loginPresenter, String login, String password) {
+		this.loginPresenter = loginPresenter;
 		String url = Constants.BASEURL_BEYOBE_SERVER + "/login?user=" + login + "&password=" + password;
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 		
@@ -56,8 +63,8 @@ public class Teller {
 	    timeoutTimer = new Timer() {
 	      public void run() {
 	        Window.alert("Timeout expired.");
-	        timeoutTimer = null;
 	        abortFlag = true;
+	        timeoutTimer = null;
 	      }
 	    };
 
@@ -66,42 +73,60 @@ public class Teller {
 	    timeoutTimer.schedule(Constants.TIMEOUT_LOGIN); // timeout is in milliseconds
 		
 		try {
+//			Window.alert("Sending request");
 			Request request = builder.sendRequest(null, new RequestCallback() {
-			    public void onError(Request request, Throwable exception) {
+
+				public void onError(Request request, Throwable exception) {
 			    	log.warning("unable to connect to server for log in");
 			    	cancelTimer();
 			    	loginStatus = STATUS_LOGIN_TIMED_OUT;
 			    }
 	
 			    public void onResponseReceived(Request request, Response response) {
+//			    	Window.alert("Response received");
+			    	
 			    	cancelTimer();
 			        
 				    if (!abortFlag && 200 == response.getStatusCode()) {
-				    	Window.alert("Login response received: " + response.getText());
-						  JSONValue jv = JSONParser.parseStrict(response.getText());
-						  JSONObject pO = (JSONObject)jv;
-						  Participant p = new Participant();
-						  JSONNumber idV = (JSONNumber)pO.get("id");
-						  p.setId(Long.parseLong(idV.toString()));
-						  p.setName(pO.get("name").toString());
-						  String createdStr = pO.get("created").toString();
-						  Date created = DateTimeFormat.getFormat(Constants.FORMAT_DATE_TIME).parse(createdStr);
-						  p.setCreated(created);
-						  p.setLang(pO.get("lang").toString());
-						  App.participant = p;
-						  loginStatus = STATUS_LOGIN_COMPLETED;
-			      } else {
-			        log.warning("Error logging in: " + response.getStatusText());
-			        loginStatus = STATUS_LOGIN_FAILED;
-			      }
-			    }       
+//			    		Window.alert("Login response received: " + response.getText());
+			    		JSONValue jv = JSONParser.parseStrict(response.getText());
+						JSONObject pO = (JSONObject)jv;
+						Participant p = new Participant();
+						JSONNumber idV = (JSONNumber)pO.get("id");
+						p.setId(Long.parseLong(idV.toString()));
+						p.setName(pO.get("name").toString());
+						String createdStr = pO.get("created").toString();
+						Date created = DateTimeFormat.getFormat(Constants.FORMAT_DATE_TIME).parse(createdStr);
+						p.setCreated(created);
+						p.setLang(pO.get("lang").toString());
+						App.participant = p;
+						loginStatus = STATUS_LOGIN_COMPLETED;
+						log.info("Set login status to: " + loginStatus);
+						abortFlag = true;
+						loginPresenter.goTo(new TagdayPlace());
+				    } else {
+				    	log.warning("Error logging in: " + response.getStatusText());
+				    	loginStatus = STATUS_LOGIN_FAILED;
+				    	log.info("Set login status to: " + loginStatus);
+				    	abortFlag = true;
+				    }
+			    } 
 		  });
 		  
 		} catch (RequestException e) {
 			log.warning("unable to log in user " + login);
 			e.printStackTrace();
 			loginStatus = STATUS_LOGIN_ERROR_CONNECTING;
+			abortFlag = true;
 		}
+		log.info("wait until request comes back or timer times out");
+		long counter = 0;
+		while (! abortFlag) {
+			//increment a counter in case our timer fails us
+			counter++;
+			if(counter > MAX_COUNTER) abortFlag = true;
+		}
+		log.info("Returning " + loginStatus);
 		return loginStatus;
 	}
 	
