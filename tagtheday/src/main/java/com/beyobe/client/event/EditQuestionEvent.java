@@ -1,7 +1,6 @@
 package com.beyobe.client.event;
 
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.widgets.Block;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class EditQuestionEvent extends GwtEvent<EditQuestionEventHandler> {

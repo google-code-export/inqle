@@ -2,148 +2,76 @@ package com.beyobe.client.beans;
 
 import java.util.Date;
 
-public class Datum {
+public interface Datum {
 
 	public static final Integer STATUS_ANSWERED_PERSONALLY = 2;
 	public static final Integer STATUS_INFERRED = 1;
-    public static final Integer STATUS_ASKED_BUT_NO_ANSWER = -1;
-    public static final Integer STATUS_DECLINED_ANSWER = -2;
-    public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
+	public static final Integer STATUS_ASKED_BUT_NO_ANSWER = -1;
+	public static final Integer STATUS_DECLINED_ANSWER = -2;
+	public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
 
-    private long id;
-    private Date created = new Date();
-    private Date updated = null;
-    private Date effectiveDate;
-    private String questionUid;
-    private long participantId;
-    private Double numericValue;
-    private Integer integerValue;
-    private String textValue;
-    private String longTextValue;
-    private Choice choice;
-    private Double normalizedValue;
-    private Unit unit;
-//    private Unit canonicalUnit;
-    private Double canonicalValue;
-    private Integer status;
-    private long conceptId;
-	private Integer dataType;
-	
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public Date getCreated() {
-		return created;
-	}
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-	public Date getUpdated() {
-		return updated;
-	}
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-	public String getQuestionUid() {
-		return questionUid;
-	}
-	public void setQuestionUid(String questionUid) {
-		this.questionUid = questionUid;
-	}
-	public long getParticipantId() {
-		return participantId;
-	}
-	public void setParticipantId(long participantId) {
-		this.participantId = participantId;
-	}
-	public Double getNumericValue() {
-		return numericValue;
-	}
-	public void setNumericValue(Double numericValue) {
-		this.numericValue = numericValue;
-	}
-	public String getTextValue() {
-		return textValue;
-	}
-	public void setTextValue(String textValue) {
-		this.textValue = textValue;
-	}
-	public Choice getChoice() {
-		return choice;
-	}
-	public void setChoice(Choice choice) {
-		this.choice = choice;
-	}
-	public Double getNormalizedValue() {
-		return normalizedValue;
-	}
-	public void setNormalizedValue(Double normalizedValue) {
-		this.normalizedValue = normalizedValue;
-	}
-	public Unit getUnit() {
-		return unit;
-	}
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-//	public Unit getCanonicalUnit() {
-//		return canonicalUnit;
-//	}
-//	public void setCanonicalUnit(Unit canonicalUnit) {
-//		this.canonicalUnit = canonicalUnit;
-//	}
-	public Double getCanonicalValue() {
-		return canonicalValue;
-	}
-	public void setCanonicalValue(Double canonicalValue) {
-		this.canonicalValue = canonicalValue;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	public long getConceptId() {
-		return conceptId;
-	}
-	public void setConceptId(long conceptId) {
-		this.conceptId = conceptId;
-	}
-	public static Integer getStatusAskedButNoAnswer() {
-		return STATUS_ASKED_BUT_NO_ANSWER;
-	}
-	public static Integer getStatusDeclinedAnswer() {
-		return STATUS_DECLINED_ANSWER;
-	}
-	public static Integer getStatusNeverAskAgain() {
-		return STATUS_NEVER_ASK_AGAIN;
-	}
-	public Integer getIntegerValue() {
-		return integerValue;
-	}
-	public void setIntegerValue(Integer integerValue) {
-		this.integerValue = integerValue;
-	}
-	public Integer getDataType() {
-		return dataType;
-	}
-	public void setDataType(Integer dataType) {
-		this.dataType = dataType;
-	}
-	public String getLongTextValue() {
-		return longTextValue;
-	}
-	public void setLongTextValue(String longTextValue) {
-		this.longTextValue = longTextValue;
-	}
-	public Date getEffectiveDate() {
-		return effectiveDate;
-	}
-	public void setEffectiveDate(Date effectiveDate) {
-		this.effectiveDate = effectiveDate;
-	}
+	public abstract Long getId();
+
+	public abstract void setId(Long id);
+
+	public abstract Date getCreated();
+
+	public abstract void setCreated(Date created);
+
+	public abstract Date getUpdated();
+
+	public abstract void setUpdated(Date updated);
+
+	public abstract String getQuestionUid();
+
+	public abstract void setQuestionUid(String questionUid);
+
+	public abstract Long getParticipantId();
+
+	public abstract void setParticipantId(Long participantId);
+
+	public abstract Double getNumericValue();
+
+	public abstract void setNumericValue(Double numericValue);
+
+	public abstract String getTextValue();
+
+	public abstract void setTextValue(String textValue);
+
+	public abstract Choice getChoice();
+
+	public abstract void setChoice(Choice choice);
+
+	public abstract Double getNormalizedValue();
+
+	public abstract void setNormalizedValue(Double normalizedValue);
+
+	public abstract Unit getUnit();
+
+	public abstract void setUnit(Unit unit);
+
+	public abstract Integer getStatus();
+
+	public abstract void setStatus(Integer status);
+
+	public abstract Long getConceptId();
+
+	public abstract void setConceptId(Long conceptId);
+
+	public abstract Integer getIntegerValue();
+
+	public abstract void setIntegerValue(Integer integerValue);
+
+	public abstract Integer getDataType();
+
+	public abstract void setDataType(Integer dataType);
+
+	public abstract String getLongTextValue();
+
+	public abstract void setLongTextValue(String longTextValue);
+
+	public abstract Date getEffectiveDate();
+
+	public abstract void setEffectiveDate(Date effectiveDate);
+
 }

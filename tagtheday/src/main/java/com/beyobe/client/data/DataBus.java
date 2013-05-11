@@ -9,13 +9,18 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.beyobe.client.App;
+import com.beyobe.client.Constants;
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.google.web.bindery.autobean.shared.AutoBean;
+import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 
@@ -41,6 +46,18 @@ public class DataBus {
 	
 	public void addQuestionToQueue(Question q) {
 		questionQueue.add(q);
+	}
+	
+	public void setQuestionQueue(List<Question> questions) {
+		questionQueue = questions;
+	}
+	
+	public void addQuestionQueue(List<Question> questions) {
+		for (Question q: questions) {
+			if (! questionQueue.contains(q)) {
+				questionQueue.add(q);
+			}
+		}
 	}
 	
 	public void addQuestionToKnownQuestions(Question question) {
@@ -114,8 +131,8 @@ public class DataBus {
 		allDays = new ArrayList<Day>();
 		
 		//add days from the start of data collection to the present.
-		DateTimeFormat format = DateTimeFormat.getFormat("yyyy-MM-dd");
-		Date startOfToday = format.parse(format.format(new Date()));
+//		DateTimeFormat format = DateTimeFormat.getFormat("yyyy-MM-dd");
+		Date startOfToday = Constants.DAY_FORMATTER.parse(Constants.DAY_FORMATTER.format(new Date()));
 		
 		//if no data, just return today's day
 		if (dataByDate != null && dataByDate.size()>0) {
@@ -128,7 +145,7 @@ public class DataBus {
 		Date earliestDate = null;
 		for (Map.Entry<String,  List<Datum>> entry : dataByDate.entrySet()) {
 		    String key = entry.getKey();
-		    earliestDate = format.parse(key);
+		    earliestDate = Constants.DAY_FORMATTER.parse(key);
 		    break;
 		}	
 		
@@ -138,7 +155,7 @@ public class DataBus {
 		}
 		
 		while(date.before(startOfToday) || date.equals(startOfToday)) {
-			String key = format.format(date);
+			String key = Constants.DAY_FORMATTER.format(date);
 			List<Datum> dataForDay = dataByDate.get(key);
 			Day day = new Day(date);
 			//advance date 24 hours
@@ -200,5 +217,42 @@ public class DataBus {
 		
 		//TODO send question to server
 		//TODO save locally
+	}
+
+	public void refreshDataFromJson(String text) {
+		try {
+			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
+		    Parcel parcel = parcelAB.as();
+		    setQuestionQueue(parcel.getQuestionQueue());
+		    setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
+		    setData(parcel.getData());
+		    App.participant = parcel.getParticipant();
+		} catch (Exception e) {
+			log.log(Level.SEVERE, "Error parsing JSON into Datum objects", e);
+		}
+		
+		
+	}
+
+	private void setKnownQuestions(List<Question> qq, List<Question> otherKnownQuestions) {
+//		knownQuestions = new HashMap<String, Question>();
+		for (Question q: qq) {
+			knownQuestions.put(q.getUid(), q);
+		}
+		for (Question q: otherKnownQuestions) {
+			knownQuestions.put(q.getUid(), q);
+		}
+		
+	}
+
+	private void setData(List<Datum> data) {
+//		dataByDate = new LinkedHashMap<String, List<Datum>>();
+		for (Datum d: data) {
+			String dayStr = Constants.DAY_FORMATTER.format(d.getEffectiveDate());
+			List<Datum> dayData = dataByDate.get(dayStr);
+			if (dayData==null) dayData = new ArrayList<Datum>();
+			dayData.add(d);
+			dataByDate.put(dayStr, dayData);
+		}
 	}
 }

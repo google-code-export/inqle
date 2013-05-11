@@ -7,7 +7,9 @@ import java.util.List;
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -146,7 +148,8 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 	
 	public boolean saveData() {
 		if (d==null) {
-			d = new Datum();
+//			d = new Datum();
+			d = BeanMaker.makeDatum();
 			d.setEffectiveDate(tagButton.getEffectiveDate());
 			d.setParticipantId(App.participant.getId());
 			d.setQuestionUid(q.getUid());
@@ -212,7 +215,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				}
 				d.setTextValue(getShortenedText(integerBox.getText()));
 				d.setLongTextValue(getLongText(integerBox.getText()));
-				
+				d.setNumericValue(val.doubleValue());
 				d.setIntegerValue(val);
 			}
 			

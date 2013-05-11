@@ -3,6 +3,7 @@ package com.beyobe.client.widgets;
 import java.util.Date;
 
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
