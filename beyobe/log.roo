@@ -1,0 +1,5 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-10 15:31:36
+project --topLevelPackage com.beyobe
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-10 16:08:55
+jpa setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY 
+entity jpa --class ~.domain.Parcel --testAutomatically
