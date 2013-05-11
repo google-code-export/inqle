@@ -11,6 +11,7 @@ import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.DataCapturedEvent;
+import com.beyobe.client.util.UUID;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -150,11 +151,12 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		if (d==null) {
 //			d = new Datum();
 			d = BeanMaker.makeDatum();
+			d.setUid(UUID.uuid());
 			d.setEffectiveDate(tagButton.getEffectiveDate());
 			d.setParticipantId(App.participant.getId());
 			d.setQuestionUid(q.getUid());
 		}
-		d.setConceptId(q.getConceptId());
+		d.setConceptUid(q.getConceptUid());
 		d.setDataType(q.getDataType());
 		d.setStatus(Datum.STATUS_ANSWERED_PERSONALLY);
 		d.setUpdated(new Date());
@@ -177,7 +179,6 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				return false;
 			}
 			d.setTextValue(getShortenedText(doubleBox.getText()));
-			d.setLongTextValue(getLongText(doubleBox.getText()));
 			
 			d.setNumericValue(val);
 			if (q.getMeasurement() != null) {
@@ -197,7 +198,6 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
 				val = slider.getValue();
 				d.setTextValue(getShortenedText(String.valueOf(val)));
-				d.setLongTextValue(getLongText(String.valueOf(val)));
 			} else {
 				try {
 					val = Integer.valueOf(integerBox.getText());
@@ -214,7 +214,6 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 					return false;
 				}
 				d.setTextValue(getShortenedText(integerBox.getText()));
-				d.setLongTextValue(getLongText(integerBox.getText()));
 				d.setNumericValue(val.doubleValue());
 				d.setIntegerValue(val);
 			}
@@ -232,13 +231,11 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		//SHORT TEXT
 		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
 			d.setTextValue(getShortenedText(textBox.getText()));
-			d.setLongTextValue(getLongText(textBox.getText()));
 		}
 		
 		//LONG TEXT
 		if (q.getDataType()==Question.DATA_TYPE_LONG_TEXT) {
 			d.setTextValue(getShortenedText(textArea.getText()));
-			d.setLongTextValue(getLongText(textArea.getText()));
 		}
 		
 		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
@@ -246,8 +243,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			if (choice == null) {
 				validateMessage("No choice selected");
 			} else {
-				d.setTextValue(getShortenedText(choice.getShortForm()));
-				d.setLongTextValue(getLongText(choice.getLongForm()));
+				d.setTextValue(getShortenedText(choice.getText()));
 				d.setChoice(choice);
 			}
 		}
@@ -275,7 +271,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 
 	@Override
 	public void onValueChange(ValueChangeEvent<Choice> event) {
-		String selection = pastAnswersPicker.getSelectedChoice().getLongForm();
+		String selection = pastAnswersPicker.getSelectedChoice().getDescription();
 		textBox.setText(selection);
 	}
 	

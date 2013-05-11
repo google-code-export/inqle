@@ -13,6 +13,10 @@ public interface Datum {
 	public abstract Long getId();
 
 	public abstract void setId(Long id);
+	
+	public abstract String getUid();
+
+	public abstract void setUid(String uid);
 
 	public abstract Date getCreated();
 
@@ -54,9 +58,9 @@ public interface Datum {
 
 	public abstract void setStatus(Integer status);
 
-	public abstract Long getConceptId();
-
-	public abstract void setConceptId(Long conceptId);
+	public abstract String getConceptUid();
+	
+	public abstract void setConceptUid(String conceptUid);
 
 	public abstract Integer getIntegerValue();
 
@@ -66,9 +70,9 @@ public interface Datum {
 
 	public abstract void setDataType(Integer dataType);
 
-	public abstract String getLongTextValue();
-
-	public abstract void setLongTextValue(String longTextValue);
+//	public abstract String getLongTextValue();
+//
+//	public abstract void setLongTextValue(String longTextValue);
 
 	public abstract Date getEffectiveDate();
 

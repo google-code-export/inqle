@@ -229,9 +229,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			q = BeanMaker.makeQuestion();
 			q.setUid(UUID.uuid());
 			q.setCreated(new Date());
-			q.setCreatorId(App.getParticipantId());
+			q.setCreatedBy(App.getParticipantId());
 			q.setLang(App.participant.getLang());
-			q.setCreatorName(App.participant.getName());
+//			q.setCreatorName(App.participant.getName());
 		}
 		
 		q.setDataType(dataTypeId.intValue());

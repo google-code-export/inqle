@@ -40,15 +40,15 @@ public class ChoicePicker extends Composite implements TapHandler, HasValueChang
 				panel.add(columnPanel);
 				columnsCreated++;
 			}
-			MRadioButton button = new MRadioButton(choice.getLongForm());
+			MRadioButton button = new MRadioButton(choice.getDescription());
 			button.addTapHandler(this);
 			radioButtons.add(button);
 			FlowPanel choicePanel = new FlowPanel();
 			button.getElement().getStyle().setProperty("float", "left");
 			choicePanel.add(button);
-			String labelText = choice.getShortForm();
-			if (choice.getLongForm() != null && !(choice.getLongForm().equals(choice.getShortForm()))) {
-				labelText += " (" + choice.getLongForm() + ")";
+			String labelText = choice.getText();
+			if (choice.getDescription() != null && !(choice.getDescription().equals(choice.getText()))) {
+				labelText += " (" + choice.getDescription() + ")";
 			}
 			Label label = new Label(labelText);
 			label.addStyleName("ttd-choice");

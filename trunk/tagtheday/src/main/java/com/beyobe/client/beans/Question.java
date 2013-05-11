@@ -21,7 +21,17 @@ public interface Question {
 
 	public abstract void setMaxValue(Double maxValue);
 
+	public abstract Integer getMaxLength();
+	
+	public abstract void setMaxLength(Integer maxLength);
+	
+	public abstract Integer getPriority();
+	
 	public abstract void setPriority(Integer priority);
+	
+	public Long getLatency();
+	
+	public void setLatency(Long latency);
 
 	public abstract String getLongForm();
 
@@ -45,25 +55,29 @@ public interface Question {
 
 	public abstract void setUpdated(Date updated);
 
-	public abstract Long getConceptId();
+	public abstract Long getCreatedBy();
 
-	public abstract void setConceptId(Long conceptId);
+	public abstract void setCreatedBy(Long creatorId);
+	
+	public abstract Long getUpdatedBy();
 
-	public abstract Long getCreatorId();
+	public abstract void setUpdatedBy(Long updaterId);
 
-	public abstract void setCreatorId(Long creatorId);
-
-	public abstract String getCreatorName();
-
-	public abstract void setCreatorName(String creatorName);
+//	public abstract String getCreatorName();
+//
+//	public abstract void setCreatorName(String creatorName);
 
 	public abstract String getLang();
 
 	public abstract void setLang(String lang);
 
-	public abstract long getId();
+	public abstract Long getId();
 
-	public abstract void setId(long id);
+	public abstract void setId(Long id);
+	
+	public abstract String getConceptUid();
+	
+	public abstract void setConceptUid(String conceptUid);
 
 	public abstract Integer getDataType();
 
