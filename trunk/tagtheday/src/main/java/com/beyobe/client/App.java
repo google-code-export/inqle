@@ -21,8 +21,9 @@ import java.util.logging.Logger;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.data.BeyobeClient;
 import com.beyobe.client.data.DataBus;
-import com.beyobe.client.data.Teller;
+import com.beyobe.client.data.TagthedayAutoBeanFactory;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
 import com.beyobe.client.event.EditQuestionEvent;
@@ -38,6 +39,7 @@ import com.beyobe.client.views.TagdayViewImpl;
 import com.beyobe.client.widgets.AnswerForm;
 import com.beyobe.client.widgets.QuestionForm;
 import com.beyobe.client.widgets.TagButton;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -59,7 +61,8 @@ public class App {
 	public static final LoginView loginView = new LoginViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
-	public static Teller teller = new Teller();
+	public static BeyobeClient beyobeClient = new BeyobeClient();
+	public static TagthedayAutoBeanFactory tagthedayAutoBeanFactory = GWT.create(TagthedayAutoBeanFactory.class);
 	
 	protected static PopinDialog answerPopin;
 	private static Logger log = Logger.getLogger(App.class.getName());
@@ -142,9 +145,7 @@ public class App {
 			@Override
 			public void onQuestionSaved(QuestionSavedEvent event) {
 				Question question = event.getQuestion();
-				
 				answerPopin.hide();
-				
 				dataBus.saveQuestion(question);
 			}
 		});

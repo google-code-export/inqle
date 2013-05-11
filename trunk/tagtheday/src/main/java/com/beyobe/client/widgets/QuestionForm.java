@@ -9,6 +9,7 @@ import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
+import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -224,7 +225,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		}
 		
 		if (q==null) {
-			q = new Question();
+//			q = new Question();
+			q = BeanMaker.makeQuestion();
 			q.setUid(UUID.uuid());
 			q.setCreated(new Date());
 			q.setCreatorId(App.getParticipantId());
