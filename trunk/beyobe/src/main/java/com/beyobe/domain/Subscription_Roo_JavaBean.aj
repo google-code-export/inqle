@@ -10,6 +10,14 @@ import java.util.Date;
 
 privileged aspect Subscription_Roo_JavaBean {
     
+    public String Subscription.getId() {
+        return this.id;
+    }
+    
+    public void Subscription.setId(String id) {
+        this.id = id;
+    }
+    
     public Date Subscription.getCreated() {
         return this.created;
     }

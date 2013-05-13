@@ -17,19 +17,19 @@ privileged aspect Formula_Roo_Jpa_Entity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long Formula.id;
+    @Column(name = "id_")
+    private Long Formula.id_;
     
     @Version
     @Column(name = "version")
     private Integer Formula.version;
     
-    public Long Formula.getId() {
-        return this.id;
+    public Long Formula.getId_() {
+        return this.id_;
     }
     
-    public void Formula.setId(Long id) {
-        this.id = id;
+    public void Formula.setId_(Long id) {
+        this.id_ = id;
     }
     
     public Integer Formula.getVersion() {

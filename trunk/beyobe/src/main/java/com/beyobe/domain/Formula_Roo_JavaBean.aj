@@ -9,6 +9,14 @@ import java.util.Date;
 
 privileged aspect Formula_Roo_JavaBean {
     
+    public String Formula.getId() {
+        return this.id;
+    }
+    
+    public void Formula.setId(String id) {
+        this.id = id;
+    }
+    
     public Date Formula.getCreated() {
         return this.created;
     }

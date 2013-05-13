@@ -8,6 +8,14 @@ import java.util.Date;
 
 privileged aspect Choice_Roo_JavaBean {
     
+    public String Choice.getId() {
+        return this.id;
+    }
+    
+    public void Choice.setId(String id) {
+        this.id = id;
+    }
+    
     public Date Choice.getCreated() {
         return this.created;
     }
@@ -38,6 +46,22 @@ privileged aspect Choice_Roo_JavaBean {
     
     public void Choice.setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public String Choice.getText() {
+        return this.text;
+    }
+    
+    public void Choice.setText(String text) {
+        this.text = text;
+    }
+    
+    public String Choice.getDescription() {
+        return this.description;
+    }
+    
+    public void Choice.setDescription(String description) {
+        this.description = description;
     }
     
 }
