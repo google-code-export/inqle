@@ -17,19 +17,19 @@ privileged aspect Subscription_Roo_Jpa_Entity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long Subscription.id;
+    @Column(name = "id_")
+    private Long Subscription.id_;
     
     @Version
     @Column(name = "version")
     private Integer Subscription.version;
     
-    public Long Subscription.getId() {
-        return this.id;
+    public Long Subscription.getId_() {
+        return this.id_;
     }
     
-    public void Subscription.setId(Long id) {
-        this.id = id;
+    public void Subscription.setId_(Long id) {
+        this.id_ = id;
     }
     
     public Integer Subscription.getVersion() {

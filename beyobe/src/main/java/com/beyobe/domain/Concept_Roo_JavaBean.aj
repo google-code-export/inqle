@@ -8,6 +8,14 @@ import java.util.Date;
 
 privileged aspect Concept_Roo_JavaBean {
     
+    public String Concept.getId() {
+        return this.id;
+    }
+    
+    public void Concept.setId(String id) {
+        this.id = id;
+    }
+    
     public Date Concept.getCreated() {
         return this.created;
     }

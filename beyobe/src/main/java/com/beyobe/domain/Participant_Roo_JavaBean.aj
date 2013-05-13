@@ -8,6 +8,14 @@ import java.util.Date;
 
 privileged aspect Participant_Roo_JavaBean {
     
+    public String Participant.getId() {
+        return this.id;
+    }
+    
+    public void Participant.setId(String id) {
+        this.id = id;
+    }
+    
     public Date Participant.getCreated() {
         return this.created;
     }
@@ -24,19 +32,19 @@ privileged aspect Participant_Roo_JavaBean {
         this.updated = updated;
     }
     
-    public Long Participant.getUpdatedBy() {
+    public String Participant.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Participant.setUpdatedBy(Long updatedBy) {
+    public void Participant.setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
     
-    public Long Participant.getCreatedBy() {
+    public String Participant.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Participant.setCreatedBy(Long createdBy) {
+    public void Participant.setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
     

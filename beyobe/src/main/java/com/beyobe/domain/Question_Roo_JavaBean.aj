@@ -8,12 +8,12 @@ import java.util.Date;
 
 privileged aspect Question_Roo_JavaBean {
     
-    public String Question.getUid() {
-        return this.uid;
+    public String Question.getId() {
+        return this.id;
     }
     
-    public void Question.setUid(String uid) {
-        this.uid = uid;
+    public void Question.setId(String id) {
+        this.id = id;
     }
     
     public String Question.getAbbreviation() {

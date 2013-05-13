@@ -10,6 +10,14 @@ import java.util.Date;
 
 privileged aspect Datum_Roo_JavaBean {
     
+    public String Datum.getId() {
+        return this.id;
+    }
+    
+    public void Datum.setId(String id) {
+        this.id = id;
+    }
+    
     public Date Datum.getCreated() {
         return this.created;
     }

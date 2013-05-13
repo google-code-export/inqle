@@ -9,6 +9,14 @@ import java.util.Date;
 
 privileged aspect ChoiceTranslation_Roo_JavaBean {
     
+    public String ChoiceTranslation.getId() {
+        return this.id;
+    }
+    
+    public void ChoiceTranslation.setId(String id) {
+        this.id = id;
+    }
+    
     public Choice ChoiceTranslation.getChoice() {
         return this.choice;
     }

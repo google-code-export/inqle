@@ -17,19 +17,19 @@ privileged aspect ChoiceTranslation_Roo_Jpa_Entity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long ChoiceTranslation.id;
+    @Column(name = "id_")
+    private Long ChoiceTranslation.id_;
     
     @Version
     @Column(name = "version")
     private Integer ChoiceTranslation.version;
     
-    public Long ChoiceTranslation.getId() {
-        return this.id;
+    public Long ChoiceTranslation.getId_() {
+        return this.id_;
     }
     
-    public void ChoiceTranslation.setId(Long id) {
-        this.id = id;
+    public void ChoiceTranslation.setId_(Long id) {
+        this.id_ = id;
     }
     
     public Integer ChoiceTranslation.getVersion() {

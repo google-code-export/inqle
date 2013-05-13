@@ -28,8 +28,8 @@ privileged aspect Concept_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Concept o", Concept.class).getResultList();
     }
     
-    public static Concept Concept.findConcept(Long id) {
-        if (id == null) return null;
+    public static Concept Concept.findConcept(String id) {
+        if (id == null || id.length() == 0) return null;
         return entityManager().find(Concept.class, id);
     }
     
