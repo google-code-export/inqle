@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.data.BeyobeClient;
+import com.beyobe.client.data.ParcelClient;
 import com.beyobe.client.data.DataBus;
 import com.beyobe.client.data.TagthedayAutoBeanFactory;
 import com.beyobe.client.event.DataCapturedEvent;
@@ -61,7 +61,9 @@ public class App {
 	public static final LoginView loginView = new LoginViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
-	public static BeyobeClient beyobeClient = new BeyobeClient();
+	public static ParcelClient parcelClient = new ParcelClient();
+	public static String sessionToken;
+	
 	public static TagthedayAutoBeanFactory tagthedayAutoBeanFactory = GWT.create(TagthedayAutoBeanFactory.class);
 	
 	protected static PopinDialog answerPopin;
