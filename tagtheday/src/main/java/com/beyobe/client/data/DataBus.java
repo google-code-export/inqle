@@ -119,9 +119,11 @@ public class DataBus {
 			dataForDay.add(datumToSave);
 		}
 		
-		//TODO save in local storage
+		Parcel parcel = newParcel();
+		parcel.setDatum(datumToSave);
+		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_DATUM);
 		
-		//TODO send to server
+		//TODO save in local storage
 		
 		//save back to our in-memory map
 		 dataByDate.put(DataBus.getDateString(effectiveDate), dataForDay);
@@ -215,7 +217,9 @@ public class DataBus {
 			day.addQuestion(question);
 		}
 		
-		//TODO send question to server
+		Parcel parcel = newParcel();
+		parcel.setQuestion(question);
+		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_QUESTION);
 		//TODO save locally
 	}
 
@@ -223,15 +227,26 @@ public class DataBus {
 		try {
 			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
 		    Parcel parcel = parcelAB.as();
-		    setQuestionQueue(parcel.getQuestionQueue());
-		    setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
-		    setData(parcel.getData());
-		    App.participant = parcel.getParticipant();
+		    if (parcel.getQuestionQueue() != null) {
+		    	setQuestionQueue(parcel.getQuestionQueue());
+		    	setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
+		    }
+		    if (parcel.getData() != null) {
+		    	 setData(parcel.getData());
+		    }
+		    if (parcel.getParticipant() != null) {
+		    	App.participant = parcel.getParticipant();
+		    }
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Error parsing JSON into Datum objects", e);
 		}
-		
-		
+	}
+
+	public Parcel newParcel() {
+	    AutoBean<Parcel> parcelAB = App.tagthedayAutoBeanFactory.parcel();
+	    Parcel parcel = parcelAB.as();
+	    parcel.setSessionToken(App.sessionToken);
+	    return parcel;
 	}
 
 	private void setKnownQuestions(List<Question> qq, List<Question> otherKnownQuestions) {

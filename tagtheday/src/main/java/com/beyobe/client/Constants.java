@@ -11,4 +11,13 @@ public class Constants {
 	public static final int TIMEOUT_DATUM_CLIENT = 10000;
 	public static DateTimeFormat DAY_FORMATTER = DateTimeFormat.getFormat("yyyy-MM-dd");
 	
+	public static final int STATUS_ALREADY_RUNNING = 0;
+	public static final int STATUS_COMPLETED = 1;
+	public static final int STATUS_FAILED = -1;
+	public static final int STATUS_TIMED_OUT = -2;
+	public static final int STATUS_ERROR_CONNECTING = -3;
+	public static final String SERVERACTION_LOGIN = "login";
+	public static final String SERVERACTION_STORE_QUESTION = "storeQuestion";
+	public static final String SERVERACTION_STORE_DATUM = "storeDatum";
+	
 }

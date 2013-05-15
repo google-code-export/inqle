@@ -2,7 +2,7 @@ package com.beyobe.client.views;
 
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
-import com.beyobe.client.data.BeyobeClient;
+import com.beyobe.client.beans.Parcel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -47,8 +47,10 @@ public class LoginViewImpl extends Composite implements LoginView {
 	void onClick(ClickEvent e) {
 //		Window.alert("Hello!");
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
-		
-		App.beyobeClient.getUserParcel(userName.getText(), password.getText());
+		Parcel parcel = App.dataBus.newParcel();
+		parcel.setUserName(userName.getText());
+		parcel.setPassword(password.getText());
+		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_LOGIN);
 //		log.info("wait until request comes back or timer times out");
 		long counter = 0;
 		boolean abortFlag = false;
@@ -58,13 +60,13 @@ public class LoginViewImpl extends Composite implements LoginView {
 //			log.info("counter=" + counter);
 			if(counter > MAX_COUNTER) abortFlag = true;
 		}
-		status = App.beyobeClient.getStatus();
+		status = App.parcelClient.getStatus();
 		//if no answer yet on login, that means the Timer in Teller failed. Delay x seconds then check again
-		if (status == BeyobeClient.STATUS_ALREADY_RUNNING) {
+		if (status == Constants.STATUS_ALREADY_RUNNING) {
 			new Timer() {
 				@Override
 				public void run() {
-					status = App.beyobeClient.getStatus();
+					status = App.parcelClient.getStatus();
 					if (status < 1) {
 						message.setText("Login failed: " + status);
 					}
