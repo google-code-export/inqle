@@ -9,3 +9,39 @@ exit
 exit
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-13 05:21:36
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-13 05:21:43
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-14 17:55:48
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-15 22:47:31
+web mvc setup
+web mvc all --package com.beyobe.domain
+web mvc all --package ~.web
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-17 06:25:26
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-17 16:02:12
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-17 16:29:43
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-17 16:29:50
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-17 16:35:32
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-18 05:47:03
+perform tests
+perform eclipse
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-18 06:14:21
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-18 06:17:39
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-18 06:30:08
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-18 07:33:18
+     exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-19 16:09:54
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-19 16:42:16
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-19 16:42:42
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-19 16:43:18
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-19 17:13:31
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-19 17:14:16
+perform tests
+repository jpa --interface ~.repository.DatumRepository --entity ~.domain.Datum
+repository jpa --interface ~.repository.QuestionRepository --entity ~.domain.Question
+perform tests
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-20 06:18:16

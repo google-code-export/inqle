@@ -30,7 +30,7 @@ public class Question {
 	public static final int DATA_TYPE_LONG_TEXT = 5;
 	public static final int DATA_TYPE_STARS = 6;
 
-	@Id
+	@javax.persistence.Id
     @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "HibernateUuidGenerator")
     private String id;

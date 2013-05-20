@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_beyobe_domain_Formula" object="${formula}" path="/formulas" z="JAT9Wfhw2vtzrWXxhg10UWjVqFI=">
+        <field:display date="true" dateTimePattern="${formula_updated_date_format}" field="updated" id="s_com_beyobe_domain_Formula_updated" object="${formula}" z="zF/cqmxoT05K6QAWWrSeWc81Jak="/>
+        <field:display field="concept" id="s_com_beyobe_domain_Formula_concept" object="${formula}" z="lDRB0/HAIEtdPqPWTg4DD2ZTn9w="/>
+        <field:display field="expression" id="s_com_beyobe_domain_Formula_expression" object="${formula}" z="m1916X/HMaCXaPXesp5x0oTo2ns="/>
+        <field:display field="updatedBy" id="s_com_beyobe_domain_Formula_updatedBy" object="${formula}" z="Wwei54gzgGWUcO6uWT64+szwHkU="/>
+        <field:display field="createdBy" id="s_com_beyobe_domain_Formula_createdBy" object="${formula}" z="LwvujSEAk1+yokPGmcjqTWkM2IA="/>
+    </page:show>
+</div>

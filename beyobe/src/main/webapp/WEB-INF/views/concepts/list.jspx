@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_beyobe_domain_Concept" items="${concepts}" z="dNwdzJ3tAPUWYbCG43eyfo2jzew=">
+        <table:table data="${concepts}" id="l_com_beyobe_domain_Concept" path="/concepts" z="l+3pEVNRdRC7qVdaZqMECtAiaJk=">
+            <table:column date="true" dateTimePattern="${concept_created_date_format}" id="c_com_beyobe_domain_Concept_created" property="created" z="FHvRt+i4cVnvRQCJMalhsQ6qECA="/>
+            <table:column date="true" dateTimePattern="${concept_updated_date_format}" id="c_com_beyobe_domain_Concept_updated" property="updated" z="GUWbhYPJuGuP8nXeowjwE1GS0H0="/>
+            <table:column id="c_com_beyobe_domain_Concept_conceptkey" property="conceptkey" z="7yNzLIVickISBsE9odShtz+r5ys="/>
+            <table:column id="c_com_beyobe_domain_Concept_updatedBy" property="updatedBy" z="T7ddpk843x7EnvcmZRgC3kccCvc="/>
+            <table:column id="c_com_beyobe_domain_Concept_createdBy" property="createdBy" z="V4V4UIzH9UsOon3qkAXcnFJyke4="/>
+        </table:table>
+    </page:list>
+</div>

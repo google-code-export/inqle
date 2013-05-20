@@ -32,7 +32,7 @@ public class Datum {
 	public static final Integer STATUS_DECLINED_ANSWER = -2;
 	public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
 	
-	@Id
+	@javax.persistence.Id
     @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "HibernateUuidGenerator")
     private String id;
