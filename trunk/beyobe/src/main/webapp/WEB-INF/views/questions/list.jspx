@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_beyobe_domain_Question" items="${questions}" z="kbwjvFot/+BYwJV5MnunXx2vE0s=">
+        <table:table data="${questions}" id="l_com_beyobe_domain_Question" path="/questions" z="OKgAjLnPLGfxGwOdxec6KcgczBQ=">
+            <table:column id="c_com_beyobe_domain_Question_abbreviation" property="abbreviation" z="SQvsHZWl7XXaHgov28NMLpcLDys="/>
+            <table:column id="c_com_beyobe_domain_Question_longForm" property="longForm" z="WGdWXVlD6VQ626cxoioAo1F5ja4="/>
+            <table:column id="c_com_beyobe_domain_Question_latency" property="latency" z="jgMfFX99uwNVdVdwVTIkhBGbeSA="/>
+            <table:column date="true" dateTimePattern="${question_created_date_format}" id="c_com_beyobe_domain_Question_created" property="created" z="zUpB8ApHgrvlJbpDI1fl4HHxbek="/>
+            <table:column date="true" dateTimePattern="${question_updated_date_format}" id="c_com_beyobe_domain_Question_updated" property="updated" z="na0xzRGvZHWO7M6sv0Dmthug9/k="/>
+            <table:column id="c_com_beyobe_domain_Question_conceptUid" property="conceptUid" z="ZcgBTcJBiETdOE9MeVs0AyUCnDY="/>
+        </table:table>
+    </page:list>
+</div>

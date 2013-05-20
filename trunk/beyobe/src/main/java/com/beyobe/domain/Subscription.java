@@ -23,7 +23,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord
 public class Subscription {
 
-	@Id
+	@javax.persistence.Id
     @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "HibernateUuidGenerator")
     private String id;

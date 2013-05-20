@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_beyobe_domain_Choice" items="${choices}" z="o0U9qlTQrD8yqp1ejtIsbASp+GY=">
+        <table:table data="${choices}" id="l_com_beyobe_domain_Choice" path="/choices" z="8OjJtMBXhFM8I+T6chd6ZMx6n2U=">
+            <table:column date="true" dateTimePattern="${choice_created_date_format}" id="c_com_beyobe_domain_Choice_created" property="created" z="bvuivxTzLgPWuIFEPqU0BECneaA="/>
+            <table:column date="true" dateTimePattern="${choice_updated_date_format}" id="c_com_beyobe_domain_Choice_updated" property="updated" z="1vujgieea5ix+dybHzuOENeykh0="/>
+            <table:column id="c_com_beyobe_domain_Choice_updatedBy" property="updatedBy" z="4ye9z1WLmAeuYav1LAFjqKovS38="/>
+            <table:column id="c_com_beyobe_domain_Choice_createdBy" property="createdBy" z="url6cor5sZ33o99RsBz4XiIIi2I="/>
+            <table:column id="c_com_beyobe_domain_Choice_text" property="text" z="ThRvMkUrksykw648/hX9KuHrFLc="/>
+            <table:column id="c_com_beyobe_domain_Choice_description" property="description" z="42fhhfiOe/kxR/u45oUTOnP6r2w="/>
+        </table:table>
+    </page:list>
+</div>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_beyobe_domain_Choice" object="${choice}" path="/choices" z="enlVG3Hzq9JpPpUiRsg7vrrgfYE=">
+        <field:display date="true" dateTimePattern="${choice_updated_date_format}" field="updated" id="s_com_beyobe_domain_Choice_updated" object="${choice}" z="Icnd/S6ZOJ7DtAAGwEJ2feDALpQ="/>
+        <field:display field="updatedBy" id="s_com_beyobe_domain_Choice_updatedBy" object="${choice}" z="n0Zcue2TVSissHlWEdfEkU9o3RY="/>
+        <field:display field="createdBy" id="s_com_beyobe_domain_Choice_createdBy" object="${choice}" z="Fb2ASuexZTulcRqvnG/UtbCppQU="/>
+        <field:display field="text" id="s_com_beyobe_domain_Choice_text" object="${choice}" z="moFzlBh/uGGcPrTn81+j1FpVjXU="/>
+        <field:display field="description" id="s_com_beyobe_domain_Choice_description" object="${choice}" z="ipjrkZylwuMUErLS/OP0tMcLrjM="/>
+    </page:show>
+</div>

@@ -6,31 +6,15 @@ package com.beyobe.domain;
 import com.beyobe.domain.Subscription;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Subscription_Roo_Jpa_Entity {
     
     declare @type: Subscription: @Entity;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_")
-    private Long Subscription.id_;
-    
     @Version
     @Column(name = "version")
     private Integer Subscription.version;
-    
-    public Long Subscription.getId_() {
-        return this.id_;
-    }
-    
-    public void Subscription.setId_(Long id) {
-        this.id_ = id;
-    }
     
     public Integer Subscription.getVersion() {
         return this.version;

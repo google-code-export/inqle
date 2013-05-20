@@ -6,31 +6,15 @@ package com.beyobe.domain;
 import com.beyobe.domain.Datum;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Datum_Roo_Jpa_Entity {
     
     declare @type: Datum: @Entity;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_")
-    private Long Datum.id_;
-    
     @Version
     @Column(name = "version")
     private Integer Datum.version;
-    
-    public Long Datum.getId_() {
-        return this.id_;
-    }
-    
-    public void Datum.setId_(Long id) {
-        this.id_ = id;
-    }
     
     public Integer Datum.getVersion() {
         return this.version;

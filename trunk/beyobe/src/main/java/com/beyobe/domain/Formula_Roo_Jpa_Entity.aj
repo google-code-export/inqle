@@ -6,31 +6,15 @@ package com.beyobe.domain;
 import com.beyobe.domain.Formula;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Formula_Roo_Jpa_Entity {
     
     declare @type: Formula: @Entity;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_")
-    private Long Formula.id_;
-    
     @Version
     @Column(name = "version")
     private Integer Formula.version;
-    
-    public Long Formula.getId_() {
-        return this.id_;
-    }
-    
-    public void Formula.setId_(Long id) {
-        this.id_ = id;
-    }
     
     public Integer Formula.getVersion() {
         return this.version;
