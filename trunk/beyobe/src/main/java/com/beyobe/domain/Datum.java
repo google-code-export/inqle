@@ -77,7 +77,6 @@ public class Datum {
 
     private Double normalizedValue;
 
-    @ManyToOne
     private Unit unit;
 
     @NotNull
