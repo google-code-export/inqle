@@ -9,14 +9,10 @@ public interface Datum {
 	public static final Integer STATUS_ASKED_BUT_NO_ANSWER = -1;
 	public static final Integer STATUS_DECLINED_ANSWER = -2;
 	public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
-
-	public abstract Long getId();
-
-	public abstract void setId(Long id);
 	
-	public abstract String getUid();
+	public abstract String getId();
 
-	public abstract void setUid(String uid);
+	public abstract void setId(String uid);
 
 	public abstract Date getCreated();
 

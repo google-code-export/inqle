@@ -147,7 +147,7 @@ public class Day extends Composite implements Block, TapHandler {
 		if (question==null) return;
 		boolean foundQuestion = false;
 		for (TagButton tagButton: tagButtons) {
-			if(question.getUid().equals(tagButton.getQuestion().getUid())) {
+			if(question.getId().equals(tagButton.getQuestion().getId())) {
 				foundQuestion = true;
 				tagButton.setQuestion(question);
 			}

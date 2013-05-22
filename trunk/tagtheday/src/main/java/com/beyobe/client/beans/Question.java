@@ -71,8 +71,6 @@ public interface Question {
 
 	public abstract void setLang(String lang);
 
-	public abstract Long getId();
-
 	public abstract void setId(Long id);
 	
 	public abstract String getConceptUid();
@@ -93,9 +91,9 @@ public interface Question {
 
 	public abstract void setChoices(List<Choice> choices);
 
-	public abstract String getUid();
+	public abstract String getId();
 
-	public abstract void setUid(String uid);
+	public abstract void setId(String uid);
 
 	public abstract Measurement getMeasurement();
 
