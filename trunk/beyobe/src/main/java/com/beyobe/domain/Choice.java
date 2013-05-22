@@ -26,10 +26,13 @@ public class Choice {
     @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "HibernateUuidGenerator")
     private String id;
+    
+    private String text;
+
+	private String description;
 	
 	@NotNull
     @Column(updatable = false)
-    @Future
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "FF")
     private Date created = new Date();
@@ -44,10 +47,6 @@ public class Choice {
 
     private Long createdBy;
     
-    private String text;
-
-	private String description;
-	
 	@PrePersist
 	public void onPersist() {
         this.created=new java.util.Date();
