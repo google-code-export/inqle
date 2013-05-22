@@ -61,7 +61,7 @@ public class DataBus {
 	}
 	
 	public void addQuestionToKnownQuestions(Question question) {
-		knownQuestions.put(question.getUid(), question);
+		knownQuestions.put(question.getId(), question);
 	}
 	
 	public static String getDateString(Date date) {
@@ -193,7 +193,7 @@ public class DataBus {
 		for (Map.Entry<String, List<Datum>> entry: dataByDate.entrySet()) {
 			List<Datum> data = entry.getValue();
 			for (Datum datum: data) {
-				if (datum.getQuestionUid().equals(q.getUid())) {
+				if (datum.getQuestionUid().equals(q.getId())) {
 					String pastAnswer = datum.getTextValue();
 					if (! answers.contains(pastAnswer)) {
 						answers.add(pastAnswer);
@@ -210,7 +210,7 @@ public class DataBus {
 		if (! questionQueue.contains(question)) {
 			questionQueue.add(question);
 		}
-		knownQuestions.put(question.getUid(), question);
+		knownQuestions.put(question.getId(), question);
 		
 		//add the question to each day
 		for (Day day: getAllDays()) {
@@ -252,10 +252,10 @@ public class DataBus {
 	private void setKnownQuestions(List<Question> qq, List<Question> otherKnownQuestions) {
 //		knownQuestions = new HashMap<String, Question>();
 		for (Question q: qq) {
-			knownQuestions.put(q.getUid(), q);
+			knownQuestions.put(q.getId(), q);
 		}
 		for (Question q: otherKnownQuestions) {
-			knownQuestions.put(q.getUid(), q);
+			knownQuestions.put(q.getId(), q);
 		}
 		
 	}
