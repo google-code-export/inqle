@@ -2,6 +2,8 @@ package com.beyobe.domain;
 
 import java.util.Date;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -9,12 +11,13 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.beyobe.client.beans.Measurement;
 
 @RooJson
 @RooJavaBean
@@ -41,8 +44,25 @@ public class Question {
     @NotNull
     private String longForm;
     
+    private String lang;
+    
     @Value("0")
     private Long latency;
+    
+    @NotNull
+    @Value("100")
+    private Integer priority;
+    
+    private String conceptUid;
+    
+    @Enumerated(EnumType.STRING)
+    public Measurement measurement;
+    
+    private Double minValue;
+    
+    private Double maxValue;
+    
+    private Integer maxLength;
     
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -53,21 +73,7 @@ public class Question {
     @DateTimeFormat(style = "FF")
     private Date updated = new Date();
 
-    private String conceptUid;
-
     private Long updatedBy;
 
     private Long createdBy;
-
-    @NotNull
-    @Value("100")
-    private Integer priority;
-    
-    private String lang;
-    
-    private Double minValue;
-    
-    private Double maxValue;
-    
-    private Integer maxLength;
 }

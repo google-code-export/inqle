@@ -45,3 +45,7 @@ repository jpa --interface ~.repository.QuestionRepository --entity ~.domain.Que
 perform tests
 exit
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-20 06:18:16
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-20 22:23:21
+security setup
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-21 12:47:48
