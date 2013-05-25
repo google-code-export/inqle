@@ -3,9 +3,13 @@
 
 package com.beyobe.domain;
 
+import com.beyobe.client.beans.AnswerStatus;
+import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Unit;
-import com.beyobe.domain.Choice;
+import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
+import com.beyobe.domain.Formula;
+import com.beyobe.domain.QuestionConcept;
 import java.util.Date;
 
 privileged aspect Datum_Roo_JavaBean {
@@ -42,51 +46,51 @@ privileged aspect Datum_Roo_JavaBean {
         this.effectiveDate = effectiveDate;
     }
     
-    public String Datum.getQuestionUid() {
-        return this.questionUid;
+    public String Datum.getQuestionId() {
+        return this.questionId;
     }
     
-    public void Datum.setQuestionUid(String questionUid) {
-        this.questionUid = questionUid;
+    public void Datum.setQuestionId(String questionId) {
+        this.questionId = questionId;
     }
     
-    public String Datum.getConceptUid() {
-        return this.conceptUid;
+    public QuestionConcept Datum.getQuestionConcept() {
+        return this.questionConcept;
     }
     
-    public void Datum.setConceptUid(String conceptUid) {
-        this.conceptUid = conceptUid;
+    public void Datum.setQuestionConcept(QuestionConcept questionConcept) {
+        this.questionConcept = questionConcept;
     }
     
-    public String Datum.getFormulaUid() {
-        return this.formulaUid;
+    public Formula Datum.getFormula() {
+        return this.formula;
     }
     
-    public void Datum.setFormulaUid(String formulaUid) {
-        this.formulaUid = formulaUid;
+    public void Datum.setFormula(Formula formula) {
+        this.formula = formula;
     }
     
-    public Long Datum.getParticipantId() {
+    public String Datum.getParticipantId() {
         return this.participantId;
     }
     
-    public void Datum.setParticipantId(Long participantId) {
+    public void Datum.setParticipantId(String participantId) {
         this.participantId = participantId;
     }
     
-    public Long Datum.getUpdatedBy() {
+    public String Datum.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Datum.setUpdatedBy(Long updatedBy) {
+    public void Datum.setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
     
-    public Long Datum.getCreatedBy() {
+    public String Datum.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Datum.setCreatedBy(Long createdBy) {
+    public void Datum.setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
     
@@ -114,11 +118,11 @@ privileged aspect Datum_Roo_JavaBean {
         this.textValue = textValue;
     }
     
-    public Choice Datum.getChoice() {
+    public ChoiceConcept Datum.getChoice() {
         return this.choice;
     }
     
-    public void Datum.setChoice(Choice choice) {
+    public void Datum.setChoice(ChoiceConcept choice) {
         this.choice = choice;
     }
     
@@ -138,12 +142,20 @@ privileged aspect Datum_Roo_JavaBean {
         this.unit = unit;
     }
     
-    public Integer Datum.getStatus() {
-        return this.status;
+    public DataType Datum.getDataType() {
+        return this.dataType;
     }
     
-    public void Datum.setStatus(Integer status) {
-        this.status = status;
+    public void Datum.setDataType(DataType dataType) {
+        this.dataType = dataType;
+    }
+    
+    public AnswerStatus Datum.getAnswerStatus() {
+        return this.answerStatus;
+    }
+    
+    public void Datum.setAnswerStatus(AnswerStatus answerStatus) {
+        this.answerStatus = answerStatus;
     }
     
 }

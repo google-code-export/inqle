@@ -3,7 +3,10 @@
 
 package com.beyobe.domain;
 
+import com.beyobe.client.beans.DataType;
+import com.beyobe.client.beans.Measurement;
 import com.beyobe.domain.Question;
+import com.beyobe.domain.QuestionConcept;
 import java.util.Date;
 
 privileged aspect Question_Roo_JavaBean {
@@ -32,68 +35,36 @@ privileged aspect Question_Roo_JavaBean {
         this.longForm = longForm;
     }
     
-    public Long Question.getLatency() {
-        return this.latency;
-    }
-    
-    public void Question.setLatency(Long latency) {
-        this.latency = latency;
-    }
-    
-    public Date Question.getCreated() {
-        return this.created;
-    }
-    
-    public void Question.setCreated(Date created) {
-        this.created = created;
-    }
-    
-    public Date Question.getUpdated() {
-        return this.updated;
-    }
-    
-    public void Question.setUpdated(Date updated) {
-        this.updated = updated;
-    }
-    
-    public String Question.getConceptUid() {
-        return this.conceptUid;
-    }
-    
-    public void Question.setConceptUid(String conceptUid) {
-        this.conceptUid = conceptUid;
-    }
-    
-    public Long Question.getUpdatedBy() {
-        return this.updatedBy;
-    }
-    
-    public void Question.setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-    
-    public Long Question.getCreatedBy() {
-        return this.createdBy;
-    }
-    
-    public void Question.setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-    
-    public Integer Question.getPriority() {
-        return this.priority;
-    }
-    
-    public void Question.setPriority(Integer priority) {
-        this.priority = priority;
-    }
-    
     public String Question.getLang() {
         return this.lang;
     }
     
     public void Question.setLang(String lang) {
         this.lang = lang;
+    }
+    
+    public QuestionConcept Question.getQuestionConcept() {
+        return this.questionConcept;
+    }
+    
+    public void Question.setQuestionConcept(QuestionConcept questionConcept) {
+        this.questionConcept = questionConcept;
+    }
+    
+    public DataType Question.getDataType() {
+        return this.dataType;
+    }
+    
+    public void Question.setDataType(DataType dataType) {
+        this.dataType = dataType;
+    }
+    
+    public Measurement Question.getMeasurement() {
+        return this.measurement;
+    }
+    
+    public void Question.setMeasurement(Measurement measurement) {
+        this.measurement = measurement;
     }
     
     public Double Question.getMinValue() {
@@ -118,6 +89,54 @@ privileged aspect Question_Roo_JavaBean {
     
     public void Question.setMaxLength(Integer maxLength) {
         this.maxLength = maxLength;
+    }
+    
+    public Long Question.getLatency() {
+        return this.latency;
+    }
+    
+    public void Question.setLatency(Long latency) {
+        this.latency = latency;
+    }
+    
+    public Integer Question.getPriority() {
+        return this.priority;
+    }
+    
+    public void Question.setPriority(Integer priority) {
+        this.priority = priority;
+    }
+    
+    public Date Question.getCreated() {
+        return this.created;
+    }
+    
+    public void Question.setCreated(Date created) {
+        this.created = created;
+    }
+    
+    public Date Question.getUpdated() {
+        return this.updated;
+    }
+    
+    public void Question.setUpdated(Date updated) {
+        this.updated = updated;
+    }
+    
+    public Long Question.getUpdatedBy() {
+        return this.updatedBy;
+    }
+    
+    public void Question.setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+    
+    public Long Question.getCreatedBy() {
+        return this.createdBy;
+    }
+    
+    public void Question.setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
     }
     
 }

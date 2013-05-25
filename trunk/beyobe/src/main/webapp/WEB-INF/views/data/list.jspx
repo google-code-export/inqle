@@ -7,9 +7,9 @@
             <table:column date="true" dateTimePattern="${datum_created_date_format}" id="c_com_beyobe_domain_Datum_created" property="created" z="uJIn/oMMzsSoPP0HeXFFj9TGW+k="/>
             <table:column date="true" dateTimePattern="${datum_updated_date_format}" id="c_com_beyobe_domain_Datum_updated" property="updated" z="7i5WARU6bDAT4x/4osmSguHgzUs="/>
             <table:column date="true" dateTimePattern="${datum_effectivedate_date_format}" id="c_com_beyobe_domain_Datum_effectiveDate" property="effectiveDate" z="PKoFz57U7SbBQF7R83BJphbpZI4="/>
-            <table:column id="c_com_beyobe_domain_Datum_questionUid" property="questionUid" z="HL7GAkw2uVR06FNStTv578TIMgg="/>
-            <table:column id="c_com_beyobe_domain_Datum_conceptUid" property="conceptUid" z="0+4ibG0gT2dgtlhE9s6gqX8lPmI="/>
-            <table:column id="c_com_beyobe_domain_Datum_formulaUid" property="formulaUid" z="55DTYq3ooZWQueEAG+0yVvxdDns="/>
+            <table:column id="c_com_beyobe_domain_Datum_questionConcept" property="questionConcept" z="uYeSvK1MBNXoWi3V53daAAfpOCs="/>
+            <table:column id="c_com_beyobe_domain_Datum_formula" property="formula" z="y4McCvyGvkTg8K9KJiQxc2VKyvA="/>
+            <table:column id="c_com_beyobe_domain_Datum_questionId" property="questionId" z="r1yFOnB85HQ+noLSZwjDDW/OGq0="/>
         </table:table>
     </page:list>
 </div>

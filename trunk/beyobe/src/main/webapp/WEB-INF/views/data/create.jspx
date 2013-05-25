@@ -3,21 +3,22 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_beyobe_domain_Datum" modelAttribute="datum" path="/data" render="${empty dependencies}" z="U6iT724Y5el/IQK8n/xj+TYCEcc=">
-        <field:datetime dateTimePattern="${datum_updated_date_format}" field="updated" id="c_com_beyobe_domain_Datum_updated" required="true" z="bWo9xLe96T1EBgop8zCkEXdgbjk="/>
+        <field:datetime dateTimePattern="${datum_updated_date_format}" field="updated" id="c_com_beyobe_domain_Datum_updated" render="false" required="true" z="user-managed"/>
         <field:datetime dateTimePattern="${datum_effectivedate_date_format}" field="effectiveDate" id="c_com_beyobe_domain_Datum_effectiveDate" required="true" z="Cd7rMRnN/ywb0KUJKSzKWo8QnHQ="/>
-        <field:input field="questionUid" id="c_com_beyobe_domain_Datum_questionUid" z="lapejlyHtyrFgIxglcqIuJlT9fs="/>
-        <field:input field="conceptUid" id="c_com_beyobe_domain_Datum_conceptUid" z="e+mvecVyd3jBWopGnI2l7Yz2RI8="/>
-        <field:input field="formulaUid" id="c_com_beyobe_domain_Datum_formulaUid" z="cqfLb1qXDpaPsB1JVauLij8p8CI="/>
-        <field:input field="participantId" id="c_com_beyobe_domain_Datum_participantId" validationMessageCode="field_invalid_integer" z="H34kkrvqjwbWt3XgJepd3L0mZjo="/>
-        <field:input field="updatedBy" id="c_com_beyobe_domain_Datum_updatedBy" validationMessageCode="field_invalid_integer" z="NNUTp2wOOIVIKwpv34jbOOjLXIw="/>
-        <field:input field="createdBy" id="c_com_beyobe_domain_Datum_createdBy" validationMessageCode="field_invalid_integer" z="VJ/RKUumeNfQOTx2PnVR5xJDhlo="/>
         <field:input field="numericValue" id="c_com_beyobe_domain_Datum_numericValue" validationMessageCode="field_invalid_number" z="D2Z+6b42J0QJEXpiX9swCExKInQ="/>
         <field:input field="integerValue" id="c_com_beyobe_domain_Datum_integerValue" validationMessageCode="field_invalid_integer" z="FTuQh6H7PtdNL/Kk/kKhKdX0i1M="/>
         <field:input field="textValue" id="c_com_beyobe_domain_Datum_textValue" required="true" z="ZusfmSEhG7ouibiwHQe6oKC2Aag="/>
-        <field:select field="choice" id="c_com_beyobe_domain_Datum_choice" itemValue="id" items="${choices}" path="/choices" z="Rhu5qxBtTGGoxGkmAjLHsgTFo4A="/>
+        <field:select field="choice" id="c_com_beyobe_domain_Datum_choice" itemValue="id" items="${choiceconcepts}" path="/choiceconcepts" z="Pe7fqORqS2I9TuCWLhlVLghbGoI="/>
         <field:input field="normalizedValue" id="c_com_beyobe_domain_Datum_normalizedValue" validationMessageCode="field_invalid_number" z="Vx4A8B5B8XiH3NL7uOdZsCmdX2Y="/>
         <field:select field="unit" id="c_com_beyobe_domain_Datum_unit" items="${units}" path="units" z="kPhJy3wHu4YtxQTDOkOGq5lsAKM="/>
-        <field:input field="status" id="c_com_beyobe_domain_Datum_status" required="true" validationMessageCode="field_invalid_integer" z="QouuphRzkGEbZSo4mqql3uSBViA="/>
+        <field:select field="questionConcept" id="c_com_beyobe_domain_Datum_questionConcept" itemValue="id" items="${questionconcepts}" path="/questionconcepts" z="MtK8MD5lKia/JV0vI4RHis72jMU="/>
+        <field:select field="formula" id="c_com_beyobe_domain_Datum_formula" itemValue="id" items="${formulas}" path="/formulas" z="cjFdwjK2wzt87W571aJOsD0eohs="/>
+        <field:input field="updatedBy" id="c_com_beyobe_domain_Datum_updatedBy" render="false" z="user-managed"/>
+        <field:input field="createdBy" id="c_com_beyobe_domain_Datum_createdBy" render="false" z="user-managed"/>
+        <field:input field="questionId" id="c_com_beyobe_domain_Datum_questionId" z="z2bdp7z7xmlprKXMzp14OyJpvPE="/>
+        <field:input field="participantId" id="c_com_beyobe_domain_Datum_participantId" required="true" z="k/IN39LI5l60E0Kn/2Y0wilHLzA="/>
+        <field:select field="dataType" id="c_com_beyobe_domain_Datum_dataType" items="${datatypes}" path="datatypes" z="dw+cpqfjmB7KlbVTm0LZSBGlt7o="/>
+        <field:select field="answerStatus" id="c_com_beyobe_domain_Datum_answerStatus" items="${answerstatuses}" path="answerstatuses" z="l8/DX4wq5kJMbCcUywrqXKpRG1c="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Datum" render="${not empty dependencies}" z="Tdz9Tyrw/gupSGcxfGKwhuIUIpw="/>
 </div>

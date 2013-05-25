@@ -3,10 +3,14 @@
 
 package com.beyobe.web;
 
+import com.beyobe.client.beans.DataType;
+import com.beyobe.client.beans.Measurement;
 import com.beyobe.domain.Question;
+import com.beyobe.domain.QuestionConcept;
 import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.QuestionController;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
@@ -101,6 +105,9 @@ privileged aspect QuestionController_Roo_Controller {
     void QuestionController.populateEditForm(Model uiModel, Question question) {
         uiModel.addAttribute("question", question);
         addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("datatypes", Arrays.asList(DataType.values()));
+        uiModel.addAttribute("measurements", Arrays.asList(Measurement.values()));
+        uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
     
     String QuestionController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

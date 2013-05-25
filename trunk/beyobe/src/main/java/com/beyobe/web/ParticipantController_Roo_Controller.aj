@@ -3,9 +3,11 @@
 
 package com.beyobe.web;
 
+import com.beyobe.client.beans.UserRole;
 import com.beyobe.domain.Participant;
 import com.beyobe.web.ParticipantController;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
@@ -96,6 +98,7 @@ privileged aspect ParticipantController_Roo_Controller {
     void ParticipantController.populateEditForm(Model uiModel, Participant participant) {
         uiModel.addAttribute("participant", participant);
         addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("userroles", Arrays.asList(UserRole.values()));
     }
     
     String ParticipantController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

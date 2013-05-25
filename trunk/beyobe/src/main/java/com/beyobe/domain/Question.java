@@ -5,8 +5,13 @@ import java.util.Date;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -17,7 +22,10 @@ import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+
+import flexjson.JSONSerializer;
 
 @RooJson
 @RooJavaBean
@@ -46,14 +54,11 @@ public class Question {
     
     private String lang;
     
-    @Value("0")
-    private Long latency;
+    @ManyToOne
+    private QuestionConcept questionConcept;
     
-    @NotNull
-    @Value("100")
-    private Integer priority;
-    
-    private String conceptUid;
+    @Enumerated(EnumType.STRING)
+    private DataType dataType;
     
     @Enumerated(EnumType.STRING)
     public Measurement measurement;
@@ -62,7 +67,15 @@ public class Question {
     
     private Double maxValue;
     
+    @Min(1)
+    @Max(4000)
     private Integer maxLength;
+    
+    @Value("0")
+    private Long latency;
+    
+    @Value("100")
+    private Integer priority;
     
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -76,4 +89,24 @@ public class Question {
     private Long updatedBy;
 
     private Long createdBy;
+    
+    public String toJsonForClient() {
+	   return new JSONSerializer()
+	   	.exclude("*.class")
+	   	.exclude("created")
+	   	.exclude("updated")
+	   	.exclude("createdBy")
+	   	.exclude("updatedBy")
+	   	.serialize(this);
+	}
+    
+	@PrePersist
+	public void onPersist() {
+        this.created=new java.util.Date();
+    }
+	
+	@PreUpdate
+	public void onUpdate() {
+        this.updated=new java.util.Date();
+    }
 }

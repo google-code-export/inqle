@@ -4,10 +4,10 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_beyobe_domain_Formula" modelAttribute="formula" path="/formulas" render="${empty dependencies}" z="/Fei5ADlNpiaF2mx+eTG2hm+gMQ=">
         <field:datetime dateTimePattern="${formula_updated_date_format}" field="updated" future="true" id="c_com_beyobe_domain_Formula_updated" required="true" z="d5qb9849UH8yDW3UVTIc9cRnO2Q="/>
-        <field:select field="concept" id="c_com_beyobe_domain_Formula_concept" itemValue="id" items="${concepts}" path="/concepts" required="true" z="WXJWnhP9ben30eS/E7saD+QgAuI="/>
         <field:input field="expression" id="c_com_beyobe_domain_Formula_expression" required="true" z="HJ3AXzxL6E4YtAXLAXCMwi8rG9A="/>
         <field:input field="updatedBy" id="c_com_beyobe_domain_Formula_updatedBy" validationMessageCode="field_invalid_integer" z="NiLDI/D53c59yYIlq6ZldgqE9AE="/>
         <field:input field="createdBy" id="c_com_beyobe_domain_Formula_createdBy" validationMessageCode="field_invalid_integer" z="6x56PRFE3cRH2orGd59S7fYzSzw="/>
+        <field:select field="concept" id="c_com_beyobe_domain_Formula_concept" itemValue="id" items="${questionconcepts}" path="/questionconcepts" required="true" z="bNHLWshb1VhLb7RtqhqNz/8rfQY="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Formula" render="${not empty dependencies}" z="3TLh9PzOolnVyDuLXXIfT4HjjNI="/>
 </div>

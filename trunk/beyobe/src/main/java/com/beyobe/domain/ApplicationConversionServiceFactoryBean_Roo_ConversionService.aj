@@ -5,12 +5,12 @@ package com.beyobe.domain;
 
 import com.beyobe.domain.ApplicationConversionServiceFactoryBean;
 import com.beyobe.domain.Choice;
-import com.beyobe.domain.ChoiceTranslation;
-import com.beyobe.domain.Concept;
+import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
+import com.beyobe.domain.QuestionConcept;
 import com.beyobe.domain.Subscription;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.repository.QuestionRepository;
@@ -32,7 +32,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Choice, String> ApplicationConversionServiceFactoryBean.getChoiceToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Choice, java.lang.String>() {
             public String convert(Choice choice) {
-                return new StringBuilder().append(choice.getCreated()).append(' ').append(choice.getUpdated()).append(' ').append(choice.getUpdatedBy()).append(' ').append(choice.getCreatedBy()).toString();
+                return new StringBuilder().append(choice.getCreated()).append(' ').append(choice.getUpdated()).append(' ').append(choice.getLang()).append(' ').append(choice.getUpdatedBy()).toString();
             }
         };
     }
@@ -45,34 +45,18 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
-    public Converter<ChoiceTranslation, String> ApplicationConversionServiceFactoryBean.getChoiceTranslationToStringConverter() {
-        return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.ChoiceTranslation, java.lang.String>() {
-            public String convert(ChoiceTranslation choiceTranslation) {
-                return new StringBuilder().append(choiceTranslation.getCreated()).append(' ').append(choiceTranslation.getUpdated()).append(' ').append(choiceTranslation.getLang()).append(' ').append(choiceTranslation.getUpdatedBy()).toString();
+    public Converter<ChoiceConcept, String> ApplicationConversionServiceFactoryBean.getChoiceConceptToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.ChoiceConcept, java.lang.String>() {
+            public String convert(ChoiceConcept choiceConcept) {
+                return new StringBuilder().append(choiceConcept.getKey()).append(' ').append(choiceConcept.getCreated()).append(' ').append(choiceConcept.getUpdated()).append(' ').append(choiceConcept.getUpdatedBy()).toString();
             }
         };
     }
     
-    public Converter<String, ChoiceTranslation> ApplicationConversionServiceFactoryBean.getIdToChoiceTranslationConverter() {
-        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.ChoiceTranslation>() {
-            public com.beyobe.domain.ChoiceTranslation convert(java.lang.String id) {
-                return ChoiceTranslation.findChoiceTranslation(id);
-            }
-        };
-    }
-    
-    public Converter<Concept, String> ApplicationConversionServiceFactoryBean.getConceptToStringConverter() {
-        return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Concept, java.lang.String>() {
-            public String convert(Concept concept) {
-                return new StringBuilder().append(concept.getCreated()).append(' ').append(concept.getUpdated()).append(' ').append(concept.getConceptkey()).append(' ').append(concept.getUpdatedBy()).toString();
-            }
-        };
-    }
-    
-    public Converter<String, Concept> ApplicationConversionServiceFactoryBean.getIdToConceptConverter() {
-        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.Concept>() {
-            public com.beyobe.domain.Concept convert(java.lang.String id) {
-                return Concept.findConcept(id);
+    public Converter<String, ChoiceConcept> ApplicationConversionServiceFactoryBean.getIdToChoiceConceptConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.ChoiceConcept>() {
+            public com.beyobe.domain.ChoiceConcept convert(java.lang.String id) {
+                return ChoiceConcept.findChoiceConcept(id);
             }
         };
     }
@@ -80,7 +64,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Datum, String> ApplicationConversionServiceFactoryBean.getDatumToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Datum, java.lang.String>() {
             public String convert(Datum datum) {
-                return new StringBuilder().append(datum.getCreated()).append(' ').append(datum.getUpdated()).append(' ').append(datum.getEffectiveDate()).append(' ').append(datum.getQuestionUid()).toString();
+                return new StringBuilder().append(datum.getCreated()).append(' ').append(datum.getUpdated()).append(' ').append(datum.getEffectiveDate()).append(' ').append(datum.getQuestionId()).toString();
             }
         };
     }
@@ -112,7 +96,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Participant, String> ApplicationConversionServiceFactoryBean.getParticipantToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Participant, java.lang.String>() {
             public String convert(Participant participant) {
-                return new StringBuilder().append(participant.getCreated()).append(' ').append(participant.getUpdated()).append(' ').append(participant.getUpdatedBy()).append(' ').append(participant.getCreatedBy()).toString();
+                return new StringBuilder().append(participant.getUsername()).append(' ').append(participant.getPassword()).append(' ').append(participant.getCreated()).append(' ').append(participant.getUpdated()).toString();
             }
         };
     }
@@ -128,7 +112,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Question, String> ApplicationConversionServiceFactoryBean.getQuestionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Question, java.lang.String>() {
             public String convert(Question question) {
-                return new StringBuilder().append(question.getAbbreviation()).append(' ').append(question.getLongForm()).append(' ').append(question.getLatency()).append(' ').append(question.getCreated()).toString();
+                return new StringBuilder().append(question.getAbbreviation()).append(' ').append(question.getLongForm()).append(' ').append(question.getLang()).append(' ').append(question.getMinValue()).toString();
             }
         };
     }
@@ -137,6 +121,22 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.Question>() {
             public com.beyobe.domain.Question convert(java.lang.String id) {
                 return questionRepository.findOne(id);
+            }
+        };
+    }
+    
+    public Converter<QuestionConcept, String> ApplicationConversionServiceFactoryBean.getQuestionConceptToStringConverter() {
+        return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.QuestionConcept, java.lang.String>() {
+            public String convert(QuestionConcept questionConcept) {
+                return new StringBuilder().append(questionConcept.getKey()).append(' ').append(questionConcept.getCreated()).append(' ').append(questionConcept.getUpdated()).append(' ').append(questionConcept.getUpdatedBy()).toString();
+            }
+        };
+    }
+    
+    public Converter<String, QuestionConcept> ApplicationConversionServiceFactoryBean.getIdToQuestionConceptConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.QuestionConcept>() {
+            public com.beyobe.domain.QuestionConcept convert(java.lang.String id) {
+                return QuestionConcept.findQuestionConcept(id);
             }
         };
     }
@@ -160,10 +160,8 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public void ApplicationConversionServiceFactoryBean.installLabelConverters(FormatterRegistry registry) {
         registry.addConverter(getChoiceToStringConverter());
         registry.addConverter(getIdToChoiceConverter());
-        registry.addConverter(getChoiceTranslationToStringConverter());
-        registry.addConverter(getIdToChoiceTranslationConverter());
-        registry.addConverter(getConceptToStringConverter());
-        registry.addConverter(getIdToConceptConverter());
+        registry.addConverter(getChoiceConceptToStringConverter());
+        registry.addConverter(getIdToChoiceConceptConverter());
         registry.addConverter(getDatumToStringConverter());
         registry.addConverter(getIdToDatumConverter());
         registry.addConverter(getFormulaToStringConverter());
@@ -172,6 +170,8 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         registry.addConverter(getIdToParticipantConverter());
         registry.addConverter(getQuestionToStringConverter());
         registry.addConverter(getIdToQuestionConverter());
+        registry.addConverter(getQuestionConceptToStringConverter());
+        registry.addConverter(getIdToQuestionConceptConverter());
         registry.addConverter(getSubscriptionToStringConverter());
         registry.addConverter(getIdToSubscriptionConverter());
     }

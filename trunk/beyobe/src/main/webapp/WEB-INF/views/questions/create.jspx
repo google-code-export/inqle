@@ -6,15 +6,17 @@
         <field:input field="abbreviation" id="c_com_beyobe_domain_Question_abbreviation" required="true" z="xHNDqc8YyGvU/uWLYItyUbw+e0Y="/>
         <field:input field="longForm" id="c_com_beyobe_domain_Question_longForm" required="true" z="WlyA8f9HGqZC6Ga8EWeO/6y0dCk="/>
         <field:input field="latency" id="c_com_beyobe_domain_Question_latency" validationMessageCode="field_invalid_integer" z="47ppgIa4IrEIYKiew6l2hJM9n34="/>
-        <field:datetime render="false" dateTimePattern="${question_updated_date_format}" field="updated" id="c_com_beyobe_domain_Question_updated" z="user-managed"/>
-        <field:input field="conceptUid" id="c_com_beyobe_domain_Question_conceptUid" z="yrwXYQbMPUM1hK6ohZZhCoLesQ0="/>
-        <field:input render="false" field="updatedBy" id="c_com_beyobe_domain_Question_updatedBy" validationMessageCode="field_invalid_integer" z="user-managed"/>
-        <field:input render="false" field="createdBy" id="c_com_beyobe_domain_Question_createdBy" validationMessageCode="field_invalid_integer" z="user-managed"/>
-        <field:input field="priority" id="c_com_beyobe_domain_Question_priority" required="true" validationMessageCode="field_invalid_integer" z="aDKyx0JaZq4f8WUXowxIPa1uc6w="/>
+        <field:datetime dateTimePattern="${question_updated_date_format}" field="updated" id="c_com_beyobe_domain_Question_updated" render="false" z="user-managed"/>
+        <field:input field="updatedBy" id="c_com_beyobe_domain_Question_updatedBy" render="false" validationMessageCode="field_invalid_integer" z="user-managed"/>
+        <field:input field="createdBy" id="c_com_beyobe_domain_Question_createdBy" render="false" validationMessageCode="field_invalid_integer" z="user-managed"/>
+        <field:input field="priority" id="c_com_beyobe_domain_Question_priority" validationMessageCode="field_invalid_integer" z="jSsuarCouTmeifSVY0oYG8YXjBI="/>
         <field:input field="lang" id="c_com_beyobe_domain_Question_lang" z="WeeL+18pq/GdCtxzZ+vZoiDI2Nc="/>
         <field:input field="minValue" id="c_com_beyobe_domain_Question_minValue" validationMessageCode="field_invalid_number" z="TBRmhoySmJvtXOzCkg3fRAp58Fc="/>
         <field:input field="maxValue" id="c_com_beyobe_domain_Question_maxValue" validationMessageCode="field_invalid_number" z="E/Ut4YnBOBaBdYG1C9i14qPYZjk="/>
-        <field:input field="maxLength" id="c_com_beyobe_domain_Question_maxLength" validationMessageCode="field_invalid_integer" z="AyifN9loLTDkd3TVEH0L+IlCu+A="/>
+        <field:input field="maxLength" id="c_com_beyobe_domain_Question_maxLength" max="4000" min="1" required="true" validationMessageCode="field_invalid_integer" z="eS2cy5FAsyioWB0TkWa8hb+owYA="/>
+        <field:select field="measurement" id="c_com_beyobe_domain_Question_measurement" items="${measurements}" path="measurements" z="eSfCS9GHpwgF/th05o3vi3pn8IM="/>
+        <field:select field="questionConcept" id="c_com_beyobe_domain_Question_questionConcept" itemValue="id" items="${questionconcepts}" path="/questionconcepts" z="chFO9zDyH8Ca9rJpjTTCWPg4H6M="/>
+        <field:select field="dataType" id="c_com_beyobe_domain_Question_dataType" items="${datatypes}" path="datatypes" z="PA2GWlkeK02iQlFVt0HczBWqLlw="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Question" render="${not empty dependencies}" z="zVSrTN57S9HBxOxQ5oGRiboALBE="/>
 </div>

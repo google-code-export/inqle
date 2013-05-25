@@ -3,6 +3,7 @@
 
 package com.beyobe.domain;
 
+import com.beyobe.client.beans.UserRole;
 import com.beyobe.domain.Participant;
 import java.util.Date;
 
@@ -14,6 +15,34 @@ privileged aspect Participant_Roo_JavaBean {
     
     public void Participant.setId(String id) {
         this.id = id;
+    }
+    
+    public String Participant.getUsername() {
+        return this.username;
+    }
+    
+    public void Participant.setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String Participant.getPassword() {
+        return this.password;
+    }
+    
+    public UserRole Participant.getRole() {
+        return this.role;
+    }
+    
+    public void Participant.setRole(UserRole role) {
+        this.role = role;
+    }
+    
+    public Boolean Participant.getEnabled() {
+        return this.enabled;
+    }
+    
+    public void Participant.setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
     
     public Date Participant.getCreated() {
@@ -46,6 +75,14 @@ privileged aspect Participant_Roo_JavaBean {
     
     public void Participant.setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public String Participant.getSessionKey() {
+        return this.sessionKey;
+    }
+    
+    public void Participant.setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
     }
     
 }

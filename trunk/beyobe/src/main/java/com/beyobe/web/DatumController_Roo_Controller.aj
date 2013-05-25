@@ -3,9 +3,13 @@
 
 package com.beyobe.web;
 
+import com.beyobe.client.beans.AnswerStatus;
+import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Unit;
-import com.beyobe.domain.Choice;
+import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
+import com.beyobe.domain.Formula;
+import com.beyobe.domain.QuestionConcept;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.web.DatumController;
 import java.io.UnsupportedEncodingException;
@@ -105,8 +109,12 @@ privileged aspect DatumController_Roo_Controller {
     void DatumController.populateEditForm(Model uiModel, Datum datum) {
         uiModel.addAttribute("datum", datum);
         addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("answerstatuses", Arrays.asList(AnswerStatus.values()));
+        uiModel.addAttribute("datatypes", Arrays.asList(DataType.values()));
         uiModel.addAttribute("units", Arrays.asList(Unit.values()));
-        uiModel.addAttribute("choices", Choice.findAllChoices());
+        uiModel.addAttribute("choiceconcepts", ChoiceConcept.findAllChoiceConcepts());
+        uiModel.addAttribute("formulas", Formula.findAllFormulas());
+        uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
     
     String DatumController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
