@@ -8,7 +8,7 @@
             <table:column id="c_com_beyobe_domain_Subscription_createdBy" property="createdBy" z="ygDymVWLRZSzL5QH5rSEw8PGLFM="/>
             <table:column id="c_com_beyobe_domain_Subscription_question" property="question" z="npd6gF0h88oAiEB2yw8PlvcXTvA="/>
             <table:column id="c_com_beyobe_domain_Subscription_participant" property="participant" z="xyYoHLVqvS95YxnUIxTK9fKKwPM="/>
-            <table:column id="c_com_beyobe_domain_Subscription_rank" property="rank" z="yXG+R3h0R6PIsdJC0JmXPyP24Cw="/>
+            <table:column id="c_com_beyobe_domain_Subscription_subscriptionType" property="subscriptionType" z="Xs6fgSHsxNsawbpm7Pkgh+XxsnY="/>
         </table:table>
     </page:list>
 </div>

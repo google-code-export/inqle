@@ -6,6 +6,6 @@
         <field:input field="createdBy" id="c_com_beyobe_domain_Subscription_createdBy" validationMessageCode="field_invalid_integer" z="pCyruQU0mhjHw2LHTLVIPwXq9Pc="/>
         <field:select field="question" id="c_com_beyobe_domain_Subscription_question" itemValue="id" items="${questions}" path="/questions" required="true" z="M+ZeAJGm7FNT4lsNB5RpbTFDV7Y="/>
         <field:select field="participant" id="c_com_beyobe_domain_Subscription_participant" itemValue="id" items="${participants}" path="/participants" required="true" z="L6bdCW8cCuJRuwJ8MAmBSBFqbAU="/>
-        <field:input field="rank" id="c_com_beyobe_domain_Subscription_rank" required="true" z="dNbdcskWQg6Gi0o5CajRaKYaoxg="/>
+        <field:select field="subscriptionType" id="c_com_beyobe_domain_Subscription_subscriptionType" items="${subscriptiontypes}" path="subscriptiontypes" z="thxPxAuUKhCgKuVNod9TODkcGVU="/>
     </form:update>
 </div>

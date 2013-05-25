@@ -90,7 +90,7 @@ public class Question {
 
     private Long createdBy;
     
-    public String toJsonForClient() {
+    public String toJson() {
 	   return new JSONSerializer()
 	   	.exclude("*.class")
 	   	.exclude("created")

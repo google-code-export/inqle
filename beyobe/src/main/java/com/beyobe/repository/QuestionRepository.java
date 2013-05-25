@@ -2,6 +2,7 @@ package com.beyobe.repository;
 
 import java.util.List;
 
+import com.beyobe.client.beans.SubscriptionType;
 import com.beyobe.domain.Question;
 
 import org.springframework.data.jpa.repository.Query;
@@ -19,10 +20,10 @@ public interface QuestionRepository {
 	 * @return list of questions, ordered by question priority then creation date
 	 */
 	@Query("select distinct q from Question q, Subscription s " +
-			" where s.participant.id=?1 and s.question.id = q.id" +
+			" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 " +
 			" order by q.priority asc, s.created desc "
 			)
-	List<Question> getSubscribedQuestions(String participantId);
+	List<Question> getSubscribedQuestions(String participantId, String subscriptionType);
 	
 
 //	/**

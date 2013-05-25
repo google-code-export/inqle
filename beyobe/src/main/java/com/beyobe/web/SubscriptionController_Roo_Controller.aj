@@ -3,6 +3,7 @@
 
 package com.beyobe.web;
 
+import com.beyobe.client.beans.SubscriptionType;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.Subscription;
@@ -10,6 +11,7 @@ import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.SubscriptionController;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -112,6 +114,7 @@ privileged aspect SubscriptionController_Roo_Controller {
     void SubscriptionController.populateEditForm(Model uiModel, Subscription subscription) {
         uiModel.addAttribute("subscription", subscription);
         addDateTimeFormatPatterns(uiModel);
+        uiModel.addAttribute("subscriptiontypes", Arrays.asList(SubscriptionType.values()));
         uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questions", questionRepository.findAll());
     }
