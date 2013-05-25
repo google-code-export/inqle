@@ -3,12 +3,24 @@ package com.beyobe.repository;
 import java.util.List;
 
 import com.beyobe.domain.Datum;
+import com.beyobe.domain.Question;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.roo.addon.layers.repository.jpa.RooJpaRepository;
 
 @RooJpaRepository(domainType = Datum.class)
 public interface DatumRepository {
+	
+	/**
+	 * Get a list of questions to which this participant has subscribed
+	 * @param participantId
+	 * @return list of questions, ordered by question priority then creation date
+	 */
+	@Query("select distinct d from Datum d " +
+			" where d.participant.id=?1 " +
+			" order by d.effectiveDate desc "
+			)
+	List<Datum> getParticipantData(String participantId);
 //	/**
 //	 * Get all latest answered data for this participant
 //	 * @param participantId

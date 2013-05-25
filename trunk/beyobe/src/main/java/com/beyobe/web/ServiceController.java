@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.beyobe.client.beans.Parcel;
+import com.beyobe.client.beans.SubscriptionType;
+import com.beyobe.domain.Datum;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.repository.DatumRepository;
@@ -62,20 +64,27 @@ public class ServiceController {
 			log.warn("Login failure: username=" + username + "; passwordHash=" + passwordHash);
 			return null;
 		}
-	 	//prepare the parcel for return
-	 	Parcel returnParcel = new Parcel();
-	 	//new session: use UUID
-	 	returnParcel.setSessionToken(UUID.randomUUID().toString());
-	 	
 	 	//save the session token for future requests
-	 	participant.setSessionToken(returnParcel.getSessionToken());
+	 	String sessionToken = UUID.randomUUID().toString();
+	 	participant.setSessionToken(sessionToken);
 	 	participant.setClientIpAddress(clientIpAddress);
 	 	participant.merge();
 	 	
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	returnParcel.setSessionToken(sessionToken);
+	 	
+	 	List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY.name());
+		returnParcel.setQuestionQueue(questionQueue);
+		
+		List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE.name());
+		returnParcel.setOtherKnownQuestions(inactiveQuestions);
+		
+	 	List<Datum> data = datumRepository.getParticipantData(participant.getId());
+	 	returnParcel.setData(data);
+	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
-	    List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId());
-	    returnParcel.setQuestionQueue(questionQueue);
 	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
 	}
 	 

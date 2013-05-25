@@ -144,7 +144,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Subscription, String> ApplicationConversionServiceFactoryBean.getSubscriptionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Subscription, java.lang.String>() {
             public String convert(Subscription subscription) {
-                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getCreatedBy()).append(' ').append(subscription.getRank()).toString();
+                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getCreatedBy()).toString();
             }
         };
     }

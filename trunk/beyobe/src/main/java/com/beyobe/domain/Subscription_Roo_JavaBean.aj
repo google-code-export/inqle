@@ -3,6 +3,7 @@
 
 package com.beyobe.domain;
 
+import com.beyobe.client.beans.SubscriptionType;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.Subscription;
@@ -50,12 +51,12 @@ privileged aspect Subscription_Roo_JavaBean {
         this.participant = participant;
     }
     
-    public int Subscription.getRank() {
-        return this.rank;
+    public SubscriptionType Subscription.getSubscriptionType() {
+        return this.subscriptionType;
     }
     
-    public void Subscription.setRank(int rank) {
-        this.rank = rank;
+    public void Subscription.setSubscriptionType(SubscriptionType subscriptionType) {
+        this.subscriptionType = subscriptionType;
     }
     
 }

@@ -12,10 +12,6 @@ import java.util.List;
 
 privileged aspect Datum_Roo_Json {
     
-    public String Datum.toJson() {
-        return new JSONSerializer().exclude("*.class").serialize(this);
-    }
-    
     public static Datum Datum.fromJsonToDatum(String json) {
         return new JSONDeserializer<Datum>().use(null, Datum.class).deserialize(json);
     }
