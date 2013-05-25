@@ -27,7 +27,7 @@ import org.springframework.security.authentication.encoding.MessageDigestPasswor
 @RooJavaBean
 @RooToString
 @RooJson
-@RooJpaActiveRecord(finders = { "findParticipantsByUsernameEqualsAndPasswordEquals" })
+@RooJpaActiveRecord(finders = { "findParticipantsByUsernameEqualsAndPasswordEquals", "findParticipantsBySessionTokenEqualsAndClientIpAddressEquals" })
 public class Participant {
 
     @Autowired

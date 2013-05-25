@@ -38,7 +38,7 @@ public class Subscription {
     @DateTimeFormat(style = "FF")
     private Date created = new Date();
 
-    private Long createdBy;
+    private String createdBy;
     
     @NotNull
     @ManyToOne
