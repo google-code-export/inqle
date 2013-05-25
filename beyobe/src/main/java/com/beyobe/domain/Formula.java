@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Future;
@@ -42,7 +44,7 @@ public class Formula {
 
     @NotNull
     @ManyToOne
-    private Concept concept;
+    private QuestionConcept concept;
 
     @NotNull
     private String expression;
@@ -50,5 +52,15 @@ public class Formula {
     private Long updatedBy;
 
     private Long createdBy;
+    
+	@PrePersist
+	public void onPersist() {
+        this.created=new java.util.Date();
+    }
+	
+	@PreUpdate
+	public void onUpdate() {
+        this.updated=new java.util.Date();
+    }
 
 }

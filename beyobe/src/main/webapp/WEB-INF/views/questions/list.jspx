@@ -6,10 +6,10 @@
         <table:table data="${questions}" id="l_com_beyobe_domain_Question" path="/questions" z="OKgAjLnPLGfxGwOdxec6KcgczBQ=">
             <table:column id="c_com_beyobe_domain_Question_abbreviation" property="abbreviation" z="SQvsHZWl7XXaHgov28NMLpcLDys="/>
             <table:column id="c_com_beyobe_domain_Question_longForm" property="longForm" z="WGdWXVlD6VQ626cxoioAo1F5ja4="/>
-            <table:column id="c_com_beyobe_domain_Question_latency" property="latency" z="jgMfFX99uwNVdVdwVTIkhBGbeSA="/>
-            <table:column date="true" dateTimePattern="${question_created_date_format}" id="c_com_beyobe_domain_Question_created" property="created" z="zUpB8ApHgrvlJbpDI1fl4HHxbek="/>
-            <table:column date="true" dateTimePattern="${question_updated_date_format}" id="c_com_beyobe_domain_Question_updated" property="updated" z="na0xzRGvZHWO7M6sv0Dmthug9/k="/>
-            <table:column id="c_com_beyobe_domain_Question_conceptUid" property="conceptUid" z="ZcgBTcJBiETdOE9MeVs0AyUCnDY="/>
+            <table:column id="c_com_beyobe_domain_Question_lang" property="lang" z="peLA814bm9xs1GaHeLRXehgvuco="/>
+            <table:column id="c_com_beyobe_domain_Question_questionConcept" property="questionConcept" z="JVmH6xAHX82Bl/ibkyKyiEMhjEE="/>
+            <table:column id="c_com_beyobe_domain_Question_dataType" property="dataType" z="6E8X/+/JwNcwSXEhF3Zya/WsJE4="/>
+            <table:column id="c_com_beyobe_domain_Question_measurement" property="measurement" z="JipgXtfsDH0Q4WKFvqwokPDfRy4="/>
         </table:table>
     </page:list>
 </div>

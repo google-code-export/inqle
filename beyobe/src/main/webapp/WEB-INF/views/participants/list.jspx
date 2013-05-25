@@ -6,8 +6,10 @@
         <table:table data="${participants}" id="l_com_beyobe_domain_Participant" path="/participants" z="BO+E/vrGLxHdxkzfBVXPpi2EJ0M=">
             <table:column date="true" dateTimePattern="${participant_created_date_format}" id="c_com_beyobe_domain_Participant_created" property="created" z="Jw4kAorPYrbMl0Jo30hiMLIXEdA="/>
             <table:column date="true" dateTimePattern="${participant_updated_date_format}" id="c_com_beyobe_domain_Participant_updated" property="updated" z="ACv9GiCnUhxvNv/041bglpUfYBE="/>
-            <table:column id="c_com_beyobe_domain_Participant_updatedBy" property="updatedBy" z="RQ9Qm0rObx/I4ACoQeEj/86F4Ms="/>
-            <table:column id="c_com_beyobe_domain_Participant_createdBy" property="createdBy" z="9ItgpbS0K70xZLfsqr7eNh3lAqg="/>
+            <table:column id="c_com_beyobe_domain_Participant_username" property="username" z="ewwJgWN9izRYk0oxmmOBimhYzcA="/>
+            <table:column id="c_com_beyobe_domain_Participant_enabled" property="enabled" z="a88HmdhhcEowufIliBqXfKtxbIQ="/>
+            <table:column id="c_com_beyobe_domain_Participant_password" property="password" render="false" z="user-managed"/>
+            <table:column id="c_com_beyobe_domain_Participant_role" property="role" z="WKwAG2DYLdxseDExY5hVwvvsGNw="/>
         </table:table>
     </page:list>
 </div>

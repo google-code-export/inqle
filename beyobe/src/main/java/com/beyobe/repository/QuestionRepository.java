@@ -22,7 +22,7 @@ public interface QuestionRepository {
 			" where s.participant.id=?1 and s.question.id = q.id" +
 			" order by q.priority asc, s.created desc "
 			)
-	List<Question> getSubscribedQuestions(Long participantId);
+	List<Question> getSubscribedQuestions(String participantId);
 	
 
 //	/**

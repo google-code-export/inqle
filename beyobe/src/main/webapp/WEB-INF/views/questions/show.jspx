@@ -7,7 +7,6 @@
         <field:display field="longForm" id="s_com_beyobe_domain_Question_longForm" object="${question}" z="bV0neSnWKEY0M7hqFHUYB3ovawk="/>
         <field:display field="latency" id="s_com_beyobe_domain_Question_latency" object="${question}" z="BFQQtpAZCjbG4vI36FePM54+kJA="/>
         <field:display date="true" dateTimePattern="${question_updated_date_format}" field="updated" id="s_com_beyobe_domain_Question_updated" object="${question}" z="RDNnw9FWhpbL4P8O4RKBDrU0of4="/>
-        <field:display field="conceptUid" id="s_com_beyobe_domain_Question_conceptUid" object="${question}" z="nvdnAqVr1vi5HjGKRh/iBGQstxY="/>
         <field:display field="updatedBy" id="s_com_beyobe_domain_Question_updatedBy" object="${question}" z="EXQUI1oofrwI3j21BHMNWFCtE4w="/>
         <field:display field="createdBy" id="s_com_beyobe_domain_Question_createdBy" object="${question}" z="TaABZI39Nj1dJVKWevrfLy9+RGQ="/>
         <field:display field="priority" id="s_com_beyobe_domain_Question_priority" object="${question}" z="9ihZ6dDoSptnJMW7BihNoPPAkAQ="/>
@@ -15,5 +14,8 @@
         <field:display field="minValue" id="s_com_beyobe_domain_Question_minValue" object="${question}" z="nCgoPDZf2ANSlFJ9UUjmjY7Rtxk="/>
         <field:display field="maxValue" id="s_com_beyobe_domain_Question_maxValue" object="${question}" z="vYJpDTAIGytXWqDgc000Phkzolg="/>
         <field:display field="maxLength" id="s_com_beyobe_domain_Question_maxLength" object="${question}" z="NNaOU1/HIL9CK5JnfAzFpz1FhYA="/>
+        <field:display field="measurement" id="s_com_beyobe_domain_Question_measurement" object="${question}" z="XgmDJNFaQuFHNpiS+xmnx5Y6eco="/>
+        <field:display field="questionConcept" id="s_com_beyobe_domain_Question_questionConcept" object="${question}" z="SsaCAeMB5N5TA2mXQTQ1q6cM0N4="/>
+        <field:display field="dataType" id="s_com_beyobe_domain_Question_dataType" object="${question}" z="IEpxQ4C5P5D9cSTBu9UdFqteQtY="/>
     </page:show>
 </div>

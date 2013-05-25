@@ -3,22 +3,28 @@ package com.beyobe.domain;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.beyobe.client.beans.AnswerStatus;
+import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Unit;
+
+import flexjson.JSONSerializer;
 
 @RooJson
 @RooJavaBean
@@ -53,17 +59,20 @@ public class Datum {
     @DateTimeFormat(style = "FF")
     private Date effectiveDate = null;
     
-    private String questionUid;
+    private String questionId;
 
-    private String conceptUid;
+    @ManyToOne
+    private QuestionConcept questionConcept;
     
-    private String formulaUid;
+    @ManyToOne
+    private Formula formula;
 
-    private Long participantId;
+    @NotNull
+    private String participantId;
 
-    private Long updatedBy;
+    private String updatedBy;
 
-    private Long createdBy;
+    private String createdBy;
 
     private Double numericValue;
     
@@ -73,13 +82,36 @@ public class Datum {
     private String textValue;
 
     @ManyToOne
-    private Choice choice;
+    private ChoiceConcept choice;
 
     private Double normalizedValue;
 
     private Unit unit;
 
-    @NotNull
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    private DataType dataType;
+    
+    @Enumerated(EnumType.STRING)
+    private AnswerStatus answerStatus;
+    
+    public String toJsonForClient() {
+ 	   return new JSONSerializer()
+ 	   	.exclude("*.class")
+ 	   	.exclude("created")
+ 	   	.exclude("updated")
+ 	   	.exclude("createdBy")
+ 	   	.exclude("updatedBy")
+ 	   	.serialize(this);
+ 	}
+    
+	@PrePersist
+	public void onPersist() {
+        this.created=new java.util.Date();
+    }
+	
+	@PreUpdate
+	public void onUpdate() {
+        this.updated=new java.util.Date();
+    }
 
 }

@@ -3,8 +3,8 @@
 
 package com.beyobe.web;
 
-import com.beyobe.domain.Concept;
 import com.beyobe.domain.Formula;
+import com.beyobe.domain.QuestionConcept;
 import com.beyobe.web.FormulaController;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -39,8 +39,8 @@ privileged aspect FormulaController_Roo_Controller {
     public String FormulaController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Formula());
         List<String[]> dependencies = new ArrayList<String[]>();
-        if (Concept.countConcepts() == 0) {
-            dependencies.add(new String[] { "concept", "concepts" });
+        if (QuestionConcept.countQuestionConcepts() == 0) {
+            dependencies.add(new String[] { "questionconcept", "questionconcepts" });
         }
         uiModel.addAttribute("dependencies", dependencies);
         return "formulas/create";
@@ -104,7 +104,7 @@ privileged aspect FormulaController_Roo_Controller {
     void FormulaController.populateEditForm(Model uiModel, Formula formula) {
         uiModel.addAttribute("formula", formula);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("concepts", Concept.findAllConcepts());
+        uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
     
     String FormulaController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

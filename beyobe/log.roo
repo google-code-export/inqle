@@ -49,3 +49,18 @@ exit
 security setup
 exit
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-21 12:47:48
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-22 13:54:27
+perform tests
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-24 06:22:39
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-24 06:23:14
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-24 14:02:49
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-24 14:02:59
+controller class --class ~.web.ServiceController --preferredMapping /service/
+finder list --class ~.domain.Participant --depth 2 --filter password
+finder add --finderName findParticipantsByUsernameEqualsAndPasswordEquals --class ~.domain.Participant
+ logging setup --level INFO
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-05-24 20:09:52
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-05-24 20:10:06
