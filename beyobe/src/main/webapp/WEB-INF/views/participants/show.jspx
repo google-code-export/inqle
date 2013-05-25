@@ -10,6 +10,7 @@
         <field:display field="enabled" id="s_com_beyobe_domain_Participant_enabled" object="${participant}" z="344Cxb+N4rO5CtB0q+2eUymIbr8="/>
         <field:display field="password" id="s_com_beyobe_domain_Participant_password" object="${participant}" z="1LlOTO0fqqI52uw1Nanez9B++Po="/>
         <field:display field="role" id="s_com_beyobe_domain_Participant_role" object="${participant}" render="false" z="user-managed"/>
-        <field:display field="sessionKey" id="s_com_beyobe_domain_Participant_sessionKey" object="${participant}" z="liwAuANm/1Yp+w6IUI5zw83cpY0="/>
+        <field:display field="sessionToken" id="s_com_beyobe_domain_Participant_sessionToken" object="${participant}" z="jfemFSKxa6fQ4cwcpDl7sZ/yVnw="/>
+        <field:display field="clientIpAddress" id="s_com_beyobe_domain_Participant_clientIpAddress" object="${participant}" z="1rfcGB3jR3o9dL919TK8lCJXiQc="/>
     </page:show>
 </div>

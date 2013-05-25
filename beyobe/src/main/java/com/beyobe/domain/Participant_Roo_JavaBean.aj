@@ -77,12 +77,20 @@ privileged aspect Participant_Roo_JavaBean {
         this.createdBy = createdBy;
     }
     
-    public String Participant.getSessionKey() {
-        return this.sessionKey;
+    public String Participant.getSessionToken() {
+        return this.sessionToken;
     }
     
-    public void Participant.setSessionKey(String sessionKey) {
-        this.sessionKey = sessionKey;
+    public void Participant.setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+    
+    public String Participant.getClientIpAddress() {
+        return this.clientIpAddress;
+    }
+    
+    public void Participant.setClientIpAddress(String clientIpAddress) {
+        this.clientIpAddress = clientIpAddress;
     }
     
 }
