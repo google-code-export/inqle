@@ -3,11 +3,15 @@ package com.beyobe.web;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,32 +30,54 @@ public class ServiceController {
 	private DatumRepository datumRepository;
 	private static final Logger log = Logger.getLogger(ServiceController.class);
 	
-	 @RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
-	    public ResponseEntity<java.lang.String> getSubscribedQuestions(@RequestBody String jsonRequest) {
-		 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
-		 	String username = parcel.getUsername();
-		 	String password = parcel.getPassword();
-		 	String passwordHash = Participant.hashString(password, username);
-		 	Participant participant = null;
-		 	try {
-				participant = Participant.findParticipantsByUsernameEqualsAndPasswordEquals(username, passwordHash).getSingleResult();
-				assert(participant != null);
-		 	} catch (Exception e) {
-				//leave as null
-				log.warn("Login failure: username=" + username + "; passwordHash=" + passwordHash);
-				return null;
-			}
-		 	//prepare the parcel for return
-		 	Parcel returnParcel = new Parcel();
-		 	//new session: use UUID
-		 	returnParcel.setSessionToken(UUID.randomUUID().toString());
-		 	participant.setSessionToken(returnParcel.getSessionToken());
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Content-Type", "application/json");
-	        List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId());
-	        returnParcel.setQuestionQueue(questionQueue);
-	        return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
-	    }
+	@ModelAttribute("clientIpAddress")
+	public String populateClientIpAddress(HttpServletRequest request) {
+		return request.getRemoteAddr();
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public String handleRequest(
+			@ModelAttribute("clientIpAddress") String clientIpAddress,
+			ModelMap model) throws Exception { 
+
+		// handle request without referencing servlet API
+
+		return "view";
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<java.lang.String> loginAndGetData(
+			@ModelAttribute("clientIpAddress") String clientIpAddress,
+			@RequestBody String jsonRequest) {
+	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
+	 	String username = parcel.getUsername();
+	 	String password = parcel.getPassword();
+	 	String passwordHash = Participant.hashString(password, username);
+	 	Participant participant = null;
+	 	try {
+			participant = Participant.findParticipantsByUsernameEqualsAndPasswordEquals(username, passwordHash).getSingleResult();
+			assert(participant != null);
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("Login failure: username=" + username + "; passwordHash=" + passwordHash);
+			return null;
+		}
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	//new session: use UUID
+	 	returnParcel.setSessionToken(UUID.randomUUID().toString());
+	 	
+	 	//save the session token for future requests
+	 	participant.setSessionToken(returnParcel.getSessionToken());
+	 	participant.setClientIpAddress(clientIpAddress);
+	 	participant.merge();
+	 	
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId());
+	    returnParcel.setQuestionQueue(questionQueue);
+	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	}
 	 
 	/*
     @RequestMapping(method = RequestMethod.POST, value = "{id}")

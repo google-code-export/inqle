@@ -2,12 +2,16 @@ package com.beyobe.client.beans;
 
 import java.util.List;
 
+import org.springframework.roo.addon.json.RooJson;
+
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 
 import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
  
+@RooJson
 public class Parcel {
 	private List<Question> questionQueue;
 	private List<Question> otherKnownQuestions;
@@ -93,5 +97,9 @@ public class Parcel {
 
 	public static Parcel fromJsonToParcel(String json) {
 	   return new JSONDeserializer<Parcel>().use(null, Parcel.class).deserialize(json);
+	}
+
+	public String toJson() {
+		return new JSONSerializer().deepSerialize( this );
 	}
 }

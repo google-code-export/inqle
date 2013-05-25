@@ -65,6 +65,8 @@ public class Participant {
     private String createdBy;
 
     private String sessionToken;
+    
+    private String clientIpAddress;
 
     public void setPassword(String password) {
         if (password == null || password.equals("")) return;
