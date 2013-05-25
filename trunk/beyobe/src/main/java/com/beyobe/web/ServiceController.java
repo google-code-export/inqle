@@ -29,6 +29,9 @@ import com.beyobe.repository.QuestionRepository;
  * Handle all requests from the GWT client
  * TODO unsubscribe from questions
  * TODO windowing data to avoid overload after prolonged data accumulation
+ * TODO change password
+ * TODO logout
+ * TODO expire sessionToken at 2 weeks?
  */
 @RequestMapping("/service/**")
 @Controller
