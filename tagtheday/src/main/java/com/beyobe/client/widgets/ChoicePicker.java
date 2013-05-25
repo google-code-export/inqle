@@ -69,10 +69,14 @@ public class ChoicePicker extends Composite implements TapHandler, HasValueChang
 		return null;
 	}
 	
-	public Long getSelectedId() {
-		Choice selectedChoice = getSelectedChoice();
-		if (selectedChoice==null) return null;
-		return selectedChoice.getId();
+	public int getSelectedIndex() {
+		for (int i = 0; i<radioButtons.size(); i++) {
+			MRadioButton button = radioButtons.get(i);
+			if (button.getValue()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	public void setSelectedChoice(Choice selectedChoice) {
@@ -104,11 +108,10 @@ public class ChoicePicker extends Composite implements TapHandler, HasValueChang
 		ValueChangeEvent.fire(this, getValue());
 	}
 
-	public void setSelectedId(long selectedId) {
+	public void setSelectedIndex(int selectedIndex) {
 		for (int i = 0; i<choices.size(); i++) {
-			Choice choice = choices.get(i);
 			MRadioButton button = radioButtons.get(i);
-			if (choice.getId()==selectedId) {
+			if (i==selectedIndex) {
 				button.setValue(true);
 			} else {
 				button.setValue(false);

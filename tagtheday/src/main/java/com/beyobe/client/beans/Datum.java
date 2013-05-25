@@ -4,11 +4,11 @@ import java.util.Date;
 
 public interface Datum {
 
-	public static final Integer STATUS_ANSWERED_PERSONALLY = 2;
-	public static final Integer STATUS_INFERRED = 1;
-	public static final Integer STATUS_ASKED_BUT_NO_ANSWER = -1;
-	public static final Integer STATUS_DECLINED_ANSWER = -2;
-	public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
+//	public static final Integer STATUS_ANSWERED_PERSONALLY = 2;
+//	public static final Integer STATUS_INFERRED = 1;
+//	public static final Integer STATUS_ASKED_BUT_NO_ANSWER = -1;
+//	public static final Integer STATUS_DECLINED_ANSWER = -2;
+//	public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
 	
 	public abstract String getId();
 
@@ -50,21 +50,22 @@ public interface Datum {
 
 	public abstract void setUnit(Unit unit);
 
-	public abstract Integer getStatus();
+	public abstract AnswerStatus getAnswerStatus();
 
-	public abstract void setStatus(Integer status);
+	public abstract void setAnswerStatus(AnswerStatus answerStatus);
 
-	public abstract String getConceptUid();
+	public abstract QuestionConcept getQuestionConcept();
 	
-	public abstract void setConceptUid(String conceptUid);
+	public abstract void setQuestionConcept(QuestionConcept questionConcept);
 
 	public abstract Integer getIntegerValue();
 
 	public abstract void setIntegerValue(Integer integerValue);
 
-	public abstract Integer getDataType();
+	public abstract DataType getDataType();
 
-	public abstract void setDataType(Integer dataType);
+	public abstract void setDataType(DataType dataType);
+
 
 //	public abstract String getLongTextValue();
 //

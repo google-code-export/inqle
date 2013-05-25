@@ -2,6 +2,7 @@ package com.beyobe.client.widgets;
 
 import java.util.Date;
 
+import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
@@ -68,7 +69,7 @@ public class TagButton extends Button {
 			setText(question.getAbbreviation() + " " + datum.getTextValue());
 			setTitle(question.getLongForm() + " " + datum.getTextValue());
 //			this.addStyleName("ttd-TagButton-answered");
-			if (datum.getStatus()!=Datum.STATUS_INFERRED) this.setConfirm(true);
+			if (datum.getAnswerStatus()!=AnswerStatus.INFERRED) this.setConfirm(true);
 		}
 		
 	}

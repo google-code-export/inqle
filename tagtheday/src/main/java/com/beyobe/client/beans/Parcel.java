@@ -13,8 +13,8 @@ public interface Parcel {
 	public void setParticipant(Participant participant);
 	public String getSessionToken();
 	public void setSessionToken(String sessionToken);
-	public String getUserName();
-	public void setUserName(String userName);
+	public String getUsername();
+	public void setUsername(String userName);
 	public String getPassword();
 	public void setPassword(String text);
 	public Question getQuestion();

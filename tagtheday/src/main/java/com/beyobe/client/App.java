@@ -18,11 +18,12 @@ package com.beyobe.client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.data.ParcelClient;
 import com.beyobe.client.data.DataBus;
+import com.beyobe.client.data.ParcelClient;
 import com.beyobe.client.data.TagthedayAutoBeanFactory;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.DataCapturedEventHandler;
@@ -107,7 +108,7 @@ public class App {
 				Datum d = tagButton.getDatum();
 				if (d==null) {
 					answerPanel.getElement().getStyle().setBackgroundColor("pink");
-				} else if (d.getStatus()!=Datum.STATUS_INFERRED) {
+				} else if (d.getAnswerStatus()!=AnswerStatus.INFERRED) {
 					answerPanel.getElement().getStyle().setBackgroundColor("light-green");
 				} else {
 					answerPanel.getElement().getStyle().setBackgroundColor("light-gray");

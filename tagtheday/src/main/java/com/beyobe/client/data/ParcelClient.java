@@ -34,10 +34,11 @@ public class ParcelClient {
 	private boolean abortFlag = false;
 	
 	public int sendParcel(Parcel parcel, String action) {
+		parcel.setSessionToken(App.sessionToken);
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
-		String url = Constants.BASEURL_BEYOBE_SERVER + "/" + action;
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+		String url = Constants.BASEURL_BEYOBE_SERVICE + "/" + action;
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
 		builder.setRequestData(jsonString);
 		// Check to make sure the timer isn't already running.
@@ -79,7 +80,6 @@ public class ParcelClient {
 						App.dataBus.refreshDataFromJson(response.getText());
 						log.info("Received data and loaded: " + response.getText());
 				    	abortFlag = true;
-				    	App.placeController.goTo(new TagdayPlace());
 				    } else {
 				    	log.warning("Error logging in: " + response.getStatusText());
 				    	status = Constants.STATUS_FAILED;

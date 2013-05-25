@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.beyobe.client.App;
+import com.beyobe.client.Constants;
 import com.beyobe.client.beans.Choice;
+import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
@@ -107,8 +109,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		dtLabel.addStyleName("ttd-form-label");
 		panel.add(dtLabel);
 		dataTypePicker = new ChoicePicker(getDataTypeChoices(), 1);
-		if (q != null && q.getDataType() > 0) {
-			dataTypePicker.setSelectedId(q.getDataType());
+		if (q != null) {
+			dataTypePicker.setSelectedIndex(q.getDataType().ordinal());
 		}
 		dataTypePicker.addValueChangeHandler(this);
 		panel.add(dataTypePicker);
@@ -116,7 +118,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		//minMaxPanel for numeric questions
 		numericParamsPanel = new VerticalPanel();
 		numericParamsPanel.setVisible(false);
-		if (dataTypePicker.getSelectedId() != null && (Question.DATA_TYPE_DOUBLE == dataTypePicker.getSelectedId() || Question.DATA_TYPE_INTEGER == dataTypePicker.getSelectedId())) {
+		if (DataType.DOUBLE.ordinal() == dataTypePicker.getSelectedIndex() || DataType.INTEGER.ordinal() == dataTypePicker.getSelectedIndex()) {
 			numericParamsPanel.setVisible(true);
 		}
 		Label minLabel = new Label("Minimum value (if any)");
@@ -146,7 +148,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		numericParamsPanel.add(measLabel);
 		measurmentPicker = new ChoicePicker(getMeasurementChoices(), 2);
 		if (q != null && q.getMeasurement() != null) {
-			measurmentPicker.setSelectedId(q.getMeasurement().getId());
+			measurmentPicker.setSelectedIndex(q.getMeasurement().ordinal());
 		}
 		panel.add(numericParamsPanel);
 		numericParamsPanel.add(measurmentPicker);
@@ -160,17 +162,17 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 	private List<Choice> getDataTypeChoices() {
 		List<Choice> dataTypeChoices = new ArrayList<Choice>();
-		Choice c = new Choice(Question.DATA_TYPE_DOUBLE, "Number", null);
+		Choice c = new Choice("Number", "Number");
 		dataTypeChoices.add(c);
-//		c = new Choice(Question.DATA_TYPE_INTEGER, "Integer", "for discreet values like a rating system");
+//		c = new Choice(DataType.INTEGER, "Integer", "for discreet values like a rating system");
 //		dataTypeChoices.add(c);
-//		c = new Choice(Question.DATA_TYPE_MULTIPLE_CHOICE, "Multiple Choice", "Multiple Choice");
+//		c = new Choice(DataType.MULTIPLE_CHOICE, "Multiple Choice", "Multiple Choice");
 //		dataTypeChoices.add(c);
-		c = new Choice(Question.DATA_TYPE_SHORT_TEXT, "Label", null);
+		c = new Choice("Label", "Label");
 		dataTypeChoices.add(c);
-		c = new Choice(Question.DATA_TYPE_LONG_TEXT, "Memo", null);
+		c = new Choice("Memo", "Memo");
 		dataTypeChoices.add(c);
-//		c = new Choice(Question.DATA_TYPE_STARS, "Stars", "Stars");
+//		c = new Choice(DataType.STARS, "Stars", "Stars");
 //		dataTypeChoices.add(c);
 		return dataTypeChoices;
 	}
@@ -184,7 +186,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 				unitsStr += unit.getAbbrev();
 			}
 			if (unitsStr.length()==0) unitsStr = null;
-			Choice c = new Choice(m.getId(), m.getLabel(), unitsStr);
+			Choice c = new Choice(m.getLabel(), unitsStr);
 			choices.add(c);
 		}
 		return choices;
@@ -198,8 +200,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	}
 	
 	public boolean saveQuestion() {
-		Long dataTypeId = dataTypePicker.getSelectedId();
-		if (dataTypeId==null) {
+		int dataTypeIndex = dataTypePicker.getSelectedIndex();
+		if (dataTypeIndex < 0) {
 			validateMessage("Please select a Type of Question.");
 			return false;
 		}
@@ -231,14 +233,18 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			q.setCreated(new Date());
 			q.setCreatedBy(App.getParticipantId());
 			q.setLang(App.participant.getLang());
+			q.setMaxLength(Constants.DEFAULT_TEXTFIELD_MAX_LENGTH);
 //			q.setCreatorName(App.participant.getName());
 		}
 		
-		q.setDataType(dataTypeId.intValue());
+		q.setDataType(DataType.values()[dataTypeIndex]);
 		q.setLongForm(longFormStr);
 		q.setAbbreviation(abbrevStr);
 		q.setUpdated(new Date());
 		
+		if (dataTypeIndex == DataType.LONG_TEXT.ordinal()) {
+			q.setMaxLength(Constants.DEFAULT_MEMOFIELD_MAX_LENGTH);
+		}
 		q.setMinValue(null);
 		if (minBox != null && minBox.getValue() != null) {
 			try {
@@ -259,8 +265,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			}
 		}
 		
-		if (measurmentPicker != null && measurmentPicker.getSelectedChoice() != null && measurmentPicker.getSelectedId() != Measurement.NONE.getId()) {
-			q.setMeasurement(Measurement.getMeasurement(measurmentPicker.getSelectedId()));
+		if (measurmentPicker != null && measurmentPicker.getSelectedChoice() != null && measurmentPicker.getSelectedIndex() != Measurement.NONE.ordinal()) {
+			q.setMeasurement(Measurement.values()[measurmentPicker.getSelectedIndex()]);
 		} else {
 			q.setMeasurement(null);
 		}
@@ -275,9 +281,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	@Override
 	public void onValueChange(ValueChangeEvent<Choice> event) {
 		Choice selectedChoice = event.getValue();
-		long dataType = selectedChoice.getId();
+		int dataTypeIndex = dataTypePicker.getSelectedIndex();
 		
-		if (dataType==Question.DATA_TYPE_DOUBLE || dataType==Question.DATA_TYPE_INTEGER) {
+		if (dataTypeIndex==DataType.DOUBLE.ordinal() || dataTypeIndex==DataType.INTEGER.ordinal()) {
 			numericParamsPanel.setVisible(true);
 		} else {
 			numericParamsPanel.setVisible(false);

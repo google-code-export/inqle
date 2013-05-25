@@ -48,7 +48,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 //		Window.alert("Hello!");
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
 		Parcel parcel = App.dataBus.newParcel();
-		parcel.setUserName(userName.getText());
+		parcel.setUsername(userName.getText());
 		parcel.setPassword(password.getText());
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_LOGIN);
 //		log.info("wait until request comes back or timer times out");

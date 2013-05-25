@@ -5,13 +5,13 @@ import java.util.List;
 
 public interface Question {
 
-	public static final int DATA_TYPE_UNSPECIFIED = 0;
-	public static final int DATA_TYPE_DOUBLE = 1;
-	public static final int DATA_TYPE_INTEGER = 2;
-	public static final int DATA_TYPE_MULTIPLE_CHOICE = 3;
-	public static final int DATA_TYPE_SHORT_TEXT = 4;
-	public static final int DATA_TYPE_LONG_TEXT = 5;
-	public static final int DATA_TYPE_STARS = 6;
+//	public static final int DATA_TYPE_UNSPECIFIED = 0;
+//	public static final int DATA_TYPE_DOUBLE = 1;
+//	public static final int DATA_TYPE_INTEGER = 2;
+//	public static final int DATA_TYPE_MULTIPLE_CHOICE = 3;
+//	public static final int DATA_TYPE_SHORT_TEXT = 4;
+//	public static final int DATA_TYPE_LONG_TEXT = 5;
+//	public static final int DATA_TYPE_STARS = 6;
 
 	public abstract Double getMinValue();
 
@@ -73,13 +73,13 @@ public interface Question {
 
 	public abstract void setId(Long id);
 	
-	public abstract String getConceptUid();
+	public abstract QuestionConcept getQuestionConcept();
 	
-	public abstract void setConceptUid(String conceptUid);
+	public abstract void setQuestionConcept(QuestionConcept questionConcept);
 
-	public abstract Integer getDataType();
+	public abstract DataType getDataType();
 
-	public abstract void setDataType(Integer answerType);
+	public abstract void setDataType(DataType dataType);
 
 	//	public Unit getReferenceUnit() {
 	//		return referenceUnit;

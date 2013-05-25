@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
+import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Participant;
@@ -25,8 +26,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 
 public class DataBus {
-
-	public final EventBus eventBus = new SimpleEventBus();
 	
 	private static Logger log = Logger.getLogger(EventBus.class.getName());
 	
@@ -227,6 +226,9 @@ public class DataBus {
 		try {
 			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
 		    Parcel parcel = parcelAB.as();
+		    if (parcel.getSessionToken() != null) {
+		    	App.sessionToken = parcel.getSessionToken();
+		    }
 		    if (parcel.getQuestionQueue() != null) {
 		    	setQuestionQueue(parcel.getQuestionQueue());
 		    	setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
@@ -237,6 +239,11 @@ public class DataBus {
 		    if (parcel.getParticipant() != null) {
 		    	App.participant = parcel.getParticipant();
 		    }
+		    
+		    //TODO determine which place to go based on data received?
+		    
+		    //default: go to TagdayPlace
+		    App.placeController.goTo(new TagdayPlace());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Error parsing JSON into Datum objects", e);
 		}

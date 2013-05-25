@@ -1,23 +1,20 @@
 package com.beyobe.client.beans;
 
 public class Choice {
-	private long id;
+	private String id;
 
 	private String text;
 
 	private String description;
 	
-	private String uid;
-	
 	public Choice(){}
 	
-	public Choice(long id, String text, String description) {
-		this.id = id;
+	public Choice(String text, String description) {
 		this.text = text;
 		this.description = description;
 	}
 	
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 	
@@ -35,15 +32,6 @@ public class Choice {
 	
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-
-	public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
 	}
 
 }
