@@ -1,5 +1,6 @@
 package com.beyobe.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,9 +22,14 @@ import com.beyobe.client.beans.SubscriptionType;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
+import com.beyobe.domain.Subscription;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.repository.QuestionRepository;
-
+/**
+ * Handle all requests from the GWT client
+ * TODO unsubscribe from questions
+ * TODO windowing data to avoid overload after prolonged data accumulation
+ */
 @RequestMapping("/service/**")
 @Controller
 public class ServiceController {
@@ -62,7 +68,7 @@ public class ServiceController {
 	 	} catch (Exception e) {
 			//leave as null
 			log.warn("Login failure: username=" + username + "; passwordHash=" + passwordHash);
-			return null;
+			return new ResponseEntity<String>(null, null, HttpStatus.UNAUTHORIZED);
 		}
 	 	//save the session token for future requests
 	 	String sessionToken = UUID.randomUUID().toString();
@@ -88,6 +94,72 @@ public class ServiceController {
 	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
 	}
 	 
+	
+	@RequestMapping(value = "/storeQuestion", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<java.lang.String> storeQuestion(
+			@ModelAttribute("clientIpAddress") String clientIpAddress,
+			@RequestBody String jsonRequest) {
+	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
+	 	String sessionToken = parcel.getSessionToken();
+	 	Participant participant = null;
+	 	try {
+	 		//TODO add session expiration datetime
+			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			assert(participant != null);
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
+			return new ResponseEntity<String>(null, null, HttpStatus.UNAUTHORIZED);
+		}
+	 	Question q = parcel.getQuestion();
+	 	
+	 	Subscription subscription = new Subscription();
+	 	subscription.setCreated(new Date());
+	 	subscription.setCreatedBy(participant.getId());
+	 	subscription.setQuestion(q);
+	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
+	 	subscription.setParticipant(participant);
+	 	subscription.persist();
+	 	
+	 	questionRepository.saveAndFlush(q);
+	 	
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/storeDatum", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ResponseEntity<java.lang.String> storeDatum(
+			@ModelAttribute("clientIpAddress") String clientIpAddress,
+			@RequestBody String jsonRequest) {
+	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
+	 	String sessionToken = parcel.getSessionToken();
+	 	Participant participant = null;
+	 	try {
+	 		//TODO add session expiration datetime
+			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			assert(participant != null);
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
+			return new ResponseEntity<String>(null, null, HttpStatus.UNAUTHORIZED);
+		}
+	 	Datum d = parcel.getDatum();
+	 	
+	 	datumRepository.saveAndFlush(d);
+	 	
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	}
+	
+	
 	/*
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {

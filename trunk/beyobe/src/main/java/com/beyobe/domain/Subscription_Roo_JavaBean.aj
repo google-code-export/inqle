@@ -27,11 +27,11 @@ privileged aspect Subscription_Roo_JavaBean {
         this.created = created;
     }
     
-    public Long Subscription.getCreatedBy() {
+    public String Subscription.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Subscription.setCreatedBy(Long createdBy) {
+    public void Subscription.setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
     

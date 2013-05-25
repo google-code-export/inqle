@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_beyobe_domain_Subscription" modelAttribute="subscription" path="/subscriptions" render="${empty dependencies}" z="KdoZ41bvLsYvqwHCVELBzkjoygc=">
-        <field:input field="createdBy" id="c_com_beyobe_domain_Subscription_createdBy" validationMessageCode="field_invalid_integer" z="pCyruQU0mhjHw2LHTLVIPwXq9Pc="/>
+        <field:input field="createdBy" id="c_com_beyobe_domain_Subscription_createdBy" z="rSfMM4xi4dXLyPAv1d05I2Td4ho="/>
         <field:select field="question" id="c_com_beyobe_domain_Subscription_question" itemValue="id" items="${questions}" path="/questions" required="true" z="M+ZeAJGm7FNT4lsNB5RpbTFDV7Y="/>
         <field:select field="participant" id="c_com_beyobe_domain_Subscription_participant" itemValue="id" items="${participants}" path="/participants" required="true" z="L6bdCW8cCuJRuwJ8MAmBSBFqbAU="/>
         <field:select field="subscriptionType" id="c_com_beyobe_domain_Subscription_subscriptionType" items="${subscriptiontypes}" path="subscriptiontypes" z="thxPxAuUKhCgKuVNod9TODkcGVU="/>

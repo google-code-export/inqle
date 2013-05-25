@@ -9,6 +9,16 @@ import javax.persistence.TypedQuery;
 
 privileged aspect Participant_Roo_Finder {
     
+    public static TypedQuery<Participant> Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(String sessionToken, String clientIpAddress) {
+        if (sessionToken == null || sessionToken.length() == 0) throw new IllegalArgumentException("The sessionToken argument is required");
+        if (clientIpAddress == null || clientIpAddress.length() == 0) throw new IllegalArgumentException("The clientIpAddress argument is required");
+        EntityManager em = Participant.entityManager();
+        TypedQuery<Participant> q = em.createQuery("SELECT o FROM Participant AS o WHERE o.sessionToken = :sessionToken  AND o.clientIpAddress = :clientIpAddress", Participant.class);
+        q.setParameter("sessionToken", sessionToken);
+        q.setParameter("clientIpAddress", clientIpAddress);
+        return q;
+    }
+    
     public static TypedQuery<Participant> Participant.findParticipantsByUsernameEqualsAndPasswordEquals(String username, String password) {
         if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
         if (password == null || password.length() == 0) throw new IllegalArgumentException("The password argument is required");
