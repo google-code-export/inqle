@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.beyobe.client.App;
+import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Choice;
-import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.util.UUID;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
@@ -61,7 +61,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		//add input elements
 		
 		//DOUBLE
-		if (q.getDataType()==Question.DATA_TYPE_DOUBLE) {
+		if (q.getDataType()==DataType.DOUBLE) {
 			doubleBox = new MDoubleBox();
 			panel.add(doubleBox);
 			if (q.getMeasurement() != null) {
@@ -73,7 +73,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		}
 		
 		//INTEGER
-		if (q.getDataType()==Question.DATA_TYPE_INTEGER) {
+		if (q.getDataType()==DataType.INTEGER) {
 			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
 				slider = new MSlider();
 				slider.setMax((int)Math.round(q.getMaxValue()));
@@ -90,14 +90,12 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		}
 		
 		//SHORT TEXT
-		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
+		if (q.getDataType()==DataType.SHORT_TEXT) {
 			List<String> pastAnswers = App.dataBus.getPastAnswers(q);
-			int i=0;
 			List<Choice> choices = new ArrayList<Choice>();
 			for (String pastAnswer: pastAnswers) {
-				Choice c  = new Choice(i, pastAnswer, pastAnswer);
+				Choice c  = new Choice(pastAnswer, pastAnswer);
 				choices.add(c);
-				i++;
 			}
 			if (choices.size() > 3) {
 				pastAnswersPicker = new ChoicePicker(choices, 2);
@@ -109,19 +107,20 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				panel.add(pastAnswersPicker);
 			}
 			textBox = new MTextBox();
+			textBox.setMaxLength(q.getMaxLength());
 			panel.add(textBox);
 			if (d != null) textBox.setText(d.getTextValue());
 		}
 		
 		//LONG TEXT
-		if (q.getDataType()==Question.DATA_TYPE_LONG_TEXT) {
+		if (q.getDataType()==DataType.LONG_TEXT) {
 			textArea = new MTextArea();
 			panel.add(textArea);
 			if (d != null) textArea.setText(d.getTextValue());
 		}
 		
 		//MULTIPLE CHOICE
-		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
+		if (q.getDataType()==DataType.MULTIPLE_CHOICE) {
 			if (q.getChoices() != null) {
 				if (q.getChoices().size() > 3) {
 					choicePicker = new ChoicePicker(q.getChoices(), 2);
@@ -156,13 +155,13 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			d.setParticipantId(App.participant.getId());
 			d.setQuestionUid(q.getId());
 		}
-		d.setConceptUid(q.getConceptUid());
+		d.setQuestionConcept(q.getQuestionConcept());
 		d.setDataType(q.getDataType());
-		d.setStatus(Datum.STATUS_ANSWERED_PERSONALLY);
+		d.setAnswerStatus(AnswerStatus.ANSWERED_PERSONALLY);
 		d.setUpdated(new Date());
 		
 		//DOUBLE
-		if (q.getDataType()==Question.DATA_TYPE_DOUBLE) {
+		if (q.getDataType()==DataType.DOUBLE) {
 			Double val;
 			try {
 				val = Double.valueOf(doubleBox.getText());
@@ -191,7 +190,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		}
 		
 		//INTEGER
-		if (q.getDataType()==Question.DATA_TYPE_INTEGER) {
+		if (q.getDataType()==DataType.INTEGER) {
 			Integer val = null;
 			
 			//Slider
@@ -229,16 +228,21 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		}
 		
 		//SHORT TEXT
-		if (q.getDataType()==Question.DATA_TYPE_SHORT_TEXT) {
+		if (q.getDataType()==DataType.SHORT_TEXT) {
 			d.setTextValue(getShortenedText(textBox.getText()));
 		}
 		
 		//LONG TEXT
-		if (q.getDataType()==Question.DATA_TYPE_LONG_TEXT) {
-			d.setTextValue(getShortenedText(textArea.getText()));
+		if (q.getDataType()==DataType.LONG_TEXT) {
+			String memo = textArea.getText();
+			if (memo.length() > q.getMaxLength()) {
+				validateMessage("Your answer must be less than " + q.getMaxLength() + " characters.");
+				return false;
+			}
+			d.setTextValue(getShortenedText(memo));
 		}
 		
-		if (q.getDataType()==Question.DATA_TYPE_MULTIPLE_CHOICE) {
+		if (q.getDataType()==DataType.MULTIPLE_CHOICE) {
 			Choice choice = choicePicker.getSelectedChoice();
 			if (choice == null) {
 				validateMessage("No choice selected");
@@ -252,17 +256,17 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		return true;
 	}
 
-	private String getLongText(String text) {
-		if (text==null) return "";
-		return text.substring(0, MAXIMUM_LENGTH_LONG_TEXT);
-	}
+//	private String getLongText(String text) {
+//		if (text==null) return "";
+//		return text.substring(0, MAXIMUM_LENGTH_LONG_TEXT);
+//	}
 
 	private String getShortenedText(String text) {
 		if (text==null) return "";
-		if (text.length() < MAXIMUM_LENGTH_SHORT_TEXT) {
+		if (text.length() < q.getMaxLength()) {
 			return text;
 		}
-		return text.substring(0, MAXIMUM_LENGTH_SHORT_TEXT-3) + "...";
+		return text.substring(0, q.getMaxLength()-3) + "...";
 	}
 
 	private void validateMessage(String message) {
