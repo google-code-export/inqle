@@ -56,7 +56,7 @@ public class ServiceController {
 //		return "view";
 //	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public ResponseEntity<java.lang.String> login(
 			@RequestBody String jsonRequest,
@@ -98,21 +98,28 @@ public class ServiceController {
 	 	participant.setClientIpAddress(clientIpAddress);
 	 	participant.merge();
 	 	
+	 	log.info("saved participant");
+	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
 	 	returnParcel.setSessionToken(sessionToken);
+	 	log.info("set session token");
 	 	
 	 	List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY.name());
 		returnParcel.setQuestionQueue(questionQueue);
+		log.info("set session queue");
 		
 		List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE.name());
 		returnParcel.setOtherKnownQuestions(inactiveQuestions);
+		log.info("set inactive questions");
 		
 	 	List<Datum> data = datumRepository.getParticipantData(participant.getId());
 	 	returnParcel.setData(data);
+	 	log.info("set data");
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
+	    log.info("Sending back: " + returnParcel.toJson());
 	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
 	}
 	 
