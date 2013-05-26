@@ -17,7 +17,7 @@ public interface DatumRepository {
 	 * @return list of questions, ordered by question priority then creation date
 	 */
 	@Query("select distinct d from Datum d " +
-			" where d.participant.id=?1 " +
+			" where d.participantId=?1 " +
 			" order by d.effectiveDate desc "
 			)
 	List<Datum> getParticipantData(String participantId);

@@ -11,11 +11,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.SubscriptionType;
@@ -46,32 +46,51 @@ public class ServiceController {
 		return request.getRemoteAddr();
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String handleRequest(
-			@ModelAttribute("clientIpAddress") String clientIpAddress,
-			ModelMap model) throws Exception { 
-
-		// handle request without referencing servlet API
-
-		return "view";
-	}
+//	@RequestMapping(method = RequestMethod.GET)
+//	public String handleRequest(
+//			@ModelAttribute("clientIpAddress") String clientIpAddress,
+//			ModelMap model) throws Exception { 
+//
+//		// handle request without referencing servlet API
+//
+//		return "view";
+//	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ResponseEntity<java.lang.String> loginAndGetData(
-			@ModelAttribute("clientIpAddress") String clientIpAddress,
-			@RequestBody String jsonRequest) {
-	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
-	 	String username = parcel.getUsername();
-	 	String password = parcel.getPassword();
-	 	String passwordHash = Participant.hashString(password, username);
+	@RequestMapping(value = "/login", method = RequestMethod.PUT, headers = "Accept=application/json")
+	@ResponseBody
+	public ResponseEntity<java.lang.String> login(
+			@RequestBody String jsonRequest,
+			@ModelAttribute("clientIpAddress") String clientIpAddress) {
+//	public ResponseEntity<java.lang.String> login(
+//			@RequestBody String jsonRequest) {
+		log.info("login service invoked with json: " + jsonRequest);
+	 	Parcel parcel = null;
+	 	String username = null;
+	 	String hashedPassword = null;
+	 	try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+			username = parcel.getUsername();
+			String password = parcel.getPassword();
+			Participant dummyParticipant = new Participant();
+			dummyParticipant.setPassword(password);
+//			hashedPassword = Participant.hashString(password, username);
+			hashedPassword = dummyParticipant.getPassword();
+		} catch (Exception e1) {
+			HttpHeaders headers = new HttpHeaders();
+			log.warn("Bad request: incoming JSON=" + jsonRequest);
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
 	 	Participant participant = null;
 	 	try {
-			participant = Participant.findParticipantsByUsernameEqualsAndPasswordEquals(username, passwordHash).getSingleResult();
-			assert(participant != null);
+			participant = Participant.findParticipantsByUsernameEqualsAndPasswordEquals(username, hashedPassword).getSingleResult();
+			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
-			log.warn("Login failure: username=" + username + "; passwordHash=" + passwordHash);
-			return new ResponseEntity<String>(null, null, HttpStatus.UNAUTHORIZED);
+			log.warn("Login failure: username=" + username + "; passwordHash=" + hashedPassword);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	//save the session token for future requests
 	 	String sessionToken = UUID.randomUUID().toString();
@@ -99,6 +118,7 @@ public class ServiceController {
 	 
 	
 	@RequestMapping(value = "/storeQuestion", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
 	public ResponseEntity<java.lang.String> storeQuestion(
 			@ModelAttribute("clientIpAddress") String clientIpAddress,
 			@RequestBody String jsonRequest) {
@@ -108,11 +128,13 @@ public class ServiceController {
 	 	try {
 	 		//TODO add session expiration datetime
 			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
-			assert(participant != null);
+			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
 			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			return new ResponseEntity<String>(null, null, HttpStatus.UNAUTHORIZED);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	Question q = parcel.getQuestion();
 	 	
@@ -135,6 +157,7 @@ public class ServiceController {
 	}
 	
 	@RequestMapping(value = "/storeDatum", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
 	public ResponseEntity<java.lang.String> storeDatum(
 			@ModelAttribute("clientIpAddress") String clientIpAddress,
 			@RequestBody String jsonRequest) {
@@ -144,7 +167,7 @@ public class ServiceController {
 	 	try {
 	 		//TODO add session expiration datetime
 			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
-			assert(participant != null);
+			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
 			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
