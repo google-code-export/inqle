@@ -37,9 +37,10 @@ public class ParcelClient {
 		parcel.setSessionToken(App.sessionToken);
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
-		String url = Constants.BASEURL_BEYOBE_SERVICE + "/" + action;
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
+		String url = Constants.BASEURL_BEYOBE_SERVICE + action;
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.PUT, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
+		log.info("Sending json: " + jsonString);
 		builder.setRequestData(jsonString);
 		// Check to make sure the timer isn't already running.
 	    if (timeoutTimer != null) {
@@ -63,7 +64,7 @@ public class ParcelClient {
 		
 		try {
 //			Window.alert("Sending request");
-			Request request = builder.sendRequest(null, new RequestCallback() {
+			Request request = builder.sendRequest(jsonString, new RequestCallback() {
 
 				public void onError(Request request, Throwable exception) {
 			    	log.warning("unable to connect to server for log in");
