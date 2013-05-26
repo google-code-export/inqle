@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +38,12 @@ import com.beyobe.repository.QuestionRepository;
 @Controller
 public class ServiceController {
 
+	@Autowired
 	private QuestionRepository questionRepository;
+	
+	@Autowired
 	private DatumRepository datumRepository;
+	
 	private static final Logger log = Logger.getLogger(ServiceController.class);
 	
 	@ModelAttribute("clientIpAddress")
@@ -105,17 +110,29 @@ public class ServiceController {
 	 	returnParcel.setSessionToken(sessionToken);
 	 	log.info("set session token");
 	 	
-	 	List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY.name());
-		returnParcel.setQuestionQueue(questionQueue);
-		log.info("set session queue");
+	 	try {
+			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
+			returnParcel.setQuestionQueue(questionQueue);
+			log.info("set question queue");
+		} catch (Exception e) {
+			log.error("ERROR getting question queue", e);
+		}
 		
-		List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE.name());
-		returnParcel.setOtherKnownQuestions(inactiveQuestions);
-		log.info("set inactive questions");
+		try {
+			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
+			returnParcel.setOtherKnownQuestions(inactiveQuestions);
+			log.info("set inactive questions");
+		} catch (Exception e) {
+			log.error("ERROR getting inactive questions", e);
+		}
 		
-	 	List<Datum> data = datumRepository.getParticipantData(participant.getId());
-	 	returnParcel.setData(data);
-	 	log.info("set data");
+	 	try {
+			List<Datum> data = datumRepository.getParticipantData(participant.getId());
+			returnParcel.setData(data);
+			log.info("set data");
+		} catch (Exception e) {
+			log.error("ERROR getting participant data", e);
+		}
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
