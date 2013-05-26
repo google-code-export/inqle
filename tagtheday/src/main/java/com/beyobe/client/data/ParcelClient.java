@@ -38,7 +38,7 @@ public class ParcelClient {
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
 		String url = Constants.BASEURL_BEYOBE_SERVICE + action;
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.PUT, URL.encode(url));
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
 		log.info("Sending json: " + jsonString);
 		builder.setRequestData(jsonString);
