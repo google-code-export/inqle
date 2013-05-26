@@ -20,10 +20,10 @@ public interface QuestionRepository {
 	 * @return list of questions, ordered by question priority then creation date
 	 */
 	@Query("select distinct q from Question q, Subscription s " +
-			" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 " +
-			" order by q.priority asc, s.created desc "
+			" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 "
+//			" order by s.created asc "
 			)
-	List<Question> getSubscribedQuestions(String participantId, String subscriptionType);
+	List<Question> getSubscribedQuestions(String participantId, SubscriptionType subscriptionType);
 	
 
 //	/**
