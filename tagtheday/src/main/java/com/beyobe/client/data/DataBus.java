@@ -243,6 +243,7 @@ public class DataBus {
 		    //TODO determine which place to go based on data received?
 		    
 		    //default: go to TagdayPlace
+		    log.info("Going to TagdayPlace...");
 		    App.placeController.goTo(new TagdayPlace());
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Error parsing JSON into Datum objects", e);
