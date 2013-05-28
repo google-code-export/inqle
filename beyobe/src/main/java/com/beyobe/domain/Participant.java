@@ -40,7 +40,7 @@ public class Participant {
     private String id;
 
     @Column(unique = true)
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 40)
     private String username;
 
     private String password;
