@@ -22,9 +22,9 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
      */
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-    	if (!App.isUserLoggedIn()) {
-    		App.placeController.goTo(new LoginPlace());
-    	}
+//    	if (!App.isUserLoggedIn()) {
+//    		App.placeController.goTo(new LoginPlace());
+//    	}
     	App.loadData();
         TagdayView tagdayView = App.tagdayView;
         tagdayView.setPresenter(this);

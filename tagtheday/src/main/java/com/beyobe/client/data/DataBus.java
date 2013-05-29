@@ -223,11 +223,13 @@ public class DataBus {
 	}
 
 	public void refreshDataFromJson(String text) {
+		boolean gotoTagdayPlace = false;
 		try {
 			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
 		    Parcel parcel = parcelAB.as();
 		    if (parcel.getSessionToken() != null) {
 		    	App.sessionToken = parcel.getSessionToken();
+		    	gotoTagdayPlace = true;
 		    }
 		    if (parcel.getQuestionQueue() != null) {
 		    	setQuestionQueue(parcel.getQuestionQueue());
@@ -242,9 +244,10 @@ public class DataBus {
 		    
 		    //TODO determine which place to go based on data received?
 		    
-		    //default: go to TagdayPlace
-		    log.info("Going to TagdayPlace...");
-		    App.placeController.goTo(new TagdayPlace());
+		    if (gotoTagdayPlace) {
+			    log.info("Going to TagdayPlace...");
+			    App.placeController.goTo(new TagdayPlace());
+		    }
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Error parsing JSON into Datum objects", e);
 		}

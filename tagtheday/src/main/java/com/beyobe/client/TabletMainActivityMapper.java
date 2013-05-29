@@ -3,6 +3,7 @@ package com.beyobe.client;
 import java.util.logging.Logger;
 
 import com.beyobe.client.activities.LoginActivity;
+import com.beyobe.client.activities.LoginPlace;
 import com.beyobe.client.activities.TagdayActivity;
 import com.beyobe.client.activities.TagdayPlace;
 import com.google.gwt.activity.shared.Activity;
@@ -22,11 +23,14 @@ public class TabletMainActivityMapper implements ActivityMapper {
 
 	public Activity getActivity(Place place) {
 		log.info("Going to place: " + place);
-		if (App.sessionToken==null) {
-			return new LoginActivity(place);
-		}
+//		if (App.sessionToken==null) {
+//			return new LoginActivity(place);
+//		}
 		if (place instanceof TagdayPlace) {
 			return new TagdayActivity(place);
+		}
+		if (place instanceof LoginPlace) {
+			return new LoginActivity(place);
 		}
 		return new TagdayActivity(place);
 	}
