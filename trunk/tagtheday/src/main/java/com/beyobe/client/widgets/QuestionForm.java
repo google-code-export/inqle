@@ -110,7 +110,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		panel.add(dtLabel);
 		dataTypePicker = new ChoicePicker(getDataTypeChoices(), 1);
 		if (q != null) {
-			dataTypePicker.setSelectedIndex(q.getDataType().ordinal());
+			dataTypePicker.setSelectedIndex(getDataTypeIndex(q.getDataType()));
 		}
 		dataTypePicker.addValueChangeHandler(this);
 		panel.add(dataTypePicker);
@@ -158,6 +158,19 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		saveButton.addTapHandler(this);
 		panel.add(saveButton);
 		initWidget(scrollPanel);
+	}
+
+	private Integer getDataTypeIndex(DataType dataType) {
+		if (dataType == DataType.DOUBLE) {
+			return 0;
+		}
+		if (dataType == DataType.SHORT_TEXT) {
+			return 1;
+		}
+		if (dataType == DataType.LONG_TEXT) {
+			return 2;
+		}
+		return null;
 	}
 
 	private List<Choice> getDataTypeChoices() {
@@ -280,10 +293,10 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 	@Override
 	public void onValueChange(ValueChangeEvent<Choice> event) {
-		Choice selectedChoice = event.getValue();
+//		Choice selectedChoice = event.getValue();
 		int dataTypeIndex = dataTypePicker.getSelectedIndex();
 		
-		if (dataTypeIndex==DataType.DOUBLE.ordinal() || dataTypeIndex==DataType.INTEGER.ordinal()) {
+		if (dataTypeIndex==0) {
 			numericParamsPanel.setVisible(true);
 		} else {
 			numericParamsPanel.setVisible(false);
