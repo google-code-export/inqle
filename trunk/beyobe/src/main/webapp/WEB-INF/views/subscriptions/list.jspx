@@ -6,9 +6,9 @@
         <table:table data="${subscriptions}" id="l_com_beyobe_domain_Subscription" path="/subscriptions" z="9nqulA3Hpq7Ygze1gHh4Skns67Q=">
             <table:column date="true" dateTimePattern="${subscription_created_date_format}" id="c_com_beyobe_domain_Subscription_created" property="created" z="AW0YytXoZ4I6VTqyjiNPdqtdUn0="/>
             <table:column id="c_com_beyobe_domain_Subscription_createdBy" property="createdBy" z="ygDymVWLRZSzL5QH5rSEw8PGLFM="/>
-            <table:column id="c_com_beyobe_domain_Subscription_question" property="question" z="npd6gF0h88oAiEB2yw8PlvcXTvA="/>
-            <table:column id="c_com_beyobe_domain_Subscription_participant" property="participant" z="xyYoHLVqvS95YxnUIxTK9fKKwPM="/>
             <table:column id="c_com_beyobe_domain_Subscription_subscriptionType" property="subscriptionType" z="Xs6fgSHsxNsawbpm7Pkgh+XxsnY="/>
+            <table:column id="c_com_beyobe_domain_Subscription_questionId" property="questionId" z="0Gul4zLGASV7BQmS1+H8TaeRKs8="/>
+            <table:column id="c_com_beyobe_domain_Subscription_participantId" property="participantId" z="5Any9fwFX3m8DR6hv/alidN6o1o="/>
         </table:table>
     </page:list>
 </div>

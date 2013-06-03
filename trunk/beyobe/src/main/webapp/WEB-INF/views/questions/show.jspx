@@ -17,5 +17,6 @@
         <field:display field="measurement" id="s_com_beyobe_domain_Question_measurement" object="${question}" z="XgmDJNFaQuFHNpiS+xmnx5Y6eco="/>
         <field:display field="questionConcept" id="s_com_beyobe_domain_Question_questionConcept" object="${question}" z="SsaCAeMB5N5TA2mXQTQ1q6cM0N4="/>
         <field:display field="dataType" id="s_com_beyobe_domain_Question_dataType" object="${question}" z="IEpxQ4C5P5D9cSTBu9UdFqteQtY="/>
+        <field:display field="id" id="s_com_beyobe_domain_Question_id" object="${question}" z="A3BjaMMc3jyQPQexW5AgIe7Nv7s="/>
     </page:show>
 </div>

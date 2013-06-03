@@ -112,15 +112,23 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Question, String> ApplicationConversionServiceFactoryBean.getQuestionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Question, java.lang.String>() {
             public String convert(Question question) {
-                return new StringBuilder().append(question.getAbbreviation()).append(' ').append(question.getLongForm()).append(' ').append(question.getLang()).append(' ').append(question.getMinValue()).toString();
+                return new StringBuilder().append(question.getId()).append(' ').append(question.getAbbreviation()).append(' ').append(question.getLongForm()).append(' ').append(question.getLang()).toString();
             }
         };
     }
     
-    public Converter<String, Question> ApplicationConversionServiceFactoryBean.getIdToQuestionConverter() {
-        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.Question>() {
-            public com.beyobe.domain.Question convert(java.lang.String id) {
+    public Converter<Long, Question> ApplicationConversionServiceFactoryBean.getIdToQuestionConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.beyobe.domain.Question>() {
+            public com.beyobe.domain.Question convert(java.lang.Long id) {
                 return questionRepository.findOne(id);
+            }
+        };
+    }
+    
+    public Converter<String, Question> ApplicationConversionServiceFactoryBean.getStringToQuestionConverter() {
+        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.Question>() {
+            public com.beyobe.domain.Question convert(String id) {
+                return getObject().convert(getObject().convert(id, Long.class), Question.class);
             }
         };
     }
@@ -144,7 +152,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Subscription, String> ApplicationConversionServiceFactoryBean.getSubscriptionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Subscription, java.lang.String>() {
             public String convert(Subscription subscription) {
-                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getCreatedBy()).toString();
+                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getCreatedBy()).append(' ').append(subscription.getQuestionId()).append(' ').append(subscription.getParticipantId()).toString();
             }
         };
     }
@@ -170,6 +178,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         registry.addConverter(getIdToParticipantConverter());
         registry.addConverter(getQuestionToStringConverter());
         registry.addConverter(getIdToQuestionConverter());
+        registry.addConverter(getStringToQuestionConverter());
         registry.addConverter(getQuestionConceptToStringConverter());
         registry.addConverter(getIdToQuestionConceptConverter());
         registry.addConverter(getSubscriptionToStringConverter());

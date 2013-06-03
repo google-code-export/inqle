@@ -1,15 +1,12 @@
 package com.beyobe.domain;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -35,7 +32,7 @@ import flexjson.JSONSerializer;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-public class Question {
+public class Question implements HasUuid {
 
 	public static final int DATA_TYPE_UNSPECIFIED = 0;
 	public static final int DATA_TYPE_DOUBLE = 1;
@@ -45,9 +42,16 @@ public class Question {
 	public static final int DATA_TYPE_LONG_TEXT = 5;
 	public static final int DATA_TYPE_STARS = 6;
 
-	@javax.persistence.Id
-    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "HibernateUuidGenerator")
+//	@javax.persistence.Id
+//    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "HibernateUuidGenerator")
+//	@XmlAttribute
+//	@Id
+//	@Basic(optional = false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+	@GenericGenerator(name="IdOrGenerated",
+	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+	)
     private String id;
 	
     @NotNull

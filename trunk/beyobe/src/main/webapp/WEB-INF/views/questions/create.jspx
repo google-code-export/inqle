@@ -17,6 +17,7 @@
         <field:select field="measurement" id="c_com_beyobe_domain_Question_measurement" items="${measurements}" path="measurements" z="eSfCS9GHpwgF/th05o3vi3pn8IM="/>
         <field:select field="questionConcept" id="c_com_beyobe_domain_Question_questionConcept" itemValue="id" items="${questionconcepts}" path="/questionconcepts" z="chFO9zDyH8Ca9rJpjTTCWPg4H6M="/>
         <field:select field="dataType" id="c_com_beyobe_domain_Question_dataType" items="${datatypes}" path="datatypes" z="PA2GWlkeK02iQlFVt0HczBWqLlw="/>
+        <field:input field="id" id="c_com_beyobe_domain_Question_id" z="FhsLcgZ2Pc1Q0pvL8agMueKJx2I="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Question" render="${not empty dependencies}" z="zVSrTN57S9HBxOxQ5oGRiboALBE="/>
 </div>

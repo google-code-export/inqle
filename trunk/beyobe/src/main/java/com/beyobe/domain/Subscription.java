@@ -39,15 +39,19 @@ public class Subscription {
 
     private String createdBy;
     
+//    @NotNull
+//    @ManyToOne(cascade=CascadeType.PERSIST)
+//    private Question question;
+    
     @NotNull
-    @ManyToOne(cascade=CascadeType.PERSIST)
-//    (fetch = FetchType.LAZY,optional=true)
-//    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    private Question question;
+    private String questionId;
+
+//    @NotNull
+//    @ManyToOne
+//    private Participant participant;
 
     @NotNull
-    @ManyToOne
-    private Participant participant;
+    private String participantId;
 
     @Enumerated(EnumType.STRING)
     private SubscriptionType subscriptionType;

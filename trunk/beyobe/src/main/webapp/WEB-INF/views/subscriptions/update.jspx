@@ -4,8 +4,8 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_beyobe_domain_Subscription" modelAttribute="subscription" path="/subscriptions" versionField="Version" z="51eKuWJY+s0GG4c1LJig8+72HYQ=">
         <field:input field="createdBy" id="c_com_beyobe_domain_Subscription_createdBy" z="rSfMM4xi4dXLyPAv1d05I2Td4ho="/>
-        <field:select field="question" id="c_com_beyobe_domain_Subscription_question" itemValue="id" items="${questions}" path="/questions" required="true" z="M+ZeAJGm7FNT4lsNB5RpbTFDV7Y="/>
-        <field:select field="participant" id="c_com_beyobe_domain_Subscription_participant" itemValue="id" items="${participants}" path="/participants" required="true" z="L6bdCW8cCuJRuwJ8MAmBSBFqbAU="/>
         <field:select field="subscriptionType" id="c_com_beyobe_domain_Subscription_subscriptionType" items="${subscriptiontypes}" path="subscriptiontypes" z="thxPxAuUKhCgKuVNod9TODkcGVU="/>
+        <field:input field="questionId" id="c_com_beyobe_domain_Subscription_questionId" required="true" z="qB+FM/vvRIZ1pSswCD+MoAXcwxk="/>
+        <field:input field="participantId" id="c_com_beyobe_domain_Subscription_participantId" required="true" z="iebJZWlkCsUr2psILDsmpKJi2ZQ="/>
     </form:update>
 </div>

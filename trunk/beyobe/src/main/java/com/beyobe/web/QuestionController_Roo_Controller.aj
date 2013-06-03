@@ -38,7 +38,7 @@ privileged aspect QuestionController_Roo_Controller {
         }
         uiModel.asMap().clear();
         questionRepository.save(question);
-        return "redirect:/questions/" + encodeUrlPathSegment(question.getId().toString(), httpServletRequest);
+        return "redirect:/questions/" + encodeUrlPathSegment(question.getId_().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
@@ -47,11 +47,11 @@ privileged aspect QuestionController_Roo_Controller {
         return "questions/create";
     }
     
-    @RequestMapping(value = "/{id}", produces = "text/html")
-    public String QuestionController.show(@PathVariable("id") String id, Model uiModel) {
+    @RequestMapping(value = "/{id_}", produces = "text/html")
+    public String QuestionController.show(@PathVariable("id_") Long id_, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("question", questionRepository.findOne(id));
-        uiModel.addAttribute("itemId", id);
+        uiModel.addAttribute("question", questionRepository.findOne(id_));
+        uiModel.addAttribute("itemId", id_);
         return "questions/show";
     }
     
@@ -78,18 +78,18 @@ privileged aspect QuestionController_Roo_Controller {
         }
         uiModel.asMap().clear();
         questionRepository.save(question);
-        return "redirect:/questions/" + encodeUrlPathSegment(question.getId().toString(), httpServletRequest);
+        return "redirect:/questions/" + encodeUrlPathSegment(question.getId_().toString(), httpServletRequest);
     }
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String QuestionController.updateForm(@PathVariable("id") String id, Model uiModel) {
-        populateEditForm(uiModel, questionRepository.findOne(id));
+    @RequestMapping(value = "/{id_}", params = "form", produces = "text/html")
+    public String QuestionController.updateForm(@PathVariable("id_") Long id_, Model uiModel) {
+        populateEditForm(uiModel, questionRepository.findOne(id_));
         return "questions/update";
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String QuestionController.delete(@PathVariable("id") String id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Question question = questionRepository.findOne(id);
+    @RequestMapping(value = "/{id_}", method = RequestMethod.DELETE, produces = "text/html")
+    public String QuestionController.delete(@PathVariable("id_") Long id_, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+        Question question = questionRepository.findOne(id_);
         questionRepository.delete(question);
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
