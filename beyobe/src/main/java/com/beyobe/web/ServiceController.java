@@ -183,9 +183,11 @@ public class ServiceController {
 	 	Subscription subscription = new Subscription();
 	 	subscription.setCreated(new Date());
 	 	subscription.setCreatedBy(participant.getId());
-	 	subscription.setQuestion(q);
+//	 	subscription.setQuestion(q);
+	 	subscription.setQuestionId(q.getId());
 	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
-	 	subscription.setParticipant(participant);
+//	 	subscription.setParticipant(participant);
+	 	subscription.setParticipantId(participant.getId());
 	 	log.info("storeQuestion service to save subscription: " + subscription);
 	 	try {
 			subscription.persist();
