@@ -123,19 +123,19 @@ privileged aspect Question_Roo_JavaBean {
         this.updated = updated;
     }
     
-    public Long Question.getUpdatedBy() {
+    public String Question.getUpdatedBy() {
         return this.updatedBy;
     }
     
-    public void Question.setUpdatedBy(Long updatedBy) {
+    public void Question.setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
     
-    public Long Question.getCreatedBy() {
+    public String Question.getCreatedBy() {
         return this.createdBy;
     }
     
-    public void Question.setCreatedBy(Long createdBy) {
+    public void Question.setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
     

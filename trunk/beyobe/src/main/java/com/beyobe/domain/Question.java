@@ -1,11 +1,15 @@
 package com.beyobe.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -86,9 +90,9 @@ public class Question {
     @DateTimeFormat(style = "FF")
     private Date updated = new Date();
 
-    private Long updatedBy;
+    private String updatedBy;
 
-    private Long createdBy;
+    private String createdBy;
     
     public String toJson() {
 	   return new JSONSerializer()
@@ -109,4 +113,7 @@ public class Question {
 	public void onUpdate() {
         this.updated=new java.util.Date();
     }
+	
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+//	private Set<Subscription> subscriptions = new HashSet<Subscription>();
 }

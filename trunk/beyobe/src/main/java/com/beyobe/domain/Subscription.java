@@ -2,6 +2,7 @@ package com.beyobe.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -40,7 +40,9 @@ public class Subscription {
     private String createdBy;
     
     @NotNull
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.PERSIST)
+//    (fetch = FetchType.LAZY,optional=true)
+//    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Question question;
 
     @NotNull
