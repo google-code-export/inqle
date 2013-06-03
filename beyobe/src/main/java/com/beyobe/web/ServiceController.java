@@ -82,7 +82,7 @@ public class ServiceController {
 			hashedPassword = dummyParticipant.getPassword();
 		} catch (Exception e1) {
 			HttpHeaders headers = new HttpHeaders();
-			log.warn("Bad request: incoming JSON=" + jsonRequest);
+			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
 		    headers.add("Content-Type", "application/json");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
@@ -103,41 +103,43 @@ public class ServiceController {
 	 	participant.setClientIpAddress(clientIpAddress);
 	 	participant.merge();
 	 	
-	 	log.info("saved participant");
+	 	log.trace("saved participant");
 	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
 	 	returnParcel.setSessionToken(sessionToken);
+	 	returnParcel.setParticipant(participant);
 	 	log.info("set session token");
 	 	
 	 	try {
 			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
 			returnParcel.setQuestionQueue(questionQueue);
-			log.info("set question queue");
+			log.trace("login service: set question queue");
 		} catch (Exception e) {
-			log.error("ERROR getting question queue", e);
+			log.error("login service: ERROR getting question queue", e);
 		}
 		
 		try {
 			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
 			returnParcel.setOtherKnownQuestions(inactiveQuestions);
-			log.info("set inactive questions");
+			log.trace("set inactive questions");
 		} catch (Exception e) {
-			log.error("ERROR getting inactive questions", e);
+			log.error("login service: ERROR getting inactive questions", e);
 		}
 		
 	 	try {
 			List<Datum> data = datumRepository.getParticipantData(participant.getId());
 			returnParcel.setData(data);
-			log.info("set data");
+			log.trace("set data");
 		} catch (Exception e) {
 			log.error("ERROR getting participant data", e);
 		}
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
-	    log.info("Sending back: " + returnParcel.toJson());
-	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	    String returnJson = returnParcel.toJson();
+	    log.info("login service sending back: " + returnJson);
+	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
 	 
 	
@@ -146,12 +148,24 @@ public class ServiceController {
 	public ResponseEntity<java.lang.String> storeQuestion(
 			@ModelAttribute("clientIpAddress") String clientIpAddress,
 			@RequestBody String jsonRequest) {
-	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
+		log.info("storeQuestion service invoked with json: " + jsonRequest);
+	 	Parcel parcel = null;
+		try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+		} catch (Exception e1) {
+			log.error("storeQuestion service: Error parsing JSON: " + jsonRequest, e1);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+	 	log.info("got parcel: " + parcel);
 	 	String sessionToken = parcel.getSessionToken();
 	 	Participant participant = null;
 	 	try {
 	 		//TODO add session expiration datetime
+	 		log.info("storeQuestion service getting participant...");
 			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			log.info("storeQuestion service participant:" + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
@@ -161,6 +175,10 @@ public class ServiceController {
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	Question q = parcel.getQuestion();
+	 	log.info("storeQuestion service received question: " + q);
+	 	questionRepository.saveAndFlush(q);
+	 	log.info("storeQuestion service saved question");
+	 	
 	 	
 	 	Subscription subscription = new Subscription();
 	 	subscription.setCreated(new Date());
@@ -168,16 +186,25 @@ public class ServiceController {
 	 	subscription.setQuestion(q);
 	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
 	 	subscription.setParticipant(participant);
-	 	subscription.persist();
-	 	
-	 	questionRepository.saveAndFlush(q);
+	 	log.info("storeQuestion service to save subscription: " + subscription);
+	 	try {
+			subscription.persist();
+			log.info("storeQuestion service saved subscription");
+		} catch (Exception e) {
+			log.error("storeQuestion service unable to save subscription:" + subscription, e);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
-	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	    String returnJson = returnParcel.toJson();
+	    log.info("storeQuestion service sending back: " + returnJson);
+	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/storeDatum", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -185,6 +212,7 @@ public class ServiceController {
 	public ResponseEntity<java.lang.String> storeDatum(
 			@ModelAttribute("clientIpAddress") String clientIpAddress,
 			@RequestBody String jsonRequest) {
+		log.info("storeDatum service invoked with json: " + jsonRequest);
 	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
 	 	String sessionToken = parcel.getSessionToken();
 	 	Participant participant = null;
@@ -206,7 +234,9 @@ public class ServiceController {
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
-	    return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	    String returnJson = returnParcel.toJson();
+	    log.info("storeDatum service sending back: " + returnJson);
+	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
 	
 	

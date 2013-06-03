@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.roo.addon.json.RooJson;
 
+import com.beyobe.client.util.FromGwtDateObjectFactory;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import flexjson.ObjectFactory;
  
 @RooJson
 public class Parcel {
@@ -96,10 +98,23 @@ public class Parcel {
 	}
 
 	public static Parcel fromJsonToParcel(String json) {
-	   return new JSONDeserializer<Parcel>().use(null, Parcel.class).deserialize(json);
+		JSONDeserializer<Parcel> deserializer = new JSONDeserializer<Parcel>();
+		FromGwtDateObjectFactory gwtFactory = new FromGwtDateObjectFactory();
+		deserializer.use(gwtFactory, new String[] {"question.created", "question.updated"});
+	    return deserializer.use(null, Parcel.class).deserialize(json);
 	}
 
 	public String toJson() {
-		return new JSONSerializer().deepSerialize( this );
+		return new JSONSerializer()
+//		.transform(new ToGwtDateTransformer(), new String[] {"effectiveDate"})
+		.exclude("*.class")
+    	.exclude("*.created")
+    	.exclude("*.updated")
+    	.exclude("*.createdBy")
+    	.exclude("*.updatedBy")
+    	.exclude("participant.password")
+    	.exclude("participant.sessionToken")
+    	.exclude("participant.clientIpAddress")
+		.deepSerialize( this );
 	}
 }

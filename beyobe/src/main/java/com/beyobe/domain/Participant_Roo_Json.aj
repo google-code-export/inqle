@@ -12,10 +12,6 @@ import java.util.List;
 
 privileged aspect Participant_Roo_Json {
     
-    public String Participant.toJson() {
-        return new JSONSerializer().exclude("*.class").serialize(this);
-    }
-    
     public static Participant Participant.fromJsonToParticipant(String json) {
         return new JSONDeserializer<Participant>().use(null, Participant.class).deserialize(json);
     }

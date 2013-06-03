@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RooJpaRepository(domainType = Question.class)
 public interface QuestionRepository {
 	
-@Transactional(readOnly=true)
+
 	
 	/**
 	 * Get a list of questions to which this participant has subscribed
@@ -23,6 +23,7 @@ public interface QuestionRepository {
 			" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 "
 //			" order by s.created asc "
 			)
+	@Transactional(readOnly=true)
 	List<Question> getSubscribedQuestions(String participantId, SubscriptionType subscriptionType);
 	
 

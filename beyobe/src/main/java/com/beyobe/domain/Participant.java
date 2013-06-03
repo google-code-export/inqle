@@ -1,8 +1,7 @@
 package com.beyobe.domain;
 
-import com.beyobe.client.beans.UserRole;
-import flexjson.JSONSerializer;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,6 +14,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,6 +23,11 @@ import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.authentication.encoding.MessageDigestPasswordEncoder;
+
+import com.beyobe.client.beans.UserRole;
+
+import flexjson.JSON;
+import flexjson.JSONSerializer;
 
 @RooJavaBean
 @RooToString
@@ -74,8 +79,16 @@ public class Participant {
         this.password = encodedPassword;
     }
 
-    public String toJsonForClient() {
-        return new JSONSerializer().exclude("*.class").exclude("created").exclude("updated").exclude("createdBy").exclude("updatedBy").exclude("password").exclude("sessionKey").serialize(this);
+    public String toJson() {
+        return new JSONSerializer()
+        	.exclude("*.class")
+        	.exclude("created")
+        	.exclude("updated")
+        	.exclude("createdBy")
+        	.exclude("updatedBy")
+        	.exclude("password")
+        	.exclude("sessionKey")
+        	.serialize(this);
     }
 
     @PrePersist
