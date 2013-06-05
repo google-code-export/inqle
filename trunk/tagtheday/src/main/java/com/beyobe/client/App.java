@@ -155,9 +155,9 @@ public class App {
 		
 	}
 
-	public static long getParticipantId() {
+	public static String getParticipantId() {
 		if (participant != null) return participant.getId();
-		return 0;
+		return null;
 	}
 
 	public static void loadData() {

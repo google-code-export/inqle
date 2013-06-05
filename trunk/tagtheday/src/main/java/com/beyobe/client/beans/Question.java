@@ -55,13 +55,13 @@ public interface Question {
 
 	public abstract void setUpdated(Date updated);
 
-	public abstract Long getCreatedBy();
+	public abstract String getCreatedBy();
 
-	public abstract void setCreatedBy(Long creatorId);
+	public abstract void setCreatedBy(String creatorId);
 	
-	public abstract Long getUpdatedBy();
+	public abstract String getUpdatedBy();
 
-	public abstract void setUpdatedBy(Long updaterId);
+	public abstract void setUpdatedBy(String updaterId);
 
 //	public abstract String getCreatorName();
 //
@@ -71,7 +71,7 @@ public interface Question {
 
 	public abstract void setLang(String lang);
 
-	public abstract void setId(Long id);
+	public abstract void setId(String id);
 	
 	public abstract QuestionConcept getQuestionConcept();
 	
@@ -92,8 +92,6 @@ public interface Question {
 	public abstract void setChoices(List<Choice> choices);
 
 	public abstract String getId();
-
-	public abstract void setId(String uid);
 
 	public abstract Measurement getMeasurement();
 

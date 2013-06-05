@@ -138,6 +138,7 @@ public class DataBus {
 		//if no data, just return today's day
 		if (dataByDate != null && dataByDate.size()>0) {
 			Day day = new Day(startOfToday);
+			log.info("Created day: " + day);
 			allDays.add(day);
 			return allDays;
 		}
@@ -148,7 +149,7 @@ public class DataBus {
 		    String key = entry.getKey();
 		    earliestDate = Constants.DAY_FORMATTER.parse(key);
 		    break;
-		}	
+		}
 		
 		Date date = new Date(startOfToday.getTime());
 		if (earliestDate != null) {
@@ -159,12 +160,13 @@ public class DataBus {
 			String key = Constants.DAY_FORMATTER.format(date);
 			List<Datum> dataForDay = dataByDate.get(key);
 			Day day = new Day(date);
-			//advance date 24 hours
-			CalendarUtil.addDaysToDate(date, 1);
-			date = new Date(date.getTime());
-			
+			log.info("Created day: " + day);
 			if (dataForDay == null || dataForDay.size()==0) {
 				allDays.add(day);
+				log.info("Adding day: " + key);
+				//advance date 24 hours
+				date = new Date(date.getTime());
+				CalendarUtil.addDaysToDate(date, 1);
 				continue;
 			}
 			
@@ -172,11 +174,15 @@ public class DataBus {
 			for (Datum d: dataForDay) {
 				Question q = knownQuestions.get(d.getQuestionUid());
 				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+				log.info("Adding to day: " + tagButton.getText());
 				day.addTagButton(tagButton);
 			}
 			
 			allDays.add(day);
 			
+			//advance date 24 hours
+			date = new Date(date.getTime());
+			CalendarUtil.addDaysToDate(date, 1);
 		}
 		
 		
@@ -213,6 +219,7 @@ public class DataBus {
 		
 		//add the question to each day
 		for (Day day: getAllDays()) {
+			log.info("getAllDays: adding to day: " + day);
 			day.addQuestion(question);
 		}
 		
