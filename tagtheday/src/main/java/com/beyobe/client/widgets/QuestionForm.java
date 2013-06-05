@@ -190,6 +190,17 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		return dataTypeChoices;
 	}
 
+	public int getSelectedDataType() {
+		int dt = DataType.DOUBLE.ordinal();
+		if(dataTypePicker.getSelectedIndex()==1) {
+			dt = DataType.SHORT_TEXT.ordinal();
+		}
+		if(dataTypePicker.getSelectedIndex()==2) {
+			dt = DataType.LONG_TEXT.ordinal();
+		}
+		return dt;
+	}
+	
 	private List<Choice> getMeasurementChoices() {
 		List<Choice> choices = new ArrayList<Choice>();
 		for (Measurement m: Measurement.values()) {
@@ -213,7 +224,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	}
 	
 	public boolean saveQuestion() {
-		int dataTypeIndex = dataTypePicker.getSelectedIndex();
+		int dataTypeIndex = getSelectedDataType();
 		if (dataTypeIndex < 0) {
 			validateMessage("Please select a Type of Question.");
 			return false;

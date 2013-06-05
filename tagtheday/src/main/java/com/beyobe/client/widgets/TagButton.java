@@ -9,6 +9,12 @@ import com.beyobe.client.beans.Question;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class TagButton extends Button {
+	@Override
+	public String toString() {
+		return "TagButton [effectiveDate=" + effectiveDate + ", question="
+				+ question + ", datum=" + datum + "]";
+	}
+
 	private Question question;
 	private Datum datum;
 	private Date effectiveDate;

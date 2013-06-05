@@ -3,6 +3,7 @@ package com.beyobe.client.widgets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Question;
@@ -13,15 +14,10 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.dom.client.event.touch.TouchCancelEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchHandler;
-import com.googlecode.mgwt.dom.client.event.touch.TouchMoveEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchStartEvent;
 import com.googlecode.mgwt.ui.client.widget.RoundPanel;
 
 public class Day extends Composite implements Block, TapHandler {
@@ -36,6 +32,8 @@ public class Day extends Composite implements Block, TapHandler {
 	private Date midpoint;
 	private Date timepoint;
 	private List<TagButton> tagButtons = new ArrayList<TagButton>();
+	
+	Logger log = Logger.getLogger("Day");
 	
 	public Day(Date point) {
 		this.timepoint = point;
@@ -67,6 +65,13 @@ public class Day extends Composite implements Block, TapHandler {
 		end = new Date(startMS + MILLISECONDS_IN_A_DAY - 1);
 		
 		initWidget(tagsPanel);
+	}
+
+	@Override
+	public String toString() {
+		return "Day [start=" + start + ", midpoint=" + midpoint
+				+ ", timepoint=" + timepoint + ", end=" + end + ", created="
+				+ created + ", tagButtons=" + tagButtons + "]";
 	}
 
 	@Override
@@ -103,10 +108,11 @@ public class Day extends Composite implements Block, TapHandler {
 	@Override
 	public void addTagButton(TagButton tagButton) {
 		tagButtons.add(tagButton);
-//		tagButton.addTouchHandler(this);
 		tagButton.addTapHandler(this);
 		tagButton.getElement().getStyle().setProperty("float", "left");
 		tagsPanel.add(tagButton);
+		tagsPanel.add(new HTML("Why did this not work??"));
+		log.info("Added tagButton: " + tagButton + " to day: " + getLabelText() + "; Current tagButtons: " + tagButtons);
 	}
 
 //	@Override
@@ -144,17 +150,20 @@ public class Day extends Composite implements Block, TapHandler {
 	}
 
 	public void addQuestion(Question question) {
+		log.fine("Adding question: " + question.getAbbreviation() + " to Day: " + getLabelText());
 		if (question==null) return;
 		boolean foundQuestion = false;
 		for (TagButton tagButton: tagButtons) {
 			if(question.getId().equals(tagButton.getQuestion().getId())) {
 				foundQuestion = true;
 				tagButton.setQuestion(question);
+				log.info("Updated question");
 			}
 		}
 		if (! foundQuestion) {
 			TagButton tagButton = new TagButton(this.timepoint, question, null);
 			addTagButton(tagButton);
+			log.info("Added new question");
 		}
 		
 	}

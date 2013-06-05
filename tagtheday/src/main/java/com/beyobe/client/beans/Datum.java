@@ -26,9 +26,9 @@ public interface Datum {
 
 	public abstract void setQuestionUid(String questionUid);
 
-	public abstract Long getParticipantId();
+	public abstract String getParticipantId();
 
-	public abstract void setParticipantId(Long participantId);
+	public abstract void setParticipantId(String participantId);
 
 	public abstract Double getNumericValue();
 
