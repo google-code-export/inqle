@@ -11,8 +11,10 @@ import com.googlecode.mgwt.ui.client.widget.Button;
 public class TagButton extends Button {
 	@Override
 	public String toString() {
-		return "TagButton [effectiveDate=" + effectiveDate + ", question="
-				+ question + ", datum=" + datum + "]";
+		String s = "TagButton [effectiveDate=" + effectiveDate;
+		if (question != null) s += ", question=" + question.getAbbreviation();
+		if (datum != null) s += ", datum=" + datum.getTextValue() + "]";
+		return s;
 	}
 
 	private Question question;

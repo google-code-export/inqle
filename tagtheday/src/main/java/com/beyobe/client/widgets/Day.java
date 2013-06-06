@@ -7,8 +7,10 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.event.TagClickedEvent;
+import com.beyobe.client.util.UUID;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -64,9 +66,20 @@ public class Day extends Composite implements Block, TapHandler {
 		long startMS = start.getTime();
 		end = new Date(startMS + MILLISECONDS_IN_A_DAY - 1);
 		
+//		addDummyTB("Day constructor");
 		initWidget(tagsPanel);
 	}
 
+//	public void addDummyTB(String label) {
+//		Question q = BeanMaker.makeQuestion();
+//		q.setId(UUID.uuid());
+//		q.setCreated(new Date());
+//		q.setAbbreviation(label);
+//		q.setLongForm(label + "?");
+//		TagButton tb = new TagButton(new Date(), q, null);
+//		tagsPanel.add(tb);
+//	}
+	
 	@Override
 	public String toString() {
 		return "Day [start=" + start + ", midpoint=" + midpoint
@@ -107,12 +120,18 @@ public class Day extends Composite implements Block, TapHandler {
 
 	@Override
 	public void addTagButton(TagButton tagButton) {
+//		addDummyTB("addTagButton");
+		addTestMessage("1. Why did this not work??");
 		tagButtons.add(tagButton);
 		tagButton.addTapHandler(this);
 		tagButton.getElement().getStyle().setProperty("float", "left");
 		tagsPanel.add(tagButton);
-		tagsPanel.add(new HTML("Why did this not work??"));
+		addTestMessage("2. Why did this not work??");
 		log.info("Added tagButton: " + tagButton + " to day: " + getLabelText() + "; Current tagButtons: " + tagButtons);
+	}
+	
+	public void addTestMessage(String msg) {
+		tagsPanel.add(new HTML(msg));
 	}
 
 //	@Override
@@ -144,7 +163,9 @@ public class Day extends Composite implements Block, TapHandler {
 		
 		if (event.getSource() instanceof TagButton) {
 			App.eventBus.fireEvent(new TagClickedEvent((TagButton)event.getSource()));
-		} else if (event.getSource().equals(tagsPanel)){
+		} 
+		else if (event.getSource().equals(tagsPanel)){
+//			addDummyTB("addTagButton");
 			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
 	}
@@ -157,13 +178,13 @@ public class Day extends Composite implements Block, TapHandler {
 			if(question.getId().equals(tagButton.getQuestion().getId())) {
 				foundQuestion = true;
 				tagButton.setQuestion(question);
-				log.info("Updated question");
+				log.info("Updated question, tagButton=" + tagButton);
 			}
 		}
 		if (! foundQuestion) {
 			TagButton tagButton = new TagButton(this.timepoint, question, null);
 			addTagButton(tagButton);
-			log.info("Added new question");
+			log.info("Added new question, tagButton=" + tagButton);
 		}
 		
 	}
