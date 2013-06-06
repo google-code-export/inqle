@@ -129,6 +129,7 @@ public class DataBus {
 	}
 	
 	public List<Day> createAllDays() {
+		log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC createAllDays called. dataByDate=" + dataByDate);
 		allDays = new ArrayList<Day>();
 		
 		//add days from the start of data collection to the present.
@@ -136,8 +137,11 @@ public class DataBus {
 		Date startOfToday = Constants.DAY_FORMATTER.parse(Constants.DAY_FORMATTER.format(new Date()));
 		
 		//if no data, just return today's day
-		if (dataByDate != null && dataByDate.size()>0) {
+		if (dataByDate == null || dataByDate.size()==0) {
 			Day day = new Day(startOfToday);
+//			List<Question> addedQuestions = addTagsToDay(day);
+			addTagsToDay(day);
+//			addRemainingQuestions(addedQuestions, day);
 			log.info("Created day: " + day);
 			allDays.add(day);
 			return allDays;
@@ -157,26 +161,27 @@ public class DataBus {
 		}
 		
 		while(date.before(startOfToday) || date.equals(startOfToday)) {
-			String key = Constants.DAY_FORMATTER.format(date);
-			List<Datum> dataForDay = dataByDate.get(key);
 			Day day = new Day(date);
-			log.info("Created day: " + day);
-			if (dataForDay == null || dataForDay.size()==0) {
-				allDays.add(day);
-				log.info("Adding day: " + key);
-				//advance date 24 hours
-				date = new Date(date.getTime());
-				CalendarUtil.addDaysToDate(date, 1);
-				continue;
-			}
-			
-			//add all tagbuttons to this day
-			for (Datum d: dataForDay) {
-				Question q = knownQuestions.get(d.getQuestionUid());
-				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
-				log.info("Adding to day: " + tagButton.getText());
-				day.addTagButton(tagButton);
-			}
+			log.fine("Created day: " + day);
+			addTagsToDay(day);
+//			String key = Constants.DAY_FORMATTER.format(date);
+//			List<Datum> dataForDay = dataByDate.get(key);
+//			if (dataForDay == null || dataForDay.size()==0) {
+//				allDays.add(day);
+//				log.fine("Adding day: " + key);
+//				//advance date 24 hours
+//				date = new Date(date.getTime());
+//				CalendarUtil.addDaysToDate(date, 1);
+//				continue;
+//			}
+//			
+//			//add all tagbuttons to this day
+//			for (Datum d: dataForDay) {
+//				Question q = knownQuestions.get(d.getQuestionUid());
+//				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+//				log.info("Adding to day: " + tagButton.getText());
+//				day.addTagButton(tagButton);
+//			}
 			
 			allDays.add(day);
 			
@@ -187,6 +192,30 @@ public class DataBus {
 		
 		
 		return allDays;
+	}
+
+	private void addTagsToDay(Day day) {
+		Date date = day.getTimepoint();
+		String key = Constants.DAY_FORMATTER.format(date);
+		List<Datum> dataForDay = dataByDate.get(key);
+		List<Question> questionsAdded = new ArrayList<Question>();
+		if (dataForDay != null) {
+			//add all tagbuttons to this day
+			for (Datum d: dataForDay) {
+				Question q = knownQuestions.get(d.getQuestionUid());
+				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+				log.info("Adding to day: " + tagButton.getText());
+				questionsAdded.add(q);
+				day.addTagButton(tagButton);
+			}
+		}
+		
+		for (Question q: questionQueue) {
+			if (questionsAdded.contains(q)) continue;
+			TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
+			day.addTagButton(tagButton);
+		}
+		
 	}
 
 	public List<Day> getAllDays() {
@@ -219,7 +248,6 @@ public class DataBus {
 		
 		//add the question to each day
 		for (Day day: getAllDays()) {
-			log.info("getAllDays: adding to day: " + day);
 			day.addQuestion(question);
 		}
 		
@@ -234,10 +262,12 @@ public class DataBus {
 		try {
 			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
 		    Parcel parcel = parcelAB.as();
+		    log.info("Received Parcel: " + parcel);
 		    if (parcel.getSessionToken() != null) {
 		    	App.sessionToken = parcel.getSessionToken();
 		    	gotoTagdayPlace = true;
 		    }
+		    log.info("Received question queue: " + parcel.getQuestionQueue());
 		    if (parcel.getQuestionQueue() != null) {
 		    	setQuestionQueue(parcel.getQuestionQueue());
 		    	setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
