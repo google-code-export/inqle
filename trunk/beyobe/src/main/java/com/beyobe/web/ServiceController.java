@@ -158,7 +158,7 @@ public class ServiceController {
 			headers.add("Content-Type", "application/json");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
-	 	log.info("got parcel: " + parcel);
+//	 	log.info("got parcel: " + parcel);
 	 	String sessionToken = parcel.getSessionToken();
 	 	Participant participant = null;
 	 	try {
@@ -215,8 +215,18 @@ public class ServiceController {
 			@ModelAttribute("clientIpAddress") String clientIpAddress,
 			@RequestBody String jsonRequest) {
 		log.info("storeDatum service invoked with json: " + jsonRequest);
-	 	Parcel parcel = Parcel.fromJsonToParcel(jsonRequest);
-	 	String sessionToken = parcel.getSessionToken();
+	 	Parcel parcel;
+		String sessionToken;
+		try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+			sessionToken = parcel.getSessionToken();
+		} catch (Exception e1) {
+			log.error("storeDatum service: Unable to parse json into parcel:" + jsonRequest, e1);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+		log.info("storeDatum service: got parcel: " + parcel);
 	 	Participant participant = null;
 	 	try {
 	 		//TODO add session expiration datetime
@@ -225,7 +235,9 @@ public class ServiceController {
 	 	} catch (Exception e) {
 			//leave as null
 			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			return new ResponseEntity<String>(null, null, HttpStatus.UNAUTHORIZED);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	Datum d = parcel.getDatum();
 	 	
