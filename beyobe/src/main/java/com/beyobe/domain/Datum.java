@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -38,9 +39,13 @@ public class Datum {
 //	public static final Integer STATUS_DECLINED_ANSWER = -2;
 //	public static final Integer STATUS_NEVER_ASK_AGAIN = -3;
 	
-	@javax.persistence.Id
-    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "HibernateUuidGenerator")
+//	@javax.persistence.Id
+//    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "HibernateUuidGenerator")
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+	@GenericGenerator(name="IdOrGenerated",
+	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+	)
     private String id;
 	
     @NotNull
