@@ -121,12 +121,12 @@ public class Day extends Composite implements Block, TapHandler {
 	@Override
 	public void addTagButton(TagButton tagButton) {
 //		addDummyTB("addTagButton");
-		addTestMessage("1. Why did this not work??");
+//		addTestMessage("1. Why did this not work??");
 		tagButtons.add(tagButton);
 		tagButton.addTapHandler(this);
 		tagButton.getElement().getStyle().setProperty("float", "left");
 		tagsPanel.add(tagButton);
-		addTestMessage("2. Why did this not work??");
+//		addTestMessage("2. Why did this not work??");
 		log.info("Added tagButton: " + tagButton + " to day: " + getLabelText() + "; Current tagButtons: " + tagButtons);
 	}
 	
