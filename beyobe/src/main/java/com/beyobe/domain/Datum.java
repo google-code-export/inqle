@@ -7,6 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -31,7 +32,7 @@ import flexjson.JSONSerializer;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-public class Datum {
+public class Datum implements HasUuid {
 
 //	public static final Integer STATUS_ANSWERED_PERSONALLY = 2;
 //	public static final Integer STATUS_INFERRED = 1;
@@ -42,11 +43,18 @@ public class Datum {
 //	@javax.persistence.Id
 //    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
 //    @GeneratedValue(generator = "HibernateUuidGenerator")
-	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
-	@GenericGenerator(name="IdOrGenerated",
-	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
-	)
-    private String id;
+//	@Id
+//	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+//	@GenericGenerator(name="IdOrGenerated",
+//	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+//	)
+
+	@Id
+	@GeneratedValue(generator = "uuid")
+//	@GenericGenerator(name = "hibernate-uuid", strategy = "hibernate-uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column(name = "uuid", unique = true)
+	private String id;
 	
     @NotNull
     @Column(updatable = false)
@@ -54,12 +62,12 @@ public class Datum {
     @DateTimeFormat(style = "FF")
     private Date created = new Date();
 
-    @NotNull
+//    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "FF")
     private Date updated = null;
 
-    @NotNull
+//    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "FF")
     private Date effectiveDate = null;

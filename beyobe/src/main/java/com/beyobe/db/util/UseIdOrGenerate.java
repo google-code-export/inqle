@@ -2,14 +2,18 @@ package com.beyobe.db.util;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentityGenerator;
 
 import com.beyobe.domain.HasUuid;
+import com.beyobe.web.ServiceController;
 
 public class UseIdOrGenerate extends IdentityGenerator {
 
+	private static final Logger log = Logger.getLogger(UseIdOrGenerate.class);
+	
 //    private static final Logger log = Logger.getLogger(UseIdOrGenerate.class
 //            .getName());
 
@@ -45,11 +49,21 @@ public class UseIdOrGenerate extends IdentityGenerator {
 //        return super.generate(session, object);
 //    }
     
-    public Serializable generate(SessionImplementor arg0, Object object) throws HibernateException {
+    public Serializable generate(SessionImplementor session, Object object) throws HibernateException {
     	if (object instanceof HasUuid) {
     		String id = ((HasUuid)object).getId();
-    		if (id != null) return id;
+    		if (id != null) {
+    			try {
+					UUID uuid = UUID.fromString(id);
+					if (uuid == null) throw new RuntimeException("Unable to parse '" + id + "' as a UUID");
+					log.info("UseIdOrGenerate: id '" + id + "' is a UUID, object=" + object);
+					return id;
+				} catch (Exception e) {
+					log.error("ID '" + id + "'  is null or not a UUID", e);
+				}
+    		}
     	}
+    	log.info("UseIdOrGenerate: id is NOT a UUID, object=" + object);
     	return UUID.randomUUID().toString();
     }
 }

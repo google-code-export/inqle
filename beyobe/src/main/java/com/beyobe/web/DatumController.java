@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.beyobe.domain.Datum;
 
-@RequestMapping("/data")
+@RequestMapping("/admin/data")
 @Controller
-@RooWebScaffold(path = "data", formBackingObject = Datum.class)
+@RooWebScaffold(path = "admin/data", formBackingObject = Datum.class)
 public class DatumController {
 }

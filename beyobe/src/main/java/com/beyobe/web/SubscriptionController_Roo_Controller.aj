@@ -27,17 +27,17 @@ privileged aspect SubscriptionController_Roo_Controller {
     public String SubscriptionController.create(@Valid Subscription subscription, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, subscription);
-            return "subscriptions/create";
+            return "admin/subscriptions/create";
         }
         uiModel.asMap().clear();
         subscription.persist();
-        return "redirect:/subscriptions/" + encodeUrlPathSegment(subscription.getId().toString(), httpServletRequest);
+        return "redirect:/admin/subscriptions/" + encodeUrlPathSegment(subscription.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String SubscriptionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Subscription());
-        return "subscriptions/create";
+        return "admin/subscriptions/create";
     }
     
     @RequestMapping(value = "/{id}", produces = "text/html")
@@ -45,7 +45,7 @@ privileged aspect SubscriptionController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("subscription", Subscription.findSubscription(id));
         uiModel.addAttribute("itemId", id);
-        return "subscriptions/show";
+        return "admin/subscriptions/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -60,24 +60,24 @@ privileged aspect SubscriptionController_Roo_Controller {
             uiModel.addAttribute("subscriptions", Subscription.findAllSubscriptions());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "subscriptions/list";
+        return "admin/subscriptions/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String SubscriptionController.update(@Valid Subscription subscription, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, subscription);
-            return "subscriptions/update";
+            return "admin/subscriptions/update";
         }
         uiModel.asMap().clear();
         subscription.merge();
-        return "redirect:/subscriptions/" + encodeUrlPathSegment(subscription.getId().toString(), httpServletRequest);
+        return "redirect:/admin/subscriptions/" + encodeUrlPathSegment(subscription.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String SubscriptionController.updateForm(@PathVariable("id") String id, Model uiModel) {
         populateEditForm(uiModel, Subscription.findSubscription(id));
-        return "subscriptions/update";
+        return "admin/subscriptions/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
@@ -87,7 +87,7 @@ privileged aspect SubscriptionController_Roo_Controller {
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/subscriptions";
+        return "redirect:/admin/subscriptions";
     }
     
     void SubscriptionController.addDateTimeFormatPatterns(Model uiModel) {

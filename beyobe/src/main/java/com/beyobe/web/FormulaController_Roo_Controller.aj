@@ -28,11 +28,11 @@ privileged aspect FormulaController_Roo_Controller {
     public String FormulaController.create(@Valid Formula formula, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, formula);
-            return "formulas/create";
+            return "admin/formulas/create";
         }
         uiModel.asMap().clear();
         formula.persist();
-        return "redirect:/formulas/" + encodeUrlPathSegment(formula.getId().toString(), httpServletRequest);
+        return "redirect:/admin/formulas/" + encodeUrlPathSegment(formula.getId_().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
@@ -40,18 +40,18 @@ privileged aspect FormulaController_Roo_Controller {
         populateEditForm(uiModel, new Formula());
         List<String[]> dependencies = new ArrayList<String[]>();
         if (QuestionConcept.countQuestionConcepts() == 0) {
-            dependencies.add(new String[] { "questionconcept", "questionconcepts" });
+            dependencies.add(new String[] { "questionconcept", "admin/questionconcepts" });
         }
         uiModel.addAttribute("dependencies", dependencies);
-        return "formulas/create";
+        return "admin/formulas/create";
     }
     
-    @RequestMapping(value = "/{id}", produces = "text/html")
-    public String FormulaController.show(@PathVariable("id") String id, Model uiModel) {
+    @RequestMapping(value = "/{id_}", produces = "text/html")
+    public String FormulaController.show(@PathVariable("id_") Long id_, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("formula", Formula.findFormula(id));
-        uiModel.addAttribute("itemId", id);
-        return "formulas/show";
+        uiModel.addAttribute("formula", Formula.findFormula(id_));
+        uiModel.addAttribute("itemId", id_);
+        return "admin/formulas/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -66,34 +66,34 @@ privileged aspect FormulaController_Roo_Controller {
             uiModel.addAttribute("formulas", Formula.findAllFormulas());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "formulas/list";
+        return "admin/formulas/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String FormulaController.update(@Valid Formula formula, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, formula);
-            return "formulas/update";
+            return "admin/formulas/update";
         }
         uiModel.asMap().clear();
         formula.merge();
-        return "redirect:/formulas/" + encodeUrlPathSegment(formula.getId().toString(), httpServletRequest);
+        return "redirect:/admin/formulas/" + encodeUrlPathSegment(formula.getId_().toString(), httpServletRequest);
     }
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String FormulaController.updateForm(@PathVariable("id") String id, Model uiModel) {
-        populateEditForm(uiModel, Formula.findFormula(id));
-        return "formulas/update";
+    @RequestMapping(value = "/{id_}", params = "form", produces = "text/html")
+    public String FormulaController.updateForm(@PathVariable("id_") Long id_, Model uiModel) {
+        populateEditForm(uiModel, Formula.findFormula(id_));
+        return "admin/formulas/update";
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String FormulaController.delete(@PathVariable("id") String id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Formula formula = Formula.findFormula(id);
+    @RequestMapping(value = "/{id_}", method = RequestMethod.DELETE, produces = "text/html")
+    public String FormulaController.delete(@PathVariable("id_") Long id_, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+        Formula formula = Formula.findFormula(id_);
         formula.remove();
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/formulas";
+        return "redirect:/admin/formulas";
     }
     
     void FormulaController.addDateTimeFormatPatterns(Model uiModel) {

@@ -12,5 +12,6 @@
         <field:display field="role" id="s_com_beyobe_domain_Participant_role" object="${participant}" render="false" z="user-managed"/>
         <field:display field="sessionToken" id="s_com_beyobe_domain_Participant_sessionToken" object="${participant}" z="jfemFSKxa6fQ4cwcpDl7sZ/yVnw="/>
         <field:display field="clientIpAddress" id="s_com_beyobe_domain_Participant_clientIpAddress" object="${participant}" z="1rfcGB3jR3o9dL919TK8lCJXiQc="/>
+        <field:display field="id" id="s_com_beyobe_domain_Participant_id" object="${participant}" z="cKSVly9Xu1wxLR+Ha2iUWbbhIxs="/>
     </page:show>
 </div>

@@ -19,5 +19,6 @@
         <field:display field="participantId" id="s_com_beyobe_domain_Datum_participantId" object="${datum}" z="b77uDrqGmJIhByEzeWwMpYMWjmg="/>
         <field:display field="dataType" id="s_com_beyobe_domain_Datum_dataType" object="${datum}" z="Vn9REHhLHWRfIKyhScvXR8I+Z1Q="/>
         <field:display field="answerStatus" id="s_com_beyobe_domain_Datum_answerStatus" object="${datum}" z="FkC1c9Hwj8x+pbajOQpC1udcUCY="/>
+        <field:display field="id" id="s_com_beyobe_domain_Datum_id" object="${datum}" z="yQgGAIKkYFgdotXTlgyMpzouWu4="/>
     </page:show>
 </div>

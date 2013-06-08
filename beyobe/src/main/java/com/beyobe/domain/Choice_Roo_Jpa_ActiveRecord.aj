@@ -28,9 +28,9 @@ privileged aspect Choice_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Choice o", Choice.class).getResultList();
     }
     
-    public static Choice Choice.findChoice(String id) {
-        if (id == null || id.length() == 0) return null;
-        return entityManager().find(Choice.class, id);
+    public static Choice Choice.findChoice(Long id_) {
+        if (id_ == null) return null;
+        return entityManager().find(Choice.class, id_);
     }
     
     public static List<Choice> Choice.findChoiceEntries(int firstResult, int maxResults) {
@@ -49,7 +49,7 @@ privileged aspect Choice_Roo_Jpa_ActiveRecord {
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Choice attached = Choice.findChoice(this.id);
+            Choice attached = Choice.findChoice(this.id_);
             this.entityManager.remove(attached);
         }
     }

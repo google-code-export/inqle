@@ -231,6 +231,7 @@ public class ServiceController {
 	 	try {
 	 		//TODO add session expiration datetime
 			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			log.info("storeDatum service: got participant: " + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
@@ -239,9 +240,17 @@ public class ServiceController {
 		    headers.add("Content-Type", "application/json");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-	 	Datum d = parcel.getDatum();
-	 	
-	 	datumRepository.saveAndFlush(d);
+	 	try {
+			Datum d = parcel.getDatum();
+			log.info("storeDatum service: got datum: " + d);
+			datumRepository.save(d);
+			datumRepository.flush();
+		} catch (Exception e) {
+			log.error("Unable to get and save datum", e);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
@@ -297,4 +306,9 @@ public class ServiceController {
         return questions;
     }
     */
+	
+	public static void main(String[] args) {
+		UUID uuid = UUID.fromString("329BD5D9-B793-49E2-8206-36B65DEEC216");
+		System.out.println("UUID is a UUID");
+	}
 }

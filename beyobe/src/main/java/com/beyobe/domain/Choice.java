@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -22,11 +23,15 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
-public class Choice {
+public class Choice implements HasUuid {
 
-	@javax.persistence.Id
-    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "HibernateUuidGenerator")
+//	@javax.persistence.Id
+//    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "HibernateUuidGenerator")
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+	@GenericGenerator(name="IdOrGenerated",
+	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+	)
     private String id;
 	
     @NotNull

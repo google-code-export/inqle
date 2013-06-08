@@ -100,7 +100,7 @@ public class Parcel {
 	public static Parcel fromJsonToParcel(String json) {
 		JSONDeserializer<Parcel> deserializer = new JSONDeserializer<Parcel>();
 		FromGwtDateObjectFactory gwtFactory = new FromGwtDateObjectFactory();
-		deserializer.use(gwtFactory, new String[] {"question.created", "question.updated"});
+		deserializer.use(gwtFactory, new String[] {"question.created", "question.updated", "datum.created", "datum.updated", "datum.effectiveDate"});
 	    return deserializer.use(null, Parcel.class).deserialize(json);
 	}
 

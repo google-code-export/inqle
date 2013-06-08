@@ -8,5 +8,6 @@
         <field:display field="lang" id="s_com_beyobe_domain_Choice_lang" object="${choice}" z="zdNmBQbmp75UZDJu4A8GY4GOqj4="/>
         <field:display field="updatedBy" id="s_com_beyobe_domain_Choice_updatedBy" object="${choice}" z="n0Zcue2TVSissHlWEdfEkU9o3RY="/>
         <field:display field="createdBy" id="s_com_beyobe_domain_Choice_createdBy" object="${choice}" z="Fb2ASuexZTulcRqvnG/UtbCppQU="/>
+        <field:display field="id" id="s_com_beyobe_domain_Choice_id" object="${choice}" z="MgphqqhZKzrKg2Fkj9DKN4hoFOY="/>
     </page:show>
 </div>

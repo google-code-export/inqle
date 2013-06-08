@@ -6,15 +6,31 @@ package com.beyobe.domain;
 import com.beyobe.domain.Choice;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Choice_Roo_Jpa_Entity {
     
     declare @type: Choice: @Entity;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_")
+    private Long Choice.id_;
+    
     @Version
     @Column(name = "version")
     private Integer Choice.version;
+    
+    public Long Choice.getId_() {
+        return this.id_;
+    }
+    
+    public void Choice.setId_(Long id) {
+        this.id_ = id;
+    }
     
     public Integer Choice.getVersion() {
         return this.version;

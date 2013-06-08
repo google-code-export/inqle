@@ -8,6 +8,7 @@
         <field:input field="updatedBy" id="c_com_beyobe_domain_Formula_updatedBy" validationMessageCode="field_invalid_integer" z="NiLDI/D53c59yYIlq6ZldgqE9AE="/>
         <field:input field="createdBy" id="c_com_beyobe_domain_Formula_createdBy" validationMessageCode="field_invalid_integer" z="6x56PRFE3cRH2orGd59S7fYzSzw="/>
         <field:select field="concept" id="c_com_beyobe_domain_Formula_concept" itemValue="id" items="${questionconcepts}" path="/questionconcepts" required="true" z="bNHLWshb1VhLb7RtqhqNz/8rfQY="/>
+        <field:input field="id" id="c_com_beyobe_domain_Formula_id" z="tOBycC76bNPf/VZBfyA4Fnk9bzQ="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Formula" render="${not empty dependencies}" z="3TLh9PzOolnVyDuLXXIfT4HjjNI="/>
 </div>

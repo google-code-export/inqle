@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.beyobe.domain.QuestionConcept;
 
-@RequestMapping("/questionconcepts")
+@RequestMapping("/admin/questionconcepts")
 @Controller
-@RooWebScaffold(path = "questionconcepts", formBackingObject = QuestionConcept.class)
+@RooWebScaffold(path = "admin/questionconcepts", formBackingObject = QuestionConcept.class)
 public class QuestionConceptController {
 }

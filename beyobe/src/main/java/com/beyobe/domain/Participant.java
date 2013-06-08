@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -33,15 +34,20 @@ import flexjson.JSONSerializer;
 @RooToString
 @RooJson
 @RooJpaActiveRecord(finders = { "findParticipantsByUsernameEqualsAndPasswordEquals", "findParticipantsBySessionTokenEqualsAndClientIpAddressEquals" })
-public class Participant {
+public class Participant implements HasUuid {
 
     @Autowired
     @Transient
     private transient MessageDigestPasswordEncoder passwordEncoder;
 
+//    @Id
+//    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "HibernateUuidGenerator")
     @Id
-    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "HibernateUuidGenerator")
+    @GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+	@GenericGenerator(name="IdOrGenerated",
+	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+	)
     private String id;
 
     @Column(unique = true)

@@ -28,11 +28,11 @@ privileged aspect ChoiceController_Roo_Controller {
     public String ChoiceController.create(@Valid Choice choice, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, choice);
-            return "choices/create";
+            return "admin/choices/create";
         }
         uiModel.asMap().clear();
         choice.persist();
-        return "redirect:/choices/" + encodeUrlPathSegment(choice.getId().toString(), httpServletRequest);
+        return "redirect:/admin/choices/" + encodeUrlPathSegment(choice.getId_().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
@@ -40,18 +40,18 @@ privileged aspect ChoiceController_Roo_Controller {
         populateEditForm(uiModel, new Choice());
         List<String[]> dependencies = new ArrayList<String[]>();
         if (ChoiceConcept.countChoiceConcepts() == 0) {
-            dependencies.add(new String[] { "choiceconcept", "choiceconcepts" });
+            dependencies.add(new String[] { "choiceconcept", "admin/choiceconcepts" });
         }
         uiModel.addAttribute("dependencies", dependencies);
-        return "choices/create";
+        return "admin/choices/create";
     }
     
-    @RequestMapping(value = "/{id}", produces = "text/html")
-    public String ChoiceController.show(@PathVariable("id") String id, Model uiModel) {
+    @RequestMapping(value = "/{id_}", produces = "text/html")
+    public String ChoiceController.show(@PathVariable("id_") Long id_, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("choice", Choice.findChoice(id));
-        uiModel.addAttribute("itemId", id);
-        return "choices/show";
+        uiModel.addAttribute("choice", Choice.findChoice(id_));
+        uiModel.addAttribute("itemId", id_);
+        return "admin/choices/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -66,34 +66,34 @@ privileged aspect ChoiceController_Roo_Controller {
             uiModel.addAttribute("choices", Choice.findAllChoices());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "choices/list";
+        return "admin/choices/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String ChoiceController.update(@Valid Choice choice, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, choice);
-            return "choices/update";
+            return "admin/choices/update";
         }
         uiModel.asMap().clear();
         choice.merge();
-        return "redirect:/choices/" + encodeUrlPathSegment(choice.getId().toString(), httpServletRequest);
+        return "redirect:/admin/choices/" + encodeUrlPathSegment(choice.getId_().toString(), httpServletRequest);
     }
     
-    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
-    public String ChoiceController.updateForm(@PathVariable("id") String id, Model uiModel) {
-        populateEditForm(uiModel, Choice.findChoice(id));
-        return "choices/update";
+    @RequestMapping(value = "/{id_}", params = "form", produces = "text/html")
+    public String ChoiceController.updateForm(@PathVariable("id_") Long id_, Model uiModel) {
+        populateEditForm(uiModel, Choice.findChoice(id_));
+        return "admin/choices/update";
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
-    public String ChoiceController.delete(@PathVariable("id") String id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Choice choice = Choice.findChoice(id);
+    @RequestMapping(value = "/{id_}", method = RequestMethod.DELETE, produces = "text/html")
+    public String ChoiceController.delete(@PathVariable("id_") Long id_, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+        Choice choice = Choice.findChoice(id_);
         choice.remove();
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/choices";
+        return "redirect:/admin/choices";
     }
     
     void ChoiceController.addDateTimeFormatPatterns(Model uiModel) {

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 privileged aspect QuestionRepository_Roo_Jpa_Repository {
     
-    declare parents: QuestionRepository extends JpaRepository<Question, Long>;
+    declare parents: QuestionRepository extends JpaRepository<Question, String>;
     
     declare parents: QuestionRepository extends JpaSpecificationExecutor<Question>;
     

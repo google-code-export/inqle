@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_beyobe_domain_QuestionConcept" object="${questionconcept}" path="/admin/questionconcepts" z="F8MatyD7R90xl3NtOUVbj0IKVJw=">
+        <field:display field="key" id="s_com_beyobe_domain_QuestionConcept_key" object="${questionconcept}" z="O51hhwH2/nhd4kGnjz/74CqbvJo="/>
+        <field:display date="true" dateTimePattern="${questionConcept_updated_date_format}" field="updated" id="s_com_beyobe_domain_QuestionConcept_updated" object="${questionconcept}" z="1XfAQtHi52gUJzfSzMEAhU1YOTU="/>
+        <field:display field="updatedBy" id="s_com_beyobe_domain_QuestionConcept_updatedBy" object="${questionconcept}" z="unHXd82lJyt5VTlHyOR4SuHXB+k="/>
+        <field:display field="createdBy" id="s_com_beyobe_domain_QuestionConcept_createdBy" object="${questionconcept}" z="t//yMUvy70xVJzsOQx5zF72o9mc="/>
+    </page:show>
+</div>

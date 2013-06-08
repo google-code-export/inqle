@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.beyobe.domain.Subscription;
 
-@RequestMapping("/subscriptions")
+@RequestMapping("/admin/subscriptions")
 @Controller
-@RooWebScaffold(path = "subscriptions", formBackingObject = Subscription.class)
+@RooWebScaffold(path = "admin/subscriptions", formBackingObject = Subscription.class)
 public class SubscriptionController {
 }

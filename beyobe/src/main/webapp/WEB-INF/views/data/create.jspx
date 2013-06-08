@@ -12,13 +12,14 @@
         <field:input field="normalizedValue" id="c_com_beyobe_domain_Datum_normalizedValue" validationMessageCode="field_invalid_number" z="Vx4A8B5B8XiH3NL7uOdZsCmdX2Y="/>
         <field:select field="unit" id="c_com_beyobe_domain_Datum_unit" items="${units}" path="units" z="kPhJy3wHu4YtxQTDOkOGq5lsAKM="/>
         <field:select field="questionConcept" id="c_com_beyobe_domain_Datum_questionConcept" itemValue="id" items="${questionconcepts}" path="/questionconcepts" z="MtK8MD5lKia/JV0vI4RHis72jMU="/>
-        <field:select field="formula" id="c_com_beyobe_domain_Datum_formula" itemValue="id" items="${formulas}" path="/formulas" z="cjFdwjK2wzt87W571aJOsD0eohs="/>
+        <field:select field="formula" id="c_com_beyobe_domain_Datum_formula" itemValue="id_" items="${formulas}" path="/formulas" z="WPXr76gAXbveSORuJqrYdsqbzpc="/>
         <field:input field="updatedBy" id="c_com_beyobe_domain_Datum_updatedBy" render="false" z="user-managed"/>
         <field:input field="createdBy" id="c_com_beyobe_domain_Datum_createdBy" render="false" z="user-managed"/>
         <field:input field="questionId" id="c_com_beyobe_domain_Datum_questionId" z="z2bdp7z7xmlprKXMzp14OyJpvPE="/>
         <field:input field="participantId" id="c_com_beyobe_domain_Datum_participantId" required="true" z="k/IN39LI5l60E0Kn/2Y0wilHLzA="/>
         <field:select field="dataType" id="c_com_beyobe_domain_Datum_dataType" items="${datatypes}" path="datatypes" z="dw+cpqfjmB7KlbVTm0LZSBGlt7o="/>
         <field:select field="answerStatus" id="c_com_beyobe_domain_Datum_answerStatus" items="${answerstatuses}" path="answerstatuses" z="l8/DX4wq5kJMbCcUywrqXKpRG1c="/>
+        <field:input field="id" id="c_com_beyobe_domain_Datum_id" z="pPPfi1A3o0Ft/toUKys7hwh9lPk="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Datum" render="${not empty dependencies}" z="Tdz9Tyrw/gupSGcxfGKwhuIUIpw="/>
 </div>

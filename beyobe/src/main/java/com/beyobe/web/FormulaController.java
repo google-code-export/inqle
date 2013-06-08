@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.beyobe.domain.Formula;
 
-@RequestMapping("/formulas")
+@RequestMapping("/admin/formulas")
 @Controller
-@RooWebScaffold(path = "formulas", formBackingObject = Formula.class)
+@RooWebScaffold(path = "admin/formulas", formBackingObject = Formula.class)
 public class FormulaController {
 }
