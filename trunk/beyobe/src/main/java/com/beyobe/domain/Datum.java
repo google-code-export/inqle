@@ -43,17 +43,19 @@ public class Datum implements HasUuid {
 //	@javax.persistence.Id
 //    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
 //    @GeneratedValue(generator = "HibernateUuidGenerator")
+	
 //	@Id
-//	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
-//	@GenericGenerator(name="IdOrGenerated",
-//	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
-//	)
-
+//	@GeneratedValue(generator = "uuid")
+////	@GenericGenerator(name = "hibernate-uuid", strategy = "hibernate-uuid")
+//	@GenericGenerator(name = "uuid", strategy = "uuid2")
+//	@Column(name = "uuid", unique = true)
+	
+	
 	@Id
-	@GeneratedValue(generator = "uuid")
-//	@GenericGenerator(name = "hibernate-uuid", strategy = "hibernate-uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name = "uuid", unique = true)
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+	@GenericGenerator(name="IdOrGenerated",
+	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+	)
 	private String id;
 	
     @NotNull

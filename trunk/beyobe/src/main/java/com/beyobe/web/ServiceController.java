@@ -243,8 +243,15 @@ public class ServiceController {
 	 	try {
 			Datum d = parcel.getDatum();
 			log.info("storeDatum service: got datum: " + d);
-			datumRepository.save(d);
-			datumRepository.flush();
+			Datum existingDatum = datumRepository.findOne(d.getId());
+			//TODO some day remove this nasty workaround because JPA gives error when we try to update a object (nutty thing to try to do I know)
+			if (existingDatum == null) {
+				datumRepository.save(d);
+				datumRepository.flush();
+			} else {
+				mergeAndSave(d, existingDatum);
+			}
+			
 		} catch (Exception e) {
 			log.error("Unable to get and save datum", e);
 			HttpHeaders headers = new HttpHeaders();
@@ -263,6 +270,49 @@ public class ServiceController {
 	}
 	
 	
+	private void mergeAndSave(Datum newDatum, Datum existingDatum) {
+		if (newDatum.getAnswerStatus() != null) {
+			existingDatum.setAnswerStatus(newDatum.getAnswerStatus());
+		}
+		if (newDatum.getChoice() != null) {
+			existingDatum.setChoice(newDatum.getChoice());
+		}
+		if (newDatum.getUpdated() != null) {
+			existingDatum.setUpdated(newDatum.getUpdated());
+		}
+		if (newDatum.getDataType() != null) {
+			existingDatum.setDataType(newDatum.getDataType());
+		}
+		if (newDatum.getEffectiveDate() != null) {
+			existingDatum.setEffectiveDate(newDatum.getEffectiveDate());
+		}
+		if (newDatum.getFormula() != null) {
+			existingDatum.setFormula(newDatum.getFormula());
+		}
+		if (newDatum.getIntegerValue() != null) {
+			existingDatum.setIntegerValue(newDatum.getIntegerValue());
+		}
+		if (newDatum.getNormalizedValue() != null) {
+			existingDatum.setNormalizedValue(newDatum.getNormalizedValue());
+		}
+		if (newDatum.getNumericValue() != null) {
+			existingDatum.setNumericValue(newDatum.getNumericValue());
+		}
+		if (newDatum.getQuestionConcept() != null) {
+			existingDatum.setQuestionConcept(newDatum.getQuestionConcept());
+		}
+		if (newDatum.getTextValue() != null) {
+			existingDatum.setTextValue(newDatum.getTextValue());
+		}
+		if (newDatum.getUnit() != null) {
+			existingDatum.setUnit(newDatum.getUnit());
+		}
+		if (newDatum.getUpdatedBy() != null) {
+			existingDatum.setUpdatedBy(newDatum.getUpdatedBy());
+		}
+		datumRepository.saveAndFlush(existingDatum);
+	}
+
 	/*
     @RequestMapping(method = RequestMethod.POST, value = "{id}")
     public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
