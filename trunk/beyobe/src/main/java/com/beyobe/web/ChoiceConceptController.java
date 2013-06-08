@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.beyobe.domain.ChoiceConcept;
 
-@RequestMapping("/choiceconcepts")
+@RequestMapping("/admin/choiceconcepts")
 @Controller
-@RooWebScaffold(path = "choiceconcepts", formBackingObject = ChoiceConcept.class)
+@RooWebScaffold(path = "admin/choiceconcepts", formBackingObject = ChoiceConcept.class)
 public class ChoiceConceptController {
 }

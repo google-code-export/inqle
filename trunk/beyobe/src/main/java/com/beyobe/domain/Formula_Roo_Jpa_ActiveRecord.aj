@@ -28,9 +28,9 @@ privileged aspect Formula_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT o FROM Formula o", Formula.class).getResultList();
     }
     
-    public static Formula Formula.findFormula(String id) {
-        if (id == null || id.length() == 0) return null;
-        return entityManager().find(Formula.class, id);
+    public static Formula Formula.findFormula(Long id_) {
+        if (id_ == null) return null;
+        return entityManager().find(Formula.class, id_);
     }
     
     public static List<Formula> Formula.findFormulaEntries(int firstResult, int maxResults) {
@@ -49,7 +49,7 @@ privileged aspect Formula_Roo_Jpa_ActiveRecord {
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Formula attached = Formula.findFormula(this.id);
+            Formula attached = Formula.findFormula(this.id_);
             this.entityManager.remove(attached);
         }
     }

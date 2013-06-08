@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -24,9 +25,13 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord
 public class Formula {
 
-	@javax.persistence.Id
-    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "HibernateUuidGenerator")
+//	@javax.persistence.Id
+//    @GenericGenerator(name = "HibernateUuidGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "HibernateUuidGenerator")
+	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
+	@GenericGenerator(name="IdOrGenerated",
+	                  strategy="com.beyobe.db.util.UseIdOrGenerate"
+	)
     private String id;
 	
     @NotNull

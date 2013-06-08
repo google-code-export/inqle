@@ -4,36 +4,36 @@
     <jsp:output omit-xml-declaration="yes"/>
     <menu:menu id="_menu" z="nZaf43BjUg1iM0v70HJVEsXDopc=">
         <menu:category id="c_participant" z="ANH5qTsrRqntSp+G/TNiqRlMyII=">
-            <menu:item id="i_participant_new" messageCode="global_menu_new" url="/participants?form" z="d/gQJiqo5AiD27LP1zhtXRYMcyM="/>
-            <menu:item id="i_participant_list" messageCode="global_menu_list" url="/participants?page=1&amp;size=${empty param.size ? 10 : param.size}" z="S0+pQAqtn2c+Ml1YK0wRvKopmdk="/>
+            <menu:item id="i_participant_new" messageCode="global_menu_new" url="/admin/participants?form" z="user-managed"/>
+            <menu:item id="i_participant_list" messageCode="global_menu_list" url="/admin/participants?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_question" z="SR0L0iZw9fVnYZY0B/dk7XBq6eQ=">
-            <menu:item id="i_question_new" messageCode="global_menu_new" url="/questions?form" z="7Bx54/bA+53IAlm/YYWnirDy13E="/>
-            <menu:item id="i_question_list" messageCode="global_menu_list" url="/questions?page=1&amp;size=${empty param.size ? 10 : param.size}" z="xkHgyP5wW2F64BsTqMA7Yb0CdHY="/>
+            <menu:item id="i_question_new" messageCode="global_menu_new" url="/admin/questions?form" z="user-managed"/>
+            <menu:item id="i_question_list" messageCode="global_menu_list" url="/admin/questions?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_datum" z="CBxLx5p/FyREIstQ6J2xVk4uGnE=">
-            <menu:item id="i_datum_new" messageCode="global_menu_new" url="/data?form" z="6ZEaFdcL84oWJVO6gR+qhf8NEEs="/>
-            <menu:item id="i_datum_list" messageCode="global_menu_list" url="/data?page=1&amp;size=${empty param.size ? 10 : param.size}" z="DWxeCNOTuxehdREmR21xFzd79FU="/>
+            <menu:item id="i_datum_new" messageCode="global_menu_new" url="/admin/data?form" z="user-managed"/>
+            <menu:item id="i_datum_list" messageCode="global_menu_list" url="/admin/data?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_choice" z="PLrBP+Ue9rzKSMjSbNJbbirwAuI=">
-            <menu:item id="i_choice_new" messageCode="global_menu_new" url="/choices?form" z="+c+Bhd4XwhaXE0ur5R66971rLi0="/>
-            <menu:item id="i_choice_list" messageCode="global_menu_list" url="/choices?page=1&amp;size=${empty param.size ? 10 : param.size}" z="wUHP6QcYieqDDNEIDwpKwSDO5I0="/>
+            <menu:item id="i_choice_new" messageCode="global_menu_new" url="/admin/choices?form" z="user-managed"/>
+            <menu:item id="i_choice_list" messageCode="global_menu_list" url="/admin/choices?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_formula" z="GcxkCdFtYDn4fuumOplK4Z7x/k4=">
-            <menu:item id="i_formula_new" messageCode="global_menu_new" url="/formulas?form" z="xzfc11dItOkJS+UMGvFwWKTFUU0="/>
-            <menu:item id="i_formula_list" messageCode="global_menu_list" url="/formulas?page=1&amp;size=${empty param.size ? 10 : param.size}" z="sRo/NaZvnTQ7lZCXg5MvYwWKxzQ="/>
+            <menu:item id="i_formula_new" messageCode="global_menu_new" url="/admin/formulas?form" z="user-managed"/>
+            <menu:item id="i_formula_list" messageCode="global_menu_list" url="/admin/formulas?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_subscription" z="r/P1cWsW/RwCvNVaISC6CJqMlvs=">
-            <menu:item id="i_subscription_new" messageCode="global_menu_new" url="/subscriptions?form" z="9Dr3ZfLiB+31yYvs7eBReS2foXg="/>
-            <menu:item id="i_subscription_list" messageCode="global_menu_list" url="/subscriptions?page=1&amp;size=${empty param.size ? 10 : param.size}" z="03VnWizM7afNsFFTvgrrta2Xv3w="/>
+            <menu:item id="i_subscription_new" messageCode="global_menu_new" url="/admin/subscriptions?form" z="user-managed"/>
+            <menu:item id="i_subscription_list" messageCode="global_menu_list" url="/admin/subscriptions?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_choiceconcept" z="24e6YW05B3v313+XKEQrHJZu5Lw=">
-            <menu:item id="i_choiceconcept_new" messageCode="global_menu_new" url="/choices?form" z="TQjOuV2NuE2XCPLT5RWwyEGY5XM="/>
-            <menu:item id="i_choiceconcept_list" messageCode="global_menu_list" url="/choices?page=1&amp;size=${empty param.size ? 10 : param.size}" z="rEr3vyDLHIJpzp9aGXMcRJm6/80="/>
+            <menu:item id="i_choiceconcept_new" messageCode="global_menu_new" url="/admin/choices?form" z="user-managed"/>
+            <menu:item id="i_choiceconcept_list" messageCode="global_menu_list" url="/admin/choices?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_questionconcept" z="GoWt8ft+Wl3xjwU9jk4E4pBn3CU=">
-            <menu:item id="i_questionconcept_new" messageCode="global_menu_new" url="/concepts?form" z="1mV9XC6zJ6io8EclUmnKlcLeglg="/>
-            <menu:item id="i_questionconcept_list" messageCode="global_menu_list" url="/concepts?page=1&amp;size=${empty param.size ? 10 : param.size}" z="B4BLGlTzJyZcGumG5AJPCWKfzt4="/>
+            <menu:item id="i_questionconcept_new" messageCode="global_menu_new" url="/admin/concepts?form" z="user-managed"/>
+            <menu:item id="i_questionconcept_list" messageCode="global_menu_list" url="/admin/concepts?page=1&amp;size=${empty param.size ? 10 : param.size}" z="user-managed"/>
         </menu:category>
         <menu:category id="c_controller" z="nj8Dm3hojIyIEyPkwE1UMDIs+K8=">
             <menu:item id="i_controller__serviceindex_id" messageCode="global_generic" url="/service/index" z="xmhk9ZyHXHn6oUfRhxOd26kZUQQ="/>

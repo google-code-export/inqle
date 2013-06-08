@@ -37,17 +37,17 @@ privileged aspect DatumController_Roo_Controller {
     public String DatumController.create(@Valid Datum datum, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, datum);
-            return "data/create";
+            return "admin/data/create";
         }
         uiModel.asMap().clear();
         datumRepository.save(datum);
-        return "redirect:/data/" + encodeUrlPathSegment(datum.getId().toString(), httpServletRequest);
+        return "redirect:/admin/data/" + encodeUrlPathSegment(datum.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String DatumController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Datum());
-        return "data/create";
+        return "admin/data/create";
     }
     
     @RequestMapping(value = "/{id}", produces = "text/html")
@@ -55,7 +55,7 @@ privileged aspect DatumController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("datum", datumRepository.findOne(id));
         uiModel.addAttribute("itemId", id);
-        return "data/show";
+        return "admin/data/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -70,24 +70,24 @@ privileged aspect DatumController_Roo_Controller {
             uiModel.addAttribute("data", datumRepository.findAll());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "data/list";
+        return "admin/data/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String DatumController.update(@Valid Datum datum, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, datum);
-            return "data/update";
+            return "admin/data/update";
         }
         uiModel.asMap().clear();
         datumRepository.save(datum);
-        return "redirect:/data/" + encodeUrlPathSegment(datum.getId().toString(), httpServletRequest);
+        return "redirect:/admin/data/" + encodeUrlPathSegment(datum.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String DatumController.updateForm(@PathVariable("id") String id, Model uiModel) {
         populateEditForm(uiModel, datumRepository.findOne(id));
-        return "data/update";
+        return "admin/data/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
@@ -97,7 +97,7 @@ privileged aspect DatumController_Roo_Controller {
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/data";
+        return "redirect:/admin/data";
     }
     
     void DatumController.addDateTimeFormatPatterns(Model uiModel) {

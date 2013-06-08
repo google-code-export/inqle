@@ -8,5 +8,6 @@
         <field:display field="updatedBy" id="s_com_beyobe_domain_Formula_updatedBy" object="${formula}" z="Wwei54gzgGWUcO6uWT64+szwHkU="/>
         <field:display field="createdBy" id="s_com_beyobe_domain_Formula_createdBy" object="${formula}" z="LwvujSEAk1+yokPGmcjqTWkM2IA="/>
         <field:display field="concept" id="s_com_beyobe_domain_Formula_concept" object="${formula}" z="lDRB0/HAIEtdPqPWTg4DD2ZTn9w="/>
+        <field:display field="id" id="s_com_beyobe_domain_Formula_id" object="${formula}" z="wOeSOMRTuzVwiYcB3cJd2uTtSqU="/>
     </page:show>
 </div>

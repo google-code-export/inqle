@@ -27,17 +27,17 @@ privileged aspect ParticipantController_Roo_Controller {
     public String ParticipantController.create(@Valid Participant participant, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, participant);
-            return "participants/create";
+            return "admin/participants/create";
         }
         uiModel.asMap().clear();
         participant.persist();
-        return "redirect:/participants/" + encodeUrlPathSegment(participant.getId().toString(), httpServletRequest);
+        return "redirect:/admin/participants/" + encodeUrlPathSegment(participant.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String ParticipantController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Participant());
-        return "participants/create";
+        return "admin/participants/create";
     }
     
     @RequestMapping(value = "/{id}", produces = "text/html")
@@ -45,7 +45,7 @@ privileged aspect ParticipantController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("participant", Participant.findParticipant(id));
         uiModel.addAttribute("itemId", id);
-        return "participants/show";
+        return "admin/participants/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -60,24 +60,24 @@ privileged aspect ParticipantController_Roo_Controller {
             uiModel.addAttribute("participants", Participant.findAllParticipants());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "participants/list";
+        return "admin/participants/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String ParticipantController.update(@Valid Participant participant, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, participant);
-            return "participants/update";
+            return "admin/participants/update";
         }
         uiModel.asMap().clear();
         participant.merge();
-        return "redirect:/participants/" + encodeUrlPathSegment(participant.getId().toString(), httpServletRequest);
+        return "redirect:/admin/participants/" + encodeUrlPathSegment(participant.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String ParticipantController.updateForm(@PathVariable("id") String id, Model uiModel) {
         populateEditForm(uiModel, Participant.findParticipant(id));
-        return "participants/update";
+        return "admin/participants/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
@@ -87,7 +87,7 @@ privileged aspect ParticipantController_Roo_Controller {
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/participants";
+        return "redirect:/admin/participants";
     }
     
     void ParticipantController.addDateTimeFormatPatterns(Model uiModel) {

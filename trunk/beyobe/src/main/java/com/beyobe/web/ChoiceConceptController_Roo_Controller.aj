@@ -25,17 +25,17 @@ privileged aspect ChoiceConceptController_Roo_Controller {
     public String ChoiceConceptController.create(@Valid ChoiceConcept choiceConcept, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, choiceConcept);
-            return "choiceconcepts/create";
+            return "admin/choiceconcepts/create";
         }
         uiModel.asMap().clear();
         choiceConcept.persist();
-        return "redirect:/choiceconcepts/" + encodeUrlPathSegment(choiceConcept.getId().toString(), httpServletRequest);
+        return "redirect:/admin/choiceconcepts/" + encodeUrlPathSegment(choiceConcept.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String ChoiceConceptController.createForm(Model uiModel) {
         populateEditForm(uiModel, new ChoiceConcept());
-        return "choiceconcepts/create";
+        return "admin/choiceconcepts/create";
     }
     
     @RequestMapping(value = "/{id}", produces = "text/html")
@@ -43,7 +43,7 @@ privileged aspect ChoiceConceptController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("choiceconcept", ChoiceConcept.findChoiceConcept(id));
         uiModel.addAttribute("itemId", id);
-        return "choiceconcepts/show";
+        return "admin/choiceconcepts/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -58,24 +58,24 @@ privileged aspect ChoiceConceptController_Roo_Controller {
             uiModel.addAttribute("choiceconcepts", ChoiceConcept.findAllChoiceConcepts());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "choiceconcepts/list";
+        return "admin/choiceconcepts/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String ChoiceConceptController.update(@Valid ChoiceConcept choiceConcept, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, choiceConcept);
-            return "choiceconcepts/update";
+            return "admin/choiceconcepts/update";
         }
         uiModel.asMap().clear();
         choiceConcept.merge();
-        return "redirect:/choiceconcepts/" + encodeUrlPathSegment(choiceConcept.getId().toString(), httpServletRequest);
+        return "redirect:/admin/choiceconcepts/" + encodeUrlPathSegment(choiceConcept.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String ChoiceConceptController.updateForm(@PathVariable("id") String id, Model uiModel) {
         populateEditForm(uiModel, ChoiceConcept.findChoiceConcept(id));
-        return "choiceconcepts/update";
+        return "admin/choiceconcepts/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
@@ -85,7 +85,7 @@ privileged aspect ChoiceConceptController_Roo_Controller {
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/choiceconcepts";
+        return "redirect:/admin/choiceconcepts";
     }
     
     void ChoiceConceptController.addDateTimeFormatPatterns(Model uiModel) {

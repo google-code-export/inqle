@@ -34,25 +34,25 @@ privileged aspect QuestionController_Roo_Controller {
     public String QuestionController.create(@Valid Question question, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, question);
-            return "questions/create";
+            return "admin/questions/create";
         }
         uiModel.asMap().clear();
         questionRepository.save(question);
-        return "redirect:/questions/" + encodeUrlPathSegment(question.getId_().toString(), httpServletRequest);
+        return "redirect:/admin/questions/" + encodeUrlPathSegment(question.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String QuestionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Question());
-        return "questions/create";
+        return "admin/questions/create";
     }
     
-    @RequestMapping(value = "/{id_}", produces = "text/html")
-    public String QuestionController.show(@PathVariable("id_") Long id_, Model uiModel) {
+    @RequestMapping(value = "/{id}", produces = "text/html")
+    public String QuestionController.show(@PathVariable("id") String id, Model uiModel) {
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("question", questionRepository.findOne(id_));
-        uiModel.addAttribute("itemId", id_);
-        return "questions/show";
+        uiModel.addAttribute("question", questionRepository.findOne(id));
+        uiModel.addAttribute("itemId", id);
+        return "admin/questions/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -67,34 +67,34 @@ privileged aspect QuestionController_Roo_Controller {
             uiModel.addAttribute("questions", questionRepository.findAll());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "questions/list";
+        return "admin/questions/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String QuestionController.update(@Valid Question question, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, question);
-            return "questions/update";
+            return "admin/questions/update";
         }
         uiModel.asMap().clear();
         questionRepository.save(question);
-        return "redirect:/questions/" + encodeUrlPathSegment(question.getId_().toString(), httpServletRequest);
+        return "redirect:/admin/questions/" + encodeUrlPathSegment(question.getId().toString(), httpServletRequest);
     }
     
-    @RequestMapping(value = "/{id_}", params = "form", produces = "text/html")
-    public String QuestionController.updateForm(@PathVariable("id_") Long id_, Model uiModel) {
-        populateEditForm(uiModel, questionRepository.findOne(id_));
-        return "questions/update";
+    @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
+    public String QuestionController.updateForm(@PathVariable("id") String id, Model uiModel) {
+        populateEditForm(uiModel, questionRepository.findOne(id));
+        return "admin/questions/update";
     }
     
-    @RequestMapping(value = "/{id_}", method = RequestMethod.DELETE, produces = "text/html")
-    public String QuestionController.delete(@PathVariable("id_") Long id_, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
-        Question question = questionRepository.findOne(id_);
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
+    public String QuestionController.delete(@PathVariable("id") String id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model uiModel) {
+        Question question = questionRepository.findOne(id);
         questionRepository.delete(question);
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/questions";
+        return "redirect:/admin/questions";
     }
     
     void QuestionController.addDateTimeFormatPatterns(Model uiModel) {

@@ -6,6 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -48,6 +49,7 @@ public class Question implements HasUuid {
 //	@XmlAttribute
 //	@Id
 //	@Basic(optional = false)
+	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY, generator="IdOrGenerated")
 	@GenericGenerator(name="IdOrGenerated",
 	                  strategy="com.beyobe.db.util.UseIdOrGenerate"

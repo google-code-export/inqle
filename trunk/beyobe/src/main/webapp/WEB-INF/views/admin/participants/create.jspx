@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_beyobe_domain_Participant" modelAttribute="participant" path="/admin/participants" render="${empty dependencies}" z="sjxzEgqgCrYzANn+KjIHZIIblkQ=">
+        <field:textarea field="username" id="c_com_beyobe_domain_Participant_username" z="7AHqVuN5GMaHdh70VAfPC1hhmiE="/>
+        <field:input field="password" id="c_com_beyobe_domain_Participant_password" z="Qyw+I/ILpizdTFviEDvYD5IEGQ0="/>
+        <field:select field="role" id="c_com_beyobe_domain_Participant_role" items="${userroles}" path="userroles" z="+YmwrX0g3FP40iTTJPpsFRxTAFg="/>
+        <field:checkbox field="enabled" id="c_com_beyobe_domain_Participant_enabled" z="2pMBouoiLpaeMmRvzyoOd+NTjs0="/>
+        <field:datetime dateTimePattern="${participant_updated_date_format}" field="updated" id="c_com_beyobe_domain_Participant_updated" z="S7M2H+UDuXF3mWjTV0Dp5SoISnY="/>
+        <field:input field="updatedBy" id="c_com_beyobe_domain_Participant_updatedBy" z="55U2ddCNyi7prwHiFuTsmWUV6eI="/>
+        <field:input field="createdBy" id="c_com_beyobe_domain_Participant_createdBy" z="NOaME750ujmYhZAyFhKNuVlZg04="/>
+        <field:input field="sessionToken" id="c_com_beyobe_domain_Participant_sessionToken" z="a/QXV9r8iRKbfyjVaRkLwr+HYD4="/>
+        <field:input field="clientIpAddress" id="c_com_beyobe_domain_Participant_clientIpAddress" z="McDht6LtSGUJtC4o8bMJ19GwjuE="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Participant" render="${not empty dependencies}" z="tZB+OowLBL5uypXBiF8uAIcRKj0="/>
+</div>

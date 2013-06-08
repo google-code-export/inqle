@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_beyobe_domain_Formula" items="${formulas}" z="Q5HTNuo6ggprFsFVv1OUXyCp9bE=">
+        <table:table data="${formulas}" id="l_com_beyobe_domain_Formula" path="/admin/formulas" typeIdFieldName="id_" z="XWlrbkr5abtIMbyAnNzpeOwJoog=">
+            <table:column id="c_com_beyobe_domain_Formula_id" property="id" z="hpXrwbgNzUJ/2ShRnKJZRmwTn88="/>
+            <table:column date="true" dateTimePattern="${formula_created_date_format}" id="c_com_beyobe_domain_Formula_created" property="created" z="c8xOAR3Z6waZLRWf097xQufvvlA="/>
+            <table:column date="true" dateTimePattern="${formula_updated_date_format}" id="c_com_beyobe_domain_Formula_updated" property="updated" z="nx3NWZw3v/57vQ7w02v4R2FvMus="/>
+            <table:column id="c_com_beyobe_domain_Formula_concept" property="concept" z="Qr4DYyeupxlwtwEyT/kjzDgyHNU="/>
+            <table:column id="c_com_beyobe_domain_Formula_expression" property="expression" z="SGsFVneE9gLXnPmhT8jjtfqQKgs="/>
+            <table:column id="c_com_beyobe_domain_Formula_updatedBy" property="updatedBy" z="vwwH/iBG1AkThRL3rNzKsdlykZU="/>
+        </table:table>
+    </page:list>
+</div>

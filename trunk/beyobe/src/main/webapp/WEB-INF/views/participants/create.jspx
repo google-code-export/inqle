@@ -8,11 +8,13 @@
         <field:input field="createdBy" id="c_com_beyobe_domain_Participant_createdBy" render="false" z="user-managed"/>
         <field:textarea field="username" id="c_com_beyobe_domain_Participant_username" z="7AHqVuN5GMaHdh70VAfPC1hhmiE="/>
         <field:checkbox field="enabled" id="c_com_beyobe_domain_Participant_enabled" z="2pMBouoiLpaeMmRvzyoOd+NTjs0="/>
-        <field:input type="password" field="password" id="c_com_beyobe_domain_Participant_password" z="user-managed"/><!-- Qyw+I/ILpizdTFviEDvYD5IEGQ0= -->
+        <field:input field="password" id="c_com_beyobe_domain_Participant_password" type="password" z="user-managed"/>
+        <!-- Qyw+I/ILpizdTFviEDvYD5IEGQ0= -->
         <field:select field="role" id="c_com_beyobe_domain_Participant_role" items="${userroles}" path="userroles" z="+YmwrX0g3FP40iTTJPpsFRxTAFg="/>
         <field:input field="sessionKey" id="c_com_beyobe_domain_Participant_sessionKey" render="false" z="user-managed"/>
         <field:input field="sessionToken" id="c_com_beyobe_domain_Participant_sessionToken" z="a/QXV9r8iRKbfyjVaRkLwr+HYD4="/>
         <field:input field="clientIpAddress" id="c_com_beyobe_domain_Participant_clientIpAddress" z="McDht6LtSGUJtC4o8bMJ19GwjuE="/>
+        <field:input field="id" id="c_com_beyobe_domain_Participant_id" z="TrMaUoUJLZEJ0ZUUxAZmK1YJMNA="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Participant" render="${not empty dependencies}" z="tZB+OowLBL5uypXBiF8uAIcRKj0="/>
 </div>

@@ -25,17 +25,17 @@ privileged aspect QuestionConceptController_Roo_Controller {
     public String QuestionConceptController.create(@Valid QuestionConcept questionConcept, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, questionConcept);
-            return "questionconcepts/create";
+            return "admin/questionconcepts/create";
         }
         uiModel.asMap().clear();
         questionConcept.persist();
-        return "redirect:/questionconcepts/" + encodeUrlPathSegment(questionConcept.getId().toString(), httpServletRequest);
+        return "redirect:/admin/questionconcepts/" + encodeUrlPathSegment(questionConcept.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(params = "form", produces = "text/html")
     public String QuestionConceptController.createForm(Model uiModel) {
         populateEditForm(uiModel, new QuestionConcept());
-        return "questionconcepts/create";
+        return "admin/questionconcepts/create";
     }
     
     @RequestMapping(value = "/{id}", produces = "text/html")
@@ -43,7 +43,7 @@ privileged aspect QuestionConceptController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("questionconcept", QuestionConcept.findQuestionConcept(id));
         uiModel.addAttribute("itemId", id);
-        return "questionconcepts/show";
+        return "admin/questionconcepts/show";
     }
     
     @RequestMapping(produces = "text/html")
@@ -58,24 +58,24 @@ privileged aspect QuestionConceptController_Roo_Controller {
             uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
         }
         addDateTimeFormatPatterns(uiModel);
-        return "questionconcepts/list";
+        return "admin/questionconcepts/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
     public String QuestionConceptController.update(@Valid QuestionConcept questionConcept, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             populateEditForm(uiModel, questionConcept);
-            return "questionconcepts/update";
+            return "admin/questionconcepts/update";
         }
         uiModel.asMap().clear();
         questionConcept.merge();
-        return "redirect:/questionconcepts/" + encodeUrlPathSegment(questionConcept.getId().toString(), httpServletRequest);
+        return "redirect:/admin/questionconcepts/" + encodeUrlPathSegment(questionConcept.getId().toString(), httpServletRequest);
     }
     
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String QuestionConceptController.updateForm(@PathVariable("id") String id, Model uiModel) {
         populateEditForm(uiModel, QuestionConcept.findQuestionConcept(id));
-        return "questionconcepts/update";
+        return "admin/questionconcepts/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "text/html")
@@ -85,7 +85,7 @@ privileged aspect QuestionConceptController_Roo_Controller {
         uiModel.asMap().clear();
         uiModel.addAttribute("page", (page == null) ? "1" : page.toString());
         uiModel.addAttribute("size", (size == null) ? "10" : size.toString());
-        return "redirect:/questionconcepts";
+        return "redirect:/admin/questionconcepts";
     }
     
     void QuestionConceptController.addDateTimeFormatPatterns(Model uiModel) {

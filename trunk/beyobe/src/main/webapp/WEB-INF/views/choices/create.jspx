@@ -8,6 +8,7 @@
         <field:input field="lang" id="c_com_beyobe_domain_Choice_lang" required="true" z="oGZMdAhQOEiKB6f5yzsLRGDuaXM="/>
         <field:input field="updatedBy" id="c_com_beyobe_domain_Choice_updatedBy" validationMessageCode="field_invalid_integer" z="06gDvWlsG9E/6ZvSdni661Bk7YY="/>
         <field:input field="createdBy" id="c_com_beyobe_domain_Choice_createdBy" validationMessageCode="field_invalid_integer" z="oLVb4caoNNxsoZCKC8C0jfboZmo="/>
+        <field:input field="id" id="c_com_beyobe_domain_Choice_id" z="e2QsqxlcmU3e8e7ZOknIv4HAqcc="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Choice" render="${not empty dependencies}" z="9jpmHVWmzKQ5HttDpWEG+9ZnQ2g="/>
 </div>
