@@ -100,8 +100,10 @@ public class Parcel {
 	public static Parcel fromJsonToParcel(String json) {
 		JSONDeserializer<Parcel> deserializer = new JSONDeserializer<Parcel>();
 		FromGwtDateObjectFactory gwtFactory = new FromGwtDateObjectFactory();
-		deserializer.use(gwtFactory, new String[] {"question.created", "question.updated", "datum.created", "datum.updated", "datum.effectiveDate"});
-	    return deserializer.use(null, Parcel.class).deserialize(json);
+		return deserializer
+			.use(gwtFactory, new String[] {"question.created", "question.updated", "datum.created", "datum.updated", "datum.effectiveDate"})
+	    	.use(null, Parcel.class)
+	    	.deserialize(json);
 	}
 
 	public String toJson() {
@@ -115,6 +117,9 @@ public class Parcel {
     	.exclude("participant.password")
     	.exclude("participant.sessionToken")
     	.exclude("participant.clientIpAddress")
+    	.exclude("*.participant")
+    	.exclude("*.question")
+    	.exclude("*.formula")
 		.deepSerialize( this );
 	}
 }

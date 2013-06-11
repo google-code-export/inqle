@@ -19,6 +19,7 @@
         <field:select field="unit" id="c_com_beyobe_domain_Datum_unit" items="${units}" path="units" z="kPhJy3wHu4YtxQTDOkOGq5lsAKM="/>
         <field:select field="dataType" id="c_com_beyobe_domain_Datum_dataType" items="${datatypes}" path="datatypes" z="dw+cpqfjmB7KlbVTm0LZSBGlt7o="/>
         <field:select field="answerStatus" id="c_com_beyobe_domain_Datum_answerStatus" items="${answerstatuses}" path="answerstatuses" z="l8/DX4wq5kJMbCcUywrqXKpRG1c="/>
+        <field:select field="participant" id="c_com_beyobe_domain_Datum_participant" itemValue="id" items="${participants}" path="/admin/participants" z="cfnO5JnVyztc0QGqhSkZiOsf6kk="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Datum" render="${not empty dependencies}" z="Tdz9Tyrw/gupSGcxfGKwhuIUIpw="/>
 </div>
