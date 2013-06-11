@@ -22,9 +22,9 @@ public interface Datum {
 
 	public abstract void setUpdated(Date updated);
 
-	public abstract String getQuestionUid();
+	public abstract String getQuestionId();
 
-	public abstract void setQuestionUid(String questionUid);
+	public abstract void setQuestionId(String questionUid);
 
 	public abstract String getParticipantId();
 

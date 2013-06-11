@@ -72,9 +72,9 @@ public class DataBus {
 		List<Datum> data = getDataForDate(effectiveDate);
 		if (data==null) return null;
 		for (Datum datum: data) {
-			Question theQuestion = getQuestion(datum.getQuestionUid());
+			Question theQuestion = getQuestion(datum.getQuestionId());
 			if (theQuestion==null) {
-				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionUid());
+				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionId());
 			}
 			TagButton button = new TagButton(effectiveDate, theQuestion, datum);
 			buttons.add(button);
@@ -107,7 +107,7 @@ public class DataBus {
 		int index = 0;
 		boolean replaced = false;
 		for (Datum datum: dataForLooping) {
-			if (datumToSave.getQuestionUid() == datum.getQuestionUid()) {
+			if (datumToSave.getQuestionId() == datum.getQuestionId()) {
 				dataForDay.remove(index);
 				dataForDay.add(index, datumToSave);
 				replaced = true;
@@ -202,7 +202,7 @@ public class DataBus {
 		if (dataForDay != null) {
 			//add all tagbuttons to this day
 			for (Datum d: dataForDay) {
-				Question q = knownQuestions.get(d.getQuestionUid());
+				Question q = knownQuestions.get(d.getQuestionId());
 				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
 				log.info("Adding to day: " + tagButton.getText());
 				questionsAdded.add(q);
@@ -227,7 +227,7 @@ public class DataBus {
 		for (Map.Entry<String, List<Datum>> entry: dataByDate.entrySet()) {
 			List<Datum> data = entry.getValue();
 			for (Datum datum: data) {
-				if (datum.getQuestionUid().equals(q.getId())) {
+				if (datum.getQuestionId().equals(q.getId())) {
 					String pastAnswer = datum.getTextValue();
 					if (! answers.contains(pastAnswer)) {
 						answers.add(pastAnswer);

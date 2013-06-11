@@ -101,7 +101,7 @@ public class App {
 			@Override
 			public void onTagClicked(TagClickedEvent event) {
 				TagButton tagButton = event.getTagButton();
-				log.log(Level.INFO, "Tag clicked: " + tagButton.getQuestion().getLongForm());
+				log.log(Level.INFO, "Tag clicked: " + tagButton);
 				answerPopin = new PopinDialog();
 				RoundPanel answerPanel = new RoundPanel();
 				answerPanel.addStyleName("ttd-editAnswerPanel");
