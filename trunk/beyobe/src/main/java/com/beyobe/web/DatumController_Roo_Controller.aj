@@ -9,6 +9,7 @@ import com.beyobe.client.beans.Unit;
 import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
+import com.beyobe.domain.Participant;
 import com.beyobe.domain.QuestionConcept;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.web.DatumController;
@@ -114,6 +115,7 @@ privileged aspect DatumController_Roo_Controller {
         uiModel.addAttribute("units", Arrays.asList(Unit.values()));
         uiModel.addAttribute("choiceconcepts", ChoiceConcept.findAllChoiceConcepts());
         uiModel.addAttribute("formulas", Formula.findAllFormulas());
+        uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
     

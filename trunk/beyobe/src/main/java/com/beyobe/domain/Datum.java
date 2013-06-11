@@ -82,6 +82,9 @@ public class Datum implements HasUuid {
     @ManyToOne
     private Formula formula;
 
+    @ManyToOne
+    private Participant participant;
+    
     @NotNull
     private String participantId;
 
@@ -116,6 +119,8 @@ public class Datum implements HasUuid {
  	   	.exclude("updated")
  	   	.exclude("createdBy")
  	   	.exclude("updatedBy")
+ 	   	.exclude("participant")
+ 	   	.exclude("question")
  	   	.serialize(this);
  	}
     
