@@ -74,7 +74,12 @@ public class Datum implements HasUuid {
     @DateTimeFormat(style = "FF")
     private Date effectiveDate = null;
     
+    @NotNull
     private String questionId;
+    
+    @ManyToOne
+    @NotNull
+    private Question question;
 
     @ManyToOne
     private QuestionConcept questionConcept;
@@ -83,6 +88,7 @@ public class Datum implements HasUuid {
     private Formula formula;
 
     @ManyToOne
+    @NotNull
     private Participant participant;
     
     @NotNull

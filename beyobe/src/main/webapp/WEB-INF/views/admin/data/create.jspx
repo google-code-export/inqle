@@ -5,7 +5,7 @@
     <form:create id="fc_com_beyobe_domain_Datum" modelAttribute="datum" path="/admin/data" render="${empty dependencies}" z="czrSJdoSxMymSE1fyuPBvZXuHjc=">
         <field:datetime dateTimePattern="${datum_updated_date_format}" field="updated" id="c_com_beyobe_domain_Datum_updated" z="ICwjTcPrEgiF+2ljCcDTKLaoefo="/>
         <field:datetime dateTimePattern="${datum_effectivedate_date_format}" field="effectiveDate" id="c_com_beyobe_domain_Datum_effectiveDate" z="U3v/B5Amnoyh9lfwuil5Y1iIJ7Q="/>
-        <field:input field="questionId" id="c_com_beyobe_domain_Datum_questionId" z="z2bdp7z7xmlprKXMzp14OyJpvPE="/>
+        <field:input field="questionId" id="c_com_beyobe_domain_Datum_questionId" required="true" z="A0RTw9alUV0rK0DFne9HSFr+5Fg="/>
         <field:select field="questionConcept" id="c_com_beyobe_domain_Datum_questionConcept" itemValue="id" items="${questionconcepts}" path="/admin/questionconcepts" z="0DLPjETLpLImGpSQd03cashfc2U="/>
         <field:select field="formula" id="c_com_beyobe_domain_Datum_formula" itemValue="id_" items="${formulas}" path="/admin/formulas" z="a414WvhY4/OXe/CdSX6GSaJlBXU="/>
         <field:input field="participantId" id="c_com_beyobe_domain_Datum_participantId" required="true" z="k/IN39LI5l60E0Kn/2Y0wilHLzA="/>
@@ -19,7 +19,8 @@
         <field:select field="unit" id="c_com_beyobe_domain_Datum_unit" items="${units}" path="units" z="kPhJy3wHu4YtxQTDOkOGq5lsAKM="/>
         <field:select field="dataType" id="c_com_beyobe_domain_Datum_dataType" items="${datatypes}" path="datatypes" z="dw+cpqfjmB7KlbVTm0LZSBGlt7o="/>
         <field:select field="answerStatus" id="c_com_beyobe_domain_Datum_answerStatus" items="${answerstatuses}" path="answerstatuses" z="l8/DX4wq5kJMbCcUywrqXKpRG1c="/>
-        <field:select field="participant" id="c_com_beyobe_domain_Datum_participant" itemValue="id" items="${participants}" path="/admin/participants" z="cfnO5JnVyztc0QGqhSkZiOsf6kk="/>
+        <field:select field="participant" id="c_com_beyobe_domain_Datum_participant" itemValue="id" items="${participants}" path="/admin/participants" required="true" z="ht2FVU6L1EgnpGYbsu4IpGsx/ps="/>
+        <field:select field="question" id="c_com_beyobe_domain_Datum_question" itemValue="id" items="${questions}" path="/admin/questions" required="true" z="CfAPtf8KpEXahvrk4uw92t3Qr+c="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Datum" render="${not empty dependencies}" z="Tdz9Tyrw/gupSGcxfGKwhuIUIpw="/>
 </div>

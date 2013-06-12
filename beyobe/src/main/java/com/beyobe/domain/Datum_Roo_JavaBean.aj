@@ -10,6 +10,7 @@ import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
 import com.beyobe.domain.Participant;
+import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
 import java.util.Date;
 
@@ -53,6 +54,14 @@ privileged aspect Datum_Roo_JavaBean {
     
     public void Datum.setQuestionId(String questionId) {
         this.questionId = questionId;
+    }
+    
+    public Question Datum.getQuestion() {
+        return this.question;
+    }
+    
+    public void Datum.setQuestion(Question question) {
+        this.question = question;
     }
     
     public QuestionConcept Datum.getQuestionConcept() {

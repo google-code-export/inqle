@@ -10,11 +10,15 @@ import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
 import com.beyobe.domain.Participant;
+import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
 import com.beyobe.repository.DatumRepository;
+import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.DatumController;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
@@ -34,6 +38,9 @@ privileged aspect DatumController_Roo_Controller {
     @Autowired
     DatumRepository DatumController.datumRepository;
     
+    @Autowired
+    QuestionRepository DatumController.questionRepository;
+    
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String DatumController.create(@Valid Datum datum, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
@@ -48,6 +55,14 @@ privileged aspect DatumController_Roo_Controller {
     @RequestMapping(params = "form", produces = "text/html")
     public String DatumController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Datum());
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (questionRepository.count() == 0) {
+            dependencies.add(new String[] { "question", "admin/questions" });
+        }
+        if (Participant.countParticipants() == 0) {
+            dependencies.add(new String[] { "participant", "admin/participants" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
         return "admin/data/create";
     }
     
@@ -116,6 +131,7 @@ privileged aspect DatumController_Roo_Controller {
         uiModel.addAttribute("choiceconcepts", ChoiceConcept.findAllChoiceConcepts());
         uiModel.addAttribute("formulas", Formula.findAllFormulas());
         uiModel.addAttribute("participants", Participant.findAllParticipants());
+        uiModel.addAttribute("questions", questionRepository.findAll());
         uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
     
