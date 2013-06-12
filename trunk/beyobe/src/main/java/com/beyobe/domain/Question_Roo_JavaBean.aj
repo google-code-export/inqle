@@ -5,6 +5,7 @@ package com.beyobe.domain;
 
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
 import java.util.Date;
@@ -137,6 +138,22 @@ privileged aspect Question_Roo_JavaBean {
     
     public void Question.setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+    
+    public String Question.getOwnerId() {
+        return this.ownerId;
+    }
+    
+    public void Question.setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+    
+    public Participant Question.getOwner() {
+        return this.owner;
+    }
+    
+    public void Question.setOwner(Participant owner) {
+        this.owner = owner;
     }
     
 }

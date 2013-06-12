@@ -9,7 +9,7 @@
             <table:column date="true" dateTimePattern="${datum_effectivedate_date_format}" id="c_com_beyobe_domain_Datum_effectiveDate" property="effectiveDate" z="PKoFz57U7SbBQF7R83BJphbpZI4="/>
             <table:column id="c_com_beyobe_domain_Datum_questionId" property="questionId" z="r1yFOnB85HQ+noLSZwjDDW/OGq0="/>
             <table:column id="c_com_beyobe_domain_Datum_questionConcept" property="questionConcept" z="uYeSvK1MBNXoWi3V53daAAfpOCs="/>
-            <table:column id="c_com_beyobe_domain_Datum_formula" property="formula" z="y4McCvyGvkTg8K9KJiQxc2VKyvA="/>
+            <table:column id="c_com_beyobe_domain_Datum_question" property="question" z="fYpo0/cK+E+pf+XDtPVSwoegOjU="/>
         </table:table>
     </page:list>
 </div>

@@ -98,7 +98,15 @@ public class Question implements HasUuid {
 
     private String updatedBy;
 
+    @NotNull
     private String createdBy;
+    
+    @NotNull
+    private String ownerId;
+    
+    @NotNull
+    @ManyToOne
+    private Participant owner;
     
     public String toJson() {
 	   return new JSONSerializer()

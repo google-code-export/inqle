@@ -143,6 +143,15 @@ public class ServiceController {
 	}
 	 
 	
+	/**
+	 * Checks if the current 
+	 * Receives a Question object
+	 * Retrieves the participant, given the participantId
+	 * 
+	 * @param clientIpAddress
+	 * @param jsonRequest
+	 * @return
+	 */
 	@RequestMapping(value = "/storeQuestion", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public ResponseEntity<java.lang.String> storeQuestion(
@@ -163,7 +172,7 @@ public class ServiceController {
 	 	Participant participant = null;
 	 	try {
 	 		//TODO add session expiration datetime
-	 		log.info("storeQuestion service getting participant...");
+	 		log.info("storeQuestion service getting current user participant...");
 			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
 			log.info("storeQuestion service participant:" + participant);
 			assert(participant.getEnabled()==true);
@@ -176,9 +185,21 @@ public class ServiceController {
 		}
 	 	Question q = parcel.getQuestion();
 	 	log.info("storeQuestion service received question: " + q);
-	 	questionRepository.saveAndFlush(q);
-	 	log.info("storeQuestion service saved question");
 	 	
+	 	//test that current user is the owner of this question or is admin
+	 	Question existingQuestion = questionRepository.findOne(q.getId());
+	 	if (existingQuestion != null) {
+	 		if (! participant.getId().equals(existingQuestion.getOwnerId())) {
+	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
+				HttpHeaders headers = new HttpHeaders();
+			    headers.add("Content-Type", "application/json");
+				return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
+	 		}
+	 		merge new question into existing
+	 	} else {
+		 	questionRepository.saveAndFlush(q);
+		 	log.info("storeQuestion service saved new question: " + q);
+	 	}
 	 	
 	 	Subscription subscription = new Subscription();
 	 	subscription.setCreated(new Date());

@@ -5,12 +5,15 @@ package com.beyobe.web;
 
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
 import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.QuestionController;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
@@ -44,6 +47,11 @@ privileged aspect QuestionController_Roo_Controller {
     @RequestMapping(params = "form", produces = "text/html")
     public String QuestionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Question());
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (Participant.countParticipants() == 0) {
+            dependencies.add(new String[] { "participant", "admin/participants" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
         return "admin/questions/create";
     }
     
@@ -107,6 +115,7 @@ privileged aspect QuestionController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("datatypes", Arrays.asList(DataType.values()));
         uiModel.addAttribute("measurements", Arrays.asList(Measurement.values()));
+        uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
     

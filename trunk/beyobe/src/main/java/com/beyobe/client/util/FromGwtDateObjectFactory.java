@@ -18,12 +18,12 @@ public class FromGwtDateObjectFactory implements ObjectFactory {
 	public Object instantiate(ObjectBinder context, Object value, Type targetType, Class targetClass) {
 //		log.info("FromGwtDateObjectFactory:" + value.getClass());
 		if (value == null || ! (value instanceof String)) {
-			log.info("FromGwtDateObjectFactory:" + value + " is not String");
+			log.warn("FromGwtDateObjectFactory:" + value + " is not String not should be a string, containing a long epoch time");
 			return null;
 		}
 		Long longDate = Long.parseLong((String)value);
 		Date date = new Date(longDate);
-		log.info("FromGwtDateObjectFactory:" + value + " becomes date:" + date);
+		log.trace("FromGwtDateObjectFactory:" + value + " becomes date:" + date);
 		return date;
 	}
 

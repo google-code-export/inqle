@@ -101,7 +101,8 @@ public class Parcel {
 		JSONDeserializer<Parcel> deserializer = new JSONDeserializer<Parcel>();
 		FromGwtDateObjectFactory gwtFactory = new FromGwtDateObjectFactory();
 		return deserializer
-			.use(gwtFactory, new String[] {"question.created", "question.updated", "datum.created", "datum.updated", "datum.effectiveDate"})
+			.use(gwtFactory, new String[] {
+					"question.created", "question.updated", "datum.created", "datum.updated", "datum.effectiveDate"})
 	    	.use(null, Parcel.class)
 	    	.deserialize(json);
 	}
@@ -114,12 +115,16 @@ public class Parcel {
     	.exclude("*.updated")
     	.exclude("*.createdBy")
     	.exclude("*.updatedBy")
-    	.exclude("participant.password")
-    	.exclude("participant.sessionToken")
-    	.exclude("participant.clientIpAddress")
+    	.exclude("*.password")
+    	.exclude("*.sessionToken")
+    	.exclude("*.clientIpAddress")
     	.exclude("*.participant")
     	.exclude("*.question")
     	.exclude("*.formula")
+    	.exclude("*.owner")
+    	.exclude("*.question")
+    	.exclude("*.participant")
+    	
 		.deepSerialize( this );
 	}
 }
