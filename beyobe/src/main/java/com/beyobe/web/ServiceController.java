@@ -195,19 +195,21 @@ public class ServiceController {
 			    headers.add("Content-Type", "application/json");
 				return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 	 		}
-	 		merge new question into existing
+	 		mergeAndSaveQuestion(q, existingQuestion);
 	 	} else {
+	 		//new question: current user must be owner
+	 		q.setOwner(participant);
 		 	questionRepository.saveAndFlush(q);
 		 	log.info("storeQuestion service saved new question: " + q);
 	 	}
 	 	
+	 	check to see if subscription already exists
+	 	
 	 	Subscription subscription = new Subscription();
 	 	subscription.setCreated(new Date());
 	 	subscription.setCreatedBy(participant.getId());
-//	 	subscription.setQuestion(q);
 	 	subscription.setQuestionId(q.getId());
 	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
-//	 	subscription.setParticipant(participant);
 	 	subscription.setParticipantId(participant.getId());
 	 	log.info("storeQuestion service to save subscription: " + subscription);
 	 	try {
@@ -264,13 +266,13 @@ public class ServiceController {
 	 	try {
 			Datum d = parcel.getDatum();
 			log.info("storeDatum service: got datum: " + d);
-			Datum existingDatum = datumRepository.findOne(d.getId());
+			Datum existingQuestion = datumRepository.findOne(d.getId());
 			//TODO some day remove this nasty workaround because JPA gives error when we try to update a object (nutty thing to try to do I know)
-			if (existingDatum == null) {
+			if (existingQuestion == null) {
 				datumRepository.save(d);
 				datumRepository.flush();
 			} else {
-				mergeAndSave(d, existingDatum);
+				mergeAndSaveDatum(d, existingQuestion);
 			}
 			
 		} catch (Exception e) {
@@ -291,47 +293,81 @@ public class ServiceController {
 	}
 	
 	
-	private void mergeAndSave(Datum newDatum, Datum existingDatum) {
-		if (newDatum.getAnswerStatus() != null) {
-			existingDatum.setAnswerStatus(newDatum.getAnswerStatus());
+	private void mergeAndSaveDatum(Datum newQuestion, Datum existingQuestion) {
+		if (newQuestion.getAnswerStatus() != null) {
+			existingQuestion.setAnswerStatus(newQuestion.getAnswerStatus());
 		}
-		if (newDatum.getChoice() != null) {
-			existingDatum.setChoice(newDatum.getChoice());
+		if (newQuestion.getChoice() != null) {
+			existingQuestion.setChoice(newQuestion.getChoice());
 		}
-		if (newDatum.getUpdated() != null) {
-			existingDatum.setUpdated(newDatum.getUpdated());
+		if (newQuestion.getUpdated() != null) {
+			existingQuestion.setUpdated(newQuestion.getUpdated());
 		}
-		if (newDatum.getDataType() != null) {
-			existingDatum.setDataType(newDatum.getDataType());
+		if (newQuestion.getDataType() != null) {
+			existingQuestion.setDataType(newQuestion.getDataType());
 		}
-		if (newDatum.getEffectiveDate() != null) {
-			existingDatum.setEffectiveDate(newDatum.getEffectiveDate());
+		if (newQuestion.getEffectiveDate() != null) {
+			existingQuestion.setEffectiveDate(newQuestion.getEffectiveDate());
 		}
-		if (newDatum.getFormula() != null) {
-			existingDatum.setFormula(newDatum.getFormula());
+		if (newQuestion.getFormula() != null) {
+			existingQuestion.setFormula(newQuestion.getFormula());
 		}
-		if (newDatum.getIntegerValue() != null) {
-			existingDatum.setIntegerValue(newDatum.getIntegerValue());
+		if (newQuestion.getIntegerValue() != null) {
+			existingQuestion.setIntegerValue(newQuestion.getIntegerValue());
 		}
-		if (newDatum.getNormalizedValue() != null) {
-			existingDatum.setNormalizedValue(newDatum.getNormalizedValue());
+		if (newQuestion.getNormalizedValue() != null) {
+			existingQuestion.setNormalizedValue(newQuestion.getNormalizedValue());
 		}
-		if (newDatum.getNumericValue() != null) {
-			existingDatum.setNumericValue(newDatum.getNumericValue());
+		if (newQuestion.getNumericValue() != null) {
+			existingQuestion.setNumericValue(newQuestion.getNumericValue());
 		}
-		if (newDatum.getQuestionConcept() != null) {
-			existingDatum.setQuestionConcept(newDatum.getQuestionConcept());
+		if (newQuestion.getQuestionConcept() != null) {
+			existingQuestion.setQuestionConcept(newQuestion.getQuestionConcept());
 		}
-		if (newDatum.getTextValue() != null) {
-			existingDatum.setTextValue(newDatum.getTextValue());
+		if (newQuestion.getTextValue() != null) {
+			existingQuestion.setTextValue(newQuestion.getTextValue());
 		}
-		if (newDatum.getUnit() != null) {
-			existingDatum.setUnit(newDatum.getUnit());
+		if (newQuestion.getUnit() != null) {
+			existingQuestion.setUnit(newQuestion.getUnit());
 		}
-		if (newDatum.getUpdatedBy() != null) {
-			existingDatum.setUpdatedBy(newDatum.getUpdatedBy());
+		if (newQuestion.getUpdatedBy() != null) {
+			existingQuestion.setUpdatedBy(newQuestion.getUpdatedBy());
 		}
-		datumRepository.saveAndFlush(existingDatum);
+		datumRepository.saveAndFlush(existingQuestion);
+	}
+	
+	private void mergeAndSaveQuestion(Question newQuestion, Question existingQuestion) {
+		if (newQuestion.getAbbreviation() != null) {
+			existingQuestion.setAbbreviation(newQuestion.getAbbreviation());
+		}
+		if (newQuestion.getLatency() != null) {
+			existingQuestion.setLatency(newQuestion.getLatency());
+		}
+		if (newQuestion.getUpdated() != null) {
+			existingQuestion.setUpdated(newQuestion.getUpdated());
+		}
+//		if (newQuestion.getDataType() != null) {
+//			existingQuestion.setDataType(newQuestion.getDataType());
+//		}
+		if (newQuestion.getLongForm() != null) {
+			existingQuestion.setLongForm(newQuestion.getLongForm());
+		}
+		if (newQuestion.getMaxLength() != null) {
+			existingQuestion.setMaxLength(newQuestion.getMaxLength());
+		}
+		if (newQuestion.getMinValue() != null) {
+			existingQuestion.setMinValue(newQuestion.getMinValue());
+		}
+		if (newQuestion.getMaxValue() != null) {
+			existingQuestion.setMaxValue(newQuestion.getMaxValue());
+		}
+//		if (newQuestion.getMeasurement() != null) {
+//			existingQuestion.setMeasurement(newQuestion.getMeasurement());
+//		}
+		if (newQuestion.getPriority() != null) {
+			existingQuestion.setPriority(newQuestion.getPriority());
+		}
+		questionRepository.saveAndFlush(existingQuestion);
 	}
 
 	/*
