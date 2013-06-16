@@ -109,7 +109,7 @@ public class ServiceController {
 	 	Parcel returnParcel = new Parcel();
 	 	returnParcel.setSessionToken(sessionToken);
 	 	returnParcel.setParticipant(participant);
-	 	log.info("set session token");
+	 	log.info("set session token: " + sessionToken);
 	 	
 	 	try {
 			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
@@ -203,24 +203,27 @@ public class ServiceController {
 		 	log.info("storeQuestion service saved new question: " + q);
 	 	}
 	 	
-	 	check to see if subscription already exists
-	 	
-	 	Subscription subscription = new Subscription();
-	 	subscription.setCreated(new Date());
-	 	subscription.setCreatedBy(participant.getId());
-	 	subscription.setQuestionId(q.getId());
-	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
-	 	subscription.setParticipantId(participant.getId());
-	 	log.info("storeQuestion service to save subscription: " + subscription);
-	 	try {
-			subscription.persist();
-			log.info("storeQuestion service saved subscription");
-		} catch (Exception e) {
-			log.error("storeQuestion service unable to save subscription:" + subscription, e);
-			HttpHeaders headers = new HttpHeaders();
-		    headers.add("Content-Type", "application/json");
-			return new ResponseEntity<String>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	 	//check to see if subscription already exists.  If not create a new one
+	 	Subscription existingSubscription = 
+	 			Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantIdEquals(q.getId(), participant.getId()).getSingleResult();
+	 	if (existingSubscription == null) {
+		 	Subscription subscription = new Subscription();
+		 	subscription.setCreated(new Date());
+		 	subscription.setCreatedBy(participant.getId());
+		 	subscription.setQuestionId(q.getId());
+		 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
+		 	subscription.setParticipantId(participant.getId());
+		 	log.info("storeQuestion service to save subscription: " + subscription);
+		 	try {
+				subscription.persist();
+				log.info("storeQuestion service saved subscription");
+			} catch (Exception e) {
+				log.error("storeQuestion service unable to save subscription:" + subscription, e);
+				HttpHeaders headers = new HttpHeaders();
+			    headers.add("Content-Type", "application/json");
+				return new ResponseEntity<String>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+	 	}
 	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
