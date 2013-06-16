@@ -27,6 +27,7 @@ public class TabletMainActivityMapper implements ActivityMapper {
 //			return new LoginActivity(place);
 //		}
 		if (place instanceof TagdayPlace) {
+			log.info("yes Going to TagdayPlace");
 			return new TagdayActivity(place);
 		}
 		if (place instanceof LoginPlace) {

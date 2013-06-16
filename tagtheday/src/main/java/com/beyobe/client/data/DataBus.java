@@ -258,11 +258,12 @@ public class DataBus {
 	}
 
 	public void refreshDataFromJson(String text) {
+		log.info("RRRRRRRRRRRRRRRRRRRRRRRRR refreshDataFromJson...");
 		boolean gotoTagdayPlace = false;
 		try {
 			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
 		    Parcel parcel = parcelAB.as();
-		    log.info("Received Parcel: " + parcel);
+		    log.info("Received Session Token? " + parcel.getSessionToken());
 		    if (parcel.getSessionToken() != null) {
 		    	App.sessionToken = parcel.getSessionToken();
 		    	gotoTagdayPlace = true;
@@ -275,6 +276,7 @@ public class DataBus {
 		    if (parcel.getData() != null) {
 		    	 setData(parcel.getData());
 		    }
+		    log.info("Received participant: " + parcel.getParticipant());
 		    if (parcel.getParticipant() != null) {
 		    	App.participant = parcel.getParticipant();
 		    }
