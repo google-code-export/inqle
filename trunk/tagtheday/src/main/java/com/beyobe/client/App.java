@@ -166,6 +166,6 @@ public class App {
 	}
 
 	public static boolean isUserLoggedIn() {
-		return (participant != null);
+		return (sessionToken != null);
 	}
 }

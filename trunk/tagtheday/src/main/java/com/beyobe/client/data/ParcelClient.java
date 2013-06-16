@@ -78,7 +78,11 @@ public class ParcelClient {
 			    	cancelTimer();
 			        
 				    if (!abortFlag && 200 == response.getStatusCode()) {
-						App.dataBus.refreshDataFromJson(response.getText());
+						try {
+							App.dataBus.refreshDataFromJson(response.getText());
+						} catch (Exception e) {
+							log.log(Level.SEVERE, "Error refreshing DataBus with new data", e);
+						}
 						log.info("Received data and loaded: " + response.getText());
 				    	abortFlag = true;
 				    } else {
