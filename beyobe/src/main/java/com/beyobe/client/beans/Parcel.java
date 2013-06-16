@@ -116,15 +116,12 @@ public class Parcel {
     	.exclude("*.createdBy")
     	.exclude("*.updatedBy")
     	.exclude("*.password")
-    	.exclude("*.sessionToken")
     	.exclude("*.clientIpAddress")
-    	.exclude("*.participant")
-    	.exclude("*.question")
-    	.exclude("*.formula")
-    	.exclude("*.owner")
-    	.exclude("*.question")
-    	.exclude("*.participant")
-    	
+    	.exclude("datum.question")
+    	.exclude("datum.formula")
+    	.exclude("participant.sessionToken")
+    	.exclude("*.version")
+//    	.exclude("*.owner")
 		.deepSerialize( this );
 	}
 }
