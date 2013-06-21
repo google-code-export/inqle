@@ -3,19 +3,21 @@
 
 package com.beyobe.domain;
 
+import com.beyobe.domain.Participant;
+import com.beyobe.domain.Question;
 import com.beyobe.domain.Subscription;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 privileged aspect Subscription_Roo_Finder {
     
-    public static TypedQuery<Subscription> Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantIdEquals(String questionId, String participantId) {
-        if (questionId == null || questionId.length() == 0) throw new IllegalArgumentException("The questionId argument is required");
-        if (participantId == null || participantId.length() == 0) throw new IllegalArgumentException("The participantId argument is required");
+    public static TypedQuery<Subscription> Subscription.findSubscriptionsByQuestionEqualsAndParticipantEquals(Question question, Participant participant) {
+        if (question == null) throw new IllegalArgumentException("The question argument is required");
+        if (participant == null) throw new IllegalArgumentException("The participant argument is required");
         EntityManager em = Subscription.entityManager();
-        TypedQuery<Subscription> q = em.createQuery("SELECT o FROM Subscription AS o WHERE o.questionId = :questionId  AND o.participantId = :participantId", Subscription.class);
-        q.setParameter("questionId", questionId);
-        q.setParameter("participantId", participantId);
+        TypedQuery<Subscription> q = em.createQuery("SELECT o FROM Subscription AS o WHERE o.question = :question  AND o.participant = :participant", Subscription.class);
+        q.setParameter("question", question);
+        q.setParameter("participant", participant);
         return q;
     }
     

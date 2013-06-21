@@ -4,9 +4,9 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_beyobe_domain_Subscription" modelAttribute="subscription" path="/admin/subscriptions" render="${empty dependencies}" z="yStDPQDE70SXdz2AyLFW3woN0qM=">
         <field:input field="createdBy" id="c_com_beyobe_domain_Subscription_createdBy" z="rSfMM4xi4dXLyPAv1d05I2Td4ho="/>
-        <field:input field="questionId" id="c_com_beyobe_domain_Subscription_questionId" required="true" z="qB+FM/vvRIZ1pSswCD+MoAXcwxk="/>
-        <field:input field="participantId" id="c_com_beyobe_domain_Subscription_participantId" required="true" z="iebJZWlkCsUr2psILDsmpKJi2ZQ="/>
         <field:select field="subscriptionType" id="c_com_beyobe_domain_Subscription_subscriptionType" items="${subscriptiontypes}" path="subscriptiontypes" z="thxPxAuUKhCgKuVNod9TODkcGVU="/>
+        <field:select field="question" id="c_com_beyobe_domain_Subscription_question" itemValue="id" items="${questions}" path="/admin/questions" required="true" z="YWNt/iqEIFBRdMqGSajHUHcK21c="/>
+        <field:select field="participant" id="c_com_beyobe_domain_Subscription_participant" itemValue="id" items="${participants}" path="/admin/participants" required="true" z="wyqb96LqrstqTpOQ5/2250btLOg="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Subscription" render="${not empty dependencies}" z="VHpj10m44e/KdWGlwhohJb5ulTs="/>
 </div>

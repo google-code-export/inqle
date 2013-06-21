@@ -88,3 +88,7 @@ finder list --class ~.domain.Subscription --depth 2
 finder list --class ~.domain.Subscription --depth 2 --filter "uestion"
 finder list --class ~.domain.Subscription --depth 2 --filter "QuestionIdEqualsAndParticipa"
 finder add --finderName findSubscriptionsByQuestionIdEqualsAndParticipantIdEquals --class ~.domain.Subscription
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-06-20 21:07:35
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-06-20 21:08:46
+finder add --finderName "findSubscriptionsByQuestionEqualsAndParticipantEquals" --class ~.domain.Subscription

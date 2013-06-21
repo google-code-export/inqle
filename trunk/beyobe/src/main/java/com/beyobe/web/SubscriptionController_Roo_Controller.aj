@@ -4,13 +4,19 @@
 package com.beyobe.web;
 
 import com.beyobe.client.beans.SubscriptionType;
+import com.beyobe.domain.Participant;
+import com.beyobe.domain.Question;
 import com.beyobe.domain.Subscription;
+import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.SubscriptionController;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +28,9 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 privileged aspect SubscriptionController_Roo_Controller {
+    
+    @Autowired
+    QuestionRepository SubscriptionController.questionRepository;
     
     @RequestMapping(method = RequestMethod.POST, produces = "text/html")
     public String SubscriptionController.create(@Valid Subscription subscription, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
@@ -37,6 +46,14 @@ privileged aspect SubscriptionController_Roo_Controller {
     @RequestMapping(params = "form", produces = "text/html")
     public String SubscriptionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Subscription());
+        List<String[]> dependencies = new ArrayList<String[]>();
+        if (questionRepository.count() == 0) {
+            dependencies.add(new String[] { "question", "admin/questions" });
+        }
+        if (Participant.countParticipants() == 0) {
+            dependencies.add(new String[] { "participant", "admin/participants" });
+        }
+        uiModel.addAttribute("dependencies", dependencies);
         return "admin/subscriptions/create";
     }
     
@@ -98,6 +115,8 @@ privileged aspect SubscriptionController_Roo_Controller {
         uiModel.addAttribute("subscription", subscription);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("subscriptiontypes", Arrays.asList(SubscriptionType.values()));
+        uiModel.addAttribute("participants", Participant.findAllParticipants());
+        uiModel.addAttribute("questions", questionRepository.findAll());
     }
     
     String SubscriptionController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
