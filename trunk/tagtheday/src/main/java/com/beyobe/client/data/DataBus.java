@@ -96,7 +96,7 @@ public class DataBus {
 		return null;
 	}
 	
-	public void setDatum(Datum datumToSave) {
+	public void setDatum(Datum datumToSave, Question questionAnswered) {
 		Date effectiveDate = datumToSave.getEffectiveDate();
 //		String dateStr = DataBus.getDateString(effectiveDate);
 		
@@ -120,6 +120,7 @@ public class DataBus {
 		
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
+		parcel.setQuestion(questionAnswered);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_DATUM);
 		
 		//TODO save in local storage

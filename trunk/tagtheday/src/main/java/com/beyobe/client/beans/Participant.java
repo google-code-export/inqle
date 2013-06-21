@@ -32,4 +32,8 @@ public interface Participant {
 
 	public abstract void setLang(String lang);
 
+	public abstract UserRole getRole();
+	
+	public abstract void setRole(UserRole role);
+
 }
