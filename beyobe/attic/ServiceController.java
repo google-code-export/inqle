@@ -404,7 +404,6 @@ public class ServiceController {
 		 	log.info("storeQuestion service to save subscription: " + subscription);
 		 	try {
 				subscription.persist();
-				subscription.flush();
 				log.info("storeQuestion service saved subscription");
 			} catch (Exception e) {
 				log.error("storeQuestion service unable to save subscription:" + subscription, e);

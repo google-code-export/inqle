@@ -31,9 +31,13 @@ public interface QuestionRepository {
 	 * @param participantId
 	 * @return list of questions, ordered by question priority then creation date
 	 */
-	@Query("select distinct q from Question q, Subscription s " +
-			" where s.participantId=?1 and s.questionId = q.id and s.subscriptionType=?2 "
+	@Query(
+//			"select distinct q from Question q, Subscription s " +
+//			" where s.participantId=?1 and s.questionId = q.id and s.subscriptionType=?2 "
 //			" order by s.created asc "
+		"select distinct q from Question q, Subscription s " +
+		" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 "
+//		" order by s.created asc "
 			)
 	@Transactional(readOnly=true)
 	List<Question> getSubscribedQuestions(String participantId, SubscriptionType subscriptionType);

@@ -119,6 +119,8 @@ public class Parcel {
     	.exclude("*.clientIpAddress")
     	.exclude("datum.question")
     	.exclude("datum.formula")
+    	.exclude("data.question")
+    	.exclude("data.participant")
     	.exclude("participant.sessionToken")
     	.exclude("*.version")
 //    	.exclude("*.owner")
