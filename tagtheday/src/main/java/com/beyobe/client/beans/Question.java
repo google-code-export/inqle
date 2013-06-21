@@ -59,6 +59,10 @@ public interface Question {
 
 	public abstract void setCreatedBy(String creatorId);
 	
+	public abstract String getOwnerId();
+
+	public abstract void setOwnerId(String ownerId);
+	
 	public abstract String getUpdatedBy();
 
 	public abstract void setUpdatedBy(String updaterId);

@@ -22,6 +22,7 @@ import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.beans.UserRole;
 import com.beyobe.client.data.DataBus;
 import com.beyobe.client.data.ParcelClient;
 import com.beyobe.client.data.TagthedayAutoBeanFactory;
@@ -100,7 +101,7 @@ public class App {
 		eventBus.addHandler(TagClickedEvent.TYPE, new TagClickedEventHandler() {
 			@Override
 			public void onTagClicked(TagClickedEvent event) {
-				TagButton tagButton = event.getTagButton();
+				final TagButton tagButton = event.getTagButton();
 				log.log(Level.INFO, "Tag clicked: " + tagButton);
 				answerPopin = new PopinDialog();
 				RoundPanel answerPanel = new RoundPanel();
@@ -113,6 +114,22 @@ public class App {
 				} else {
 					answerPanel.getElement().getStyle().setBackgroundColor("light-gray");
 				}
+				
+				//if user is admin or owner of the question, show the edit button
+				if (UserRole.ROLE_ADMIN == participant.getRole() || participant.getId().equals(tagButton.getQuestion().getOwnerId())) {
+					Button editButton = new Button("edit");
+					editButton.setSmall(true);
+					editButton.getElement().getStyle().setProperty("float", "right");
+					editButton.addTapHandler(new TapHandler() {
+						@Override
+						public void onTap(TapEvent event) {
+							answerPopin.hide();
+							answerPopin.clear();
+							App.eventBus.fireEvent(new EditQuestionEvent(tagButton.getQuestion()));
+						}
+					});
+				}
+				
 				Button closeButton = new Button("x");
 				closeButton.setImportant(true);
 				closeButton.setSmall(true);
@@ -140,7 +157,7 @@ public class App {
 				answerPopin.hide();
 				tagButton.refreshAppearance();
 				
-				dataBus.setDatum(tagButton.getDatum());
+				dataBus.setDatum(tagButton.getDatum(), tagButton.getQuestion());
 			}
 		});
 		
