@@ -378,7 +378,8 @@ public class ServiceController {
 	 	} else {
 	 		//new question: current user must be owner
 	 		q.setOwner(participant);
-		 	questionRepository.saveAndFlush(q);
+		 	questionRepository.save(theQuestion);
+		 	questionRepository.flush();
 		 	log.info("storeQuestion service saved new question: " + q);
 	 	}
 	 	
