@@ -10,7 +10,6 @@ import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
 import com.beyobe.domain.Participant;
-import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.repository.QuestionRepository;
@@ -56,9 +55,6 @@ privileged aspect DatumController_Roo_Controller {
     public String DatumController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Datum());
         List<String[]> dependencies = new ArrayList<String[]>();
-        if (questionRepository.count() == 0) {
-            dependencies.add(new String[] { "question", "admin/questions" });
-        }
         if (Participant.countParticipants() == 0) {
             dependencies.add(new String[] { "participant", "admin/participants" });
         }

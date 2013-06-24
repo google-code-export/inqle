@@ -36,7 +36,7 @@ public interface QuestionRepository {
 //			" where s.participantId=?1 and s.questionId = q.id and s.subscriptionType=?2 "
 //			" order by s.created asc "
 		"select distinct q from Question q, Subscription s " +
-		" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 "
+		" where s.participant.id=?1 and s.questionId = q.id and s.subscriptionType=?2 "
 //		" order by s.created asc "
 			)
 	@Transactional(readOnly=true)

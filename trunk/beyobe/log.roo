@@ -92,3 +92,8 @@ exit
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-06-20 21:07:35
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-06-20 21:08:46
 finder add --finderName "findSubscriptionsByQuestionEqualsAndParticipantEquals" --class ~.domain.Subscription
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-06-22 10:51:48
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-06-22 10:54:41
+// [failed] finder add --class --finderName findSubscriptionsByQuestionIdEqualsAndParticipantEquals
+finder add --class ~.domain.Subscription --finderName findSubscriptionsByQuestionIdEqualsAndParticipantEquals
