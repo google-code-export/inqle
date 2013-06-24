@@ -195,7 +195,7 @@ public class ServiceController {
 			headers.add("Content-Type", "application/json");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
-		
+		Question existingQuestion = questionRepository.findOne(q.getId());
 	 	return saveQuestionAndSubscribe(q, participant);
 	}
 	
@@ -284,50 +284,55 @@ public class ServiceController {
 	}
 	
 	
-	private void mergeAndSaveDatum(Datum newQuestion, Datum existingQuestion) {
-		if (newQuestion.getAnswerStatus() != null) {
-			existingQuestion.setAnswerStatus(newQuestion.getAnswerStatus());
+	private void mergeAndSaveDatum(Datum newDatum, Datum existingDatum) {
+		if (newDatum.getAnswerStatus() != null) {
+			existingDatum.setAnswerStatus(newDatum.getAnswerStatus());
 		}
-		if (newQuestion.getChoice() != null) {
-			existingQuestion.setChoice(newQuestion.getChoice());
+		if (newDatum.getChoice() != null) {
+			existingDatum.setChoice(newDatum.getChoice());
 		}
-		if (newQuestion.getUpdated() != null) {
-			existingQuestion.setUpdated(newQuestion.getUpdated());
+		if (newDatum.getUpdated() != null) {
+			existingDatum.setUpdated(newDatum.getUpdated());
 		}
-		if (newQuestion.getDataType() != null) {
-			existingQuestion.setDataType(newQuestion.getDataType());
+		if (newDatum.getDataType() != null) {
+			existingDatum.setDataType(newDatum.getDataType());
 		}
-		if (newQuestion.getEffectiveDate() != null) {
-			existingQuestion.setEffectiveDate(newQuestion.getEffectiveDate());
+		if (newDatum.getEffectiveDate() != null) {
+			existingDatum.setEffectiveDate(newDatum.getEffectiveDate());
 		}
-		if (newQuestion.getFormula() != null) {
-			existingQuestion.setFormula(newQuestion.getFormula());
+		if (newDatum.getFormula() != null) {
+			existingDatum.setFormula(newDatum.getFormula());
 		}
-		if (newQuestion.getIntegerValue() != null) {
-			existingQuestion.setIntegerValue(newQuestion.getIntegerValue());
+		if (newDatum.getIntegerValue() != null) {
+			existingDatum.setIntegerValue(newDatum.getIntegerValue());
 		}
-		if (newQuestion.getNormalizedValue() != null) {
-			existingQuestion.setNormalizedValue(newQuestion.getNormalizedValue());
+		if (newDatum.getNormalizedValue() != null) {
+			existingDatum.setNormalizedValue(newDatum.getNormalizedValue());
 		}
-		if (newQuestion.getNumericValue() != null) {
-			existingQuestion.setNumericValue(newQuestion.getNumericValue());
+		if (newDatum.getNumericValue() != null) {
+			existingDatum.setNumericValue(newDatum.getNumericValue());
 		}
-		if (newQuestion.getQuestionConcept() != null) {
-			existingQuestion.setQuestionConcept(newQuestion.getQuestionConcept());
+		if (newDatum.getQuestionConcept() != null) {
+			existingDatum.setQuestionConcept(newDatum.getQuestionConcept());
 		}
-		if (newQuestion.getTextValue() != null) {
-			existingQuestion.setTextValue(newQuestion.getTextValue());
+		if (newDatum.getTextValue() != null) {
+			existingDatum.setTextValue(newDatum.getTextValue());
 		}
-		if (newQuestion.getUnit() != null) {
-			existingQuestion.setUnit(newQuestion.getUnit());
+		if (newDatum.getUnit() != null) {
+			existingDatum.setUnit(newDatum.getUnit());
 		}
-		if (newQuestion.getUpdatedBy() != null) {
-			existingQuestion.setUpdatedBy(newQuestion.getUpdatedBy());
+		if (newDatum.getUpdatedBy() != null) {
+			existingDatum.setUpdatedBy(newDatum.getUpdatedBy());
 		}
-		datumRepository.saveAndFlush(existingQuestion);
+		datumRepository.saveAndFlush(existingDatum);
 	}
 	
 	private Question mergeAndSaveQuestion(Question newQuestion, Question existingQuestion) {
+		if (existingQuestion == null) {
+			existingQuestion = newQuestion;
+			return existingQuestion;
+		}
+		
 		if (newQuestion.getAbbreviation() != null) {
 			existingQuestion.setAbbreviation(newQuestion.getAbbreviation());
 		}
@@ -387,8 +392,8 @@ public class ServiceController {
 	 	Subscription existingSubscription = null;
 	 	 try {
 			existingSubscription = 
-//					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantIdEquals(q.getId(), participant.getId()).getSingleResult();
-					Subscription.findSubscriptionsByQuestionEqualsAndParticipantEquals(q, participant).getSingleResult();
+					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
+//					Subscription.findSubscriptionsByQuestionEqualsAndParticipantEquals(q, participant).getSingleResult();
 
 	 	 } catch (Exception e1) {
 			log.info("No existing subscription found for question: " + q.getId());
@@ -397,8 +402,8 @@ public class ServiceController {
 		 	Subscription subscription = new Subscription();
 		 	subscription.setCreated(new Date());
 		 	subscription.setCreatedBy(participant.getId());
-//		 	subscription.setQuestionId(q.getId());
-		 	subscription.setQuestion(theQuestion);
+		 	subscription.setQuestionId(q.getId());
+//		 	subscription.setQuestion(theQuestion);
 		 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
 //		 	subscription.setParticipantId(participant.getId());
 		 	subscription.setParticipant(participant);

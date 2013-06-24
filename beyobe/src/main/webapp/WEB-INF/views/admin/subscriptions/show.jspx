@@ -5,7 +5,7 @@
     <page:show id="ps_com_beyobe_domain_Subscription" object="${subscription}" path="/admin/subscriptions" z="qfK7dba4a8w35KAj9NBW2n4z/vI=">
         <field:display field="createdBy" id="s_com_beyobe_domain_Subscription_createdBy" object="${subscription}" z="C3QEdm2fMefbMfY7fqyAC/D5YP4="/>
         <field:display field="subscriptionType" id="s_com_beyobe_domain_Subscription_subscriptionType" object="${subscription}" z="ReEYU1NEZwGpTY1H/D9WK7F7h3I="/>
-        <field:display field="question" id="s_com_beyobe_domain_Subscription_question" object="${subscription}" z="yyKqy1gwC0aeO+rc9EwXl7R+GXo="/>
         <field:display field="participant" id="s_com_beyobe_domain_Subscription_participant" object="${subscription}" z="ENgp6cVRlmWMQeE8kGUK6OCKyzA="/>
+        <field:display field="questionId" id="s_com_beyobe_domain_Subscription_questionId" object="${subscription}" z="kKXqaFAEBr8EU6nF5l2SxXR8vGY="/>
     </page:show>
 </div>

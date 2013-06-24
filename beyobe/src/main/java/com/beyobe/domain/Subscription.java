@@ -19,10 +19,9 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
 
-// "findSubscriptionsByQuestionIdEqualsAndParticipantIdEquals", 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(finders = {"findSubscriptionsByQuestionEqualsAndParticipantEquals" })
+@RooJpaActiveRecord(finders = { "findSubscriptionsByQuestionIdEqualsAndParticipantEquals" })
 public class Subscription {
 
     @Id
@@ -39,8 +38,7 @@ public class Subscription {
     private String createdBy;
 
     @NotNull
-    @ManyToOne
-    private Question question;
+    private String questionId;
 
     @NotNull
     @ManyToOne

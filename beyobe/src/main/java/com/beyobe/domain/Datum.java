@@ -78,7 +78,6 @@ public class Datum implements HasUuid {
     private String questionId;
     
     @ManyToOne
-    @NotNull
     private Question question;
 
     @ManyToOne
