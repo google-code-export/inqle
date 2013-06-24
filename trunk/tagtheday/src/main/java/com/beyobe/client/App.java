@@ -128,6 +128,7 @@ public class App {
 							App.eventBus.fireEvent(new EditQuestionEvent(tagButton.getQuestion()));
 						}
 					});
+					answerPanel.add(editButton);
 				}
 				
 				Button closeButton = new Button("x");

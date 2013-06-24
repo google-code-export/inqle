@@ -178,6 +178,7 @@ public class Day extends Composite implements Block, TapHandler {
 			if(question.getId().equals(tagButton.getQuestion().getId())) {
 				foundQuestion = true;
 				tagButton.setQuestion(question);
+				tagButton.refreshAppearance();
 				log.info("Updated question, tagButton=" + tagButton);
 			}
 		}
