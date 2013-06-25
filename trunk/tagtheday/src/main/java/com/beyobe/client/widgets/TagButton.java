@@ -74,7 +74,7 @@ public class TagButton extends Button {
 //			this.addStyleName("ttd-TagButton-unanswered");
 			this.setImportant(true);
 		} else {
-			setText(question.getAbbreviation() + " " + datum.getTextValue());
+			setText(question.getAbbreviation() + ": " + datum.getTextValue());
 			setTitle(question.getLongForm() + " " + datum.getTextValue());
 //			this.addStyleName("ttd-TagButton-answered");
 			if (datum.getAnswerStatus()!=AnswerStatus.INFERRED) this.setConfirm(true);

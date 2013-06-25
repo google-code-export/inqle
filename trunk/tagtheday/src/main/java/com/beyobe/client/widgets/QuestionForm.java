@@ -33,6 +33,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 	private static final int LONG_FORM_MAX_LENGTH = 250;
 	private static final int ABBREV_LENGTH = 10;
+	private static final int DATATYPEINDEX_NUMBER = 0;
+	private static final int DATATYPEINDEX_LABEL = 1;
+	private static final int DATATYPEINDEX_MEMO = 2;
 	private Question q;
 //	private MTextBox shortForm;
 	private MTextBox abbrev;
@@ -118,7 +121,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		//minMaxPanel for numeric questions
 		numericParamsPanel = new VerticalPanel();
 		numericParamsPanel.setVisible(false);
-		if (DataType.DOUBLE.ordinal() == dataTypePicker.getSelectedIndex() || DataType.INTEGER.ordinal() == dataTypePicker.getSelectedIndex()) {
+		if (DATATYPEINDEX_NUMBER == dataTypePicker.getSelectedIndex()) {
 			numericParamsPanel.setVisible(true);
 		}
 		Label minLabel = new Label("Minimum value (if any)");
@@ -162,13 +165,13 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 	private Integer getDataTypeIndex(DataType dataType) {
 		if (dataType == DataType.DOUBLE) {
-			return 0;
+			return DATATYPEINDEX_NUMBER;
 		}
 		if (dataType == DataType.SHORT_TEXT) {
-			return 1;
+			return DATATYPEINDEX_LABEL;
 		}
 		if (dataType == DataType.LONG_TEXT) {
-			return 2;
+			return DATATYPEINDEX_MEMO;
 		}
 		return null;
 	}
@@ -308,7 +311,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //		Choice selectedChoice = event.getValue();
 		int dataTypeIndex = dataTypePicker.getSelectedIndex();
 		
-		if (dataTypeIndex==0) {
+		if (dataTypeIndex==DATATYPEINDEX_NUMBER) {
 			numericParamsPanel.setVisible(true);
 		} else {
 			numericParamsPanel.setVisible(false);

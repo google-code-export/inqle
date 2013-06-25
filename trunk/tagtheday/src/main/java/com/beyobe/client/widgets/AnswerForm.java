@@ -115,6 +115,8 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		//LONG TEXT
 		if (q.getDataType()==DataType.LONG_TEXT) {
 			textArea = new MTextArea();
+			textArea.setCharacterWidth(30);
+			textArea.setVisibleLines(3);
 			panel.add(textArea);
 			if (d != null) textArea.setText(d.getTextValue());
 		}
