@@ -115,6 +115,19 @@ public class App {
 					answerPanel.getElement().getStyle().setBackgroundColor("light-gray");
 				}
 				
+				Button closeButton = new Button("x");
+				closeButton.setImportant(true);
+				closeButton.setSmall(true);
+				closeButton.getElement().getStyle().setProperty("float", "right");
+				closeButton.addTapHandler(new TapHandler() {
+					@Override
+					public void onTap(TapEvent event) {
+						answerPopin.hide();
+						answerPopin.clear();
+					}
+				});
+				answerPanel.add(closeButton);
+				
 				//if user is admin or owner of the question, show the edit button
 				if (UserRole.ROLE_ADMIN == participant.getRole() || participant.getId().equals(tagButton.getQuestion().getOwnerId())) {
 					Button editButton = new Button("edit");
@@ -131,18 +144,6 @@ public class App {
 					answerPanel.add(editButton);
 				}
 				
-				Button closeButton = new Button("x");
-				closeButton.setImportant(true);
-				closeButton.setSmall(true);
-				closeButton.getElement().getStyle().setProperty("float", "right");
-				closeButton.addTapHandler(new TapHandler() {
-					@Override
-					public void onTap(TapEvent event) {
-						answerPopin.hide();
-						answerPopin.clear();
-					}
-				});
-				answerPanel.add(closeButton);
 				answerPanel.add(new AnswerForm(tagButton));
 				answerPopin.add(answerPanel);
 				
