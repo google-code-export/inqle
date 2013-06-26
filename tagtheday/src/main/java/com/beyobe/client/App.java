@@ -36,6 +36,8 @@ import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.views.LoginView;
 import com.beyobe.client.views.LoginViewImpl;
+import com.beyobe.client.views.SignupView;
+import com.beyobe.client.views.SignupViewImpl;
 import com.beyobe.client.views.TagdayView;
 import com.beyobe.client.views.TagdayViewImpl;
 import com.beyobe.client.widgets.AnswerForm;
@@ -61,6 +63,7 @@ public class App {
 	public static final PlaceController placeController = new PlaceController(eventBus);
 	public static final TagdayView tagdayView = new TagdayViewImpl();
 	public static final LoginView loginView = new LoginViewImpl();
+	public static SignupView signupView  = new SignupViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
@@ -70,6 +73,7 @@ public class App {
 	
 	protected static PopinDialog answerPopin;
 	private static Logger log = Logger.getLogger(App.class.getName());
+	
 	
 	public static void registerEvents() {
 		eventBus.addHandler(EditQuestionEvent.TYPE, new EditQuestionEventHandler() {

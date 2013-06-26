@@ -1,0 +1,37 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:mgwt="urn:import:com.googlecode.mgwt.ui.client.widget">
+  <ui:style>
+    .mainPanel {
+      width: 100%;
+      height: 100%;
+      align: center;
+    }
+    .roundPanel {
+      width: 300px;
+      height: 400px;
+    }
+    .fieldsPanel {
+    
+    }
+    .message {
+      color: red;
+    }
+  </ui:style>
+  <g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}">
+  <mgwt:RoundPanel ui:field="roundPanel" styleName="{style.roundPanel}">
+   <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
+     <g:Label styleName="ttd-form-title" text="Create New Beyobe Account!"/>
+     <g:Label ui:field="message" styleName="{style.message}"/>
+     <g:Label styleName="ttd-form-label" text="Login"/>
+     <g:TextBox ui:field="userName"/>
+     <g:Label styleName="ttd-form-label" text="Password"/>
+     <g:PasswordTextBox ui:field="password"/>
+     <g:Label styleName="ttd-form-label" text="Repeat Password"/>
+     <g:PasswordTextBox ui:field="password2"/>
+     <g:Button ui:field="submitButton" text="Create Account"/>
+   </g:VerticalPanel>
+  </mgwt:RoundPanel>
+  </g:VerticalPanel>
+</ui:UiBinder> 
