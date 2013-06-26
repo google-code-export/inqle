@@ -24,7 +24,7 @@
 	 <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
 		 <g:Label styleName="ttd-form-title" text="Welcome to Beyobe!"/>
 		 <g:Label ui:field="message" styleName="{style.message}"/>
-		 <g:Label styleName="ttd-form-label" text="Login"/>
+		 <g:Label styleName="ttd-form-label" text="Email"/>
 		 <g:TextBox ui:field="userName"/>
 		 <g:Label styleName="ttd-form-label" text="Password"/>
 	   <g:PasswordTextBox ui:field="password"/>

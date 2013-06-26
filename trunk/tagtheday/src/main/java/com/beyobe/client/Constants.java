@@ -21,5 +21,9 @@ public class Constants {
 	public static final String SERVERACTION_STORE_DATUM = "storeDatum";
 	public static final Integer DEFAULT_TEXTFIELD_MAX_LENGTH = 50;
 	public static final Integer DEFAULT_MEMOFIELD_MAX_LENGTH = 2000;
+	public static final int TIMEOUT_SIGNUP = 10000;
+	public static final String SERVERACTION_SIGNUP = "signup";
+	public static final String SERVERACTION_TESTUSERNAME = "testUsername";
+	public static final int MINIMUM_PASSWORD_LENGTH = 8;
 	
 }

@@ -130,7 +130,7 @@ public class DataBus {
 	}
 	
 	public List<Day> createAllDays() {
-		log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC createAllDays called. dataByDate=" + dataByDate);
+//		log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC createAllDays called. dataByDate=" + dataByDate);
 		allDays = new ArrayList<Day>();
 		
 		//add days from the start of data collection to the present.
