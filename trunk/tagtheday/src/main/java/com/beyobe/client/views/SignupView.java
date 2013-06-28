@@ -9,4 +9,6 @@ public interface SignupView extends IsWidget {
     public interface Presenter {
         void goTo(Place place);
     }
+
+	void setMessage(String string);
 }

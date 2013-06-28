@@ -13,6 +13,7 @@ import com.beyobe.client.App;
 import com.beyobe.client.Constants;
 import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
@@ -23,7 +24,6 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.SimpleEventBus;
 
 public class DataBus {
 	
@@ -259,26 +259,34 @@ public class DataBus {
 	}
 
 	public void refreshDataFromJson(String text) {
-		log.info("RRRRRRRRRRRRRRRRRRRRRRRRR refreshDataFromJson...");
+//		log.info("RRRRRRRRRRRRRRRRRRRRRRRRR refreshDataFromJson...");
 		boolean gotoTagdayPlace = false;
 		try {
 			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
 		    Parcel parcel = parcelAB.as();
 		    log.info("Received Session Token? " + parcel.getSessionToken());
+		    Message message = parcel.getMessage();
+		    
+		    if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
+		    	App.signupView.setMessage("Account already exists");
+		    }
+		    
 		    if (parcel.getSessionToken() != null) {
 		    	App.sessionToken = parcel.getSessionToken();
 		    	gotoTagdayPlace = true;
 		    }
-		    log.info("Received question queue: " + parcel.getQuestionQueue());
+		    
 		    if (parcel.getQuestionQueue() != null) {
+		    	log.info("Received question queue: " + parcel.getQuestionQueue());
 		    	setQuestionQueue(parcel.getQuestionQueue());
 		    	setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
 		    }
 		    if (parcel.getData() != null) {
 		    	 setData(parcel.getData());
 		    }
-		    log.info("Received participant: " + parcel.getParticipant());
+		    
 		    if (parcel.getParticipant() != null) {
+		    	log.info("Received participant: " + parcel.getParticipant());
 		    	App.participant = parcel.getParticipant();
 		    }
 		    

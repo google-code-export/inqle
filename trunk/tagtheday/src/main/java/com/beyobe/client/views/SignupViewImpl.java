@@ -89,9 +89,8 @@ public class SignupViewImpl extends Composite implements SignupView {
 		}
 		if (! (password.getText().equals(password2.getText()))) {
 			message.setText("Your 2 passwords do not match");
+			return;
 		}
-//		Window.alert("Hello!");
-//		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
 		Parcel parcel = App.dataBus.newParcel();
 		parcel.setUsername(userName.getText());
 		parcel.setPassword(password.getText());
@@ -106,7 +105,7 @@ public class SignupViewImpl extends Composite implements SignupView {
 			if(counter > MAX_COUNTER) abortFlag = true;
 		}
 		status = App.parcelClient.getStatus();
-		//if no answer yet on login, that means the Timer in Teller failed. Delay x seconds then check again
+		//if no answer yet on signup, that means the Timer in ParcelClient failed. Delay x seconds then check again
 		if (status == Constants.STATUS_ALREADY_RUNNING) {
 			new Timer() {
 				@Override
@@ -141,6 +140,11 @@ public class SignupViewImpl extends Composite implements SignupView {
 		String email = userName.getText();
 		if (email == null) return null;
 		return email.trim();
+	}
+
+	@Override
+	public void setMessage(String string) {
+		message.setText(string);
 	}
 
 }

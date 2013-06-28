@@ -21,4 +21,6 @@ public interface Parcel {
 	public void setQuestion(Question question);
 	public Datum getDatum();
 	public void setDatum(Datum datum);
+	public Message getMessage();
+	public void setMessage(Message message);
 }

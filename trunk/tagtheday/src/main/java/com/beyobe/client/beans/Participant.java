@@ -24,10 +24,14 @@ public interface Participant {
 	
 	public abstract void setUpdatedBy(String updatedBy);
 	
-	public abstract String getName();
+	public abstract String getUsername();
 
-	public abstract void setName(String name);
+	public abstract void setUsername(String username);
 
+	public abstract String getEmail();
+
+	public abstract void setEmail(String email);
+	
 	public abstract String getLang();
 
 	public abstract void setLang(String lang);
