@@ -97,3 +97,8 @@ exit
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-06-22 10:54:41
 // [failed] finder add --class --finderName findSubscriptionsByQuestionIdEqualsAndParticipantEquals
 finder add --class ~.domain.Subscription --finderName findSubscriptionsByQuestionIdEqualsAndParticipantEquals
+finder list --depth 1 --filter "sername"
+finder list --depth 1 --filter "Username"
+finder list --depth 1 --filter "Username" --class ~.domain.Participant
+focus --class ~.domain.Participant
+finder add --finderName "findParticipantsByUsernameEquals"

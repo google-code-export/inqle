@@ -12,5 +12,6 @@
         <field:display field="createdBy" id="s_com_beyobe_domain_Participant_createdBy" object="${participant}" z="6GQAyXpBvq8VF0MzvH8PjFuZfNw="/>
         <field:display field="sessionToken" id="s_com_beyobe_domain_Participant_sessionToken" object="${participant}" z="jfemFSKxa6fQ4cwcpDl7sZ/yVnw="/>
         <field:display field="clientIpAddress" id="s_com_beyobe_domain_Participant_clientIpAddress" object="${participant}" z="1rfcGB3jR3o9dL919TK8lCJXiQc="/>
+        <field:display field="email" id="s_com_beyobe_domain_Participant_email" object="${participant}" z="Ci2TllatKnXCKPk+YU5vQisd7mg="/>
     </page:show>
 </div>

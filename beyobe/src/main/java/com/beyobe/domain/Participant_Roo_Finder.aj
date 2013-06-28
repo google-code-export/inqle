@@ -19,6 +19,14 @@ privileged aspect Participant_Roo_Finder {
         return q;
     }
     
+    public static TypedQuery<Participant> Participant.findParticipantsByUsernameEquals(String username) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        EntityManager em = Participant.entityManager();
+        TypedQuery<Participant> q = em.createQuery("SELECT o FROM Participant AS o WHERE o.username = :username", Participant.class);
+        q.setParameter("username", username);
+        return q;
+    }
+    
     public static TypedQuery<Participant> Participant.findParticipantsByUsernameEqualsAndPasswordEquals(String username, String password) {
         if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
         if (password == null || password.length() == 0) throw new IllegalArgumentException("The password argument is required");
