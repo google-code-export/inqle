@@ -12,5 +12,6 @@
         <field:input field="createdBy" id="c_com_beyobe_domain_Participant_createdBy" z="NOaME750ujmYhZAyFhKNuVlZg04="/>
         <field:input field="sessionToken" id="c_com_beyobe_domain_Participant_sessionToken" z="a/QXV9r8iRKbfyjVaRkLwr+HYD4="/>
         <field:input field="clientIpAddress" id="c_com_beyobe_domain_Participant_clientIpAddress" z="McDht6LtSGUJtC4o8bMJ19GwjuE="/>
+        <field:input field="email" id="c_com_beyobe_domain_Participant_email" validationMessageCode="field_invalid_email" z="hxES6qR5TEwWdTJ9uaxhqN8E3OE="/>
     </form:update>
 </div>

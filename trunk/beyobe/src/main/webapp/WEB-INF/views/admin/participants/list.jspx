@@ -9,7 +9,7 @@
             <table:column id="c_com_beyobe_domain_Participant_role" property="role" z="WKwAG2DYLdxseDExY5hVwvvsGNw="/>
             <table:column id="c_com_beyobe_domain_Participant_enabled" property="enabled" z="a88HmdhhcEowufIliBqXfKtxbIQ="/>
             <table:column date="true" dateTimePattern="${participant_created_date_format}" id="c_com_beyobe_domain_Participant_created" property="created" z="Jw4kAorPYrbMl0Jo30hiMLIXEdA="/>
-            <table:column date="true" dateTimePattern="${participant_updated_date_format}" id="c_com_beyobe_domain_Participant_updated" property="updated" z="ACv9GiCnUhxvNv/041bglpUfYBE="/>
+            <table:column id="c_com_beyobe_domain_Participant_email" property="email" z="L4ABSqx8qTHuCOzRSlW55UVYYW4="/>
         </table:table>
     </page:list>
 </div>

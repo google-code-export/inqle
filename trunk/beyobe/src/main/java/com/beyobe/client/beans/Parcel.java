@@ -24,6 +24,7 @@ public class Parcel {
 	private String password;
 	private Question question;
 	private Datum datum;
+	private Message message;
 	
 	public List<Question> getQuestionQueue() {
 		return questionQueue;
@@ -125,5 +126,13 @@ public class Parcel {
     	.exclude("*.version")
 //    	.exclude("*.owner")
 		.deepSerialize( this );
+	}
+
+	public Message getMessage() {
+		return message;
+	}
+
+	public void setMessage(Message message) {
+		this.message = message;
 	}
 }

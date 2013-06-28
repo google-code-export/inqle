@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.SubscriptionType;
+import com.beyobe.client.beans.UserRole;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
@@ -61,6 +64,98 @@ public class ServiceController {
 //		return "view";
 //	}
 	
+	@RequestMapping(value = "/signup", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public ResponseEntity<java.lang.String> signup(
+			@RequestBody String jsonRequest,
+			@ModelAttribute("clientIpAddress") String clientIpAddress) {
+//	public ResponseEntity<java.lang.String> login(
+//			@RequestBody String jsonRequest) {
+		log.info("login service invoked with json: " + jsonRequest);
+	 	Parcel parcel = null;
+	 	String username = null;
+	 	String password = null;
+	 	String hashedPassword = null;
+	 	try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+			username = parcel.getUsername();
+			password = parcel.getPassword();
+			Participant dummyParticipant = new Participant();
+			dummyParticipant.setPassword(password);
+//			hashedPassword = Participant.hashString(password, username);
+			hashedPassword = dummyParticipant.getPassword();
+		} catch (Exception e1) {
+			HttpHeaders headers = new HttpHeaders();
+			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+	 	Participant participant = null;
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	try {
+			Participant shouldNotExist = Participant.findParticipantsByUsernameEquals(username).getSingleResult();
+			assert(shouldNotExist==null);
+	 	} catch (NoResultException dne) {
+	 		
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("Username already exists=" + username);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+		    returnParcel.setMessage(Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS);
+	 		String returnJson = returnParcel.toJson();
+	 		return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
+//			return new ResponseEntity<String>(null, headers, HttpStatus.CONFLICT);
+		}
+	 	//save the session token for future requests
+	 	String sessionToken = UUID.randomUUID().toString();
+	 	participant = new Participant();
+	 	participant.setUsername(username);
+	 	participant.setPassword(password);
+	 	participant.setEmail(username);
+	 	participant.setRole(UserRole.ROLE_BASIC);
+	 	participant.setSessionToken(sessionToken);
+	 	participant.setClientIpAddress(clientIpAddress);
+	 	participant.persist();
+	 	
+	 	log.info("saved NEW participant: " + username);
+	 	
+	 	returnParcel.setSessionToken(sessionToken);
+	 	returnParcel.setParticipant(participant);
+	 	log.info("set session token: " + sessionToken);
+	 	
+	 	try {
+			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
+			returnParcel.setQuestionQueue(questionQueue);
+			log.trace("login service: set question queue");
+		} catch (Exception e) {
+			log.error("login service: ERROR getting question queue", e);
+		}
+		
+		try {
+			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
+			returnParcel.setOtherKnownQuestions(inactiveQuestions);
+			log.trace("set inactive questions");
+		} catch (Exception e) {
+			log.error("login service: ERROR getting inactive questions", e);
+		}
+		
+	 	try {
+			List<Datum> data = datumRepository.getParticipantData(participant.getId());
+			returnParcel.setData(data);
+			log.trace("set data");
+		} catch (Exception e) {
+			log.error("ERROR getting participant data", e);
+		}
+	 	
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    String returnJson = returnParcel.toJson();
+	    log.info("login service sending back: " + returnJson);
+	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
+	}
+	 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public ResponseEntity<java.lang.String> login(
@@ -141,7 +236,6 @@ public class ServiceController {
 	    log.info("login service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
-	 
 	
 	/**
 	 * Checks if the current 
