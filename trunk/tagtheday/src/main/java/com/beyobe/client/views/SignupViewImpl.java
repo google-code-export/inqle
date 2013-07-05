@@ -1,15 +1,19 @@
 package com.beyobe.client.views;
 
+import java.util.logging.Logger;
+
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
+import com.beyobe.client.activities.LoginPlace;
 import com.beyobe.client.beans.Parcel;
+import com.beyobe.client.util.Validator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -17,11 +21,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class SignupViewImpl extends Composite implements SignupView {
 
+	private static Logger log = Logger.getLogger("SignupViewImpl");
+	
 	private static final long MAX_COUNTER = 10000;
 	@UiField Label message;
 	@UiField TextBox userName;
 	@UiField TextBox password;
 	@UiField TextBox password2;
+	@UiField Anchor loginLink;
 	
 	private Presenter presenter;
 	private int status;
@@ -76,9 +83,14 @@ public class SignupViewImpl extends Composite implements SignupView {
 //		}
 //	}
 	
+	@UiHandler("loginLink")
+	void onClickLogin(ClickEvent e) {
+		App.placeController.goTo(new LoginPlace());
+	}
+	
 	@UiHandler("submitButton")
 	void onClick(ClickEvent e) {
-		if (! isValidEmail() ) {
+		if (! Validator.isValidEmail(getEmail()) ) {
 			message.setText("Please enter a valid email");
 			return;
 		}
@@ -129,12 +141,7 @@ public class SignupViewImpl extends Composite implements SignupView {
 //		}
 	}
 
-	private boolean isValidEmail() {
-		String email = getEmail();
-		if (email == null) return false;
-		RegExp regExp = RegExp.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
-		return regExp.test(email);
-	}
+	
 	
 	public String getEmail() {
 		String email = userName.getText();
@@ -146,5 +153,7 @@ public class SignupViewImpl extends Composite implements SignupView {
 	public void setMessage(String string) {
 		message.setText(string);
 	}
+	
+	
 
 }

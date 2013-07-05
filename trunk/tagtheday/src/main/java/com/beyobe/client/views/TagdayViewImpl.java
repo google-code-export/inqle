@@ -1,8 +1,10 @@
 package com.beyobe.client.views;
 
 import java.util.Date;
+import java.util.List;
 
 import com.beyobe.client.App;
+import com.beyobe.client.beans.Question;
 import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
@@ -96,5 +98,11 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //            scrollPanel.setScrollingEnabledX(false);
 //            scrollPanel.add(day);
 			carousel.addWidget(day);
+		}
+
+		@Override
+		public void setQuestionOptions(List<Question> questions) {
+			
+			
 		}
 }

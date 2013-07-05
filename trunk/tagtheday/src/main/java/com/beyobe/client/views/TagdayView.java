@@ -1,5 +1,8 @@
 package com.beyobe.client.views;
 
+import java.util.List;
+
+import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -12,4 +15,6 @@ public interface TagdayView extends IsWidget {
     }
 
 	void addDay(Day todayDay);
+
+	void setQuestionOptions(List<Question> questions);
 }
