@@ -25,6 +25,8 @@ public class Parcel {
 	private Question question;
 	private Datum datum;
 	private Message message;
+	private String queryTerm;
+	private List<Question> questions;
 	
 	public List<Question> getQuestionQueue() {
 		return questionQueue;
@@ -110,7 +112,6 @@ public class Parcel {
 
 	public String toJson() {
 		return new JSONSerializer()
-//		.transform(new ToGwtDateTransformer(), new String[] {"effectiveDate"})
 		.exclude("*.class")
     	.exclude("*.created")
     	.exclude("*.updated")
@@ -124,7 +125,6 @@ public class Parcel {
     	.exclude("data.participant")
     	.exclude("participant.sessionToken")
     	.exclude("*.version")
-//    	.exclude("*.owner")
 		.deepSerialize( this );
 	}
 
@@ -134,5 +134,21 @@ public class Parcel {
 
 	public void setMessage(Message message) {
 		this.message = message;
+	}
+
+	public String getQueryTerm() {
+		return queryTerm;
+	}
+	
+	public void setQueryTerm(String queryTerm) {
+		this.queryTerm = queryTerm;
+	}
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
+	
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
 	}
 }

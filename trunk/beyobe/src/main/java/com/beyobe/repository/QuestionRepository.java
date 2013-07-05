@@ -12,19 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RooJpaRepository(domainType = Question.class)
 public interface QuestionRepository {
 	
-
-	
-//	/**
-//	 * Get a list of questions to which this participant has subscribed
-//	 * @param participantId
-//	 * @return list of questions, ordered by question priority then creation date
-//	 */
-//	@Query("select distinct q from Question q, Subscription s " +
-//			" where s.participant.id=?1 and s.question.id = q.id and s.subscriptionType=?2 "
-////			" order by s.created asc "
-//			)
-//	@Transactional(readOnly=true)
-//	List<Question> getSubscribedQuestions(String participantId, SubscriptionType subscriptionType);
 	
 	/**
 	 * Get a list of questions to which this participant has subscribed
@@ -32,17 +19,25 @@ public interface QuestionRepository {
 	 * @return list of questions, ordered by question priority then creation date
 	 */
 	@Query(
-//			"select distinct q from Question q, Subscription s " +
-//			" where s.participantId=?1 and s.questionId = q.id and s.subscriptionType=?2 "
-//			" order by s.created asc "
 		"select distinct q from Question q, Subscription s " +
 		" where s.participant.id=?1 and s.questionId = q.id and s.subscriptionType=?2 "
 //		" order by s.created asc "
-			)
+	)
 	@Transactional(readOnly=true)
 	List<Question> getSubscribedQuestions(String participantId, SubscriptionType subscriptionType);
 	
-
+	//TODO filter for only those questions published
+	/**
+	 * Get some questions matching the query term
+	 * Be sure to add % at end and/or beginning of the term
+	 */
+	@Query(
+			"SELECT distinct q from Question q WHERE LOWER(abbreviation) LIKE LOWER(?1) OR LOWER(longForm) LIKE LOWER(?1) "
+//			limit 10"
+	)
+	@Transactional(readOnly=true)
+	List<Question> searchUsingSql(String term);
+	
 //	/**
 //	 * Get a list of questions to which this participant has subscribed, that have not
 //	 * been answered too recently

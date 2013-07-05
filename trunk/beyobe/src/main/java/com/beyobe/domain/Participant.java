@@ -74,7 +74,8 @@ public class Participant implements HasUuid {
 
     public void setPassword(String password) {
         if (password == null || password.equals("")) return;
-        String encodedPassword = passwordEncoder.encodePassword(password, username);
+//        String encodedPassword = passwordEncoder.encodePassword(password, username);
+        String encodedPassword = passwordEncoder.encodePassword(password, null);
         this.password = encodedPassword;
     }
 

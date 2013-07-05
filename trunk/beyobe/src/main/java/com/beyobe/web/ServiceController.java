@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class ServiceController {
 			@ModelAttribute("clientIpAddress") String clientIpAddress) {
 //	public ResponseEntity<java.lang.String> login(
 //			@RequestBody String jsonRequest) {
-		log.info("login service invoked with json: " + jsonRequest);
+		log.info("signup service invoked with json: " + jsonRequest);
 	 	Parcel parcel = null;
 	 	String username = null;
 	 	String password = null;
@@ -93,21 +94,36 @@ public class ServiceController {
 	 	Participant participant = null;
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
+	 	boolean acctAlreadyExists = true;
 	 	try {
-			Participant shouldNotExist = Participant.findParticipantsByUsernameEquals(username).getSingleResult();
-			assert(shouldNotExist==null);
-	 	} catch (NoResultException dne) {
-	 		
-	 	} catch (Exception e) {
-			//leave as null
+			try {
+				Participant shouldNotExist = Participant.findParticipantsByUsernameEquals(username).getSingleResult();
+				if (shouldNotExist != null) {
+					acctAlreadyExists = true;
+				}
+			} catch (NoResultException dne) {
+				acctAlreadyExists = false;
+			} catch (EmptyResultDataAccessException erdae) {
+				acctAlreadyExists = false;
+			}
+			
+//			finally {
+//				//leave true
+//			}
+		} catch (Exception e1) {
+	 		log.error("Exception finding already existing account", e1);
+			acctAlreadyExists = true;
+		} 
+	 	if (acctAlreadyExists) {
 			log.warn("Username already exists=" + username);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
 		    returnParcel.setMessage(Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS);
 	 		String returnJson = returnParcel.toJson();
 	 		return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
-//			return new ResponseEntity<String>(null, headers, HttpStatus.CONFLICT);
-		}
+	//		return new ResponseEntity<String>(null, headers, HttpStatus.CONFLICT);
+	 	}
+	 	
 	 	//save the session token for future requests
 	 	String sessionToken = UUID.randomUUID().toString();
 	 	participant = new Participant();
@@ -461,13 +477,67 @@ public class ServiceController {
 		return existingQuestion;
 	}
 
-	private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant participant) {
+	@RequestMapping(value = "/searchForQuestions", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	private ResponseEntity<String> searchForQuestions(@ModelAttribute("clientIpAddress") String clientIpAddress,
+			@RequestBody String jsonRequest) {
+		
+		Parcel parcel = null;
+		try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+		} catch (Exception e1) {
+			log.error("searchForQuestions service: Error parsing JSON: " + jsonRequest, e1);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+//	 	log.info("got parcel: " + parcel);
+	 	String sessionToken = parcel.getSessionToken();
+	 	Participant participant = null;
+	 	try {
+	 		//TODO add session expiration datetime
+	 		log.info("searchForQuestions service getting current user participant...");
+			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			log.info("searchForQuestions service participant:" + participant);
+			assert(participant.getEnabled()==true);
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("searchForQuestions service: Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
+	 	}
+	 	
+	 	String queryTerm = parcel.getQueryTerm();
+	 	String qt = "%" + sqlEscape(queryTerm) + "%";
+	 	List<Question> questions = questionRepository.searchUsingSql(qt);
+	 	log.info("searchForQuestions queried " + qt + " and found: " + questions);
+	 	
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	returnParcel.setQuestions(questions);
+	 	returnParcel.setQueryTerm(queryTerm);
+	 	
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    String returnJson = returnParcel.toJson();
+	    log.info("searchForQuestions service sending back: " + returnJson);
+	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
+	}
+	
+	private String sqlEscape(String queryTerm) {
+		queryTerm = queryTerm.replace("%", "[%]");
+		queryTerm = queryTerm.replace("*", "[*]");
+		return queryTerm;
+	}
+
+private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant participant) {
 		
 		//test that current user is the owner of this question or is admin
 	 	Question existingQuestion = questionRepository.findOne(q.getId());
 	 	Question theQuestion = q;
 	 	if (existingQuestion != null) {
-	 		if (! participant.getId().equals(existingQuestion.getOwnerId())) {
+	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
 	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
 				HttpHeaders headers = new HttpHeaders();
 			    headers.add("Content-Type", "application/json");

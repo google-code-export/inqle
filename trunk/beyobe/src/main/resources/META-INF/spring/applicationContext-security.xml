@@ -23,7 +23,8 @@
         <!-- SHA-256 values can be produced using 'echo -n your_desired_password | sha256sum' (using normal *nix environments) -->
         <authentication-provider>
             <password-encoder hash="sha-256">
-						  <salt-source user-property="username"/>
+<!-- 						  <salt-source user-property="username"/> -->
+<!--               <salt-source user-property="created"/> -->
 						</password-encoder>
 						
 						<jdbc-user-service data-source-ref="dataSource"
