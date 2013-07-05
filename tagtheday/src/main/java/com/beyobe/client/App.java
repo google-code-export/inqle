@@ -68,6 +68,8 @@ public class App {
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
 	public static String sessionToken;
+//	public static RoundPanel editQuestionPanel;
+	public static QuestionForm questionForm;
 	
 	public static TagthedayAutoBeanFactory tagthedayAutoBeanFactory = GWT.create(TagthedayAutoBeanFactory.class);
 	
@@ -77,6 +79,7 @@ public class App {
 	
 	public static void registerEvents() {
 		eventBus.addHandler(EditQuestionEvent.TYPE, new EditQuestionEventHandler() {
+
 			//TODO add real event
 			@Override
 			public void onEditQuestion(EditQuestionEvent event) {
@@ -95,7 +98,8 @@ public class App {
 					}
 				});
 				editQuestionPanel.add(closeButton);
-				editQuestionPanel.add(new QuestionForm(event.getQuestion()));
+				questionForm = new QuestionForm(event.getQuestion());
+				editQuestionPanel.add(questionForm);
 				answerPopin.add(editQuestionPanel);
 				
 				answerPopin.show();

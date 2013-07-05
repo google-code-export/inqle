@@ -23,4 +23,8 @@ public interface Parcel {
 	public void setDatum(Datum datum);
 	public Message getMessage();
 	public void setMessage(Message message);
+	public String getQueryTerm();
+	public void setQueryTerm(String queryTerm);
+	public List<Question> getQuestions();
+	public void setQuestions(List<Question> questions);
 }

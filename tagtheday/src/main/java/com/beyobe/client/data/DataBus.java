@@ -17,6 +17,7 @@ import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -288,6 +289,10 @@ public class DataBus {
 		    if (parcel.getParticipant() != null) {
 		    	log.info("Received participant: " + parcel.getParticipant());
 		    	App.participant = parcel.getParticipant();
+		    }
+		    
+		    if (parcel.getQuestions() != null) {
+		    	App.questionForm.searchQuestionsReturns(parcel);
 		    }
 		    
 		    //TODO determine which place to go based on data received?

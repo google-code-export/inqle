@@ -1,7 +1,14 @@
 package com.beyobe.client.views;
 
+import java.util.logging.Logger;
+
+import org.mortbay.log.Log;
+
+import sun.security.pkcs.SigningCertificateInfo;
+
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
+import com.beyobe.client.activities.SignupPlace;
 import com.beyobe.client.beans.Parcel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -9,6 +16,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -16,10 +24,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class LoginViewImpl extends Composite implements LoginView {
 
+	private static final Logger log = Logger.getLogger("LoginViewImpl");
 	private static final long MAX_COUNTER = 10000;
 	@UiField Label message;
 	@UiField TextBox userName;
 	@UiField TextBox password;
+	@UiField Anchor signupLink;
 	
 	private Presenter presenter;
 	private int status;
@@ -43,8 +53,14 @@ public class LoginViewImpl extends Composite implements LoginView {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
+	@UiHandler("signupLink")
+	void onClickSignup(ClickEvent e) {
+		log.info("signupLink clicked");
+		App.placeController.goTo(new SignupPlace());
+	}
+	
 	@UiHandler("submitButton")
-	void onClick(ClickEvent e) {
+	void onSubmit(ClickEvent e) {
 //		Window.alert("Hello!");
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
 		Parcel parcel = App.dataBus.newParcel();

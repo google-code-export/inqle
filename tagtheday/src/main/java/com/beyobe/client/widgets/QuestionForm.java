@@ -3,17 +3,21 @@ package com.beyobe.client.widgets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
 import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
@@ -29,7 +33,7 @@ import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
-public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice> {
+public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice>, KeyUpHandler {
 
 	private static final int LONG_FORM_MAX_LENGTH = 250;
 	private static final int ABBREV_LENGTH = 10;
@@ -51,8 +55,15 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private MTextBox maxBox;
 	private VerticalPanel maxLengthPanel;
 	private ScrollPanel scrollPanel;
+	private boolean notWaititngForResponse = true;
+	
+	Logger log = Logger.getLogger("QuestionForm");
 	
 	public QuestionForm(Question q) {
+		setQuestion(q);
+	}
+	
+	public void setQuestion(Question q) {
 		this.q = q;
 		scrollPanel = new ScrollPanel();
 		scrollPanel.setShowScrollBarX(false);
@@ -70,6 +81,18 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		Label questionFull = new Label("Add a Question");
 		questionFull.addStyleName("ttd-form-header");
 		panel.add(questionFull);
+		
+		Label abbrevLabel = new Label("Short Label (example: Happy)");
+		abbrevLabel.addStyleName("ttd-form-label");
+		panel.add(abbrevLabel);
+		abbrev = new MTextBox();
+		abbrev.setMaxLength(ABBREV_LENGTH);
+		abbrev.setVisibleLength(ABBREV_LENGTH);
+		abbrev.addKeyUpHandler(this);
+		if (q != null) {
+			abbrev.setText(q.getAbbreviation());
+		}
+		panel.add(abbrev);
 		
 		//add input elements
 		//long form
@@ -97,16 +120,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		
 		//abbrev
 //		panel.add(spacer);
-		Label abbrevLabel = new Label("Short Label (example: Happy)");
-		abbrevLabel.addStyleName("ttd-form-label");
-		panel.add(abbrevLabel);
-		abbrev = new MTextBox();
-		abbrev.setMaxLength(ABBREV_LENGTH);
-		abbrev.setVisibleLength(ABBREV_LENGTH);
-		if (q != null) {
-			abbrev.setText(q.getAbbreviation());
-		}
-		panel.add(abbrev);
+		
 		
 		Label dtLabel = new Label("What type of answer?");
 		dtLabel.addStyleName("ttd-form-label");
@@ -319,6 +333,37 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		scrollPanel.refresh();
 	}
 	
-	
+	public void searchQuestionsReturns(Parcel parcel) {
+		log.info("searchQuestionsReturns called for: " + parcel.getQueryTerm());
+		notWaititngForResponse = true;
+		if (parcel.getQueryTerm().equals(abbrev.getText())) {
+			log.info("Query term is up to date.  Populate typeahead choices");
+			//TODO populate a proper typeahead
+			if (parcel.getQuestions() != null && parcel.getQuestions().get(0) != null) {
+				setQuestion(parcel.getQuestions().get(0));
+			}
+		} else {
+			log.info("Query term is old.  Resend");
+			searchForQuestions();
+		}
+	}
+
+	@Override
+	public void onKeyUp(KeyUpEvent event) {
+		searchForQuestions();
+		
+		
+	}
+
+	private void searchForQuestions() {
+		log.info("searchForQuestions using: " + abbrev.getText());
+		if (notWaititngForResponse  && abbrev.getText().length() > 1) {
+			Parcel parcel = App.dataBus.newParcel();
+			parcel.setQueryTerm(abbrev.getText());
+			notWaititngForResponse = false;
+			log.info("searchForQuestions sending request...");
+			App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_SEARCH_QUESTIONS);
+		}
+	}
 
 }
