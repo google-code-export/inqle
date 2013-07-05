@@ -102,3 +102,6 @@ finder list --depth 1 --filter "Username"
 finder list --depth 1 --filter "Username" --class ~.domain.Participant
 focus --class ~.domain.Participant
 finder add --finderName "findParticipantsByUsernameEquals"
+exit
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-07-01 18:46:01
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-07-01 18:46:19
