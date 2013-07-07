@@ -11,8 +11,10 @@ import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Parcel;
+import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
+import com.beyobe.client.beans.UserRole;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
@@ -59,12 +61,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	
 	Logger log = Logger.getLogger("QuestionForm");
 	
-	public QuestionForm(Question q) {
-		setQuestion(q);
-	}
-	
-	public void setQuestion(Question q) {
-		this.q = q;
+	public QuestionForm(Question q) {		
 		scrollPanel = new ScrollPanel();
 		scrollPanel.setShowScrollBarX(false);
 	    scrollPanel.setShowScrollBarY(true);
@@ -89,16 +86,11 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		abbrev.setMaxLength(ABBREV_LENGTH);
 		abbrev.setVisibleLength(ABBREV_LENGTH);
 		abbrev.addKeyUpHandler(this);
-		if (q != null) {
-			abbrev.setText(q.getAbbreviation());
-		}
+		
 		panel.add(abbrev);
 		
 		//add input elements
 		//long form
-//		HTML spacer = new HTML("<br/>");
-//		spacer.getElement().getStyle().setFontSize(0.7, Unit.EM);
-//		panel.add(spacer);
 		Label longLabel = new Label("Question (example: How happy were you?)");
 		longLabel.addStyleName("ttd-form-label");
 //		longLabel.getElement().getStyle().setFontSize(0.7, Unit.EM);
@@ -107,28 +99,14 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		longForm.setAutoCorrectEnabled(true);
 		longForm.setCharacterWidth(30);
 		longForm.setVisibleLines(3);
-		if (q != null) {
-			longForm.setText(q.getLongForm());
-		}
+		
 		panel.add(longForm);
-			
-//		//short form
-//		panel.add(new Label("Abbreviated version of the question - Example: Happy?"));
-//		shortForm = new MTextBox();
-//		shortForm.setMaxLength(14);
-//		panel.add(shortForm);
-		
-		//abbrev
-//		panel.add(spacer);
-		
 		
 		Label dtLabel = new Label("What type of answer?");
 		dtLabel.addStyleName("ttd-form-label");
 		panel.add(dtLabel);
 		dataTypePicker = new ChoicePicker(getDataTypeChoices(), 1);
-		if (q != null) {
-			dataTypePicker.setSelectedIndex(getDataTypeIndex(q.getDataType()));
-		}
+		
 		dataTypePicker.addValueChangeHandler(this);
 		panel.add(dataTypePicker);
 		
@@ -142,11 +120,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		minLabel.addStyleName("ttd-form-label");
 		numericParamsPanel.add(minLabel);
 		minBox = new MTextBox();
-		if (q != null && q.getMinValue() != null) {
-			minBox.setValue(String.valueOf(q.getMinValue()));
-		} else {
-			minBox.setValue("0");
-		}
+		
 		minBox.setMaxLength(8);
 		minBox.setVisibleLength(8);
 		numericParamsPanel.add(minBox);
@@ -154,9 +128,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		maxLabel.addStyleName("ttd-form-label");
 		numericParamsPanel.add(maxLabel);
 		maxBox = new MTextBox();
-		if (q != null && q.getMaxValue() != null) {
-			maxBox.setValue(String.valueOf(q.getMaxValue()));
-		}
+		
 		maxBox.setMaxLength(8);
 		maxBox.setVisibleLength(8);
 		numericParamsPanel.add(maxBox);
@@ -164,9 +136,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		measLabel.addStyleName("ttd-form-label");
 		numericParamsPanel.add(measLabel);
 		measurmentPicker = new ChoicePicker(getMeasurementChoices(), 2);
-		if (q != null && q.getMeasurement() != null) {
-			measurmentPicker.setSelectedIndex(q.getMeasurement().ordinal());
-		}
+		
 		panel.add(numericParamsPanel);
 		numericParamsPanel.add(measurmentPicker);
 		
@@ -174,7 +144,59 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		saveButton.setSmall(true);
 		saveButton.addTapHandler(this);
 		panel.add(saveButton);
+		
+		boolean disableForm = true;
+		if (q != null && (q.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN)) {
+			disableForm = false;
+		}
+		setQuestion(q, disableForm);
+		
 		initWidget(scrollPanel);
+	}
+	
+	
+	public void setQuestion(Question q, boolean disableForm) {
+		this.q = q;
+		
+		if (q != null) {
+			
+			abbrev.setText(q.getAbbreviation());
+			longForm.setText(q.getLongForm());
+			dataTypePicker.setSelectedIndex(getDataTypeIndex(q.getDataType()));
+			
+			if (q.getMinValue() != null) {
+				minBox.setValue(String.valueOf(q.getMinValue()));
+			} else {
+				minBox.setValue("0");
+			}
+			
+			if (q.getMaxValue() != null) {
+				maxBox.setValue(String.valueOf(q.getMaxValue()));
+			}
+			
+			if ( q.getMeasurement() != null) {
+				measurmentPicker.setSelectedIndex(q.getMeasurement().ordinal());
+			}
+			
+			disableForm(disableForm);
+		}
+	}
+
+	private void disableForm(boolean disable) {
+		if (disable) {
+			saveButton.setText("Subscribe");
+		} else {
+			saveButton.setText("Save");
+		}
+		abbrev.setReadOnly(disable);
+		longForm.setReadOnly(disable);
+		
+		dataTypePicker.setDisabled(disable);
+		measurmentPicker.setDisabled(disable);
+		if (minVal != null) minVal.setReadOnly(disable);
+		if (maxVal != null) maxVal.setReadOnly(disable);
+		if (maxLength != null) maxLength.setReadOnly(disable);
+		
 	}
 
 	private Integer getDataTypeIndex(DataType dataType) {
@@ -337,10 +359,16 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		log.info("searchQuestionsReturns called for: " + parcel.getQueryTerm());
 		notWaititngForResponse = true;
 		if (parcel.getQueryTerm().equals(abbrev.getText())) {
-			log.info("Query term is up to date.  Populate typeahead choices");
+//			log.info("Query term is up to date.  Populate typeahead choices with parcel: " + parcel.getQuestions().get(0).getAbbreviation());
 			//TODO populate a proper typeahead
 			if (parcel.getQuestions() != null && parcel.getQuestions().get(0) != null) {
-				setQuestion(parcel.getQuestions().get(0));
+				Question selectedQuestion = parcel.getQuestions().get(0);
+				boolean disableForm = true;
+				if (selectedQuestion.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN) {
+					disableForm = false;
+				}
+				
+				setQuestion(parcel.getQuestions().get(0), disableForm);
 			}
 		} else {
 			log.info("Query term is old.  Resend");
@@ -350,6 +378,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 	@Override
 	public void onKeyUp(KeyUpEvent event) {
+		if (abbrev.isReadOnly()) return;
 		searchForQuestions();
 		
 		

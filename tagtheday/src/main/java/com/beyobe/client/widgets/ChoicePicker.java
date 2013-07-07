@@ -154,4 +154,13 @@ public class ChoicePicker extends Composite implements TapHandler, HasValueChang
 			ValueChangeEvent.fire(this, value);
 		}
 	}
+
+	public void setDisabled(boolean disable) {
+		for (int i = 0; i<radioButtons.size(); i++) {
+			MRadioButton button = radioButtons.get(i);
+			boolean enabled = !disable;
+			button.setEnabled(enabled);
+		}
+		
+	}
 }
