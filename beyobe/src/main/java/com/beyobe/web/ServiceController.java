@@ -539,11 +539,12 @@ private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant 
 	 	if (existingQuestion != null) {
 	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
 	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
-				HttpHeaders headers = new HttpHeaders();
-			    headers.add("Content-Type", "application/json");
-				return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
+//				HttpHeaders headers = new HttpHeaders();
+//			    headers.add("Content-Type", "application/json");
+//				return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
+	 		} else {
+	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
 	 		}
-	 		 theQuestion = mergeAndSaveQuestion(q, existingQuestion);
 	 	} else {
 	 		//new question: current user must be owner
 	 		q.setOwner(participant);
