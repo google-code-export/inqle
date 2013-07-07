@@ -32,11 +32,12 @@ public interface QuestionRepository {
 	 * Be sure to add % at end and/or beginning of the term
 	 */
 	@Query(
-			"SELECT distinct q from Question q WHERE LOWER(abbreviation) LIKE LOWER(?1) OR LOWER(longForm) LIKE LOWER(?1) "
+			"SELECT distinct q from Question q, WHERE (LOWER(q.abbreviation) LIKE LOWER(?2) OR LOWER(q.longForm) LIKE LOWER(?2)) " +
+			"and q.questionId not in (select s.questionId from Subscription s where s.participant.id = ?1 )"
 //			limit 10"
 	)
 	@Transactional(readOnly=true)
-	List<Question> searchUsingSql(String term);
+	List<Question> searchForNewQuestionsUsingSql(String participantId, String term);
 	
 //	/**
 //	 * Get a list of questions to which this participant has subscribed, that have not
