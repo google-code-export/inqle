@@ -118,6 +118,7 @@ public class Parcel {
     	.exclude("*.createdBy")
     	.exclude("*.updatedBy")
     	.exclude("*.password")
+    	.exclude("*.owner")
     	.exclude("*.clientIpAddress")
     	.exclude("datum.question")
     	.exclude("datum.formula")

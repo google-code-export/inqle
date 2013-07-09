@@ -510,7 +510,7 @@ public class ServiceController {
 	 	
 	 	String queryTerm = parcel.getQueryTerm();
 	 	String qt = "%" + sqlEscape(queryTerm) + "%";
-	 	List<Question> questions = questionRepository.searchUsingSql(qt);
+	 	List<Question> questions = questionRepository.searchForNewQuestionsUsingSql(participant.getId(), qt);
 	 	log.info("searchForQuestions queried " + qt + " and found: " + questions);
 	 	
 	 	//prepare the parcel for return
