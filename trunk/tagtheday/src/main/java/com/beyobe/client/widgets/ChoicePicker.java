@@ -21,7 +21,8 @@ import com.googlecode.mgwt.ui.client.widget.MRadioButton;
 public class ChoicePicker extends Composite implements TapHandler, HasValueChangeHandlers<Choice>, HasValue<Choice> {
 
 	public List<Choice> choices;
-	public List<MRadioButton> radioButtons;	
+	public List<MRadioButton> radioButtons;
+	private boolean disabled;	
 
 	public ChoicePicker(List<Choice> choices, int columns) {
 		this.choices = choices;
@@ -93,6 +94,7 @@ public class ChoicePicker extends Composite implements TapHandler, HasValueChang
 	
 	@Override
 	public void onTap(TapEvent event) {
+		if (disabled) return;
 		MRadioButton clickedButton = (MRadioButton)event.getSource();
 		//if the value did not change then do nothing
 		if (clickedButton.getValue()) return;
@@ -156,6 +158,7 @@ public class ChoicePicker extends Composite implements TapHandler, HasValueChang
 	}
 
 	public void setDisabled(boolean disable) {
+		this.disabled = disable;
 		for (int i = 0; i<radioButtons.size(); i++) {
 			MRadioButton button = radioButtons.get(i);
 			boolean enabled = !disable;

@@ -166,9 +166,10 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			
 			if (q.getMinValue() != null) {
 				minBox.setValue(String.valueOf(q.getMinValue()));
-			} else {
-				minBox.setValue("0");
-			}
+			} 
+//			else {
+//				minBox.setValue("0");
+//			}
 			
 			if (q.getMaxValue() != null) {
 				maxBox.setValue(String.valueOf(q.getMaxValue()));
@@ -176,7 +177,11 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			
 			if ( q.getMeasurement() != null) {
 				measurmentPicker.setSelectedIndex(q.getMeasurement().ordinal());
+			} else {
+				measurmentPicker.setSelectedIndex(0);
 			}
+			
+			setVisibilityOfSubFields();
 			
 			disableForm(disableForm);
 		}
@@ -344,7 +349,10 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 	@Override
 	public void onValueChange(ValueChangeEvent<Choice> event) {
-//		Choice selectedChoice = event.getValue();
+		setVisibilityOfSubFields();
+	}
+	
+	public void setVisibilityOfSubFields() {
 		int dataTypeIndex = dataTypePicker.getSelectedIndex();
 		
 		if (dataTypeIndex==DATATYPEINDEX_NUMBER) {
@@ -363,12 +371,12 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			//TODO populate a proper typeahead
 			if (parcel.getQuestions() != null && parcel.getQuestions().get(0) != null) {
 				Question selectedQuestion = parcel.getQuestions().get(0);
-				boolean disableForm = true;
-				if (selectedQuestion.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN) {
-					disableForm = false;
-				}
+//				boolean disableForm = true;
+//				if (selectedQuestion.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN) {
+//					disableForm = false;
+//				}
 				
-				setQuestion(parcel.getQuestions().get(0), disableForm);
+				setQuestion(selectedQuestion, true);
 			}
 		} else {
 			log.info("Query term is old.  Resend");
