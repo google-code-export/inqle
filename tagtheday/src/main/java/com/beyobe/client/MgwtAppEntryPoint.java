@@ -53,13 +53,8 @@ public class MgwtAppEntryPoint implements EntryPoint {
 		MGWT.applySettings(MGWTSettings.getAppSetting());
 		
 		App.registerEvents();
-		
-//		final ClientFactory clientFactory = new ClientFactoryImpl();
-
-		// Start PlaceHistoryHandler with our PlaceHistoryMapper
 		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
 		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-
 		historyHandler.register(App.placeController, App.eventBus, new LoginPlace());
 
 		//this will create a link element at the end of head

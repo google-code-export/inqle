@@ -30,8 +30,8 @@ import com.googlecode.mgwt.ui.client.widget.MTextBox;
 
 public class AnswerForm extends Composite implements TapHandler, ValueChangeHandler<Choice> {
 
-	private static final int MAXIMUM_LENGTH_SHORT_TEXT = 12;
-	private static final int MAXIMUM_LENGTH_LONG_TEXT = 1000;
+	public static final int MAXIMUM_LENGTH_SHORT_TEXT = 12;
+	public static final int MAXIMUM_LENGTH_LONG_TEXT = 1000;
 	private Question q;
 	private Datum d;
 	private MDoubleBox doubleBox;
