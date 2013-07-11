@@ -44,4 +44,5 @@
 	<entry-point class="com.beyobe.client.MgwtAppEntryPoint" />
 	
 	<source path="client"/>
+	<source path="test"/>
 </module>
