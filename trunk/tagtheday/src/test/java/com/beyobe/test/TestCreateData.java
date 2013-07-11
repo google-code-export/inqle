@@ -1,4 +1,4 @@
-package test.com.beyobe;
+package com.beyobe.test;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ public class TestCreateData extends GWTTestCase {
 
 	@Override
 	public String getModuleName() {
-		return "tagtheday";
+		return "com.beyobe.tagtheday";
 	}
 	
 	@BeforeClass

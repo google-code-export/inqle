@@ -11,7 +11,6 @@ import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Parcel;
-import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
 import com.beyobe.client.beans.UserRole;
@@ -58,6 +57,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private VerticalPanel maxLengthPanel;
 	private ScrollPanel scrollPanel;
 	private boolean notWaititngForResponse = true;
+//	private Typeahead abbrevTA;
 	
 	Logger log = Logger.getLogger("QuestionForm");
 	
