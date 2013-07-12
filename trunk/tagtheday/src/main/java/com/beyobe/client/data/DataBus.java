@@ -292,7 +292,7 @@ public class DataBus {
 		    }
 		    
 		    if (parcel.getQuestions() != null) {
-		    	App.questionForm.searchQuestionsReturns(parcel);
+		    	App.questionForm.onSearchQuestionsReturns(parcel);
 		    }
 		    
 		    //TODO determine which place to go based on data received?
