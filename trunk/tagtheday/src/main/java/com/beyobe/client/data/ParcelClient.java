@@ -38,9 +38,13 @@ public class ParcelClient {
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
 		String url = Constants.BASEURL_BEYOBE_SERVICE + action;
+//		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
-		log.info("Sending json: " + jsonString);
+//		builder.setHeader("Access-Control-Allow-Methods",
+//	            "PUT, GET, POST, DELETE, OPTIONS");
+//	    builder.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//	    builder.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8888");
 		builder.setRequestData(jsonString);
 		// Check to make sure the timer isn't already running.
 	    if (timeoutTimer != null) {
@@ -86,13 +90,14 @@ public class ParcelClient {
 						log.info("Received data and loaded: " + response.getText());
 				    	abortFlag = true;
 				    } else {
-				    	log.warning("Error logging in: " + response.getStatusText());
+				    	log.warning("Error communicating with server: " + response.getText() + "\n" + response.getHeadersAsString());
 				    	status = Constants.STATUS_FAILED;
 				    	log.info("Set login status to: " + status);
 				    	abortFlag = true;
 				    }
 			    } 
 		  });
+		log.info("Builder sent request:" + builder.getRequestData());
 		  
 		} catch (RequestException e) {
 			log.log(Level.WARNING, "unable to get data", e);

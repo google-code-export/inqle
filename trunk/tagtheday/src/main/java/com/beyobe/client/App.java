@@ -18,6 +18,8 @@ package com.beyobe.client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.beyobe.client.activities.QuestionPlace;
+import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Participant;
@@ -36,6 +38,8 @@ import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.views.LoginView;
 import com.beyobe.client.views.LoginViewImpl;
+import com.beyobe.client.views.QuestionView;
+import com.beyobe.client.views.QuestionViewImpl;
 import com.beyobe.client.views.SignupView;
 import com.beyobe.client.views.SignupViewImpl;
 import com.beyobe.client.views.TagdayView;
@@ -63,13 +67,14 @@ public class App {
 	public static final PlaceController placeController = new PlaceController(eventBus);
 	public static final TagdayView tagdayView = new TagdayViewImpl();
 	public static final LoginView loginView = new LoginViewImpl();
+	public static final QuestionView questionView = new QuestionViewImpl();
 	public static SignupView signupView  = new SignupViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
 	public static String sessionToken;
 //	public static RoundPanel editQuestionPanel;
-	public static QuestionForm questionForm;
+	public static QuestionForm questionForm = new QuestionForm(null);
 	
 	public static TagthedayAutoBeanFactory tagthedayAutoBeanFactory = GWT.create(TagthedayAutoBeanFactory.class);
 	
@@ -83,26 +88,36 @@ public class App {
 			//TODO add real event
 			@Override
 			public void onEditQuestion(EditQuestionEvent event) {
-				answerPopin = new PopinDialog();
-				RoundPanel editQuestionPanel = new RoundPanel();
-				editQuestionPanel.addStyleName("ttd-editQuestionPanel");
-				Button closeButton = new Button("x");
-				closeButton.setImportant(true);
-				closeButton.setSmall(true);
-				closeButton.getElement().getStyle().setProperty("float", "right");
-				closeButton.addTapHandler(new TapHandler() {
-					@Override
-					public void onTap(TapEvent event) {
-						answerPopin.hide();
-						answerPopin.clear();
-					}
-				});
-				editQuestionPanel.add(closeButton);
-				questionForm = new QuestionForm(event.getQuestion());
-				editQuestionPanel.add(questionForm);
-				answerPopin.add(editQuestionPanel);
+//				answerPopin = new PopinDialog();
+//				RoundPanel editQuestionPanel = new RoundPanel();
+//				editQuestionPanel.addStyleName("ttd-editQuestionPanel");
+//				Button closeButton = new Button("x");
+//				closeButton.setImportant(true);
+//				closeButton.setSmall(true);
+//				closeButton.getElement().getStyle().setProperty("float", "right");
+//				closeButton.addTapHandler(new TapHandler() {
+//					@Override
+//					public void onTap(TapEvent event) {
+//						answerPopin.hide();
+//						answerPopin.clear();
+//					}
+//				});
+//				editQuestionPanel.add(closeButton);
+//				questionForm = new QuestionForm(event.getQuestion());
+//				
+//				editQuestionPanel.add(questionForm);
+//				ScrollPanel scrollPanel = new ScrollPanel();
+//				scrollPanel.setWidget(editQuestionPanel);
+//				scrollPanel.setScrollingEnabledX(false);
+//				scrollPanel.setScrollingEnabledY(true);
+//				scrollPanel.setHeight("1000px");
+////				editQuestionPanel.add(new HTML("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt, arcu eget accumsan ullamcorper, ante nisl viverra enim, id consequat ante metus sed nibh. Sed orci nisl, dictum sit amet bibendum id, mollis ac arcu. Mauris venenatis orci sed dui lacinia vulputate. Proin in commodo nisl. Curabitur libero sem, tincidunt et eleifend et, euismod ac arcu. Etiam sit amet nulla mauris, id pulvinar enim. Quisque tincidunt accumsan tempor. Donec et euismod augue. Quisque ultricies mollis metus cursus consectetur. Ut sollicitudin magna in velit vulputate tempus. Sed metus metus, tincidunt nec consectetur vitae, sagittis ac velit Vestibulum consectetur, velit sed consectetur tempor, sapien odio tempor nulla, vel interdum mauris mi ac sem. Proin fermentum dictum mattis. Praesent eleifend posuere orci, vel rhoncus ante consequat eu. Vivamus eu nisl ornare nibh pellentesque fringilla. Sed tincidunt felis gravida mauris gravida sed venenatis mauris tincidunt. Pellentesque varius neque non arcu dictum consequat. Nulla vitae orci felis, ac egestas nisl. Vivamus semper sollicitudin mollis. Donec ac diam ut magna tempor consectetur. Donec at metus ligula, sed hendrerit sapien. Proin quis urna dui, id tincidunt tellus. Morbi enim ligula, mollis ut congue non, commodo nec magna. Quisque sagittis vehicula dui, ac aliquam tortor scelerisque a. Morbi urna ipsum, feugiat vitae fringilla in, blandit adipiscing tellus. Donec in est id tortor viverra viverra. Proin eu arcu sem, eget tincidunt est. Nunc in erat risus. Praesent pharetra pulvinar volutpat. Donec semper diam in enim luctus in viverra nisi tincidunt. Aliquam cursus interdum posuere."));
+//				answerPopin.add(scrollPanel);
+//				
+//				answerPopin.show();
 				
-				answerPopin.show();
+				questionView.setQuestion(event.getQuestion());
+				placeController.goTo(new QuestionPlace());
 			}
 		});
 		
@@ -175,8 +190,9 @@ public class App {
 			@Override
 			public void onQuestionSaved(QuestionSavedEvent event) {
 				Question question = event.getQuestion();
-				answerPopin.hide();
+//				answerPopin.hide();
 				dataBus.saveQuestion(question);
+				placeController.goTo(new TagdayPlace());
 			}
 		});
 		
