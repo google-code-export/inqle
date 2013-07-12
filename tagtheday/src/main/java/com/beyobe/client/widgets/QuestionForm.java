@@ -17,6 +17,8 @@ import com.beyobe.client.beans.UserRole;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -61,7 +63,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private MTextBox minBox;
 	private MTextBox maxBox;
 	private VerticalPanel maxLengthPanel;
-	private ScrollPanel scrollPanel;
+//	private ScrollPanel scrollPanel;
 //	private boolean notWaititngForResponse = true;
 	private MListBox abbrevLB = new MListBox();
 	
@@ -79,20 +81,20 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		} else {
 			editMode = true;
 		}
-		scrollPanel = new ScrollPanel();
-		scrollPanel.setShowScrollBarX(true);
-	    scrollPanel.setShowScrollBarY(true);
-	    scrollPanel.setScrollingEnabledX(false);
-	    scrollPanel.setScrollingEnabledY(true);
-	    scrollPanel.setAutoHandleResize(true);
-	    scrollPanel.setUsePos(true);
-	    scrollPanel.setSnap(false);
-	    scrollPanel.setBounce(true);
-
+//		scrollPanel = new ScrollPanel();
+//		scrollPanel.setShowScrollBarX(true);
+//	    scrollPanel.setShowScrollBarY(true);
+//	    scrollPanel.setScrollingEnabledX(false);
+//	    scrollPanel.setScrollingEnabledY(true);
+//	    scrollPanel.setAutoHandleResize(true);
+//	    scrollPanel.setUsePos(true);
+//	    scrollPanel.setSnap(false);
+//	    scrollPanel.setBounce(true);
+//	    scrollPanel.setWidget(panel);
 	    
 //	    scrollPanel.setUsePos(true);
 		VerticalPanel panel = new VerticalPanel();
-		scrollPanel.add(panel);
+		
 		panel.setWidth("100%");
 		panel.setHeight("100%");
 		Label questionFull = new Label("Add a Question");
@@ -140,7 +142,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		dtLabel.addStyleName("ttd-form-label");
 		panel.add(dtLabel);
 		dataTypePicker = new ChoicePicker(getDataTypeChoices(), 1);
-		
+		dataTypePicker.setSelectedIndex(DATATYPEINDEX_NUMBER);
 		dataTypePicker.addValueChangeHandler(this);
 		panel.add(dataTypePicker);
 		
@@ -185,7 +187,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		}
 		setQuestion(originalQuestion, disableForm);
 		
-		initWidget(scrollPanel);
+//		initWidget(scrollPanel);
+		initWidget(panel);
 	}
 	
 	
@@ -400,8 +403,15 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		} else {
 			numericParamsPanel.setVisible(false);
 		}
-		
-		scrollPanel.refresh();
+//		scrollPanel.setMaxScrollY(8000);
+//		scrollPanel.refresh();
+//		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+//
+//            @Override
+//            public void execute() {
+//                scrollPanel.refresh();
+//            }
+//        });
 	}
 	
 	public void onSearchQuestionsReturns(Parcel parcel) {

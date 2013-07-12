@@ -4,6 +4,8 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.activities.LoginActivity;
 import com.beyobe.client.activities.LoginPlace;
+import com.beyobe.client.activities.QuestionActivity;
+import com.beyobe.client.activities.QuestionPlace;
 import com.beyobe.client.activities.SignupActivity;
 import com.beyobe.client.activities.SignupPlace;
 import com.beyobe.client.activities.TagdayActivity;
@@ -37,6 +39,9 @@ public class TabletMainActivityMapper implements ActivityMapper {
 		}
 		if (place instanceof SignupPlace) {
 			return new SignupActivity(place);
+		}
+		if (place instanceof QuestionPlace) {
+			return new QuestionActivity(place);
 		}
 		return new TagdayActivity(place);
 	}
