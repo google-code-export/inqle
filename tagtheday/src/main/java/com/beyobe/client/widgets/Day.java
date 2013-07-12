@@ -52,7 +52,7 @@ public class Day extends Composite implements Block, TapHandler {
 		tagsPanel = new RoundPanel();
 		tagsPanel.setWidth("90%");
 		tagsPanel.setHeight((Window.getClientHeight() - 100) + "px");
-		tagsPanel.addTapHandler(this);
+//		tagsPanel.addTapHandler(this);
 		tagsPanel.addHandler(new ResizeHandler() {
 			  public void onResize(ResizeEvent event) {
 				  tagsPanel.setHeight((Window.getClientHeight() - 100) + "px");
@@ -164,10 +164,9 @@ public class Day extends Composite implements Block, TapHandler {
 		if (event.getSource() instanceof TagButton) {
 			App.eventBus.fireEvent(new TagClickedEvent((TagButton)event.getSource()));
 		} 
-		else if (event.getSource().equals(tagsPanel)){
-//			addDummyTB("addTagButton");
-			App.eventBus.fireEvent(new EditQuestionEvent(null));
-		}
+//		else if (event.getSource().equals(tagsPanel)){
+//			App.eventBus.fireEvent(new EditQuestionEvent(null));
+//		}
 	}
 
 	public void addQuestion(Question question) {

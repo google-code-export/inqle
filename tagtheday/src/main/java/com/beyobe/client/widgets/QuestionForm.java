@@ -17,6 +17,8 @@ import com.beyobe.client.beans.UserRole;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -24,17 +26,21 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.MDoubleBox;
 import com.googlecode.mgwt.ui.client.widget.MIntegerBox;
+import com.googlecode.mgwt.ui.client.widget.MListBox;
+import com.googlecode.mgwt.ui.client.widget.MSearchBox;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
 import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
-public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice>, KeyUpHandler {
+public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice>, KeyUpHandler, ChangeHandler {
 
 	private static final int LONG_FORM_MAX_LENGTH = 250;
 	private static final int ABBREV_LENGTH = 10;
@@ -43,12 +49,12 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private static final int DATATYPEINDEX_MEMO = 2;
 	private Question q;
 //	private MTextBox shortForm;
-	private MTextBox abbrev;
+	private MSearchBox abbrev;
 	private MTextArea longForm;
 	private ChoicePicker dataTypePicker;
 	private ChoicePicker measurmentPicker;
-	private MDoubleBox minVal;
-	private MDoubleBox maxVal;
+	private MDoubleBox minVal = new MDoubleBox();
+	private MDoubleBox maxVal = new MDoubleBox();
 	private MIntegerBox maxLength;
 	private Button saveButton;
 	private VerticalPanel numericParamsPanel;
@@ -56,20 +62,34 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private MTextBox maxBox;
 	private VerticalPanel maxLengthPanel;
 	private ScrollPanel scrollPanel;
-	private boolean notWaititngForResponse = true;
+//	private boolean notWaititngForResponse = true;
+	private MListBox abbrevLB = new MListBox();
+	
 //	private Typeahead abbrevTA;
+//	private MultiWordSuggestOracle abbrevOracle;
 	
 	Logger log = Logger.getLogger("QuestionForm");
+	private List<Question> matchingQuestions = new ArrayList<Question>();
+	private boolean editMode;
 	
-	public QuestionForm(Question q) {		
+	
+	public QuestionForm(Question originalQuestion) {
+		if (originalQuestion == null) {
+			editMode = false;
+		} else {
+			editMode = true;
+		}
 		scrollPanel = new ScrollPanel();
-		scrollPanel.setShowScrollBarX(false);
+		scrollPanel.setShowScrollBarX(true);
 	    scrollPanel.setShowScrollBarY(true);
 	    scrollPanel.setScrollingEnabledX(false);
 	    scrollPanel.setScrollingEnabledY(true);
 	    scrollPanel.setAutoHandleResize(true);
+	    scrollPanel.setUsePos(true);
 	    scrollPanel.setSnap(false);
-	    scrollPanel.setBounce(false);
+	    scrollPanel.setBounce(true);
+
+	    
 //	    scrollPanel.setUsePos(true);
 		VerticalPanel panel = new VerticalPanel();
 		scrollPanel.add(panel);
@@ -82,12 +102,26 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		Label abbrevLabel = new Label("Short Label (example: Happy)");
 		abbrevLabel.addStyleName("ttd-form-label");
 		panel.add(abbrevLabel);
-		abbrev = new MTextBox();
-		abbrev.setMaxLength(ABBREV_LENGTH);
-		abbrev.setVisibleLength(ABBREV_LENGTH);
+//		abbrevTA = new Typeahead();
+//		abbrevTA.setMinLength(2);
+//		abbrevTA.setDisplayItemCount(7);
+//		abbrevTA.
+//		abbrevOracle = (MultiWordSuggestOracle) abbrevTA.getSuggestOracle();
+		abbrev = new MSearchBox();
+		abbrev.setName("ttd-AbbrevSearchBox");
+//		abbrev.setMaxLength(ABBREV_LENGTH);
+//		abbrev.setVisibleLength(ABBREV_LENGTH);
 		abbrev.addKeyUpHandler(this);
-		
 		panel.add(abbrev);
+		
+		if (! editMode) {
+			abbrevLB = new MListBox();
+//			abbrevLB.setSize("90%", "200px");
+			abbrevLB.setVisibleItemCount(1);
+			abbrevLB.addChangeHandler(this);
+			
+			panel.add(abbrevLB);
+		}
 		
 		//add input elements
 		//long form
@@ -146,10 +180,10 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		panel.add(saveButton);
 		
 		boolean disableForm = true;
-		if (q != null && (q.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN)) {
+		if (originalQuestion != null && (originalQuestion.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN)) {
 			disableForm = false;
 		}
-		setQuestion(q, disableForm);
+		setQuestion(originalQuestion, disableForm);
 		
 		initWidget(scrollPanel);
 	}
@@ -160,9 +194,12 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		
 		if (q != null) {
 			
-			abbrev.setText(q.getAbbreviation());
+			if (q.getAbbreviation() != null) abbrev.setText(q.getAbbreviation());
 			longForm.setText(q.getLongForm());
-			dataTypePicker.setSelectedIndex(getDataTypeIndex(q.getDataType()));
+			DataType dataType = q.getDataType();
+			log.info("dataType=" + dataType);
+			int selectedIndex = getDataTypeIndex(dataType);
+			dataTypePicker.setSelectedIndex(selectedIndex);
 			
 			if (q.getMinValue() != null) {
 				minBox.setValue(String.valueOf(q.getMinValue()));
@@ -193,12 +230,14 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		} else {
 			saveButton.setText("Save");
 		}
-		abbrev.setReadOnly(disable);
+//		abbrev.setReadOnly(disable);
 		longForm.setReadOnly(disable);
 		
 		dataTypePicker.setDisabled(disable);
 		measurmentPicker.setDisabled(disable);
-		if (minVal != null) minVal.setReadOnly(disable);
+		if (minVal != null) {
+			minVal.setReadOnly(disable);
+		}
 		if (maxVal != null) maxVal.setReadOnly(disable);
 		if (maxLength != null) maxLength.setReadOnly(disable);
 		
@@ -221,16 +260,10 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		List<Choice> dataTypeChoices = new ArrayList<Choice>();
 		Choice c = new Choice("Number", "Number");
 		dataTypeChoices.add(c);
-//		c = new Choice(DataType.INTEGER, "Integer", "for discreet values like a rating system");
-//		dataTypeChoices.add(c);
-//		c = new Choice(DataType.MULTIPLE_CHOICE, "Multiple Choice", "Multiple Choice");
-//		dataTypeChoices.add(c);
 		c = new Choice("Label", "Label");
 		dataTypeChoices.add(c);
 		c = new Choice("Memo", "Memo");
 		dataTypeChoices.add(c);
-//		c = new Choice(DataType.STARS, "Stars", "Stars");
-//		dataTypeChoices.add(c);
 		return dataTypeChoices;
 	}
 
@@ -296,13 +329,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		
 		if (q==null) {
 //			q = new Question();
-			q = BeanMaker.makeQuestion();
-			q.setId(UUID.uuid());
-			q.setCreated(new Date());
-			q.setCreatedBy(App.getParticipantId());
-			q.setOwnerId(App.getParticipantId());
-			q.setLang(App.participant.getLang());
-			q.setMaxLength(Constants.DEFAULT_TEXTFIELD_MAX_LENGTH);
+			q = getNewQuestion();
 //			q.setCreatorName(App.participant.getName());
 		}
 		
@@ -343,6 +370,19 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		return true;
 	}
 
+	private Question getNewQuestion() {
+		Question newQuestion = BeanMaker.makeQuestion();
+		newQuestion.setId(UUID.uuid());
+		newQuestion.setCreated(new Date());
+		newQuestion.setCreatedBy(App.getParticipantId());
+		newQuestion.setOwnerId(App.getParticipantId());
+		newQuestion.setLang(App.participant.getLang());
+		newQuestion.setMaxLength(Constants.DEFAULT_TEXTFIELD_MAX_LENGTH);
+		newQuestion.setDataType(DataType.DOUBLE);
+		return newQuestion;
+	}
+
+
 	private void validateMessage(String message) {
 		Window.alert(message);
 	}
@@ -360,47 +400,105 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		} else {
 			numericParamsPanel.setVisible(false);
 		}
+		
 		scrollPanel.refresh();
 	}
 	
-	public void searchQuestionsReturns(Parcel parcel) {
-		log.info("searchQuestionsReturns called for: " + parcel.getQueryTerm());
-		notWaititngForResponse = true;
-		if (parcel.getQueryTerm().equals(abbrev.getText())) {
+	public void onSearchQuestionsReturns(Parcel parcel) {
+		log.info("onSearchQuestionsReturns called for: " + parcel.getQueryTerm());
+//		notWaititngForResponse = true;
+		String theAbbrev = abbrev.getText();
+		if (parcel.getQueryTerm().equals(theAbbrev)) {
+			this.matchingQuestions = parcel.getQuestions();
+			if (matchingQuestions != null && matchingQuestions.size()> 0) {
+				abbrevLB.clear();
+				updateAbbrev(theAbbrev);
+				abbrevLB.setSelectedIndex(0);
+				int numItems = matchingQuestions.size();
+				if (numItems > 7) numItems = 7;
+				abbrevLB.setVisibleItemCount(numItems + 1);
+				for (int i=0; i < numItems; i++) {
+					Question q = parcel.getQuestions().get(i);
+					abbrevLB.addItem(q.getAbbreviation() + ": " + q.getLongForm());
+				}
+			} 
 //			log.info("Query term is up to date.  Populate typeahead choices with parcel: " + parcel.getQuestions().get(0).getAbbreviation());
 			//TODO populate a proper typeahead
-			if (parcel.getQuestions() != null && parcel.getQuestions().get(0) != null) {
-				Question selectedQuestion = parcel.getQuestions().get(0);
-//				boolean disableForm = true;
-//				if (selectedQuestion.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN) {
-//					disableForm = false;
-//				}
-				
-				setQuestion(selectedQuestion, true);
-			}
+//			if (matchingQuestions.get(0) != null) {
+			
+//				Question selectedQuestion = parcel.getQuestions().get(0);				
+//				setQuestion(selectedQuestion, true);
+//			}
 		} else {
 			log.info("Query term is old.  Resend");
 			searchForQuestions();
 		}
 	}
 
+	private void updateAbbrev(String theAbbrev) {
+		try {
+			abbrevLB.setItemText(0, theAbbrev);
+			abbrevLB.setSelectedIndex(0);
+		} catch (Exception e) {
+			abbrevLB.clear();
+			abbrevLB.addItem(theAbbrev);
+		}		
+	}
+
+
+	private String getAbbrev() {
+		String theAbbrev = abbrev.getText();
+		theAbbrev = theAbbrev.trim();
+		if (theAbbrev.endsWith("?") || theAbbrev.endsWith(":") || theAbbrev.endsWith("-")) {
+			theAbbrev = theAbbrev.substring(0, theAbbrev.length() - 1);
+		}
+		if (theAbbrev.length() > ABBREV_LENGTH) {
+			theAbbrev = theAbbrev.substring(0, ABBREV_LENGTH);
+		}
+		return theAbbrev;
+	}
+
+
 	@Override
 	public void onKeyUp(KeyUpEvent event) {
-		if (abbrev.isReadOnly()) return;
-		searchForQuestions();
-		
-		
+		Widget sender = (Widget) event.getSource();
+		String senderName = null;
+		if (sender instanceof TextBox) {
+			TextBox textBox = (TextBox)sender;
+			senderName = textBox.getName();
+		}
+		log.info("senderName=" + senderName + "; abbrev=" + getAbbrev());
+		if (abbrev.getName().equals(senderName)) {
+			setQuestion(getNewQuestion(), false);
+			updateAbbrev(getAbbrev());
+			searchForQuestions();
+		}
 	}
 
 	private void searchForQuestions() {
 		log.info("searchForQuestions using: " + abbrev.getText());
-		if (notWaititngForResponse  && abbrev.getText().length() > 1) {
+		if (abbrev.getText().length() > 1) {
 			Parcel parcel = App.dataBus.newParcel();
 			parcel.setQueryTerm(abbrev.getText());
-			notWaititngForResponse = false;
+//			notWaititngForResponse = false;
 			log.info("searchForQuestions sending request...");
 			App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_SEARCH_QUESTIONS);
 		}
+	}
+
+
+	@Override
+	public void onChange(ChangeEvent event) {
+		if (abbrevLB.getSelectedIndex()==0) {
+			abbrev.setText(abbrevLB.getItemText(0));
+			setQuestion(getNewQuestion(), false);
+		} else {
+			disableForm(true);
+			Question selectedQuestion = matchingQuestions.get(abbrevLB.getSelectedIndex() - 1);
+			setQuestion(selectedQuestion, true);
+		}
+		
+		
 	}
 
 }
