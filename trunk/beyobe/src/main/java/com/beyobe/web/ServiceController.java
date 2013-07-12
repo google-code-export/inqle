@@ -65,6 +65,7 @@ public class ServiceController {
 //		return "view";
 //	}
 	
+//	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	@RequestMapping(value = "/signup", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
 	public ResponseEntity<java.lang.String> signup(
@@ -76,15 +77,15 @@ public class ServiceController {
 	 	Parcel parcel = null;
 	 	String username = null;
 	 	String password = null;
-	 	String hashedPassword = null;
+//	 	String hashedPassword = null;
 	 	try {
 			parcel = Parcel.fromJsonToParcel(jsonRequest);
 			username = parcel.getUsername();
 			password = parcel.getPassword();
-			Participant dummyParticipant = new Participant();
-			dummyParticipant.setPassword(password);
+//			Participant dummyParticipant = new Participant();
+//			dummyParticipant.setPassword(password);
 //			hashedPassword = Participant.hashString(password, username);
-			hashedPassword = dummyParticipant.getPassword();
+//			hashedPassword = dummyParticipant.getPassword();
 		} catch (Exception e1) {
 			HttpHeaders headers = new HttpHeaders();
 			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
@@ -171,8 +172,9 @@ public class ServiceController {
 	    log.info("login service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
-	 
+//	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+//	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json;charset=UTF-8")
 	@ResponseBody
 	public ResponseEntity<java.lang.String> login(
 			@RequestBody String jsonRequest,
