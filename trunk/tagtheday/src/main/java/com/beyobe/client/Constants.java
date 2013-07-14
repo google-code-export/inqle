@@ -24,7 +24,7 @@ public class Constants {
 	public static final int TIMEOUT_SIGNUP = 10000;
 	public static final String SERVERACTION_SIGNUP = "signup";
 	public static final String SERVERACTION_TESTUSERNAME = "testUsername";
-	public static final int MINIMUM_PASSWORD_LENGTH = 8;
+	public static final int MINIMUM_PASSWORD_LENGTH = 1;
 	public static final String SERVERACTION_SEARCH_QUESTIONS = "searchForQuestions";
 	
 }
