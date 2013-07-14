@@ -8,7 +8,6 @@ import com.beyobe.client.beans.Question;
 import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
-import com.beyobe.client.widgets.WeekView;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -18,7 +17,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
 import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
 import com.googlecode.mgwt.ui.client.widget.Button;
-import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
 
 public class TagdayViewImpl extends Composite implements TagdayView {
