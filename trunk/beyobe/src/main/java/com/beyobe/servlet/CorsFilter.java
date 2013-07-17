@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Deprecated
 /**
  * Tried this to permit Chrome & Firefox to debug tagtheday
  * @author donohue
