@@ -3,7 +3,6 @@ package com.beyobe.client;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import test.com.beyobe.util.Maker;
 
 import com.beyobe.client.App;
 import com.beyobe.client.AppPlaceHistoryMapper;
@@ -25,28 +24,29 @@ public class TestCreateData extends GWTTestCase {
 		return "com.beyobe.tagtheday";
 	}
 	
-	@BeforeClass
-	public static void createParticipant() {
-		App.registerEvents();
-		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
-		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-		historyHandler.register(App.placeController, App.eventBus, new LoginPlace());
+	@Test
+	public void testCreateParticipant() {
+//		App.registerEvents();
+//		AppPlaceHistoryMapper historyMapper = GWT.create(AppPlaceHistoryMapper.class);
+//		final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+//		historyHandler.register(App.placeController, App.eventBus, new LoginPlace());
 		
 		Parcel parcel = App.dataBus.newParcel();
-		parcel.setUsername("user1");
+		parcel.setUsername("TestCreateData");
 		parcel.setPassword("password");
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_SIGNUP);
+		delayTestFinish(5000);
 	}
 	
-	@Test
-	public void testCreateRandomQuestions() {
-		Question[] qs = new Question[SUBSCRIPTION_SIZE];
-		for (int i=0; i<SUBSCRIPTION_SIZE; i++) {
-			Question q = Maker.q(App.participant);
-			qs[i] = q;
-			App.eventBus.fireEvent(new QuestionSavedEvent(q));
-		}
-	}
+//	@Test
+//	public void testCreateRandomQuestions() {
+//		Question[] qs = new Question[SUBSCRIPTION_SIZE];
+//		for (int i=0; i<SUBSCRIPTION_SIZE; i++) {
+//			Question q = Maker.q(App.participant);
+//			qs[i] = q;
+//			App.eventBus.fireEvent(new QuestionSavedEvent(q));
+//		}
+//	}
 	
 //	public void testAnswerQuestions() {
 //		

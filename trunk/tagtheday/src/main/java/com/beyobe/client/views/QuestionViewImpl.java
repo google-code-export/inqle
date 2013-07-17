@@ -48,6 +48,8 @@ public class QuestionViewImpl extends Composite implements QuestionView {
 			}
 		});
 		roundPanel.add(closeButton);
+		roundPanel.add(App.questionForm);
+        scrollPanel.setWidget(roundPanel);
 		App.questionForm = new QuestionForm(question);
         scrollPanel.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
         scrollPanel.setScrollingEnabledX(false);
@@ -57,8 +59,7 @@ public class QuestionViewImpl extends Composite implements QuestionView {
         scrollPanel.setSnapSelector(null);
         scrollPanel.setHideScrollBar(false);
         
-        roundPanel.add(App.questionForm);
-        scrollPanel.setWidget(roundPanel);
+        
         scrollPanel.setHeight("100%");
         initWidget(scrollPanel);
 	}

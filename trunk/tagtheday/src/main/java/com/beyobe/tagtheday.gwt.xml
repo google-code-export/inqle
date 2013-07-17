@@ -35,14 +35,7 @@
 	<!-- here you can turn off css obfuscation -->
 	<!--<set-configuration-property name="mgwt.css" value="pretty" /> -->
 	
-	
-	 
-	  
-	 
-	 
-
 	<entry-point class="com.beyobe.client.MgwtAppEntryPoint" />
 	
 	<source path="client"/>
-	<source path="test"/>
 </module>
