@@ -90,6 +90,7 @@ public class ServiceController {
 			HttpHeaders headers = new HttpHeaders();
 			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
 	 	Participant participant = null;
@@ -119,6 +120,7 @@ public class ServiceController {
 			log.warn("Username already exists=" + username);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 		    returnParcel.setMessage(Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS);
 	 		String returnJson = returnParcel.toJson();
 	 		return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
@@ -168,6 +170,7 @@ public class ServiceController {
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
+	    headers.add("Access-Control-Allow-Origin", "*");
 	    String returnJson = returnParcel.toJson();
 	    log.info("login service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
@@ -197,6 +200,7 @@ public class ServiceController {
 			HttpHeaders headers = new HttpHeaders();
 			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
 	 	Participant participant = null;
@@ -208,6 +212,7 @@ public class ServiceController {
 			log.warn("Login failure: username=" + username + "; passwordHash=" + hashedPassword);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	//save the session token for future requests
@@ -250,6 +255,7 @@ public class ServiceController {
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
+	    headers.add("Access-Control-Allow-Origin", "*");
 	    String returnJson = returnParcel.toJson();
 	    log.info("login service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
@@ -277,6 +283,7 @@ public class ServiceController {
 			log.error("storeQuestion service: Error parsing JSON: " + jsonRequest, e1);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
 //	 	log.info("got parcel: " + parcel);
@@ -293,6 +300,7 @@ public class ServiceController {
 			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	
@@ -305,6 +313,7 @@ public class ServiceController {
 			log.error("Unable to get Question from parcel", e1);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
 		Question existingQuestion = questionRepository.findOne(q.getId());
@@ -330,6 +339,7 @@ public class ServiceController {
 			log.error("storeDatum service: Unable to parse json into parcel:" + jsonRequest, e1);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 		log.info("storeDatum service: got parcel: " + parcel);
@@ -344,6 +354,7 @@ public class ServiceController {
 			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	
@@ -356,6 +367,7 @@ public class ServiceController {
 			log.error("Unable to get Question from parcel", e1);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
 		
@@ -379,6 +391,7 @@ public class ServiceController {
 			log.error("Unable to get and save datum", e);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	 	
@@ -491,6 +504,7 @@ public class ServiceController {
 			log.error("searchForQuestions service: Error parsing JSON: " + jsonRequest, e1);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
 //	 	log.info("got parcel: " + parcel);
@@ -507,6 +521,7 @@ public class ServiceController {
 			log.warn("searchForQuestions service: Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
 			HttpHeaders headers = new HttpHeaders();
 		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 	 	}
 	 	
@@ -522,6 +537,7 @@ public class ServiceController {
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
+	    headers.add("Access-Control-Allow-Origin", "*");
 	    String returnJson = returnParcel.toJson();
 	    log.info("searchForQuestions service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
@@ -583,6 +599,7 @@ private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant 
 				log.error("storeQuestion service unable to save subscription:" + subscription, e);
 				HttpHeaders headers = new HttpHeaders();
 			    headers.add("Content-Type", "application/json");
+			    headers.add("Access-Control-Allow-Origin", "*");
 				return new ResponseEntity<String>(null, headers, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 	 	}
@@ -592,6 +609,7 @@ private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant 
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
+	    headers.add("Access-Control-Allow-Origin", "*");
 	    String returnJson = returnParcel.toJson();
 	    log.info("storeQuestion service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
