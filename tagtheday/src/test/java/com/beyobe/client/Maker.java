@@ -1,4 +1,4 @@
-package test.com.beyobe.util;
+package com.beyobe.client;
 
 import java.util.Date;
 

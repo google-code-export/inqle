@@ -67,6 +67,7 @@ public class App {
 	public static final PlaceController placeController = new PlaceController(eventBus);
 	public static final TagdayView tagdayView = new TagdayViewImpl();
 	public static final LoginView loginView = new LoginViewImpl();
+	public static QuestionForm questionForm = new QuestionForm(null);
 	public static final QuestionView questionView = new QuestionViewImpl();
 	public static SignupView signupView  = new SignupViewImpl();
 	public static Participant participant;
@@ -74,7 +75,7 @@ public class App {
 	public static ParcelClient parcelClient = new ParcelClient();
 	public static String sessionToken;
 //	public static RoundPanel editQuestionPanel;
-	public static QuestionForm questionForm = new QuestionForm(null);
+	
 	
 	public static TagthedayAutoBeanFactory tagthedayAutoBeanFactory = GWT.create(TagthedayAutoBeanFactory.class);
 	
