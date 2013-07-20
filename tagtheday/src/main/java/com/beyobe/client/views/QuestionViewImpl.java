@@ -19,7 +19,7 @@ public class QuestionViewImpl extends Composite implements QuestionView {
 	private static final Logger log = Logger.getLogger("QuestionViewImpl");
 	private ScrollPanel scrollPanel = new ScrollPanel();
 	private Presenter presenter;
-	private Question question;
+//	private Question question;
 	
 //	private static QuestionViewImplUiBinder uiBinder = GWT
 //			.create(QuestionViewImplUiBinder.class);
@@ -50,7 +50,7 @@ public class QuestionViewImpl extends Composite implements QuestionView {
 		roundPanel.add(closeButton);
 		roundPanel.add(App.questionForm);
         scrollPanel.setWidget(roundPanel);
-		App.questionForm = new QuestionForm(question);
+		App.questionForm = new QuestionForm(App.question);
         scrollPanel.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
         scrollPanel.setScrollingEnabledX(false);
         scrollPanel.setScrollingEnabledY(true);
@@ -64,8 +64,8 @@ public class QuestionViewImpl extends Composite implements QuestionView {
         initWidget(scrollPanel);
 	}
 
-	@Override
-	public void setQuestion(Question question) {
-		this.question = question;		
-	}
+//	@Override
+//	public void setQuestion(Question question) {
+//		this.question = question;		
+//	}
 }

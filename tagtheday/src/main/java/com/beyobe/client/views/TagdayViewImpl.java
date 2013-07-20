@@ -1,21 +1,20 @@
 package com.beyobe.client.views;
 
 import java.util.Date;
-import java.util.List;
 
 import com.beyobe.client.App;
-import com.beyobe.client.beans.Question;
 import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndEvent;
-import com.googlecode.mgwt.dom.client.event.touch.TouchEndHandler;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 
@@ -26,8 +25,10 @@ public class TagdayViewImpl extends Composite implements TagdayView {
         interface TagdayViewImplUiBinder extends UiBinder<Widget, TagdayViewImpl> {
         }
 
-        @UiField FlowPanel tagsPanel;
+        @UiField HorizontalPanel menuPanel;
+        @UiField Button addTagButton;
         @UiField FlowPanel daysPanel;
+        
 //        @UiField FlowPanel dayPicker;
         private Presenter presenter;
 //        private List<Day> days = new ArrayList<Day>();
@@ -37,18 +38,24 @@ public class TagdayViewImpl extends Composite implements TagdayView {
         public TagdayViewImpl() {
         		this.date = new Date();
                 initWidget(uiBinder.createAndBindUi(this));
-                Button addTagButton = new Button("+");
-//                addTagButton.addStyleName("mgwt-Button-small");
-//                addTagButton.addStyleName("mgwt-Button-round");
-                addTagButton.setSmall(true);
-                addTagButton.addTouchEndHandler(new TouchEndHandler() {
-					@Override
-					public void onTouchEnd(TouchEndEvent event) {
-						App.eventBus.fireEvent(new EditQuestionEvent(null));
-					}
-                });
-                addTagButton.getElement().getStyle().setProperty("float", "right");
-                tagsPanel.add(addTagButton);
+                
+                addTagButton.addStyleName("ttd-controlButton");
+                addTagButton.addStyleName("ttd-addTagButton");
+//                Button addTagButton = new Button("+");
+//                addTagButton.addStyleName("ttd-button");
+//                addTagButton.setSmall(true);
+//                addTagButton.addTouchEndHandler(new TouchEndHandler() {
+//					@Override
+//					public void onTouchEnd(TouchEndEvent event) {
+//						App.eventBus.fireEvent(new EditQuestionEvent(null));
+//					}
+//                });
+//                addTagButton.getElement().getStyle().setProperty("float", "right");
+//                menuPanel.add(addTagButton);
+                
+//                Button dateDownButton = new Button("<");
+//                dateDownButton.addStyleName("ttd-button");
+//                menuPanel.add();
 //                loadDayPicker();
                 carousel = new Carousel();
                 carousel.setHeight("100%");
@@ -98,9 +105,16 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 			carousel.addWidget(day);
 		}
 
-		@Override
-		public void setQuestionOptions(List<Question> questions) {
-			
-			
+		@UiHandler("addTagButton")
+		void onAddTag(TapEvent e) {
+			App.question = null;
+			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
+//		@Override
+//		public void setQuestionOptions(List<Question> questions) {
+//			
+//			
+//		}
+		
+		
 }

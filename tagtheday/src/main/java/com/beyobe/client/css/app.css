@@ -37,26 +37,35 @@
 	
 }
   
-  .ttd-form-header {
-    text-align: center;
-    font-size: 1.1em;
-  }
+.ttd-form-header {
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.ttd-editQuestionPanel {
+  background-color: #ffff99 !important;
+}
+
+.ttd-editAnswerPanel {
   
-  .ttd-editQuestionPanel {
-    background-color: #ffff99 !important;
-  }
+}
+
+.ttd-form-label {
+  margin-top: 1em;
+  font-size: 0.8em;
+}
+
+.ttd-choice {
+  font-size: 0.7em;
+  font-weight: normal;
+  margin-top: 0.3em;
+}
   
-  .ttd-editAnswerPanel {
-    
-  }
-  
-  .ttd-form-label {
-    margin-top: 1em;
-    font-size: 0.8em;
-  }
-  
-  .ttd-choice {
-    font-size: 0.7em;
-    font-weight: normal;
-    margin-top: 0.3em;
-  }
+.ttd-controlButton {
+  background-color: aqua;
+}
+
+.ttd-addTagButton {
+  margin: 5px 10px 0px 10px;
+  font-size: 1em;
+}

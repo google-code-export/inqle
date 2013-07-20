@@ -11,5 +11,5 @@ public interface QuestionView extends IsWidget {
         void goTo(Place place);
     }
 
-	void setQuestion(Question question);
+//	void setQuestion(Question question);
 }
