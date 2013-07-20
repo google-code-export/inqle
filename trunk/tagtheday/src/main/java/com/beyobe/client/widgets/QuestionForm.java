@@ -195,36 +195,35 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	public void setQuestion(Question q, boolean disableForm) {
 		this.q = q;
 		
-		if (q != null) {
+		if (q == null) return;
 			
-			if (q.getAbbreviation() != null) abbrev.setText(q.getAbbreviation());
-			longForm.setText(q.getLongForm());
-			DataType dataType = q.getDataType();
-			log.info("dataType=" + dataType);
-			int selectedIndex = getDataTypeIndex(dataType);
-			dataTypePicker.setSelectedIndex(selectedIndex);
-			
-			if (q.getMinValue() != null) {
-				minBox.setValue(String.valueOf(q.getMinValue()));
-			} 
+		if (q.getAbbreviation() != null) abbrev.setText(q.getAbbreviation());
+		longForm.setText(q.getLongForm());
+		DataType dataType = q.getDataType();
+		log.info("dataType=" + dataType);
+		int selectedIndex = getDataTypeIndex(dataType);
+		dataTypePicker.setSelectedIndex(selectedIndex);
+		
+		if (q.getMinValue() != null) {
+			minBox.setValue(String.valueOf(q.getMinValue()));
+		} 
 //			else {
 //				minBox.setValue("0");
 //			}
-			
-			if (q.getMaxValue() != null) {
-				maxBox.setValue(String.valueOf(q.getMaxValue()));
-			}
-			
-			if ( q.getMeasurement() != null) {
-				measurmentPicker.setSelectedIndex(q.getMeasurement().ordinal());
-			} else {
-				measurmentPicker.setSelectedIndex(0);
-			}
-			
-			setVisibilityOfSubFields();
-			
-			disableForm(disableForm);
+		
+		if (q.getMaxValue() != null) {
+			maxBox.setValue(String.valueOf(q.getMaxValue()));
 		}
+		
+		if ( q.getMeasurement() != null) {
+			measurmentPicker.setSelectedIndex(q.getMeasurement().ordinal());
+		} else {
+			measurmentPicker.setSelectedIndex(0);
+		}
+		
+		setVisibilityOfSubFields();
+		
+		disableForm(disableForm);
 	}
 
 	private void disableForm(boolean disable) {
@@ -417,10 +416,13 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	public void onSearchQuestionsReturns(Parcel parcel) {
 		log.info("onSearchQuestionsReturns called for: " + parcel.getQueryTerm());
 //		notWaititngForResponse = true;
-		String theAbbrev = abbrev.getText();
+//		String theAbbrev = abbrev.getText();
+		String theAbbrev = getAbbrev();
 		if (parcel.getQueryTerm().equals(theAbbrev)) {
 			this.matchingQuestions = parcel.getQuestions();
+			
 			if (matchingQuestions != null && matchingQuestions.size()> 0) {
+				log.info("Received " + matchingQuestions.size() + " matching questions");
 				abbrevLB.clear();
 				updateAbbrev(theAbbrev);
 				abbrevLB.setSelectedIndex(0);
@@ -478,7 +480,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			senderName = textBox.getName();
 		}
 		log.info("senderName=" + senderName + "; abbrev=" + getAbbrev());
-		if (abbrev.getName().equals(senderName)) {
+		if (! editMode && abbrev.getName().equals(senderName)) {
 			setQuestion(getNewQuestion(), false);
 			updateAbbrev(getAbbrev());
 			searchForQuestions();

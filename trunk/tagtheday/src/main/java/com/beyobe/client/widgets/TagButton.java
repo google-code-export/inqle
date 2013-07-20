@@ -2,6 +2,8 @@ package com.beyobe.client.widgets;
 
 import java.util.Date;
 
+import org.mortbay.log.Log;
+
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Datum;
@@ -79,7 +81,6 @@ public class TagButton extends Button {
 //			this.addStyleName("ttd-TagButton-answered");
 			if (datum.getAnswerStatus()!=AnswerStatus.INFERRED) this.setConfirm(true);
 		}
-		
 	}
 
 	public Date getEffectiveDate() {

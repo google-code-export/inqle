@@ -67,13 +67,14 @@ public class App {
 	public static final PlaceController placeController = new PlaceController(eventBus);
 	public static final TagdayView tagdayView = new TagdayViewImpl();
 	public static final LoginView loginView = new LoginViewImpl();
-	public static QuestionForm questionForm = new QuestionForm(null);
-	public static final QuestionView questionView = new QuestionViewImpl();
+	
+	public static QuestionView questionView = new QuestionViewImpl();
 	public static SignupView signupView  = new SignupViewImpl();
 	public static Participant participant;
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
 	public static String sessionToken;
+	public static QuestionForm questionForm = new QuestionForm(null);
 	public static Question question;
 //	public static RoundPanel editQuestionPanel;
 	
@@ -119,7 +120,6 @@ public class App {
 //				answerPopin.add(scrollPanel);
 //				
 //				answerPopin.show();
-				log.info("Editing question: " + event.getQuestion().getLongForm());
 				App.question = event.getQuestion();
 				placeController.goTo(new QuestionPlace());
 			}

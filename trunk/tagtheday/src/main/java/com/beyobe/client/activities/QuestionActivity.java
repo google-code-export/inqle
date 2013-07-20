@@ -2,6 +2,7 @@ package com.beyobe.client.activities;
 
 import com.beyobe.client.App;
 import com.beyobe.client.views.QuestionView;
+import com.beyobe.client.views.QuestionViewImpl;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -23,7 +24,8 @@ public class QuestionActivity extends AbstractActivity implements QuestionView.P
     		App.placeController.goTo(new LoginPlace());
     		return;
     	}
-        QuestionView questionView = App.questionView;
+        QuestionView questionView = new QuestionViewImpl();
+        App.questionView = questionView;
         questionView.setPresenter(this);
         containerWidget.setWidget(questionView.asWidget());
     }
