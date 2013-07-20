@@ -74,6 +74,7 @@ public class App {
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
 	public static String sessionToken;
+	public static Question question;
 //	public static RoundPanel editQuestionPanel;
 	
 	
@@ -85,6 +86,8 @@ public class App {
 	
 	public static void registerEvents() {
 		eventBus.addHandler(EditQuestionEvent.TYPE, new EditQuestionEventHandler() {
+
+			
 
 			//TODO add real event
 			@Override
@@ -116,8 +119,8 @@ public class App {
 //				answerPopin.add(scrollPanel);
 //				
 //				answerPopin.show();
-				
-				questionView.setQuestion(event.getQuestion());
+				log.info("Editing question: " + event.getQuestion().getLongForm());
+				App.question = event.getQuestion();
 				placeController.goTo(new QuestionPlace());
 			}
 		});
@@ -194,6 +197,7 @@ public class App {
 //				answerPopin.hide();
 				dataBus.saveQuestion(question);
 				placeController.goTo(new TagdayPlace());
+				App.question = null;
 			}
 		});
 		

@@ -18,13 +18,17 @@
     .message {
       color: red;
     }
+    .pointerLink {
+	     cursor:pointer;
+	     font-size: 0.8em;
+	  }
   </ui:style>
   <g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}">
   <mgwt:RoundPanel ui:field="roundPanel" styleName="{style.roundPanel}">
    <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
      <g:HorizontalPanel>
        <g:Label styleName="ttd-form-title" text="Create New Beyobe Account"/>
-       <g:Anchor ui:field="loginLink" text="Already have an account?  Log In." />
+       <g:Anchor ui:field="loginLink" text="Already have an account?  Log In." styleName="{style.pointerLink}" />
      </g:HorizontalPanel>
      
      <g:Label ui:field="message" styleName="{style.message}"/>
