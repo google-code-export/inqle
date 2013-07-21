@@ -65,7 +65,10 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 //    	Day tomorrowDay = new Day(date);
 //    	tagdayView.addDay(tomorrowDay);
     	
-    	List<Day> days = App.dataBus.createAllDays();
+    	List<Day> days = App.dataBus.getAllDays();
+    	if (days == null) {
+    		days = App.dataBus.createAllDays();
+    	}
     	for (Day day: days) {
     		tagdayView.addDay(day);
     	}

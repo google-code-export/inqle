@@ -1,6 +1,7 @@
 package com.beyobe.client.widgets;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import org.mortbay.log.Log;
 
@@ -23,6 +24,7 @@ public class TagButton extends Button {
 	private Datum datum;
 	private Date effectiveDate;
 
+	private static Logger log = Logger.getLogger("TagButton");
 
 //	public TagButton() {
 //		// TODO Auto-generated constructor stub
@@ -71,11 +73,13 @@ public class TagButton extends Button {
 	
 	public void refreshAppearance() {
 		if(datum == null) {
+			log.info("refreshAppearance, datum=null");
 			setText(question.getAbbreviation() + "?");
 			setTitle(question.getLongForm());
 //			this.addStyleName("ttd-TagButton-unanswered");
 			this.setImportant(true);
 		} else {
+			log.info("refreshAppearance, datum != null");
 			setText(question.getAbbreviation() + ": " + datum.getTextValue());
 			setTitle(question.getLongForm() + " " + datum.getTextValue());
 //			this.addStyleName("ttd-TagButton-answered");
