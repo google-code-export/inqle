@@ -18,7 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
+import com.beyobe.client.App;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
@@ -31,10 +31,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.collection.shared.LightArrayInt;
-import com.googlecode.mgwt.dom.client.event.orientation.OrientationChangeEvent;
-import com.googlecode.mgwt.dom.client.event.orientation.OrientationChangeHandler;
 import com.googlecode.mgwt.ui.client.MGWT;
 import com.googlecode.mgwt.ui.client.MGWTStyle;
 import com.googlecode.mgwt.ui.client.theme.base.CarouselCss;
@@ -51,30 +50,30 @@ import com.googlecode.mgwt.ui.client.widget.event.scroll.ScrollRefreshEvent;
  */
 public class Carousel extends Composite implements HasWidgets, HasSelectionHandlers<Integer> {
 
-  private static class WidgetHolder extends FlowPanel {
-
-    public WidgetHolder(CarouselCss css) {
-      addStyleName(css.carouselHolder());
-    }
-
-    @Override
-    public void add(Widget w) {
-      super.add(w);
-      if (w instanceof ScrollPanel) {
-        w.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
-      }
-    }
-
-  }
+//  private static class WidgetHolder extends FlowPanel {
+//
+//    public WidgetHolder(CarouselCss css) {
+//      addStyleName(css.carouselHolder());
+//    }
+//
+//    @Override
+//    public void add(Widget w) {
+//      super.add(w);
+//      if (w instanceof ScrollPanel) {
+//        w.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
+//      }
+//    }
+//
+//  }
 
   private FlowPanel main;
   private final CarouselCss css;
   private ScrollPanel scrollPanel;
-  private FlowPanel container;
+  private HorizontalPanel container;
 
   private int currentPage;
 
-  private Map<Widget, Widget> childToHolder;
+//  private Map<Widget, Widget> childToHolder;
   private com.google.web.bindery.event.shared.HandlerRegistration refreshHandler;
 
 //  private static final CarouselImpl IMPL = GWT.create(CarouselImpl.class);
@@ -97,29 +96,30 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
     this.css = css;
     this.css.ensureInjected();
 
-    childToHolder = new HashMap<Widget, Widget>();
+//    childToHolder = new HashMap<Widget, Widget>();
     main = new FlowPanel();
     initWidget(main);
 
     main.addStyleName(css.carousel());
 
     scrollPanel = new ScrollPanel();
+    
     scrollPanel.addStyleName(css.carouselScroller());
 
     main.add(scrollPanel);
 
-    container = new FlowPanel();
+    container = new HorizontalPanel();
     container.addStyleName(css.carouselContainer());
 
     scrollPanel.setWidget(container);
 
     scrollPanel.setSnap(true);
     scrollPanel.setMomentum(true);
-    scrollPanel.setShowScrollBarX(false);
+    scrollPanel.setShowScrollBarX(true);
     scrollPanel.setShowScrollBarY(false);
     scrollPanel.setScrollingEnabledX(true);
     scrollPanel.setScrollingEnabledY(false);
-    scrollPanel.setAutoHandleResize(false);
+    scrollPanel.setAutoHandleResize(true);
 
     currentPage = 0;
 
@@ -128,36 +128,34 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
       @Override
       public void onScrollEnd(ScrollEndEvent event) {
         int page;
-
         page = scrollPanel.getCurrentPageX();
-
         currentPage = page;
+        App.tagdayView.updateNavigation();
         SelectionEvent.fire(Carousel.this, currentPage);
-
       }
     });
 
-    MGWT.addOrientationChangeHandler(new OrientationChangeHandler() {
-
-      @Override
-      public void onOrientationChanged(OrientationChangeEvent event) {
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-          @Override
-          public void execute() {
-            refresh();
-
-          }
-        });
-
-      }
-    });
+//    MGWT.addOrientationChangeHandler(new OrientationChangeHandler() {
+//
+//      @Override
+//      public void onOrientationChanged(OrientationChangeEvent event) {
+//        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+//
+//          @Override
+//          public void execute() {
+//            refresh();
+//
+//          }
+//        });
+//
+//      }
+//    });
 
     addSelectionHandler(new SelectionHandler<Integer>() {
 
       @Override
       public void onSelection(SelectionEvent<Integer> event) {
-
+    	  int page = scrollPanel.getCurrentPageX();
       }
     });
 
@@ -181,56 +179,57 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
 
   }
 
+  public int size() {
+//	  return childToHolder.size();
+	  return container.getWidgetCount();
+  }
+  
   public void addWidget(Widget w) {
-  	ScrollPanel pageHolder = new ScrollPanel();
-  	pageHolder.setWidth("90%");
-  	pageHolder.setScrollingEnabledX(false);
-  	pageHolder.setWidget(w);
+//  	ScrollPanel pageHolder = new ScrollPanel();
+//  	pageHolder.setWidth("90%");
+//  	pageHolder.setScrollingEnabledX(false);
+//  	pageHolder.setWidget(w);
 //    pageHolder.getElement().getStyle().setProperty("float", "left");
-    add(pageHolder);
-//    if (w instanceof ScrollPanel) {
-//      w.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
-//    }
-    //dd
-//    w.getElement().getStyle().setProperty("float", "left");
-//    w.addStyleName(MGWTStyle.getTheme().getMGWTClientBundle().getLayoutCss().fillPanelExpandChild());
+//    add(pageHolder);
+	  add(w);
   }
   
   @Override
   public void add(Widget w) {
 
-    WidgetHolder widgetHolder = new WidgetHolder(css);
-    widgetHolder.getElement().getStyle().setProperty("float", "left");
-    widgetHolder.add(w);
+//    WidgetHolder widgetHolder = new WidgetHolder(css);
+//    widgetHolder.getElement().getStyle().setProperty("float", "left");
+//    widgetHolder.add(w);
 
-    childToHolder.put(w, widgetHolder);
+//    childToHolder.put(w, widgetHolder);
 
-    container.add(widgetHolder);
+//    container.add(widgetHolder);
+    container.add(w);
 
   }
 
   @Override
   public void clear() {
     container.clear();
-    childToHolder.clear();
+//    childToHolder.clear();
 
   }
 
-  @Override
-  public Iterator<Widget> iterator() {
-    Set<Widget> keySet = childToHolder.keySet();
-    return keySet.iterator();
-  }
+//  @Override
+//  public Iterator<Widget> iterator() {
+//    Set<Widget> keySet = childToHolder.keySet();
+//    return keySet.iterator();
+//  }
 
-  @Override
-  public boolean remove(Widget w) {
-    Widget holder = childToHolder.remove(w);
-    if (holder != null) {
-      return container.remove(holder);
-    }
-    return false;
-
-  }
+//  @Override
+//  public boolean remove(Widget w) {
+//    Widget holder = childToHolder.remove(w);
+//    if (holder != null) {
+//      return container.remove(holder);
+//    }
+//    return false;
+//
+//  }
 
   @Override
   protected void onAttach() {
@@ -303,7 +302,7 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
      * @param main
      * @param container
      */
-    void adjust(FlowPanel main, FlowPanel container);
+    void adjust(FlowPanel main, HorizontalPanel container);
 
   }
 
@@ -315,7 +314,7 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
   public static class CarouselImplSafari implements CarouselImpl {
 
     @Override
-    public void adjust(FlowPanel main, FlowPanel container) {
+    public void adjust(FlowPanel main, HorizontalPanel container) {
       int widgetCount = container.getWidgetCount();
 
       double sizeFactor = 100d / widgetCount;
@@ -338,7 +337,7 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
   public static class CarouselImplGecko implements CarouselImpl {
 
     @Override
-    public void adjust(FlowPanel main, FlowPanel container) {
+    public void adjust(FlowPanel main, HorizontalPanel container) {
       int widgetCount = container.getWidgetCount();
       int offsetWidth = main.getOffsetWidth();
 
@@ -355,5 +354,21 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
   public Widget getCurrentWidget() {
 	  return container.getWidget(currentPage);
   }
+
+@Override
+public Iterator<Widget> iterator() {
+	return container.iterator();
+}
+
+@Override
+public boolean remove(Widget w) {
+	return container.remove(w);
+}
+
+//	public Day getCurrentDay() {
+//		Widget w = getCurrentWidget();
+//		if (w==null) return null;
+//		w.get
+//	}
 
 }

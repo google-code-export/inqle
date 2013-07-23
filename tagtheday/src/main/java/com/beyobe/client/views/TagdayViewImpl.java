@@ -1,6 +1,7 @@
 package com.beyobe.client.views;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.event.EditQuestionEvent;
@@ -12,20 +13,22 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 
 public class TagdayViewImpl extends Composite implements TagdayView {
+	private static Logger log = Logger.getLogger("TagdayViewImpl");
+	
         private static TagdayViewImplUiBinder uiBinder = GWT
                         .create(TagdayViewImplUiBinder.class);
 
         interface TagdayViewImplUiBinder extends UiBinder<Widget, TagdayViewImpl> {
         }
 
-        @UiField HorizontalPanel menuPanel;
+        @UiField FlowPanel menuPanel;
         @UiField Button addTagButton;
         @UiField FlowPanel daysPanel;
         
@@ -34,7 +37,17 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //        private List<Day> days = new ArrayList<Day>();
 		private Date date;
 		private Carousel carousel;
+		@UiField Label dateLabel;
+		@UiField Label monthLabel;
+		@UiField Label yearLabel;
         
+		@UiField Button dayEarlierButton;
+		@UiField Button dayLaterButton;
+		@UiField Button monthEarlierButton;
+		@UiField Button monthLaterButton;
+		@UiField Button yearEarlierButton;
+		@UiField Button yearLaterButton;
+		
         public TagdayViewImpl() {
         		this.date = new Date();
                 initWidget(uiBinder.createAndBindUi(this));
@@ -57,9 +70,23 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //                dateDownButton.addStyleName("ttd-button");
 //                menuPanel.add();
 //                loadDayPicker();
+                
+                dateLabel.addStyleName("ttd-dateNavLabel");
+                monthLabel.addStyleName("ttd-dateNavLabel");
+                yearLabel.addStyleName("ttd-dateNavLabel");
+                
+                dayEarlierButton.addStyleName("ttd-navEarlierButton");
+                monthEarlierButton.addStyleName("ttd-navEarlierButton");
+                yearEarlierButton.addStyleName("ttd-navEarlierButton");
+                
+                dayLaterButton.addStyleName("ttd-navLaterButton");
+                monthLaterButton.addStyleName("ttd-navLaterButton");
+                yearLaterButton.addStyleName("ttd-navLaterButton");
+                
                 carousel = new Carousel();
                 carousel.setHeight("100%");
                 carousel.setWidth("100%");
+                
                 daysPanel.setHeight("100%");
                 daysPanel.setWidth("100%");
                 
@@ -80,10 +107,13 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //        }
 
         public Day getCurrentDay() {
-        	if (carousel.getCurrentWidget() != null && carousel.getCurrentWidget() instanceof Day) {
-        		return (Day)carousel.getCurrentWidget();
+        	Widget w = carousel.getCurrentWidget();
+        	log.info("getCurrentDay() widget = " + w.getClass());
+        	if (w != null && w instanceof Day) {
+        		return (Day)w;
         	}
         	return null;
+//        	return carousel.getCurrentDay();
 		}
 
 //		private void loadDayPicker() {
@@ -98,10 +128,6 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 
 		@Override
 		public void addDay(Day day) {
-//			ScrollPanel scrollPanel = new ScrollPanel();
-//			scrollPanel.setWidth("90%");
-//            scrollPanel.setScrollingEnabledX(false);
-//            scrollPanel.add(day);
 			carousel.addWidget(day);
 		}
 
@@ -115,6 +141,16 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //			
 //			
 //		}
+
+		@Override
+		public void updateNavigation() {
+			Day day = getCurrentDay();
+			if (day==null) return;
+			log.info("updateNavigation to day: " + day);
+			dateLabel.setText(day.getDateText());
+			monthLabel.setText(day.getMonthText());
+			yearLabel.setText(day.getYearText());
+		}
 		
 		
 }
