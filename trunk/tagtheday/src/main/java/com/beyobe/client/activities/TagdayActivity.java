@@ -1,6 +1,7 @@
 package com.beyobe.client.activities;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.views.TagdayView;
@@ -13,6 +14,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class TagdayActivity extends AbstractActivity implements TagdayView.Presenter {
     private Place defaultPlace;
 
+    private static Logger log = Logger.getLogger("TagdayActivity");
+    
     public TagdayActivity(Place defaultPlace) {
         this.defaultPlace = defaultPlace;
     }
@@ -71,7 +74,9 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     	}
     	for (Day day: days) {
     		tagdayView.addDay(day);
+    		log.info("Added day: " + day);
     	}
+    	
 	}
 
 	/**

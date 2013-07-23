@@ -16,5 +16,7 @@ public interface TagdayView extends IsWidget {
 
 	void addDay(Day todayDay);
 
+	void updateNavigation();
+
 //	void setQuestionOptions(List<Question> questions);
 }

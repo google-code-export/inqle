@@ -93,6 +93,21 @@ public class Day extends Composite implements Block, TapHandler {
 		return formatter.format(getTimepoint());
 	}
 
+	public String getDateText() {
+		DateTimeFormat formatter = DateTimeFormat.getFormat("d");
+		return formatter.format(getTimepoint());
+	}
+	
+	public String getMonthText() {
+		DateTimeFormat formatter = DateTimeFormat.getFormat("MMM");
+		return formatter.format(getTimepoint());
+	}
+	
+	public String getYearText() {
+		DateTimeFormat formatter = DateTimeFormat.getFormat("yyyy");
+		return formatter.format(getTimepoint());
+	}
+	
 	@Override
 	public Date getMidpoint() {
 		return midpoint;

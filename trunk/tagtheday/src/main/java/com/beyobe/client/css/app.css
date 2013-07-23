@@ -34,6 +34,9 @@
 		display:none;
 	}
 	
+	.ttd-dateNavLabel {
+	   width: 40px;
+	}
 	
 }
   
@@ -68,4 +71,18 @@
 .ttd-addTagButton {
   margin: 5px 10px 0px 10px;
   font-size: 1em;
+}
+
+.ttd-dateNavLabel {
+	width: 15px;
+}
+
+.ttd-navEarlierButton {
+	margin: 5px 5px 0px 10px;
+	font-size: 0.7em;
+}
+
+.ttd-navLaterButton {
+	margin: 5px 10px 0px 5px;
+	font-size: 0.7em;
 }
