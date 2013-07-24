@@ -1,6 +1,7 @@
 package com.beyobe.client.views;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.beyobe.client.App;
@@ -71,9 +72,9 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //                menuPanel.add();
 //                loadDayPicker();
                 
-                dateLabel.addStyleName("ttd-dateNavLabel");
-                monthLabel.addStyleName("ttd-dateNavLabel");
-                yearLabel.addStyleName("ttd-dateNavLabel");
+                dateLabel.addStyleName("ttd-dayNavLabel");
+                monthLabel.addStyleName("ttd-monthNavLabel");
+                yearLabel.addStyleName("ttd-yearNavLabel");
                 
                 dayEarlierButton.addStyleName("ttd-navEarlierButton");
                 monthEarlierButton.addStyleName("ttd-navEarlierButton");
@@ -108,7 +109,7 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 
         public Day getCurrentDay() {
         	Widget w = carousel.getCurrentWidget();
-        	log.info("getCurrentDay() widget = " + w.getClass());
+//        	log.info("getCurrentDay() widget = " + w.getClass());
         	if (w != null && w instanceof Day) {
         		return (Day)w;
         	}
@@ -143,6 +144,13 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 //		}
 
 		@Override
+		public void onAttach() {
+			super.onAttach();
+			scrollToDay(new Date());
+	   	 	updateNavigation();
+		}
+		
+		@Override
 		public void updateNavigation() {
 			Day day = getCurrentDay();
 			if (day==null) return;
@@ -150,6 +158,22 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 			dateLabel.setText(day.getDateText());
 			monthLabel.setText(day.getMonthText());
 			yearLabel.setText(day.getYearText());
+		}
+
+		@Override
+		public void scrollToDay(Date date) {
+			Iterator carouselI = carousel.iterator();
+			int i=0;
+			while(carouselI.hasNext()) {
+				Object dayObj = carouselI.next();
+				Day day = (Day) dayObj;
+				if (day.getEnd().after(date) && (day.getStart().before(date) || day.getStart().equals(date))) {
+					carousel.setSelectedPage(i);
+					break;
+				}
+				i++;
+			}
+			
 		}
 		
 		

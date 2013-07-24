@@ -1,5 +1,6 @@
 package com.beyobe.client.activities;
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -76,7 +77,6 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     		tagdayView.addDay(day);
     		log.info("Added day: " + day);
     	}
-    	
 	}
 
 	/**

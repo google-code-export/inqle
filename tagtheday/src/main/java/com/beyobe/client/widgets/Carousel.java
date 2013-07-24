@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import org.mortbay.log.Log;
 
 import com.beyobe.client.App;
 import com.google.gwt.core.client.Scheduler;
@@ -66,6 +69,8 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
 //
 //  }
 
+	private Logger log = Logger.getLogger("Carousel");
+	
   private FlowPanel main;
   private final CarouselCss css;
   private ScrollPanel scrollPanel;
@@ -273,7 +278,9 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
   }
 
   public void setSelectedPage(int index) {
+	  
     LightArrayInt pagesX = scrollPanel.getPagesX();
+    log.info("Setting page #" + index + "; pagesX=" + pagesX.length());
     if (index < 0 || index >= pagesX.length()) {
       throw new IllegalArgumentException("invalid value for index: " + index);
     }
@@ -352,6 +359,7 @@ public class Carousel extends Composite implements HasWidgets, HasSelectionHandl
   }
   
   public Widget getCurrentWidget() {
+	  if (size() < 1) return null;
 	  return container.getWidget(currentPage);
   }
 

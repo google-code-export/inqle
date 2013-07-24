@@ -64,25 +64,42 @@
   margin-top: 0.3em;
 }
   
-.ttd-controlButton {
-  background-color: aqua;
-}
+/* .ttd-controlButton { */
+/*   background-color: aqua; */
+/* } */
 
 .ttd-addTagButton {
   margin: 5px 10px 0px 10px;
   font-size: 1em;
 }
 
-.ttd-dateNavLabel {
-	width: 15px;
+.ttd-dayNavLabel {
+	margin-top: 5px;
+	width: 18px;
+}
+
+.ttd-monthNavLabel {
+	margin-top: 5px;
+  width: 21px;
+}
+
+.ttd-yearNavLabel {
+	margin-top: 5px;
+  width: 36px;
 }
 
 .ttd-navEarlierButton {
-	margin: 5px 5px 0px 10px;
+	margin: 5px 2px 0px 10px;
 	font-size: 0.7em;
+	width: 20px;
+  height: 20px;
+  padding: 5px 0px 0px 0px;
 }
 
 .ttd-navLaterButton {
-	margin: 5px 10px 0px 5px;
+	margin: 5px 10px 0px 2px;
 	font-size: 0.7em;
+	width: 20px;
+  height: 20px;
+  padding: 5px 0px 0px 0px;
 }

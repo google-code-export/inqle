@@ -8,12 +8,7 @@
 .menuPanel { width: 100%;}
 .daysPanel { width: 100%; height: 100%;}
 .dayPicker { width: 100%; height: 7px;}
-.scrollHorizontal{
-        /* 
-        overflow-y: hidden !important;
-        !important used to force override the style "overflow:scroll"
-            of the ScrollPanel */
-    }
+.menuPanelItem { float:left;}
 <!--  .addTagButton { -->
 <!-- 	color: light-blue; -->
 <!-- 	margin: 5px; -->
@@ -22,29 +17,29 @@
   </ui:style>
   <g:DockLayoutPanel styleName="{style.tagdayArea}">
     <g:north size="68">
-      <g:VerticalPanel>
+<!--       <g:VerticalPanel> -->
 		  <g:FlowPanel ui:field="menuPanel" styleName='{style.menuPanel}'>
-		    <mgwt:Button ui:field="addTagButton" title="Add a tag" round="false" small="true" text="+"/>
+		    <mgwt:Button ui:field="addTagButton" title="Add a tag" round="false" small="true" text="+" styleName='{style.menuPanelItem}'/>
 		    
-		    <g:HorizontalPanel>
+		    <g:HorizontalPanel styleName='{style.menuPanelItem}'>
 			    <mgwt:Button ui:field="dayEarlierButton" title="1 day earlier" round="false" small="true" text="←"/>
 			    <g:Label ui:field="dateLabel"/>
 			    <mgwt:Button ui:field="dayLaterButton" title="1 day later" round="false" small="true" text="→"/>
 			  </g:HorizontalPanel>
 			  
-			  <g:HorizontalPanel>
+			  <g:HorizontalPanel styleName='{style.menuPanelItem}'>
 			    <mgwt:Button ui:field="monthEarlierButton" title="1 month earlier" round="false" small="true" text="←"/>
 	        <g:Label ui:field="monthLabel"/>
 	        <mgwt:Button ui:field="monthLaterButton" title="1 month later" round="false" small="true" text="→"/>
 	      </g:HorizontalPanel>
 	      
-	      <g:HorizontalPanel>
+	      <g:HorizontalPanel styleName='{style.menuPanelItem}'>
 	        <mgwt:Button ui:field="yearEarlierButton" title="1 year earlier" round="false" small="true" text="←"/>
 	        <g:Label ui:field="yearLabel"/>
 	        <mgwt:Button ui:field="yearLaterButton" title="1 year later" round="false" small="true" text="→"/>
 	      </g:HorizontalPanel>
 		  </g:FlowPanel>
-		  </g:VerticalPanel>
+<!-- 		  </g:VerticalPanel> -->
 		</g:north>
     <g:center>
       <g:FlowPanel ui:field="daysPanel"/>
