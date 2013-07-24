@@ -284,7 +284,6 @@ public class DataBus {
 		    }
 		    if (parcel.getData() != null) {
 		    	 setData(parcel.getData());
-//		    	 App.tagdayView.updateNavigation();
 		    }
 		    
 		    if (parcel.getParticipant() != null) {

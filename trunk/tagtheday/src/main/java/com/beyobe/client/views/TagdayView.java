@@ -1,5 +1,6 @@
 package com.beyobe.client.views;
 
+import java.util.Date;
 import java.util.List;
 
 import com.beyobe.client.beans.Question;
@@ -17,6 +18,8 @@ public interface TagdayView extends IsWidget {
 	void addDay(Day todayDay);
 
 	void updateNavigation();
+
+	void scrollToDay(Date date);
 
 //	void setQuestionOptions(List<Question> questions);
 }
