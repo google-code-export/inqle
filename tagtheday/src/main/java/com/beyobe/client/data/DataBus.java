@@ -140,11 +140,7 @@ public class DataBus {
 		
 		//if no data, just return today's day
 		if (dataByDate == null || dataByDate.size()==0) {
-			Day day = new Day(startOfToday);
-//			List<Question> addedQuestions = addTagsToDay(day);
-			addTagsToDay(day);
-//			addRemainingQuestions(addedQuestions, day);
-			log.info("Created day: " + day);
+			Day day = createDay(startOfToday);
 			allDays.add(day);
 			return allDays;
 		}
@@ -163,29 +159,10 @@ public class DataBus {
 		}
 		
 		while(date.before(startOfToday) || date.equals(startOfToday)) {
-			Day day = new Day(date);
-			log.fine("Created day: " + day);
-			addTagsToDay(day);
-//			String key = Constants.DAY_FORMATTER.format(date);
-//			List<Datum> dataForDay = dataByDate.get(key);
-//			if (dataForDay == null || dataForDay.size()==0) {
-//				allDays.add(day);
-//				log.fine("Adding day: " + key);
-//				//advance date 24 hours
-//				date = new Date(date.getTime());
-//				CalendarUtil.addDaysToDate(date, 1);
-//				continue;
-//			}
-//			
-//			//add all tagbuttons to this day
-//			for (Datum d: dataForDay) {
-//				Question q = knownQuestions.get(d.getQuestionUid());
-//				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
-//				log.info("Adding to day: " + tagButton.getText());
-//				day.addTagButton(tagButton);
-//			}
+//			Day day = createDay(date);
+//			allDays.add(day);
 			
-			allDays.add(day);
+			addDayOntoEnd(date);
 			
 			//advance date 24 hours
 			date = new Date(date.getTime());
@@ -194,6 +171,27 @@ public class DataBus {
 		
 		
 		return allDays;
+	}
+	
+	public Day addDayOntoEnd(Date d) {
+		log.info("addDayOntoEnd: " + d);
+		Day day = createDay(d);
+		allDays.add(day);
+		return day;
+	}
+	
+	public Day addDayOntoBeginning(Date d) {
+		log.info("addDayOntoBeginning: " + d);
+		Day day = createDay(d);
+		allDays.add(0, day);
+		return day;
+	}
+
+	private Day createDay(Date date) {
+		Day day = new Day(date);
+//		log.info("created Day:" + day);
+		addTagsToDay(day);
+		return day;
 	}
 
 	private void addTagsToDay(Day day) {
@@ -295,14 +293,11 @@ public class DataBus {
 		    	App.questionForm.onSearchQuestionsReturns(parcel);
 		    }
 		    
-		    //TODO determine which place to go based on data received?
-		    
 		    if (gotoTagdayPlace) {
-			    log.info("Going to TagdayPlace...");
 			    App.placeController.goTo(new TagdayPlace());
 		    }
 		} catch (Exception e) {
-			log.log(Level.SEVERE, "Error parsing JSON into Datum objects", e);
+			log.log(Level.SEVERE, "Error on refreshDataFromJson", e);
 		}
 	}
 

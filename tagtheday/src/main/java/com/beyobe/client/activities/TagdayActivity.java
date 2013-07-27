@@ -5,12 +5,18 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.beyobe.client.App;
+import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.views.TagdayView;
+import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 
 public class TagdayActivity extends AbstractActivity implements TagdayView.Presenter {
     private Place defaultPlace;
@@ -30,15 +36,13 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     		App.placeController.goTo(new LoginPlace());
     		return;
     	}
-    	App.loadData();
-        TagdayView tagdayView = App.tagdayView;
-        tagdayView.setPresenter(this);
-        loadDays(tagdayView);
-        containerWidget.setWidget(tagdayView.asWidget());
+    	App.tagdayView.setPresenter(this);
+        loadDays();
+        containerWidget.setWidget(App.tagdayView.asWidget());
     }
 
     //TODO load tags dynamically
-    private void loadDays(TagdayView tagdayView) {
+    private void loadDays() {
 //    	Date date = new Date();
 //    	Day todayDay = new Day(date);
 //    	
@@ -74,7 +78,7 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     		days = App.dataBus.createAllDays();
     	}
     	for (Day day: days) {
-    		tagdayView.addDay(day);
+    		addDayOntoEndOfCarousel(day);
     		log.info("Added day: " + day);
     	}
 	}
@@ -93,4 +97,141 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     public void goTo(Place place) {
         App.placeController.goTo(place);
     }
+
+	@Override
+	public void onAddTag(TapEvent e) {
+		App.question = null;
+		App.eventBus.fireEvent(new EditQuestionEvent(null));
+	}
+
+	@Override
+	public void onAttach() {
+		goToDate(new Date());
+   	 	updateNavigation();
+	}
+	
+	@Override
+	public void updateNavigation() {
+		Day day = getCurrentDay();
+		if (day==null) return;
+		log.info("updateNavigation to day: " + day);
+		App.tagdayView.getDateLabel().setText(day.getDateText());
+		log.info("updateNavigation to date: " + day.getDateText());
+		App.tagdayView.getMonthLabel().setText(day.getMonthText());
+		App.tagdayView.getYearLabel().setText(day.getYearText());
+	}
+
+	@Override
+	public void goToDate(Date d) {
+		if (d == null) return;
+		Carousel carousel = App.tagdayView.getCarousel();
+		
+		//if the date is already on the caurosel, scroll to it
+		int dateIndex = carousel.indexOf(d);
+		if (dateIndex >= 0) {
+			carousel.setSelectedPage(dateIndex);
+			updateNavigation();
+			return;
+		}
+		
+		//otherwise if the date is 1 day earlier, gather data for that day and add it on to the beginning
+		Date oneDayBeforeCaurosel = carousel.getEarliestDate();
+		CalendarUtil.addDaysToDate(oneDayBeforeCaurosel, -1);
+		if(d.before(carousel.getEarliestDate()) && (d.equals(oneDayBeforeCaurosel) || d.after(oneDayBeforeCaurosel))) {
+			//TODO load data from server
+			log.info("addDayOntoBeginning...");
+			Day day = App.dataBus.addDayOntoBeginning(d);
+			addDayOntoBeginningOfCarousel(day);
+			carousel.setSelectedPage(0);
+			log.info(carousel.toString());
+			updateNavigation();
+			return;
+		}
+		
+		//otherwise if the date is 1 day later, gather data for that day and add it on to the end
+		Date oneDayAfterCaurosel = carousel.getLatestDate();
+		CalendarUtil.addDaysToDate(oneDayAfterCaurosel, 1);
+		if(d.after(carousel.getLatestDate()) && (d.equals(oneDayAfterCaurosel) || d.before(oneDayAfterCaurosel))) {
+			log.info("addDayOntoEnd...");
+			//TODO load data from server
+			Day day = App.dataBus.addDayOntoEnd(d);
+			addDayOntoEndOfCarousel(day);
+			carousel.setSelectedPage(carousel.size()-1);
+			log.info(carousel.toString());
+			updateNavigation();
+		}
+		
+		//otherwise dump the carousel and load new data completely
+		//TODO support creating remote days
+	}
+	
+	@Override
+	public Day getCurrentDay() {
+	 	Widget w = App.tagdayView.getCarousel().getCurrentWidget();
+	 	if (w != null && w instanceof Day) {
+	 		return (Day)w;
+	 	}
+	 	return null;
+	}
+	
+	@Override
+	public void addDayOntoEndOfCarousel(Day day) {
+		App.tagdayView.getCarousel().addDayOntoEnd(day);
+	}
+	
+	@Override
+	public void addDayOntoBeginningOfCarousel(Day day) {
+		App.tagdayView.getCarousel().addDayOntoBeginning(day);
+	}
+	
+
+	@Override
+	public void onSelection(SelectionEvent<Integer> event) {
+		log.info("Carousel stopped at: " + event.getSelectedItem() + "\nCarpusel=" + App.tagdayView.getCarousel().toString());
+		updateNavigation();
+	}
+
+	@Override
+	public void onDayEarlier() {
+		Date d = getCurrentDay().getStart();
+		CalendarUtil.addDaysToDate(d, -1);
+		log.info("1 day earlier: going to date: " + d + "...");
+		goToDate(d);
+	}
+
+	@Override
+	public void onDayLater() {
+		Date d = getCurrentDay().getStart();
+		CalendarUtil.addDaysToDate(d, 1);
+		log.info("1 day later: going to date: " + d + "...");
+		goToDate(d);
+	}
+
+	@Override
+	public void onMonthEarlier() {
+		Date d = getCurrentDay().getStart();
+		CalendarUtil.addMonthsToDate(d, -1);
+		goToDate(d);
+	}
+
+	@Override
+	public void onMonthLater() {
+		Date d = getCurrentDay().getStart();
+		CalendarUtil.addMonthsToDate(d, 1);
+		goToDate(d);
+	}
+
+	@Override
+	public void onYearEarlier() {
+		Date d = getCurrentDay().getStart();
+		CalendarUtil.addMonthsToDate(d, -12);
+		goToDate(d);
+	}
+
+	@Override
+	public void onYearLater() {
+		Date d = getCurrentDay().getStart();
+		CalendarUtil.addMonthsToDate(d, 12);
+		goToDate(d);
+	}
 }
