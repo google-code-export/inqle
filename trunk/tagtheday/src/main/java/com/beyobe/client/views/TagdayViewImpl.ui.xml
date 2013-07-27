@@ -16,10 +16,12 @@
 <!-- 	} -->
   </ui:style>
   <g:DockLayoutPanel styleName="{style.tagdayArea}">
-    <g:north size="68">
+    <g:north size="38">
 <!--       <g:VerticalPanel> -->
-		  <g:FlowPanel ui:field="menuPanel" styleName='{style.menuPanel}'>
-		    <mgwt:Button ui:field="addTagButton" title="Add a tag" round="false" small="true" text="+" styleName='{style.menuPanelItem}'/>
+		  <g:HorizontalPanel ui:field="menuPanel" styleName='{style.menuPanel}'>
+		    <g:HorizontalPanel styleName='{style.menuPanelItem}'>
+		      <mgwt:Button ui:field="addTagButton" title="Add a tag" round="false" small="true" text="+"/>
+		    </g:HorizontalPanel>
 		    
 		    <g:HorizontalPanel styleName='{style.menuPanelItem}'>
 			    <mgwt:Button ui:field="dayEarlierButton" title="1 day earlier" round="false" small="true" text="←"/>
@@ -38,7 +40,7 @@
 	        <g:Label ui:field="yearLabel"/>
 	        <mgwt:Button ui:field="yearLaterButton" title="1 year later" round="false" small="true" text="→"/>
 	      </g:HorizontalPanel>
-		  </g:FlowPanel>
+		  </g:HorizontalPanel>
 <!-- 		  </g:VerticalPanel> -->
 		</g:north>
     <g:center>

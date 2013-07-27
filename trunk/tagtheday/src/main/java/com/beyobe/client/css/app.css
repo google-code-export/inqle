@@ -63,28 +63,25 @@
   font-weight: normal;
   margin-top: 0.3em;
 }
-  
-/* .ttd-controlButton { */
-/*   background-color: aqua; */
-/* } */
 
 .ttd-addTagButton {
   margin: 5px 10px 0px 10px;
   font-size: 1em;
+  cursor: pointer;
 }
 
 .ttd-dayNavLabel {
-	margin-top: 5px;
+	margin-top: 10px;
 	width: 18px;
 }
 
 .ttd-monthNavLabel {
-	margin-top: 5px;
-  width: 21px;
+	margin-top: 10px;
+  width: 25px;
 }
 
 .ttd-yearNavLabel {
-	margin-top: 5px;
+	margin-top: 10px;
   width: 36px;
 }
 
@@ -94,6 +91,7 @@
 	width: 20px;
   height: 20px;
   padding: 5px 0px 0px 0px;
+  cursor: pointer;
 }
 
 .ttd-navLaterButton {
@@ -102,4 +100,5 @@
 	width: 20px;
   height: 20px;
   padding: 5px 0px 0px 0px;
+  cursor: pointer;
 }

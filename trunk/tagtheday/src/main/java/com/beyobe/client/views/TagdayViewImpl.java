@@ -14,6 +14,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasText;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
@@ -29,7 +31,7 @@ public class TagdayViewImpl extends Composite implements TagdayView {
         interface TagdayViewImplUiBinder extends UiBinder<Widget, TagdayViewImpl> {
         }
 
-        @UiField FlowPanel menuPanel;
+        @UiField HorizontalPanel menuPanel;
         @UiField Button addTagButton;
         @UiField FlowPanel daysPanel;
         
@@ -53,7 +55,7 @@ public class TagdayViewImpl extends Composite implements TagdayView {
         		this.date = new Date();
                 initWidget(uiBinder.createAndBindUi(this));
                 
-                addTagButton.addStyleName("ttd-controlButton");
+//                addTagButton.addStyleName("ttd-controlButton");
                 addTagButton.addStyleName("ttd-addTagButton");
 //                Button addTagButton = new Button("+");
 //                addTagButton.addStyleName("ttd-button");
@@ -102,20 +104,13 @@ public class TagdayViewImpl extends Composite implements TagdayView {
                 daysPanel.add(carousel);
         }
 
-//        @UiHandler("goodbyeLink")
-//        void onClickGoodbye(ClickEvent e) {
-//                presenter.goTo(new GoodbyePlace(name));
-//        }
-
-        public Day getCurrentDay() {
-        	Widget w = carousel.getCurrentWidget();
-//        	log.info("getCurrentDay() widget = " + w.getClass());
-        	if (w != null && w instanceof Day) {
-        		return (Day)w;
-        	}
-        	return null;
-//        	return carousel.getCurrentDay();
-		}
+//        public Day getCurrentDay() {
+//        	Widget w = carousel.getCurrentWidget();
+//        	if (w != null && w instanceof Day) {
+//        		return (Day)w;
+//        	}
+//        	return null;
+//		}
 
 //		private void loadDayPicker() {
 //        	WeekView weekView = new WeekView();
@@ -124,57 +119,93 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 
 		@Override
         public void setPresenter(Presenter presenter) {
-                this.presenter = presenter;
+            this.presenter = presenter;
+            carousel.addSelectionHandler(presenter);
         }
-
-		@Override
-		public void addDay(Day day) {
-			carousel.addWidget(day);
-		}
-
-		@UiHandler("addTagButton")
-		void onAddTag(TapEvent e) {
-			App.question = null;
-			App.eventBus.fireEvent(new EditQuestionEvent(null));
-		}
-//		@Override
-//		public void setQuestionOptions(List<Question> questions) {
-//			
-//			
-//		}
 
 		@Override
 		public void onAttach() {
 			super.onAttach();
-			scrollToDay(new Date());
-	   	 	updateNavigation();
-		}
-		
-		@Override
-		public void updateNavigation() {
-			Day day = getCurrentDay();
-			if (day==null) return;
-			log.info("updateNavigation to day: " + day);
-			dateLabel.setText(day.getDateText());
-			monthLabel.setText(day.getMonthText());
-			yearLabel.setText(day.getYearText());
+			presenter.onAttach();
 		}
 
 		@Override
-		public void scrollToDay(Date date) {
-			Iterator carouselI = carousel.iterator();
-			int i=0;
-			while(carouselI.hasNext()) {
-				Object dayObj = carouselI.next();
-				Day day = (Day) dayObj;
-				if (day.getEnd().after(date) && (day.getStart().before(date) || day.getStart().equals(date))) {
-					carousel.setSelectedPage(i);
-					break;
-				}
-				i++;
-			}
-			
+		public HasText getDateLabel() {
+			return dateLabel;
 		}
+
+		@Override
+		public HasText getMonthLabel() {
+			return monthLabel;
+		}
+
+		@Override
+		public HasText getYearLabel() {
+			return yearLabel;
+		}
+
+		@Override
+		public Carousel getCarousel() {
+			return carousel;
+		}
+		
+		@UiHandler("dayEarlierButton")
+		void onDayEarlier(TapEvent e) {
+			presenter.onDayEarlier();
+		}
+		@UiHandler("dayLaterButton")
+		void onDayLater(TapEvent e) {
+			presenter.onDayLater();
+		}
+		
+		@UiHandler("addTagButton")
+		void onAddTag(TapEvent e) {
+			App.eventBus.fireEvent(new EditQuestionEvent(null));
+		}
+		
+//		@UiHandler("monthEarlierButton")
+//		void onMonthEarlier(TapEvent e) {
+//			presenter.onMonthEarlier();
+//		}
+//		@UiHandler("monthLaterButton")
+//		void onMonthLater(TapEvent e) {
+//			presenter.onMonthLater();
+//		}
+//		
+//		@UiHandler("yearEarlierButton")
+//		void onYearEarlier(TapEvent e) {
+//			presenter.onYearEarlier();
+//		}
+//		@UiHandler("yearLaterButton")
+//		void onYearLater(TapEvent e) {
+//			presenter.onYearLater();
+//		}
+
+		
+//		@Override
+//		public void updateNavigation() {
+//			Day day = getCurrentDay();
+//			if (day==null) return;
+//			log.info("updateNavigation to day: " + day);
+//			dateLabel.setText(day.getDateText());
+//			monthLabel.setText(day.getMonthText());
+//			yearLabel.setText(day.getYearText());
+//		}
+//
+//		@Override
+//		public void scrollToDay(Date date) {
+//			Iterator carouselI = carousel.iterator();
+//			int i=0;
+//			while(carouselI.hasNext()) {
+//				Object dayObj = carouselI.next();
+//				Day day = (Day) dayObj;
+//				if (day.getEnd().after(date) && (day.getStart().before(date) || day.getStart().equals(date))) {
+//					carousel.setSelectedPage(i);
+//					break;
+//				}
+//				i++;
+//			}
+//		}
 		
 		
 }

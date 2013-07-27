@@ -50,12 +50,15 @@ public class Day extends Composite implements Block, TapHandler {
 //		}, ResizeEvent.getType() );
 		dateLabel = new Label(getLabelText());
 		tagsPanel = new RoundPanel();
-		tagsPanel.setWidth("90%");
+//		tagsPanel.setWidth("90%");
 		tagsPanel.setHeight((Window.getClientHeight() - 100) + "px");
+//		tagsPanel.setWidth(Window.getClientWidth()-50 + "px");
 //		tagsPanel.addTapHandler(this);
 		tagsPanel.addHandler(new ResizeHandler() {
 			  public void onResize(ResizeEvent event) {
+				  Window.alert("Client is " + Window.getClientWidth() + " by " + Window.getClientHeight());
 				  tagsPanel.setHeight((Window.getClientHeight() - 100) + "px");
+//				  tagsPanel.setWidth(Window.getClientWidth()-50 + "px");
 			  }
 		}, ResizeEvent.getType() );
 		
@@ -110,22 +113,22 @@ public class Day extends Composite implements Block, TapHandler {
 	
 	@Override
 	public Date getMidpoint() {
-		return midpoint;
+		return new Date(midpoint.getTime());
 	}
 
 	@Override
 	public Date getTimepoint() {
-		return timepoint;
+		return new Date(timepoint.getTime());
 	}
 
 	@Override
 	public Date getStart() {
-		return start;
+		return new Date(start.getTime());
 	}
 
 	@Override
 	public Date getEnd() {
-		return end;
+		return new Date(end.getTime());
 	}
 
 	@Override

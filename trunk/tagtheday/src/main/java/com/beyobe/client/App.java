@@ -208,10 +208,10 @@ public class App {
 		return null;
 	}
 
-	public static void loadData() {
-		
-		
-	}
+//	public static void loadData() {
+//		
+//		
+//	}
 
 	public static boolean isUserLoggedIn() {
 		return (sessionToken != null);
