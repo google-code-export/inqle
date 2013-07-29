@@ -2,9 +2,7 @@ package com.beyobe.client.views;
 
 import java.util.Date;
 
-import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -13,12 +11,12 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 public interface TagdayView extends IsWidget {
     void setPresenter(Presenter presenter);
 
-    public interface Presenter extends SelectionHandler<Integer> {
+    public interface Presenter {
         void goTo(Place place);
 
 		void onAddTag(TapEvent e);
 
-		void onAttach();
+//		void onAttach();
 		
 		public void updateNavigation();
 		
@@ -26,7 +24,7 @@ public interface TagdayView extends IsWidget {
 		
 		public Day getCurrentDay();
 		
-		public void addDayOntoEndOfCarousel(Day day);
+//		public void addDayOntoEndOfCarousel(Day day);
 
 		void onDayEarlier();
 
@@ -40,7 +38,7 @@ public interface TagdayView extends IsWidget {
 
 		void onYearLater();
 
-		void addDayOntoBeginningOfCarousel(Day day);
+//		void addDayOntoBeginningOfCarousel(Day day);
     }
 
 	HasText getDateLabel();
@@ -49,7 +47,9 @@ public interface TagdayView extends IsWidget {
 
 	HasText getYearLabel();
 
-	Carousel getCarousel();
+	void setDay(Day day);
+
+//	Carousel getCarousel();
 
 //	void setQuestionOptions(List<Question> questions);
 }

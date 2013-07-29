@@ -3,7 +3,7 @@ package com.beyobe.client.data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,11 +32,11 @@ public class DataBus {
 	
 	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
 	private static List<Question> questionQueue = new ArrayList<Question>();
-	private static LinkedHashMap<String, List<Datum>> dataByDate = new LinkedHashMap<String, List<Datum>>();
+	private static HashMap<String, List<Datum>> dataByDate = new HashMap<String, List<Datum>>();
 
 	public Participant participant;
 
-	private ArrayList<Day> allDays;
+	private HashMap<String, Day> allDays;
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -130,9 +130,9 @@ public class DataBus {
 		 dataByDate.put(DataBus.getDateString(effectiveDate), dataForDay);
 	}
 	
-	public List<Day> createAllDays() {
+	public HashMap<String, Day> createAllDays() {
 //		log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC createAllDays called. dataByDate=" + dataByDate);
-		allDays = new ArrayList<Day>();
+		allDays = new HashMap<String, Day>();
 		
 		//add days from the start of data collection to the present.
 //		DateTimeFormat format = DateTimeFormat.getFormat("yyyy-MM-dd");
@@ -141,7 +141,7 @@ public class DataBus {
 		//if no data, just return today's day
 		if (dataByDate == null || dataByDate.size()==0) {
 			Day day = createDay(startOfToday);
-			allDays.add(day);
+			allDays.put(getDateString(startOfToday), day);
 			return allDays;
 		}
 				
@@ -176,18 +176,18 @@ public class DataBus {
 	public Day addDayOntoEnd(Date d) {
 		log.info("addDayOntoEnd: " + d);
 		Day day = createDay(d);
-		allDays.add(day);
+		allDays.put(getDateString(d), day);
 		return day;
 	}
 	
 	public Day addDayOntoBeginning(Date d) {
 		log.info("addDayOntoBeginning: " + d);
 		Day day = createDay(d);
-		allDays.add(0, day);
+		allDays.put(getDateString(d), day);
 		return day;
 	}
 
-	private Day createDay(Date date) {
+	public Day createDay(Date date) {
 		Day day = new Day(date);
 //		log.info("created Day:" + day);
 		addTagsToDay(day);
@@ -218,7 +218,7 @@ public class DataBus {
 		
 	}
 
-	public List<Day> getAllDays() {
+	public HashMap<String, Day> getAllDays() {
 		return allDays;
 	}
 	
@@ -247,8 +247,11 @@ public class DataBus {
 		knownQuestions.put(question.getId(), question);
 		
 		//add the question to each day
-		for (Day day: getAllDays()) {
-			day.addQuestion(question);
+		for (String dayStr: getAllDays().keySet()) {
+			Day day = allDays.get(dayStr);
+			if (day != null) {
+				day.addQuestion(question);
+			}
 		}
 		
 		Parcel parcel = newParcel();
@@ -320,7 +323,7 @@ public class DataBus {
 	}
 
 	private void setData(List<Datum> data) {
-//		dataByDate = new LinkedHashMap<String, List<Datum>>();
+//		dataByDate = new HashMap<String, List<Datum>>();
 		for (Datum d: data) {
 			String dayStr = Constants.DAY_FORMATTER.format(d.getEffectiveDate());
 			List<Datum> dayData = dataByDate.get(dayStr);
@@ -328,5 +331,18 @@ public class DataBus {
 			dayData.add(d);
 			dataByDate.put(dayStr, dayData);
 		}
+	}
+
+	public Day getDay(Date date) {
+		return allDays.get(getDateString(date));
+	}
+
+	public Day loadDay(Date d) {
+		Day day = getDay(d);
+		if (day == null) {
+			//TODO load data for that day
+			day = createDay(d);
+		}
+		return day;
 	}
 }
