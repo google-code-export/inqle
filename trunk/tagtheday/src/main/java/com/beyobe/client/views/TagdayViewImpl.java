@@ -1,7 +1,6 @@
 package com.beyobe.client.views;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.beyobe.client.App;
@@ -9,9 +8,12 @@ import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasText;
@@ -20,7 +22,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.ui.client.widget.Button;
-
 
 public class TagdayViewImpl extends Composite implements TagdayView {
 	private static Logger log = Logger.getLogger("TagdayViewImpl");
@@ -52,82 +53,49 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 		@UiField Button yearLaterButton;
 		
         public TagdayViewImpl() {
-        		this.date = new Date();
-                initWidget(uiBinder.createAndBindUi(this));
-                
-//                addTagButton.addStyleName("ttd-controlButton");
-                addTagButton.addStyleName("ttd-addTagButton");
-//                Button addTagButton = new Button("+");
-//                addTagButton.addStyleName("ttd-button");
-//                addTagButton.setSmall(true);
-//                addTagButton.addTouchEndHandler(new TouchEndHandler() {
-//					@Override
-//					public void onTouchEnd(TouchEndEvent event) {
-//						App.eventBus.fireEvent(new EditQuestionEvent(null));
-//					}
-//                });
-//                addTagButton.getElement().getStyle().setProperty("float", "right");
-//                menuPanel.add(addTagButton);
-                
-//                Button dateDownButton = new Button("<");
-//                dateDownButton.addStyleName("ttd-button");
-//                menuPanel.add();
-//                loadDayPicker();
-                
-                dateLabel.addStyleName("ttd-dayNavLabel");
-                monthLabel.addStyleName("ttd-monthNavLabel");
-                yearLabel.addStyleName("ttd-yearNavLabel");
-                
-                dayEarlierButton.addStyleName("ttd-navEarlierButton");
-                monthEarlierButton.addStyleName("ttd-navEarlierButton");
-                yearEarlierButton.addStyleName("ttd-navEarlierButton");
-                
-                dayLaterButton.addStyleName("ttd-navLaterButton");
-                monthLaterButton.addStyleName("ttd-navLaterButton");
-                yearLaterButton.addStyleName("ttd-navLaterButton");
-                
-                carousel = new Carousel();
-                carousel.setHeight("100%");
-                carousel.setWidth("100%");
-                
-                daysPanel.setHeight("100%");
-                daysPanel.setWidth("100%");
-                
-//                daysPanel.setHeight(Window.getClientHeight() + "px");
-//                Window.addResizeHandler(new ResizeHandler() {
-//                 public void onResize(ResizeEvent event) {
-//                   int height = event.getHeight();
-//                   daysPanel.setHeight(height + "px");
-//                 }
-//                });
-                
-                daysPanel.add(carousel);
+    		this.date = new Date();
+            initWidget(uiBinder.createAndBindUi(this));
+            
+            addTagButton.addStyleName("ttd-addTagButton");
+            
+            dateLabel.addStyleName("ttd-dayNavLabel");
+            monthLabel.addStyleName("ttd-monthNavLabel");
+            yearLabel.addStyleName("ttd-yearNavLabel");
+            
+            dayEarlierButton.addStyleName("ttd-navEarlierButton");
+            monthEarlierButton.addStyleName("ttd-navEarlierButton");
+            yearEarlierButton.addStyleName("ttd-navEarlierButton");
+            
+            dayLaterButton.addStyleName("ttd-navLaterButton");
+            monthLaterButton.addStyleName("ttd-navLaterButton");
+            yearLaterButton.addStyleName("ttd-navLaterButton");
+            
+            carousel = new Carousel();
+            carousel.setHeight("100%");
+            carousel.setWidth("100%");
+            
+            daysPanel.setHeight("100%");
+            daysPanel.setWidth("100%");
+            
+            daysPanel.setHeight(Window.getClientHeight() + "px");
+            Window.addResizeHandler(new ResizeHandler() {
+             public void onResize(ResizeEvent event) {
+               int height = event.getHeight();
+               daysPanel.setHeight(height + "px");
+             }
+            });
         }
-
-//        public Day getCurrentDay() {
-//        	Widget w = carousel.getCurrentWidget();
-//        	if (w != null && w instanceof Day) {
-//        		return (Day)w;
-//        	}
-//        	return null;
-//		}
-
-//		private void loadDayPicker() {
-//        	WeekView weekView = new WeekView();
-//        	dayPicker.add(weekView);
-//		}
 
 		@Override
         public void setPresenter(Presenter presenter) {
             this.presenter = presenter;
-            carousel.addSelectionHandler(presenter);
         }
 
-		@Override
-		public void onAttach() {
-			super.onAttach();
-			presenter.onAttach();
-		}
+//		@Override
+//		public void onAttach() {
+//			super.onAttach();
+//			presenter.onAttach();
+//		}
 
 		@Override
 		public HasText getDateLabel() {
@@ -144,11 +112,6 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 			return yearLabel;
 		}
 
-		@Override
-		public Carousel getCarousel() {
-			return carousel;
-		}
-		
 		@UiHandler("dayEarlierButton")
 		void onDayEarlier(TapEvent e) {
 			presenter.onDayEarlier();
@@ -162,24 +125,31 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 		void onAddTag(TapEvent e) {
 			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
+
+		@Override
+		public void setDay(Day day) {
+			if (day == null) throw new RuntimeException("Cannot set a null day");
+			daysPanel.clear();
+			daysPanel.add(day);
+		}
 		
-//		@UiHandler("monthEarlierButton")
-//		void onMonthEarlier(TapEvent e) {
-//			presenter.onMonthEarlier();
-//		}
-//		@UiHandler("monthLaterButton")
-//		void onMonthLater(TapEvent e) {
-//			presenter.onMonthLater();
-//		}
-//		
-//		@UiHandler("yearEarlierButton")
-//		void onYearEarlier(TapEvent e) {
-//			presenter.onYearEarlier();
-//		}
-//		@UiHandler("yearLaterButton")
-//		void onYearLater(TapEvent e) {
-//			presenter.onYearLater();
-//		}
+		@UiHandler("monthEarlierButton")
+		void onMonthEarlier(TapEvent e) {
+			presenter.onMonthEarlier();
+		}
+		@UiHandler("monthLaterButton")
+		void onMonthLater(TapEvent e) {
+			presenter.onMonthLater();
+		}
+		
+		@UiHandler("yearEarlierButton")
+		void onYearEarlier(TapEvent e) {
+			presenter.onYearEarlier();
+		}
+		@UiHandler("yearLaterButton")
+		void onYearLater(TapEvent e) {
+			presenter.onYearLater();
+		}
 
 		
 //		@Override
