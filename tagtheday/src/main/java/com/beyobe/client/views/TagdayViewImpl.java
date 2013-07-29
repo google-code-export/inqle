@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import com.beyobe.client.App;
 import com.beyobe.client.event.EditQuestionEvent;
-import com.beyobe.client.widgets.Carousel;
 import com.beyobe.client.widgets.Day;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -40,7 +39,6 @@ public class TagdayViewImpl extends Composite implements TagdayView {
         private Presenter presenter;
 //        private List<Day> days = new ArrayList<Day>();
 		private Date date;
-		private Carousel carousel;
 		@UiField Label dateLabel;
 		@UiField Label monthLabel;
 		@UiField Label yearLabel;
@@ -69,10 +67,6 @@ public class TagdayViewImpl extends Composite implements TagdayView {
             dayLaterButton.addStyleName("ttd-navLaterButton");
             monthLaterButton.addStyleName("ttd-navLaterButton");
             yearLaterButton.addStyleName("ttd-navLaterButton");
-            
-            carousel = new Carousel();
-            carousel.setHeight("100%");
-            carousel.setWidth("100%");
             
             daysPanel.setHeight("100%");
             daysPanel.setWidth("100%");

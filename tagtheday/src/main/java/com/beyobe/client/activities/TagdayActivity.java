@@ -15,6 +15,20 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 
+/**
+ * TODO:
+ * Animate date transitions
+ * Load data in time windows
+ * fix widget widths
+ * make future dates gray
+ * home utton loads today
+ * make tagbuttons have a consistent order
+ * support d&d of tag buttons to reorder?
+ * support screen resize for height
+ * 
+ * @author donohue
+ *
+ */
 public class TagdayActivity extends AbstractActivity implements TagdayView.Presenter {
     private Place defaultPlace;
 
