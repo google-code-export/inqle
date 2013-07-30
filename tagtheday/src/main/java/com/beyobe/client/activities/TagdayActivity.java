@@ -19,9 +19,8 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
  * TODO:
  * Animate date transitions
  * Load data in time windows
- * fix widget widths
- * make future dates gray
- * home utton loads today
+ * fix tagbutton widths
+ * home button loads today?
  * make tagbuttons have a consistent order
  * support d&d of tag buttons to reorder?
  * support screen resize for height
@@ -51,10 +50,11 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     	}
     	App.tagdayView.setPresenter(this);
         loadDays();
-        currentDay = App.dataBus.loadDay(new Date());
-        
         containerWidget.setWidget(App.tagdayView.asWidget());
-        App.tagdayView.setDay(currentDay);
+        goToDate(new Date());
+        
+//        currentDay = App.dataBus.loadDay(new Date());
+//        App.tagdayView.setDay(currentDay);
     }
 
     private void loadDays() {
@@ -112,6 +112,14 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		if (d == null) return;
 		Day day = App.dataBus.loadDay(d);
 		currentDay = day;
+		Date now = new Date();
+		if (day.getEnd().after(now) && day.getStart().before(now)) {
+			day.addStyleName("ttd-day-today");
+		} else if (day.getStart().after(now)) {
+			day.addStyleName("ttd-day-future");
+		} else {
+			day.addStyleName("ttd-day-past");
+		}
 		App.tagdayView.setDay(day);
 		updateNavigation();
 	}

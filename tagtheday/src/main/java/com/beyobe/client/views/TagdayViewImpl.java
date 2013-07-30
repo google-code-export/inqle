@@ -20,9 +20,13 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndEvent;
+import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndHandler;
+import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEvent.DIRECTION;
 import com.googlecode.mgwt.ui.client.widget.Button;
+import com.googlecode.mgwt.ui.client.widget.touch.TouchDelegate;
 
-public class TagdayViewImpl extends Composite implements TagdayView {
+public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHandler {
 	private static Logger log = Logger.getLogger("TagdayViewImpl");
 	
         private static TagdayViewImplUiBinder uiBinder = GWT
@@ -72,6 +76,10 @@ public class TagdayViewImpl extends Composite implements TagdayView {
             daysPanel.setWidth("100%");
             
             daysPanel.setHeight(Window.getClientHeight() + "px");
+            
+            TouchDelegate touchDelegate = new TouchDelegate(daysPanel);
+            touchDelegate.addSwipeEndHandler(this);
+            
             Window.addResizeHandler(new ResizeHandler() {
              public void onResize(ResizeEvent event) {
                int height = event.getHeight();
@@ -143,6 +151,16 @@ public class TagdayViewImpl extends Composite implements TagdayView {
 		@UiHandler("yearLaterButton")
 		void onYearLater(TapEvent e) {
 			presenter.onYearLater();
+		}
+		
+		@Override
+		public void onSwipeEnd(SwipeEndEvent e) {
+			if (e.getDirection() == DIRECTION.LEFT_TO_RIGHT) {
+				presenter.onDayEarlier();
+			}
+			else if (e.getDirection() == DIRECTION.RIGHT_TO_LEFT) {
+				presenter.onDayLater();
+			}
 		}
 
 		
