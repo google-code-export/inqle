@@ -26,13 +26,22 @@ import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
 
+/**
+ * Handle all data needs
+ * 
+ * TODO: keep a registry of what is known
+ * TODO load windows of data when unknown data is requested
+ * TODO: associate immediate past answer with future answers
+ * @author donohue
+ *
+ */
 public class DataBus {
 	
 	private static Logger log = Logger.getLogger(EventBus.class.getName());
 	
 	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
 	private static List<Question> questionQueue = new ArrayList<Question>();
-	private static HashMap<String, List<Datum>> dataByDate = new HashMap<String, List<Datum>>();
+	private static HashMap<String, Map<String, Datum>> dataByDate = new HashMap<String,  Map<String, Datum>>();
 
 	public Participant participant;
 
@@ -70,20 +79,25 @@ public class DataBus {
 	
 	public static List<TagButton> getTagButtonsForDate(Date effectiveDate) {
 		List<TagButton> buttons = new ArrayList<TagButton>();
-		List<Datum> data = getDataForDate(effectiveDate);
+		Map<String, Datum> data = getDataForDate(effectiveDate);
 		if (data==null) return null;
-		for (Datum datum: data) {
-			Question theQuestion = getQuestion(datum.getQuestionId());
-			if (theQuestion==null) {
-				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionId());
-			}
-			TagButton button = new TagButton(effectiveDate, theQuestion, datum);
+		for (Question q: questionQueue) {
+			Datum d = data.get(q.getId());
+			TagButton button = new TagButton(effectiveDate, q, d);
 			buttons.add(button);
 		}
+//		for (Datum datum: data.) {
+//			Question theQuestion = getQuestion(datum.getQuestionId());
+//			if (theQuestion==null) {
+//				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionId());
+//			}
+//			TagButton button = new TagButton(effectiveDate, theQuestion, datum);
+//			buttons.add(button);
+//		}
 		return buttons;
 	}
 
-	private static List<Datum> getDataForDate(Date date) {
+	private static Map<String, Datum> getDataForDate(Date date) {
 		return dataByDate.get(DataBus.getDateString(date));
 	}
 
@@ -102,22 +116,23 @@ public class DataBus {
 //		String dateStr = DataBus.getDateString(effectiveDate);
 		
 		//first save in memory
-		List<Datum> dataForDay = getDataForDate(effectiveDate);
-		if (dataForDay == null) dataForDay = new ArrayList<Datum>();
-		List<Datum> dataForLooping = new ArrayList<Datum>(dataForDay);
-		int index = 0;
-		boolean replaced = false;
-		for (Datum datum: dataForLooping) {
-			if (datumToSave.getQuestionId() == datum.getQuestionId()) {
-				dataForDay.remove(index);
-				dataForDay.add(index, datumToSave);
-				replaced = true;
-			}
-			index++;
-		}
-		if (! replaced) {
-			dataForDay.add(datumToSave);
-		}
+		Map<String, Datum> dataForDay = getDataForDate(effectiveDate);
+		if (dataForDay == null) dataForDay = new HashMap<String, Datum>();
+		dataForDay.put(questionAnswered.getId(), datumToSave);
+//		List<Datum> dataForLooping = new ArrayList<Datum>(dataForDay);
+//		int index = 0;
+//		boolean replaced = false;
+//		for (Datum datum: dataForLooping) {
+//			if (datumToSave.getQuestionId() == datum.getQuestionId()) {
+//				dataForDay.remove(index);
+//				dataForDay.add(index, datumToSave);
+//				replaced = true;
+//			}
+//			index++;
+//		}
+//		if (! replaced) {
+//			dataForDay.add(datumToSave);
+//		}
 		
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
@@ -130,48 +145,41 @@ public class DataBus {
 		 dataByDate.put(DataBus.getDateString(effectiveDate), dataForDay);
 	}
 	
-	public HashMap<String, Day> createAllDays() {
-//		log.info("CCCCCCCCCCCCCCCCCCCCCCCCCCC createAllDays called. dataByDate=" + dataByDate);
-		allDays = new HashMap<String, Day>();
-		
-		//add days from the start of data collection to the present.
-//		DateTimeFormat format = DateTimeFormat.getFormat("yyyy-MM-dd");
-		Date startOfToday = Constants.DAY_FORMATTER.parse(Constants.DAY_FORMATTER.format(new Date()));
-		
-		//if no data, just return today's day
-		if (dataByDate == null || dataByDate.size()==0) {
-			Day day = createDay(startOfToday);
-			allDays.put(getDateString(startOfToday), day);
-			return allDays;
-		}
-				
-		//find earliest date
-		Date earliestDate = null;
-		for (Map.Entry<String,  List<Datum>> entry : dataByDate.entrySet()) {
-		    String key = entry.getKey();
-		    earliestDate = Constants.DAY_FORMATTER.parse(key);
-		    break;
-		}
-		
-		Date date = new Date(startOfToday.getTime());
-		if (earliestDate != null) {
-			date = earliestDate;
-		}
-		
-		while(date.before(startOfToday) || date.equals(startOfToday)) {
-//			Day day = createDay(date);
-//			allDays.add(day);
-			
-			addDayOntoEnd(date);
-			
-			//advance date 24 hours
-			date = new Date(date.getTime());
-			CalendarUtil.addDaysToDate(date, 1);
-		}
-		
-		
-		return allDays;
-	}
+//	public HashMap<String, Day> createAllDays() {
+//		allDays = new HashMap<String, Day>();
+//		
+//		Date startOfToday = Constants.DAY_FORMATTER.parse(Constants.DAY_FORMATTER.format(new Date()));
+//		
+//		//if no data, just return today's day
+//		if (dataByDate == null || dataByDate.size()==0) {
+//			Day day = createDay(startOfToday);
+//			allDays.put(getDateString(startOfToday), day);
+//			return allDays;
+//		}
+//				
+//		//find earliest date
+//		Date earliestDate = null;
+//		for (String key : dataByDate.entrySet()) {
+//		    String key = entry.getKey();
+//		    earliestDate = Constants.DAY_FORMATTER.parse(key);
+//		    break;
+//		}
+//		
+//		Date date = new Date(startOfToday.getTime());
+//		if (earliestDate != null) {
+//			date = earliestDate;
+//		}
+//		
+//		while(date.before(startOfToday) || date.equals(startOfToday)) {
+//			addDayOntoEnd(date);
+//			
+//			//advance date 24 hours
+//			date = new Date(date.getTime());
+//			CalendarUtil.addDaysToDate(date, 1);
+//		}
+//		
+//		return allDays;
+//	}
 	
 	public Day addDayOntoEnd(Date d) {
 		log.info("addDayOntoEnd: " + d);
@@ -197,24 +205,40 @@ public class DataBus {
 	private void addTagsToDay(Day day) {
 		Date date = day.getTimepoint();
 		String key = Constants.DAY_FORMATTER.format(date);
-		List<Datum> dataForDay = dataByDate.get(key);
-		List<Question> questionsAdded = new ArrayList<Question>();
-		if (dataForDay != null) {
-			//add all tagbuttons to this day
-			for (Datum d: dataForDay) {
-				Question q = knownQuestions.get(d.getQuestionId());
-				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
-				log.info("Adding to day: " + tagButton.getText());
-				questionsAdded.add(q);
-				day.addTagButton(tagButton);
-			}
-		}
+		Map<String, Datum> dataForDay = dataByDate.get(key);
+//		List<Question> questionsAdded = new ArrayList<Question>();
 		
 		for (Question q: questionQueue) {
-			if (questionsAdded.contains(q)) continue;
+//			if (questionsAdded.contains(q)) continue;
+			
+			if (dataForDay != null) {
+				Datum d = dataForDay.get(q.getId());
+				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+				log.info("Adding to day: " + tagButton.getText());
+//				questionsAdded.add(q);
+				day.addTagButton(tagButton);
+			}
 			TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
 			day.addTagButton(tagButton);
+//			questionsAdded.add(q);
 		}
+		
+//		if (dataForDay != null) {
+//			//add all tagbuttons to this day
+//			for (Datum d: dataForDay) {
+//				Question q = knownQuestions.get(d.getQuestionId());
+//				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+//				log.info("Adding to day: " + tagButton.getText());
+//				questionsAdded.add(q);
+//				day.addTagButton(tagButton);
+//			}
+//		}
+		
+//		for (Question q: questionQueue) {
+//			if (questionsAdded.contains(q)) continue;
+//			TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
+//			day.addTagButton(tagButton);
+//		}
 		
 	}
 
@@ -224,9 +248,10 @@ public class DataBus {
 	
 	public List<String> getPastAnswers(Question q) {
 		List<String> answers = new ArrayList<String>();
-		for (Map.Entry<String, List<Datum>> entry: dataByDate.entrySet()) {
-			List<Datum> data = entry.getValue();
-			for (Datum datum: data) {
+		for (Map.Entry<String, Map<String, Datum>> entry: dataByDate.entrySet()) {
+			Map<String, Datum> data = entry.getValue();
+			for (String qid: data.keySet()) {
+				Datum datum = data.get(qid);
 				if (datum.getQuestionId().equals(q.getId())) {
 					String pastAnswer = datum.getTextValue();
 					if (! answers.contains(pastAnswer)) {
@@ -326,9 +351,11 @@ public class DataBus {
 //		dataByDate = new HashMap<String, List<Datum>>();
 		for (Datum d: data) {
 			String dayStr = Constants.DAY_FORMATTER.format(d.getEffectiveDate());
-			List<Datum> dayData = dataByDate.get(dayStr);
-			if (dayData==null) dayData = new ArrayList<Datum>();
-			dayData.add(d);
+			Map<String, Datum> dayData = dataByDate.get(dayStr);
+			if (dayData==null) dayData = new HashMap<String, Datum>();
+			String key = d.getQuestionId();
+			//TODO: support formulas: if (key==null) key = d.getFormulaId();
+			dayData.put(key, d);
 			dataByDate.put(dayStr, dayData);
 		}
 	}

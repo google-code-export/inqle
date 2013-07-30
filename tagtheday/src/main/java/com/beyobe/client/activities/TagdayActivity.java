@@ -49,7 +49,7 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     		return;
     	}
     	App.tagdayView.setPresenter(this);
-        loadDays();
+//        loadDays();
         containerWidget.setWidget(App.tagdayView.asWidget());
         goToDate(new Date());
         
@@ -57,17 +57,17 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 //        App.tagdayView.setDay(currentDay);
     }
 
-    private void loadDays() {
-    	
-    	Map<String, Day> days = App.dataBus.getAllDays();
-    	if (days == null) {
-    		days = App.dataBus.createAllDays();
-    	}
-//    	for (Day day: days) {
-//    		addDayOntoEnd(day);
-//    		log.info("Added day: " + day);
+//    private void loadDays() {
+//    	
+//    	Map<String, Day> days = App.dataBus.getAllDays();
+//    	if (days == null) {
+//    		days = App.dataBus.createAllDays();
 //    	}
-	}
+////    	for (Day day: days) {
+////    		addDayOntoEnd(day);
+////    		log.info("Added day: " + day);
+////    	}
+//	}
 
 	/**
      * Ask user before stopping this activity
