@@ -45,7 +45,7 @@ public class DataBus {
 
 	public Participant participant;
 
-	private HashMap<String, Day> allDays;
+	private HashMap<String, Day> allDays = new HashMap<String, Day>();
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -181,24 +181,25 @@ public class DataBus {
 //		return allDays;
 //	}
 	
-	public Day addDayOntoEnd(Date d) {
-		log.info("addDayOntoEnd: " + d);
-		Day day = createDay(d);
-		allDays.put(getDateString(d), day);
-		return day;
-	}
+//	public Day addDay(Date d) {
+//		log.info("addDay: " + d);
+//		Day day = createDay(d);
+//		allDays.put(getDateString(d), day);
+//		return day;
+//	}
 	
-	public Day addDayOntoBeginning(Date d) {
-		log.info("addDayOntoBeginning: " + d);
-		Day day = createDay(d);
-		allDays.put(getDateString(d), day);
-		return day;
-	}
+//	public Day addDayOntoBeginning(Date d) {
+//		log.info("addDayOntoBeginning: " + d);
+//		Day day = createDay(d);
+//		allDays.put(getDateString(d), day);
+//		return day;
+//	}
 
 	public Day createDay(Date date) {
 		Day day = new Day(date);
 //		log.info("created Day:" + day);
 		addTagsToDay(day);
+		allDays.put(getDateString(date), day);
 		return day;
 	}
 
@@ -213,7 +214,7 @@ public class DataBus {
 			
 			if (dataForDay != null) {
 				Datum d = dataForDay.get(q.getId());
-				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
+				TagButton tagButton = new TagButton(date, q, d);
 				log.info("Adding to day: " + tagButton.getText());
 //				questionsAdded.add(q);
 				day.addTagButton(tagButton);
@@ -361,6 +362,7 @@ public class DataBus {
 	}
 
 	public Day getDay(Date date) {
+		if (allDays == null) return null;
 		return allDays.get(getDateString(date));
 	}
 
