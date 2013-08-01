@@ -155,9 +155,8 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 			if (day == null) throw new RuntimeException("Cannot set a null day");
 //			daysPanel.clear();
 //			daysPanel.add(day);
-			for (int i=0; i<10; i++) {
-				animater.goTo(day, animation);
-			}
+			//TODO add interim "2014" or "September" page for year or month changes respectively
+			animater.goTo(day, animation);
 		}
 		
 		@UiHandler("monthEarlierButton")

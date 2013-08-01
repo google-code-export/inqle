@@ -18,7 +18,6 @@ import com.googlecode.mgwt.mvp.client.Animation;
 
 /**
  * TODO:
- * Animate date transitions
  * Load data in time windows
  * fix tagbutton widths
  * home button loads today?
@@ -26,6 +25,7 @@ import com.googlecode.mgwt.mvp.client.Animation;
  * support screen resize for height
  * add permisions to share a question
  * unsubscribe from question
+ * TODO default to most recent answer
  * 
  * @author donohue
  *
