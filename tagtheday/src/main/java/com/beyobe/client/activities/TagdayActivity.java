@@ -14,6 +14,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.mvp.client.Animation;
 
 /**
  * TODO:
@@ -21,9 +22,10 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
  * Load data in time windows
  * fix tagbutton widths
  * home button loads today?
- * make tagbuttons have a consistent order
  * support d&d of tag buttons to reorder?
  * support screen resize for height
+ * add permisions to share a question
+ * unsubscribe from question
  * 
  * @author donohue
  *
@@ -107,8 +109,7 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		App.tagdayView.getYearLabel().setText(day.getYearText());
 	}
 
-	@Override
-	public void goToDate(Date d) {
+	private void goToDate(Date d) {
 		if (d == null) return;
 		Day day = App.dataBus.loadDay(d);
 		currentDay = day;
@@ -120,7 +121,41 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		} else {
 			day.addStyleName("ttd-day-past");
 		}
-		App.tagdayView.setDay(day);
+		App.tagdayView.setDay(day, null);
+		updateNavigation();
+	}
+	
+//	@Override
+//	public void goToEarlierDate(Date d) {
+//		if (d == null) return;
+//		Day day = App.dataBus.loadDay(d);
+//		currentDay = day;
+//		Date now = new Date();
+//		if (day.getEnd().after(now) && day.getStart().before(now)) {
+//			day.addStyleName("ttd-day-today");
+//		} else if (day.getStart().after(now)) {
+//			day.addStyleName("ttd-day-future");
+//		} else {
+//			day.addStyleName("ttd-day-past");
+//		}
+//		App.tagdayView.setDay(day, Animation.SLIDE_REVERSE);
+//		updateNavigation();
+//	}
+	
+	@Override
+	public void goToDate(Date d, Animation animation) {
+		if (d == null) return;
+		Day day = App.dataBus.loadDay(d);
+		currentDay = day;
+		Date now = new Date();
+		if (day.getEnd().after(now) && day.getStart().before(now)) {
+			day.addStyleName("ttd-day-today");
+		} else if (day.getStart().after(now)) {
+			day.addStyleName("ttd-day-future");
+		} else {
+			day.addStyleName("ttd-day-past");
+		}
+		App.tagdayView.setDay(day, animation);
 		updateNavigation();
 	}
 	
@@ -134,7 +169,7 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addDaysToDate(d, -1);
 		log.info("1 day earlier: going to date: " + d + "...");
-		goToDate(d);
+		goToDate(d, Animation.SLIDE_REVERSE);
 	}
 
 	@Override
@@ -142,34 +177,34 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addDaysToDate(d, 1);
 		log.info("1 day later: going to date: " + d + "...");
-		goToDate(d);
+		goToDate(d, Animation.SLIDE);
 	}
 
 	@Override
 	public void onMonthEarlier() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, -1);
-		goToDate(d);
+		goToDate(d, Animation.SLIDE_REVERSE);
 	}
 
 	@Override
 	public void onMonthLater() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, 1);
-		goToDate(d);
+		goToDate(d, Animation.SLIDE);
 	}
 
 	@Override
 	public void onYearEarlier() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, -12);
-		goToDate(d);
+		goToDate(d, Animation.SLIDE_REVERSE);
 	}
 
 	@Override
 	public void onYearLater() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, 12);
-		goToDate(d);
+		goToDate(d, Animation.SLIDE);
 	}
 }
