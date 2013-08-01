@@ -23,6 +23,8 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndEvent;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndHandler;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEvent.DIRECTION;
+import com.googlecode.mgwt.mvp.client.Animation;
+import com.googlecode.mgwt.ui.client.animation.AnimationHelper;
 import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchDelegate;
 
@@ -54,6 +56,8 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 		@UiField Button yearEarlierButton;
 		@UiField Button yearLaterButton;
 		
+		private AnimationHelper animater = new AnimationHelper();
+		
         public TagdayViewImpl() {
     		this.date = new Date();
             initWidget(uiBinder.createAndBindUi(this));
@@ -72,7 +76,7 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
             monthLaterButton.addStyleName("ttd-navLaterButton");
             yearLaterButton.addStyleName("ttd-navLaterButton");
             
-            daysPanel.setHeight("100%");
+//            daysPanel.setHeight("100%");
             daysPanel.setWidth("100%");
             
             daysPanel.setHeight(Window.getClientHeight() + "px");
@@ -86,6 +90,8 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
                daysPanel.setHeight(height + "px");
              }
             });
+            
+            daysPanel.add(animater);
         }
 
 		@Override
@@ -128,11 +134,30 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
 
+//		@Override
+//		public void setEarlierDay(Day day) {
+//			if (day == null) throw new RuntimeException("Cannot set a null day");
+////			daysPanel.clear();
+////			daysPanel.add(day);
+//			animater.goTo(day, Animation.SLIDE_REVERSE);
+//		}
+//		
+//		@Override
+//		public void setLaterDay(Day day) {
+//			if (day == null) throw new RuntimeException("Cannot set a null day");
+////			daysPanel.clear();
+////			daysPanel.add(day);
+//			animater.goTo(day, Animation.SLIDE);
+//		}
+		
 		@Override
-		public void setDay(Day day) {
+		public void setDay(Day day, Animation animation) {
 			if (day == null) throw new RuntimeException("Cannot set a null day");
-			daysPanel.clear();
-			daysPanel.add(day);
+//			daysPanel.clear();
+//			daysPanel.add(day);
+			for (int i=0; i<10; i++) {
+				animater.goTo(day, animation);
+			}
 		}
 		
 		@UiHandler("monthEarlierButton")

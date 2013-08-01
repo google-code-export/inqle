@@ -7,6 +7,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.mvp.client.Animation;
 
 public interface TagdayView extends IsWidget {
     void setPresenter(Presenter presenter);
@@ -20,7 +21,9 @@ public interface TagdayView extends IsWidget {
 		
 		public void updateNavigation();
 		
-		public void goToDate(Date date);
+		public void goToDate(Date date, Animation animation);
+		
+//		public void goToLaterDate(Date date);
 		
 		public Day getCurrentDay();
 		
@@ -47,8 +50,8 @@ public interface TagdayView extends IsWidget {
 
 	HasText getYearLabel();
 
-	void setDay(Day day);
-
+	void setDay(Day day, Animation animation);
+	
 //	Carousel getCarousel();
 
 //	void setQuestionOptions(List<Question> questions);

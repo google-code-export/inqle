@@ -218,9 +218,10 @@ public class DataBus {
 				log.info("Adding to day: " + tagButton.getText());
 //				questionsAdded.add(q);
 				day.addTagButton(tagButton);
+			} else {
+				TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
+				day.addTagButton(tagButton);
 			}
-			TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
-			day.addTagButton(tagButton);
 //			questionsAdded.add(q);
 		}
 		

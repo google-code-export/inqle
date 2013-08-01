@@ -73,16 +73,19 @@
 .ttd-dayNavLabel {
 	margin-top: 10px;
 	width: 18px;
+	text-align: center;
 }
 
 .ttd-monthNavLabel {
 	margin-top: 10px;
-  width: 25px;
+  width: 30px;
+  text-align: center;
 }
 
 .ttd-yearNavLabel {
 	margin-top: 10px;
   width: 36px;
+  text-align: center;
 }
 
 .ttd-navEarlierButton {
