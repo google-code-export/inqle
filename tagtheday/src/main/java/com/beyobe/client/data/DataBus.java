@@ -41,11 +41,12 @@ public class DataBus {
 	
 	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
 	private static List<Question> questionQueue = new ArrayList<Question>();
-	private static HashMap<String, Map<String, Datum>> dataByDate = new HashMap<String,  Map<String, Datum>>();
+//	private static HashMap<String, Map<String, Datum>> dataByDate = new HashMap<String,  Map<String, Datum>>();
 
 	public Participant participant;
 
 	private HashMap<String, Day> allDays = new HashMap<String, Day>();
+	private DataTimeline dataTimeline = new DataTimeline();
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -73,9 +74,9 @@ public class DataBus {
 		knownQuestions.put(question.getId(), question);
 	}
 	
-	public static String getDateString(Date date) {
-		return DateTimeFormat.getFormat("yyyy-MM-dd").format(date);
-	}
+//	public static String getDateString(Date date) {
+//		return DateTimeFormat.getFormat("yyyy-MM-dd").format(date);
+//	}
 	
 	public static List<TagButton> getTagButtonsForDate(Date effectiveDate) {
 		List<TagButton> buttons = new ArrayList<TagButton>();
@@ -97,9 +98,9 @@ public class DataBus {
 		return buttons;
 	}
 
-	private static Map<String, Datum> getDataForDate(Date date) {
-		return dataByDate.get(DataBus.getDateString(date));
-	}
+//	private static Map<String, Datum> getDataForDate(Date date) {
+//		return dataByDate.get(DataTimeline.getDateStr(date));
+//	}
 
 	private static Question getQuestion(String questionUid) {
 		if (knownQuestions.get(questionUid) != null) {
@@ -142,7 +143,7 @@ public class DataBus {
 		//TODO save in local storage
 		
 		//save back to our in-memory map
-		 dataByDate.put(DataBus.getDateString(effectiveDate), dataForDay);
+		 dataByDate.put(DataTimeline.getDateStr(effectiveDate), dataForDay);
 	}
 	
 //	public HashMap<String, Day> createAllDays() {
@@ -199,7 +200,7 @@ public class DataBus {
 		Day day = new Day(date);
 //		log.info("created Day:" + day);
 		addTagsToDay(day);
-		allDays.put(getDateString(date), day);
+		allDays.put(DataTimeline.getDateStr(date), day);
 		return day;
 	}
 
@@ -219,29 +220,12 @@ public class DataBus {
 //				questionsAdded.add(q);
 				day.addTagButton(tagButton);
 			} else {
-				TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
+				Datum inferredAnswer = dataTimeline.getPriorAnswer(q, date);
+				if (inferredAnswer == null) inferredAnswer = dataTimeline.getSubsequentAnswer(q, date);
+				TagButton tagButton = new TagButton(day.getTimepoint(), q, inferredAnswer);
 				day.addTagButton(tagButton);
 			}
-//			questionsAdded.add(q);
 		}
-		
-//		if (dataForDay != null) {
-//			//add all tagbuttons to this day
-//			for (Datum d: dataForDay) {
-//				Question q = knownQuestions.get(d.getQuestionId());
-//				TagButton tagButton = new TagButton(d.getEffectiveDate(), q, d);
-//				log.info("Adding to day: " + tagButton.getText());
-//				questionsAdded.add(q);
-//				day.addTagButton(tagButton);
-//			}
-//		}
-		
-//		for (Question q: questionQueue) {
-//			if (questionsAdded.contains(q)) continue;
-//			TagButton tagButton = new TagButton(day.getTimepoint(), q, null);
-//			day.addTagButton(tagButton);
-//		}
-		
 	}
 
 	public HashMap<String, Day> getAllDays() {
@@ -364,7 +348,7 @@ public class DataBus {
 
 	public Day getDay(Date date) {
 		if (allDays == null) return null;
-		return allDays.get(getDateString(date));
+		return allDays.get(DataTimeline.getDateStr(date));
 	}
 
 	public Day loadDay(Date d) {
