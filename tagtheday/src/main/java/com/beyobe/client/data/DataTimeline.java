@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
+
+import org.mortbay.log.Log;
 
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
@@ -19,6 +22,8 @@ public class DataTimeline {
 	private Map<String, List<String>> answerDates = new HashMap<String, List<String>>();
 	//Map<date, Map<questionId, datumId>>
 	private static HashMap<String, Map<String, String>> dataByDate = new HashMap<String,  Map<String, String>>();
+	
+	private static Logger log = Logger.getLogger("DataTimeline");
 	
 	public Datum get(String datumId) {
 		return data.get(datumId);
@@ -70,7 +75,7 @@ public class DataTimeline {
 		if (datesQuestionAnswered == null) {
 			datesQuestionAnswered = new ArrayList<String>();
 		}
-		Collections.sort(datesQuestionAnswered);
+//		Collections.sort(datesQuestionAnswered);
 		datesQuestionAnswered.add(dateStr);
 		answerDates.put(d.getQuestionId(), datesQuestionAnswered);
 	}
@@ -83,42 +88,47 @@ public class DataTimeline {
 		return DateTimeFormat.getFormat("yyyy-MM-dd").parse(dateStr);
 	}
 	
-	public Datum getSubsequentAnswer(Question q, Date d) {
-		if (q==null || d==null) return null;
+	public Datum getSubsequentAnswer(Question q, Date referenceDate) {
+		if (q==null || referenceDate==null) return null;
 		List<String> datesQuestionAnswered = answerDates.get(q.getId());
-		boolean afterDate = false;
+		Collections.sort(datesQuestionAnswered);
+//		boolean afterDate = false;
 		for (String dateStr: datesQuestionAnswered) {
 			Date date = getDate(dateStr);
 			if (date==null) continue;
-			if (afterDate) {
+			if (date.after(referenceDate)) {
 				return getDatum(date, q);
 			}
-			if (d.after(date)) {
-				afterDate = true;
-			}
+//			if (date.after(referenceDate)) {
+//				afterDate = true;
+//			}
 		}
 		return null;
 	}
 
-	public Datum getPriorAnswer(Question q, Date d) {
-		if (q==null || d==null) return null;
+	public Datum getPriorAnswer(Question q, Date referenceDate) {
+		if (q==null || referenceDate==null) return null;
 		List<String> datesQuestionAnswered = answerDates.get(q.getId());
-		boolean beforeDate = false;
+		Collections.sort(datesQuestionAnswered);
+//		boolean beforeDate = false;
 		for (int i=datesQuestionAnswered.size()-1; i >= 0; i--) {
 			String dateStr = datesQuestionAnswered.get(i);
+//			log.info("Question: " + q.getAbbreviation() + ": getPriorAnswer() on " + dateStr + "?");
 			Date date = getDate(dateStr);
 			if (date==null) continue;
-			if (beforeDate) {
+			if (date.before(referenceDate)) {
+//				log.info("Question: " + q.getAbbreviation() + ": getPriorAnswer() returning datum for " + dateStr);
 				return getDatum(date, q);
 			}
-			if (d.before(date)) {
-				beforeDate = true;
-			}
+//			if (date.before(referenceDate)) {
+//				beforeDate = true;
+//			}
 		}
+		log.info("Question: " + q.getAbbreviation() + ": getPriorAnswer() returning NULL");
 		return null;
 	}
 	
-	public Map<String, Datum> getDatumForDate(Date date) {
+	public Map<String, Datum> getDataForDate(Date date) {
 		String dateStr = getDateStr(date);
 		Map<String, String> dataIdsForDate = dataByDate.get(dateStr);
 		if (dataIdsForDate==null) return null;
@@ -126,7 +136,9 @@ public class DataTimeline {
 		for (Map.Entry<String, String> entry: dataIdsForDate.entrySet()) {
 			String datumId = entry.getValue();
 			String questionId = entry.getKey();
-			dataObjsForDate.put(questionId, getDatum(date, datumId));
+			Datum d = get(datumId);
+			if (d!=null) log.info("getDataForDate(): set datum: " + d.getTextValue());
+			dataObjsForDate.put(questionId, d);
 		}
 		return dataObjsForDate;
 	}
@@ -165,8 +177,11 @@ public class DataTimeline {
 		d2.setAnswerStatus(d1.getAnswerStatus());
 		d2.setChoice(d1.getChoice());
 		d2.setDataType(d1.getDataType());
+		d2.setNumericValue(d1.getNumericValue());
 		d2.setIntegerValue(d1.getIntegerValue());
 		d2.setNormalizedValue(d1.getNormalizedValue());
+		d2.setTextValue(d1.getTextValue());
+		d2.setUnit(d1.getUnit());
 		d2.setParticipantId(d1.getParticipantId());
 		d2.setQuestionConcept(d1.getQuestionConcept());
 		d2.setQuestionId(d1.getQuestionId());

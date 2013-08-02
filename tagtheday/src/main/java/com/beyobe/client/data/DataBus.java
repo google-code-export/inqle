@@ -46,7 +46,7 @@ public class DataBus {
 
 	public Participant participant;
 
-	private HashMap<String, Day> allDays = new HashMap<String, Day>();
+//	private HashMap<String, Day> allDays = new HashMap<String, Day>();
 	private DataTimeline dataTimeline = new DataTimeline();
 	
 	public DataBus() {
@@ -82,7 +82,7 @@ public class DataBus {
 	public List<TagButton> getTagButtonsForDate(Date effectiveDate) {
 		List<TagButton> buttons = new ArrayList<TagButton>();
 //		Map<String, Datum> data = getDataForDate(effectiveDate);
-		Map<String, Datum> data = dataTimeline.getDatumForDate(effectiveDate);
+		Map<String, Datum> data = dataTimeline.getDataForDate(effectiveDate);
 		if (data==null) return null;
 		for (Question q: questionQueue) {
 			Datum d = data.get(q.getId());
@@ -176,47 +176,59 @@ public class DataBus {
 //		return day;
 //	}
 
-	public Day createDay(Date date) {
+	public Day createDay(Date date, boolean navigatingToPast) {
 		Day day = new Day(date);
 //		log.info("created Day:" + day);
-		addTagsToDay(day);
-		allDays.put(DataTimeline.getDateStr(date), day);
+		addTagsToDay(day, navigatingToPast);
+//		allDays.put(DataTimeline.getDateStr(date), day);
 		return day;
 	}
 
-	private void addTagsToDay(Day day) {
+	private void addTagsToDay(Day day, boolean navigatingToPast) {
 		Date date = day.getTimepoint();
-//		String key = Constants.DAY_FORMATTER.format(date);
-		Map<String, Datum> dataForDay = dataTimeline.getDatumForDate(date);
-//		List<Question> questionsAdded = new ArrayList<Question>();
-		
-		for (Question q: questionQueue) {
-//			if (questionsAdded.contains(q)) continue;
-			
-			if (dataForDay != null) {
+		Map<String, Datum> dataForDay = dataTimeline.getDataForDate(date);
+		if (dataForDay != null) {
+			for (Question q: questionQueue) {
 				Datum d = dataForDay.get(q.getId());
+				if (d==null) {
+					d = getInferredAnswer(q, date, navigatingToPast);
+				}
 				TagButton tagButton = new TagButton(date, q, d);
-				log.info("Adding to day: " + tagButton.getText());
-//				questionsAdded.add(q);
 				day.addTagButton(tagButton);
-			} 
-//			else {
-//				Datum modelAnswer = dataTimeline.getPriorAnswer(q, date);
-//				if (modelAnswer == null) modelAnswer = dataTimeline.getSubsequentAnswer(q, date);
-//				Datum inferredAnswer = DataTimeline.cloneDatum(modelAnswer);
-//				if (inferredAnswer!=null) {
-//					inferredAnswer.setAnswerStatus(AnswerStatus.INFERRED);
-//					log.info("Inferred Answer for " + q.getAbbreviation() + "? " + inferredAnswer.getTextValue());
-//				}
-//				TagButton tagButton = new TagButton(day.getTimepoint(), q, inferredAnswer);
-//				day.addTagButton(tagButton);
-//			}
+			}
+		}
+		else {
+			for (Question q: questionQueue) {
+				Datum inferredAnswer = getInferredAnswer(q, date, navigatingToPast);
+				TagButton tagButton = new TagButton(day.getTimepoint(), q, inferredAnswer);
+				day.addTagButton(tagButton);
+			}
 		}
 	}
 
-	public HashMap<String, Day> getAllDays() {
-		return allDays;
+	private Datum getInferredAnswer(Question q, Date date, boolean navigatingToPast) {
+		Datum modelAnswer = null;
+		if (! navigatingToPast) {
+			modelAnswer = dataTimeline.getPriorAnswer(q, date);
+			if (modelAnswer == null) modelAnswer = dataTimeline.getSubsequentAnswer(q, date);
+		} else {
+			modelAnswer = dataTimeline.getSubsequentAnswer(q, date);
+			if (modelAnswer == null) modelAnswer = dataTimeline.getPriorAnswer(q, date);
+		}
+		
+		Datum inferredAnswer = DataTimeline.cloneDatum(modelAnswer);
+		if (inferredAnswer!=null) {
+			inferredAnswer.setAnswerStatus(AnswerStatus.INFERRED);
+			inferredAnswer.setUpdated(new Date());
+			inferredAnswer.setEffectiveDate(date);
+			log.info("Inferred Answer for " + q.getAbbreviation() + "? " + inferredAnswer.getTextValue());
+		}
+		return inferredAnswer;
 	}
+
+//	public HashMap<String, Day> getAllDays() {
+//		return allDays;
+//	}
 	
 	public List<String> getPastAnswers(Question q) {
 		return dataTimeline.getPastAnswers(q);
@@ -228,13 +240,13 @@ public class DataBus {
 		}
 		knownQuestions.put(question.getId(), question);
 		
-		//add the question to each day
-		for (String dayStr: getAllDays().keySet()) {
-			Day day = allDays.get(dayStr);
-			if (day != null) {
-				day.addQuestion(question);
-			}
-		}
+//		//add the question to each day
+//		for (String dayStr: getAllDays().keySet()) {
+//			Day day = allDays.get(dayStr);
+//			if (day != null) {
+//				day.addQuestion(question);
+//			}
+//		}
 		
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
@@ -317,17 +329,29 @@ public class DataBus {
 //		}
 //	}
 
-	public Day getDay(Date date) {
-		if (allDays == null) return null;
-		return allDays.get(DataTimeline.getDateStr(date));
-	}
+//	public Day getDay(Date date) {
+//		if (allDays == null) return null;
+//		return allDays.get(DataTimeline.getDateStr(date));
+//	}
 
-	public Day loadDay(Date d) {
-		Day day = getDay(d);
-		if (day == null) {
-			//TODO load data for that day
-			day = createDay(d);
-		}
+//	public Day loadDay(Date d, boolean navigatingToPast) {
+//		Day day = getDay(d);
+//		if (day == null) {
+//			//TODO load data for that day
+//			day = createDay(d, navigatingToPast);
+//		}
+//		return day;
+//	}
+	
+	/**
+	 * If we ever decide to cache days, then uncomment the above
+	 * @param d
+	 * @param navigatingToPast
+	 * @return
+	 */
+	public Day loadDay(Date d, boolean navigatingToPast) {
+		Day day = createDay(d, navigatingToPast);
 		return day;
 	}
+	
 }

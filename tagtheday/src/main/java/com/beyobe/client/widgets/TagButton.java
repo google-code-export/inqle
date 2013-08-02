@@ -80,12 +80,12 @@ public class TagButton extends Button {
 			this.setImportant(true);
 		} else {
 			log.info("refreshAppearance, datum != null");
-			if (datum.getAnswerStatus()!=AnswerStatus.INFERRED) {
-				setText(question.getAbbreviation() + ": " + datum.getTextValue() + "?");
+			if (datum.getAnswerStatus() != AnswerStatus.INFERRED) {
+				setText(question.getAbbreviation() + ": " + datum.getTextValue());
 				setTitle(question.getLongForm() + " " + datum.getTextValue());
 				this.setConfirm(true);
 			} else {
-				setText(question.getAbbreviation() + ": " + datum.getTextValue());
+				setText(question.getAbbreviation() + ": " + datum.getTextValue() + "?");
 				setTitle(question.getLongForm() + " " + datum.getTextValue());
 			}
 //			this.addStyleName("ttd-TagButton-answered");

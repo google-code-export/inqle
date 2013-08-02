@@ -183,7 +183,7 @@ public class App {
 			public void onDataCaptured(DataCapturedEvent event) {
 				TagButton tagButton = event.getTagButton();
 				
-				answerPopin.hide();
+				if (answerPopin != null) answerPopin.hide();
 				tagButton.refreshAppearance();
 				
 				dataBus.setDatum(tagButton.getDatum(), tagButton.getQuestion());
