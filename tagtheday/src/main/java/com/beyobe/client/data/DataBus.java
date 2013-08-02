@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
 import com.beyobe.client.activities.TagdayPlace;
+import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
@@ -78,9 +79,10 @@ public class DataBus {
 //		return DateTimeFormat.getFormat("yyyy-MM-dd").format(date);
 //	}
 	
-	public static List<TagButton> getTagButtonsForDate(Date effectiveDate) {
+	public List<TagButton> getTagButtonsForDate(Date effectiveDate) {
 		List<TagButton> buttons = new ArrayList<TagButton>();
-		Map<String, Datum> data = getDataForDate(effectiveDate);
+//		Map<String, Datum> data = getDataForDate(effectiveDate);
+		Map<String, Datum> data = dataTimeline.getDatumForDate(effectiveDate);
 		if (data==null) return null;
 		for (Question q: questionQueue) {
 			Datum d = data.get(q.getId());
@@ -102,48 +104,26 @@ public class DataBus {
 //		return dataByDate.get(DataTimeline.getDateStr(date));
 //	}
 
-	private static Question getQuestion(String questionUid) {
-		if (knownQuestions.get(questionUid) != null) {
-			return knownQuestions.get(questionUid);
-		}
-		//TODO try to retrieve the question from the server
-		
-		//unable to find it
-		return null;
-	}
+//	private Question getQuestion(String questionUid) {
+//		if (knownQuestions.get(questionUid) != null) {
+//			return knownQuestions.get(questionUid);
+//		}
+//		//TODO try to retrieve the question from the server
+//		
+//		//unable to find it
+//		return null;
+//	}
 	
 	public void setDatum(Datum datumToSave, Question questionAnswered) {
-		Date effectiveDate = datumToSave.getEffectiveDate();
-//		String dateStr = DataBus.getDateString(effectiveDate);
+		dataTimeline.put(datumToSave);
 		
-		//first save in memory
-		Map<String, Datum> dataForDay = getDataForDate(effectiveDate);
-		if (dataForDay == null) dataForDay = new HashMap<String, Datum>();
-		dataForDay.put(questionAnswered.getId(), datumToSave);
-//		List<Datum> dataForLooping = new ArrayList<Datum>(dataForDay);
-//		int index = 0;
-//		boolean replaced = false;
-//		for (Datum datum: dataForLooping) {
-//			if (datumToSave.getQuestionId() == datum.getQuestionId()) {
-//				dataForDay.remove(index);
-//				dataForDay.add(index, datumToSave);
-//				replaced = true;
-//			}
-//			index++;
-//		}
-//		if (! replaced) {
-//			dataForDay.add(datumToSave);
-//		}
-		
+		//next save to server
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
 		parcel.setQuestion(questionAnswered);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_DATUM);
 		
 		//TODO save in local storage
-		
-		//save back to our in-memory map
-		 dataByDate.put(DataTimeline.getDateStr(effectiveDate), dataForDay);
 	}
 	
 //	public HashMap<String, Day> createAllDays() {
@@ -206,8 +186,8 @@ public class DataBus {
 
 	private void addTagsToDay(Day day) {
 		Date date = day.getTimepoint();
-		String key = Constants.DAY_FORMATTER.format(date);
-		Map<String, Datum> dataForDay = dataByDate.get(key);
+//		String key = Constants.DAY_FORMATTER.format(date);
+		Map<String, Datum> dataForDay = dataTimeline.getDatumForDate(date);
 //		List<Question> questionsAdded = new ArrayList<Question>();
 		
 		for (Question q: questionQueue) {
@@ -219,12 +199,18 @@ public class DataBus {
 				log.info("Adding to day: " + tagButton.getText());
 //				questionsAdded.add(q);
 				day.addTagButton(tagButton);
-			} else {
-				Datum inferredAnswer = dataTimeline.getPriorAnswer(q, date);
-				if (inferredAnswer == null) inferredAnswer = dataTimeline.getSubsequentAnswer(q, date);
-				TagButton tagButton = new TagButton(day.getTimepoint(), q, inferredAnswer);
-				day.addTagButton(tagButton);
-			}
+			} 
+//			else {
+//				Datum modelAnswer = dataTimeline.getPriorAnswer(q, date);
+//				if (modelAnswer == null) modelAnswer = dataTimeline.getSubsequentAnswer(q, date);
+//				Datum inferredAnswer = DataTimeline.cloneDatum(modelAnswer);
+//				if (inferredAnswer!=null) {
+//					inferredAnswer.setAnswerStatus(AnswerStatus.INFERRED);
+//					log.info("Inferred Answer for " + q.getAbbreviation() + "? " + inferredAnswer.getTextValue());
+//				}
+//				TagButton tagButton = new TagButton(day.getTimepoint(), q, inferredAnswer);
+//				day.addTagButton(tagButton);
+//			}
 		}
 	}
 
@@ -233,22 +219,7 @@ public class DataBus {
 	}
 	
 	public List<String> getPastAnswers(Question q) {
-		List<String> answers = new ArrayList<String>();
-		for (Map.Entry<String, Map<String, Datum>> entry: dataByDate.entrySet()) {
-			Map<String, Datum> data = entry.getValue();
-			for (String qid: data.keySet()) {
-				Datum datum = data.get(qid);
-				if (datum.getQuestionId().equals(q.getId())) {
-					String pastAnswer = datum.getTextValue();
-					if (! answers.contains(pastAnswer)) {
-						answers.add(pastAnswer);
-					}
-				}
-			}
-		}
-		//TODO: reverse
-//		answers = Lists.reverse(answers);
-		return answers;
+		return dataTimeline.getPastAnswers(q);
 	}
 
 	public void saveQuestion(Question question) {
@@ -295,7 +266,7 @@ public class DataBus {
 		    	setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
 		    }
 		    if (parcel.getData() != null) {
-		    	 setData(parcel.getData());
+		    	 dataTimeline.setData(parcel.getData());
 		    }
 		    
 		    if (parcel.getParticipant() != null) {
@@ -333,18 +304,18 @@ public class DataBus {
 		
 	}
 
-	private void setData(List<Datum> data) {
-//		dataByDate = new HashMap<String, List<Datum>>();
-		for (Datum d: data) {
-			String dayStr = Constants.DAY_FORMATTER.format(d.getEffectiveDate());
-			Map<String, Datum> dayData = dataByDate.get(dayStr);
-			if (dayData==null) dayData = new HashMap<String, Datum>();
-			String key = d.getQuestionId();
-			//TODO: support formulas: if (key==null) key = d.getFormulaId();
-			dayData.put(key, d);
-			dataByDate.put(dayStr, dayData);
-		}
-	}
+//	private void setData(List<Datum> data) {
+////		dataByDate = new HashMap<String, List<Datum>>();
+//		for (Datum d: data) {
+//			String dayStr = Constants.DAY_FORMATTER.format(d.getEffectiveDate());
+//			Map<String, Datum> dayData = dataByDate.get(dayStr);
+//			if (dayData==null) dayData = new HashMap<String, Datum>();
+//			String key = d.getQuestionId();
+//			//TODO: support formulas: if (key==null) key = d.getFormulaId();
+//			dayData.put(key, d);
+//			dataByDate.put(dayStr, dayData);
+//		}
+//	}
 
 	public Day getDay(Date date) {
 		if (allDays == null) return null;
