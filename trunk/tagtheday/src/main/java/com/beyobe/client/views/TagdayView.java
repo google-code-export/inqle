@@ -21,7 +21,7 @@ public interface TagdayView extends IsWidget {
 		
 		public void updateNavigation();
 		
-		public void goToDate(Date date, Animation animation);
+//		public void goToDate(Date date, Animation animation);
 		
 //		public void goToLaterDate(Date date);
 		
@@ -40,6 +40,10 @@ public interface TagdayView extends IsWidget {
 		void onYearEarlier();
 
 		void onYearLater();
+
+		void goToDate(Date d, Animation animation, boolean navigatingToPast);
+
+		void onNavToToday();
 
 //		void addDayOntoBeginningOfCarousel(Day day);
     }

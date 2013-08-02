@@ -11,21 +11,21 @@ import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
+import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndEvent;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndHandler;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEvent.DIRECTION;
 import com.googlecode.mgwt.mvp.client.Animation;
 import com.googlecode.mgwt.ui.client.animation.AnimationHelper;
-import com.googlecode.mgwt.ui.client.widget.Button;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchDelegate;
 
 public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHandler {
@@ -38,7 +38,8 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
         }
 
         @UiField HorizontalPanel menuPanel;
-        @UiField Button addTagButton;
+//        @UiField Button addTagButton;
+        @UiField Image addTagIcon;
         @UiField FlowPanel daysPanel;
         
 //        @UiField FlowPanel dayPicker;
@@ -49,12 +50,14 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 		@UiField Label monthLabel;
 		@UiField Label yearLabel;
         
-		@UiField Button dayEarlierButton;
-		@UiField Button dayLaterButton;
-		@UiField Button monthEarlierButton;
-		@UiField Button monthLaterButton;
-		@UiField Button yearEarlierButton;
-		@UiField Button yearLaterButton;
+		@UiField Image dayEarlierIcon;
+		@UiField Image dayLaterIcon;
+		@UiField Image monthEarlierIcon;
+		@UiField Image monthLaterIcon;
+		@UiField Image yearEarlierIcon;
+		@UiField Image yearLaterIcon;
+		
+		@UiField Image todayIcon;
 		
 		private AnimationHelper animater = new AnimationHelper();
 		
@@ -62,19 +65,81 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
     		this.date = new Date();
             initWidget(uiBinder.createAndBindUi(this));
             
-            addTagButton.addStyleName("ttd-addTagButton");
+            TouchDelegate addTagTd = new TouchDelegate(addTagIcon);
+            addTagTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onAddTag(e);
+				}
+			});
+            addTagIcon.addStyleName("ttd-addTagIcon");
             
             dateLabel.addStyleName("ttd-dayNavLabel");
             monthLabel.addStyleName("ttd-monthNavLabel");
             yearLabel.addStyleName("ttd-yearNavLabel");
             
-            dayEarlierButton.addStyleName("ttd-navEarlierButton");
-            monthEarlierButton.addStyleName("ttd-navEarlierButton");
-            yearEarlierButton.addStyleName("ttd-navEarlierButton");
+            TouchDelegate dayEarlierTd = new TouchDelegate(dayEarlierIcon);
+            dayEarlierTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onDayEarlier(e);
+				}
+			});
+            dayEarlierIcon.addStyleName("ttd-navEarlierIcon");
             
-            dayLaterButton.addStyleName("ttd-navLaterButton");
-            monthLaterButton.addStyleName("ttd-navLaterButton");
-            yearLaterButton.addStyleName("ttd-navLaterButton");
+            TouchDelegate dayLaterTd = new TouchDelegate(dayLaterIcon);
+            dayLaterTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onDayLater(e);
+				}
+			});
+            dayLaterIcon.addStyleName("ttd-navLaterIcon");
+            
+            TouchDelegate monthEarlierTd = new TouchDelegate(monthEarlierIcon);
+            monthEarlierTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onMonthEarlier(e);
+				}
+			});
+            monthEarlierIcon.addStyleName("ttd-navEarlierIcon");
+            
+            TouchDelegate monthLaterTd = new TouchDelegate(monthLaterIcon);
+            monthLaterTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onMonthLater(e);
+				}
+			});
+            monthLaterIcon.addStyleName("ttd-navLaterIcon");
+            
+            TouchDelegate yearEarlierTd = new TouchDelegate(yearEarlierIcon);
+            yearEarlierTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onYearEarlier(e);
+				}
+			});
+            yearEarlierIcon.addStyleName("ttd-navEarlierIcon");
+            
+            TouchDelegate yearLaterTd = new TouchDelegate(yearLaterIcon);
+            yearLaterTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onYearLater(e);
+				}
+			});           
+            yearLaterIcon.addStyleName("ttd-navLaterIcon");
+            
+            TouchDelegate todayTd = new TouchDelegate(todayIcon);
+            todayTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+					onNavToToday(e);
+				}
+			});
+            todayIcon.addStyleName("ttd-todayIcon");
             
 //            daysPanel.setHeight("100%");
             daysPanel.setWidth("100%");
@@ -120,20 +185,19 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 			return yearLabel;
 		}
 
-		@UiHandler("dayEarlierButton")
+//		@UiHandler("dayEarlierButton")
 		void onDayEarlier(TapEvent e) {
 			presenter.onDayEarlier();
 		}
-		@UiHandler("dayLaterButton")
+//		@UiHandler("dayLaterButton")
 		void onDayLater(TapEvent e) {
 			presenter.onDayLater();
 		}
 		
-		@UiHandler("addTagButton")
-		void onAddTag(TapEvent e) {
-			App.eventBus.fireEvent(new EditQuestionEvent(null));
+		private void onNavToToday(TapEvent e) {
+			presenter.onNavToToday();
 		}
-
+		
 //		@Override
 //		public void setEarlierDay(Day day) {
 //			if (day == null) throw new RuntimeException("Cannot set a null day");
@@ -159,20 +223,20 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 			animater.goTo(day, animation);
 		}
 		
-		@UiHandler("monthEarlierButton")
+//		@UiHandler("monthEarlierButton")
 		void onMonthEarlier(TapEvent e) {
 			presenter.onMonthEarlier();
 		}
-		@UiHandler("monthLaterButton")
+//		@UiHandler("monthLaterButton")
 		void onMonthLater(TapEvent e) {
 			presenter.onMonthLater();
 		}
 		
-		@UiHandler("yearEarlierButton")
+//		@UiHandler("yearEarlierButton")
 		void onYearEarlier(TapEvent e) {
 			presenter.onYearEarlier();
 		}
-		@UiHandler("yearLaterButton")
+//		@UiHandler("yearLaterButton")
 		void onYearLater(TapEvent e) {
 			presenter.onYearLater();
 		}
@@ -185,6 +249,10 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 			else if (e.getDirection() == DIRECTION.RIGHT_TO_LEFT) {
 				presenter.onDayLater();
 			}
+		}
+
+		void onAddTag(TapEvent e) {
+			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
 
 		

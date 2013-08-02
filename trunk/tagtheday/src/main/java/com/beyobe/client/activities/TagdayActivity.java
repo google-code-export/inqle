@@ -25,7 +25,6 @@ import com.googlecode.mgwt.mvp.client.Animation;
  * support screen resize for height
  * add permisions to share a question
  * unsubscribe from question
- * TODO default to most recent answer
  * 
  * @author donohue
  *
@@ -111,7 +110,7 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 
 	private void goToDate(Date d) {
 		if (d == null) return;
-		Day day = App.dataBus.loadDay(d);
+		Day day = App.dataBus.loadDay(d, false);
 		currentDay = day;
 		Date now = new Date();
 		if (day.getEnd().after(now) && day.getStart().before(now)) {
@@ -143,9 +142,9 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 //	}
 	
 	@Override
-	public void goToDate(Date d, Animation animation) {
+	public void goToDate(Date d, Animation animation, boolean navigatingToPast) {
 		if (d == null) return;
-		Day day = App.dataBus.loadDay(d);
+		Day day = App.dataBus.loadDay(d, navigatingToPast);
 		currentDay = day;
 		Date now = new Date();
 		if (day.getEnd().after(now) && day.getStart().before(now)) {
@@ -168,43 +167,52 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 	public void onDayEarlier() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addDaysToDate(d, -1);
-		log.info("1 day earlier: going to date: " + d + "...");
-		goToDate(d, Animation.SLIDE_REVERSE);
+		goToDate(d, Animation.SLIDE_REVERSE, true);
 	}
 
 	@Override
 	public void onDayLater() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addDaysToDate(d, 1);
-		log.info("1 day later: going to date: " + d + "...");
-		goToDate(d, Animation.SLIDE);
+		goToDate(d, Animation.SLIDE, false);
 	}
 
 	@Override
 	public void onMonthEarlier() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, -1);
-		goToDate(d, Animation.SLIDE_REVERSE);
+		goToDate(d, Animation.SLIDE_REVERSE, true);
 	}
 
 	@Override
 	public void onMonthLater() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, 1);
-		goToDate(d, Animation.SLIDE);
+		goToDate(d, Animation.SLIDE, false);
 	}
 
 	@Override
 	public void onYearEarlier() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, -12);
-		goToDate(d, Animation.SLIDE_REVERSE);
+		goToDate(d, Animation.SLIDE_REVERSE, true);
 	}
 
 	@Override
 	public void onYearLater() {
 		Date d = getCurrentDay().getStart();
 		CalendarUtil.addMonthsToDate(d, 12);
-		goToDate(d, Animation.SLIDE);
+		goToDate(d, Animation.SLIDE, false);
+	}
+
+	@Override
+	public void onNavToToday() {
+		Date d = getCurrentDay().getStart();
+		Date now = new Date();
+		if (d.after(now)) {
+			goToDate(now, Animation.SLIDE, false);
+		} else {
+			goToDate(now, Animation.SLIDE_REVERSE, true);
+		}
 	}
 }

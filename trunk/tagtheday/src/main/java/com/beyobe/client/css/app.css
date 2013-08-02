@@ -64,32 +64,32 @@
   margin-top: 0.3em;
 }
 
-.ttd-addTagButton {
-  margin: 5px 10px 0px 10px;
+.ttd-addTagIcon {
+  margin: 9px 2px 0px 10px;
   font-size: 1em;
   cursor: pointer;
 }
 
 .ttd-dayNavLabel {
-	margin-top: 10px;
+	margin-top: 12px;
 	width: 18px;
 	text-align: center;
 }
 
 .ttd-monthNavLabel {
-	margin-top: 10px;
+	margin-top: 12px;
   width: 30px;
   text-align: center;
 }
 
 .ttd-yearNavLabel {
-	margin-top: 10px;
+	margin-top: 12px;
   width: 36px;
   text-align: center;
 }
 
-.ttd-navEarlierButton {
-	margin: 5px 2px 0px 10px;
+.ttd-navEarlierIcon {
+	margin: 9px 2px 0px 4px;
 	font-size: 0.7em;
 	width: 20px;
   height: 20px;
@@ -97,11 +97,17 @@
   cursor: pointer;
 }
 
-.ttd-navLaterButton {
-	margin: 5px 10px 0px 2px;
+.ttd-navLaterIcon {
+	margin: 9px 4px 0px 2px;
 	font-size: 0.7em;
 	width: 20px;
   height: 20px;
+  padding: 5px 0px 0px 0px;
+  cursor: pointer;
+}
+
+.ttd-todayIcon {
+  margin: 9px 10px 0px 2px;
   padding: 5px 0px 0px 0px;
   cursor: pointer;
 }

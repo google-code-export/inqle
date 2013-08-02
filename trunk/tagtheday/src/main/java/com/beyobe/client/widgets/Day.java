@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.beyobe.client.App;
+import com.beyobe.client.beans.AnswerStatus;
+import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.data.BeanMaker;
-import com.beyobe.client.event.EditQuestionEvent;
+import com.beyobe.client.event.DataCapturedEvent;
 import com.beyobe.client.event.TagClickedEvent;
-import com.beyobe.client.util.UUID;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -180,7 +180,15 @@ public class Day extends Composite implements Block, TapHandler {
 	public void onTap(TapEvent event) {
 		
 		if (event.getSource() instanceof TagButton) {
-			App.eventBus.fireEvent(new TagClickedEvent((TagButton)event.getSource()));
+			TagButton tagButton = (TagButton)event.getSource();
+			Datum d = tagButton.getDatum();
+			if (d!=null && d.getAnswerStatus()==AnswerStatus.INFERRED) {
+				d.setAnswerStatus(AnswerStatus.ANSWERED_PERSONALLY);
+				tagButton.refreshAppearance();
+				App.eventBus.fireEvent(new DataCapturedEvent(tagButton));
+				return;
+			}
+			App.eventBus.fireEvent(new TagClickedEvent(tagButton));
 		} 
 //		else if (event.getSource().equals(tagsPanel)){
 //			App.eventBus.fireEvent(new EditQuestionEvent(null));
