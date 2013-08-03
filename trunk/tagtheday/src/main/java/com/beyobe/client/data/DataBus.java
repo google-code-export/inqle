@@ -14,6 +14,7 @@ import com.beyobe.client.Constants;
 import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.Directive;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Participant;
@@ -121,6 +122,7 @@ public class DataBus {
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
 		parcel.setQuestion(questionAnswered);
+		parcel.setDirective(Directive.SAVE);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_DATUM);
 		
 		//TODO save in local storage
@@ -250,6 +252,7 @@ public class DataBus {
 		
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
+		parcel.setDirective(Directive.SAVE);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_QUESTION);
 		//TODO save locally
 	}
@@ -272,12 +275,12 @@ public class DataBus {
 		    	gotoTagdayPlace = true;
 		    }
 		    
-		    if (parcel.getQuestionQueue() != null) {
-		    	log.info("Received question queue: " + parcel.getQuestionQueue());
-		    	setQuestionQueue(parcel.getQuestionQueue());
-		    	setKnownQuestions(parcel.getQuestionQueue(), parcel.getOtherKnownQuestions());
+		    if (parcel.getMessage()==Message.QUESTION_QUEUE_RETURNED && parcel.getQuestions() != null) {
+		    	log.info("Received question queue: " + parcel.getQuestions());
+		    	setQuestionQueue(parcel.getQuestions());
+		    	setKnownQuestions(parcel.getQuestions(), parcel.getOtherKnownQuestions());
 		    }
-		    if (parcel.getData() != null) {
+		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getData() != null) {
 		    	 dataTimeline.setData(parcel.getData());
 		    }
 		    
@@ -286,7 +289,7 @@ public class DataBus {
 		    	App.participant = parcel.getParticipant();
 		    }
 		    
-		    if (parcel.getQuestions() != null) {
+		    if (parcel.getMessage()==Message.MATCHING_QUESTIONS_RETURNED && parcel.getQuestions() != null) {
 		    	App.questionForm.onSearchQuestionsReturns(parcel);
 		    }
 		    
@@ -352,6 +355,15 @@ public class DataBus {
 	public Day loadDay(Date d, boolean navigatingToPast) {
 		Day day = createDay(d, navigatingToPast);
 		return day;
+	}
+
+	public void removeQuestion(Question question) {
+		questionQueue.remove(question);
+		knownQuestions.remove(question);
+		Parcel parcel = newParcel();
+		parcel.setQuestion(question);
+		parcel.setDirective(Directive.UNSUBSCRIBE);
+		App.parcelClient.sendParcel(parcel, action);
 	}
 	
 }
