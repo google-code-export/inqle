@@ -3,8 +3,8 @@ package com.beyobe.client.beans;
 import java.util.List;
 
 public interface Parcel {
-	public Directive getDirective();
-	public void setDirective(Directive directive);
+//	public Directive getDirective();
+//	public void setDirective(Directive directive);
 	
 	public Participant getParticipant();
 	public void setParticipant(Participant participant);

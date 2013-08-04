@@ -3,6 +3,7 @@ package com.beyobe.client.views;
 import java.util.Date;
 
 import com.beyobe.client.widgets.Day;
+import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -55,6 +56,8 @@ public interface TagdayView extends IsWidget {
 	HasText getYearLabel();
 
 	void setDay(Day day, Animation animation);
+
+//	void removeTagButton(TagButton tagButton);
 	
 //	Carousel getCarousel();
 

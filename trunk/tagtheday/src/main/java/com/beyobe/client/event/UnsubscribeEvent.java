@@ -1,20 +1,21 @@
 package com.beyobe.client.event;
 
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.event.shared.GwtEvent;
 
 public class UnsubscribeEvent extends GwtEvent<UnsubscribeEventHandler> {
 
 public static Type<UnsubscribeEventHandler> TYPE = new Type<UnsubscribeEventHandler>();
-private Question question;
+private TagButton tagButton;
 
 
-public UnsubscribeEvent(Question question) {
-	this.question = question;
+public UnsubscribeEvent(TagButton tagButton) {
+	this.tagButton = tagButton;
 }
 
-public Question getQuestion() {
-	return question;
+public TagButton getTagButton() {
+	return tagButton;
 }
 
   @Override

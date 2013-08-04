@@ -24,7 +24,9 @@ import com.googlecode.mgwt.mvp.client.Animation;
  * support d&d of tag buttons to reorder?
  * support screen resize for height
  * add permisions to share a question
- * unsubscribe from question
+ * when you add a existing question, add back any data if any.  DataTimeline needs method to merge data
+ * improve signup & login pages
+ * add back email validation regexp
  * 
  * @author donohue
  *
