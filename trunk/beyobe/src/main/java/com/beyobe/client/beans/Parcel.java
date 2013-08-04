@@ -15,7 +15,7 @@ import flexjson.ObjectFactory;
  
 @RooJson
 public class Parcel {
-	private List<Question> questionQueue;
+//	private List<Question> questionQueue;
 	private List<Question> otherKnownQuestions;
 	private List<Datum> data;
 	private Participant participant;
@@ -28,13 +28,13 @@ public class Parcel {
 	private String queryTerm;
 	private List<Question> questions;
 	
-	public List<Question> getQuestionQueue() {
-		return questionQueue;
-	}
-
-	public void setQuestionQueue(List<Question> questionQueue) {
-		this.questionQueue = questionQueue;
-	}
+//	public List<Question> getQuestionQueue() {
+//		return questionQueue;
+//	}
+//
+//	public void setQuestionQueue(List<Question> questionQueue) {
+//		this.questionQueue = questionQueue;
+//	}
 
 	public List<Question> getOtherKnownQuestions() {
 		return otherKnownQuestions;

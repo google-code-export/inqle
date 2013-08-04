@@ -32,7 +32,6 @@ import com.beyobe.repository.DatumRepository;
 import com.beyobe.repository.QuestionRepository;
 /**
  * Handle all requests from the GWT client
- * TODO unsubscribe from questions
  * TODO windowing data to avoid overload after prolonged data accumulation
  * TODO change password
  * TODO logout
@@ -142,31 +141,33 @@ public class ServiceController {
 	 	
 	 	returnParcel.setSessionToken(sessionToken);
 	 	returnParcel.setParticipant(participant);
+	 	returnParcel.setMessage(Message.SIGNED_UP);
 	 	log.info("set session token: " + sessionToken);
 	 	
-	 	try {
-			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
-			returnParcel.setQuestionQueue(questionQueue);
-			log.trace("login service: set question queue");
-		} catch (Exception e) {
-			log.error("login service: ERROR getting question queue", e);
-		}
-		
-		try {
-			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
-			returnParcel.setOtherKnownQuestions(inactiveQuestions);
-			log.trace("set inactive questions");
-		} catch (Exception e) {
-			log.error("login service: ERROR getting inactive questions", e);
-		}
-		
-	 	try {
-			List<Datum> data = datumRepository.getParticipantData(participant.getId());
-			returnParcel.setData(data);
-			log.trace("set data");
-		} catch (Exception e) {
-			log.error("ERROR getting participant data", e);
-		}
+//	 	try {
+//			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
+//			returnParcel.setQuestions(questionQueue);
+//			log.trace("login service: set question queue");
+//		} catch (Exception e) {
+//			log.error("login service: ERROR getting question queue", e);
+//		}
+//		//dont return active questions
+//		try {
+//			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
+//			returnParcel.setOtherKnownQuestions(inactiveQuestions);
+//			log.trace("set inactive questions");
+//		} catch (Exception e) {
+//			log.error("login service: ERROR getting inactive questions", e);
+//		}
+//		
+//	 	try {
+//			List<Datum> data = datumRepository.getParticipantData(participant.getId());
+//			returnParcel.setData(data);
+//			returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
+//			log.trace("set data");
+//		} catch (Exception e) {
+//			log.error("ERROR getting participant data", e);
+//		}
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
@@ -231,7 +232,7 @@ public class ServiceController {
 	 	
 	 	try {
 			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
-			returnParcel.setQuestionQueue(questionQueue);
+			returnParcel.setQuestions(questionQueue);
 			log.trace("login service: set question queue");
 		} catch (Exception e) {
 			log.error("login service: ERROR getting question queue", e);
@@ -248,6 +249,7 @@ public class ServiceController {
 	 	try {
 			List<Datum> data = datumRepository.getParticipantData(participant.getId());
 			returnParcel.setData(data);
+			returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
 			log.trace("set data");
 		} catch (Exception e) {
 			log.error("ERROR getting participant data", e);
@@ -316,7 +318,7 @@ public class ServiceController {
 			headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
 		}
-		Question existingQuestion = questionRepository.findOne(q.getId());
+//		Question existingQuestion = questionRepository.findOne(q.getId());
 	 	return saveQuestionAndSubscribe(q, participant);
 	}
 	
@@ -534,6 +536,7 @@ public class ServiceController {
 	 	Parcel returnParcel = new Parcel();
 	 	returnParcel.setQuestions(questions);
 	 	returnParcel.setQueryTerm(queryTerm);
+	 	returnParcel.setMessage(Message.MATCHING_QUESTIONS_RETURNED);
 	 	
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
@@ -549,7 +552,88 @@ public class ServiceController {
 		return queryTerm;
 	}
 
-private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant participant) {
+	/**
+	 * Checks if the current 
+	 * Receives a Question object
+	 * Retrieves the participant, given the participantId
+	 * 
+	 * @param clientIpAddress
+	 * @param jsonRequest
+	 * @return
+	 */
+	@RequestMapping(value = "/unsubscribe", method = RequestMethod.POST, headers = "Accept=application/json")
+	@ResponseBody
+	public ResponseEntity<java.lang.String> unsubscribe(
+			@ModelAttribute("clientIpAddress") String clientIpAddress,
+			@RequestBody String jsonRequest) {
+		log.info("unsubscribe service invoked with json: " + jsonRequest);
+	 	Parcel parcel = null;
+		try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+		} catch (Exception e1) {
+			log.error("storeQuestion service: Error parsing JSON: " + jsonRequest, e1);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+//	 	log.info("got parcel: " + parcel);
+	 	String sessionToken = parcel.getSessionToken();
+	 	Participant participant = null;
+	 	try {
+	 		//TODO add session expiration datetime
+	 		log.info("unsubscribe service getting current user participant...");
+			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			log.info("storeQuestion service participant:" + participant);
+			assert(participant.getEnabled()==true);
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
+			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
+		}
+	 	
+	 	Question q = null;
+		try {
+			q = parcel.getQuestion();
+			log.info("unsubscribe service received question: " + q);
+		} catch (Exception e1) {
+			log.error("Unable to get Question from parcel", e1);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+//		Question existingQuestion = questionRepository.findOne(q.getId());
+		Subscription existingSubscription = null;
+	 	try {
+			existingSubscription = 
+					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
+	 	} catch (Exception e1) {
+			log.info("No existing subscription found for question: " + q.getId());
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-Type", "application/json");
+			headers.add("Access-Control-Allow-Origin", "*");
+			return new ResponseEntity<String>(null, headers, HttpStatus.BAD_REQUEST);
+		}
+	 	
+	 	//delete the subscription
+	 	existingSubscription.remove();
+	 	
+	 	//prepare the parcel for return
+	 	Parcel returnParcel = new Parcel();
+	 	returnParcel.setMessage(Message.UNSUBSCRIBED);
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    headers.add("Access-Control-Allow-Origin", "*");
+	    String returnJson = returnParcel.toJson();
+	    log.info("storeQuestion service sending back: " + returnJson);
+	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
+	}
+	
+	private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant participant) {
 		
 		//test that current user is the owner of this question or is admin
 	 	Question existingQuestion = questionRepository.findOne(q.getId());
@@ -576,7 +660,6 @@ private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant 
 	 	 try {
 			existingSubscription = 
 					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
-//					Subscription.findSubscriptionsByQuestionEqualsAndParticipantEquals(q, participant).getSingleResult();
 
 	 	 } catch (Exception e1) {
 			log.info("No existing subscription found for question: " + q.getId());
@@ -606,7 +689,7 @@ private ResponseEntity<String> saveQuestionAndSubscribe(Question q, Participant 
 	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
-	 	
+	 	returnParcel.setMessage(Message.SAVED);
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
 	    headers.add("Access-Control-Allow-Origin", "*");
