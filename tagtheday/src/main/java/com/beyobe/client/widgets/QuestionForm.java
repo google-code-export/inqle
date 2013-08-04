@@ -97,7 +97,12 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		
 		panel.setWidth("100%");
 		panel.setHeight("100%");
-		Label questionFull = new Label("Add a Question");
+		Label questionFull = new Label();
+		if (editMode) {
+			questionFull.setText("Edit Question");
+		} else {
+			questionFull.setText("Add a Question");
+		}
 		questionFull.addStyleName("ttd-form-header");
 		panel.add(questionFull);
 		

@@ -108,7 +108,7 @@ public class DataTimeline {
 
 	public Datum getPriorAnswer(Question q, Date referenceDate) {
 		if (q==null || referenceDate==null) return null;
-		List<String> datesQuestionAnswered = answerDates.get(q.getId());
+		List<String> datesQuestionAnswered = getAnswerDates(q);
 		Collections.sort(datesQuestionAnswered);
 //		boolean beforeDate = false;
 		for (int i=datesQuestionAnswered.size()-1; i >= 0; i--) {
@@ -128,6 +128,15 @@ public class DataTimeline {
 		return null;
 	}
 	
+	private List<String> getAnswerDates(Question q) {
+		List<String> datesQuestionAnswered = answerDates.get(q.getId());
+		if (datesQuestionAnswered==null) {
+			datesQuestionAnswered = new ArrayList<String>();
+			answerDates.put(q.getId(), datesQuestionAnswered);
+		}
+		return datesQuestionAnswered;
+	}
+
 	public Map<String, Datum> getDataForDate(Date date) {
 		String dateStr = getDateStr(date);
 		Map<String, String> dataIdsForDate = dataByDate.get(dateStr);

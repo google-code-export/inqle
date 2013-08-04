@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.beyobe.client.App;
 import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Day;
+import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -60,6 +61,8 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 		@UiField Image todayIcon;
 		
 		private AnimationHelper animater = new AnimationHelper();
+
+		private Day day;
 		
         public TagdayViewImpl() {
     		this.date = new Date();
@@ -254,6 +257,12 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 		void onAddTag(TapEvent e) {
 			App.eventBus.fireEvent(new EditQuestionEvent(null));
 		}
+
+//		@Override
+//		public void removeTagButton(TagButton tagButton) {
+//			Day day = presenter.getCurrentDay();
+//			day.removeTagButton(tagButton);
+//		}
 
 		
 //		@Override

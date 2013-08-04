@@ -53,6 +53,7 @@ import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -107,6 +108,9 @@ public class App {
 				answerPopin = new PopinDialog();
 				RoundPanel answerPanel = new RoundPanel();
 				answerPanel.addStyleName("ttd-editAnswerPanel");
+//				HorizontalPanel menuBar = new HorizontalPanel();
+//				answerPanel.add(menuBar);
+				
 				Datum d = tagButton.getDatum();
 				if (d==null) {
 					answerPanel.getElement().getStyle().setBackgroundColor("pink");
@@ -133,18 +137,18 @@ public class App {
 				});
 				answerPanel.add(closeIcon);
 				
-				Image unsubscribeIcon = new Image(icons.recyclecan32());
-				unsubscribeIcon.getElement().getStyle().setProperty("float", "center");
+				Image unsubscribeIcon = new Image(icons.recycle32());
+				unsubscribeIcon.getElement().getStyle().setProperty("float", "top");
 				TouchDelegate unsubscribeTd = new TouchDelegate(unsubscribeIcon);
 				unsubscribeTd.addTapHandler(new TapHandler() {
 					@Override
 					public void onTap(TapEvent event) {
 						if (Window.confirm("Are you sure you want to unsubscribe from this question?")) {
-							App.eventBus.fireEvent(new UnsubscribeEvent(tagButton.getQuestion()));
+							App.eventBus.fireEvent(new UnsubscribeEvent(tagButton));
 						}
 					}
 				});
-				answerPanel.add(closeIcon);
+				answerPanel.add(unsubscribeIcon);
 				
 				//if user is admin or owner of the question, show the edit button
 				if (UserRole.ROLE_ADMIN == participant.getRole() || participant.getId().equals(tagButton.getQuestion().getOwnerId())) {
@@ -152,7 +156,7 @@ public class App {
 //					editButton.setSmall(true);
 //					editButton.getElement().getStyle().setProperty("float", "right");
 					
-					Image editIcon = new Image(icons.close32());
+					Image editIcon = new Image(icons.pencil32());
 					editIcon.getElement().getStyle().setProperty("float", "left");
 					TouchDelegate editTd = new TouchDelegate(editIcon);
 					editTd.addTapHandler(new TapHandler() {
@@ -199,8 +203,10 @@ public class App {
 		eventBus.addHandler(UnsubscribeEvent.TYPE, new UnsubscribeEventHandler() {
 			@Override
 			public void onUnsubscribe(UnsubscribeEvent event) {
-				Question question = event.getQuestion();
-				dataBus.removeQuestion(question);
+				TagButton tagButton = event.getTagButton();
+				tagButton.setVisible(false);
+				dataBus.removeQuestion(tagButton);
+				if (answerPopin != null) answerPopin.hide();
 			}
 		});
 		

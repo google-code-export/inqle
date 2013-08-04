@@ -3,7 +3,6 @@ package com.beyobe.client.data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -14,16 +13,12 @@ import com.beyobe.client.Constants;
 import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
-import com.beyobe.client.beans.Directive;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.event.TagClickedEvent;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
@@ -122,7 +117,6 @@ public class DataBus {
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
 		parcel.setQuestion(questionAnswered);
-		parcel.setDirective(Directive.SAVE);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_DATUM);
 		
 		//TODO save in local storage
@@ -252,7 +246,6 @@ public class DataBus {
 		
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
-		parcel.setDirective(Directive.SAVE);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_QUESTION);
 		//TODO save locally
 	}
@@ -275,7 +268,7 @@ public class DataBus {
 		    	gotoTagdayPlace = true;
 		    }
 		    
-		    if (parcel.getMessage()==Message.QUESTION_QUEUE_RETURNED && parcel.getQuestions() != null) {
+		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getQuestions() != null) {
 		    	log.info("Received question queue: " + parcel.getQuestions());
 		    	setQuestionQueue(parcel.getQuestions());
 		    	setKnownQuestions(parcel.getQuestions(), parcel.getOtherKnownQuestions());
@@ -357,13 +350,14 @@ public class DataBus {
 		return day;
 	}
 
-	public void removeQuestion(Question question) {
+	public void removeQuestion(TagButton tagButton) {
+//		App.tagdayView.removeTagButton(tagButton);
+		Question question = tagButton.getQuestion();
 		questionQueue.remove(question);
 		knownQuestions.remove(question);
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
-		parcel.setDirective(Directive.UNSUBSCRIBE);
-		App.parcelClient.sendParcel(parcel, action);
+		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_UNSUBSCRIBE);
 	}
 	
 }
