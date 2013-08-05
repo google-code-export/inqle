@@ -11,14 +11,13 @@ import com.beyobe.client.beans.Choice;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.Parcel;
+import com.beyobe.client.beans.PrivacyType;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
 import com.beyobe.client.beans.UserRole;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -40,7 +39,6 @@ import com.googlecode.mgwt.ui.client.widget.MListBox;
 import com.googlecode.mgwt.ui.client.widget.MSearchBox;
 import com.googlecode.mgwt.ui.client.widget.MTextArea;
 import com.googlecode.mgwt.ui.client.widget.MTextBox;
-import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
 public class QuestionForm extends Composite implements TapHandler, ValueChangeHandler<Choice>, KeyUpHandler, ChangeHandler {
 
@@ -55,11 +53,13 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private MTextArea longForm;
 	private ChoicePicker dataTypePicker;
 	private ChoicePicker measurmentPicker;
+	private ChoicePicker privacyTypePicker;
 	private MDoubleBox minVal = new MDoubleBox();
 	private MDoubleBox maxVal = new MDoubleBox();
 	private MIntegerBox maxLength;
 	private Button saveButton;
 	private VerticalPanel numericParamsPanel;
+	private VerticalPanel privacyPanel;
 	private MTextBox minBox;
 	private MTextBox maxBox;
 	private VerticalPanel maxLengthPanel;
@@ -181,6 +181,14 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		panel.add(numericParamsPanel);
 		numericParamsPanel.add(measurmentPicker);
 		
+		privacyPanel = new VerticalPanel();
+		Label privacyLabel = new Label("Would anyone else want to answer this question?");
+		privacyLabel.addStyleName("ttd-form-label");
+		privacyPanel.add(privacyLabel);
+		privacyTypePicker = new ChoicePicker(getPrivacyTypeChoices(), 1);
+		privacyPanel.add(privacyTypePicker);
+		panel.add(privacyPanel);
+		
 		saveButton = new Button("Save");
 		saveButton.setSmall(true);
 		saveButton.addTapHandler(this);
@@ -195,8 +203,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //		initWidget(scrollPanel);
 		initWidget(panel);
 	}
-	
-	
+
+
 	public void setQuestion(Question q, boolean disableForm) {
 		this.q = q;
 		
@@ -242,6 +250,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		
 		dataTypePicker.setDisabled(disable);
 		measurmentPicker.setDisabled(disable);
+		privacyTypePicker.setDisabled(disable);
 		if (minVal != null) {
 			minVal.setReadOnly(disable);
 		}
@@ -274,6 +283,15 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		return dataTypeChoices;
 	}
 
+	private List<Choice> getPrivacyTypeChoices() {
+		List<Choice> privacyTypeChoices = new ArrayList<Choice>();
+		Choice c = new Choice("Yes", "Others might want to answer this.");
+		privacyTypeChoices.add(c);
+		c = new Choice("No", "I am the only one who would answer this.");
+		privacyTypeChoices.add(c);
+		return privacyTypeChoices;
+	}
+	
 	public int getSelectedDataType() {
 		int dt = DataType.DOUBLE.ordinal();
 		if(dataTypePicker.getSelectedIndex()==1) {
@@ -283,6 +301,15 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			dt = DataType.LONG_TEXT.ordinal();
 		}
 		return dt;
+	}
+	
+
+	private int getSelectedPrivacyType() {
+		int pt = PrivacyType.PUBLIC.ordinal();
+		if(privacyTypePicker.getSelectedIndex()==1) {
+			pt = PrivacyType.PRIVATE.ordinal();
+		}
+		return pt;
 	}
 	
 	private List<Choice> getMeasurementChoices() {
@@ -314,6 +341,12 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			return false;
 		}
 		
+		int privacyTypeIndex = getSelectedPrivacyType();
+		if (privacyTypeIndex < 0) {
+			validateMessage("Please select whether others might wish to answer this same question.");
+			return false;
+		}
+		
 		String longFormStr = longForm.getText();
 		if (longFormStr==null || longFormStr.trim().length()==0) {
 			validateMessage("Please enter a Question");
@@ -341,6 +374,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		}
 		
 		q.setDataType(DataType.values()[dataTypeIndex]);
+		q.setPrivacyType(PrivacyType.values()[privacyTypeIndex]);
 		q.setLongForm(longFormStr);
 		q.setAbbreviation(abbrevStr);
 		q.setUpdated(new Date());
@@ -376,6 +410,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		App.eventBus.fireEvent(new QuestionSavedEvent(q));
 		return true;
 	}
+
+
 
 	private Question getNewQuestion() {
 		Question newQuestion = BeanMaker.makeQuestion();
