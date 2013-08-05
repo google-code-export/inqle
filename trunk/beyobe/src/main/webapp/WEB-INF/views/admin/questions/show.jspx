@@ -19,5 +19,6 @@
         <field:display field="createdBy" id="s_com_beyobe_domain_Question_createdBy" object="${question}" z="TaABZI39Nj1dJVKWevrfLy9+RGQ="/>
         <field:display field="owner" id="s_com_beyobe_domain_Question_owner" object="${question}" z="USQYvUdH8y95JlDq5EgfAHflYN4="/>
         <field:display field="ownerId" id="s_com_beyobe_domain_Question_ownerId" object="${question}" z="wgz8PWvRt9B9vuqPtliG6qNJSzc="/>
+        <field:display field="privacyType" id="s_com_beyobe_domain_Question_privacyType" object="${question}" z="kf2WKlT8qK3kKsY74bdz9inroI8="/>
     </page:show>
 </div>

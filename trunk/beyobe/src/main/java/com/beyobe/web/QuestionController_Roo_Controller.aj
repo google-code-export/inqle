@@ -5,6 +5,7 @@ package com.beyobe.web;
 
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+import com.beyobe.client.beans.PrivacyType;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
@@ -115,6 +116,7 @@ privileged aspect QuestionController_Roo_Controller {
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("datatypes", Arrays.asList(DataType.values()));
         uiModel.addAttribute("measurements", Arrays.asList(Measurement.values()));
+        uiModel.addAttribute("privacytypes", Arrays.asList(PrivacyType.values()));
         uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
     }
