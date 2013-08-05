@@ -47,6 +47,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private static final int DATATYPEINDEX_NUMBER = 0;
 	private static final int DATATYPEINDEX_LABEL = 1;
 	private static final int DATATYPEINDEX_MEMO = 2;
+	private static final Integer PRIVACYTYPEINDEX_PRIVATE = 1;
+	private static final Integer PRIVACYTYPEINDEX_PUBLIC = 0;
 	private Question q;
 //	private MTextBox shortForm;
 	private MSearchBox abbrev;
@@ -233,6 +235,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		} else {
 			measurmentPicker.setSelectedIndex(0);
 		}
+		PrivacyType privacyType = q.getPrivacyType();
+		int selectedPrivacyIndex = getPrivacyTypeIndex(privacyType);
+		privacyTypePicker.setSelectedIndex(selectedPrivacyIndex);
 		
 		setVisibilityOfSubFields();
 		
@@ -283,6 +288,14 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		return dataTypeChoices;
 	}
 
+	private Integer getPrivacyTypeIndex(PrivacyType privacyType) {
+		if (privacyType == PrivacyType.PRIVATE) {
+			return PRIVACYTYPEINDEX_PRIVATE;
+		}
+		
+		return PRIVACYTYPEINDEX_PUBLIC;
+	}
+	
 	private List<Choice> getPrivacyTypeChoices() {
 		List<Choice> privacyTypeChoices = new ArrayList<Choice>();
 		Choice c = new Choice("Yes", "Others might want to answer this.");
