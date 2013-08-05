@@ -19,6 +19,7 @@
         <field:input field="createdBy" id="c_com_beyobe_domain_Question_createdBy" required="true" z="Lfu4hHHn5dfHJiCjK78N63SSUpM="/>
         <field:select field="owner" id="c_com_beyobe_domain_Question_owner" itemValue="id" items="${participants}" path="/admin/participants" required="true" z="SJGWFZAD0rdXFlCXafm7tTib8YI="/>
         <field:input field="ownerId" id="c_com_beyobe_domain_Question_ownerId" required="true" z="b6oP4iCVWHEPgJDYYh2kPqK8V6Y="/>
+        <field:select field="privacyType" id="c_com_beyobe_domain_Question_privacyType" items="${privacytypes}" path="privacytypes" z="2BjWJIeXiWT5PbdZ9UHhbS7IuXo="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Question" render="${not empty dependencies}" z="zVSrTN57S9HBxOxQ5oGRiboALBE="/>
 </div>

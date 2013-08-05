@@ -5,6 +5,7 @@ package com.beyobe.domain;
 
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+import com.beyobe.client.beans.PrivacyType;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
@@ -66,6 +67,14 @@ privileged aspect Question_Roo_JavaBean {
     
     public void Question.setMeasurement(Measurement measurement) {
         this.measurement = measurement;
+    }
+    
+    public PrivacyType Question.getPrivacyType() {
+        return this.privacyType;
+    }
+    
+    public void Question.setPrivacyType(PrivacyType privacyType) {
+        this.privacyType = privacyType;
     }
     
     public Double Question.getMinValue() {

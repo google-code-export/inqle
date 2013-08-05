@@ -26,6 +26,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
+import com.beyobe.client.beans.PrivacyType;
 
 import flexjson.JSONSerializer;
 
@@ -72,6 +73,9 @@ public class Question implements HasUuid {
     
     @Enumerated(EnumType.STRING)
     public Measurement measurement;
+    
+    @Enumerated(EnumType.STRING)
+    public PrivacyType privacyType;
     
     private Double minValue;
     
