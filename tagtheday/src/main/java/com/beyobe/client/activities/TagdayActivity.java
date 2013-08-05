@@ -27,6 +27,10 @@ import com.googlecode.mgwt.mvp.client.Animation;
  * when you add a existing question, add back any data if any.  DataTimeline needs method to merge data
  * improve signup & login pages
  * add back email validation regexp
+ * add back security
+ * figure out admin account
+ * option to auto-answer intervening days when 2 isolated days have identical value
+ * unit test somewhere!
  * 
  * @author donohue
  *
