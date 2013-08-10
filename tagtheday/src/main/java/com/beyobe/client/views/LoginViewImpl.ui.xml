@@ -4,16 +4,23 @@
 	xmlns:mgwt="urn:import:com.googlecode.mgwt.ui.client.widget">
 	<ui:style>
     .mainPanel {
+	   margin-top: 15px;
 	    width: 100%;
 	    height: 100%;
 	    align: center;
     }
 		.roundPanel {
-			width: 300px;
-			height: 400px;
+			margin-left: auto;
+			margin-right: auto;
+			height: 200px;
 		}
+		
 		.fieldsPanel {
-    
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .titleBar {
+      
     }
     .message {
 	    color: red;
@@ -22,13 +29,16 @@
        cursor:pointer;
        font-size: 0.8em;
     }
+     .submitButton {
+       margin-top: 5px;
+       margin-bottom: 2px;
+    }
 	</ui:style>
 	<g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}">
 	<mgwt:RoundPanel ui:field="roundPanel" styleName="{style.roundPanel}">
 	 <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
-	   <g:HorizontalPanel ui:field="linkPanel">
-	     <g:Label styleName="ttd-form-title" text="Log in using your Beyobe account"/>
-	     <g:Anchor ui:field="signupLink" text="Create a new account"  styleName="{style.pointerLink}"/>
+	   <g:HorizontalPanel ui:field="titleBar" styleName="{style.titleBar}">
+	     <g:Label styleName="ttd-form-title" text="Sign In to Beyobe" />
 	   </g:HorizontalPanel>
 		 
 		 <g:Label ui:field="message" styleName="{style.message}"/>
@@ -36,7 +46,8 @@
 		 <g:TextBox ui:field="userName"/>
 		 <g:Label styleName="ttd-form-label" text="Password"/>
 	   <g:PasswordTextBox ui:field="password"/>
-	   <g:Button ui:field="submitButton" text="Sign In"/>
+	   <g:Button ui:field="submitButton" text="Sign In" styleName="{style.submitButton}"/>
+	   <g:Anchor ui:field="signupLink" text="Create a new account"  styleName="{style.pointerLink}"/>
    </g:VerticalPanel>
 	</mgwt:RoundPanel>
 	</g:VerticalPanel>

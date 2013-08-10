@@ -1,6 +1,18 @@
+
+a {
+	cursor:pointer;
+	color:blue;
+}
+a:link {
+	text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
 #main {
 	position: absolute;
-	left: 300px;
+	left: 0px;
 	top: 0px;
 	right: 0px;
 	bottom: 0px;
@@ -12,15 +24,13 @@
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	width: 300px;
+	width: 0px;
 	bottom: 0px;
 	overflow: hidden;
 	border-right: 1px solid black;
 	
 	
 }
-
-
 
 @media only screen and (orientation:portrait) {
 	
@@ -126,6 +136,6 @@
 
 .ttd-day-past {
 	background-color: #FFFFFF;
-	border-color: #FFFFFF;
+	border-color: #C0C0C0;
 	border-width: 5px;
 }
