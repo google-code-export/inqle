@@ -4,18 +4,23 @@
 package com.beyobe.domain;
 
 import com.beyobe.domain.Participant;
+import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 privileged aspect Participant_Roo_Finder {
     
-    public static TypedQuery<Participant> Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(String sessionToken, String clientIpAddress) {
+    public static TypedQuery<Participant> Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(String sessionToken, Date sessionDate, String clientIpAddress, Boolean enabled) {
         if (sessionToken == null || sessionToken.length() == 0) throw new IllegalArgumentException("The sessionToken argument is required");
+        if (sessionDate == null) throw new IllegalArgumentException("The sessionDate argument is required");
         if (clientIpAddress == null || clientIpAddress.length() == 0) throw new IllegalArgumentException("The clientIpAddress argument is required");
+        if (enabled == null) throw new IllegalArgumentException("The enabled argument is required");
         EntityManager em = Participant.entityManager();
-        TypedQuery<Participant> q = em.createQuery("SELECT o FROM Participant AS o WHERE o.sessionToken = :sessionToken  AND o.clientIpAddress = :clientIpAddress", Participant.class);
+        TypedQuery<Participant> q = em.createQuery("SELECT o FROM Participant AS o WHERE o.sessionToken = :sessionToken  AND o.sessionDate > :sessionDate  AND o.clientIpAddress = :clientIpAddress  AND o.enabled IS NOT :enabled", Participant.class);
         q.setParameter("sessionToken", sessionToken);
+        q.setParameter("sessionDate", sessionDate);
         q.setParameter("clientIpAddress", clientIpAddress);
+        q.setParameter("enabled", enabled);
         return q;
     }
     
@@ -27,13 +32,15 @@ privileged aspect Participant_Roo_Finder {
         return q;
     }
     
-    public static TypedQuery<Participant> Participant.findParticipantsByUsernameEqualsAndPasswordEquals(String username, String password) {
+    public static TypedQuery<Participant> Participant.findParticipantsByUsernameEqualsAndPasswordEqualsAndEnabledNot(String username, String password, Boolean enabled) {
         if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
         if (password == null || password.length() == 0) throw new IllegalArgumentException("The password argument is required");
+        if (enabled == null) throw new IllegalArgumentException("The enabled argument is required");
         EntityManager em = Participant.entityManager();
-        TypedQuery<Participant> q = em.createQuery("SELECT o FROM Participant AS o WHERE o.username = :username  AND o.password = :password", Participant.class);
+        TypedQuery<Participant> q = em.createQuery("SELECT o FROM Participant AS o WHERE o.username = :username  AND o.password = :password  AND o.enabled IS NOT :enabled", Participant.class);
         q.setParameter("username", username);
         q.setParameter("password", password);
+        q.setParameter("enabled", enabled);
         return q;
     }
     

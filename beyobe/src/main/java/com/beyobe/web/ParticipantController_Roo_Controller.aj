@@ -91,8 +91,9 @@ privileged aspect ParticipantController_Roo_Controller {
     }
     
     void ParticipantController.addDateTimeFormatPatterns(Model uiModel) {
-        uiModel.addAttribute("participant_created_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
-        uiModel.addAttribute("participant_updated_date_format", DateTimeFormat.patternForStyle("FF", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("participant_created_date_format", DateTimeFormat.patternForStyle("SS", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("participant_updated_date_format", DateTimeFormat.patternForStyle("SS", LocaleContextHolder.getLocale()));
+        uiModel.addAttribute("participant_sessiondate_date_format", DateTimeFormat.patternForStyle("SS", LocaleContextHolder.getLocale()));
     }
     
     void ParticipantController.populateEditForm(Model uiModel, Participant participant) {

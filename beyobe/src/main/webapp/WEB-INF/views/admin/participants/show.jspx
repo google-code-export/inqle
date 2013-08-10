@@ -4,7 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <page:show id="ps_com_beyobe_domain_Participant" object="${participant}" path="/admin/participants" z="dkyIL0vt9MzJHKcEaT2HNN5+yRE=">
         <field:display field="username" id="s_com_beyobe_domain_Participant_username" object="${participant}" z="cMpASImUVEM55PJ5deFnp85JmlQ="/>
-        <field:display field="password" id="s_com_beyobe_domain_Participant_password" object="${participant}" z="1LlOTO0fqqI52uw1Nanez9B++Po="/>
+        <field:display field="password" id="s_com_beyobe_domain_Participant_password" object="${participant}" z="user-managed" render="false"/>
         <field:display field="role" id="s_com_beyobe_domain_Participant_role" object="${participant}" z="dX1e5r9vkNJ+i7DnWBpUU9vu/L0="/>
         <field:display field="enabled" id="s_com_beyobe_domain_Participant_enabled" object="${participant}" z="344Cxb+N4rO5CtB0q+2eUymIbr8="/>
         <field:display date="true" dateTimePattern="${participant_updated_date_format}" field="updated" id="s_com_beyobe_domain_Participant_updated" object="${participant}" z="111b+a0OjMg5NM/jg/IZ4BpkdmQ="/>
@@ -13,5 +13,6 @@
         <field:display field="sessionToken" id="s_com_beyobe_domain_Participant_sessionToken" object="${participant}" z="jfemFSKxa6fQ4cwcpDl7sZ/yVnw="/>
         <field:display field="clientIpAddress" id="s_com_beyobe_domain_Participant_clientIpAddress" object="${participant}" z="1rfcGB3jR3o9dL919TK8lCJXiQc="/>
         <field:display field="email" id="s_com_beyobe_domain_Participant_email" object="${participant}" z="Ci2TllatKnXCKPk+YU5vQisd7mg="/>
+        <field:display date="true" dateTimePattern="${participant_sessiondate_date_format}" field="sessionDate" id="s_com_beyobe_domain_Participant_sessionDate" object="${participant}" z="nfIrcixygyd7ELqCXzIHzVVlA/4="/>
     </page:show>
 </div>

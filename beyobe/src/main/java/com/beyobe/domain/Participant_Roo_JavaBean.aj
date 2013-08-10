@@ -69,6 +69,14 @@ privileged aspect Participant_Roo_JavaBean {
         this.updated = updated;
     }
     
+    public Date Participant.getSessionDate() {
+        return this.sessionDate;
+    }
+    
+    public void Participant.setSessionDate(Date sessionDate) {
+        this.sessionDate = sessionDate;
+    }
+    
     public String Participant.getUpdatedBy() {
         return this.updatedBy;
     }
