@@ -121,4 +121,17 @@ public class Participant implements HasUuid {
         MessageDigestPasswordEncoder e = new MessageDigestPasswordEncoder("sha-256");
         System.out.println("Password hashes to: " + e.encodePassword("put password here", null));
     }
+
+	public void mergeWithExisting() {
+		Participant existing = findParticipant(this.getId());
+		if (username != null) existing.setUsername(username);
+		if (enabled != null) existing.setEnabled(enabled);
+		if (email != null) existing.setEmail(email);
+		if (role != null) existing.setRole(role);
+		if (sessionDate != null) existing.setSessionDate(sessionDate);
+		if (sessionToken != null) existing.setSessionToken(sessionToken);
+		if (updated != null) existing.setUpdated(updated);
+		if (updatedBy != null) existing.setUpdatedBy(updatedBy);
+		existing.flush();
+	}
 }
