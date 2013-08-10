@@ -277,6 +277,10 @@ public class DataBus {
 		    	 dataTimeline.setData(parcel.getData());
 		    }
 		    
+		    if (parcel.getMessage()==Message.SAVED && parcel.getData() != null) {
+		    	 dataTimeline.setData(parcel.getData());
+		    }
+		    
 		    if (parcel.getParticipant() != null) {
 		    	log.info("Received participant: " + parcel.getParticipant());
 		    	App.participant = parcel.getParticipant();

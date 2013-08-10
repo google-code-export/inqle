@@ -19,18 +19,14 @@ import com.googlecode.mgwt.mvp.client.Animation;
 /**
  * TODO:
  * Load data in time windows
- * fix tagbutton widths
- * home button loads today?
- * support d&d of tag buttons to reorder?
- * support screen resize for height
- * add permisions to share a question
- * when you add a existing question, add back any data if any.  DataTimeline needs method to merge data
- * improve signup & login pages
  * add back email validation regexp
- * add back security
- * figure out admin account
  * option to auto-answer intervening days when 2 isolated days have identical value
  * unit test somewhere!
+ * CAPTCHA
+ * email confirmation
+ * server-side safeguard - prevent too many insertions, invalidate sessions
+ * fix login slowness problems
+ * hide passwords in roo
  * 
  * @author donohue
  *
