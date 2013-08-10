@@ -63,17 +63,6 @@ privileged aspect ParticipantController_Roo_Controller {
         return "admin/participants/list";
     }
     
-    @RequestMapping(method = RequestMethod.PUT, produces = "text/html")
-    public String ParticipantController.update(@Valid Participant participant, BindingResult bindingResult, Model uiModel, HttpServletRequest httpServletRequest) {
-        if (bindingResult.hasErrors()) {
-            populateEditForm(uiModel, participant);
-            return "admin/participants/update";
-        }
-        uiModel.asMap().clear();
-        participant.merge();
-        return "redirect:/admin/participants/" + encodeUrlPathSegment(participant.getId().toString(), httpServletRequest);
-    }
-    
     @RequestMapping(value = "/{id}", params = "form", produces = "text/html")
     public String ParticipantController.updateForm(@PathVariable("id") String id, Model uiModel) {
         populateEditForm(uiModel, Participant.findParticipant(id));
