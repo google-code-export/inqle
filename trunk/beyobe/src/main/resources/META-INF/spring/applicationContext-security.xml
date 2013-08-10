@@ -15,7 +15,7 @@
          <intercept-url pattern="/login/**" access="permitAll" />
 <!--         <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" /> -->
         <intercept-url pattern="/security/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/admin/**" access="permitAll"/>
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
     </http>
  
     <!-- Configure Authentication mechanism -->
@@ -57,7 +57,7 @@
              -->
             <user-service>
 <!--                 <user name="admin" password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" authorities="ROLE_ADMIN" /> -->
-                <user name="admin" password="a4a88c0872bf652bb9ed803ece5fd6e82354838a9bf59ab4babb1dab322154e1" authorities="ROLE_ADMIN"/>
+                <user name="admin" password="74057b890d73be209197d71dd203bd97c8c694d8f2599d28f6d3753d28537fa5" authorities="ROLE_ADMIN"/>
                 <user name="user" password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb" authorities="ROLE_USER" />
             </user-service>
         </authentication-provider>

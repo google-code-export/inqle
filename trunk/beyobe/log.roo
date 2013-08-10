@@ -123,3 +123,8 @@ exit
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-07-18 12:45:56
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-07-18 20:08:49
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-08-03 05:29:48
+finder list --class ~.domain.Participant
+finder list --class ~.domain.Participant --filter nabled
+finder list --class ~.domain.Participant --filter nabl
+// [failed] finder list --class ~.domain.Participant --filter nabl --depth 0
+finder list --class ~.domain.Participant --filter nabl --depth 1

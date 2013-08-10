@@ -21,6 +21,18 @@ public interface DatumRepository {
 			" order by d.effectiveDate desc "
 			)
 	List<Datum> getParticipantData(String participantId);
+	
+	/**
+	 * Get a list of questions to which this participant has subscribed
+	 * @param participantId
+	 * @return list of questions, ordered by question priority then creation date
+	 */
+	@Query("select distinct d from Datum d " +
+			" where d.participantId=?1 and d.questionId=?2" +
+			" order by d.effectiveDate desc "
+			)
+	List<Datum> getParticipantDataForQuestion(String participantId, String questionId);
+	
 //	/**
 //	 * Get all latest answered data for this participant
 //	 * @param participantId

@@ -29,7 +29,12 @@ import org.springframework.security.authentication.encoding.MessageDigestPasswor
 @RooJavaBean
 @RooToString
 @RooJson
-@RooJpaActiveRecord(finders = { "findParticipantsByUsernameEqualsAndPasswordEquals", "findParticipantsBySessionTokenEqualsAndClientIpAddressEquals", "findParticipantsByUsernameEquals" })
+@RooJpaActiveRecord(finders = { 
+		"findParticipantsByUsernameEqualsAndPasswordEqualsAndEnabledNot", 
+//		"findParticipantsBySessionTokenEqualsAndClientIpAddressEquals", 
+		"findParticipantsByUsernameEquals",
+		"findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot", 
+		})
 public class Participant implements HasUuid {
 
     @Autowired
@@ -57,12 +62,18 @@ public class Participant implements HasUuid {
     @NotNull
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "FF")
+    @DateTimeFormat(style = "SS")
     private Date created = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(style = "FF")
+    @DateTimeFormat(style = "SS")
     private Date updated = null;
+    
+    @NotNull
+    @Column(updatable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "SS")
+    private Date sessionDate = new Date();
 
     private String updatedBy;
 
@@ -80,7 +91,15 @@ public class Participant implements HasUuid {
     }
 
     public String toJson() {
-        return new JSONSerializer().exclude("*.class").exclude("created").exclude("updated").exclude("createdBy").exclude("updatedBy").exclude("password").exclude("sessionKey").serialize(this);
+        return new JSONSerializer()
+	        .exclude("*.class")
+	        .exclude("created")
+	        .exclude("updated")
+	        .exclude("createdBy")
+	        .exclude("updatedBy")
+	        .exclude("password")
+	        .exclude("sessionKey")
+	        .serialize(this);
     }
 
     @PrePersist
@@ -100,6 +119,6 @@ public class Participant implements HasUuid {
 
     public static void main(String[] args) {
         MessageDigestPasswordEncoder e = new MessageDigestPasswordEncoder("sha-256");
-        System.out.println("Password hashes to: " + e.encodePassword("admin", "admin"));
+        System.out.println("Password hashes to: " + e.encodePassword("put password here", null));
     }
 }

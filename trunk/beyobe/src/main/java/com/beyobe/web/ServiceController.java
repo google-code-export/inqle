@@ -1,5 +1,6 @@
 package com.beyobe.web;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -48,6 +49,8 @@ public class ServiceController {
 	private DatumRepository datumRepository;
 	
 	private static final Logger log = Logger.getLogger(ServiceController.class);
+
+	private static final int MAXIMUM_SESSION_DAYS = 14;
 	
 	@ModelAttribute("clientIpAddress")
 	public String populateClientIpAddress(HttpServletRequest request) {
@@ -134,6 +137,7 @@ public class ServiceController {
 	 	participant.setEmail(username);
 	 	participant.setRole(UserRole.ROLE_BASIC);
 	 	participant.setSessionToken(sessionToken);
+	 	participant.setEnabled(true);
 	 	participant.setClientIpAddress(clientIpAddress);
 	 	participant.persist();
 	 	
@@ -206,7 +210,8 @@ public class ServiceController {
 		}
 	 	Participant participant = null;
 	 	try {
-			participant = Participant.findParticipantsByUsernameEqualsAndPasswordEquals(username, hashedPassword).getSingleResult();
+//			participant = Participant.findParticipantsByUsernameEqualsAndPasswordEqualsAndEnabledNot(username, hashedPassword, false).getSingleResult();
+	 		participant = Participant.findParticipantsByUsernameEqualsAndPasswordEqualsAndEnabledNot(username, hashedPassword, false).getSingleResult();
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
@@ -219,6 +224,7 @@ public class ServiceController {
 	 	//save the session token for future requests
 	 	String sessionToken = UUID.randomUUID().toString();
 	 	participant.setSessionToken(sessionToken);
+	 	participant.setSessionDate(new Date());
 	 	participant.setClientIpAddress(clientIpAddress);
 	 	participant.merge();
 	 	
@@ -294,7 +300,7 @@ public class ServiceController {
 	 	try {
 	 		//TODO add session expiration datetime
 	 		log.info("storeQuestion service getting current user participant...");
-			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
 			log.info("storeQuestion service participant:" + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
@@ -322,9 +328,6 @@ public class ServiceController {
 	 	return saveQuestionAndSubscribe(q, participant);
 	}
 	
-	
-	
-	
 
 	@RequestMapping(value = "/storeDatum", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -348,7 +351,7 @@ public class ServiceController {
 	 	Participant participant = null;
 	 	try {
 	 		//TODO add session expiration datetime
-			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
 			log.info("storeDatum service: got participant: " + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
@@ -515,7 +518,7 @@ public class ServiceController {
 	 	try {
 	 		//TODO add session expiration datetime
 	 		log.info("searchForQuestions service getting current user participant...");
-			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
 			log.info("searchForQuestions service participant:" + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
@@ -583,7 +586,7 @@ public class ServiceController {
 	 	try {
 	 		//TODO add session expiration datetime
 	 		log.info("unsubscribe service getting current user participant...");
-			participant = Participant.findParticipantsBySessionTokenEqualsAndClientIpAddressEquals(sessionToken, clientIpAddress).getSingleResult();
+			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
 			log.info("storeQuestion service participant:" + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
@@ -638,6 +641,7 @@ public class ServiceController {
 		//test that current user is the owner of this question or is admin
 	 	Question existingQuestion = questionRepository.findOne(q.getId());
 	 	Question theQuestion = q;
+	 	boolean loadData = false;
 	 	if (existingQuestion != null) {
 	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
 	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
@@ -645,6 +649,7 @@ public class ServiceController {
 //			    headers.add("Content-Type", "application/json");
 //				return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 	 		} else {
+	 			loadData = true;
 	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
 	 		}
 	 	} else {
@@ -689,6 +694,12 @@ public class ServiceController {
 	 	
 	 	//prepare the parcel for return
 	 	Parcel returnParcel = new Parcel();
+	 	
+	 	if (loadData) {
+	 		List<Datum> data = datumRepository.getParticipantDataForQuestion(participant.getId(), q.getId());
+	 		returnParcel.setData(data);
+	 	}
+	 	
 	 	returnParcel.setMessage(Message.SAVED);
 	    HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
@@ -698,49 +709,12 @@ public class ServiceController {
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
 	
-	/*
-    @RequestMapping(method = RequestMethod.POST, value = "{id}")
-    public void post(@PathVariable Long id, ModelMap modelMap, HttpServletRequest request, HttpServletResponse response) {
-    }
-
-    @RequestMapping
-    public String index() {
-        return "service/index";
-    }
-    
-    @RequestMapping(value = "/subscribedQuestions", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> getSubscribedQuestions(@RequestParam Long participantId) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        List<Question> questions = questionRepository.getSubscribedQuestions(participantId);
-        return new ResponseEntity<String>(Question.toJsonArray(questions), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/availableSubscribedQuestions", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> getAvailableSubscribedQuestions(@RequestParam Long participantId) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        List<Question> questions = questionRepository.getSubscribedQuestions(participantId);
-        return new ResponseEntity<String>(Question.toJsonArray(questions), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/searchQuestions", method = RequestMethod.GET, headers = "Accept=application/json")
-    public ResponseEntity<java.lang.String> getSubscribedQuestions(@RequestParam Long participantId, @RequestParam String query) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        QueryResponse queryResponse = Question.search(query);
-        List<Question> questions = queryResponseToQuestions(queryResponse);
-        return new ResponseEntity<String>(Question.toJsonArray(questions), headers, HttpStatus.OK);
-    }
-
-    private List<org.inqle.domain.Question> queryResponseToQuestions(QueryResponse queryResponse) {
-        List<Question> questions = new ArrayList<Question>();
-        for (SolrDocument sd : queryResponse.getResults()) {
-            questions.add(Question.findQuestion((Long) sd.getFieldValue("blurb.id_l")));
-        }
-        return questions;
-    }
-    */
+	private Date getEarliestSessionDate() {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.DATE, -1 * MAXIMUM_SESSION_DAYS);
+		return c.getTime();
+		
+	}
 	
 	public static void main(String[] args) {
 		UUID uuid = UUID.fromString("329BD5D9-B793-49E2-8206-36B65DEEC216");
