@@ -75,7 +75,7 @@ public class ServiceController {
 			@ModelAttribute("clientIpAddress") String clientIpAddress) {
 //	public ResponseEntity<java.lang.String> login(
 //			@RequestBody String jsonRequest) {
-		log.info("signup service invoked with json: " + jsonRequest);
+//		log.info("signup service invoked with json: " + jsonRequest);
 	 	Parcel parcel = null;
 	 	String username = null;
 	 	String password = null;
@@ -177,7 +177,7 @@ public class ServiceController {
 	    headers.add("Content-Type", "application/json");
 	    headers.add("Access-Control-Allow-Origin", "*");
 	    String returnJson = returnParcel.toJson();
-	    log.info("login service sending back: " + returnJson);
+	    log.info("signup service sending back: " + returnJson);
 	    return new ResponseEntity<String>(returnJson, headers, HttpStatus.OK);
 	}
 //	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -189,7 +189,7 @@ public class ServiceController {
 			@ModelAttribute("clientIpAddress") String clientIpAddress) {
 //	public ResponseEntity<java.lang.String> login(
 //			@RequestBody String jsonRequest) {
-		log.info("login service invoked with json: " + jsonRequest);
+//		log.info("login service invoked with json: " + jsonRequest);
 	 	Parcel parcel = null;
 	 	String username = null;
 	 	String hashedPassword = null;
@@ -234,7 +234,7 @@ public class ServiceController {
 	 	Parcel returnParcel = new Parcel();
 	 	returnParcel.setSessionToken(sessionToken);
 	 	returnParcel.setParticipant(participant);
-	 	log.info("set session token: " + sessionToken);
+	 	log.info("login service: user=" + participant.getUsername() + "; set session token: " + sessionToken);
 	 	
 	 	try {
 			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
