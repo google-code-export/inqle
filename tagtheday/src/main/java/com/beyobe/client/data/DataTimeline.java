@@ -196,4 +196,8 @@ public class DataTimeline {
 		d2.setQuestionId(d1.getQuestionId());
 		return d2;
 	}
+
+//	public void removeDatum(Datum datum) {
+//		data.remove(datum.getId());
+//	}
 }

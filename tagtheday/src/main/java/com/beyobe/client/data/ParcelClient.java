@@ -33,10 +33,10 @@ public class ParcelClient {
 	// An indicator when the computation should quit
 	private boolean abortFlag = false;
 	
-	public int sendParcel(Parcel parcel, String action) {
+	public int sendParcel(final Parcel parcel, String action) {
 		parcel.setSessionToken(App.sessionToken);
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
-		String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
+		final String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
 		String url = Constants.BASEURL_BEYOBE_SERVICE + action;
 //		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
@@ -74,6 +74,8 @@ public class ParcelClient {
 			    	log.warning("unable to connect to server for log in");
 			    	cancelTimer();
 			    	status = Constants.STATUS_TIMED_OUT;
+			    	
+			    	App.dataBus.handleConnectionError(parcel);
 			    }
 	
 			    public void onResponseReceived(Request request, Response response) {
@@ -92,7 +94,8 @@ public class ParcelClient {
 				    } else {
 				    	log.warning("Error communicating with server: " + response.getText() + "\n" + response.getHeadersAsString());
 				    	status = Constants.STATUS_FAILED;
-				    	log.info("Set login status to: " + status);
+				    	log.info("Set connection status to: " + status);
+				    	App.dataBus.handleServerException(response.getText());
 				    	abortFlag = true;
 				    }
 			    } 
