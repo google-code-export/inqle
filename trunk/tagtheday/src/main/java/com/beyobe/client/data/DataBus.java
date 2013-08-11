@@ -19,6 +19,7 @@ import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
+import com.google.gwt.user.client.Window;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
@@ -292,13 +293,15 @@ public class DataBus {
 		    
 		    if (parcel.getMessage()==Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
 		    	//delete the question
-		    	questionQueue.remove(parcel.getQuestion());
-		    	App.tagdayView.removeQuestion(parcel.getQuestion());
+		    	Window.alert("You have created too many questions.  Unable to store any more.");
+//		    	questionQueue.remove(parcel.getQuestion());
+//		    	App.tagdayView.removeQuestion(parcel.getQuestion().getId());
 		    }
 		    if (parcel.getMessage()==Message.TOO_MANY_DATA && parcel.getDatum() != null) {
 		    	//delete the datum
-		    	dataTimeline.removeDatum(parcel.getDatum());
-		    	App.tagdayView.removeDatum(parcel.getDatum());
+		    	Window.alert("You have answered too many questions.  Unable to store any more answers.");
+//		    	dataTimeline.removeDatum(parcel.getDatum().getId());
+//		    	App.tagdayView.removeDatum(parcel.getDatum().getId());
 		    }
 		    if (gotoTagdayPlace) {
 			    App.placeController.goTo(new TagdayPlace());
@@ -372,6 +375,19 @@ public class DataBus {
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_UNSUBSCRIBE);
+	}
+
+	public void handleConnectionError(Parcel parcel) {
+		//TODO undo the change in the UI
+		//TODO put the unsaved object into a queue, and try to save that queue each time
+		Window.alert("Error.  Your last operation was not saved.");
+	}
+
+	public void handleServerException(String text) {
+		AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
+	    Parcel parcel = parcelAB.as();
+	    //TODO handle different exceptions
+	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
 	}
 	
 }
