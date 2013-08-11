@@ -7,6 +7,7 @@ import com.beyobe.domain.Question;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.roo.addon.layers.repository.jpa.RooJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @RooJpaRepository(domainType = Datum.class)
 public interface DatumRepository {
@@ -20,6 +21,7 @@ public interface DatumRepository {
 			" where d.participantId=?1 " +
 			" order by d.effectiveDate desc "
 			)
+	@Transactional(readOnly=true)
 	List<Datum> getParticipantData(String participantId);
 	
 	/**
@@ -31,8 +33,14 @@ public interface DatumRepository {
 			" where d.participantId=?1 and d.questionId=?2" +
 			" order by d.effectiveDate desc "
 			)
+	@Transactional(readOnly=true)
 	List<Datum> getParticipantDataForQuestion(String participantId, String questionId);
 	
+	@Query("select count(d) from Datum d " +
+			" where d.participantId=?1 "
+			)
+	@Transactional(readOnly=true)
+	Long countParticipantData(String participantId);
 //	/**
 //	 * Get all latest answered data for this participant
 //	 * @param participantId
