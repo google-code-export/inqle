@@ -290,6 +290,16 @@ public class DataBus {
 		    	App.questionForm.onSearchQuestionsReturns(parcel);
 		    }
 		    
+		    if (parcel.getMessage()==Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
+		    	//delete the question
+		    	questionQueue.remove(parcel.getQuestion());
+		    	App.tagdayView.removeQuestion(parcel.getQuestion());
+		    }
+		    if (parcel.getMessage()==Message.TOO_MANY_DATA && parcel.getDatum() != null) {
+		    	//delete the datum
+		    	dataTimeline.removeDatum(parcel.getDatum());
+		    	App.tagdayView.removeDatum(parcel.getDatum());
+		    }
 		    if (gotoTagdayPlace) {
 			    App.placeController.goTo(new TagdayPlace());
 		    }
