@@ -34,10 +34,18 @@ public interface QuestionRepository {
 	@Query(
 			"SELECT distinct q from Question q WHERE (q.privacyType='PUBLIC' OR q.ownerId=?1) AND (LOWER(q.abbreviation) LIKE LOWER(?2) OR LOWER(q.longForm) LIKE LOWER(?2)) " +
 			"AND q.id not in (select s.questionId from Subscription s where s.participant.id = ?1 )"
-//			limit 10"
 	)
 	@Transactional(readOnly=true)
 	List<Question> searchForNewQuestionsUsingSql(String participantId, String term);
+	
+	
+	@Query("select count(q) from Question q " +
+			" where q.ownerId=?1 "
+			)
+	@Transactional(readOnly=true)
+	Long countQuestionsOwned(String participantId);
+	
+	
 	
 //	/**
 //	 * Get a list of questions to which this participant has subscribed, that have not

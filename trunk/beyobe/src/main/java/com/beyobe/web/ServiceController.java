@@ -51,6 +51,10 @@ public class ServiceController {
 	private static final Logger log = Logger.getLogger(ServiceController.class);
 
 	private static final int MAXIMUM_SESSION_DAYS = 14;
+
+	private static final long MAXIMUM_DATA_PER_USER = 2;
+
+	private static final long MAXIMUM_QUESTIONS_PER_USER = 1;
 	
 	@ModelAttribute("clientIpAddress")
 	public String populateClientIpAddress(HttpServletRequest request) {
@@ -311,7 +315,17 @@ public class ServiceController {
 		    headers.add("Access-Control-Allow-Origin", "*");
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
-	 	
+	 	Long countQuestions = questionRepository.countQuestionsOwned(participant.getId());
+	 	if (countQuestions > MAXIMUM_QUESTIONS_PER_USER) {
+	 		log.warn("Participant " + participant.getUsername() + " has too many questions (" + countQuestions + ")");
+			HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
+		    Parcel returnParcel = new Parcel();
+		    returnParcel.setQuestion(parcel.getQuestion());
+		    returnParcel.setMessage(Message.TOO_MANY_QUESTIONS);
+			return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	 	}
 	 	Question q = null;
 		try {
 			q = parcel.getQuestion();
@@ -363,6 +377,19 @@ public class ServiceController {
 			return new ResponseEntity<String>(null, headers, HttpStatus.UNAUTHORIZED);
 		}
 	 	
+	 	//make sure the user has not exceeded quota
+	 	long countData = questionRepository.countQuestionsOwned(participant.getId());
+	 	if (countData > MAXIMUM_DATA_PER_USER) {
+	 		log.warn("Participant " + participant.getUsername() + " has too many data (" + countData + ")");
+	 		HttpHeaders headers = new HttpHeaders();
+		    headers.add("Content-Type", "application/json");
+		    headers.add("Access-Control-Allow-Origin", "*");
+		    Parcel returnParcel = new Parcel();
+		    returnParcel.setDatum(parcel.getDatum());
+		    returnParcel.setMessage(Message.TOO_MANY_DATA);
+			return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
+	 	}
+	 	log.info("User " + participant.getUsername() + " created " + questionRepository.countQuestionsOwned(participant.getId()) + " questions and " + datumRepository.countParticipantData(participant.getId()) + " data.");
 	 	Question q = null;
 		try {
 			q = parcel.getQuestion();
