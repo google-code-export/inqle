@@ -250,67 +250,7 @@ public class DataBus {
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_QUESTION);
 		//TODO save locally
 	}
-
-	public void refreshDataFromJson(String text) {
-//		log.info("RRRRRRRRRRRRRRRRRRRRRRRRR refreshDataFromJson...");
-		boolean gotoTagdayPlace = false;
-		try {
-			AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
-		    Parcel parcel = parcelAB.as();
-		    log.info("Received Session Token? " + parcel.getSessionToken());
-		    Message message = parcel.getMessage();
-		    
-		    if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
-		    	App.signupView.setMessage("Account already exists");
-		    }
-		    
-		    if (parcel.getSessionToken() != null) {
-		    	App.sessionToken = parcel.getSessionToken();
-		    	gotoTagdayPlace = true;
-		    }
-		    
-		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getQuestions() != null) {
-		    	log.info("Received question queue: " + parcel.getQuestions());
-		    	setQuestionQueue(parcel.getQuestions());
-		    	setKnownQuestions(parcel.getQuestions(), parcel.getOtherKnownQuestions());
-		    }
-		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getData() != null) {
-		    	 dataTimeline.setData(parcel.getData());
-		    }
-		    
-		    if (parcel.getMessage()==Message.SAVED && parcel.getData() != null) {
-		    	 dataTimeline.setData(parcel.getData());
-		    }
-		    
-		    if (parcel.getParticipant() != null) {
-		    	log.info("Received participant: " + parcel.getParticipant());
-		    	App.participant = parcel.getParticipant();
-		    }
-		    
-		    if (parcel.getMessage()==Message.MATCHING_QUESTIONS_RETURNED && parcel.getQuestions() != null) {
-		    	App.questionForm.onSearchQuestionsReturns(parcel);
-		    }
-		    
-		    if (parcel.getMessage()==Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
-		    	//delete the question
-		    	Window.alert("You have created too many questions.  Unable to store any more.");
-//		    	questionQueue.remove(parcel.getQuestion());
-//		    	App.tagdayView.removeQuestion(parcel.getQuestion().getId());
-		    }
-		    if (parcel.getMessage()==Message.TOO_MANY_DATA && parcel.getDatum() != null) {
-		    	//delete the datum
-		    	Window.alert("You have answered too many questions.  Unable to store any more answers.");
-//		    	dataTimeline.removeDatum(parcel.getDatum().getId());
-//		    	App.tagdayView.removeDatum(parcel.getDatum().getId());
-		    }
-		    if (gotoTagdayPlace) {
-			    App.placeController.goTo(new TagdayPlace());
-		    }
-		} catch (Exception e) {
-			log.log(Level.SEVERE, "Error on refreshDataFromJson", e);
-		}
-	}
-
+	
 	public Parcel newParcel() {
 	    AutoBean<Parcel> parcelAB = App.tagthedayAutoBeanFactory.parcel();
 	    Parcel parcel = parcelAB.as();
@@ -377,10 +317,72 @@ public class DataBus {
 		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_UNSUBSCRIBE);
 	}
 
+	public void handleServerResponse(Parcel parcel) {
+//		log.info("RRRRRRRRRRRRRRRRRRRRRRRRR refreshDataFromJson...");
+		boolean gotoTagdayPlace = false;
+		try {
+		    log.info("Received Session Token? " + parcel.getSessionToken());
+		    Message message = parcel.getMessage();
+		    
+		    if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
+		    	App.signupView.setMessage("Account already exists");
+		    }
+		    
+		    if (parcel.getSessionToken() != null) {
+		    	App.sessionToken = parcel.getSessionToken();
+		    	gotoTagdayPlace = true;
+		    }
+		    
+		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getQuestions() != null) {
+		    	log.info("Received question queue: " + parcel.getQuestions());
+		    	setQuestionQueue(parcel.getQuestions());
+		    	setKnownQuestions(parcel.getQuestions(), parcel.getOtherKnownQuestions());
+		    }
+		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getData() != null) {
+		    	 dataTimeline.setData(parcel.getData());
+		    }
+		    
+		    if (parcel.getMessage()==Message.SAVED && parcel.getData() != null) {
+		    	 dataTimeline.setData(parcel.getData());
+		    }
+		    
+		    if (parcel.getParticipant() != null) {
+		    	log.info("Received participant: " + parcel.getParticipant());
+		    	App.participant = parcel.getParticipant();
+		    }
+		    
+		    if (parcel.getMessage()==Message.MATCHING_QUESTIONS_RETURNED && parcel.getQuestions() != null) {
+		    	App.questionForm.onSearchQuestionsReturns(parcel);
+		    }
+		    
+		    if (gotoTagdayPlace) {
+			    App.placeController.goTo(new TagdayPlace());
+		    }
+		} catch (Exception e) {
+			log.log(Level.SEVERE, "Error on refreshDataFromJson", e);
+		}
+	}
+
 	public void handleConnectionError(Parcel parcel) {
 		//TODO undo the change in the UI
 		//TODO put the unsaved object into a queue, and try to save that queue each time
-		Window.alert("Error.  Your last operation was not saved.");
+		
+		if (parcel.getMessage()==Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
+	    	Window.alert("You have created too many questions.  Unable to store any more.");
+	    	//delete the question?
+//	    	questionQueue.remove(parcel.getQuestion());
+//	    	App.tagdayView.removeQuestion(parcel.getQuestion().getId());
+	    	return;
+	    }
+	    if (parcel.getMessage()==Message.TOO_MANY_DATA && parcel.getDatum() != null) {
+	    	Window.alert("You have answered too many questions.  Unable to store any more answers.");
+	    	//delete the datum?
+//	    	dataTimeline.removeDatum(parcel.getDatum().getId());
+//	    	App.tagdayView.removeDatum(parcel.getDatum().getId());
+	    	return;
+	    }
+	    
+	    Window.alert("Error.  Your last operation was not saved.");
 	}
 
 	public void handleServerException(String text) {
@@ -388,6 +390,10 @@ public class DataBus {
 	    Parcel parcel = parcelAB.as();
 	    //TODO handle different exceptions
 	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
+	}
+
+	public void handleTimeout(Parcel currentParcel) {
+		Window.alert("Unable to connect: " + currentParcel);
 	}
 	
 }
