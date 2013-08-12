@@ -6,6 +6,8 @@ public interface Parcel {
 //	public Directive getDirective();
 //	public void setDirective(Directive directive);
 	
+	public String getAction();
+	public void setAction(String action);
 	public Participant getParticipant();
 	public void setParticipant(Participant participant);
 	public String getSessionToken();

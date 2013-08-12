@@ -22,48 +22,51 @@ import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 public class ParcelClient {
 	
 	public static final long MAX_COUNTER = 100000;
-	private int status;
+//	private int status;
 
 	private static Logger log = Logger.getLogger(ParcelClient.class.getName());
 //	private boolean awaitingLoginResponse = false;
 	
-	private Parcel currentParcel;
+	private Parcel latestParcel;
 	
 	// A keeper of the timer instance in case we need to cancel it
 	private Timer timeoutTimer = null;
 
 	// An indicator when the computation should quit
-	private boolean abortFlag = false;
+//	private boolean abortFlag = false;
 	
-	public int sendParcel(final Parcel parcel, String action) {
+	public void sendParcel(final Parcel parcel) {
+		if (parcel==null || parcel.getAction()==null) return;
+		this.latestParcel = parcel;
 		parcel.setSessionToken(App.sessionToken);
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		final String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
-		String url = Constants.BASEURL_BEYOBE_SERVICE + action;
+		String url = Constants.BASEURL_BEYOBE_SERVICE + parcel.getAction();
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
 		builder.setRequestData(jsonString);
 		// Check to make sure the timer isn't already running.
-	    if (timeoutTimer != null) {
-//	        Window.alert("Please wait until prior process finishes then try again.");
-	        return Constants.STATUS_ALREADY_RUNNING;
-	    }
-	    status = Constants.STATUS_ALREADY_RUNNING;
+//	    if (timeoutTimer != null) {
+//	        return Constants.STATUS_ALREADY_RUNNING;
+//	    }
+		
+//	    status = Constants.STATUS_ALREADY_RUNNING;
 
 	    // Create a timer to abort if the RPC takes too long
 	    timeoutTimer = new Timer() {
 	      public void run() {
 	        Window.alert("Timeout expired.");
-	        abortFlag = true;
+//	        abortFlag = true;
 	        timeoutTimer = null;
-	        App.dataBus.handleTimeout(currentParcel);
+	        cancelTimer();
+	        App.dataBus.handleTimeout(latestParcel);
 	        
 	      }
 	    };
 
 	    // (re)Initialize the abort flag and start the timer.
-	    abortFlag = false;
-	    timeoutTimer.schedule(Constants.TIMEOUT_DATUM_CLIENT); // timeout is in milliseconds
+//	    abortFlag = false;
+	    timeoutTimer.schedule(Constants.TIMEOUT_PARCEL_CLIENT); // timeout is in milliseconds
 		
 		try {
 //			Window.alert("Sending request");
@@ -72,17 +75,18 @@ public class ParcelClient {
 				public void onError(Request request, Throwable exception) {
 			    	log.warning("unable to connect to server for log in");
 			    	cancelTimer();
-			    	status = Constants.STATUS_TIMED_OUT;
+//			    	status = Constants.STATUS_TIMED_OUT;
 			    	
 			    	App.dataBus.handleConnectionError(parcel);
 			    }
 	
 			    public void onResponseReceived(Request request, Response response) {
-//			    	Window.alert("Response received");
+			    	log.info("Response received: " + response.getStatusCode() + ":" + response.getStatusText() + "=" + response.getText());
 			    	
 			    	cancelTimer();
 			        
-				    if (!abortFlag && 200 == response.getStatusCode()) {
+//				    if (!abortFlag && 200 == response.getStatusCode()) {
+			    	if (200 == response.getStatusCode()) {
 						try {
 							AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
 						    Parcel parcel = parcelAB.as();
@@ -91,25 +95,26 @@ public class ParcelClient {
 							log.log(Level.SEVERE, "Error refreshing DataBus with new data", e);
 						}
 						log.info("Received data and loaded: " + response.getText());
-				    	abortFlag = true;
+//				    	abortFlag = true;
 				    } else {
 				    	log.warning("Error communicating with server: " + response.getText() + "\n" + response.getHeadersAsString());
-				    	status = Constants.STATUS_FAILED;
-				    	log.info("Set connection status to: " + status);
-				    	App.dataBus.handleServerException(response.getText());
-				    	abortFlag = true;
+//				    	status = Constants.STATUS_FAILED;
+//				    	log.info("Set connection status to: " + status);
+				    	AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
+					    Parcel parcel = parcelAB.as();
+				    	App.dataBus.handleServerException(parcel);
+//				    	abortFlag = true;
 				    }
 			    } 
 		  });
 		log.info("Builder sent request:" + builder.getRequestData());
 		  
 		} catch (RequestException e) {
-			log.log(Level.WARNING, "unable to get data", e);
-			e.printStackTrace();
-			status = Constants.STATUS_ERROR_CONNECTING;
-			abortFlag = true;
+			log.log(Level.WARNING, "RequestException sending request to Beyobe server", e);
+			cancelTimer();
+			App.dataBus.handleConnectionError(parcel);
 		}
-		return status;
+//		return status;
 	}
 	
 	// Stop the timeout timer if it is running
@@ -120,7 +125,7 @@ public class ParcelClient {
 		}
 	}
 
-	public int getStatus() {
-		return status;
-	}
+//	public int getStatus() {
+//		return status;
+//	}
 }

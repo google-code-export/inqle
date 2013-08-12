@@ -39,17 +39,17 @@ public class DataBus {
 	
 	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
 	private static List<Question> questionQueue = new ArrayList<Question>();
-//	private static HashMap<String, Map<String, Datum>> dataByDate = new HashMap<String,  Map<String, Datum>>();
 
+	private static Map<String, Question> unsavedQuestions = new HashMap<String, Question>();
+	private static Map<String, Datum> unsavedData = new HashMap<String, Datum>();
+	
 	public Participant participant;
 
-//	private HashMap<String, Day> allDays = new HashMap<String, Day>();
 	private DataTimeline dataTimeline = new DataTimeline();
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
-		//populate dataByDate, knownQuestions
-		//TODO sync questions and data with remote DB
+		//TODO sync local questions and data with remote DB
 	}
 	
 	public void addQuestionToQueue(Question q) {
@@ -72,13 +72,8 @@ public class DataBus {
 		knownQuestions.put(question.getId(), question);
 	}
 	
-//	public static String getDateString(Date date) {
-//		return DateTimeFormat.getFormat("yyyy-MM-dd").format(date);
-//	}
-	
 	public List<TagButton> getTagButtonsForDate(Date effectiveDate) {
 		List<TagButton> buttons = new ArrayList<TagButton>();
-//		Map<String, Datum> data = getDataForDate(effectiveDate);
 		Map<String, Datum> data = dataTimeline.getDataForDate(effectiveDate);
 		if (data==null) return null;
 		for (Question q: questionQueue) {
@@ -86,30 +81,8 @@ public class DataBus {
 			TagButton button = new TagButton(effectiveDate, q, d);
 			buttons.add(button);
 		}
-//		for (Datum datum: data.) {
-//			Question theQuestion = getQuestion(datum.getQuestionId());
-//			if (theQuestion==null) {
-//				log.log(Level.SEVERE, "Unable to find question: " + datum.getQuestionId());
-//			}
-//			TagButton button = new TagButton(effectiveDate, theQuestion, datum);
-//			buttons.add(button);
-//		}
 		return buttons;
 	}
-
-//	private static Map<String, Datum> getDataForDate(Date date) {
-//		return dataByDate.get(DataTimeline.getDateStr(date));
-//	}
-
-//	private Question getQuestion(String questionUid) {
-//		if (knownQuestions.get(questionUid) != null) {
-//			return knownQuestions.get(questionUid);
-//		}
-//		//TODO try to retrieve the question from the server
-//		
-//		//unable to find it
-//		return null;
-//	}
 	
 	public void setDatum(Datum datumToSave, Question questionAnswered) {
 		dataTimeline.put(datumToSave);
@@ -118,66 +91,15 @@ public class DataBus {
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
 		parcel.setQuestion(questionAnswered);
-		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_DATUM);
+		parcel.setAction(Constants.SERVERACTION_STORE_DATUM);
+		App.parcelClient.sendParcel(parcel);
 		
 		//TODO save in local storage
 	}
 	
-//	public HashMap<String, Day> createAllDays() {
-//		allDays = new HashMap<String, Day>();
-//		
-//		Date startOfToday = Constants.DAY_FORMATTER.parse(Constants.DAY_FORMATTER.format(new Date()));
-//		
-//		//if no data, just return today's day
-//		if (dataByDate == null || dataByDate.size()==0) {
-//			Day day = createDay(startOfToday);
-//			allDays.put(getDateString(startOfToday), day);
-//			return allDays;
-//		}
-//				
-//		//find earliest date
-//		Date earliestDate = null;
-//		for (String key : dataByDate.entrySet()) {
-//		    String key = entry.getKey();
-//		    earliestDate = Constants.DAY_FORMATTER.parse(key);
-//		    break;
-//		}
-//		
-//		Date date = new Date(startOfToday.getTime());
-//		if (earliestDate != null) {
-//			date = earliestDate;
-//		}
-//		
-//		while(date.before(startOfToday) || date.equals(startOfToday)) {
-//			addDayOntoEnd(date);
-//			
-//			//advance date 24 hours
-//			date = new Date(date.getTime());
-//			CalendarUtil.addDaysToDate(date, 1);
-//		}
-//		
-//		return allDays;
-//	}
-	
-//	public Day addDay(Date d) {
-//		log.info("addDay: " + d);
-//		Day day = createDay(d);
-//		allDays.put(getDateString(d), day);
-//		return day;
-//	}
-	
-//	public Day addDayOntoBeginning(Date d) {
-//		log.info("addDayOntoBeginning: " + d);
-//		Day day = createDay(d);
-//		allDays.put(getDateString(d), day);
-//		return day;
-//	}
-
 	public Day createDay(Date date, boolean navigatingToPast) {
 		Day day = new Day(date);
-//		log.info("created Day:" + day);
 		addTagsToDay(day, navigatingToPast);
-//		allDays.put(DataTimeline.getDateStr(date), day);
 		return day;
 	}
 
@@ -223,10 +145,6 @@ public class DataBus {
 		return inferredAnswer;
 	}
 
-//	public HashMap<String, Day> getAllDays() {
-//		return allDays;
-//	}
-	
 	public List<String> getPastAnswers(Question q) {
 		return dataTimeline.getPastAnswers(q);
 	}
@@ -237,17 +155,10 @@ public class DataBus {
 		}
 		knownQuestions.put(question.getId(), question);
 		
-//		//add the question to each day
-//		for (String dayStr: getAllDays().keySet()) {
-//			Day day = allDays.get(dayStr);
-//			if (day != null) {
-//				day.addQuestion(question);
-//			}
-//		}
-		
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
-		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_STORE_QUESTION);
+		parcel.setAction(Constants.SERVERACTION_STORE_QUESTION);
+		App.parcelClient.sendParcel(parcel);
 		//TODO save locally
 	}
 	
@@ -260,42 +171,18 @@ public class DataBus {
 
 	private void setKnownQuestions(List<Question> qq, List<Question> otherKnownQuestions) {
 //		knownQuestions = new HashMap<String, Question>();
-		for (Question q: qq) {
-			knownQuestions.put(q.getId(), q);
+		if (qq != null) {
+			for (Question q: qq) {
+				knownQuestions.put(q.getId(), q);
+			}
 		}
+		if (otherKnownQuestions==null) return;
 		for (Question q: otherKnownQuestions) {
 			knownQuestions.put(q.getId(), q);
 		}
 		
 	}
 
-//	private void setData(List<Datum> data) {
-////		dataByDate = new HashMap<String, List<Datum>>();
-//		for (Datum d: data) {
-//			String dayStr = Constants.DAY_FORMATTER.format(d.getEffectiveDate());
-//			Map<String, Datum> dayData = dataByDate.get(dayStr);
-//			if (dayData==null) dayData = new HashMap<String, Datum>();
-//			String key = d.getQuestionId();
-//			//TODO: support formulas: if (key==null) key = d.getFormulaId();
-//			dayData.put(key, d);
-//			dataByDate.put(dayStr, dayData);
-//		}
-//	}
-
-//	public Day getDay(Date date) {
-//		if (allDays == null) return null;
-//		return allDays.get(DataTimeline.getDateStr(date));
-//	}
-
-//	public Day loadDay(Date d, boolean navigatingToPast) {
-//		Day day = getDay(d);
-//		if (day == null) {
-//			//TODO load data for that day
-//			day = createDay(d, navigatingToPast);
-//		}
-//		return day;
-//	}
-	
 	/**
 	 * If we ever decide to cache days, then uncomment the above
 	 * @param d
@@ -314,11 +201,11 @@ public class DataBus {
 		knownQuestions.remove(question);
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
-		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_UNSUBSCRIBE);
+		parcel.setAction(Constants.SERVERACTION_UNSUBSCRIBE);
+		App.parcelClient.sendParcel(parcel);
 	}
 
 	public void handleServerResponse(Parcel parcel) {
-//		log.info("RRRRRRRRRRRRRRRRRRRRRRRRR refreshDataFromJson...");
 		boolean gotoTagdayPlace = false;
 		try {
 		    log.info("Received Session Token? " + parcel.getSessionToken());
@@ -333,18 +220,20 @@ public class DataBus {
 		    	gotoTagdayPlace = true;
 		    }
 		    
-		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getQuestions() != null) {
+//		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getQuestions() != null) {
+		    if (parcel.getQuestions() != null) {
 		    	log.info("Received question queue: " + parcel.getQuestions());
 		    	setQuestionQueue(parcel.getQuestions());
 		    	setKnownQuestions(parcel.getQuestions(), parcel.getOtherKnownQuestions());
 		    }
-		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getData() != null) {
+//		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getData() != null) {
+	    	if (parcel.getData() != null) {
 		    	 dataTimeline.setData(parcel.getData());
 		    }
 		    
-		    if (parcel.getMessage()==Message.SAVED && parcel.getData() != null) {
-		    	 dataTimeline.setData(parcel.getData());
-		    }
+//		    if (parcel.getMessage()==Message.SAVED && parcel.getData() != null) {
+//		    	 dataTimeline.setData(parcel.getData());
+//		    }
 		    
 		    if (parcel.getParticipant() != null) {
 		    	log.info("Received participant: " + parcel.getParticipant());
@@ -367,6 +256,13 @@ public class DataBus {
 		//TODO undo the change in the UI
 		//TODO put the unsaved object into a queue, and try to save that queue each time
 		
+		
+	    
+	    Window.alert("Error.  Your last operation was not saved.");
+	}
+
+	public void handleServerException(Parcel parcel) {
+	    //TODO handle more kinds of exceptions
 		if (parcel.getMessage()==Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
 	    	Window.alert("You have created too many questions.  Unable to store any more.");
 	    	//delete the question?
@@ -382,18 +278,27 @@ public class DataBus {
 	    	return;
 	    }
 	    
-	    Window.alert("Error.  Your last operation was not saved.");
-	}
-
-	public void handleServerException(String text) {
-		AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, text);
-	    Parcel parcel = parcelAB.as();
-	    //TODO handle different exceptions
 	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
+	    
+	    storeUnsavedInfo(parcel);
 	}
 
-	public void handleTimeout(Parcel currentParcel) {
-		Window.alert("Unable to connect: " + currentParcel);
+	public void handleTimeout(Parcel parcel) {
+		Window.alert("Unable to connect: " + parcel);
+		storeUnsavedInfo(parcel);
+	}
+
+	private void storeUnsavedInfo(Parcel parcel) {
+		Datum d = parcel.getDatum();
+		if (d!= null) {
+			Window.alert("Saving datum: '" + d.getTextValue() + "' in the unsavedData queue");
+			unsavedData.put(d.getId(), d);
+		}
+		Question q = parcel.getQuestion();
+		if (q!=null) {
+			Window.alert("Saving question: '" + q.getAbbreviation() + "' in the unsavedQuestions queue");
+			unsavedQuestions.put(q.getId(), q);
+		}
 	}
 	
 }

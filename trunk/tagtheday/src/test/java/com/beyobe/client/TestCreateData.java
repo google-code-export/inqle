@@ -34,7 +34,8 @@ public class TestCreateData extends GWTTestCase {
 		Parcel parcel = App.dataBus.newParcel();
 		parcel.setUsername("TestCreateData");
 		parcel.setPassword("password");
-		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_SIGNUP);
+		parcel.setAction(Constants.SERVERACTION_SIGNUP);
+		App.parcelClient.sendParcel(parcel);
 		delayTestFinish(5000);
 	}
 	

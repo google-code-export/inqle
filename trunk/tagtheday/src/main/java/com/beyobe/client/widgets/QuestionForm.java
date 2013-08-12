@@ -548,7 +548,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			parcel.setQueryTerm(abbrev.getText());
 //			notWaititngForResponse = false;
 			log.info("searchForQuestions sending request...");
-			App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_SEARCH_QUESTIONS);
+			parcel.setAction(Constants.SERVERACTION_SEARCH_QUESTIONS);
+			App.parcelClient.sendParcel(parcel);
 		}
 	}
 
