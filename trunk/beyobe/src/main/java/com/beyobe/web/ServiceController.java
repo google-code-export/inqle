@@ -101,6 +101,7 @@ public class ServiceController {
 		} 
 	 	if (acctAlreadyExists) {
 			log.warn("Username already exists=" + username);
+			returnParcel.setMessage(Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS);
 	 		return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
 	 	
@@ -299,7 +300,7 @@ public class ServiceController {
 		}
 	 	
 	 	//make sure the user has not exceeded quota
-	 	long countData = questionRepository.countQuestionsOwned(participant.getId());
+	 	long countData = datumRepository.countParticipantData(participant.getId());
 	 	if (countData > MAXIMUM_DATA_PER_USER) {
 	 		log.warn("Participant " + participant.getUsername() + " has too many data (" + countData + ")");
 //	 		HttpHeaders headers = new HttpHeaders();
