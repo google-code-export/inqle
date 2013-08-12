@@ -128,3 +128,4 @@ finder list --class ~.domain.Participant --filter nabled
 finder list --class ~.domain.Participant --filter nabl
 // [failed] finder list --class ~.domain.Participant --filter nabl --depth 0
 finder list --class ~.domain.Participant --filter nabl --depth 1
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-08-11 20:49:05
