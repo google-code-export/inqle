@@ -27,6 +27,8 @@ public class ParcelClient {
 	private static Logger log = Logger.getLogger(ParcelClient.class.getName());
 //	private boolean awaitingLoginResponse = false;
 	
+	private Parcel currentParcel;
+	
 	// A keeper of the timer instance in case we need to cancel it
 	private Timer timeoutTimer = null;
 
@@ -38,13 +40,8 @@ public class ParcelClient {
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		final String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
 		String url = Constants.BASEURL_BEYOBE_SERVICE + action;
-//		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
-//		builder.setHeader("Access-Control-Allow-Methods",
-//	            "PUT, GET, POST, DELETE, OPTIONS");
-//	    builder.setHeader("Access-Control-Allow-Headers", "Content-Type");
-//	    builder.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8888");
 		builder.setRequestData(jsonString);
 		// Check to make sure the timer isn't already running.
 	    if (timeoutTimer != null) {
@@ -59,6 +56,8 @@ public class ParcelClient {
 	        Window.alert("Timeout expired.");
 	        abortFlag = true;
 	        timeoutTimer = null;
+	        App.dataBus.handleTimeout(currentParcel);
+	        
 	      }
 	    };
 
@@ -85,7 +84,9 @@ public class ParcelClient {
 			        
 				    if (!abortFlag && 200 == response.getStatusCode()) {
 						try {
-							App.dataBus.refreshDataFromJson(response.getText());
+							AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
+						    Parcel parcel = parcelAB.as();
+							App.dataBus.handleServerResponse(parcel);
 						} catch (Exception e) {
 							log.log(Level.SEVERE, "Error refreshing DataBus with new data", e);
 						}
