@@ -106,43 +106,35 @@ public class SignupViewImpl extends Composite implements SignupView {
 		Parcel parcel = App.dataBus.newParcel();
 		parcel.setUsername(userName.getText());
 		parcel.setPassword(password.getText());
-		App.parcelClient.sendParcel(parcel, Constants.SERVERACTION_SIGNUP);
+		parcel.setAction(Constants.SERVERACTION_SIGNUP);
+		App.parcelClient.sendParcel(parcel);
 //		log.info("wait until request comes back or timer times out");
-		long counter = 0;
-		boolean abortFlag = false;
-		while (! abortFlag) {
-			//increment a counter in case our timer fails us
-			counter++;
-//			log.info("counter=" + counter);
-			if(counter > MAX_COUNTER) abortFlag = true;
-		}
-		status = App.parcelClient.getStatus();
-		//if no answer yet on signup, that means the Timer in ParcelClient failed. Delay x seconds then check again
-		if (status == Constants.STATUS_ALREADY_RUNNING) {
-			new Timer() {
-				@Override
-				public void run() {
-					status = App.parcelClient.getStatus();
-					if (status < 1) {
-						message.setText("Login failed: " + status);
-					}
-				}
-				}.schedule(Constants.TIMEOUT_SIGNUP);
-		} else {
-			if (status < 1) {
-				message.setText("Login failed: " + status);
-			}
-		}
-		
-//		if (App.isUserLoggedIn()) {
-//			presenter.goTo(new TagdayPlace());
+//		long counter = 0;
+//		boolean abortFlag = false;
+//		while (! abortFlag) {
+//			//increment a counter in case our timer fails us
+//			counter++;
+//			if(counter > MAX_COUNTER) abortFlag = true;
+//		}
+//		status = App.parcelClient.getStatus();
+//		//if no answer yet on signup, that means the Timer in ParcelClient failed. Delay x seconds then check again
+//		if (status == Constants.STATUS_ALREADY_RUNNING) {
+//			new Timer() {
+//				@Override
+//				public void run() {
+//					status = App.parcelClient.getStatus();
+//					if (status < 1) {
+//						message.setText("Login failed: " + status);
+//					}
+//				}
+//				}.schedule(Constants.TIMEOUT_SIGNUP);
 //		} else {
-//			message.setText("Login failed: " + status);
+//			if (status < 1) {
+//				message.setText("Login failed: " + status);
+//			}
 //		}
 	}
 
-	
-	
 	public String getEmail() {
 		String email = userName.getText();
 		if (email == null) return null;
@@ -153,7 +145,4 @@ public class SignupViewImpl extends Composite implements SignupView {
 	public void setMessage(String string) {
 		message.setText(string);
 	}
-	
-	
-
 }
