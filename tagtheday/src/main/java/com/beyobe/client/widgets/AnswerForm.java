@@ -129,6 +129,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				} else {
 					choicePicker = new ChoicePicker(q.getChoices(), 1);
 				}
+				choicePicker.setSelectedIndex(0);
 				panel.add(choicePicker);
 			}
 			if (d != null) choicePicker.setSelectedChoice(d.getChoice());
