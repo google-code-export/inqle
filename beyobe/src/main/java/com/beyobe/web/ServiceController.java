@@ -309,7 +309,7 @@ public class ServiceController {
 		    returnParcel.setDatum(parcel.getDatum());
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
 //			return new ResponseEntity<String>(returnParcel.toJson(), headers, HttpStatus.OK);
-			return respond(returnParcel, HttpStatus.OK);
+			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
 	 	log.info("User " + participant.getUsername() + " created " + questionRepository.countQuestionsOwned(participant.getId()) + " questions and " + datumRepository.countParticipantData(participant.getId()) + " data.");
 	 	Question q = null;
