@@ -51,25 +51,9 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
     		return;
     	}
     	App.tagdayView.setPresenter(this);
-//        loadDays();
         containerWidget.setWidget(App.tagdayView.asWidget());
         goToDate(new Date());
-        
-//        currentDay = App.dataBus.loadDay(new Date());
-//        App.tagdayView.setDay(currentDay);
     }
-
-//    private void loadDays() {
-//    	
-//    	Map<String, Day> days = App.dataBus.getAllDays();
-//    	if (days == null) {
-//    		days = App.dataBus.createAllDays();
-//    	}
-////    	for (Day day: days) {
-////    		addDayOntoEnd(day);
-////    		log.info("Added day: " + day);
-////    	}
-//	}
 
 	/**
      * Ask user before stopping this activity
@@ -124,23 +108,6 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		App.tagdayView.setDay(day, null);
 		updateNavigation();
 	}
-	
-//	@Override
-//	public void goToEarlierDate(Date d) {
-//		if (d == null) return;
-//		Day day = App.dataBus.loadDay(d);
-//		currentDay = day;
-//		Date now = new Date();
-//		if (day.getEnd().after(now) && day.getStart().before(now)) {
-//			day.addStyleName("ttd-day-today");
-//		} else if (day.getStart().after(now)) {
-//			day.addStyleName("ttd-day-future");
-//		} else {
-//			day.addStyleName("ttd-day-past");
-//		}
-//		App.tagdayView.setDay(day, Animation.SLIDE_REVERSE);
-//		updateNavigation();
-//	}
 	
 	@Override
 	public void goToDate(Date d, Animation animation, boolean navigatingToPast) {
