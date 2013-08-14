@@ -36,6 +36,7 @@ public class ParcelClient {
 //	private boolean abortFlag = false;
 	
 	public void sendParcel(final Parcel parcel) {
+		parcel.setClient(Constants.CLIENT);
 		if (parcel==null || parcel.getAction()==null) return;
 		this.latestParcel = parcel;
 		parcel.setSessionToken(App.sessionToken);

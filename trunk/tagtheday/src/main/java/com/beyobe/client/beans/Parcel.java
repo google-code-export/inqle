@@ -38,4 +38,12 @@ public interface Parcel {
 	public String getQueryTerm();
 	public void setQueryTerm(String queryTerm);
 	
+	public List<String> getSavedData();
+	public void setSavedData(List<String> savedData);
+	
+	public List<String> getSavedQuestions();
+	public void setSavedQuestions(List<String> savedQuestions);
+	
+	public String getClient();
+	public void setClient(String client);
 }
