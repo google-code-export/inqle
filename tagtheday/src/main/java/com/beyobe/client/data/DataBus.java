@@ -46,6 +46,8 @@ public class DataBus {
 	public Participant participant;
 
 	private DataTimeline dataTimeline = new DataTimeline();
+
+	private boolean dirty = false;
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -84,8 +86,12 @@ public class DataBus {
 		return buttons;
 	}
 	
-	public void setDatum(Datum datumToSave, Question questionAnswered) {
+	public void saveDatum(Datum datumToSave, Question questionAnswered) {
+		//save the datum in working memory
 		dataTimeline.put(datumToSave);
+		
+		//save the datum in unsaved data queue
+		unsavedData.put(datumToSave.getId(), datumToSave);
 		
 		//next save to server
 		Parcel parcel = newParcel();
@@ -231,9 +237,17 @@ public class DataBus {
 		    	 dataTimeline.setData(parcel.getData());
 		    }
 		    
-//		    if (parcel.getMessage()==Message.SAVED && parcel.getData() != null) {
-//		    	 dataTimeline.setData(parcel.getData());
-//		    }
+		    if (parcel.getMessage()==Message.SAVED && parcel.getSavedData() != null) {
+		    	 for(String savedDatumId: parcel.getSavedData()) {
+		    		 unsavedData.remove(savedDatumId);
+		    	 }
+		    }
+		    
+		    if (parcel.getMessage()==Message.SAVED && parcel.getSavedQuestions() != null) {
+		    	 for(String savedQuestionId: parcel.getSavedQuestions()) {
+		    		 unsavedQuestions.remove(savedQuestionId);
+		    	 }
+		    }
 		    
 		    if (parcel.getParticipant() != null) {
 		    	log.info("Received participant: " + parcel.getParticipant());
@@ -290,7 +304,7 @@ public class DataBus {
 	    
 	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
 	    
-	    storeUnsavedInfo(parcel);
+	    weAreDirty();
 	}
 
 	public void handleTimeout(Parcel parcel) {
@@ -300,20 +314,21 @@ public class DataBus {
 		}
 			
 		Window.alert("Unable to connect: " + parcel);
-		storeUnsavedInfo(parcel);
+		weAreDirty();
 	}
 
-	private void storeUnsavedInfo(Parcel parcel) {
-		Datum d = parcel.getDatum();
-		if (d!= null) {
-			Window.alert("Saving datum: '" + d.getTextValue() + "' in the unsavedData queue");
-			unsavedData.put(d.getId(), d);
-		}
-		Question q = parcel.getQuestion();
-		if (q!=null) {
-			Window.alert("Saving question: '" + q.getAbbreviation() + "' in the unsavedQuestions queue");
-			unsavedQuestions.put(q.getId(), q);
-		}
+	private void weAreDirty() {
+		dirty  = true;
+//		Datum d = parcel.getDatum();
+//		if (d!= null) {
+//			Window.alert("Saving datum: '" + d.getTextValue() + "' in the unsavedData queue");
+//			unsavedData.put(d.getId(), d);
+//		}
+//		Question q = parcel.getQuestion();
+//		if (q!=null) {
+//			Window.alert("Saving question: '" + q.getAbbreviation() + "' in the unsavedQuestions queue");
+//			unsavedQuestions.put(q.getId(), q);
+//		}
 	}
 	
 }

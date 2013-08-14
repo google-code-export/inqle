@@ -185,7 +185,7 @@ public class App {
 				if (answerPopin != null) answerPopin.hide();
 				tagButton.refreshAppearance();
 				
-				dataBus.setDatum(tagButton.getDatum(), tagButton.getQuestion());
+				dataBus.saveDatum(tagButton.getDatum(), tagButton.getQuestion());
 			}
 		});
 		
