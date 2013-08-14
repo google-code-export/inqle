@@ -11,7 +11,6 @@ import com.beyobe.domain.Question;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import flexjson.ObjectFactory;
  
 @RooJson
 public class Parcel {
@@ -27,6 +26,9 @@ public class Parcel {
 	private Message message;
 	private String queryTerm;
 	private List<Question> questions;
+	private List<String> savedQuestions;
+	private List<String> savedData;
+	private String client;
 	
 //	public List<Question> getQuestionQueue() {
 //		return questionQueue;
@@ -151,5 +153,29 @@ public class Parcel {
 	
 	public void setQuestions(List<Question> questions) {
 		this.questions = questions;
+	}
+
+	public List<String> getSavedQuestions() {
+		return savedQuestions;
+	}
+
+	public void setSavedQuestions(List<String> savedQuestions) {
+		this.savedQuestions = savedQuestions;
+	}
+
+	public List<String> getSavedData() {
+		return savedData;
+	}
+
+	public void setSavedData(List<String> savedData) {
+		this.savedData = savedData;
+	}
+
+	public String getClient() {
+		return client;
+	}
+
+	public void setClient(String client) {
+		this.client = client;
 	}
 }
