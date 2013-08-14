@@ -52,9 +52,9 @@ public class ServiceController {
 
 	private static final int MAXIMUM_SESSION_DAYS = 14;
 
-	private static final long MAXIMUM_DATA_PER_USER = 2;
+	private static final long MAXIMUM_DATA_PER_USER = 100000;
 
-	private static final long MAXIMUM_QUESTIONS_PER_USER = 1;
+	private static final long MAXIMUM_QUESTIONS_PER_USER = 10000;
 	
 	@ModelAttribute("clientIpAddress")
 	public String populateClientIpAddress(HttpServletRequest request) {
