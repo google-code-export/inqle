@@ -49,6 +49,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 	private static final int DATATYPEINDEX_MEMO = 2;
 	private static final Integer PRIVACYTYPEINDEX_PRIVATE = 1;
 	private static final Integer PRIVACYTYPEINDEX_PUBLIC = 0;
+	private static final String ABBREV_SEARCH_BOX_NAME = "AbbrevSearchBox";
 	private Question q;
 //	private MTextBox shortForm;
 	private MSearchBox abbrev;
@@ -69,6 +70,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //	private boolean notWaititngForResponse = true;
 	private MListBox abbrevLB = new MListBox();
 	
+	private boolean searching = false;
 //	private Typeahead abbrevTA;
 //	private MultiWordSuggestOracle abbrevOracle;
 	
@@ -117,7 +119,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //		abbrevTA.
 //		abbrevOracle = (MultiWordSuggestOracle) abbrevTA.getSuggestOracle();
 		abbrev = new MSearchBox();
-		abbrev.setName("ttd-AbbrevSearchBox");
+		abbrev.setName(ABBREV_SEARCH_BOX_NAME);
 //		abbrev.setMaxLength(ABBREV_LENGTH);
 //		abbrev.setVisibleLength(ABBREV_LENGTH);
 		abbrev.addKeyUpHandler(this);
@@ -208,6 +210,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 
 	public void setQuestion(Question q, boolean disableForm) {
+		searching = false;
 		this.q = q;
 		
 		if (q == null) return;
@@ -467,37 +470,42 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 //        });
 	}
 	
+	public void onSearchQuestionError() {
+		searching = false;
+	}
+	
+	/**
+	 * This is called when a search returns
+	 * @param parcel
+	 */
 	public void onSearchQuestionsReturns(Parcel parcel) {
 		log.info("onSearchQuestionsReturns called for: " + parcel.getQueryTerm());
 //		notWaititngForResponse = true;
 //		String theAbbrev = abbrev.getText();
 		String theAbbrev = getAbbrev();
-		if (parcel.getQueryTerm().equals(theAbbrev)) {
-			this.matchingQuestions = parcel.getQuestions();
-			
-			if (matchingQuestions != null && matchingQuestions.size()> 0) {
-				log.info("Received " + matchingQuestions.size() + " matching questions");
-				abbrevLB.clear();
-				updateAbbrev(theAbbrev);
-				abbrevLB.setSelectedIndex(0);
-				int numItems = matchingQuestions.size();
-				if (numItems > 7) numItems = 7;
-				abbrevLB.setVisibleItemCount(numItems + 1);
-				for (int i=0; i < numItems; i++) {
-					Question q = parcel.getQuestions().get(i);
-					abbrevLB.addItem(q.getAbbreviation() + ": " + q.getLongForm());
-				}
-			} 
-//			log.info("Query term is up to date.  Populate typeahead choices with parcel: " + parcel.getQuestions().get(0).getAbbreviation());
-			//TODO populate a proper typeahead
-//			if (matchingQuestions.get(0) != null) {
-			
-//				Question selectedQuestion = parcel.getQuestions().get(0);				
-//				setQuestion(selectedQuestion, true);
-//			}
-		} else {
-			log.info("Query term is old.  Resend");
+		updateAbbrev(theAbbrev);
+		
+		this.matchingQuestions = parcel.getQuestions();
+		
+		//if the term searched for does not equal the current abbrev, do another search
+		if (! parcel.getQueryTerm().equals(theAbbrev)) {
 			searchForQuestions();
+		} else {
+			searching = false;
+		}
+				
+		if (matchingQuestions != null && matchingQuestions.size()> 0) {
+			log.info("Received " + matchingQuestions.size() + " matching questions");
+			abbrevLB.clear();
+			
+			abbrevLB.setSelectedIndex(0);
+			int numItems = matchingQuestions.size();
+			if (numItems > 7) numItems = 7;
+			abbrevLB.setVisibleItemCount(numItems + 1);
+			for (int i=0; i < numItems; i++) {
+				Question q = parcel.getQuestions().get(i);
+				abbrevLB.addItem(q.getAbbreviation() + ": " + q.getLongForm());
+			}
 		}
 	}
 
@@ -526,6 +534,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 
 	@Override
+	/**
+	 * This is called when a user is typing in a text box
+	 */
 	public void onKeyUp(KeyUpEvent event) {
 		Widget sender = (Widget) event.getSource();
 		String senderName = null;
@@ -534,16 +545,22 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			senderName = textBox.getName();
 		}
 		log.info("senderName=" + senderName + "; abbrev=" + getAbbrev());
+		
+		//if abbrev box is the source of the change, update the abbrev listbox and search
 		if (! editMode && abbrev.getName().equals(senderName)) {
-			setQuestion(getNewQuestion(), false);
+//		if (! editMode && ABBREV_SEARCH_BOX_NAME.equals(senderName)) {
+//			setQuestion(getNewQuestion(), false);
+			this.q = getNewQuestion();
 			updateAbbrev(getAbbrev());
 			searchForQuestions();
 		}
 	}
 
 	private void searchForQuestions() {
+		if (searching) return;
 		log.info("searchForQuestions using: " + abbrev.getText());
 		if (abbrev.getText().length() > 1) {
+			searching = true;
 			Parcel parcel = App.dataBus.newParcel();
 			parcel.setQueryTerm(abbrev.getText());
 //			notWaititngForResponse = false;
@@ -555,6 +572,9 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 
 
 	@Override
+	/**
+	 * This is called when a user selects a abbreviation in the dropdown list
+	 */
 	public void onChange(ChangeEvent event) {
 		if (abbrevLB.getSelectedIndex()==0) {
 			abbrev.setText(abbrevLB.getItemText(0));

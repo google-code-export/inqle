@@ -115,7 +115,7 @@ public class App {
 				if (d==null) {
 					answerPanel.getElement().getStyle().setBackgroundColor("pink");
 				} else if (d.getAnswerStatus()!=AnswerStatus.INFERRED) {
-					answerPanel.getElement().getStyle().setBackgroundColor("light-green");
+					answerPanel.getElement().getStyle().setBackgroundColor("#98FB98");
 				} else {
 					answerPanel.getElement().getStyle().setBackgroundColor("light-gray");
 				}

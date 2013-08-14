@@ -154,7 +154,7 @@ public class DataBus {
 			questionQueue.add(question);
 		}
 		knownQuestions.put(question.getId(), question);
-		
+		log.info("Saved question.  Queue=" + questionQueue);
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
 		parcel.setAction(Constants.SERVERACTION_STORE_QUESTION);
@@ -208,26 +208,26 @@ public class DataBus {
 	public void handleServerResponse(Parcel parcel) {
 		boolean gotoTagdayPlace = false;
 		try {
-		    log.info("Received Session Token? " + parcel.getSessionToken());
 		    Message message = parcel.getMessage();
-		    
-		    if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
-		    	App.signupView.setMessage("Account already exists");
-		    }
 		    
 		    if (parcel.getSessionToken() != null) {
 		    	App.sessionToken = parcel.getSessionToken();
 		    	gotoTagdayPlace = true;
 		    }
 		    
+		    if (parcel.getMessage()==Message.MATCHING_QUESTIONS_RETURNED) {
+		    	App.questionForm.onSearchQuestionsReturns(parcel);
+		    	return;
+		    }
+		    
 //		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getQuestions() != null) {
-		    if (parcel.getQuestions() != null) {
+		    if ((parcel.getMessage()==Message.LOGIN_SUCCEEDED || parcel.getMessage()==Message.SIGNED_UP) && parcel.getQuestions() != null) {
 		    	log.info("Received question queue: " + parcel.getQuestions());
 		    	setQuestionQueue(parcel.getQuestions());
 		    	setKnownQuestions(parcel.getQuestions(), parcel.getOtherKnownQuestions());
 		    }
 //		    if (parcel.getMessage()==Message.ALL_DATA_RETRIEVED && parcel.getData() != null) {
-	    	if (parcel.getData() != null) {
+	    	if ((parcel.getMessage()==Message.LOGIN_SUCCEEDED || parcel.getMessage()==Message.SIGNED_UP) && parcel.getData() != null) {
 		    	 dataTimeline.setData(parcel.getData());
 		    }
 		    
@@ -238,10 +238,6 @@ public class DataBus {
 		    if (parcel.getParticipant() != null) {
 		    	log.info("Received participant: " + parcel.getParticipant());
 		    	App.participant = parcel.getParticipant();
-		    }
-		    
-		    if (parcel.getMessage()==Message.MATCHING_QUESTIONS_RETURNED && parcel.getQuestions() != null) {
-		    	App.questionForm.onSearchQuestionsReturns(parcel);
 		    }
 		    
 		    if (gotoTagdayPlace) {
@@ -256,21 +252,30 @@ public class DataBus {
 		//TODO undo the change in the UI
 		//TODO put the unsaved object into a queue, and try to save that queue each time
 		
-		
+		if (Constants.SERVERACTION_SEARCH_QUESTIONS.equals(parcel.getAction())) {
+			App.questionForm.onSearchQuestionError();
+			return;
+		}
 	    
 	    Window.alert("Error.  Your last operation was not saved.");
 	}
 
 	public void handleServerException(Parcel parcel) {
+		Message message = parcel.getMessage();
+		
+		if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
+	    	App.signupView.setMessage("Account already exists");
+	    }
+		
 	    //TODO handle more kinds of exceptions
-		if (parcel.getMessage()==Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
+		if (message == Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
 	    	Window.alert("You have created too many questions.  Unable to store any more.");
 	    	//delete the question?
 //	    	questionQueue.remove(parcel.getQuestion());
 //	    	App.tagdayView.removeQuestion(parcel.getQuestion().getId());
 	    	return;
 	    }
-	    if (parcel.getMessage()==Message.TOO_MANY_DATA && parcel.getDatum() != null) {
+	    if (message == Message.TOO_MANY_DATA && parcel.getDatum() != null) {
 	    	Window.alert("You have answered too many questions.  Unable to store any more answers.");
 	    	//delete the datum?
 //	    	dataTimeline.removeDatum(parcel.getDatum().getId());
@@ -278,12 +283,22 @@ public class DataBus {
 	    	return;
 	    }
 	    
+	    if (Constants.SERVERACTION_SEARCH_QUESTIONS.equals(parcel.getAction())) {
+			App.questionForm.onSearchQuestionError();
+			return;
+		}
+	    
 	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
 	    
 	    storeUnsavedInfo(parcel);
 	}
 
 	public void handleTimeout(Parcel parcel) {
+		if (Constants.SERVERACTION_SEARCH_QUESTIONS.equals(parcel.getAction())) {
+			App.questionForm.onSearchQuestionError();
+			return;
+		}
+			
 		Window.alert("Unable to connect: " + parcel);
 		storeUnsavedInfo(parcel);
 	}
