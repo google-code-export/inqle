@@ -19,6 +19,7 @@ import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
@@ -35,6 +36,10 @@ import com.google.web.bindery.event.shared.EventBus;
  */
 public class DataBus {
 	
+	private static final int NUM_ATTEMPTS_BEFORE_STOP_SAVING_UNSAVED = 5;
+
+	private static final int WAIT_MS_BEFORE_NEXT_ATTEMPT = 10000;
+
 	private static Logger log = Logger.getLogger(EventBus.class.getName());
 	
 	private static Map<String, Question> knownQuestions = new HashMap<String, Question>();
@@ -48,6 +53,12 @@ public class DataBus {
 	private DataTimeline dataTimeline = new DataTimeline();
 
 	private boolean dirty = false;
+
+	private int attemptsToSaveUnsaved;
+
+	private long nextTimeToSaveUnsaved = 0;
+
+	private Timer retryTimer;
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -93,6 +104,12 @@ public class DataBus {
 		//save the datum in unsaved data queue
 		unsavedData.put(datumToSave.getId(), datumToSave);
 		
+		//if we have other unsaved data, try to save all of it
+		if (isDirty()) {
+			log.info("We are dirty.  Save unsaved instead of just datum: " + datumToSave.getTextValue());
+			saveUnsavedToServer();
+			return;
+		}
 		//next save to server
 		Parcel parcel = newParcel();
 		parcel.setDatum(datumToSave);
@@ -160,7 +177,15 @@ public class DataBus {
 			questionQueue.add(question);
 		}
 		knownQuestions.put(question.getId(), question);
-		log.info("Saved question.  Queue=" + questionQueue);
+		unsavedQuestions.put(question.getId(), question);
+		
+		//if we have other unsaved data, try to save all of it
+		if (isDirty()) {
+			log.info("We are dirty.  Save unsaved instead of just question: " + question.getAbbreviation());
+			saveUnsavedToServer();
+			return;
+		}
+				
 		Parcel parcel = newParcel();
 		parcel.setQuestion(question);
 		parcel.setAction(Constants.SERVERACTION_STORE_QUESTION);
@@ -304,7 +329,7 @@ public class DataBus {
 	    
 	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
 	    
-	    weAreDirty();
+	    saveUnsavedToServer();
 	}
 
 	public void handleTimeout(Parcel parcel) {
@@ -312,23 +337,81 @@ public class DataBus {
 			App.questionForm.onSearchQuestionError();
 			return;
 		}
-			
+		
+		if (Constants.SERVERACTION_STORE_DATUM.equals(parcel.getAction())) {
+			saveUnsavedToServer();
+			return;
+		}
+		if (Constants.SERVERACTION_STORE_QUESTION.equals(parcel.getAction())) {
+			saveUnsavedToServer();
+			return;
+		}
+		if (Constants.SERVERACTION_SAVE_UNSAVED.equals(parcel.getAction())) {
+			saveUnsavedToServer();
+			return;
+		}
 		Window.alert("Unable to connect: " + parcel);
-		weAreDirty();
+//		synchronizeUnsavedToServer();
 	}
 
-	private void weAreDirty() {
-		dirty  = true;
-//		Datum d = parcel.getDatum();
-//		if (d!= null) {
-//			Window.alert("Saving datum: '" + d.getTextValue() + "' in the unsavedData queue");
-//			unsavedData.put(d.getId(), d);
-//		}
-//		Question q = parcel.getQuestion();
-//		if (q!=null) {
-//			Window.alert("Saving question: '" + q.getAbbreviation() + "' in the unsavedQuestions queue");
-//			unsavedQuestions.put(q.getId(), q);
-//		}
+	private void saveUnsavedToServer() {
+		dirty = true;
+		//if not actually dirty (nothing to save), reset
+		if (! isDirty()) {
+			attemptsToSaveUnsaved = 0;
+			nextTimeToSaveUnsaved = 0;
+			cancelRetryTimer();
+			return;
+		}
+		attemptsToSaveUnsaved++;
+//		if (System.currentTimeMillis() < nextTimeToSaveUnsaved) {
+		if (retryTimer != null) {
+			log.info("Too soon to try to save unsaved again.");
+			return;
+		}
+		if (attemptsToSaveUnsaved > NUM_ATTEMPTS_BEFORE_STOP_SAVING_UNSAVED) {
+			Window.alert("Unable to save your recent data to the Beyobe server.  Please retry when you have a signal.");
+			nextTimeToSaveUnsaved  = System.currentTimeMillis() + WAIT_MS_BEFORE_NEXT_ATTEMPT;
+			//set a timer
+			retryTimer = new Timer() {
+		      public void run() {
+		        if (isDirty()) {
+		        	doSaveUnsavedToServer();
+		        }
+		        cancelRetryTimer();
+		      }
+		    };
+		    retryTimer.schedule(WAIT_MS_BEFORE_NEXT_ATTEMPT);
+			return;
+		}
+		doSaveUnsavedToServer();
 	}
 	
+	private void doSaveUnsavedToServer() {
+		if (! isDirty()) {
+			attemptsToSaveUnsaved = 0;
+			nextTimeToSaveUnsaved = 0;
+			cancelRetryTimer();
+			return;
+		}
+		
+		log.info("Attempting to save " + unsavedQuestions.size() + " unsaved questions and " + unsavedData.size() + " unsaved data.");
+		Parcel parcel = newParcel();
+		parcel.setData(new ArrayList<Datum>(unsavedData.values()));
+		parcel.setQuestions(new ArrayList<Question>(unsavedQuestions.values()));
+		parcel.setAction(Constants.SERVERACTION_SAVE_UNSAVED);
+		App.parcelClient.sendParcel(parcel);
+	}
+
+	private void cancelRetryTimer() {
+		if (retryTimer != null) {
+			retryTimer.cancel();
+			retryTimer = null;
+		}
+	}
+	
+	private boolean isDirty() {
+		if (unsavedQuestions.size()==0 && unsavedData.size()==0) dirty = false;
+		return dirty;
+	}
 }
