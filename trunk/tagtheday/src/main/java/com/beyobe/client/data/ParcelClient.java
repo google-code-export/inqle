@@ -56,7 +56,7 @@ public class ParcelClient {
 	    // Create a timer to abort if the RPC takes too long
 	    timeoutTimer = new Timer() {
 	      public void run() {
-	        Window.alert("Timeout expired.");
+//	        Window.alert("Timeout expired.");
 //	        abortFlag = true;
 	        timeoutTimer = null;
 	        cancelTimer();

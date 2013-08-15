@@ -28,5 +28,7 @@ public class Constants {
 	public static final int MINIMUM_PASSWORD_LENGTH = 1;
 	public static final String SERVERACTION_SEARCH_QUESTIONS = "searchForQuestions";
 	public static final String SERVERACTION_UNSUBSCRIBE = "unsubscribe";
+
+	public static final String SERVERACTION_SAVE_UNSAVED = "saveUnsaved";
 	
 }
