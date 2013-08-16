@@ -618,24 +618,27 @@ public class ServiceController {
 	 	 } catch (Exception e1) {
 			log.info("No existing subscription found for question: " + q.getId());
 		}
-	 	if (existingSubscription == null) {
-		 	Subscription subscription = new Subscription();
-		 	subscription.setCreated(new Date());
-		 	subscription.setCreatedBy(participant.getId());
-		 	subscription.setQuestionId(q.getId());
+	 	 
+	 	//if the subscription already exists, nothing to do
+	 	if (existingSubscription != null) return;
+	 	
+	 	//create new subscription
+	 	Subscription subscription = new Subscription();
+	 	subscription.setCreated(new Date());
+	 	subscription.setCreatedBy(participant.getId());
+	 	subscription.setQuestionId(q.getId());
 //		 	subscription.setQuestion(theQuestion);
-		 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
+	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
 //		 	subscription.setParticipantId(participant.getId());
-		 	subscription.setParticipant(participant);
-		 	log.info("storeQuestion service to save subscription: " + subscription);
-		 	try {
-				subscription.persist();
-				subscription.flush();
-				log.info("storeQuestion service saved subscription");
-			} catch (Exception e) {
-				log.error("storeQuestion service unable to save subscription:" + subscription, e);
-			}
-	 	}
+	 	subscription.setParticipant(participant);
+	 	log.info("storeQuestion service to save subscription: " + subscription);
+	 	try {
+			subscription.persist();
+			subscription.flush();
+			log.info("storeQuestion service saved subscription for participant: " + participant.getId() + ", question: " + q.getId());
+		} catch (Exception e) {
+			log.error("storeQuestion service unable to save subscription:" + subscription, e);
+		}
 	}
 	
 	private Date getEarliestSessionDate() {
