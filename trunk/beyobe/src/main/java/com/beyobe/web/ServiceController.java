@@ -277,7 +277,44 @@ public class ServiceController {
 		    returnParcel.setMessage(Message.BAD_REQUEST);
 		    return respond(returnParcel, HttpStatus.BAD_REQUEST);
 		}
-	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+//	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+		
+		Question existingQuestion = questionRepository.findOne(q.getId());
+		boolean loadData = false;
+	 	if (existingQuestion != null) {
+	 		loadData = true;
+	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
+	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
+	 		} else {
+//	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
+	 			q = mergeAndSaveQuestion(q, existingQuestion);
+	 		}
+	 	} else {
+	 		//new question: current user must be owner
+	 		q.setOwner(participant);
+//		 	questionRepository.save(theQuestion);
+	 		questionRepository.save(q);
+		 	questionRepository.flush();
+		 	log.info("storeQuestion service saved new question: " + q);
+	 	}
+	 	
+	 	//subscribe
+	 	subscribe(participant, q);
+	 	
+	 	//signal to client that this question is saved
+	 	List<String> savedQuestions = new ArrayList<String>();
+	 	savedQuestions.add(q.getId());
+	 	returnParcel.setSavedQuestions(savedQuestions);
+	 	
+	 	if (loadData) {
+	 		List<Datum> data = datumRepository.getParticipantDataForQuestion(participant.getId(), q.getId());
+	 		returnParcel.setData(data);
+	 	}
+	 	
+	 	returnParcel.setMessage(Message.SAVED);
+	    String returnJson = returnParcel.toJson();
+	    log.info("storeQuestion service sending back: " + returnJson);
+	    return respond(returnParcel, HttpStatus.OK);
 	}
 	
 
@@ -320,7 +357,7 @@ public class ServiceController {
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
-	 	log.info("User " + participant.getUsername() + " created " + questionRepository.countQuestionsOwned(participant.getId()) + " questions and " + datumRepository.countParticipantData(participant.getId()) + " data.");
+	 	log.info("User " + participant.getUsername() + " created " + questionRepository.countQuestionsOwned(participant.getId()) + " questions and " + countData + " data.");
 	 	Question q = null;
 		try {
 			q = parcel.getQuestion();
@@ -333,21 +370,28 @@ public class ServiceController {
 		}
 		
 		Question existingQuestion = questionRepository.findOne(q.getId());
-		mergeAndSaveQuestion(q, existingQuestion);
+		q = mergeAndSaveQuestion(q, existingQuestion);
+		
+		//signal to client that this question is saved
+	 	List<String> savedQuestions = new ArrayList<String>();
+	 	savedQuestions.add(q.getId());
+	 	returnParcel.setSavedQuestions(savedQuestions);
+	 	
 		Datum d = null;
 	 	try {
 			d = parcel.getDatum();
-			d.setQuestion(existingQuestion);
+//			d.setQuestion(existingQuestion);
+			d.setQuestion(q);
 			d.setParticipant(participant);
 			log.info("storeDatum service: got datum: " + d);
 			Datum existingDatum = datumRepository.findOne(d.getId());
 			//TODO some day remove this nasty workaround because JPA gives error when we try to update a object (nutty thing to try to do I know)
-			if (existingDatum == null) {
-				datumRepository.save(d);
-				datumRepository.flush();
-			} else {
+//			if (existingDatum == null) {
+//				datumRepository.save(d);
+//				datumRepository.flush();
+//			} else {
 				mergeAndSaveDatum(d, existingDatum);
-			}
+//			}
 			
 		} catch (Exception e) {
 			log.error("Unable to get and save datum", e);
@@ -362,7 +406,11 @@ public class ServiceController {
 	 	returnParcel.setSavedData(savedData);
 	 	
 	 	//save or update the question associated with this answer
-	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+//	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+	 	
+	 	subscribe(participant, q);
+	 	returnParcel.setMessage(Message.SAVED);
+	 	return respond(returnParcel, HttpStatus.OK);
 	}
 	
 	
@@ -449,7 +497,7 @@ public class ServiceController {
 	 		//TODO add session expiration datetime
 	 		log.info("unsubscribe service getting current user participant...");
 			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
-			log.info("storeQuestion service participant:" + participant);
+			log.info("unsubscribe service participant:" + participant);
 			assert(participant.getEnabled()==true);
 	 	} catch (Exception e) {
 			//leave as null
@@ -484,39 +532,84 @@ public class ServiceController {
 	 	//prepare the parcel for return
 	 	returnParcel.setMessage(Message.UNSUBSCRIBED);
 	    String returnJson = returnParcel.toJson();
-	    log.info("storeQuestion service sending back: " + returnJson);
+	    log.info("unsubscribe service sending back: " + returnJson);
 	    return respond(returnParcel, HttpStatus.OK);
 	}
 	
-	private ResponseEntity<String> saveQuestionAndSubscribe(Parcel returnParcel, Question q, Participant participant) {
-		
-		//test that current user is the owner of this question or is admin
-	 	Question existingQuestion = questionRepository.findOne(q.getId());
-//	 	Question theQuestion = q;
-	 	boolean loadData = false;
-	 	if (existingQuestion != null) {
-	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
-	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
-	 		} else {
-	 			loadData = true;
-//	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
-	 			q = mergeAndSaveQuestion(q, existingQuestion);
-	 		}
-	 	} else {
-	 		//new question: current user must be owner
-	 		q.setOwner(participant);
-//		 	questionRepository.save(theQuestion);
-	 		questionRepository.save(q);
-		 	questionRepository.flush();
-		 	log.info("storeQuestion service saved new question: " + q);
-	 	}
+//	private ResponseEntity<String> saveQuestion(Parcel returnParcel, Question q, Participant participant) {
+//		
+//		//test that current user is the owner of this question or is admin
+//	 	Question existingQuestion = questionRepository.findOne(q.getId());
+////	 	Question theQuestion = q;
+//	 	boolean loadData = false;
+//	 	if (existingQuestion != null) {
+//	 		loadData = true;
+//	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
+//	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
+//	 		} else {
+////	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
+//	 			q = mergeAndSaveQuestion(q, existingQuestion);
+//	 		}
+//	 	} else {
+//	 		//new question: current user must be owner
+//	 		q.setOwner(participant);
+////		 	questionRepository.save(theQuestion);
+//	 		questionRepository.save(q);
+//		 	questionRepository.flush();
+//		 	log.info("storeQuestion service saved new question: " + q);
+//	 	}
+//	 	
+//	 	//signal to client that this datum is saved
+//	 	List<String> savedQuestions = new ArrayList<String>();
+//	 	savedQuestions.add(q.getId());
+//	 	returnParcel.setSavedQuestions(savedQuestions);
+//	 	
+//	 	//check to see if subscription already exists.  If not create a new one
+//	 	Subscription existingSubscription = null;
+//	 	 try {
+//			existingSubscription = 
+//					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
+//
+//	 	 } catch (Exception e1) {
+//			log.info("No existing subscription found for question: " + q.getId());
+//		}
+//	 	if (existingSubscription == null) {
+//		 	Subscription subscription = new Subscription();
+//		 	subscription.setCreated(new Date());
+//		 	subscription.setCreatedBy(participant.getId());
+//		 	subscription.setQuestionId(q.getId());
+////		 	subscription.setQuestion(theQuestion);
+//		 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
+////		 	subscription.setParticipantId(participant.getId());
+//		 	subscription.setParticipant(participant);
+//		 	log.info("storeQuestion service to save subscription: " + subscription);
+//		 	try {
+//				subscription.persist();
+//				subscription.flush();
+//				log.info("storeQuestion service saved subscription");
+//			} catch (Exception e) {
+//				log.error("storeQuestion service unable to save subscription:" + subscription, e);
+//				returnParcel.setMessage(Message.SUBSCRIBE_FAILED);
+//				returnParcel.setQuestion(q);
+//			    return respond(returnParcel, HttpStatus.INTERNAL_SERVER_ERROR);
+//			}
+//	 	}
 	 	
-	 	//signal to client that this datum is saved
-	 	List<String> savedQuestions = new ArrayList<String>();
-	 	savedQuestions.add(q.getId());
-	 	returnParcel.setSavedQuestions(savedQuestions);
+	 	//prepare the parcel for return
 	 	
-	 	//check to see if subscription already exists.  If not create a new one
+//	 	if (loadData) {
+//	 		List<Datum> data = datumRepository.getParticipantDataForQuestion(participant.getId(), q.getId());
+//	 		returnParcel.setData(data);
+//	 	}
+//	 	
+//	 	returnParcel.setMessage(Message.SAVED);
+//	    String returnJson = returnParcel.toJson();
+//	    log.info("storeQuestion service sending back: " + returnJson);
+//	    return respond(returnParcel, HttpStatus.OK);
+//	}
+	
+	private void subscribe(Participant participant, Question q) {
+		//check to see if subscription already exists.  If not create a new one
 	 	Subscription existingSubscription = null;
 	 	 try {
 			existingSubscription = 
@@ -541,23 +634,8 @@ public class ServiceController {
 				log.info("storeQuestion service saved subscription");
 			} catch (Exception e) {
 				log.error("storeQuestion service unable to save subscription:" + subscription, e);
-				returnParcel.setMessage(Message.SUBSCRIBE_FAILED);
-				returnParcel.setQuestion(q);
-			    return respond(returnParcel, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 	 	}
-	 	
-	 	//prepare the parcel for return
-	 	
-	 	if (loadData) {
-	 		List<Datum> data = datumRepository.getParticipantDataForQuestion(participant.getId(), q.getId());
-	 		returnParcel.setData(data);
-	 	}
-	 	
-	 	returnParcel.setMessage(Message.SAVED);
-	    String returnJson = returnParcel.toJson();
-	    log.info("storeQuestion service sending back: " + returnJson);
-	    return respond(returnParcel, HttpStatus.OK);
 	}
 	
 	private Date getEarliestSessionDate() {
@@ -568,6 +646,11 @@ public class ServiceController {
 	}
 	
 	private void mergeAndSaveDatum(Datum newDatum, Datum existingDatum) {
+		if (existingDatum == null) {
+			existingDatum = newDatum;
+			datumRepository.saveAndFlush(existingDatum);
+			return;
+		}
 		if (newDatum.getAnswerStatus() != null) {
 			existingDatum.setAnswerStatus(newDatum.getAnswerStatus());
 		}
@@ -613,6 +696,7 @@ public class ServiceController {
 	private Question mergeAndSaveQuestion(Question newQuestion, Question existingQuestion) {
 		if (existingQuestion == null) {
 			existingQuestion = newQuestion;
+			questionRepository.saveAndFlush(existingQuestion);
 			return existingQuestion;
 		}
 		
@@ -696,9 +780,16 @@ public class ServiceController {
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 		}
 	 	
+	 	List<Datum> data = parcel.getData();
+	 	List<Question> questions = parcel.getQuestions();
+	 	int dataQueueSize = 0;
+	 	if (data != null) dataQueueSize = data.size();
+	 	int questionsQueueSize = 0;
+	 	if (questions != null) questionsQueueSize = questions.size();
+	 	
 	 	//make sure the user has not exceeded data quota
 	 	long countData = datumRepository.countParticipantData(participant.getId());
-	 	if (countData > MAXIMUM_DATA_PER_USER) {
+	 	if (countData + dataQueueSize > MAXIMUM_DATA_PER_USER) {
 	 		log.warn("Participant " + participant.getUsername() + " has too many data (" + countData + ")");
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
@@ -706,57 +797,42 @@ public class ServiceController {
 	 	
 	 	//make sure the user has not exceeded question quota
 	 	long countQuestions = questionRepository.countQuestionsOwned(participant.getId());
-	 	if (countQuestions > MAXIMUM_QUESTIONS_PER_USER) {
+	 	if (countQuestions + questionsQueueSize > MAXIMUM_QUESTIONS_PER_USER) {
 	 		log.warn("Participant " + participant.getUsername() + " has too many questions (" + countQuestions + ")");
-		    returnParcel.setMessage(Message.TOO_MANY_DATA);
+		    returnParcel.setMessage(Message.TOO_MANY_QUESTIONS);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
 	 	
 	 	log.info("User " + participant.getUsername() + " has created " + countQuestions + " questions and " + countData + " data.");
-	 	
-	 	loop thru data and questions
-	 	
-	 	Question q = null;
-		try {
-			q = parcel.getQuestion();
-			log.info("saveUnsaved service received question: " + q);
-			if (q.getOwnerId()==null) q.setOwnerId(participant.getId());
-		} catch (Exception e1) {
-			log.error("Unable to get Question from parcel", e1);
-			returnParcel.setMessage(Message.BAD_REQUEST);
-		    return respond(returnParcel, HttpStatus.BAD_REQUEST);
-		}
-		
-		Question existingQuestion = questionRepository.findOne(q.getId());
-		mergeAndSaveQuestion(q, existingQuestion);
-		Datum d = null;
-	 	try {
-			d = parcel.getDatum();
-			d.setQuestion(existingQuestion);
-			d.setParticipant(participant);
-			log.info("saveUnsaved service: got datum: " + d);
-			Datum existingDatum = datumRepository.findOne(d.getId());
-			//TODO some day remove this nasty workaround because JPA gives error when we try to update a object (nutty thing to try to do I know)
-			if (existingDatum == null) {
-				datumRepository.save(d);
-				datumRepository.flush();
-			} else {
+	 	int countSavedData = 0;
+	 	if (data != null) {
+	 		List<String> savedData = new ArrayList<String>();
+	 		for(Datum d: data) {
+	 			Datum existingDatum = datumRepository.findOne(d.getId());
 				mergeAndSaveDatum(d, existingDatum);
-			}
-			
-		} catch (Exception e) {
-			log.error("Unable to get and save datum", e);
-			returnParcel.setMessage(Message.SAVE_FAILED);
-			returnParcel.setDatum(d);
-		    return respond(returnParcel, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	 			savedData.add(d.getId());
+	 			countSavedData++;
+	 		}
+	 		returnParcel.setSavedData(savedData);
+	 	}
 	 	
-	 	//signal to client that this datum is saved
-	 	List<String> savedData = new ArrayList<String>();
-	 	savedData.add(d.getId());
-	 	returnParcel.setSavedData(savedData);
+	 	int countSavedQuestions = 0;
+	 	if (questions != null) {
+	 		List<String> savedQuestions = new ArrayList<String>();
+	 		for (Question q: questions) {
+	 			Question existingQuestion = questionRepository.findOne(q.getId());
+	 			mergeAndSaveQuestion(q, existingQuestion);
+	 			subscribe(participant, q);
+	 			savedQuestions.add(q.getId());
+	 			countSavedQuestions++;
+	 		}
+	 		returnParcel.setSavedQuestions(savedQuestions);
+	 	}
 	 	
-	 	//save or update the question associated with this answer
-	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+	 	returnParcel.setMessage(Message.SAVED);
+//	    String returnJson = returnParcel.toJson();
+	    log.info("saveUnsaved service for participant:" + participant.getUsername() + " saved " + countSavedQuestions + " questions and " + countSavedData + " data");
+	    return respond(returnParcel, HttpStatus.OK);
+	 	
 	}
 }
