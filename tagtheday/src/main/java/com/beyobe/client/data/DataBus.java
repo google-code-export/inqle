@@ -326,8 +326,11 @@ public class DataBus {
 			App.questionForm.onSearchQuestionError();
 			return;
 		}
-	    
-	    Window.alert("Error from Beyobe server: " + parcel.getMessage().name());
+	    String msg = "No parcel";
+	    if (parcel!=null) {
+	    	msg = String.valueOf(parcel.getMessage());
+	    }
+	    Window.alert("Error from Beyobe server: " + msg);
 	    
 	    saveUnsavedToServer();
 	}
@@ -350,7 +353,10 @@ public class DataBus {
 			saveUnsavedToServer();
 			return;
 		}
-		Window.alert("Unable to connect: " + parcel);
+		if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction()) && App.isUserLoggedIn()) {
+			return;
+		}
+		Window.alert("Unable to connect: " + parcel.getMessage());
 //		synchronizeUnsavedToServer();
 	}
 

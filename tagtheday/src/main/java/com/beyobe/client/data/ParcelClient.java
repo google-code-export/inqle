@@ -101,8 +101,13 @@ public class ParcelClient {
 				    	log.warning("Error communicating with server: " + response.getText() + "\n" + response.getHeadersAsString());
 //				    	status = Constants.STATUS_FAILED;
 //				    	log.info("Set connection status to: " + status);
-				    	AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
-					    Parcel parcel = parcelAB.as();
+				    	Parcel parcel = App.dataBus.newParcel();
+				    	try {
+							AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
+							parcel = parcelAB.as();
+						} catch (Exception e) {
+							log.log(Level.WARNING, "No response or no parcel received from Beyobe server");
+						}
 				    	App.dataBus.handleServerException(parcel);
 //				    	abortFlag = true;
 				    }
