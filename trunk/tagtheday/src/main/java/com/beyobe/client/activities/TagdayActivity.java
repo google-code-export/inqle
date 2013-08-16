@@ -23,6 +23,7 @@ import com.googlecode.mgwt.mvp.client.Animation;
  * unit test somewhere!
  * server-side safeguard - prevent too many insertions, invalidate sessions
  * fix login slowness problems
+ * store sessions/requests
  * integrate typicalsecurity
  *  * add back email validation regexp
  *  * CAPTCHA
