@@ -151,18 +151,20 @@ public class ServiceController {
 	 	Parcel returnParcel = new Parcel();
 	 	try {
 			parcel = Parcel.fromJsonToParcel(jsonRequest);
-			username = parcel.getUsername();
-			String password = parcel.getPassword();
-			log.info("login service invoked for username: " + username);
-			Participant dummyParticipant = new Participant();
-			dummyParticipant.setPassword(password);
-//			hashedPassword = Participant.hashString(password, username);
-			hashedPassword = dummyParticipant.getPassword();
+
 		} catch (Exception e1) {
 			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
 			returnParcel.setMessage(Message.BAD_REQUEST);
 			return respond(returnParcel, HttpStatus.BAD_REQUEST);
 		}
+	 	
+	 	//log in
+		username = parcel.getUsername();
+		String password = parcel.getPassword();
+		log.info("login service invoked for username: " + username);
+		Participant dummyParticipant = new Participant();
+		dummyParticipant.setPassword(password);
+		hashedPassword = dummyParticipant.getPassword();
 	 	Participant participant = null;
 	 	try {
 	 		participant = Participant.findParticipantsByUsernameEqualsAndPasswordEqualsAndEnabledNot(username, hashedPassword, false).getSingleResult();

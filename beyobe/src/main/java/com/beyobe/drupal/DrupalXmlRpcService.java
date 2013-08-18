@@ -205,7 +205,7 @@ public class DrupalXmlRpcService {
 		// IMPORTANT: the login changes the session id! The new session ID is authorized, the old one not.
 		this.sessionID = (String) o.get("sessid");
 
-		log.fine("Successfull Login");
+		log.info("Successfull Login: " + o);
 	}
 
 	/**
@@ -242,4 +242,9 @@ public class DrupalXmlRpcService {
 //		if (log.isLoggable(Level.FINEST))
 //			log.finest(MethodNodeSave+" returned "+o.toString());
 //	}
+	
+	//fails
+	public static void main(String[] args) throws Exception {
+		DrupalXmlRpcService drupal = new DrupalXmlRpcService("beyobe_auth", "dummy", "http://localhost:8082");
+	}
 }
