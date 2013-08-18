@@ -19,10 +19,7 @@ import com.googlecode.mgwt.mvp.client.Animation;
 /**
  * TODO:
  * Load data in time windows
- * option to auto-answer intervening days when 2 isolated days have identical value
  * unit test somewhere!
- * server-side safeguard - prevent too many insertions, invalidate sessions
- * fix login slowness problems
  * store sessions/requests
  * integrate typicalsecurity
  *  * add back email validation regexp

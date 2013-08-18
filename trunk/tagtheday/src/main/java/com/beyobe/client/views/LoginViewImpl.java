@@ -51,6 +51,11 @@ public class LoginViewImpl extends Composite implements LoginView {
 	
 	public LoginViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		displayDefaultMessage();
+	}
+
+	private void displayDefaultMessage() {
+		displayMessage("Login with your Beyobe account.");
 	}
 
 	@UiHandler("signupLink")
@@ -63,6 +68,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 	void onSubmit(ClickEvent e) {
 //		Window.alert("Hello!");
 //		App.eventBus.fireEvent(new LoginEvent(userName.getText(), password.getText()));
+		displayMessage("Logging in...");
 		Parcel parcel = App.dataBus.newParcel();
 		parcel.setUsername(userName.getText());
 		parcel.setPassword(password.getText());
@@ -93,5 +99,10 @@ public class LoginViewImpl extends Composite implements LoginView {
 //				message.setText("Login failed: " + status);
 //			}
 //		}
+	}
+	
+	@Override
+	public void displayMessage(String msg) {
+		message.setText(msg);
 	}
 }

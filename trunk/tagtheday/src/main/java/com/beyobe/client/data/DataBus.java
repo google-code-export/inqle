@@ -326,11 +326,23 @@ public class DataBus {
 			App.questionForm.onSearchQuestionError();
 			return;
 		}
+	    
+	    if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction())) {
+			App.loginView.displayMessage("No connection available.");
+			return;
+		}
+	    
+	    if (Constants.SERVERACTION_SIGNUP.equals(parcel.getAction())) {
+			App.signupView.displayMessage("No connection available.");
+			return;
+		}
+	    
 	    String msg = "No parcel";
 	    if (parcel!=null) {
 	    	msg = String.valueOf(parcel.getMessage());
 	    }
-	    Window.alert("Error from Beyobe server: " + msg);
+	    
+//	    Window.alert("Error from Beyobe server: " + msg);
 	    
 	    saveUnsavedToServer();
 	}

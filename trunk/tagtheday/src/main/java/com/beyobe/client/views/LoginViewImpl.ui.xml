@@ -20,10 +20,13 @@
       margin-right: auto;
     }
     .titleBar {
-      
+      margin-left: auto;
+      margin-right: auto;
     }
     .message {
 	    color: red;
+	    margin-left: auto;
+      margin-right: auto;
 	  }
 	  .pointerLink {
        cursor:pointer;
@@ -36,12 +39,15 @@
 	</ui:style>
 	<g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}">
 	<mgwt:RoundPanel ui:field="roundPanel" styleName="{style.roundPanel}">
+	 <g:HorizontalPanel ui:field="titleBar" styleName="{style.titleBar}">
+     <g:Label styleName="ttd-form-title" text="Sign In to Beyobe" />
+   </g:HorizontalPanel>
+   <g:HorizontalPanel styleName="{style.titleBar}">
+      <g:Label ui:field="message" styleName="{style.message}"/>
+   </g:HorizontalPanel>
+   
 	 <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
-	   <g:HorizontalPanel ui:field="titleBar" styleName="{style.titleBar}">
-	     <g:Label styleName="ttd-form-title" text="Sign In to Beyobe" />
-	   </g:HorizontalPanel>
-		 
-		 <g:Label ui:field="message" styleName="{style.message}"/>
+	   
 		 <g:Label styleName="ttd-form-label" text="Email"/>
 		 <g:TextBox ui:field="userName"/>
 		 <g:Label styleName="ttd-form-label" text="Password"/>

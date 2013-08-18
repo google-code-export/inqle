@@ -50,6 +50,11 @@ public class SignupViewImpl extends Composite implements SignupView {
 	
 	public SignupViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		displayDefaultMessage();
+	}
+
+	private void displayDefaultMessage() {
+		displayMessage("Create a new Beyobe account");
 	}
 
 //	void onTestUsername() {
@@ -103,6 +108,7 @@ public class SignupViewImpl extends Composite implements SignupView {
 			message.setText("Your 2 passwords do not match");
 			return;
 		}
+		displayMessage("Signing up...");
 		Parcel parcel = App.dataBus.newParcel();
 		parcel.setUsername(userName.getText());
 		parcel.setPassword(password.getText());
@@ -144,5 +150,10 @@ public class SignupViewImpl extends Composite implements SignupView {
 	@Override
 	public void setMessage(String string) {
 		message.setText(string);
+	}
+	
+	@Override
+	public void displayMessage(String msg) {
+		message.setText(msg);
 	}
 }

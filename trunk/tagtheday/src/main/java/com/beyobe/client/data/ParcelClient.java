@@ -101,7 +101,7 @@ public class ParcelClient {
 				    	log.warning("Error communicating with server: " + response.getText() + "\n" + response.getHeadersAsString());
 //				    	status = Constants.STATUS_FAILED;
 //				    	log.info("Set connection status to: " + status);
-				    	Parcel parcel = App.dataBus.newParcel();
+				    	Parcel parcel = latestParcel;
 				    	try {
 							AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
 							parcel = parcelAB.as();
