@@ -11,4 +11,6 @@ public interface SignupView extends IsWidget {
     }
 
 	void setMessage(String string);
+
+	void displayMessage(String msg);
 }
