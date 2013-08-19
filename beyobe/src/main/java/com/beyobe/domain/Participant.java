@@ -3,6 +3,8 @@ package com.beyobe.domain;
 import com.beyobe.client.beans.UserRole;
 import flexjson.JSON;
 import flexjson.JSONSerializer;
+
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -57,7 +59,9 @@ public class Participant implements HasUuid {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    private Collection<String> roles;
     private Boolean enabled;
+    private Integer status;
 
     @NotNull
     @Column(updatable = false)
@@ -134,4 +138,5 @@ public class Participant implements HasUuid {
 		if (updatedBy != null) existing.setUpdatedBy(updatedBy);
 		existing.flush();
 	}
+
 }

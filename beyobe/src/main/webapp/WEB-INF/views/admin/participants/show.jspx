@@ -14,5 +14,7 @@
         <field:display field="clientIpAddress" id="s_com_beyobe_domain_Participant_clientIpAddress" object="${participant}" z="1rfcGB3jR3o9dL919TK8lCJXiQc="/>
         <field:display field="email" id="s_com_beyobe_domain_Participant_email" object="${participant}" z="Ci2TllatKnXCKPk+YU5vQisd7mg="/>
         <field:display date="true" dateTimePattern="${participant_sessiondate_date_format}" field="sessionDate" id="s_com_beyobe_domain_Participant_sessionDate" object="${participant}" z="nfIrcixygyd7ELqCXzIHzVVlA/4="/>
+        <field:display field="roles" id="s_com_beyobe_domain_Participant_roles" object="${participant}" z="ev+A55Ft/J4a1wZjLpFd1uAll+o="/>
+        <field:display field="status" id="s_com_beyobe_domain_Participant_status" object="${participant}" z="dfUipf8RL/ngcaLTQJVQKnxmYyQ="/>
     </page:show>
 </div>

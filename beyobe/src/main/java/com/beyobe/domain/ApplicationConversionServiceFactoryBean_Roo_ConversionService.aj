@@ -112,7 +112,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Participant, String> ApplicationConversionServiceFactoryBean.getParticipantToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Participant, java.lang.String>() {
             public String convert(Participant participant) {
-                return new StringBuilder().append(participant.getUsername()).append(' ').append(participant.getPassword()).append(' ').append(participant.getEmail()).append(' ').append(participant.getCreated()).toString();
+                return new StringBuilder().append(participant.getUsername()).append(' ').append(participant.getPassword()).append(' ').append(participant.getEmail()).append(' ').append(participant.getStatus()).toString();
             }
         };
     }

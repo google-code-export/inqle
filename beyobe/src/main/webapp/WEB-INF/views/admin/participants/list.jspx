@@ -5,11 +5,11 @@
     <page:list id="pl_com_beyobe_domain_Participant" items="${participants}" z="y9CtR30NskEKgjNGLU2/cwzEj4A=">
         <table:table data="${participants}" id="l_com_beyobe_domain_Participant" path="/admin/participants" z="4xJ9p4ZcQHq9zyWFgBR1cD3NNhg=">
             <table:column id="c_com_beyobe_domain_Participant_username" property="username" z="ewwJgWN9izRYk0oxmmOBimhYzcA="/>
-            <table:column id="c_com_beyobe_domain_Participant_password" property="password" z="user-managed" render="false"/>
+            <table:column id="c_com_beyobe_domain_Participant_password" property="password" render="false" z="user-managed"/>
             <table:column id="c_com_beyobe_domain_Participant_role" property="role" z="WKwAG2DYLdxseDExY5hVwvvsGNw="/>
             <table:column id="c_com_beyobe_domain_Participant_enabled" property="enabled" z="a88HmdhhcEowufIliBqXfKtxbIQ="/>
-            <table:column date="true" dateTimePattern="${participant_created_date_format}" id="c_com_beyobe_domain_Participant_created" property="created" z="Jw4kAorPYrbMl0Jo30hiMLIXEdA="/>
             <table:column id="c_com_beyobe_domain_Participant_email" property="email" z="L4ABSqx8qTHuCOzRSlW55UVYYW4="/>
+            <table:column id="c_com_beyobe_domain_Participant_roles" property="roles" z="cPeKFEDXocKe9yNhDFBoHUI6WTE="/>
         </table:table>
     </page:list>
 </div>
