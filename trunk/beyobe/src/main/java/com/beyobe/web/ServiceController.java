@@ -927,4 +927,17 @@ public class ServiceController {
 	    return respond(returnParcel, HttpStatus.OK);
 	 	
 	}
+	
+	
+	private Session newSession(Parcel parcel) {
+		
+	}
+	
+	private void saveSession(Session session) {
+		
+	}
+	
+	private Session verifySession(Parcel parcel) {
+		
+	}
 }
