@@ -4,7 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_beyobe_domain_Participant" modelAttribute="participant" path="/admin/participants" versionField="Version" z="VbwxvoMin9L9+FX1lJV1/D3StV0=">
         <field:textarea field="username" id="c_com_beyobe_domain_Participant_username" z="7AHqVuN5GMaHdh70VAfPC1hhmiE="/>
-        <field:input field="password" id="c_com_beyobe_domain_Participant_password" z="user-managed" render="false"/>
+        <field:input field="password" id="c_com_beyobe_domain_Participant_password" render="false" z="user-managed"/>
         <field:select field="role" id="c_com_beyobe_domain_Participant_role" items="${userroles}" path="userroles" z="+YmwrX0g3FP40iTTJPpsFRxTAFg="/>
         <field:checkbox field="enabled" id="c_com_beyobe_domain_Participant_enabled" z="2pMBouoiLpaeMmRvzyoOd+NTjs0="/>
         <field:datetime dateTimePattern="${participant_updated_date_format}" field="updated" id="c_com_beyobe_domain_Participant_updated" z="S7M2H+UDuXF3mWjTV0Dp5SoISnY="/>
@@ -14,5 +14,7 @@
         <field:input field="clientIpAddress" id="c_com_beyobe_domain_Participant_clientIpAddress" z="McDht6LtSGUJtC4o8bMJ19GwjuE="/>
         <field:input field="email" id="c_com_beyobe_domain_Participant_email" validationMessageCode="field_invalid_email" z="hxES6qR5TEwWdTJ9uaxhqN8E3OE="/>
         <field:datetime dateTimePattern="${participant_sessiondate_date_format}" field="sessionDate" id="c_com_beyobe_domain_Participant_sessionDate" required="true" z="8o58L1TAjDWm56n71c/9vS7x7+s="/>
+        <field:input field="roles" id="c_com_beyobe_domain_Participant_roles" z="C5Y8QFsE/th1AAArMOrSJm5DIUc="/>
+        <field:input field="status" id="c_com_beyobe_domain_Participant_status" validationMessageCode="field_invalid_integer" z="cvoPE5ZnYtI6FLTflSo2g4IJEo8="/>
     </form:update>
 </div>

@@ -1,5 +1,6 @@
 package com.beyobe.web;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlrpc.XmlRpcException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.beyobe.Constants;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.SubscriptionType;
@@ -30,6 +33,7 @@ import com.beyobe.domain.Datum;
 import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.Subscription;
+import com.beyobe.drupal.Drupal7XmlRpcClient;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.repository.QuestionRepository;
 /**
@@ -142,9 +146,6 @@ public class ServiceController {
 	public ResponseEntity<java.lang.String> login(
 			@RequestBody String jsonRequest,
 			@ModelAttribute("clientIpAddress") String clientIpAddress) {
-//	public ResponseEntity<java.lang.String> login(
-//			@RequestBody String jsonRequest) {
-//		log.info("login service invoked with json: " + jsonRequest);
 	 	Parcel parcel = null;
 	 	String username = null;
 	 	String hashedPassword = null;
@@ -217,6 +218,92 @@ public class ServiceController {
 	    log.info("login service sending back: " + returnParcel.toJson());
 	    return respond(returnParcel, HttpStatus.OK);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/loginDrupal", method = RequestMethod.POST, headers = "Accept=application/json")
+//	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json;charset=UTF-8")
+	@ResponseBody
+	public ResponseEntity<java.lang.String> loginDrupal(
+			@RequestBody String jsonRequest,
+			@ModelAttribute("clientIpAddress") String clientIpAddress) {
+	 	Parcel parcel = null;
+	 	String username = null;
+	 	String hashedPassword = null;
+	 	Parcel returnParcel = new Parcel();
+	 	try {
+			parcel = Parcel.fromJsonToParcel(jsonRequest);
+
+		} catch (Exception e1) {
+			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
+			returnParcel.setMessage(Message.BAD_REQUEST);
+			return respond(returnParcel, HttpStatus.BAD_REQUEST);
+		}
+	 	
+	 	//log in
+		username = parcel.getUsername();
+		String password = parcel.getPassword();
+		log.info("loginDrupal service invoked for username: " + username);
+		
+		Participant participant = null;
+		try {
+			Drupal7XmlRpcClient drupal = new Drupal7XmlRpcClient(Constants.APPID);
+			drupal.connect();
+			participant = drupal.getParticipant(username, password);
+		} catch (Exception e) {
+			log.error("Unable to connect to Drupal server", e);
+		}
+		if (participant==null) {
+			log.info("loginDrupal service failed to login");
+			returnParcel.setMessage(Message.LOGIN_FAILED);
+			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
+		}
+		
+	 	participant.setClientIpAddress(clientIpAddress);
+	 	participant.merge();
+	 	
+	 	log.trace("saved participant");
+	 	
+	 	//prepare the parcel for return
+	 	returnParcel.setSessionToken(participant.getSessionToken());
+	 	returnParcel.setParticipant(participant);
+	 	log.info("login service: user=" + participant.getUsername() + "; set session token: " + participant.getSessionToken());
+	 	
+	 	try {
+			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
+			returnParcel.setQuestions(questionQueue);
+			log.trace("login service: set question queue");
+		} catch (Exception e) {
+			log.error("login service: ERROR getting question queue", e);
+		}
+		
+		try {
+			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
+			returnParcel.setOtherKnownQuestions(inactiveQuestions);
+			log.trace("set inactive questions");
+		} catch (Exception e) {
+			log.error("login service: ERROR getting inactive questions", e);
+		}
+		
+	 	try {
+			List<Datum> data = datumRepository.getParticipantData(participant.getId());
+			returnParcel.setData(data);
+			returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
+			log.trace("set data");
+		} catch (Exception e) {
+			log.error("ERROR getting participant data", e);
+		}
+	 	returnParcel.setMessage(Message.LOGIN_SUCCEEDED);
+	    log.info("login service sending back: " + returnParcel.toJson());
+	    return respond(returnParcel, HttpStatus.OK);
+	}
+	
+	
 	
 	
 	

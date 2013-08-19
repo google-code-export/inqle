@@ -14,6 +14,8 @@
         <field:input field="clientIpAddress" id="c_com_beyobe_domain_Participant_clientIpAddress" z="McDht6LtSGUJtC4o8bMJ19GwjuE="/>
         <field:input field="email" id="c_com_beyobe_domain_Participant_email" validationMessageCode="field_invalid_email" z="hxES6qR5TEwWdTJ9uaxhqN8E3OE="/>
         <field:datetime dateTimePattern="${participant_sessiondate_date_format}" field="sessionDate" id="c_com_beyobe_domain_Participant_sessionDate" required="true" z="8o58L1TAjDWm56n71c/9vS7x7+s="/>
+        <field:input field="roles" id="c_com_beyobe_domain_Participant_roles" z="C5Y8QFsE/th1AAArMOrSJm5DIUc="/>
+        <field:input field="status" id="c_com_beyobe_domain_Participant_status" validationMessageCode="field_invalid_integer" z="cvoPE5ZnYtI6FLTflSo2g4IJEo8="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Participant" render="${not empty dependencies}" z="tZB+OowLBL5uypXBiF8uAIcRKj0="/>
 </div>

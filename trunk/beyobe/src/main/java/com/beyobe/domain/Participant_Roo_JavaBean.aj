@@ -5,6 +5,7 @@ package com.beyobe.domain;
 
 import com.beyobe.client.beans.UserRole;
 import com.beyobe.domain.Participant;
+import java.util.Collection;
 import java.util.Date;
 
 privileged aspect Participant_Roo_JavaBean {
@@ -45,12 +46,28 @@ privileged aspect Participant_Roo_JavaBean {
         this.role = role;
     }
     
+    public Collection<String> Participant.getRoles() {
+        return this.roles;
+    }
+    
+    public void Participant.setRoles(Collection<String> roles) {
+        this.roles = roles;
+    }
+    
     public Boolean Participant.getEnabled() {
         return this.enabled;
     }
     
     public void Participant.setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    public Integer Participant.getStatus() {
+        return this.status;
+    }
+    
+    public void Participant.setStatus(Integer status) {
+        this.status = status;
     }
     
     public Date Participant.getCreated() {
