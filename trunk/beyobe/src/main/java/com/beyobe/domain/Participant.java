@@ -87,6 +87,8 @@ public class Participant implements HasUuid {
 
     private String clientIpAddress;
 
+    private String lang;
+    
     public void setPassword(String password) {
         if (password == null || password.equals("")) return;
 //        String encodedPassword = passwordEncoder.encodePassword(password, username);

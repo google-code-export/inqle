@@ -1,5 +1,6 @@
 package com.beyobe.domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,7 +19,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJson
 @RooJpaActiveRecord(finders = { 
-		"findSessionsByIdEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot", 
+		"findSessionsByIdEqualsAndSessionDateGreaterThanAndClientIpAddressEquals", 
 		})
 public class Session {
 	@Id
@@ -56,24 +57,32 @@ public class Session {
     @DateTimeFormat(style = "SS")
     private Date loggedOut = null;
 
-    private Integer requestCount;
+    private Integer requestCount = 0;
     
-    private Integer questionsCreated;
+    private Integer questionsCreated = 0;
     
-    private Integer questionsUpdated;
+    private Integer questionsUpdated = 0;
     
-    private Integer questionsSubscribed;
+    private Integer questionsSubscribed = 0;
     
-    private Integer questionsUnsubscribed;
+    private Integer questionsUnsubscribed = 0;
     
-    private Integer dataCreated;
+    private Integer dataCreated = 0;
     
-    private Integer dataUpdated;
+    private Integer dataUpdated = 0;
     
     private String userId;
 
     private String sessionToken;
 
     private String clientIpAddress;
+    
+    private String timezone;
+    
+    private Collection<String> roles;
+    
+    private String lang;
+    
+    private Integer status = 1;
 
 }

@@ -6,7 +6,7 @@ import org.springframework.roo.addon.json.RooJson;
 
 import com.beyobe.client.util.FromGwtDateObjectFactory;
 import com.beyobe.domain.Datum;
-import com.beyobe.domain.Participant;
+import com.beyobe.domain.Session;
 import com.beyobe.domain.Question;
 
 import flexjson.JSONDeserializer;
@@ -17,7 +17,7 @@ public class Parcel {
 //	private List<Question> questionQueue;
 	private List<Question> otherKnownQuestions;
 	private List<Datum> data;
-	private Participant participant;
+	private Session session;
 	private String sessionToken;
 	private String username;
 	private String password;
@@ -54,12 +54,12 @@ public class Parcel {
 		this.data = data;
 	}
 
-	public Participant getParticipant() {
-		return participant;
+	public Session getSession() {
+		return session;
 	}
 
-	public void setParticipant(Participant participant) {
-		this.participant = participant;
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 	public String getSessionToken() {
@@ -125,8 +125,8 @@ public class Parcel {
     	.exclude("datum.question")
     	.exclude("datum.formula")
     	.exclude("data.question")
-    	.exclude("data.participant")
-    	.exclude("participant.sessionToken")
+    	.exclude("data.session")
+//    	.exclude("session.id")
     	.exclude("*.version")
 		.deepSerialize( this );
 	}

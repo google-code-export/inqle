@@ -21,7 +21,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString
-@RooJpaActiveRecord(finders = { "findSubscriptionsByQuestionIdEqualsAndParticipantEquals" })
+@RooJpaActiveRecord(finders = { 
+		"findSubscriptionsByQuestionIdEqualsAndUserIdEquals",
+		"findSubscriptionsByQuestionIdEqualsAndSessionEquals"})
 public class Subscription {
 
     @Id
@@ -42,7 +44,10 @@ public class Subscription {
 
     @NotNull
     @ManyToOne
-    private Participant participant;
+    private Session session;
+    
+    @NotNull
+    private String userId;
 
     @Enumerated(EnumType.STRING)
     private SubscriptionType subscriptionType;

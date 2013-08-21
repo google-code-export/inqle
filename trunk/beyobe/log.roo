@@ -132,3 +132,6 @@ finder list --class ~.domain.Participant --filter nabl --depth 1
 dependency add --groupId com.restfuse --artifactId com.eclipsesource.restfuse --version 1.2.0
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-08-17 16:41:20
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-08-17 17:01:44
+q
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-08-20 06:29:09
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-08-20 06:29:33

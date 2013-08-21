@@ -88,7 +88,7 @@ public class Datum implements HasUuid {
 
     @ManyToOne
     @NotNull
-    private Participant participant;
+    private Session session;
     
     @NotNull
     private String participantId;
@@ -126,6 +126,7 @@ public class Datum implements HasUuid {
  	   	.exclude("updatedBy")
  	   	.exclude("participant")
  	   	.exclude("question")
+ 	   	.exclude("session")
  	   	.serialize(this);
  	}
     

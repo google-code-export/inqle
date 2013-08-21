@@ -110,7 +110,11 @@ public class Question implements HasUuid {
     
     @NotNull
     @ManyToOne
-    private Participant owner;
+    private Session session;
+    
+//    @NotNull
+//    @ManyToOne
+//    private Participant owner;
     
     public String toJson() {
 	   return new JSONSerializer()
@@ -119,6 +123,7 @@ public class Question implements HasUuid {
 	   	.exclude("updated")
 	   	.exclude("createdBy")
 	   	.exclude("updatedBy")
+	   	.exclude("session")
 	   	.serialize(this);
 	}
     
@@ -131,6 +136,8 @@ public class Question implements HasUuid {
 	public void onUpdate() {
         this.updated=new java.util.Date();
     }
+	
+	
 	
 //	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
 //	private Set<Subscription> subscriptions = new HashSet<Subscription>();
