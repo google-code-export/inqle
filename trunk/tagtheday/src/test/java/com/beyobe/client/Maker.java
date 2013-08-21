@@ -4,11 +4,9 @@ import java.util.Date;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-import com.beyobe.client.App;
 import com.beyobe.client.beans.DataType;
-import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.beans.UserRole;
+import com.beyobe.client.beans.Session;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.util.UUID;
 import com.beyobe.client.widgets.AnswerForm;
@@ -25,12 +23,12 @@ public class Maker {
 //		p.
 //	}
 	
-	public static Question q(Participant p) {
+	public static Question q(Session s) {
 		Question q = BeanMaker.makeQuestion();
 		q.setId(UUID.uuid());
 		q.setCreated(new Date());
-		q.setCreatedBy(p.getId());
-		q.setOwnerId(p.getId());
+		q.setCreatedBy(s.getUserId());
+		q.setOwnerId(s.getUserId());
 		int abbrevLen = Random.nextInt(AnswerForm.MAXIMUM_LENGTH_SHORT_TEXT -1) + 1;
 		q.setAbbreviation(RandomStringUtils.random(abbrevLen));
 		int longFormLen = Random.nextInt(AnswerForm.MAXIMUM_LENGTH_LONG_TEXT -1) + 1;

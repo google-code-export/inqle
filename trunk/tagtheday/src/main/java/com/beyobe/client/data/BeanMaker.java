@@ -2,7 +2,6 @@ package com.beyobe.client.data;
 
 import com.beyobe.client.App;
 import com.beyobe.client.beans.Datum;
-import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.google.web.bindery.autobean.shared.AutoBean;
 
@@ -18,8 +17,4 @@ public class BeanMaker {
 	    return datum.as();
 	}
 	
-	public static Participant makeParticipant() {
-		AutoBean<Participant> participant = App.tagthedayAutoBeanFactory.participant();
-	    return participant.as();
-	}
 }

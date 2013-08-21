@@ -191,7 +191,7 @@ public class DataTimeline {
 		d2.setNormalizedValue(d1.getNormalizedValue());
 		d2.setTextValue(d1.getTextValue());
 		d2.setUnit(d1.getUnit());
-		d2.setParticipantId(d1.getParticipantId());
+		d2.setUserId(d1.getUserId());
 		d2.setQuestionConcept(d1.getQuestionConcept());
 		d2.setQuestionId(d1.getQuestionId());
 		return d2;

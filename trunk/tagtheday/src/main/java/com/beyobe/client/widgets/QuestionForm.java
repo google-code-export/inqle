@@ -14,7 +14,6 @@ import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.PrivacyType;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.beans.Unit;
-import com.beyobe.client.beans.UserRole;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
@@ -199,7 +198,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		panel.add(saveButton);
 		
 		boolean disableForm = true;
-		if (originalQuestion != null && (originalQuestion.getOwnerId().equals(App.participant.getId()) || App.participant.getRole() == UserRole.ROLE_ADMIN)) {
+		if (originalQuestion != null && (originalQuestion.getOwnerId().equals(App.session.getUserId()) || App.isAdminUser())) {
 			disableForm = false;
 		}
 		setQuestion(originalQuestion, disableForm);
@@ -435,7 +434,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		newQuestion.setCreated(new Date());
 		newQuestion.setCreatedBy(App.getParticipantId());
 		newQuestion.setOwnerId(App.getParticipantId());
-		newQuestion.setLang(App.participant.getLang());
+		newQuestion.setLang(App.session.getLang());
 		newQuestion.setMaxLength(Constants.DEFAULT_TEXTFIELD_MAX_LENGTH);
 		newQuestion.setDataType(DataType.DOUBLE);
 		return newQuestion;

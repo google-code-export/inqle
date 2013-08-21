@@ -8,8 +8,8 @@ public interface Parcel {
 	
 	public String getAction();
 	public void setAction(String action);
-	public Participant getParticipant();
-	public void setParticipant(Participant participant);
+	public Session getSession();
+	public void setSession(Session session);
 	public String getSessionToken();
 	public void setSessionToken(String sessionToken);
 	public String getUsername();
