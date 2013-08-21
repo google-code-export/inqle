@@ -1,19 +1,14 @@
 package com.beyobe.web;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlrpc.XmlRpcException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +23,9 @@ import com.beyobe.Constants;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.SubscriptionType;
-import com.beyobe.client.beans.UserRole;
 import com.beyobe.domain.Datum;
-import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
+import com.beyobe.domain.Session;
 import com.beyobe.domain.Subscription;
 import com.beyobe.drupal.Drupal7XmlRpcClient;
 import com.beyobe.repository.DatumRepository;
@@ -65,166 +59,6 @@ public class ServiceController {
 	public String populateClientIpAddress(HttpServletRequest request) {
 		return request.getRemoteAddr();
 	}
-
-	
-	
-	
-	@RequestMapping(value = "/signup", method = RequestMethod.POST, headers = "Accept=application/json")
-	@ResponseBody
-	public ResponseEntity<java.lang.String> signup(
-			@RequestBody String jsonRequest,
-			@ModelAttribute("clientIpAddress") String clientIpAddress) {
-	 	Parcel parcel = null;
-	 	String username = null;
-	 	String password = null;
-	 	Parcel returnParcel = new Parcel();
-	 	try {
-			parcel = Parcel.fromJsonToParcel(jsonRequest);
-			username = parcel.getUsername();
-			password = parcel.getPassword();
-			log.info("signup service invoked for username: " + username);
-		} catch (Exception e1) {
-			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
-			returnParcel.setMessage(Message.BAD_REQUEST);
-			return respond(returnParcel, HttpStatus.BAD_REQUEST);
-		}
-	 	Participant participant = null;
-	 	//prepare the parcel for return
-	 	
-	 	boolean acctAlreadyExists = true;
-	 	try {
-			try {
-				Participant shouldNotExist = Participant.findParticipantsByUsernameEquals(username).getSingleResult();
-				if (shouldNotExist != null) {
-					acctAlreadyExists = true;
-				}
-			} catch (NoResultException dne) {
-				acctAlreadyExists = false;
-			} catch (EmptyResultDataAccessException erdae) {
-				acctAlreadyExists = false;
-			}
-		} catch (Exception e1) {
-	 		log.error("Exception finding already existing account", e1);
-			acctAlreadyExists = true;
-		} 
-	 	if (acctAlreadyExists) {
-			log.warn("Username already exists=" + username);
-			returnParcel.setMessage(Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS);
-	 		return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-	 	}
-	 	
-	 	//save the session token for future requests
-	 	String sessionToken = UUID.randomUUID().toString();
-	 	participant = new Participant();
-	 	participant.setUsername(username);
-	 	participant.setPassword(password);
-	 	participant.setEmail(username);
-	 	participant.setRole(UserRole.ROLE_BASIC);
-	 	participant.setSessionToken(sessionToken);
-	 	participant.setEnabled(true);
-	 	participant.setClientIpAddress(clientIpAddress);
-	 	participant.persist();
-	 	
-	 	log.info("saved NEW participant: " + username);
-	 	
-	 	returnParcel.setSessionToken(sessionToken);
-	 	returnParcel.setParticipant(participant);
-	 	returnParcel.setMessage(Message.SIGNED_UP);
-	 	log.info("set session token: " + sessionToken);
-	 	
-	    log.info("signup service sending back: " + returnParcel.toJson());
-	    return respond(returnParcel, HttpStatus.OK);
-	}
-	
-	
-	
-	
-	
-	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
-//	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json;charset=UTF-8")
-	@ResponseBody
-	public ResponseEntity<java.lang.String> login(
-			@RequestBody String jsonRequest,
-			@ModelAttribute("clientIpAddress") String clientIpAddress) {
-	 	Parcel parcel = null;
-	 	String username = null;
-	 	String hashedPassword = null;
-	 	Parcel returnParcel = new Parcel();
-	 	try {
-			parcel = Parcel.fromJsonToParcel(jsonRequest);
-
-		} catch (Exception e1) {
-			log.error("Bad request: incoming JSON=" + jsonRequest, e1);
-			returnParcel.setMessage(Message.BAD_REQUEST);
-			return respond(returnParcel, HttpStatus.BAD_REQUEST);
-		}
-	 	
-	 	//log in
-		username = parcel.getUsername();
-		String password = parcel.getPassword();
-		log.info("login service invoked for username: " + username);
-		Participant dummyParticipant = new Participant();
-		dummyParticipant.setPassword(password);
-		hashedPassword = dummyParticipant.getPassword();
-	 	Participant participant = null;
-	 	try {
-	 		participant = Participant.findParticipantsByUsernameEqualsAndPasswordEqualsAndEnabledNot(username, hashedPassword, false).getSingleResult();
-			assert(participant.getEnabled()==true);
-	 	} catch (Exception e) {
-			//leave as null
-			log.warn("Login failure: username=" + username + "; passwordHash=" + hashedPassword);
-			returnParcel.setMessage(Message.LOGIN_FAILED);
-			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-		}
-	 	//save the session token for future requests
-	 	String sessionToken = UUID.randomUUID().toString();
-	 	participant.setSessionToken(sessionToken);
-	 	participant.setSessionDate(new Date());
-	 	participant.setClientIpAddress(clientIpAddress);
-	 	participant.merge();
-	 	
-	 	log.trace("saved participant");
-	 	
-	 	//prepare the parcel for return
-	 	returnParcel.setSessionToken(sessionToken);
-	 	returnParcel.setParticipant(participant);
-	 	log.info("login service: user=" + participant.getUsername() + "; set session token: " + sessionToken);
-	 	
-	 	try {
-			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
-			returnParcel.setQuestions(questionQueue);
-			log.trace("login service: set question queue");
-		} catch (Exception e) {
-			log.error("login service: ERROR getting question queue", e);
-		}
-		
-		try {
-			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
-			returnParcel.setOtherKnownQuestions(inactiveQuestions);
-			log.trace("set inactive questions");
-		} catch (Exception e) {
-			log.error("login service: ERROR getting inactive questions", e);
-		}
-		
-	 	try {
-			List<Datum> data = datumRepository.getParticipantData(participant.getId());
-			returnParcel.setData(data);
-			returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
-			log.trace("set data");
-		} catch (Exception e) {
-			log.error("ERROR getting participant data", e);
-		}
-	 	returnParcel.setMessage(Message.LOGIN_SUCCEEDED);
-	    log.info("login service sending back: " + returnParcel.toJson());
-	    return respond(returnParcel, HttpStatus.OK);
-	}
-	
-	
-	
-	
-	
-	
-	
 	
 	@RequestMapping(value = "/loginDrupal", method = RequestMethod.POST, headers = "Accept=application/json")
 //	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json;charset=UTF-8")
@@ -250,32 +84,32 @@ public class ServiceController {
 		String password = parcel.getPassword();
 		log.info("loginDrupal service invoked for username: " + username);
 		
-		Participant participant = null;
+		Session session = null;
 		try {
 			Drupal7XmlRpcClient drupal = new Drupal7XmlRpcClient(Constants.APPID);
 			drupal.connect();
-			participant = drupal.getParticipant(username, password);
+			session = drupal.doDrupalLogin(username, password);
 		} catch (Exception e) {
 			log.error("Unable to connect to Drupal server", e);
 		}
-		if (participant==null) {
+		if (session==null) {
 			log.info("loginDrupal service failed to login");
 			returnParcel.setMessage(Message.LOGIN_FAILED);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 		}
 		
-	 	participant.setClientIpAddress(clientIpAddress);
-	 	participant.merge();
-	 	
-	 	log.trace("saved participant");
+	 	session.setClientIpAddress(clientIpAddress);
+	 	saveSession(session);
 	 	
 	 	//prepare the parcel for return
-	 	returnParcel.setSessionToken(participant.getSessionToken());
-	 	returnParcel.setParticipant(participant);
-	 	log.info("login service: user=" + participant.getUsername() + "; set session token: " + participant.getSessionToken());
+	 	returnParcel.setSessionToken(session.getId());
+	 	returnParcel.setSession(session);
+	 	log.info("login service: user=" + session.getUsername() + "; set session token: " + session.getId());
 	 	
 	 	try {
-			List<Question> questionQueue = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.ACTIVE_DAILY);
+			List<Question> questionQueue = questionRepository.getSubscribedQuestions(
+					session.getId(), 
+					SubscriptionType.ACTIVE_DAILY);
 			returnParcel.setQuestions(questionQueue);
 			log.trace("login service: set question queue");
 		} catch (Exception e) {
@@ -283,7 +117,7 @@ public class ServiceController {
 		}
 		
 		try {
-			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(participant.getId(), SubscriptionType.INACTIVE);
+			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(session.getUserId(), SubscriptionType.INACTIVE);
 			returnParcel.setOtherKnownQuestions(inactiveQuestions);
 			log.trace("set inactive questions");
 		} catch (Exception e) {
@@ -291,12 +125,12 @@ public class ServiceController {
 		}
 		
 	 	try {
-			List<Datum> data = datumRepository.getParticipantData(participant.getId());
+			List<Datum> data = datumRepository.getUserData(session.getUserId());
 			returnParcel.setData(data);
 			returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
 			log.trace("set data");
 		} catch (Exception e) {
-			log.error("ERROR getting participant data", e);
+			log.error("ERROR getting session data", e);
 		}
 	 	returnParcel.setMessage(Message.LOGIN_SUCCEEDED);
 	    log.info("login service sending back: " + returnParcel.toJson());
@@ -313,7 +147,7 @@ public class ServiceController {
 	/**
 	 * Checks if the current 
 	 * Receives a Question object
-	 * Retrieves the participant, given the participantId
+	 * Retrieves the session, given the sessionId
 	 * 
 	 * @param clientIpAddress
 	 * @param jsonRequest
@@ -336,22 +170,12 @@ public class ServiceController {
 		}
 //	 	log.info("got parcel: " + parcel);
 	 	String sessionToken = parcel.getSessionToken();
-	 	Participant participant = null;
-	 	try {
-	 		//TODO add session expiration datetime
-	 		log.info("storeQuestion service getting current user participant...");
-			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
-			log.info("storeQuestion service participant:" + participant);
-			assert(participant.getEnabled()==true);
-	 	} catch (Exception e) {
-			//leave as null
-			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			returnParcel.setMessage(Message.INVALID_SESSION);
-			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-		}
-	 	Long countQuestions = questionRepository.countQuestionsOwned(participant.getId());
+	 	Session session = getSession(sessionToken, clientIpAddress);
+	 	if (session == null) return invalidSession();
+	 	
+	 	Long countQuestions = questionRepository.countQuestionsOwned(session.getUserId());
 	 	if (countQuestions > MAXIMUM_QUESTIONS_PER_USER) {
-	 		log.warn("Participant " + participant.getUsername() + " has too many questions (" + countQuestions + ")");
+	 		log.warn("Session " + session.getUsername() + " has too many questions (" + countQuestions + ")");
 		    returnParcel.setQuestion(parcel.getQuestion());
 		    returnParcel.setMessage(Message.TOO_MANY_QUESTIONS);
 		    return respond(returnParcel, HttpStatus.UNAUTHORIZED);
@@ -360,19 +184,21 @@ public class ServiceController {
 		try {
 			q = parcel.getQuestion();
 			log.info("storeQuestion service received question: " + q);
-			if (q.getOwnerId()==null) q.setOwnerId(participant.getId());
+			if (q.getOwnerId()==null) q.setOwnerId(session.getUserId());
+			q.setSession(session);
 		} catch (Exception e1) {
 			log.error("Unable to get Question from parcel", e1);
 		    returnParcel.setMessage(Message.BAD_REQUEST);
 		    return respond(returnParcel, HttpStatus.BAD_REQUEST);
 		}
-//	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+		
+//	 	return saveQuestionAndSubscribe(returnParcel, q, session);
 		
 		Question existingQuestion = questionRepository.findOne(q.getId());
 		boolean loadData = false;
 	 	if (existingQuestion != null) {
 	 		loadData = true;
-	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
+	 		if (! session.getUserId().equals(existingQuestion.getOwnerId()) && ! (session.getRoles().contains(Constants.ROLE_ADMINISTRATOR))) {
 	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
 	 		} else {
 //	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
@@ -380,7 +206,7 @@ public class ServiceController {
 	 		}
 	 	} else {
 	 		//new question: current user must be owner
-	 		q.setOwner(participant);
+	 		q.setOwnerId(session.getUserId());
 //		 	questionRepository.save(theQuestion);
 	 		questionRepository.save(q);
 		 	questionRepository.flush();
@@ -388,7 +214,7 @@ public class ServiceController {
 	 	}
 	 	
 	 	//subscribe
-	 	subscribe(participant, q);
+	 	subscribe(session, q);
 	 	
 	 	//signal to client that this question is saved
 	 	List<String> savedQuestions = new ArrayList<String>();
@@ -396,7 +222,7 @@ public class ServiceController {
 	 	returnParcel.setSavedQuestions(savedQuestions);
 	 	
 	 	if (loadData) {
-	 		List<Datum> data = datumRepository.getParticipantDataForQuestion(participant.getId(), q.getId());
+	 		List<Datum> data = datumRepository.getUserDataForQuestion(session.getUserId(), q.getId());
 	 		returnParcel.setData(data);
 	 	}
 	 	
@@ -406,6 +232,26 @@ public class ServiceController {
 	    return respond(returnParcel, HttpStatus.OK);
 	}
 	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	@RequestMapping(value = "/storeDatum", method = RequestMethod.POST, headers = "Accept=application/json")
 	@ResponseBody
@@ -425,33 +271,24 @@ public class ServiceController {
 			return respond(returnParcel, HttpStatus.BAD_REQUEST);
 		}
 		log.info("storeDatum service: got parcel: " + parcel);
-	 	Participant participant = null;
-	 	try {
-	 		//TODO add session expiration datetime
-			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
-			log.info("storeDatum service: got participant: " + participant);
-			assert(participant.getEnabled()==true);
-	 	} catch (Exception e) {
-			//leave as null
-			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			returnParcel.setMessage(Message.INVALID_SESSION);
-			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-		}
-	 	
+		Session session = getSession(sessionToken, clientIpAddress);
+		if (session == null) return invalidSession();
+		
 	 	//make sure the user has not exceeded quota
-	 	long countData = datumRepository.countParticipantData(participant.getId());
+	 	long countData = datumRepository.countUserData(session.getUserId());
 	 	if (countData > MAXIMUM_DATA_PER_USER) {
-	 		log.warn("Participant " + participant.getUsername() + " has too many data (" + countData + ")");
+	 		log.warn("Session " + session.getUsername() + " has too many data (" + countData + ")");
 		    returnParcel.setDatum(parcel.getDatum());
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
-	 	log.info("User " + participant.getUsername() + " created " + questionRepository.countQuestionsOwned(participant.getId()) + " questions and " + countData + " data.");
+	 	log.info("User " + session.getUsername() + " created " + questionRepository.countQuestionsOwned(session.getUserId()) + " questions and " + countData + " data.");
 	 	Question q = null;
 		try {
 			q = parcel.getQuestion();
 			log.info("storeDatum service received question: " + q);
-			if (q.getOwnerId()==null) q.setOwnerId(participant.getId());
+			if (q.getOwnerId()==null) q.setOwnerId(session.getUserId());
+			q.setSession(session);
 		} catch (Exception e1) {
 			log.error("Unable to get Question from parcel", e1);
 			returnParcel.setMessage(Message.BAD_REQUEST);
@@ -471,7 +308,7 @@ public class ServiceController {
 			d = parcel.getDatum();
 //			d.setQuestion(existingQuestion);
 			d.setQuestion(q);
-			d.setParticipant(participant);
+			d.setSession(session);
 			log.info("storeDatum service: got datum: " + d);
 			Datum existingDatum = datumRepository.findOne(d.getId());
 			//TODO some day remove this nasty workaround because JPA gives error when we try to update a object (nutty thing to try to do I know)
@@ -495,9 +332,9 @@ public class ServiceController {
 	 	returnParcel.setSavedData(savedData);
 	 	
 	 	//save or update the question associated with this answer
-//	 	return saveQuestionAndSubscribe(returnParcel, q, participant);
+//	 	return saveQuestionAndSubscribe(returnParcel, q, session);
 	 	
-	 	subscribe(participant, q);
+	 	subscribe(session, q);
 	 	returnParcel.setMessage(Message.SAVED);
 	 	return respond(returnParcel, HttpStatus.OK);
 	}
@@ -520,23 +357,12 @@ public class ServiceController {
 		}
 //	 	log.info("got parcel: " + parcel);
 	 	String sessionToken = parcel.getSessionToken();
-	 	Participant participant = null;
-	 	try {
-	 		//TODO add session expiration datetime
-	 		log.info("searchForQuestions service getting current user participant...");
-			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
-			log.info("searchForQuestions service participant:" + participant);
-			assert(participant.getEnabled()==true);
-	 	} catch (Exception e) {
-			//leave as null
-			log.warn("searchForQuestions service: Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			returnParcel.setMessage(Message.INVALID_SESSION);
-			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-	 	}
+	 	Session session = getSession(sessionToken, clientIpAddress);
+	 	if (session == null) return invalidSession();
 	 	
 	 	String queryTerm = parcel.getQueryTerm();
 	 	String qt = "%" + sqlEscape(queryTerm) + "%";
-	 	List<Question> questions = questionRepository.searchForNewQuestionsUsingSql(participant.getId(), qt);
+	 	List<Question> questions = questionRepository.searchForNewQuestionsUsingSql(session.getUserId(), qt);
 	 	log.info("searchForQuestions queried " + qt + " and found: " + questions);
 	 	
 	 	//prepare the parcel for return
@@ -558,7 +384,7 @@ public class ServiceController {
 	/**
 	 * Checks if the current 
 	 * Receives a Question object
-	 * Retrieves the participant, given the participantId
+	 * Retrieves the session, given the sessionId
 	 * 
 	 * @param clientIpAddress
 	 * @param jsonRequest
@@ -581,19 +407,8 @@ public class ServiceController {
 		}
 //	 	log.info("got parcel: " + parcel);
 	 	String sessionToken = parcel.getSessionToken();
-	 	Participant participant = null;
-	 	try {
-	 		//TODO add session expiration datetime
-	 		log.info("unsubscribe service getting current user participant...");
-			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
-			log.info("unsubscribe service participant:" + participant);
-			assert(participant.getEnabled()==true);
-	 	} catch (Exception e) {
-			//leave as null
-			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			returnParcel.setMessage(Message.INVALID_SESSION);
-			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-		}
+	 	Session session = getSession(sessionToken, clientIpAddress);
+	 	if (session == null) return invalidSession();
 	 	
 	 	Question q = null;
 		try {
@@ -608,7 +423,7 @@ public class ServiceController {
 		Subscription existingSubscription = null;
 	 	try {
 			existingSubscription = 
-					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
+					Subscription.findSubscriptionsByQuestionIdEqualsAndUserIdEquals(q.getId(), session.getUserId()).getSingleResult();
 	 	} catch (Exception e1) {
 			log.info("No existing subscription found for question: " + q.getId());
 			returnParcel.setMessage(Message.UNSUBSCRIBE_FAILED);
@@ -625,7 +440,7 @@ public class ServiceController {
 	    return respond(returnParcel, HttpStatus.OK);
 	}
 	
-//	private ResponseEntity<String> saveQuestion(Parcel returnParcel, Question q, Participant participant) {
+//	private ResponseEntity<String> saveQuestion(Parcel returnParcel, Question q, Session session) {
 //		
 //		//test that current user is the owner of this question or is admin
 //	 	Question existingQuestion = questionRepository.findOne(q.getId());
@@ -633,7 +448,7 @@ public class ServiceController {
 //	 	boolean loadData = false;
 //	 	if (existingQuestion != null) {
 //	 		loadData = true;
-//	 		if (! participant.getId().equals(existingQuestion.getOwnerId()) && ! (participant.getRole() == UserRole.ROLE_ADMIN)) {
+//	 		if (! session.getUserId().equals(existingQuestion.getOwnerId()) && ! (session.getRole() == UserRole.ROLE_ADMIN)) {
 //	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
 //	 		} else {
 ////	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
@@ -641,7 +456,7 @@ public class ServiceController {
 //	 		}
 //	 	} else {
 //	 		//new question: current user must be owner
-//	 		q.setOwner(participant);
+//	 		q.setOwner(session);
 ////		 	questionRepository.save(theQuestion);
 //	 		questionRepository.save(q);
 //		 	questionRepository.flush();
@@ -657,7 +472,7 @@ public class ServiceController {
 //	 	Subscription existingSubscription = null;
 //	 	 try {
 //			existingSubscription = 
-//					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
+//					Subscription.findSubscriptionsByQuestionIdEqualsAndSessionEquals(q.getId(), session).getSingleResult();
 //
 //	 	 } catch (Exception e1) {
 //			log.info("No existing subscription found for question: " + q.getId());
@@ -665,12 +480,12 @@ public class ServiceController {
 //	 	if (existingSubscription == null) {
 //		 	Subscription subscription = new Subscription();
 //		 	subscription.setCreated(new Date());
-//		 	subscription.setCreatedBy(participant.getId());
+//		 	subscription.setCreatedBy(session.getUserId());
 //		 	subscription.setQuestionId(q.getId());
 ////		 	subscription.setQuestion(theQuestion);
 //		 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
-////		 	subscription.setParticipantId(participant.getId());
-//		 	subscription.setParticipant(participant);
+////		 	subscription.setSessionId(session.getUserId());
+//		 	subscription.setSession(session);
 //		 	log.info("storeQuestion service to save subscription: " + subscription);
 //		 	try {
 //				subscription.persist();
@@ -687,7 +502,7 @@ public class ServiceController {
 	 	//prepare the parcel for return
 	 	
 //	 	if (loadData) {
-//	 		List<Datum> data = datumRepository.getParticipantDataForQuestion(participant.getId(), q.getId());
+//	 		List<Datum> data = datumRepository.getSessionDataForQuestion(session.getUserId(), q.getId());
 //	 		returnParcel.setData(data);
 //	 	}
 //	 	
@@ -697,12 +512,12 @@ public class ServiceController {
 //	    return respond(returnParcel, HttpStatus.OK);
 //	}
 	
-	private void subscribe(Participant participant, Question q) {
+	private void subscribe(Session session, Question q) {
 		//check to see if subscription already exists.  If not create a new one
 	 	Subscription existingSubscription = null;
 	 	 try {
 			existingSubscription = 
-					Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(q.getId(), participant).getSingleResult();
+					Subscription.findSubscriptionsByQuestionIdEqualsAndSessionEquals(q.getId(), session).getSingleResult();
 
 	 	 } catch (Exception e1) {
 			log.info("No existing subscription found for question: " + q.getId());
@@ -714,17 +529,17 @@ public class ServiceController {
 	 	//create new subscription
 	 	Subscription subscription = new Subscription();
 	 	subscription.setCreated(new Date());
-	 	subscription.setCreatedBy(participant.getId());
+	 	subscription.setCreatedBy(session.getUserId());
 	 	subscription.setQuestionId(q.getId());
 //		 	subscription.setQuestion(theQuestion);
 	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
-//		 	subscription.setParticipantId(participant.getId());
-	 	subscription.setParticipant(participant);
+//		 	subscription.setSessionId(session.getUserId());
+	 	subscription.setSession(session);
 	 	log.info("storeQuestion service to save subscription: " + subscription);
 	 	try {
 			subscription.persist();
 			subscription.flush();
-			log.info("storeQuestion service saved subscription for participant: " + participant.getId() + ", question: " + q.getId());
+			log.info("storeQuestion service saved subscription for session: " + session.getUserId() + ", question: " + q.getId());
 		} catch (Exception e) {
 			log.error("storeQuestion service unable to save subscription:" + subscription, e);
 		}
@@ -782,6 +597,9 @@ public class ServiceController {
 		if (newDatum.getUpdatedBy() != null) {
 			existingDatum.setUpdatedBy(newDatum.getUpdatedBy());
 		}
+		if (newDatum.getSession() != null) {
+			existingDatum.setSession(newDatum.getSession());
+		}
 		datumRepository.saveAndFlush(existingDatum);
 	}
 	
@@ -822,6 +640,9 @@ public class ServiceController {
 		if (newQuestion.getPriority() != null) {
 			existingQuestion.setPriority(newQuestion.getPriority());
 		}
+		if (newQuestion.getSession() != null) {
+			existingQuestion.setSession(newQuestion.getSession());
+		}
 		questionRepository.saveAndFlush(existingQuestion);
 		return existingQuestion;
 	}
@@ -859,19 +680,9 @@ public class ServiceController {
 			return respond(returnParcel, HttpStatus.BAD_REQUEST);
 		}
 		log.info("saveUnsaved service: got parcel: " + parcel);
-	 	Participant participant = null;
-	 	try {
-	 		//TODO add session expiration datetime
-			participant = Participant.findParticipantsBySessionTokenEqualsAndSessionDateGreaterThanAndClientIpAddressEqualsAndEnabledNot(sessionToken, getEarliestSessionDate(), clientIpAddress, false).getSingleResult();
-			log.info("saveUnsaved service: got participant: " + participant);
-			assert(participant.getEnabled()==true);
-	 	} catch (Exception e) {
-			//leave as null
-			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
-			returnParcel.setMessage(Message.INVALID_SESSION);
-			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
-		}
-	 	
+		Session session = getSession(sessionToken, clientIpAddress);
+		if (session == null) return invalidSession();
+		
 	 	List<Datum> data = parcel.getData();
 	 	List<Question> questions = parcel.getQuestions();
 	 	int dataQueueSize = 0;
@@ -880,26 +691,27 @@ public class ServiceController {
 	 	if (questions != null) questionsQueueSize = questions.size();
 	 	
 	 	//make sure the user has not exceeded data quota
-	 	long countData = datumRepository.countParticipantData(participant.getId());
+	 	long countData = datumRepository.countUserData(session.getUserId());
 	 	if (countData + dataQueueSize > MAXIMUM_DATA_PER_USER) {
-	 		log.warn("Participant " + participant.getUsername() + " has too many data (" + countData + ")");
+	 		log.warn("Session " + session.getUsername() + " has too many data (" + countData + ")");
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
 	 	
 	 	//make sure the user has not exceeded question quota
-	 	long countQuestions = questionRepository.countQuestionsOwned(participant.getId());
+	 	long countQuestions = questionRepository.countQuestionsOwned(session.getUserId());
 	 	if (countQuestions + questionsQueueSize > MAXIMUM_QUESTIONS_PER_USER) {
-	 		log.warn("Participant " + participant.getUsername() + " has too many questions (" + countQuestions + ")");
+	 		log.warn("Session " + session.getUsername() + " has too many questions (" + countQuestions + ")");
 		    returnParcel.setMessage(Message.TOO_MANY_QUESTIONS);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
 	 	
-	 	log.info("User " + participant.getUsername() + " has created " + countQuestions + " questions and " + countData + " data.");
+	 	log.info("User " + session.getUsername() + " has created " + countQuestions + " questions and " + countData + " data.");
 	 	int countSavedData = 0;
 	 	if (data != null) {
 	 		List<String> savedData = new ArrayList<String>();
 	 		for(Datum d: data) {
+	 			d.setSession(session);
 	 			Datum existingDatum = datumRepository.findOne(d.getId());
 				mergeAndSaveDatum(d, existingDatum);
 	 			savedData.add(d.getId());
@@ -912,9 +724,10 @@ public class ServiceController {
 	 	if (questions != null) {
 	 		List<String> savedQuestions = new ArrayList<String>();
 	 		for (Question q: questions) {
+	 			q.setSession(session);
 	 			Question existingQuestion = questionRepository.findOne(q.getId());
 	 			mergeAndSaveQuestion(q, existingQuestion);
-	 			subscribe(participant, q);
+	 			subscribe(session, q);
 	 			savedQuestions.add(q.getId());
 	 			countSavedQuestions++;
 	 		}
@@ -923,21 +736,196 @@ public class ServiceController {
 	 	
 	 	returnParcel.setMessage(Message.SAVED);
 //	    String returnJson = returnParcel.toJson();
-	    log.info("saveUnsaved service for participant:" + participant.getUsername() + " saved " + countSavedQuestions + " questions and " + countSavedData + " data");
+	    log.info("saveUnsaved service for session:" + session.getUsername() + " saved " + countSavedQuestions + " questions and " + countSavedData + " data");
 	    return respond(returnParcel, HttpStatus.OK);
 	 	
 	}
 	
 	
-	private Session newSession(Parcel parcel) {
-		
+//	private Session newSession(Parcel parcel) {
+//		Session s = new Session();
+//		s.set
+//	}
+	
+	private Session getSession(String sessionToken, String clientIpAddress) {
+		Session session = null;
+		try {
+	 		log.info("getting current user session...");
+	 		session = Session.findSessionsByIdEqualsAndSessionDateGreaterThanAndClientIpAddressEquals(sessionToken, getEarliestSessionDate(), clientIpAddress).getSingleResult();
+			log.info("storeQuestion service session:" + session);
+			assert(session.getStatus()==1);
+	 	} catch (Exception e) {
+			//leave as null
+			log.warn("Session not recognized or expired: sessionToken=" + sessionToken + "; clientIpAddress=" + clientIpAddress);
+		}
+		return session;
+	}
+	
+	private ResponseEntity<java.lang.String> invalidSession() {
+		Parcel returnParcel = new Parcel();
+		returnParcel.setMessage(Message.INVALID_SESSION);
+		return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	}
 	
 	private void saveSession(Session session) {
-		
+		session.persist();
 	}
 	
-	private Session verifySession(Parcel parcel) {
-		
+	private Session loadSession(Parcel parcel) {
+		String sessionId = parcel.getSessionToken();
+		if (sessionId==null) return null;
+		Session session = Session.findSession(sessionId);
+		return session;
 	}
 }
+
+
+
+//@RequestMapping(value = "/signup", method = RequestMethod.POST, headers = "Accept=application/json")
+//@ResponseBody
+//public ResponseEntity<java.lang.String> signup(
+//		@RequestBody String jsonRequest,
+//		@ModelAttribute("clientIpAddress") String clientIpAddress) {
+// 	Parcel parcel = null;
+// 	String username = null;
+// 	String password = null;
+// 	Parcel returnParcel = new Parcel();
+// 	try {
+//		parcel = Parcel.fromJsonToParcel(jsonRequest);
+//		username = parcel.getUsername();
+//		password = parcel.getPassword();
+//		log.info("signup service invoked for username: " + username);
+//	} catch (Exception e1) {
+//		log.error("Bad request: incoming JSON=" + jsonRequest, e1);
+//		returnParcel.setMessage(Message.BAD_REQUEST);
+//		return respond(returnParcel, HttpStatus.BAD_REQUEST);
+//	}
+// 	Session session = null;
+// 	//prepare the parcel for return
+// 	
+// 	boolean acctAlreadyExists = true;
+// 	try {
+//		try {
+//			Session shouldNotExist = Session.findSessionsByUsernameEquals(username).getSingleResult();
+//			if (shouldNotExist != null) {
+//				acctAlreadyExists = true;
+//			}
+//		} catch (NoResultException dne) {
+//			acctAlreadyExists = false;
+//		} catch (EmptyResultDataAccessException erdae) {
+//			acctAlreadyExists = false;
+//		}
+//	} catch (Exception e1) {
+// 		log.error("Exception finding already existing account", e1);
+//		acctAlreadyExists = true;
+//	} 
+// 	if (acctAlreadyExists) {
+//		log.warn("Username already exists=" + username);
+//		returnParcel.setMessage(Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS);
+// 		return respond(returnParcel, HttpStatus.UNAUTHORIZED);
+// 	}
+// 	
+// 	//save the session token for future requests
+// 	String sessionToken = UUID.randomUUID().toString();
+// 	session = new Session();
+// 	session.setUsername(username);
+// 	session.setPassword(password);
+// 	session.setEmail(username);
+// 	session.setRole(UserRole.ROLE_BASIC);
+// 	session.setSessionToken(sessionToken);
+// 	session.setEnabled(true);
+// 	session.setClientIpAddress(clientIpAddress);
+// 	session.persist();
+// 	
+// 	log.info("saved NEW session: " + username);
+// 	
+// 	returnParcel.setSessionToken(sessionToken);
+// 	returnParcel.setSession(session);
+// 	returnParcel.setMessage(Message.SIGNED_UP);
+// 	log.info("set session token: " + sessionToken);
+// 	
+//    log.info("signup service sending back: " + returnParcel.toJson());
+//    return respond(returnParcel, HttpStatus.OK);
+//}
+
+
+
+
+
+//@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+//@ResponseBody
+//public ResponseEntity<java.lang.String> login(
+//		@RequestBody String jsonRequest,
+//		@ModelAttribute("clientIpAddress") String clientIpAddress) {
+// 	Parcel parcel = null;
+// 	String username = null;
+// 	String hashedPassword = null;
+// 	Parcel returnParcel = new Parcel();
+// 	try {
+//		parcel = Parcel.fromJsonToParcel(jsonRequest);
+//
+//	} catch (Exception e1) {
+//		log.error("Bad request: incoming JSON=" + jsonRequest, e1);
+//		returnParcel.setMessage(Message.BAD_REQUEST);
+//		return respond(returnParcel, HttpStatus.BAD_REQUEST);
+//	}
+// 	
+// 	//log in
+//	username = parcel.getUsername();
+//	String password = parcel.getPassword();
+//	log.info("login service invoked for username: " + username);
+//	Session dummySession = new Session();
+//	dummySession.setPassword(password);
+//	hashedPassword = dummySession.getPassword();
+// 	Session session = null;
+// 	try {
+// 		session = Session.findSessionsByUsernameEqualsAndPasswordEqualsAndEnabledNot(username, hashedPassword, false).getSingleResult();
+//		assert(session.getEnabled()==true);
+// 	} catch (Exception e) {
+//		//leave as null
+//		log.warn("Login failure: username=" + username + "; passwordHash=" + hashedPassword);
+//		returnParcel.setMessage(Message.LOGIN_FAILED);
+//		return respond(returnParcel, HttpStatus.UNAUTHORIZED);
+//	}
+// 	//save the session token for future requests
+// 	String sessionToken = UUID.randomUUID().toString();
+// 	session.setSessionToken(sessionToken);
+// 	session.setSessionDate(new Date());
+// 	session.setClientIpAddress(clientIpAddress);
+// 	session.merge();
+// 	
+// 	log.trace("saved session");
+// 	
+// 	//prepare the parcel for return
+// 	returnParcel.setSessionToken(sessionToken);
+// 	returnParcel.setSession(session);
+// 	log.info("login service: user=" + session.getUsername() + "; set session token: " + sessionToken);
+// 	
+// 	try {
+//		List<Question> questionQueue = questionRepository.getSubscribedQuestions(session.getUserId(), SubscriptionType.ACTIVE_DAILY);
+//		returnParcel.setQuestions(questionQueue);
+//		log.trace("login service: set question queue");
+//	} catch (Exception e) {
+//		log.error("login service: ERROR getting question queue", e);
+//	}
+//	
+//	try {
+//		List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(session.getUserId(), SubscriptionType.INACTIVE);
+//		returnParcel.setOtherKnownQuestions(inactiveQuestions);
+//		log.trace("set inactive questions");
+//	} catch (Exception e) {
+//		log.error("login service: ERROR getting inactive questions", e);
+//	}
+//	
+// 	try {
+//		List<Datum> data = datumRepository.getSessionData(session.getUserId());
+//		returnParcel.setData(data);
+//		returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
+//		log.trace("set data");
+//	} catch (Exception e) {
+//		log.error("ERROR getting session data", e);
+//	}
+// 	returnParcel.setMessage(Message.LOGIN_SUCCEEDED);
+//    log.info("login service sending back: " + returnParcel.toJson());
+//    return respond(returnParcel, HttpStatus.OK);
+//}

@@ -3,20 +3,30 @@
 
 package com.beyobe.domain;
 
-import com.beyobe.domain.Participant;
+import com.beyobe.domain.Session;
 import com.beyobe.domain.Subscription;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 privileged aspect Subscription_Roo_Finder {
     
-    public static TypedQuery<Subscription> Subscription.findSubscriptionsByQuestionIdEqualsAndParticipantEquals(String questionId, Participant participant) {
+    public static TypedQuery<Subscription> Subscription.findSubscriptionsByQuestionIdEqualsAndSessionEquals(String questionId, Session session) {
         if (questionId == null || questionId.length() == 0) throw new IllegalArgumentException("The questionId argument is required");
-        if (participant == null) throw new IllegalArgumentException("The participant argument is required");
+        if (session == null) throw new IllegalArgumentException("The session argument is required");
         EntityManager em = Subscription.entityManager();
-        TypedQuery<Subscription> q = em.createQuery("SELECT o FROM Subscription AS o WHERE o.questionId = :questionId  AND o.participant = :participant", Subscription.class);
+        TypedQuery<Subscription> q = em.createQuery("SELECT o FROM Subscription AS o WHERE o.questionId = :questionId  AND o.session = :session", Subscription.class);
         q.setParameter("questionId", questionId);
-        q.setParameter("participant", participant);
+        q.setParameter("session", session);
+        return q;
+    }
+    
+    public static TypedQuery<Subscription> Subscription.findSubscriptionsByQuestionIdEqualsAndUserIdEquals(String questionId, String userId) {
+        if (questionId == null || questionId.length() == 0) throw new IllegalArgumentException("The questionId argument is required");
+        if (userId == null || userId.length() == 0) throw new IllegalArgumentException("The userId argument is required");
+        EntityManager em = Subscription.entityManager();
+        TypedQuery<Subscription> q = em.createQuery("SELECT o FROM Subscription AS o WHERE o.questionId = :questionId  AND o.userId = :userId", Subscription.class);
+        q.setParameter("questionId", questionId);
+        q.setParameter("userId", userId);
         return q;
     }
     

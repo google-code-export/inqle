@@ -13,7 +13,7 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 import com.beyobe.Constants;
-import com.beyobe.domain.Participant;
+import com.beyobe.domain.Session;
 
 
 /**
@@ -242,7 +242,7 @@ public class Drupal7XmlRpcClient {
             Map user = (Map) login.get("user");
             String email = (String)user.get("mail");
             Map roles = (Map)user.get("roles");
-            log.info("Roles=" + roles + "; session=" + sessionid);
+            log.info("login=" + login);
             // you can create "watch" on 'login' to see the details of login user (the admin user)
 
 //            // 3) create new user
@@ -256,26 +256,37 @@ public class Drupal7XmlRpcClient {
         }
     }
 
-	public Participant getParticipant(String username, String password) throws XmlRpcException {
+	public Session doDrupalLogin(String username, String password) throws XmlRpcException {
 		Vector<Object> params = new Vector<Object>();
         params.add(username);
         params.add(password);
-        Map response = (Map) xmlRpcClient.execute(METHOD_USER_LOGIN, params);
-        if (response==null) return null;
-        Participant p = new Participant();
-        p.setSessionDate(new Date());
-        p.setSessionToken((String)response.get("sessid"));
-        p.setUsername(username);
-        String id = appId + "-" + response.get("uid");
-        p.setId(id);
-        Integer status = (Integer)response.get("status");
-        p.setStatus(status);
-        p.setEnabled(status != null && status ==1);
-        p.setEmail(String.valueOf(response.get("mail")));
-        Map roles = (Map)response.get("roles");
-        Collection<String> userRoles = roles.values();
-        p.setRoles(userRoles);
-        return p;
+        @SuppressWarnings("unchecked")
+		Map<Object, Object> response = (Map<Object, Object>) xmlRpcClient.execute(METHOD_USER_LOGIN, params);
+        response.put("username", username);
+        return getSession(response);
 	}
-
+	
+	public Session getSession(Map<Object, Object> map) {
+        if (map==null) return null;
+        @SuppressWarnings("unchecked")
+        Map<Object, Object> user = (Map<Object, Object>) map.get("user");
+        Integer status = (Integer)user.get("status");
+        if (status != 1) return null;
+        Session s = new Session();
+        s.setStatus(status);
+        s.setUpdated(new Date());
+        s.setId((String)map.get("sessid"));
+        s.setSessionDate(new Date());
+        s.setSessionToken((String)map.get("session_name"));
+        s.setUsername((String)map.get("username"));
+        String userid = appId + "-" + user.get("uid");
+        s.setUserId(userid);
+        @SuppressWarnings("unchecked")
+        Map<Object, String> roles = (Map<Object, String>)user.get("roles");
+        Collection<String> userRoles = (Collection<String>)roles.values();
+        s.setRoles(userRoles);
+        s.setTimezone((String)user.get("timezone"));
+        s.setLang((String)user.get("language"));
+        return s;
+	}
 }

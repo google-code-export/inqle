@@ -9,9 +9,9 @@ import com.beyobe.client.beans.Unit;
 import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
-import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
+import com.beyobe.domain.Session;
 import java.util.Date;
 
 privileged aspect Datum_Roo_JavaBean {
@@ -80,12 +80,12 @@ privileged aspect Datum_Roo_JavaBean {
         this.formula = formula;
     }
     
-    public Participant Datum.getParticipant() {
-        return this.participant;
+    public Session Datum.getSession() {
+        return this.session;
     }
     
-    public void Datum.setParticipant(Participant participant) {
-        this.participant = participant;
+    public void Datum.setSession(Session session) {
+        this.session = session;
     }
     
     public String Datum.getParticipantId() {

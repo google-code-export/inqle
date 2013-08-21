@@ -4,7 +4,7 @@
 package com.beyobe.domain;
 
 import com.beyobe.client.beans.SubscriptionType;
-import com.beyobe.domain.Participant;
+import com.beyobe.domain.Session;
 import com.beyobe.domain.Subscription;
 import java.util.Date;
 
@@ -42,12 +42,20 @@ privileged aspect Subscription_Roo_JavaBean {
         this.questionId = questionId;
     }
     
-    public Participant Subscription.getParticipant() {
-        return this.participant;
+    public Session Subscription.getSession() {
+        return this.session;
     }
     
-    public void Subscription.setParticipant(Participant participant) {
-        this.participant = participant;
+    public void Subscription.setSession(Session session) {
+        this.session = session;
+    }
+    
+    public String Subscription.getUserId() {
+        return this.userId;
+    }
+    
+    public void Subscription.setUserId(String userId) {
+        this.userId = userId;
     }
     
     public SubscriptionType Subscription.getSubscriptionType() {

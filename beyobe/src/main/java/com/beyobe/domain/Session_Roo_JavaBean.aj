@@ -4,6 +4,7 @@
 package com.beyobe.domain;
 
 import com.beyobe.domain.Session;
+import java.util.Collection;
 import java.util.Date;
 
 privileged aspect Session_Roo_JavaBean {
@@ -174,6 +175,38 @@ privileged aspect Session_Roo_JavaBean {
     
     public void Session.setClientIpAddress(String clientIpAddress) {
         this.clientIpAddress = clientIpAddress;
+    }
+    
+    public String Session.getTimezone() {
+        return this.timezone;
+    }
+    
+    public void Session.setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+    
+    public Collection<String> Session.getRoles() {
+        return this.roles;
+    }
+    
+    public void Session.setRoles(Collection<String> roles) {
+        this.roles = roles;
+    }
+    
+    public String Session.getLang() {
+        return this.lang;
+    }
+    
+    public void Session.setLang(String lang) {
+        this.lang = lang;
+    }
+    
+    public Integer Session.getStatus() {
+        return this.status;
+    }
+    
+    public void Session.setStatus(Integer status) {
+        this.status = status;
     }
     
 }

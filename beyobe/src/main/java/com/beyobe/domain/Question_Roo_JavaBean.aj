@@ -6,9 +6,9 @@ package com.beyobe.domain;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.PrivacyType;
-import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
+import com.beyobe.domain.Session;
 import java.util.Date;
 
 privileged aspect Question_Roo_JavaBean {
@@ -157,12 +157,12 @@ privileged aspect Question_Roo_JavaBean {
         this.ownerId = ownerId;
     }
     
-    public Participant Question.getOwner() {
-        return this.owner;
+    public Session Question.getSession() {
+        return this.session;
     }
     
-    public void Question.setOwner(Participant owner) {
-        this.owner = owner;
+    public void Question.setSession(Session session) {
+        this.session = session;
     }
     
 }

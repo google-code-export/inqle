@@ -22,7 +22,7 @@ public interface DatumRepository {
 			" order by d.effectiveDate desc "
 			)
 	@Transactional(readOnly=true)
-	List<Datum> getParticipantData(String participantId);
+	List<Datum> getUserData(String userId);
 	
 	/**
 	 * Get a list of questions to which this participant has subscribed
@@ -34,13 +34,13 @@ public interface DatumRepository {
 			" order by d.effectiveDate desc "
 			)
 	@Transactional(readOnly=true)
-	List<Datum> getParticipantDataForQuestion(String participantId, String questionId);
+	List<Datum> getUserDataForQuestion(String participantId, String userId);
 	
 	@Query("select count(d) from Datum d " +
 			" where d.participantId=?1 "
 			)
 	@Transactional(readOnly=true)
-	Long countParticipantData(String participantId);
+	Long countUserData(String participantId);
 //	/**
 //	 * Get all latest answered data for this participant
 //	 * @param participantId
