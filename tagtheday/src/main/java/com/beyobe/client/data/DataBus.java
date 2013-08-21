@@ -15,14 +15,12 @@ import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
-import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.widgets.Day;
 import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.web.bindery.autobean.shared.AutoBean;
-import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
 
 /**
@@ -48,8 +46,6 @@ public class DataBus {
 	private static Map<String, Question> unsavedQuestions = new HashMap<String, Question>();
 	private static Map<String, Datum> unsavedData = new HashMap<String, Datum>();
 	
-	public Participant participant;
-
 	private DataTimeline dataTimeline = new DataTimeline();
 
 	private boolean dirty = false;
@@ -274,9 +270,9 @@ public class DataBus {
 		    	 }
 		    }
 		    
-		    if (parcel.getParticipant() != null) {
-		    	log.info("Received participant: " + parcel.getParticipant());
-		    	App.participant = parcel.getParticipant();
+		    if (parcel.getSession() != null) {
+		    	log.info("Received session: " + parcel.getSession());
+		    	App.session = parcel.getSession();
 		    }
 		    
 		    if (gotoTagdayPlace) {

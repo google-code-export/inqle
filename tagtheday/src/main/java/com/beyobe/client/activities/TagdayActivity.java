@@ -19,12 +19,9 @@ import com.googlecode.mgwt.mvp.client.Animation;
 /**
  * TODO:
  * Load data in time windows
- * unit test somewhere!
+ * unit test somewhere!  test timeouts as data gets big
  * store sessions/requests
- * integrate typicalsecurity
- *  * add back email validation regexp
- *  * CAPTCHA
- *  * email confirmation
+ * Drupal authentication
  * @author donohue
  *
  */

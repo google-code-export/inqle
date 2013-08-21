@@ -155,7 +155,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			d = BeanMaker.makeDatum();
 			d.setId(UUID.uuid());
 			d.setEffectiveDate(tagButton.getEffectiveDate());
-			d.setParticipantId(App.participant.getId());
+			d.setUserId(App.session.getUserId());
 			d.setQuestionId(q.getId());
 		}
 		d.setQuestionConcept(q.getQuestionConcept());

@@ -22,9 +22,8 @@ import com.beyobe.client.activities.QuestionPlace;
 import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
-import com.beyobe.client.beans.Participant;
 import com.beyobe.client.beans.Question;
-import com.beyobe.client.beans.UserRole;
+import com.beyobe.client.beans.Session;
 import com.beyobe.client.data.DataBus;
 import com.beyobe.client.data.ParcelClient;
 import com.beyobe.client.data.TagthedayAutoBeanFactory;
@@ -53,7 +52,6 @@ import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -64,8 +62,8 @@ import com.googlecode.mgwt.ui.client.widget.RoundPanel;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchDelegate;
 
 /**
- * @author Daniel Kurka
- * 
+ * @author Dave Donohue
+ * Provide singleton properties and static methods for looking up application objects and for handling application-wide events
  */
 public class App {
 
@@ -76,7 +74,7 @@ public class App {
 	
 	public static QuestionView questionView = new QuestionViewImpl();
 	public static SignupView signupView  = new SignupViewImpl();
-	public static Participant participant;
+	public static Session session;
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
 	public static String sessionToken;
@@ -151,7 +149,7 @@ public class App {
 				answerPanel.add(unsubscribeIcon);
 				
 				//if user is admin or owner of the question, show the edit button
-				if (UserRole.ROLE_ADMIN == participant.getRole() || participant.getId().equals(tagButton.getQuestion().getOwnerId())) {
+				if (isAdminUser() || session.getUserId().equals(tagButton.getQuestion().getOwnerId())) {
 //					Button editButton = new Button("edit");
 //					editButton.setSmall(true);
 //					editButton.getElement().getStyle().setProperty("float", "right");
@@ -175,6 +173,8 @@ public class App {
 				
 				answerPopin.show();
 			}
+
+			
 		});
 		
 		eventBus.addHandler(DataCapturedEvent.TYPE, new DataCapturedEventHandler() {
@@ -212,8 +212,17 @@ public class App {
 		
 	}
 
+	public static boolean isAdminUser() {
+		for (String role: session.getRoles()) {
+			if (role.toLowerCase().indexOf("admin") >= 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static String getParticipantId() {
-		if (participant != null) return participant.getId();
+		if (session != null) return session.getUserId();
 		return null;
 	}
 

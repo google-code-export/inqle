@@ -1,8 +1,9 @@
 package com.beyobe.client.beans;
 
+import java.util.Collection;
 import java.util.Date;
 
-public interface Participant {
+public interface Session {
 
 	public abstract String getId();
 
@@ -36,8 +37,12 @@ public interface Participant {
 
 	public abstract void setLang(String lang);
 
-	public abstract UserRole getRole();
+	public abstract Collection<String> getRoles();
 	
-	public abstract void setRole(UserRole role);
+	public abstract void setRoles(Collection<String> roles);
+
+	public abstract String getUserId();
+	
+	public abstract void setUserId(String userId);
 
 }
