@@ -1,5 +1,6 @@
 package com.beyobe.client.beans;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface Parcel {
@@ -46,4 +47,7 @@ public interface Parcel {
 	
 	public String getClient();
 	public void setClient(String client);
+	
+//	public Collection<String> getRoles();
+//	public void setRoles(Collection<String> roles);
 }
