@@ -7,8 +7,9 @@
             <table:column date="true" dateTimePattern="${subscription_created_date_format}" id="c_com_beyobe_domain_Subscription_created" property="created" z="AW0YytXoZ4I6VTqyjiNPdqtdUn0="/>
             <table:column id="c_com_beyobe_domain_Subscription_createdBy" property="createdBy" z="ygDymVWLRZSzL5QH5rSEw8PGLFM="/>
             <table:column id="c_com_beyobe_domain_Subscription_subscriptionType" property="subscriptionType" z="Xs6fgSHsxNsawbpm7Pkgh+XxsnY="/>
-            <table:column id="c_com_beyobe_domain_Subscription_participant" property="participant" z="xyYoHLVqvS95YxnUIxTK9fKKwPM="/>
             <table:column id="c_com_beyobe_domain_Subscription_questionId" property="questionId" z="0Gul4zLGASV7BQmS1+H8TaeRKs8="/>
+            <table:column id="c_com_beyobe_domain_Subscription_session" property="session" z="WxIk8RZYTHCYPYwws6y5APwy9sw="/>
+            <table:column id="c_com_beyobe_domain_Subscription_userId" property="userId" z="IvpLz1Xe4DVm71SvLa75G7dA/0o="/>
         </table:table>
     </page:list>
 </div>

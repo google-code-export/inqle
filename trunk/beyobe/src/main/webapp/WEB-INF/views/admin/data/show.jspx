@@ -19,7 +19,7 @@
         <field:display field="unit" id="s_com_beyobe_domain_Datum_unit" object="${datum}" z="uMBUnya3HgA/y4zLDbP9w/nYpBg="/>
         <field:display field="dataType" id="s_com_beyobe_domain_Datum_dataType" object="${datum}" z="Vn9REHhLHWRfIKyhScvXR8I+Z1Q="/>
         <field:display field="answerStatus" id="s_com_beyobe_domain_Datum_answerStatus" object="${datum}" z="FkC1c9Hwj8x+pbajOQpC1udcUCY="/>
-        <field:display field="participant" id="s_com_beyobe_domain_Datum_participant" object="${datum}" z="Uv/P0Iw5W4s4Rp8rDltB1peBr4Y="/>
         <field:display field="question" id="s_com_beyobe_domain_Datum_question" object="${datum}" z="ieLQrw5rEtZ1OGwKVVzTyVVe2sI="/>
+        <field:display field="session" id="s_com_beyobe_domain_Datum_session" object="${datum}" z="vjMmX8HOpeKeiHEJMdz+5nEUw9k="/>
     </page:show>
 </div>

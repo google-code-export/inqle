@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -79,6 +80,7 @@ public class Session {
     
     private String timezone;
     
+    @Transient
     private Collection<String> roles;
     
     private String lang;

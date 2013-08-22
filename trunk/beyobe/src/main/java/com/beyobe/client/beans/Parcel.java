@@ -1,13 +1,14 @@
 package com.beyobe.client.beans;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.roo.addon.json.RooJson;
 
 import com.beyobe.client.util.FromGwtDateObjectFactory;
 import com.beyobe.domain.Datum;
-import com.beyobe.domain.Session;
 import com.beyobe.domain.Question;
+import com.beyobe.domain.Session;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -29,6 +30,7 @@ public class Parcel {
 	private List<String> savedQuestions;
 	private List<String> savedData;
 	private String client;
+//	private Collection<String> roles;
 	
 //	public List<Question> getQuestionQueue() {
 //		return questionQueue;

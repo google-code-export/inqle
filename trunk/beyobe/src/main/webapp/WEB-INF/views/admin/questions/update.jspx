@@ -17,8 +17,8 @@
         <field:datetime dateTimePattern="${question_updated_date_format}" field="updated" id="c_com_beyobe_domain_Question_updated" z="K9J6j2yDbDQNe9u3wfglTiqux70="/>
         <field:input field="updatedBy" id="c_com_beyobe_domain_Question_updatedBy" z="mfHxmqmfAbn38bumOANJ2K21Mc4="/>
         <field:input field="createdBy" id="c_com_beyobe_domain_Question_createdBy" required="true" z="Lfu4hHHn5dfHJiCjK78N63SSUpM="/>
-        <field:select field="owner" id="c_com_beyobe_domain_Question_owner" itemValue="id" items="${participants}" path="/admin/participants" required="true" z="SJGWFZAD0rdXFlCXafm7tTib8YI="/>
         <field:input field="ownerId" id="c_com_beyobe_domain_Question_ownerId" required="true" z="b6oP4iCVWHEPgJDYYh2kPqK8V6Y="/>
         <field:select field="privacyType" id="c_com_beyobe_domain_Question_privacyType" items="${privacytypes}" path="privacytypes" z="2BjWJIeXiWT5PbdZ9UHhbS7IuXo="/>
+        <field:select field="session" id="c_com_beyobe_domain_Question_session" itemValue="id" items="${sessions}" path="/sessions" required="true" z="dKy6PHDbT+FwzFcTrdUpp5k+rog="/>
     </form:update>
 </div>

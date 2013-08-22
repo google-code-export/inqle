@@ -6,9 +6,9 @@ package com.beyobe.web;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.PrivacyType;
-import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
+import com.beyobe.domain.Session;
 import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.QuestionController;
 import java.io.UnsupportedEncodingException;
@@ -49,8 +49,8 @@ privileged aspect QuestionController_Roo_Controller {
     public String QuestionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Question());
         List<String[]> dependencies = new ArrayList<String[]>();
-        if (Participant.countParticipants() == 0) {
-            dependencies.add(new String[] { "participant", "admin/participants" });
+        if (Session.countSessions() == 0) {
+            dependencies.add(new String[] { "session", "sessions" });
         }
         uiModel.addAttribute("dependencies", dependencies);
         return "admin/questions/create";
@@ -117,8 +117,8 @@ privileged aspect QuestionController_Roo_Controller {
         uiModel.addAttribute("datatypes", Arrays.asList(DataType.values()));
         uiModel.addAttribute("measurements", Arrays.asList(Measurement.values()));
         uiModel.addAttribute("privacytypes", Arrays.asList(PrivacyType.values()));
-        uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
+        uiModel.addAttribute("sessions", Session.findAllSessions());
     }
     
     String QuestionController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {
