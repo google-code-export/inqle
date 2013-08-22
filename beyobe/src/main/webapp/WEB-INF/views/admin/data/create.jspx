@@ -19,8 +19,8 @@
         <field:select field="unit" id="c_com_beyobe_domain_Datum_unit" items="${units}" path="units" z="kPhJy3wHu4YtxQTDOkOGq5lsAKM="/>
         <field:select field="dataType" id="c_com_beyobe_domain_Datum_dataType" items="${datatypes}" path="datatypes" z="dw+cpqfjmB7KlbVTm0LZSBGlt7o="/>
         <field:select field="answerStatus" id="c_com_beyobe_domain_Datum_answerStatus" items="${answerstatuses}" path="answerstatuses" z="l8/DX4wq5kJMbCcUywrqXKpRG1c="/>
-        <field:select field="participant" id="c_com_beyobe_domain_Datum_participant" itemValue="id" items="${participants}" path="/admin/participants" required="true" z="ht2FVU6L1EgnpGYbsu4IpGsx/ps="/>
         <field:select field="question" id="c_com_beyobe_domain_Datum_question" itemValue="id" items="${questions}" path="/admin/questions" z="qKSw4XbdrmPg+ljTVlChuDKlLck="/>
+        <field:select field="session" id="c_com_beyobe_domain_Datum_session" itemValue="id" items="${sessions}" path="/sessions" required="true" z="bC9CxnAkFSRUnZ4BykKKIt/KHOw="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Datum" render="${not empty dependencies}" z="Tdz9Tyrw/gupSGcxfGKwhuIUIpw="/>
 </div>

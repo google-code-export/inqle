@@ -9,8 +9,8 @@ import com.beyobe.client.beans.Unit;
 import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
-import com.beyobe.domain.Participant;
 import com.beyobe.domain.QuestionConcept;
+import com.beyobe.domain.Session;
 import com.beyobe.repository.DatumRepository;
 import com.beyobe.repository.QuestionRepository;
 import com.beyobe.web.DatumController;
@@ -55,8 +55,8 @@ privileged aspect DatumController_Roo_Controller {
     public String DatumController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Datum());
         List<String[]> dependencies = new ArrayList<String[]>();
-        if (Participant.countParticipants() == 0) {
-            dependencies.add(new String[] { "participant", "admin/participants" });
+        if (Session.countSessions() == 0) {
+            dependencies.add(new String[] { "session", "sessions" });
         }
         uiModel.addAttribute("dependencies", dependencies);
         return "admin/data/create";
@@ -126,9 +126,9 @@ privileged aspect DatumController_Roo_Controller {
         uiModel.addAttribute("units", Arrays.asList(Unit.values()));
         uiModel.addAttribute("choiceconcepts", ChoiceConcept.findAllChoiceConcepts());
         uiModel.addAttribute("formulas", Formula.findAllFormulas());
-        uiModel.addAttribute("participants", Participant.findAllParticipants());
         uiModel.addAttribute("questions", questionRepository.findAll());
         uiModel.addAttribute("questionconcepts", QuestionConcept.findAllQuestionConcepts());
+        uiModel.addAttribute("sessions", Session.findAllSessions());
     }
     
     String DatumController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

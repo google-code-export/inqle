@@ -4,7 +4,7 @@
 package com.beyobe.web;
 
 import com.beyobe.client.beans.SubscriptionType;
-import com.beyobe.domain.Participant;
+import com.beyobe.domain.Session;
 import com.beyobe.domain.Subscription;
 import com.beyobe.web.SubscriptionController;
 import java.io.UnsupportedEncodingException;
@@ -41,8 +41,8 @@ privileged aspect SubscriptionController_Roo_Controller {
     public String SubscriptionController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Subscription());
         List<String[]> dependencies = new ArrayList<String[]>();
-        if (Participant.countParticipants() == 0) {
-            dependencies.add(new String[] { "participant", "admin/participants" });
+        if (Session.countSessions() == 0) {
+            dependencies.add(new String[] { "session", "sessions" });
         }
         uiModel.addAttribute("dependencies", dependencies);
         return "admin/subscriptions/create";
@@ -106,7 +106,7 @@ privileged aspect SubscriptionController_Roo_Controller {
         uiModel.addAttribute("subscription", subscription);
         addDateTimeFormatPatterns(uiModel);
         uiModel.addAttribute("subscriptiontypes", Arrays.asList(SubscriptionType.values()));
-        uiModel.addAttribute("participants", Participant.findAllParticipants());
+        uiModel.addAttribute("sessions", Session.findAllSessions());
     }
     
     String SubscriptionController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

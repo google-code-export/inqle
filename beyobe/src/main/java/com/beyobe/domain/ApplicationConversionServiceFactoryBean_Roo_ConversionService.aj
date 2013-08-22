@@ -8,7 +8,6 @@ import com.beyobe.domain.Choice;
 import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
-import com.beyobe.domain.Participant;
 import com.beyobe.domain.Question;
 import com.beyobe.domain.QuestionConcept;
 import com.beyobe.domain.Subscription;
@@ -109,22 +108,6 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         };
     }
     
-    public Converter<Participant, String> ApplicationConversionServiceFactoryBean.getParticipantToStringConverter() {
-        return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Participant, java.lang.String>() {
-            public String convert(Participant participant) {
-                return new StringBuilder().append(participant.getUsername()).append(' ').append(participant.getPassword()).append(' ').append(participant.getEmail()).append(' ').append(participant.getStatus()).toString();
-            }
-        };
-    }
-    
-    public Converter<String, Participant> ApplicationConversionServiceFactoryBean.getIdToParticipantConverter() {
-        return new org.springframework.core.convert.converter.Converter<java.lang.String, com.beyobe.domain.Participant>() {
-            public com.beyobe.domain.Participant convert(java.lang.String id) {
-                return Participant.findParticipant(id);
-            }
-        };
-    }
-    
     public Converter<Question, String> ApplicationConversionServiceFactoryBean.getQuestionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Question, java.lang.String>() {
             public String convert(Question question) {
@@ -160,7 +143,7 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
     public Converter<Subscription, String> ApplicationConversionServiceFactoryBean.getSubscriptionToStringConverter() {
         return new org.springframework.core.convert.converter.Converter<com.beyobe.domain.Subscription, java.lang.String>() {
             public String convert(Subscription subscription) {
-                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getCreatedBy()).append(' ').append(subscription.getQuestionId()).toString();
+                return new StringBuilder().append(subscription.getCreated()).append(' ').append(subscription.getCreatedBy()).append(' ').append(subscription.getQuestionId()).append(' ').append(subscription.getUserId()).toString();
             }
         };
     }
@@ -184,8 +167,6 @@ privileged aspect ApplicationConversionServiceFactoryBean_Roo_ConversionService 
         registry.addConverter(getFormulaToStringConverter());
         registry.addConverter(getIdToFormulaConverter());
         registry.addConverter(getStringToFormulaConverter());
-        registry.addConverter(getParticipantToStringConverter());
-        registry.addConverter(getIdToParticipantConverter());
         registry.addConverter(getQuestionToStringConverter());
         registry.addConverter(getIdToQuestionConverter());
         registry.addConverter(getQuestionConceptToStringConverter());
