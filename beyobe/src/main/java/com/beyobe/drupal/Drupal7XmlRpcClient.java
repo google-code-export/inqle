@@ -1,8 +1,11 @@
 package com.beyobe.drupal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -256,13 +259,19 @@ public class Drupal7XmlRpcClient {
         }
     }
 
+    @SuppressWarnings("unchecked")
 	public Session doDrupalLogin(String username, String password) throws XmlRpcException {
 		Vector<Object> params = new Vector<Object>();
         params.add(username);
         params.add(password);
-        @SuppressWarnings("unchecked")
-		Map<Object, Object> response = (Map<Object, Object>) xmlRpcClient.execute(METHOD_USER_LOGIN, params);
+		Map<Object, Object> response = new HashMap<Object, Object>();
+		try {
+			response = (Map<Object, Object>) xmlRpcClient.execute(METHOD_USER_LOGIN, params);
+		} catch (Exception e) {
+			log.log(Level.WARNING, "Login failed for user: " + username + ".  Wrong username or password.");
+		}
         response.put("username", username);
+//        log.info("Got response from Drupal: " + response);
         return getSession(response);
 	}
 	
@@ -270,23 +279,32 @@ public class Drupal7XmlRpcClient {
         if (map==null) return null;
         @SuppressWarnings("unchecked")
         Map<Object, Object> user = (Map<Object, Object>) map.get("user");
-        Integer status = (Integer)user.get("status");
-        if (status != 1) return null;
-        Session s = new Session();
-        s.setStatus(status);
-        s.setUpdated(new Date());
-        s.setId((String)map.get("sessid"));
-        s.setSessionDate(new Date());
-        s.setSessionToken((String)map.get("session_name"));
-        s.setUsername((String)map.get("username"));
-        String userid = appId + "-" + user.get("uid");
-        s.setUserId(userid);
-        @SuppressWarnings("unchecked")
-        Map<Object, String> roles = (Map<Object, String>)user.get("roles");
-        Collection<String> userRoles = (Collection<String>)roles.values();
-        s.setRoles(userRoles);
-        s.setTimezone((String)user.get("timezone"));
-        s.setLang((String)user.get("language"));
-        return s;
+        if (user==null) return null;
+        try {
+			String status = (String)user.get("status");
+			if (! "1".equals(status)) return null;
+			Session s = new Session();
+			s.setStatus(1);
+			s.setUpdated(new Date());
+			s.setId((String)map.get("sessid"));
+			s.setSessionDate(new Date());
+			s.setSessionToken((String)map.get("session_name"));
+			s.setUsername((String)map.get("username"));
+			String useruid = appId + "-" + user.get("uid");
+			s.setUserUid(useruid);
+			Integer uid = Integer.parseInt((String)user.get("uid"));
+			s.setDrupalUserId(uid);
+			@SuppressWarnings("unchecked")
+			Map<Object, String> roles = (Map<Object, String>)user.get("roles");
+			Collection<String> rulesColl = (Collection<String>)roles.values();
+			List<String> userRoles = new ArrayList<String>(rulesColl);
+			s.setRoles(userRoles);
+			s.setTimezone((String)user.get("timezone"));
+			s.setLang((String)user.get("language"));
+			return s;
+		} catch (NumberFormatException e) {
+			log.log(Level.WARNING, "Unable to create session object from Drupal login", e);
+			return null;
+		}
 	}
 }

@@ -20,7 +20,7 @@ public interface QuestionRepository {
 	 */
 	@Query(
 		"select distinct q from Question q, Subscription s " +
-		" where s.participant.id=?1 and s.questionId = q.id and s.subscriptionType=?2 "
+		" where s.userId=?1 and s.questionId = q.id and s.subscriptionType=?2 "
 //		" order by s.created asc "
 	)
 	@Transactional(readOnly=true)
@@ -33,7 +33,7 @@ public interface QuestionRepository {
 	 */
 	@Query(
 			"SELECT distinct q from Question q WHERE (q.privacyType='PUBLIC' OR q.ownerId=?1) AND (LOWER(q.abbreviation) LIKE LOWER(?2) OR LOWER(q.longForm) LIKE LOWER(?2)) " +
-			"AND q.id not in (select s.questionId from Subscription s where s.participant.id = ?1 )"
+			"AND q.id not in (select s.questionId from Subscription s where s.userId = ?1 )"
 	)
 	@Transactional(readOnly=true)
 	List<Question> searchForNewQuestionsUsingSql(String participantId, String term);
@@ -43,7 +43,7 @@ public interface QuestionRepository {
 			" where q.ownerId=?1 "
 			)
 	@Transactional(readOnly=true)
-	Long countQuestionsOwned(String participantId);
+	Long countQuestionsOwned(String userId);
 	
 	
 	

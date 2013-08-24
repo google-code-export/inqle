@@ -88,12 +88,12 @@ privileged aspect Datum_Roo_JavaBean {
         this.session = session;
     }
     
-    public String Datum.getParticipantId() {
-        return this.participantId;
+    public String Datum.getUserId() {
+        return this.userId;
     }
     
-    public void Datum.setParticipantId(String participantId) {
-        this.participantId = participantId;
+    public void Datum.setUserId(String userId) {
+        this.userId = userId;
     }
     
     public String Datum.getUpdatedBy() {
