@@ -37,6 +37,7 @@ public class ParcelClient {
 	
 	public void sendParcel(final Parcel parcel) {
 		parcel.setClient(Constants.CLIENT);
+		parcel.setClientVersion(Constants.CLIENT_VERSION);
 		if (parcel==null || parcel.getAction()==null) return;
 		this.latestParcel = parcel;
 		parcel.setSessionToken(App.sessionToken);

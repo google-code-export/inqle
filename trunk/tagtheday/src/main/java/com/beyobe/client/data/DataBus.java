@@ -368,9 +368,10 @@ public class DataBus {
 			saveUnsavedToServer();
 			return;
 		}
-		if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction()) && App.isUserLoggedIn()) {
+		if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction())) {
 			return;
 		}
+		
 		String msg = "";
 		if (parcel != null && parcel.getMessage()!=null) msg = ": " + parcel.getMessage().toString();
 		Window.alert("Unable to connect" + msg);
