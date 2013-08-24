@@ -292,15 +292,20 @@ public class DataBus {
 			return;
 		}
 	    
+		if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction())) {
+			App.loginView.displayMessage("No connection available.");
+			return;
+		}
+		
 	    Window.alert("Error.  Your last operation was not saved.");
 	}
 
 	public void handleServerException(Parcel parcel) {
 		Message message = parcel.getMessage();
 		
-		if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
-	    	App.signupView.setMessage("Account already exists");
-	    }
+//		if (message == Message.SIGNUP_FAILURE_ACCTOUNT_EXISTS) {
+//	    	App.signupView.setMessage("Account already exists");
+//	    }
 		
 	    //TODO handle more kinds of exceptions
 		if (message == Message.TOO_MANY_QUESTIONS && parcel.getQuestion() != null) {
@@ -323,15 +328,17 @@ public class DataBus {
 			return;
 		}
 	    
-	    if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction())) {
-			App.loginView.displayMessage("No connection available.");
+	    log.info("login error?parcel.getAction()=" + parcel.getAction() + "; parcel.getMessage=" + parcel.getMessage());
+	    if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction()) || parcel.getMessage() == Message.LOGIN_FAILED) {
+	    	log.info("Unable to login using your credentials.");
+			App.loginView.displayMessage("Unable to login using your credentials.");
 			return;
 		}
 	    
-	    if (Constants.SERVERACTION_SIGNUP.equals(parcel.getAction())) {
-			App.signupView.displayMessage("No connection available.");
-			return;
-		}
+//	    if (Constants.SERVERACTION_SIGNUP.equals(parcel.getAction())) {
+//			App.signupView.displayMessage("No connection available.");
+//			return;
+//		}
 	    
 	    String msg = "No parcel";
 	    if (parcel!=null) {
@@ -364,7 +371,9 @@ public class DataBus {
 		if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction()) && App.isUserLoggedIn()) {
 			return;
 		}
-		Window.alert("Unable to connect: " + parcel.getMessage());
+		String msg = "";
+		if (parcel != null && parcel.getMessage()!=null) msg = ": " + parcel.getMessage().toString();
+		Window.alert("Unable to connect" + msg);
 //		synchronizeUnsavedToServer();
 	}
 

@@ -42,8 +42,6 @@ import com.beyobe.client.views.LoginView;
 import com.beyobe.client.views.LoginViewImpl;
 import com.beyobe.client.views.QuestionView;
 import com.beyobe.client.views.QuestionViewImpl;
-import com.beyobe.client.views.SignupView;
-import com.beyobe.client.views.SignupViewImpl;
 import com.beyobe.client.views.TagdayView;
 import com.beyobe.client.views.TagdayViewImpl;
 import com.beyobe.client.widgets.AnswerForm;
@@ -73,7 +71,7 @@ public class App {
 	public static final LoginView loginView = new LoginViewImpl();
 	
 	public static QuestionView questionView = new QuestionViewImpl();
-	public static SignupView signupView  = new SignupViewImpl();
+//	public static SignupView signupView  = new SignupViewImpl();
 	public static Session session;
 	public static DataBus dataBus = new DataBus();
 	public static ParcelClient parcelClient = new ParcelClient();
@@ -149,7 +147,7 @@ public class App {
 				answerPanel.add(unsubscribeIcon);
 				
 				//if user is admin or owner of the question, show the edit button
-				if (isAdminUser() || session.getUserId().equals(tagButton.getQuestion().getOwnerId())) {
+				if (isAdminUser() || session.getUserUid().equals(tagButton.getQuestion().getOwnerId())) {
 //					Button editButton = new Button("edit");
 //					editButton.setSmall(true);
 //					editButton.getElement().getStyle().setProperty("float", "right");
@@ -222,7 +220,7 @@ public class App {
 	}
 	
 	public static String getParticipantId() {
-		if (session != null) return session.getUserId();
+		if (session != null) return session.getUserUid();
 		return null;
 	}
 

@@ -3,12 +3,11 @@ package com.beyobe.client.widgets;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import org.mortbay.log.Log;
-
+import com.beyobe.client.Constants;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
-import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
+import com.beyobe.client.util.TextUtil;
 import com.googlecode.mgwt.ui.client.widget.Button;
 
 public class TagButton extends Button {
@@ -74,15 +73,15 @@ public class TagButton extends Button {
 	public void refreshAppearance() {
 		if(datum == null) {
 			log.info("refreshAppearance, datum=null");
-			setText(question.getAbbreviation() + "?");
-			setTitle(question.getLongForm());
+			setText(TextUtil.shortenText(question.getAbbreviation() + "?", Constants.MAXLENGTH_BUTTONLABEL));
+			setTitle(TextUtil.shortenText(question.getLongForm(), Constants.MAXLENGTH_BUTTONTITLE));
 //			this.addStyleName("ttd-TagButton-unanswered");
 			this.setImportant(true);
 		} else {
 			log.info("refreshAppearance, datum != null");
 			if (datum.getAnswerStatus() != AnswerStatus.INFERRED) {
-				setText(question.getAbbreviation() + ": " + datum.getTextValue());
-				setTitle(question.getLongForm() + " " + datum.getTextValue());
+				setText(TextUtil.shortenText(question.getAbbreviation() + ": " + datum.getTextValue(), Constants.MAXLENGTH_BUTTONLABEL));
+				setTitle(TextUtil.shortenText(question.getLongForm() + " " + datum.getTextValue(), Constants.MAXLENGTH_BUTTONTITLE));
 				this.setConfirm(true);
 			} else {
 				setText(question.getAbbreviation() + ": " + datum.getTextValue() + "?");

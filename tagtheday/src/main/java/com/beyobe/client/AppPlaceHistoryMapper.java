@@ -17,7 +17,6 @@ package com.beyobe.client;
 
 import com.beyobe.client.activities.LoginPlace.LoginPlaceTokenizer;
 import com.beyobe.client.activities.QuestionPlace.QuestionPlaceTokenizer;
-import com.beyobe.client.activities.SignupPlace.SignupPlaceTokenizer;
 import com.beyobe.client.activities.TagdayPlace.TagdayPlaceTokenizer;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
@@ -26,6 +25,6 @@ import com.google.gwt.place.shared.WithTokenizers;
  * @author Daniel Kurka
  * 
  */
-@WithTokenizers({ SignupPlaceTokenizer.class, LoginPlaceTokenizer.class, TagdayPlaceTokenizer.class, QuestionPlaceTokenizer.class })
+@WithTokenizers({ LoginPlaceTokenizer.class, TagdayPlaceTokenizer.class, QuestionPlaceTokenizer.class })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 }

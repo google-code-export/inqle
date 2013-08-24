@@ -2,20 +2,15 @@ package com.beyobe.client.views;
 
 import java.util.logging.Logger;
 
-import org.mortbay.log.Log;
-
-import sun.security.pkcs.SigningCertificateInfo;
-
 import com.beyobe.client.App;
 import com.beyobe.client.Constants;
-import com.beyobe.client.activities.SignupPlace;
 import com.beyobe.client.beans.Parcel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -60,8 +55,9 @@ public class LoginViewImpl extends Composite implements LoginView {
 
 	@UiHandler("signupLink")
 	void onClickSignup(ClickEvent e) {
-		log.info("signupLink clicked");
-		App.placeController.goTo(new SignupPlace());
+//		log.info("signupLink clicked");
+		Window.open(Constants.URL_SIGNUP, "_blank", "");
+//		App.placeController.goTo(new SignupPlace());
 	}
 	
 	@UiHandler("submitButton")

@@ -24,7 +24,7 @@
       margin-right: auto;
     }
     .message {
-	    color: red;
+	    color: #0B61A4;
 	    margin-left: auto;
       margin-right: auto;
 	  }
