@@ -13,67 +13,67 @@ import org.springframework.transaction.annotation.Transactional;
 public interface DatumRepository {
 	
 	/**
-	 * Get a list of questions to which this participant has subscribed
-	 * @param participantId
+	 * Get a list of questions to which this user has subscribed
+	 * @param userId
 	 * @return list of questions, ordered by question priority then creation date
 	 */
 	@Query("select distinct d from Datum d " +
-			" where d.participantId=?1 " +
+			" where d.userId=?1 " +
 			" order by d.effectiveDate desc "
 			)
 	@Transactional(readOnly=true)
 	List<Datum> getUserData(String userId);
 	
 	/**
-	 * Get a list of questions to which this participant has subscribed
-	 * @param participantId
+	 * Get a list of questions to which this user has subscribed
+	 * @param userId
 	 * @return list of questions, ordered by question priority then creation date
 	 */
 	@Query("select distinct d from Datum d " +
-			" where d.participantId=?1 and d.questionId=?2" +
+			" where d.userId=?1 and d.questionId=?2" +
 			" order by d.effectiveDate desc "
 			)
 	@Transactional(readOnly=true)
-	List<Datum> getUserDataForQuestion(String participantId, String userId);
+	List<Datum> getUserDataForQuestion(String userId, String questionId);
 	
 	@Query("select count(d) from Datum d " +
-			" where d.participantId=?1 "
+			" where d.userId=?1 "
 			)
 	@Transactional(readOnly=true)
-	Long countUserData(String participantId);
+	Long countUserData(String userId);
 //	/**
-//	 * Get all latest answered data for this participant
-//	 * @param participantId
+//	 * Get all latest answered data for this user
+//	 * @param userId
 //	 * @return
 //	 */
 //	@Query("select d from LatestParticipantDatum lpd, Datum d " +
-//			" where lpd.participant.id=?1" +
+//			" where lpd.user.id=?1" +
 //			" and lpd.datum.id = d.id" +
 //			" order by lpd.created desc")
-//	List<Datum> getLatestData(Integer participantId);
+//	List<Datum> getLatestData(Integer userId);
 //	
 //	/**
-//	 * Get latest datum for this participant, by concept key
-//	 * @param participantId
+//	 * Get latest datum for this user, by concept key
+//	 * @param userId
 //	 * @return
 //	 */
 //	@Query("select d from LatestParticipantDatum lpd, Datum d " +
-//			" where lpd.participant.id=?1" +
+//			" where lpd.user.id=?1" +
 //			" and lpd.datum.id = d.id" +
 //			" and lpd.concept.conceptkey = ?2" +
 //			" order by lpd.created desc limit 1")
-//	Datum getLatestDatum(Integer participantId, String conceptkey);
+//	Datum getLatestDatum(Integer userId, String conceptkey);
 //	
 //	/**
 //	 * Get data by concept ID
-//	 * @param participantId
+//	 * @param userId
 //	 * @return
 //	 */
 //	@Query("select d from Datum d " +
-//			" where d.participant.id = ?1" +
+//			" where d.user.id = ?1" +
 //			" and d.status >= 0 " +
 //			" and d.concept.id = ?2" +
 //			" order by d.created desc")
-//	List<Datum> getDataByConcept(Integer participantId, Integer conceptId);
+//	List<Datum> getDataByConcept(Integer userId, Integer conceptId);
 
 }

@@ -99,8 +99,13 @@ public class ServiceController {
 		}
 		
 	 	session.setClientIpAddress(clientIpAddress);
-	 	saveSession(session);
-	 	
+	 	log.info("Created session from Drupal login: " + session);
+	 	boolean savedSession = saveSession(session);
+	 	if (! savedSession) {
+	 		returnParcel.setMessage(Message.LOGIN_FAILED);
+			return respond(returnParcel, HttpStatus.INTERNAL_SERVER_ERROR);
+	 	}
+	 	log.info("saved it");
 	 	//prepare the parcel for return
 	 	returnParcel.setSessionToken(session.getId());
 	 	returnParcel.setSession(session);
@@ -108,7 +113,7 @@ public class ServiceController {
 	 	
 	 	try {
 			List<Question> questionQueue = questionRepository.getSubscribedQuestions(
-					session.getId(), 
+					session.getUserUid(), 
 					SubscriptionType.ACTIVE_DAILY);
 			returnParcel.setQuestions(questionQueue);
 			log.trace("login service: set question queue");
@@ -117,7 +122,7 @@ public class ServiceController {
 		}
 		
 		try {
-			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(session.getUserId(), SubscriptionType.INACTIVE);
+			List<Question> inactiveQuestions = questionRepository.getSubscribedQuestions(session.getUserUid(), SubscriptionType.INACTIVE);
 			returnParcel.setOtherKnownQuestions(inactiveQuestions);
 			log.trace("set inactive questions");
 		} catch (Exception e) {
@@ -125,7 +130,7 @@ public class ServiceController {
 		}
 		
 	 	try {
-			List<Datum> data = datumRepository.getUserData(session.getUserId());
+			List<Datum> data = datumRepository.getUserData(session.getUserUid());
 			returnParcel.setData(data);
 			returnParcel.setMessage(Message.ALL_DATA_RETRIEVED);
 			log.trace("set data");
@@ -173,7 +178,7 @@ public class ServiceController {
 	 	Session session = getSession(sessionToken, clientIpAddress);
 	 	if (session == null) return invalidSession();
 	 	
-	 	Long countQuestions = questionRepository.countQuestionsOwned(session.getUserId());
+	 	Long countQuestions = questionRepository.countQuestionsOwned(session.getUserUid());
 	 	if (countQuestions > MAXIMUM_QUESTIONS_PER_USER) {
 	 		log.warn("Session " + session.getUsername() + " has too many questions (" + countQuestions + ")");
 		    returnParcel.setQuestion(parcel.getQuestion());
@@ -184,7 +189,7 @@ public class ServiceController {
 		try {
 			q = parcel.getQuestion();
 			log.info("storeQuestion service received question: " + q);
-			if (q.getOwnerId()==null) q.setOwnerId(session.getUserId());
+			if (q.getOwnerId()==null) q.setOwnerId(session.getUserUid());
 			q.setSession(session);
 		} catch (Exception e1) {
 			log.error("Unable to get Question from parcel", e1);
@@ -198,7 +203,7 @@ public class ServiceController {
 		boolean loadData = false;
 	 	if (existingQuestion != null) {
 	 		loadData = true;
-	 		if (! session.getUserId().equals(existingQuestion.getOwnerId()) && ! (session.getRoles().contains(Constants.ROLE_ADMINISTRATOR))) {
+	 		if (! session.getUserUid().equals(existingQuestion.getOwnerId()) && ! (session.getRoles().contains(Constants.ROLE_ADMINISTRATOR))) {
 	 			log.warn("storeQuestion service: insufficient privileges to modify existing question with this one:" + q);
 	 		} else {
 //	 			theQuestion = mergeAndSaveQuestion(q, existingQuestion);
@@ -206,7 +211,7 @@ public class ServiceController {
 	 		}
 	 	} else {
 	 		//new question: current user must be owner
-	 		q.setOwnerId(session.getUserId());
+	 		q.setOwnerId(session.getUserUid());
 //		 	questionRepository.save(theQuestion);
 	 		questionRepository.save(q);
 		 	questionRepository.flush();
@@ -222,7 +227,7 @@ public class ServiceController {
 	 	returnParcel.setSavedQuestions(savedQuestions);
 	 	
 	 	if (loadData) {
-	 		List<Datum> data = datumRepository.getUserDataForQuestion(session.getUserId(), q.getId());
+	 		List<Datum> data = datumRepository.getUserDataForQuestion(session.getUserUid(), q.getId());
 	 		returnParcel.setData(data);
 	 	}
 	 	
@@ -275,19 +280,19 @@ public class ServiceController {
 		if (session == null) return invalidSession();
 		
 	 	//make sure the user has not exceeded quota
-	 	long countData = datumRepository.countUserData(session.getUserId());
+	 	long countData = datumRepository.countUserData(session.getUserUid());
 	 	if (countData > MAXIMUM_DATA_PER_USER) {
 	 		log.warn("Session " + session.getUsername() + " has too many data (" + countData + ")");
 		    returnParcel.setDatum(parcel.getDatum());
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	 	}
-	 	log.info("User " + session.getUsername() + " created " + questionRepository.countQuestionsOwned(session.getUserId()) + " questions and " + countData + " data.");
+	 	log.info("User " + session.getUsername() + " created " + questionRepository.countQuestionsOwned(session.getUserUid()) + " questions and " + countData + " data.");
 	 	Question q = null;
 		try {
 			q = parcel.getQuestion();
 			log.info("storeDatum service received question: " + q);
-			if (q.getOwnerId()==null) q.setOwnerId(session.getUserId());
+			if (q.getOwnerId()==null) q.setOwnerId(session.getUserUid());
 			q.setSession(session);
 		} catch (Exception e1) {
 			log.error("Unable to get Question from parcel", e1);
@@ -362,7 +367,7 @@ public class ServiceController {
 	 	
 	 	String queryTerm = parcel.getQueryTerm();
 	 	String qt = "%" + sqlEscape(queryTerm) + "%";
-	 	List<Question> questions = questionRepository.searchForNewQuestionsUsingSql(session.getUserId(), qt);
+	 	List<Question> questions = questionRepository.searchForNewQuestionsUsingSql(session.getUserUid(), qt);
 	 	log.info("searchForQuestions queried " + qt + " and found: " + questions);
 	 	
 	 	//prepare the parcel for return
@@ -423,7 +428,7 @@ public class ServiceController {
 		Subscription existingSubscription = null;
 	 	try {
 			existingSubscription = 
-					Subscription.findSubscriptionsByQuestionIdEqualsAndUserIdEquals(q.getId(), session.getUserId()).getSingleResult();
+					Subscription.findSubscriptionsByQuestionIdEqualsAndUserIdEquals(q.getId(), session.getUserUid()).getSingleResult();
 	 	} catch (Exception e1) {
 			log.info("No existing subscription found for question: " + q.getId());
 			returnParcel.setMessage(Message.UNSUBSCRIBE_FAILED);
@@ -529,8 +534,9 @@ public class ServiceController {
 	 	//create new subscription
 	 	Subscription subscription = new Subscription();
 	 	subscription.setCreated(new Date());
-	 	subscription.setCreatedBy(session.getUserId());
+	 	subscription.setCreatedBy(session.getUserUid());
 	 	subscription.setQuestionId(q.getId());
+	 	subscription.setUserId(session.getUserUid());
 //		 	subscription.setQuestion(theQuestion);
 	 	subscription.setSubscriptionType(SubscriptionType.ACTIVE_DAILY);
 //		 	subscription.setSessionId(session.getUserId());
@@ -539,7 +545,7 @@ public class ServiceController {
 	 	try {
 			subscription.persist();
 			subscription.flush();
-			log.info("storeQuestion service saved subscription for session: " + session.getUserId() + ", question: " + q.getId());
+			log.info("storeQuestion service saved subscription for session: " + session.getUserUid() + ", question: " + q.getId());
 		} catch (Exception e) {
 			log.error("storeQuestion service unable to save subscription:" + subscription, e);
 		}
@@ -691,7 +697,7 @@ public class ServiceController {
 	 	if (questions != null) questionsQueueSize = questions.size();
 	 	
 	 	//make sure the user has not exceeded data quota
-	 	long countData = datumRepository.countUserData(session.getUserId());
+	 	long countData = datumRepository.countUserData(session.getUserUid());
 	 	if (countData + dataQueueSize > MAXIMUM_DATA_PER_USER) {
 	 		log.warn("Session " + session.getUsername() + " has too many data (" + countData + ")");
 		    returnParcel.setMessage(Message.TOO_MANY_DATA);
@@ -699,7 +705,7 @@ public class ServiceController {
 	 	}
 	 	
 	 	//make sure the user has not exceeded question quota
-	 	long countQuestions = questionRepository.countQuestionsOwned(session.getUserId());
+	 	long countQuestions = questionRepository.countQuestionsOwned(session.getUserUid());
 	 	if (countQuestions + questionsQueueSize > MAXIMUM_QUESTIONS_PER_USER) {
 	 		log.warn("Session " + session.getUsername() + " has too many questions (" + countQuestions + ")");
 		    returnParcel.setMessage(Message.TOO_MANY_QUESTIONS);
@@ -767,8 +773,14 @@ public class ServiceController {
 		return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 	}
 	
-	private void saveSession(Session session) {
-		session.persist();
+	private boolean saveSession(Session session) {
+		try {
+			session.persist();
+		} catch (Exception e) {
+			log.error("Error saving session", e);
+			return false;
+		}
+		return true;
 	}
 	
 	private Session loadSession(Parcel parcel) {

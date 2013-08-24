@@ -56,14 +56,14 @@ public class UseIdOrGenerate extends IdentityGenerator {
     			try {
 					UUID uuid = UUID.fromString(id);
 					if (uuid == null) throw new RuntimeException("Unable to parse '" + id + "' as a UUID");
-					log.info("UseIdOrGenerate: id '" + id + "' is a UUID, object=" + object);
+//					log.info("UseIdOrGenerate: id '" + id + "' is a UUID, object=" + object);
 					return id;
 				} catch (Exception e) {
 					log.error("ID '" + id + "'  is null or not a UUID", e);
 				}
     		}
     	}
-    	log.info("UseIdOrGenerate: id is NOT a UUID, object=" + object);
+//    	log.info("UseIdOrGenerate: id is NOT a UUID, object=" + object);
     	return UUID.randomUUID().toString();
     }
 }

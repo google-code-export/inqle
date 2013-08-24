@@ -4,8 +4,8 @@
 package com.beyobe.domain;
 
 import com.beyobe.domain.Session;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 privileged aspect Session_Roo_JavaBean {
     
@@ -153,12 +153,20 @@ privileged aspect Session_Roo_JavaBean {
         this.dataUpdated = dataUpdated;
     }
     
-    public String Session.getUserId() {
-        return this.userId;
+    public Integer Session.getDrupalUserId() {
+        return this.drupalUserId;
     }
     
-    public void Session.setUserId(String userId) {
-        this.userId = userId;
+    public void Session.setDrupalUserId(Integer drupalUserId) {
+        this.drupalUserId = drupalUserId;
+    }
+    
+    public String Session.getUserUid() {
+        return this.userUid;
+    }
+    
+    public void Session.setUserUid(String userUid) {
+        this.userUid = userUid;
     }
     
     public String Session.getSessionToken() {
@@ -185,11 +193,11 @@ privileged aspect Session_Roo_JavaBean {
         this.timezone = timezone;
     }
     
-    public Collection<String> Session.getRoles() {
+    public List<String> Session.getRoles() {
         return this.roles;
     }
     
-    public void Session.setRoles(Collection<String> roles) {
+    public void Session.setRoles(List<String> roles) {
         this.roles = roles;
     }
     

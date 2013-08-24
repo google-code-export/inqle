@@ -1,7 +1,7 @@
 package com.beyobe.domain;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -35,7 +35,6 @@ public class Session {
 	
 	private Boolean expired = false;
     
-    
     @NotNull
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -52,7 +51,6 @@ public class Session {
     @DateTimeFormat(style = "SS")
     private Date sessionDate = new Date();
     
-    @NotNull
     @Column(updatable = true)
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "SS")
@@ -72,7 +70,9 @@ public class Session {
     
     private Integer dataUpdated = 0;
     
-    private String userId;
+    private Integer drupalUserId;
+    
+    private String userUid;
 
     private String sessionToken;
 
@@ -81,7 +81,7 @@ public class Session {
     private String timezone;
     
     @Transient
-    private Collection<String> roles;
+    private List<String> roles;
     
     private String lang;
     

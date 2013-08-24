@@ -91,7 +91,7 @@ public class Datum implements HasUuid {
     private Session session;
     
     @NotNull
-    private String participantId;
+    private String userId;
 
     private String updatedBy;
 

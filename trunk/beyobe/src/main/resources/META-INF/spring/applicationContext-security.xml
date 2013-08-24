@@ -14,8 +14,8 @@
         <intercept-url pattern="/services/**" access="permitAll" />
          <intercept-url pattern="/login/**" access="permitAll" />
 <!--         <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" /> -->
-        <intercept-url pattern="/security/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+<!--         <intercept-url pattern="/security/**" access="hasRole('ROLE_ADMIN')"/> -->
+<!--         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> -->
     </http>
  
     <!-- Configure Authentication mechanism -->
