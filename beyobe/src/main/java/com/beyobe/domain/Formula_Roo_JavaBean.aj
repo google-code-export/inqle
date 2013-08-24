@@ -4,7 +4,6 @@
 package com.beyobe.domain;
 
 import com.beyobe.domain.Formula;
-import com.beyobe.domain.QuestionConcept;
 import java.util.Date;
 
 privileged aspect Formula_Roo_JavaBean {
@@ -31,14 +30,6 @@ privileged aspect Formula_Roo_JavaBean {
     
     public void Formula.setUpdated(Date updated) {
         this.updated = updated;
-    }
-    
-    public QuestionConcept Formula.getConcept() {
-        return this.concept;
-    }
-    
-    public void Formula.setConcept(QuestionConcept concept) {
-        this.concept = concept;
     }
     
     public String Formula.getExpression() {

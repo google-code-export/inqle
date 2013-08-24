@@ -47,9 +47,9 @@ public class Formula {
     @DateTimeFormat(style = "FF")
     private Date updated = null;
 
-    @NotNull
-    @ManyToOne
-    private QuestionConcept concept;
+//    @NotNull
+//    @ManyToOne
+//    private QuestionConcept concept;
 
     @NotNull
     private String expression;
