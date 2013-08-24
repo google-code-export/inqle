@@ -6,8 +6,6 @@ import com.beyobe.client.activities.LoginActivity;
 import com.beyobe.client.activities.LoginPlace;
 import com.beyobe.client.activities.QuestionActivity;
 import com.beyobe.client.activities.QuestionPlace;
-import com.beyobe.client.activities.SignupActivity;
-import com.beyobe.client.activities.SignupPlace;
 import com.beyobe.client.activities.TagdayActivity;
 import com.beyobe.client.activities.TagdayPlace;
 import com.google.gwt.activity.shared.Activity;
@@ -32,9 +30,9 @@ public class TabletMainActivityMapper implements ActivityMapper {
 		if (place instanceof LoginPlace) {
 			return new LoginActivity(place);
 		}
-		if (place instanceof SignupPlace) {
-			return new SignupActivity(place);
-		}
+//		if (place instanceof SignupPlace) {
+//			return new SignupActivity(place);
+//		}
 		if (place instanceof QuestionPlace) {
 			return new QuestionActivity(place);
 		}

@@ -198,7 +198,7 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 		panel.add(saveButton);
 		
 		boolean disableForm = true;
-		if (originalQuestion != null && (originalQuestion.getOwnerId().equals(App.session.getUserId()) || App.isAdminUser())) {
+		if (originalQuestion != null && (originalQuestion.getOwnerId().equals(App.session.getUserUid()) || App.isAdminUser())) {
 			disableForm = false;
 		}
 		setQuestion(originalQuestion, disableForm);

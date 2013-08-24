@@ -93,7 +93,8 @@ public class ParcelClient {
 						    Parcel parcel = parcelAB.as();
 							App.dataBus.handleServerResponse(parcel);
 						} catch (Exception e) {
-							log.log(Level.SEVERE, "Error refreshing DataBus with new data", e);
+							log.log(Level.SEVERE, "Error refreshing DataBus with new data.\nResponse=" +  response.getText(), e);
+							App.dataBus.handleConnectionError(parcel);
 						}
 						log.info("Received data and loaded: " + response.getText());
 //				    	abortFlag = true;
@@ -108,12 +109,13 @@ public class ParcelClient {
 						} catch (Exception e) {
 							log.log(Level.WARNING, "No response or no parcel received from Beyobe server");
 						}
+				    	
 				    	App.dataBus.handleServerException(parcel);
 //				    	abortFlag = true;
 				    }
 			    } 
 		  });
-		log.info("Builder sent request:" + builder.getRequestData());
+//		log.info("Builder sent request:" + builder.getRequestData());
 		  
 		} catch (RequestException e) {
 			log.log(Level.WARNING, "RequestException sending request to Beyobe server", e);

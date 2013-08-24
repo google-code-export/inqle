@@ -31,5 +31,10 @@ public class Constants {
 	public static final String SERVERACTION_UNSUBSCRIBE = "unsubscribe";
 
 	public static final String SERVERACTION_SAVE_UNSAVED = "saveUnsaved";
+
+	public static final String URL_SIGNUP = "http://localhost:8082/user/register";
+
+	public static final int MAXLENGTH_BUTTONLABEL = 14;
+	public static final int MAXLENGTH_BUTTONTITLE = 40;
 	
 }

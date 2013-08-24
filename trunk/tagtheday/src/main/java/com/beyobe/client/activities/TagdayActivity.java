@@ -19,9 +19,12 @@ import com.googlecode.mgwt.mvp.client.Animation;
 /**
  * TODO:
  * Load data in time windows
- * unit test somewhere!  test timeouts as data gets big
  * store sessions/requests
  * Drupal authentication
+ * remove unneeded stuff (signup, scaffolding, etc)
+ * switch to MySQL
+ * deploy
+ * unit test somewhere!  test timeouts as data gets big
  * @author donohue
  *
  */

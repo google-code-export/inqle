@@ -27,8 +27,8 @@ public class Maker {
 		Question q = BeanMaker.makeQuestion();
 		q.setId(UUID.uuid());
 		q.setCreated(new Date());
-		q.setCreatedBy(s.getUserId());
-		q.setOwnerId(s.getUserId());
+		q.setCreatedBy(s.getUserUid());
+		q.setOwnerId(s.getUserUid());
 		int abbrevLen = Random.nextInt(AnswerForm.MAXIMUM_LENGTH_SHORT_TEXT -1) + 1;
 		q.setAbbreviation(RandomStringUtils.random(abbrevLen));
 		int longFormLen = Random.nextInt(AnswerForm.MAXIMUM_LENGTH_LONG_TEXT -1) + 1;

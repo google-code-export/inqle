@@ -12,6 +12,7 @@ import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.DataCapturedEvent;
+import com.beyobe.client.util.TextUtil;
 import com.beyobe.client.util.UUID;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -155,7 +156,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			d = BeanMaker.makeDatum();
 			d.setId(UUID.uuid());
 			d.setEffectiveDate(tagButton.getEffectiveDate());
-			d.setUserId(App.session.getUserId());
+			d.setUserId(App.session.getUserUid());
 			d.setQuestionId(q.getId());
 		}
 		d.setQuestionConcept(q.getQuestionConcept());
@@ -180,7 +181,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				validateMessage("Your answer must be no more than " + q.getMaxValue());
 				return false;
 			}
-			d.setTextValue(getShortenedText(doubleBox.getText()));
+			d.setTextValue(TextUtil.shortenText(doubleBox.getText(), q.getMaxLength()));
 			
 			d.setNumericValue(val);
 			if (q.getMeasurement() != null) {
@@ -199,7 +200,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			//Slider
 			if (q.getMinValue()==0 && q.getMaxValue() != null && q.getMaxValue() > 0) {
 				val = slider.getValue();
-				d.setTextValue(getShortenedText(String.valueOf(val)));
+				d.setTextValue(TextUtil.shortenText(String.valueOf(val), q.getMaxLength()));
 			} else {
 				try {
 					val = Integer.valueOf(integerBox.getText());
@@ -215,7 +216,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 					validateMessage("Your answer must be no more than " + q.getMaxValue());
 					return false;
 				}
-				d.setTextValue(getShortenedText(integerBox.getText()));
+				d.setTextValue(TextUtil.shortenText(integerBox.getText(), q.getMaxLength()));
 				d.setNumericValue(val.doubleValue());
 				d.setIntegerValue(val);
 			}
@@ -232,7 +233,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 		
 		//SHORT TEXT
 		if (q.getDataType()==DataType.SHORT_TEXT) {
-			d.setTextValue(getShortenedText(textBox.getText()));
+			d.setTextValue(TextUtil.shortenText(textBox.getText(), q.getMaxLength()));
 		}
 		
 		//LONG TEXT
@@ -242,7 +243,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 				validateMessage("Your answer must be less than " + q.getMaxLength() + " characters.");
 				return false;
 			}
-			d.setTextValue(getShortenedText(memo));
+			d.setTextValue(TextUtil.shortenText(memo, q.getMaxLength()));
 		}
 		
 		if (q.getDataType()==DataType.MULTIPLE_CHOICE) {
@@ -250,7 +251,7 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 			if (choice == null) {
 				validateMessage("No choice selected");
 			} else {
-				d.setTextValue(getShortenedText(choice.getText()));
+				d.setTextValue(TextUtil.shortenText(choice.getText(), q.getMaxLength()));
 				d.setChoice(choice);
 			}
 		}
@@ -263,14 +264,6 @@ public class AnswerForm extends Composite implements TapHandler, ValueChangeHand
 //		if (text==null) return "";
 //		return text.substring(0, MAXIMUM_LENGTH_LONG_TEXT);
 //	}
-
-	private String getShortenedText(String text) {
-		if (text==null) return "";
-		if (text.length() < q.getMaxLength()) {
-			return text;
-		}
-		return text.substring(0, q.getMaxLength()-3) + "...";
-	}
 
 	private void validateMessage(String message) {
 		Window.alert(message);
