@@ -65,8 +65,8 @@ public class Question implements HasUuid {
     
     private String lang;
     
-    @ManyToOne
-    private QuestionConcept questionConcept;
+//    @ManyToOne
+//    private QuestionConcept questionConcept;
     
     @Enumerated(EnumType.STRING)
     private DataType dataType;

@@ -7,7 +7,6 @@ import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Measurement;
 import com.beyobe.client.beans.PrivacyType;
 import com.beyobe.domain.Question;
-import com.beyobe.domain.QuestionConcept;
 import com.beyobe.domain.Session;
 import java.util.Date;
 
@@ -43,14 +42,6 @@ privileged aspect Question_Roo_JavaBean {
     
     public void Question.setLang(String lang) {
         this.lang = lang;
-    }
-    
-    public QuestionConcept Question.getQuestionConcept() {
-        return this.questionConcept;
-    }
-    
-    public void Question.setQuestionConcept(QuestionConcept questionConcept) {
-        this.questionConcept = questionConcept;
     }
     
     public DataType Question.getDataType() {

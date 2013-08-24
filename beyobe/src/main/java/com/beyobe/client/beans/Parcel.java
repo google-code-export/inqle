@@ -30,6 +30,7 @@ public class Parcel {
 	private List<String> savedQuestions;
 	private List<String> savedData;
 	private String client;
+	private String clientVersion;
 //	private Collection<String> roles;
 	
 //	public List<Question> getQuestionQueue() {
@@ -179,5 +180,13 @@ public class Parcel {
 
 	public void setClient(String client) {
 		this.client = client;
+	}
+
+	public String getClientVersion() {
+		return clientVersion;
+	}
+
+	public void setClientVersion(String clientVersion) {
+		this.clientVersion = clientVersion;
 	}
 }

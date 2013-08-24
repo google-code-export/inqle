@@ -17,20 +17,12 @@ privileged aspect Session_Roo_JavaBean {
         this.id = id;
     }
     
-    public String Session.getApp() {
-        return this.app;
+    public String Session.getServerVersion() {
+        return this.serverVersion;
     }
     
-    public void Session.setApp(String app) {
-        this.app = app;
-    }
-    
-    public Double Session.getAppVersion() {
-        return this.appVersion;
-    }
-    
-    public void Session.setAppVersion(Double appVersion) {
-        this.appVersion = appVersion;
+    public void Session.setServerVersion(String serverVersion) {
+        this.serverVersion = serverVersion;
     }
     
     public String Session.getClient() {
@@ -41,11 +33,11 @@ privileged aspect Session_Roo_JavaBean {
         this.client = client;
     }
     
-    public Double Session.getClientVersion() {
+    public String Session.getClientVersion() {
         return this.clientVersion;
     }
     
-    public void Session.setClientVersion(Double clientVersion) {
+    public void Session.setClientVersion(String clientVersion) {
         this.clientVersion = clientVersion;
     }
     

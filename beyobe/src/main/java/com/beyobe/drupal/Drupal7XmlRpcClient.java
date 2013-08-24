@@ -59,8 +59,8 @@ public class Drupal7XmlRpcClient {
      *
      * @see #login(String, String)
      */
-    private String cookie;
-	private String appId;
+//    private String cookie;
+//	private String appId;
 
 
     /**
@@ -71,7 +71,7 @@ public class Drupal7XmlRpcClient {
      * @throws java.net.MalformedURLException if the serviceURL is not a URL
      */
     public Drupal7XmlRpcClient(String appId) throws MalformedURLException {
-    	this.appId = appId;
+//    	this.appId = appId;
 //        this.endpointURL = endpointURL;
         log.setLevel(Level.INFO);
 
@@ -290,7 +290,7 @@ public class Drupal7XmlRpcClient {
 			s.setSessionDate(new Date());
 			s.setSessionToken((String)map.get("session_name"));
 			s.setUsername((String)map.get("username"));
-			String useruid = appId + "-" + user.get("uid");
+			String useruid = Constants.APPID + "-" + user.get("uid");
 			s.setUserUid(useruid);
 			Integer uid = Integer.parseInt((String)user.get("uid"));
 			s.setDrupalUserId(uid);

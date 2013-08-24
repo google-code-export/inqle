@@ -4,7 +4,6 @@
 package com.beyobe.domain;
 
 import com.beyobe.domain.Choice;
-import com.beyobe.domain.ChoiceConcept;
 import java.util.Date;
 
 privileged aspect Choice_Roo_JavaBean {
@@ -15,14 +14,6 @@ privileged aspect Choice_Roo_JavaBean {
     
     public void Choice.setId(String id) {
         this.id = id;
-    }
-    
-    public ChoiceConcept Choice.getChoice() {
-        return this.choice;
-    }
-    
-    public void Choice.setChoice(ChoiceConcept choice) {
-        this.choice = choice;
     }
     
     public Date Choice.getCreated() {

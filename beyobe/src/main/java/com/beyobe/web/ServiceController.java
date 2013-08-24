@@ -97,8 +97,11 @@ public class ServiceController {
 			returnParcel.setMessage(Message.LOGIN_FAILED);
 			return respond(returnParcel, HttpStatus.UNAUTHORIZED);
 		}
-		
+		//add other bits to session
 	 	session.setClientIpAddress(clientIpAddress);
+	 	session.setClient(parcel.getClient());
+	 	session.setClientVersion(parcel.getClientVersion());
+	 	session.setServerVersion(Constants.APPVERSION);
 	 	log.info("Created session from Drupal login: " + session);
 	 	boolean savedSession = saveSession(session);
 	 	if (! savedSession) {
