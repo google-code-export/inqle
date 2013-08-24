@@ -594,9 +594,9 @@ public class ServiceController {
 		if (newDatum.getNumericValue() != null) {
 			existingDatum.setNumericValue(newDatum.getNumericValue());
 		}
-		if (newDatum.getQuestionConcept() != null) {
-			existingDatum.setQuestionConcept(newDatum.getQuestionConcept());
-		}
+//		if (newDatum.getQuestionConcept() != null) {
+//			existingDatum.setQuestionConcept(newDatum.getQuestionConcept());
+//		}
 		if (newDatum.getTextValue() != null) {
 			existingDatum.setTextValue(newDatum.getTextValue());
 		}

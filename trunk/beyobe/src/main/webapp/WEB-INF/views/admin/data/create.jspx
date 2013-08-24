@@ -19,6 +19,7 @@
         <field:select field="question" id="c_com_beyobe_domain_Datum_question" itemValue="id" items="${questions}" path="/admin/questions" z="qKSw4XbdrmPg+ljTVlChuDKlLck="/>
         <field:select field="session" id="c_com_beyobe_domain_Datum_session" itemValue="id" items="${sessions}" path="/sessions" required="true" z="bC9CxnAkFSRUnZ4BykKKIt/KHOw="/>
         <field:input field="userId" id="c_com_beyobe_domain_Datum_userId" required="true" z="+8Dm4sllqWFUILYIycMWU2S6L5E="/>
+        <field:select field="choice" id="c_com_beyobe_domain_Datum_choice" itemValue="id_" items="${choices}" path="/admin/choices" z="KNMEIBkwEqqdp65qaFu9mf7l/Kg="/>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_beyobe_domain_Datum" render="${not empty dependencies}" z="Tdz9Tyrw/gupSGcxfGKwhuIUIpw="/>
 </div>

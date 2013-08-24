@@ -104,8 +104,8 @@ public class Datum implements HasUuid {
     @NotNull
     private String textValue;
 
-//    @ManyToOne
-//    private ChoiceConcept choice;
+    @ManyToOne
+    private Choice choice;
 
     private Double normalizedValue;
 

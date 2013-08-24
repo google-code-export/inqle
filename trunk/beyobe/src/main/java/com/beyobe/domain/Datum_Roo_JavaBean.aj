@@ -6,6 +6,7 @@ package com.beyobe.domain;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Unit;
+import com.beyobe.domain.Choice;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
 import com.beyobe.domain.Question;
@@ -124,6 +125,14 @@ privileged aspect Datum_Roo_JavaBean {
     
     public void Datum.setTextValue(String textValue) {
         this.textValue = textValue;
+    }
+    
+    public Choice Datum.getChoice() {
+        return this.choice;
+    }
+    
+    public void Datum.setChoice(Choice choice) {
+        this.choice = choice;
     }
     
     public Double Datum.getNormalizedValue() {
