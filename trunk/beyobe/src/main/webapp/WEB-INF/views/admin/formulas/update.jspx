@@ -5,7 +5,6 @@
     <form:update id="fu_com_beyobe_domain_Formula" idField="id_" modelAttribute="formula" path="/admin/formulas" versionField="Version" z="7Nhd6yGMjuE5L3hOKxLdJS0kDvg=">
         <field:input field="id" id="c_com_beyobe_domain_Formula_id" z="tOBycC76bNPf/VZBfyA4Fnk9bzQ="/>
         <field:datetime dateTimePattern="${formula_updated_date_format}" field="updated" future="true" id="c_com_beyobe_domain_Formula_updated" required="true" z="d5qb9849UH8yDW3UVTIc9cRnO2Q="/>
-        <field:select field="concept" id="c_com_beyobe_domain_Formula_concept" itemValue="id" items="${questionconcepts}" path="/admin/questionconcepts" required="true" z="D/JxUW8mFOUFuVAscEQEZ5m/mvQ="/>
         <field:input field="expression" id="c_com_beyobe_domain_Formula_expression" required="true" z="HJ3AXzxL6E4YtAXLAXCMwi8rG9A="/>
         <field:input field="updatedBy" id="c_com_beyobe_domain_Formula_updatedBy" validationMessageCode="field_invalid_integer" z="NiLDI/D53c59yYIlq6ZldgqE9AE="/>
         <field:input field="createdBy" id="c_com_beyobe_domain_Formula_createdBy" validationMessageCode="field_invalid_integer" z="6x56PRFE3cRH2orGd59S7fYzSzw="/>

@@ -7,9 +7,9 @@
             <table:column id="c_com_beyobe_domain_Formula_id" property="id" z="hpXrwbgNzUJ/2ShRnKJZRmwTn88="/>
             <table:column date="true" dateTimePattern="${formula_created_date_format}" id="c_com_beyobe_domain_Formula_created" property="created" z="c8xOAR3Z6waZLRWf097xQufvvlA="/>
             <table:column date="true" dateTimePattern="${formula_updated_date_format}" id="c_com_beyobe_domain_Formula_updated" property="updated" z="nx3NWZw3v/57vQ7w02v4R2FvMus="/>
-            <table:column id="c_com_beyobe_domain_Formula_concept" property="concept" z="Qr4DYyeupxlwtwEyT/kjzDgyHNU="/>
             <table:column id="c_com_beyobe_domain_Formula_expression" property="expression" z="SGsFVneE9gLXnPmhT8jjtfqQKgs="/>
             <table:column id="c_com_beyobe_domain_Formula_updatedBy" property="updatedBy" z="vwwH/iBG1AkThRL3rNzKsdlykZU="/>
+            <table:column id="c_com_beyobe_domain_Formula_createdBy" property="createdBy" z="UcVSHZkmyUnrVCvc/KQdg3TUI70="/>
         </table:table>
     </page:list>
 </div>

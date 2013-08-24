@@ -312,9 +312,9 @@ public class ServiceController {
 		if (newQuestion.getNumericValue() != null) {
 			existingQuestion.setNumericValue(newQuestion.getNumericValue());
 		}
-		if (newQuestion.getQuestionConcept() != null) {
-			existingQuestion.setQuestionConcept(newQuestion.getQuestionConcept());
-		}
+//		if (newQuestion.getQuestionConcept() != null) {
+//			existingQuestion.setQuestionConcept(newQuestion.getQuestionConcept());
+//		}
 		if (newQuestion.getTextValue() != null) {
 			existingQuestion.setTextValue(newQuestion.getTextValue());
 		}
