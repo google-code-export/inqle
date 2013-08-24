@@ -19,5 +19,6 @@
         <field:display field="question" id="s_com_beyobe_domain_Datum_question" object="${datum}" z="ieLQrw5rEtZ1OGwKVVzTyVVe2sI="/>
         <field:display field="session" id="s_com_beyobe_domain_Datum_session" object="${datum}" z="vjMmX8HOpeKeiHEJMdz+5nEUw9k="/>
         <field:display field="userId" id="s_com_beyobe_domain_Datum_userId" object="${datum}" z="oyd7ZDcSmwhtI6ilVH0NAn5MGZA="/>
+        <field:display field="choice" id="s_com_beyobe_domain_Datum_choice" object="${datum}" z="M88838OKznFu+0v86SLAzi6lUz4="/>
     </page:show>
 </div>
