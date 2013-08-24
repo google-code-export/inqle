@@ -80,8 +80,8 @@ public class Datum implements HasUuid {
     @ManyToOne
     private Question question;
 
-    @ManyToOne
-    private QuestionConcept questionConcept;
+//    @ManyToOne
+//    private QuestionConcept questionConcept;
     
     @ManyToOne
     private Formula formula;
@@ -104,8 +104,8 @@ public class Datum implements HasUuid {
     @NotNull
     private String textValue;
 
-    @ManyToOne
-    private ChoiceConcept choice;
+//    @ManyToOne
+//    private ChoiceConcept choice;
 
     private Double normalizedValue;
 

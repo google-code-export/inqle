@@ -6,7 +6,6 @@
         <field:display field="abbreviation" id="s_com_beyobe_domain_Question_abbreviation" object="${question}" z="cxWabsTEupKjtCc3KrzyQ2G3wrk="/>
         <field:display field="longForm" id="s_com_beyobe_domain_Question_longForm" object="${question}" z="bV0neSnWKEY0M7hqFHUYB3ovawk="/>
         <field:display field="lang" id="s_com_beyobe_domain_Question_lang" object="${question}" z="zf9GQjmWqhnpbXEZ8KdJI/DoNUU="/>
-        <field:display field="questionConcept" id="s_com_beyobe_domain_Question_questionConcept" object="${question}" z="SsaCAeMB5N5TA2mXQTQ1q6cM0N4="/>
         <field:display field="dataType" id="s_com_beyobe_domain_Question_dataType" object="${question}" z="IEpxQ4C5P5D9cSTBu9UdFqteQtY="/>
         <field:display field="measurement" id="s_com_beyobe_domain_Question_measurement" object="${question}" z="XgmDJNFaQuFHNpiS+xmnx5Y6eco="/>
         <field:display field="minValue" id="s_com_beyobe_domain_Question_minValue" object="${question}" z="nCgoPDZf2ANSlFJ9UUjmjY7Rtxk="/>

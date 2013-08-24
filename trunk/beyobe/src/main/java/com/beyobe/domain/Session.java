@@ -26,10 +26,9 @@ public class Session {
 	@Id
     private String id;
 	
-	private String app;
-	private Double appVersion;
+	private String serverVersion;
 	private String client;
-	private Double clientVersion;
+	private String clientVersion;
 	
 	private String username;
 	

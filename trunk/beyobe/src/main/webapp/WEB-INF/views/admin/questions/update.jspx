@@ -6,7 +6,6 @@
         <field:input field="abbreviation" id="c_com_beyobe_domain_Question_abbreviation" required="true" z="xHNDqc8YyGvU/uWLYItyUbw+e0Y="/>
         <field:input field="longForm" id="c_com_beyobe_domain_Question_longForm" required="true" z="WlyA8f9HGqZC6Ga8EWeO/6y0dCk="/>
         <field:input field="lang" id="c_com_beyobe_domain_Question_lang" z="WeeL+18pq/GdCtxzZ+vZoiDI2Nc="/>
-        <field:select field="questionConcept" id="c_com_beyobe_domain_Question_questionConcept" itemValue="id" items="${questionconcepts}" path="/admin/questionconcepts" z="540xuGTAlt+SAVi/aSHtIwLIeHc="/>
         <field:select field="dataType" id="c_com_beyobe_domain_Question_dataType" items="${datatypes}" path="datatypes" z="PA2GWlkeK02iQlFVt0HczBWqLlw="/>
         <field:select field="measurement" id="c_com_beyobe_domain_Question_measurement" items="${measurements}" path="measurements" z="eSfCS9GHpwgF/th05o3vi3pn8IM="/>
         <field:input field="minValue" id="c_com_beyobe_domain_Question_minValue" validationMessageCode="field_invalid_number" z="TBRmhoySmJvtXOzCkg3fRAp58Fc="/>

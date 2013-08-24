@@ -4,7 +4,6 @@
     <jsp:output omit-xml-declaration="yes"/>
     <form:update id="fu_com_beyobe_domain_Choice" idField="id_" modelAttribute="choice" path="/admin/choices" versionField="Version" z="esCgvhK7bFxx48e0PNpCJ9xLaFY=">
         <field:input field="id" id="c_com_beyobe_domain_Choice_id" z="e2QsqxlcmU3e8e7ZOknIv4HAqcc="/>
-        <field:select field="choice" id="c_com_beyobe_domain_Choice_choice" itemValue="id" items="${choiceconcepts}" path="/admin/choiceconcepts" required="true" z="8sb2wA4Xyn069yf0bUJkB9Udwio="/>
         <field:datetime dateTimePattern="${choice_updated_date_format}" field="updated" future="true" id="c_com_beyobe_domain_Choice_updated" required="true" z="WvlUKlg5w67DFisvBh4+Xx2+NKI="/>
         <field:input field="lang" id="c_com_beyobe_domain_Choice_lang" required="true" z="oGZMdAhQOEiKB6f5yzsLRGDuaXM="/>
         <field:input field="updatedBy" id="c_com_beyobe_domain_Choice_updatedBy" validationMessageCode="field_invalid_integer" z="06gDvWlsG9E/6ZvSdni661Bk7YY="/>

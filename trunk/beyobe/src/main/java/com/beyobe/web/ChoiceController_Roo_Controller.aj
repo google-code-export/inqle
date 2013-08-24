@@ -4,11 +4,8 @@
 package com.beyobe.web;
 
 import com.beyobe.domain.Choice;
-import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.web.ChoiceController;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.joda.time.format.DateTimeFormat;
@@ -38,11 +35,6 @@ privileged aspect ChoiceController_Roo_Controller {
     @RequestMapping(params = "form", produces = "text/html")
     public String ChoiceController.createForm(Model uiModel) {
         populateEditForm(uiModel, new Choice());
-        List<String[]> dependencies = new ArrayList<String[]>();
-        if (ChoiceConcept.countChoiceConcepts() == 0) {
-            dependencies.add(new String[] { "choiceconcept", "admin/choiceconcepts" });
-        }
-        uiModel.addAttribute("dependencies", dependencies);
         return "admin/choices/create";
     }
     
@@ -104,7 +96,6 @@ privileged aspect ChoiceController_Roo_Controller {
     void ChoiceController.populateEditForm(Model uiModel, Choice choice) {
         uiModel.addAttribute("choice", choice);
         addDateTimeFormatPatterns(uiModel);
-        uiModel.addAttribute("choiceconcepts", ChoiceConcept.findAllChoiceConcepts());
     }
     
     String ChoiceController.encodeUrlPathSegment(String pathSegment, HttpServletRequest httpServletRequest) {

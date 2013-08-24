@@ -6,11 +6,9 @@ package com.beyobe.domain;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.DataType;
 import com.beyobe.client.beans.Unit;
-import com.beyobe.domain.ChoiceConcept;
 import com.beyobe.domain.Datum;
 import com.beyobe.domain.Formula;
 import com.beyobe.domain.Question;
-import com.beyobe.domain.QuestionConcept;
 import com.beyobe.domain.Session;
 import java.util.Date;
 
@@ -62,14 +60,6 @@ privileged aspect Datum_Roo_JavaBean {
     
     public void Datum.setQuestion(Question question) {
         this.question = question;
-    }
-    
-    public QuestionConcept Datum.getQuestionConcept() {
-        return this.questionConcept;
-    }
-    
-    public void Datum.setQuestionConcept(QuestionConcept questionConcept) {
-        this.questionConcept = questionConcept;
     }
     
     public Formula Datum.getFormula() {
@@ -134,14 +124,6 @@ privileged aspect Datum_Roo_JavaBean {
     
     public void Datum.setTextValue(String textValue) {
         this.textValue = textValue;
-    }
-    
-    public ChoiceConcept Datum.getChoice() {
-        return this.choice;
-    }
-    
-    public void Datum.setChoice(ChoiceConcept choice) {
-        this.choice = choice;
     }
     
     public Double Datum.getNormalizedValue() {

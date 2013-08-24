@@ -138,3 +138,5 @@ q
 q
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log closed at 2013-08-22 05:25:25
 // Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-08-22 05:25:54
+// [failed] persistence setup --provider HIBERNATE --database MYSQL
+persistence setup --provider HIBERNATE --database MYSQL --databaseName beyobe1 --hostName localhost --userName beyobe_admin --password beyobe_admin
