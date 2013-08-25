@@ -48,7 +48,7 @@
    
 	 <g:VerticalPanel ui:field="fieldsPanel" styleName="{style.fieldsPanel}">
 	   
-		 <g:Label styleName="ttd-form-label" text="Email"/>
+		 <g:Label styleName="ttd-form-label" text="Login"/>
 		 <g:TextBox ui:field="userName"/>
 		 <g:Label styleName="ttd-form-label" text="Password"/>
 	   <g:PasswordTextBox ui:field="password"/>
