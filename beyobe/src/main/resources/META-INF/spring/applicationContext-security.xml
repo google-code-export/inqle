@@ -6,60 +6,40 @@
         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
     <!-- HTTP security configurations -->
     <http auto-config="true" use-expressions="true">
-        <form-login login-processing-url="/resources/j_spring_security_check" login-page="/login" authentication-failure-url="/login?login_error=t" />
-        <logout logout-url="/resources/j_spring_security_logout" />
+<!--         <form-login login-processing-url="/resources/j_spring_security_check" login-page="/login" authentication-failure-url="/login?login_error=t" /> -->
+<!--         <logout logout-url="/resources/j_spring_security_logout" /> -->
         <!-- Configure these elements to secure URIs in your application -->
-        <intercept-url pattern="/members/**" access="isAuthenticated()" />
-        <intercept-url pattern="/resources/**" access="permitAll" />
+<!--         <intercept-url pattern="/members/**" access="isAuthenticated()" /> -->
+<!--         <intercept-url pattern="/resources/**" access="permitAll" /> -->
         <intercept-url pattern="/services/**" access="permitAll" />
-         <intercept-url pattern="/login/**" access="permitAll" />
+        <intercept-url pattern="/login/**" access="denyAll" />
+         <intercept-url pattern="/security/**" access="denyAll" />
+         <intercept-url pattern="/admin/**" access="denyAll" />
+         <intercept-url pattern="/members/**" access="denyAll" />
+         <intercept-url pattern="/resources/**" access="denyAll" />
+<!--          <intercept-url pattern="/login/**" access="permitAll" /> -->
 <!--         <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" /> -->
 <!--         <intercept-url pattern="/security/**" access="hasRole('ROLE_ADMIN')"/> -->
 <!--         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> -->
+<!--           <intercept-url pattern="/**" access="denyAll" /> -->
     </http>
  
     <!-- Configure Authentication mechanism -->
     <authentication-manager alias="authenticationManager">
         <!-- SHA-256 values can be produced using 'echo -n your_desired_password | sha256sum' (using normal *nix environments) -->
-        <authentication-provider>
-            <password-encoder hash="sha-256">
-<!-- 						  <salt-source user-property="username"/> -->
-<!--               <salt-source user-property="created"/> -->
-						</password-encoder>
-						
-						<jdbc-user-service data-source-ref="dataSource"
-              users-by-username-query="SELECT username, password, enabled
-                FROM participants WHERE username = ?"
-              authorities-by-username-query="SELECT username, authority
-                FROM participants WHERE username = ?"
-            />
-            
-						<!-- 
-            <jdbc-user-service data-source-ref="dataSource"
-              users-by-username-query="SELECT username, password, enabled
-					      FROM security_principals WHERE username = ?"
-							authorities-by-username-query="SELECT p.username, a.authority
-								FROM security_principals p, security_authorities a,
-								security_role_assignments ra WHERE p.username = ra.username AND a.roleId = ra.roleId
-								AND p.username = ?"
-            />
-            
-            entity jpa ~~class ~.model.security.Principal ~~tablesecurity_principals
-						field string ~~fieldName username ~~notNull ~~sizeMax50 ~~sizeMin3
-						field string ~~fieldName password ~~notNull ~~sizeMax50 ~~sizeMin3
-						field boolean ~~fieldName enabled
-						entity jpa ~~class ~.model.security.Authority ~~table security_authorities
-						field string ~~fieldName roleId ~~notNull ~~sizeMax 10 ~~sizeMin 8
-						field string ~~fieldName authority ~~notNull ~~sizeMax 50 ~~sizeMin8 ~~regexp ^ROLE_[A-Z]*
-						entity jpa ~~class ~.model.security.AuthorityPrincipalAssignment
-						field reference ~~fieldName username ~~type ~.model.security.Principal
-						field reference ~~fieldName roleId ~~type ~.model.security.Authority
-             -->
-            <user-service>
-<!--                 <user name="admin" password="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" authorities="ROLE_ADMIN" /> -->
-                <user name="admin" password="74057b890d73be209197d71dd203bd97c8c694d8f2599d28f6d3753d28537fa5" authorities="ROLE_ADMIN"/>
-                <user name="user" password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb" authorities="ROLE_USER" />
-            </user-service>
-        </authentication-provider>
+<!--         <authentication-provider> -->
+<!--             <password-encoder hash="sha-256"> -->
+<!-- 						</password-encoder> -->
+<!-- 						<jdbc-user-service data-source-ref="dataSource" -->
+<!--               users-by-username-query="SELECT username, password, enabled -->
+<!--                 FROM participants WHERE username = ?" -->
+<!--               authorities-by-username-query="SELECT username, authority -->
+<!--                 FROM participants WHERE username = ?" -->
+<!--             /> -->
+<!--             <user-service> -->
+<!--                 <user name="admin" password="74057b890d73be209197d71dd203bd97c8c694d8f2599d28f6d3753d28537fa5" authorities="ROLE_ADMIN"/> -->
+<!--                 <user name="user" password="04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb" authorities="ROLE_USER" /> -->
+<!--             </user-service> -->
+<!--         </authentication-provider> -->
     </authentication-manager>
 </beans:beans>
