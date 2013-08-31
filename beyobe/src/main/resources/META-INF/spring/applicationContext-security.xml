@@ -11,17 +11,20 @@
         <!-- Configure these elements to secure URIs in your application -->
 <!--         <intercept-url pattern="/members/**" access="isAuthenticated()" /> -->
 <!--         <intercept-url pattern="/resources/**" access="permitAll" /> -->
-        <intercept-url pattern="/services/**" access="permitAll" />
-        <intercept-url pattern="/login/**" access="denyAll" />
-         <intercept-url pattern="/security/**" access="denyAll" />
-         <intercept-url pattern="/admin/**" access="denyAll" />
-         <intercept-url pattern="/members/**" access="denyAll" />
-         <intercept-url pattern="/resources/**" access="denyAll" />
+
+        <intercept-url pattern="/service/**" access="permitAll" />
+        
+<!--         <intercept-url pattern="/login/**" access="denyAll" /> -->
+<!--          <intercept-url pattern="/security/**" access="denyAll" /> -->
+<!--          <intercept-url pattern="/admin/**" access="denyAll" /> -->
+<!--          <intercept-url pattern="/members/**" access="denyAll" /> -->
+         
+<!--          <intercept-url pattern="/resources/**" access="denyAll" /> -->
 <!--          <intercept-url pattern="/login/**" access="permitAll" /> -->
 <!--         <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" /> -->
 <!--         <intercept-url pattern="/security/**" access="hasRole('ROLE_ADMIN')"/> -->
 <!--         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> -->
-<!--           <intercept-url pattern="/**" access="denyAll" /> -->
+          <intercept-url pattern="/**" access="denyAll" />
     </http>
  
     <!-- Configure Authentication mechanism -->
