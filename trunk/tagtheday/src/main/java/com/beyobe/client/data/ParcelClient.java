@@ -32,8 +32,61 @@ public class ParcelClient {
 	// A keeper of the timer instance in case we need to cancel it
 	private Timer timeoutTimer = null;
 
-	// An indicator when the computation should quit
-//	private boolean abortFlag = false;
+//	/**
+//	 * Send a GET to the service to get CORS working
+//	 */
+//	public void sendLogin(final Parcel parcel) {
+//		String url = Constants.URL_BEYOBE_SERVICE + "prep";
+//		RequestBuilder builder = new RequestBuilder(RequestBuilder.HEAD, URL.encode(url));
+////		builder.setHeader("Content-Type", "application/json");
+//		try {
+////			Window.alert("Sending request");
+//			Request request = builder.sendRequest(null, new RequestCallback() {
+//
+//				public void onError(Request request, Throwable exception) {
+//			    	log.warning("unable to connect to server for log in");
+//			    	cancelTimer();
+////			    	status = Constants.STATUS_TIMED_OUT;
+//			    	
+//			    	App.dataBus.handleConnectionError(parcel);
+//			    }
+//	
+//			    public void onResponseReceived(Request request, Response response) {
+//			    	log.info("Response received: " + response.getStatusCode() + ":" + response.getStatusText() + "=" + response.getText());
+//			    	Window.alert("Response received: " + response.getText());
+//			    	cancelTimer();
+//			        
+////				    if (!abortFlag && 200 == response.getStatusCode()) {
+//			    	if (200 == response.getStatusCode()) {
+//						sendParcel(parcel);
+//						log.info("GET worked, now try post");
+////				    	abortFlag = true;
+//				    } else {
+//				    	log.warning("Error doing LOGIN GET to server: " + response.getText() + "\n" + response.getHeadersAsString());
+////				    	status = Constants.STATUS_FAILED;
+////				    	log.info("Set connection status to: " + status);
+////				    	Parcel parcel = latestParcel;
+////				    	try {
+////							AutoBean<Parcel> parcelAB = AutoBeanCodex.decode(App.tagthedayAutoBeanFactory, Parcel.class, response.getText());
+////							parcel = parcelAB.as();
+////						} catch (Exception e) {
+////							log.log(Level.WARNING, "Tried LOGIN GET, but no response or no parcel received from Beyobe server");
+////						}
+//				    	
+//				    	App.dataBus.handleServerException(parcel);
+////				    	abortFlag = true;
+//				    }
+//			    } 
+//		  });
+////		log.info("Builder sent request:" + builder.getRequestData());
+//		  
+//		} catch (RequestException e) {
+//			log.log(Level.WARNING, "RequestException sending LOGIN (GET) request to Beyobe server", e);
+////			cancelTimer();
+//			App.dataBus.handleConnectionError(parcel);
+//		}
+//	}
+	
 	
 	public void sendParcel(final Parcel parcel) {
 		parcel.setClient(Constants.CLIENT);
@@ -43,7 +96,7 @@ public class ParcelClient {
 		parcel.setSessionToken(App.sessionToken);
 		AutoBean<Parcel> parcelAutoBean = AutoBeanUtils.getAutoBean(parcel);
 		final String jsonString = AutoBeanCodex.encode(parcelAutoBean).getPayload();
-		String url = Constants.BASEURL_BEYOBE_SERVICE + parcel.getAction();
+		String url = Constants.URL_BEYOBE_SERVICE + parcel.getAction();
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
 		builder.setHeader("Content-Type", "application/json");
 		builder.setRequestData(jsonString);
@@ -84,7 +137,7 @@ public class ParcelClient {
 	
 			    public void onResponseReceived(Request request, Response response) {
 			    	log.info("Response received: " + response.getStatusCode() + ":" + response.getStatusText() + "=" + response.getText());
-			    	
+			    	Window.alert("Response received: " + response.getText());
 			    	cancelTimer();
 			        
 //				    if (!abortFlag && 200 == response.getStatusCode()) {

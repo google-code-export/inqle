@@ -345,7 +345,7 @@ public class DataBus {
 	    	msg = String.valueOf(parcel.getMessage());
 	    }
 	    
-//	    Window.alert("Error from Beyobe server: " + msg);
+	    Window.alert("Error from Beyobe server: " + msg);
 	    
 	    saveUnsavedToServer();
 	}
