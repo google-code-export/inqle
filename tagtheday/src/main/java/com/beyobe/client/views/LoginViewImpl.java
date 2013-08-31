@@ -56,7 +56,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 	@UiHandler("signupLink")
 	void onClickSignup(ClickEvent e) {
 //		log.info("signupLink clicked");
-		Window.open(Constants.URL_SIGNUP, "_blank", "");
+		Window.open(Constants.URL_BEYOBE_SIGNUP, "_blank", "");
 //		App.placeController.goTo(new SignupPlace());
 	}
 	
@@ -70,6 +70,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 		parcel.setPassword(password.getText());
 		parcel.setAction(Constants.SERVERACTION_LOGIN);
 		App.parcelClient.sendParcel(parcel);
+//		App.parcelClient.sendLogin(parcel);
 //		log.info("wait until request comes back or timer times out");
 //		long counter = 0;
 //		boolean abortFlag = false;
