@@ -60,6 +60,29 @@ public class ServiceController {
 		return request.getRemoteAddr();
 	}
 	
+//	/**
+//	 * Do a dummy GET request to get CORS working
+//	 * @param jsonRequest
+//	 * @param clientIpAddress
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/prep", method = RequestMethod.HEAD)
+//	public ResponseEntity<java.lang.String> prep() {
+//		
+////      response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+////      response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+////      response.addHeader("Access-Control-Max-Age", "1800");//30 min
+//      
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Access-Control-Allow-Origin", "*");
+//		headers.add("Content-Type", "application/json");
+//		headers.add("Access-Control-Allow-Origin", "*");
+//		headers.add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+//		headers.add("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+//		headers.add("Access-Control-Max-Age", "1728000");
+//		return new ResponseEntity<String>(new Parcel().toJson(), headers, HttpStatus.OK);
+//	}
+	
 	@RequestMapping(value = "/loginDrupal", method = RequestMethod.POST, headers = "Accept=application/json")
 //	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json;charset=UTF-8")
 	@ResponseBody
@@ -68,7 +91,7 @@ public class ServiceController {
 			@ModelAttribute("clientIpAddress") String clientIpAddress) {
 	 	Parcel parcel = null;
 	 	String username = null;
-	 	String hashedPassword = null;
+//	 	String hashedPassword = null;
 	 	Parcel returnParcel = new Parcel();
 	 	try {
 			parcel = Parcel.fromJsonToParcel(jsonRequest);
@@ -659,7 +682,7 @@ public class ServiceController {
 	private ResponseEntity<java.lang.String> respond(Parcel returnParcel, HttpStatus status) {
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json");
-	    headers.add("Access-Control-Allow-Origin", "*");
+		headers.add("Access-Control-Allow-Origin", "*");
 	    return new ResponseEntity<String>(returnParcel.toJson(), headers, status);
 	}
 	

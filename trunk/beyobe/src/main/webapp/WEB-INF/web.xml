@@ -2,7 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     
-    <display-name>beyobe</display-name>
+    <display-name>Beyobe</display-name>
     
     <description>Roo generated beyobe application</description>
 
@@ -19,14 +19,39 @@
     </context-param>
     
      <filter>
-       <filter-name>cors</filter-name>
+       <filter-name>beyobeCors</filter-name>
        <filter-class>com.beyobe.servlet.CorsFilter</filter-class>
      </filter>
      <filter-mapping>
-       <filter-name>cors</filter-name>
+       <filter-name>beyobeCors</filter-name>
        <url-pattern>/*</url-pattern>
      </filter-mapping>
      
+<!--  <filter> -->
+<!--     <filter-name>corsFilter</filter-name> -->
+<!--     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> -->
+<!-- </filter> -->
+
+<!-- <filter-mapping> -->
+<!--     <filter-name>corsFilter</filter-name> -->
+<!--     <url-pattern>/*</url-pattern> -->
+<!-- </filter-mapping> -->
+
+<!-- <filter> -->
+<!--     <filter-name>CORS Filter</filter-name> -->
+<!--     <filter-class>org.ebaysf.web.cors.CORSFilter</filter-class> -->
+<!--     <init-param> -->
+<!--       <description>A flag to control logging</description> -->
+<!--       <param-name>cors.logging.enabled</param-name> -->
+<!--       <param-value>true</param-value> -->
+<!--     </init-param> -->
+
+<!--   </filter> -->
+<!--   <filter-mapping> -->
+<!--     <filter-name>CORS Filter</filter-name> -->
+<!--     <url-pattern>/*</url-pattern> -->
+<!--   </filter-mapping> -->
+
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
