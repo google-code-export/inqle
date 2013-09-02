@@ -137,7 +137,7 @@ public class ParcelClient {
 	
 			    public void onResponseReceived(Request request, Response response) {
 			    	log.info("Response received: " + response.getStatusCode() + ":" + response.getStatusText() + "=" + response.getText());
-			    	Window.alert("Response received: " + response.getText());
+//			    	Window.alert("Response received: " + response.getText());
 			    	cancelTimer();
 			        
 //				    if (!abortFlag && 200 == response.getStatusCode()) {
