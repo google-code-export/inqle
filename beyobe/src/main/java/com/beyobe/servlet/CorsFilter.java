@@ -22,12 +22,11 @@ public class CorsFilter extends OncePerRequestFilter {
         if (request.getHeader("Access-Control-Request-Method") != null && "options".equalsIgnoreCase(request.getMethod())) {
             // CORS "pre-flight" request
             response.addHeader("Access-Control-Allow-Origin", "*");
-//            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-//            response.addHeader("Access-Control-Max-Age", "1800");//30 min
             response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
-            response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+            response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Access-Control-Request-Headers");
             response.addHeader("Access-Control-Max-Age", "1728000");
+//            response.addHeader("Access-Control-Expose-Headers", "X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG");
+//            response.addHeader("Access-Control-Allow-Credentials", "false");
         }
         filterChain.doFilter(request, response);
     }
