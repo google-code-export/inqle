@@ -17,6 +17,8 @@ import com.beyobe.client.beans.Unit;
 import com.beyobe.client.data.BeanMaker;
 import com.beyobe.client.event.QuestionSavedEvent;
 import com.beyobe.client.util.UUID;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -107,6 +109,8 @@ public class QuestionForm extends Composite implements TapHandler, ValueChangeHa
 			questionFull.setText("Add a Question");
 		}
 		questionFull.addStyleName("ttd-form-header");
+		questionFull.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+		questionFull.getElement().getStyle().setFontSize(1.4, Style.Unit.EM);
 		panel.add(questionFull);
 		
 		Label abbrevLabel = new Label("Short Label (example: Happy)");

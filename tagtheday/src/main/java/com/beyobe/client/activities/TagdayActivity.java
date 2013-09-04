@@ -175,9 +175,9 @@ public class TagdayActivity extends AbstractActivity implements TagdayView.Prese
 		Date d = getCurrentDay().getStart();
 		Date now = new Date();
 		if (d.after(now)) {
-			goToDate(now, Animation.SLIDE, false);
+			goToDate(now, Animation.SLIDE_REVERSE, false);
 		} else {
-			goToDate(now, Animation.SLIDE_REVERSE, true);
+			goToDate(now, Animation.SLIDE, true);
 		}
 	}
 }

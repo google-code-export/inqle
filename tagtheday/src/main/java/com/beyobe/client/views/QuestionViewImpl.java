@@ -42,13 +42,7 @@ public class QuestionViewImpl extends Composite implements QuestionView {
 	public QuestionViewImpl() {
 		RoundPanel roundPanel = new RoundPanel();
 		roundPanel.addStyleName("ttd-editQuestionPanel");
-//		Button closeButton = new Button("x");
-//		closeButton.setImportant(true);
-//		closeButton.setSmall(true);
-//		closeButton.getElement().getStyle().setProperty("float", "right");
-		
-//		HorizontalPanel menuBar = new HorizontalPanel();
-//		roundPanel.add(menuBar);
+//		roundPanel.getElement().getStyle().setBackgroundColor("background-color: #ffff99 !important;");
 		
 		Icons icons = GWT.create(Icons.class);
 		
