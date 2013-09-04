@@ -26,42 +26,41 @@
 <!--     } -->
   </ui:style>
   <g:DockLayoutPanel styleName="{style.tagdayArea}">
-    <g:north size="38">
-<!--       <g:VerticalPanel> -->
+<!--     <g:north size="38"> -->
+    <g:north size="60">
 		  <g:HorizontalPanel ui:field="menuPanel" styleName="{style.menuPanel}">
 		    <g:HorizontalPanel styleName='{style.menuPanelItem}'>
-<!-- 		      <mgwt:Button ui:field="addTagButton" title="Add a tag" round="false" small="true" text="+"/> -->
-          <g:Image ui:field="addTagIcon" title="Add a tag" resource="{icons.add24}" styleName="{style.clickableIcon}" />
+          <g:Image ui:field="addTagIcon" title="Add a question" resource="{icons.add32}" styleName="{style.clickableIcon}" />
 		    </g:HorizontalPanel>
 		    
-		    <g:HorizontalPanel styleName='{style.menuPanelItem}'>
-<!-- 			    <mgwt:Button ui:field="dayEarlierButton" title="1 day earlier" round="false" small="true" text="←"/> -->
-          <g:Image ui:field="dayEarlierIcon" title="1 day earlier" resource="{icons.prev24}" styleName="{style.clickableIcon}" />
-			    <g:Label ui:field="dateLabel"/>
-<!-- 			    <mgwt:Button ui:field="dayLaterButton" title="1 day later" round="false" small="true" text="→" /> -->
-          <g:Image ui:field="dayLaterIcon" title="1 day later" resource="{icons.next24}" styleName="{style.clickableIcon}" />
-			  </g:HorizontalPanel>
+		    <g:VerticalPanel>
+		      <g:HorizontalPanel styleName='{style.menuPanelItem}'>
+	          <g:Image ui:field="dayEarlierIcon" title="1 day earlier" resource="{icons.prev24}" styleName="{style.clickableIcon}" />
+	          <g:Image ui:field="dayLaterIcon" title="1 day later" resource="{icons.next24}" styleName="{style.clickableIcon}" />
+          </g:HorizontalPanel>
+          <g:Label ui:field="dateLabel"/>
+        </g:VerticalPanel>
 			  
-			  <g:HorizontalPanel styleName='{style.menuPanelItem}'>
-<!-- 			    <mgwt:Button ui:field="monthEarlierButton" title="1 month earlier" round="false" small="true" text="←"/> -->
-			    <g:Image ui:field="monthEarlierIcon" title="1 month earlier" resource="{icons.prev24}" styleName="{style.clickableIcon}" />
+			  <g:VerticalPanel>
+			    <g:HorizontalPanel styleName='{style.menuPanelItem}'>
+				    <g:Image ui:field="monthEarlierIcon" title="1 month earlier" resource="{icons.prev24}" styleName="{style.clickableIcon}" />
+	          <g:Image ui:field="monthLaterIcon" title="1 month later" resource="{icons.next24}" styleName="{style.clickableIcon}" />
+	        </g:HorizontalPanel>
 	        <g:Label ui:field="monthLabel"/>
-<!-- 	        <mgwt:Button ui:field="monthLaterButton" title="1 month later" round="false" small="true" text="→"/> -->
-          <g:Image ui:field="monthLaterIcon" title="1 month later" resource="{icons.next24}" styleName="{style.clickableIcon}" />
-	      </g:HorizontalPanel>
+	      </g:VerticalPanel>
 	      
-	      <g:HorizontalPanel styleName='{style.menuPanelItem}'>
-<!-- 	        <mgwt:Button ui:field="yearEarlierButton" title="1 year earlier" round="false" small="true" text="←"/> -->
-          <g:Image ui:field="yearEarlierIcon" title="1 year earlier" resource="{icons.prev24}" styleName="{style.clickableIcon}" />
+	      <g:VerticalPanel>
+	        <g:HorizontalPanel styleName='{style.menuPanelItem}'>
+	          <g:Image ui:field="yearEarlierIcon" title="1 year earlier" resource="{icons.prev24}" styleName="{style.clickableIcon}" />
+	          <g:Image ui:field="yearLaterIcon" title="1 year later" resource="{icons.next24}" styleName="{style.clickableIcon}" />
+	        </g:HorizontalPanel>
 	        <g:Label ui:field="yearLabel"/>
-<!-- 	        <mgwt:Button ui:field="yearLaterButton" title="1 year later" round="false" small="true" text="→"/> -->
-           <g:Image ui:field="yearLaterIcon" title="1 year later" resource="{icons.next24}" styleName="{style.clickableIcon}" />
-	      </g:HorizontalPanel>
+	      </g:VerticalPanel>
+	      
 	       <g:HorizontalPanel styleName='{style.menuPanelItem}'>
-	         <g:Image ui:field="todayIcon" title="today" resource="{icons.today24}" styleName="{style.clickableIcon}" />
+	         <g:Image ui:field="todayIcon" title="today" resource="{icons.today32}" styleName="{style.clickableIcon}" />
 	       </g:HorizontalPanel>
 		  </g:HorizontalPanel>
-<!-- 		  </g:VerticalPanel> -->
 		</g:north>
     <g:center>
       <g:FlowPanel ui:field="daysPanel"/>
