@@ -34,8 +34,8 @@
        font-size: 1.1em;
     }
      .submitButton {
-       margin-top: 15px;
-       margin-bottom: 10px;
+       margin-top: 16px;
+       margin-bottom: 14px;
        font-size: 1.1em;
     }
 	</ui:style>

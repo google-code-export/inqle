@@ -3,6 +3,8 @@ package com.beyobe.client;
 
 import com.beyobe.client.activities.LoginActivity;
 import com.beyobe.client.activities.LoginPlace;
+import com.beyobe.client.activities.QuestionActivity;
+import com.beyobe.client.activities.QuestionPlace;
 import com.beyobe.client.activities.TagdayActivity;
 import com.beyobe.client.activities.TagdayPlace;
 import com.google.gwt.activity.shared.Activity;
@@ -27,7 +29,15 @@ public class PhoneActivityMapper implements ActivityMapper {
 		if (place instanceof TagdayPlace) {
 			return new TagdayActivity(place);
 		}
-		//default: login
-		return new LoginActivity(place);
+		if (place instanceof LoginPlace) {
+			return new LoginActivity(place);
+		}
+//		if (place instanceof SignupPlace) {
+//			return new SignupActivity(place);
+//		}
+		if (place instanceof QuestionPlace) {
+			return new QuestionActivity(place);
+		}
+		return new TagdayActivity(place);
 	}
 }
