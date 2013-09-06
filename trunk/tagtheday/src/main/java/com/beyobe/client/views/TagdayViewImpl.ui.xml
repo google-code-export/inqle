@@ -63,7 +63,9 @@
 		  </g:HorizontalPanel>
 		</g:north>
     <g:center>
-      <g:FlowPanel ui:field="daysPanel"/>
+      <mgwt:ScrollPanel>
+        <g:FlowPanel ui:field="daysPanel"/>
+      </mgwt:ScrollPanel>
     </g:center>
   </g:DockLayoutPanel>
 </ui:UiBinder>

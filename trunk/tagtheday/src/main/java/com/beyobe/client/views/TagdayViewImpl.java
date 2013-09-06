@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import com.beyobe.client.App;
 import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.widgets.Day;
-import com.beyobe.client.widgets.TagButton;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -22,14 +21,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
-import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndEvent;
-import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEndHandler;
 import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeEvent.DIRECTION;
+import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeStartEvent;
+import com.googlecode.mgwt.dom.client.recognizer.swipe.SwipeStartHandler;
 import com.googlecode.mgwt.mvp.client.Animation;
 import com.googlecode.mgwt.ui.client.animation.AnimationHelper;
 import com.googlecode.mgwt.ui.client.widget.touch.TouchDelegate;
 
-public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHandler {
+public class TagdayViewImpl extends Composite implements TagdayView, SwipeStartHandler {
 	private static Logger log = Logger.getLogger("TagdayViewImpl");
 	
         private static TagdayViewImplUiBinder uiBinder = GWT
@@ -150,7 +149,7 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
             daysPanel.setHeight(Window.getClientHeight() + "px");
             
             TouchDelegate touchDelegate = new TouchDelegate(daysPanel);
-            touchDelegate.addSwipeEndHandler(this);
+            touchDelegate.addSwipeStartHandler(this);
             
             Window.addResizeHandler(new ResizeHandler() {
              public void onResize(ResizeEvent event) {
@@ -245,7 +244,7 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeEndHan
 		}
 		
 		@Override
-		public void onSwipeEnd(SwipeEndEvent e) {
+		public void onSwipeStart(SwipeStartEvent e) {
 			if (e.getDirection() == DIRECTION.LEFT_TO_RIGHT) {
 				presenter.onDayEarlier();
 			}

@@ -14,4 +14,8 @@ public interface Icons extends ClientBundle {
 	ImageResource recycle32();
 	ImageResource today24();
 	ImageResource today32();
+	ImageResource warn24();
+	ImageResource warn32();
+	ImageResource disc24();
+	ImageResource disc32();
 }
