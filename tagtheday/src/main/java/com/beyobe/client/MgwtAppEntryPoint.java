@@ -23,12 +23,16 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.googlecode.mgwt.dom.client.event.orientation.OrientationChangeEvent;
+import com.googlecode.mgwt.dom.client.event.orientation.OrientationChangeHandler;
 import com.googlecode.mgwt.mvp.client.AnimatableDisplay;
 import com.googlecode.mgwt.mvp.client.AnimatingActivityManager;
 import com.googlecode.mgwt.mvp.client.AnimationMapper;
@@ -79,7 +83,7 @@ public class MgwtAppEntryPoint implements EntryPoint {
 
 	private void createPhoneDisplay() {
 		AnimatableDisplay display = GWT.create(AnimatableDisplay.class);
-
+		
 		PhoneActivityMapper appActivityMapper = new PhoneActivityMapper();
 
 		PhoneAnimationMapper appAnimationMapper = new PhoneAnimationMapper();
@@ -88,6 +92,7 @@ public class MgwtAppEntryPoint implements EntryPoint {
 
 		activityManager.setDisplay(display);
 
+		
 		RootPanel.get().add(display);
 
 	}

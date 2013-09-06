@@ -6,6 +6,8 @@ import com.beyobe.client.App;
 import com.beyobe.client.Constants;
 import com.beyobe.client.beans.Parcel;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -15,7 +17,11 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.googlecode.mgwt.dom.client.event.orientation.OrientationChangeEvent;
+import com.googlecode.mgwt.dom.client.event.orientation.OrientationChangeHandler;
+import com.googlecode.mgwt.ui.client.MGWT;
 
 public class LoginViewImpl extends Composite implements LoginView {
 
@@ -25,6 +31,7 @@ public class LoginViewImpl extends Composite implements LoginView {
 	@UiField TextBox userName;
 	@UiField TextBox password;
 	@UiField Anchor signupLink;
+	@UiField VerticalPanel panel;
 	
 	private Presenter presenter;
 //	private int status;
@@ -45,7 +52,22 @@ public class LoginViewImpl extends Composite implements LoginView {
 	}
 	
 	public LoginViewImpl() {
+		
 		initWidget(uiBinder.createAndBindUi(this));
+		
+//		MGWT.addOrientationChangeHandler(new OrientationChangeHandler() {
+//		      @Override
+//		      public void onOrientationChanged(OrientationChangeEvent event) {
+//		        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+//		          @Override
+//		          public void execute() {
+//		        	  panel.refresh();
+//		          }
+//		        });
+//
+//		      }
+//		    });
+		
 		displayDefaultMessage();
 	}
 

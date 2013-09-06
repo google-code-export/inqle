@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.RoundPanel;
+import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
 
 public class Day extends Composite implements Block, TapHandler {
 	private static final String DAY_LABEL_FORMAT = "EEEE, MMMM d, y";
@@ -29,7 +30,7 @@ public class Day extends Composite implements Block, TapHandler {
 	protected Date end;
 	protected Date created;
 //	protected VerticalPanel panel;
-	protected RoundPanel tagsPanel;
+	protected RoundPanel roundPanel;
 	protected Label dateLabel;
 	private Date midpoint;
 	private Date timepoint;
@@ -49,20 +50,24 @@ public class Day extends Composite implements Block, TapHandler {
 //			  }
 //		}, ResizeEvent.getType() );
 		dateLabel = new Label(getLabelText());
-		tagsPanel = new RoundPanel();
+		dateLabel.addStyleName("ttd-fullDateLabel");
+		
+//		ScrollPanel scrollPanel = new ScrollPanel();
+		roundPanel = new RoundPanel();
 //		tagsPanel.setWidth("90%");
-		tagsPanel.setHeight((Window.getClientHeight() - 100) + "px");
+		roundPanel.setHeight((Window.getClientHeight() - 100) + "px");
 //		tagsPanel.setWidth(Window.getClientWidth()-50 + "px");
 //		tagsPanel.addTapHandler(this);
-		tagsPanel.addHandler(new ResizeHandler() {
-			  public void onResize(ResizeEvent event) {
-				  Window.alert("Client is " + Window.getClientWidth() + " by " + Window.getClientHeight());
-				  tagsPanel.setHeight((Window.getClientHeight() - 100) + "px");
-//				  tagsPanel.setWidth(Window.getClientWidth()-50 + "px");
-			  }
-		}, ResizeEvent.getType() );
 		
-		tagsPanel.add(dateLabel);
+//		roundPanel.addHandler(new ResizeHandler() {
+//			  public void onResize(ResizeEvent event) {
+//				  Window.alert("Client is " + Window.getClientWidth() + " by " + Window.getClientHeight());
+//				  roundPanel.setHeight((Window.getClientHeight() - 100) + "px");
+////				  tagsPanel.setWidth(Window.getClientWidth()-50 + "px");
+//			  }
+//		}, ResizeEvent.getType() );
+		
+		roundPanel.add(dateLabel);
 //		panel.add(tagsPanel);
 		
 		start = new Date(point.getYear(), point.getMonth(), point.getDate());
@@ -70,7 +75,9 @@ public class Day extends Composite implements Block, TapHandler {
 		end = new Date(startMS + MILLISECONDS_IN_A_DAY - 1);
 		
 //		addDummyTB("Day constructor");
-		initWidget(tagsPanel);
+//		scrollPanel.add(roundPanel);
+//		initWidget(scrollPanel);
+		initWidget(roundPanel);
 	}
 
 //	public void addDummyTB(String label) {
@@ -143,13 +150,13 @@ public class Day extends Composite implements Block, TapHandler {
 		tagButtons.add(tagButton);
 		tagButton.addTapHandler(this);
 		tagButton.getElement().getStyle().setProperty("float", "left");
-		tagsPanel.add(tagButton);
+		roundPanel.add(tagButton);
 //		addTestMessage("2. Why did this not work??");
 		log.info("Added tagButton: " + tagButton + " to day: " + getLabelText() + "; Current tagButtons: " + tagButtons);
 	}
 	
 	public void addTestMessage(String msg) {
-		tagsPanel.add(new HTML(msg));
+		roundPanel.add(new HTML(msg));
 	}
 
 //	@Override

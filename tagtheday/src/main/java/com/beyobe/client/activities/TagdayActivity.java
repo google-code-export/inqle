@@ -18,12 +18,6 @@ import com.googlecode.mgwt.mvp.client.Animation;
 
 /**
  * TODO:
- * Load data in time windows
- * remove unneeded stuff (signup, scaffolding, etc)
- * shore up security
- * 
- * deploy
- * unit test somewhere!  test timeouts as data gets big
  * @author donohue
  *
  */
