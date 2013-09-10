@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import com.beyobe.client.App;
+import com.beyobe.client.activities.InfoPlace;
+import com.beyobe.client.beans.InfoStatus;
 import com.beyobe.client.event.EditQuestionEvent;
+import com.beyobe.client.icons.Icons;
 import com.beyobe.client.widgets.Day;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -34,10 +37,13 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeStartH
         private static TagdayViewImplUiBinder uiBinder = GWT
                         .create(TagdayViewImplUiBinder.class);
 
+        
         interface TagdayViewImplUiBinder extends UiBinder<Widget, TagdayViewImpl> {
         }
 
         @UiField HorizontalPanel menuPanel;
+        @UiField HorizontalPanel toggleImagePanel;
+        
 //        @UiField Button addTagButton;
         @UiField Image addTagIcon;
         @UiField FlowPanel daysPanel;
@@ -57,16 +63,26 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeStartH
 		@UiField Image yearEarlierIcon;
 		@UiField Image yearLaterIcon;
 		
-		@UiField Image todayIcon;
+//		private Image todayIcon;
+		
+		private Image infoIcon;
+		private Image warnIcon;
+		private Icons icons = GWT.create(Icons.class);
 		
 		private AnimationHelper animater = new AnimationHelper();
 
 		private Day day;
 		
         public TagdayViewImpl() {
-    		this.date = new Date();
+        	
             initWidget(uiBinder.createAndBindUi(this));
             
+            infoIcon = new Image(icons.info32());
+        	warnIcon = new Image(icons.warn32());
+        	toggleImagePanel.add(infoIcon);
+        	
+    		this.date = new Date();
+    		
             TouchDelegate addTagTd = new TouchDelegate(addTagIcon);
             addTagTd.addTapHandler(new TapHandler() {
 				@Override
@@ -134,15 +150,25 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeStartH
 			});           
             yearLaterIcon.addStyleName("ttd-navLaterIcon");
             
-            TouchDelegate todayTd = new TouchDelegate(todayIcon);
-            todayTd.addTapHandler(new TapHandler() {
+            TouchDelegate infoTd = new TouchDelegate(infoIcon);
+            infoTd.addTapHandler(new TapHandler() {
 				@Override
 				public void onTap(TapEvent e) {
-					onNavToToday(e);
+					App.placeController.goTo(new InfoPlace(InfoStatus.STANDARD));
 				}
 			});
-            todayIcon.addStyleName("ttd-todayIcon");
+            infoIcon.addStyleName("ttd-infoIcon");
             
+            TouchDelegate warnTd = new TouchDelegate(warnIcon);
+            warnTd.addTapHandler(new TapHandler() {
+				@Override
+				public void onTap(TapEvent e) {
+//					if (Window.confirm("You have unsaved data. Would you like to contact the Beyobe server now?")) {
+//						App.dataBus.doSaveUnsavedToServer();
+//					}
+					App.placeController.goTo(new InfoPlace(InfoStatus.UNSAVED));
+				}
+			});
 //            daysPanel.setHeight("100%");
             daysPanel.setWidth("100%");
             
@@ -255,6 +281,18 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeStartH
 
 		void onAddTag(TapEvent e) {
 			App.eventBus.fireEvent(new EditQuestionEvent(null));
+		}
+
+		@Override
+		public void setInfoStatus(InfoStatus infoStatus) {
+			if (infoStatus == InfoStatus.UNSAVED) {
+				toggleImagePanel.clear();
+				toggleImagePanel.add(warnIcon);
+			} else {
+				toggleImagePanel.clear();
+				toggleImagePanel.add(infoIcon);
+			}
+			
 		}
 
 //		@Override

@@ -13,6 +13,7 @@ import com.beyobe.client.Constants;
 import com.beyobe.client.activities.TagdayPlace;
 import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
+import com.beyobe.client.beans.InfoStatus;
 import com.beyobe.client.beans.Message;
 import com.beyobe.client.beans.Parcel;
 import com.beyobe.client.beans.Question;
@@ -50,11 +51,10 @@ public class DataBus {
 
 	private boolean dirty = false;
 
-	private int attemptsToSaveUnsaved;
+//	private int attemptsToSaveUnsaved;
+//	private long nextTimeToSaveUnsaved = 0;
 
-	private long nextTimeToSaveUnsaved = 0;
-
-	private Timer retryTimer;
+//	private Timer retryTimer;
 	
 	public DataBus() {
 		//TODO load questions and data from local storage
@@ -103,7 +103,7 @@ public class DataBus {
 		//if we have other unsaved data, try to save all of it
 		if (isDirty()) {
 			log.info("We are dirty.  Save unsaved instead of just datum: " + datumToSave.getTextValue());
-			saveUnsavedToServer();
+			saveFailed();
 			return;
 		}
 		//next save to server
@@ -178,7 +178,7 @@ public class DataBus {
 		//if we have other unsaved data, try to save all of it
 		if (isDirty()) {
 			log.info("We are dirty.  Save unsaved instead of just question: " + question.getAbbreviation());
-			saveUnsavedToServer();
+			saveFailed();
 			return;
 		}
 				
@@ -262,12 +262,14 @@ public class DataBus {
 		    	 for(String savedDatumId: parcel.getSavedData()) {
 		    		 unsavedData.remove(savedDatumId);
 		    	 }
+		    	 updateInfoStatusIcon();
 		    }
 		    
 		    if (parcel.getMessage()==Message.SAVED && parcel.getSavedQuestions() != null) {
 		    	 for(String savedQuestionId: parcel.getSavedQuestions()) {
 		    		 unsavedQuestions.remove(savedQuestionId);
 		    	 }
+		    	 updateInfoStatusIcon();
 		    }
 		    
 		    if (parcel.getSession() != null) {
@@ -281,6 +283,15 @@ public class DataBus {
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Error on refreshDataFromJson", e);
 		}
+	}
+
+	private void updateInfoStatusIcon() {
+		if (isDirty()) {
+			App.tagdayView.setInfoStatus(InfoStatus.UNSAVED);
+		} else {
+			App.tagdayView.setInfoStatus(InfoStatus.STANDARD);
+		}
+		
 	}
 
 	public void handleConnectionError(Parcel parcel) {
@@ -347,7 +358,7 @@ public class DataBus {
 	    
 	    Window.alert("Error from Beyobe server: " + msg);
 	    
-	    saveUnsavedToServer();
+	    saveFailed();
 	}
 
 	public void handleTimeout(Parcel parcel) {
@@ -357,15 +368,15 @@ public class DataBus {
 		}
 		
 		if (Constants.SERVERACTION_STORE_DATUM.equals(parcel.getAction())) {
-			saveUnsavedToServer();
+			saveFailed();
 			return;
 		}
 		if (Constants.SERVERACTION_STORE_QUESTION.equals(parcel.getAction())) {
-			saveUnsavedToServer();
+			saveFailed();
 			return;
 		}
 		if (Constants.SERVERACTION_SAVE_UNSAVED.equals(parcel.getAction())) {
-			saveUnsavedToServer();
+			saveFailed();
 			return;
 		}
 		if (Constants.SERVERACTION_LOGIN.equals(parcel.getAction())) {
@@ -378,44 +389,45 @@ public class DataBus {
 //		synchronizeUnsavedToServer();
 	}
 
-	private void saveUnsavedToServer() {
+	private void saveFailed() {
 		dirty = true;
-		//if not actually dirty (nothing to save), reset
-		if (! isDirty()) {
-			attemptsToSaveUnsaved = 0;
-			nextTimeToSaveUnsaved = 0;
-			cancelRetryTimer();
-			return;
-		}
-		attemptsToSaveUnsaved++;
-//		if (System.currentTimeMillis() < nextTimeToSaveUnsaved) {
-		if (retryTimer != null) {
-			log.info("Too soon to try to save unsaved again.");
-			return;
-		}
-		if (attemptsToSaveUnsaved > NUM_ATTEMPTS_BEFORE_STOP_SAVING_UNSAVED) {
-			Window.alert("Unable to save your recent data to the Beyobe server.  Please retry when you have a signal.");
-			nextTimeToSaveUnsaved  = System.currentTimeMillis() + WAIT_MS_BEFORE_NEXT_ATTEMPT;
-			//set a timer
-			retryTimer = new Timer() {
-		      public void run() {
-		        if (isDirty()) {
-		        	doSaveUnsavedToServer();
-		        }
-		        cancelRetryTimer();
-		      }
-		    };
-		    retryTimer.schedule(WAIT_MS_BEFORE_NEXT_ATTEMPT);
-			return;
-		}
-		doSaveUnsavedToServer();
+		App.tagdayView.setInfoStatus(InfoStatus.UNSAVED);
+		
+//		//if not actually dirty (nothing to save), reset
+//		if (! isDirty()) {
+//			attemptsToSaveUnsaved = 0;
+//			nextTimeToSaveUnsaved = 0;
+//			cancelRetryTimer();
+//			return;
+//		}
+//		attemptsToSaveUnsaved++;
+//		if (retryTimer != null) {
+//			log.info("Too soon to try to save unsaved again.");
+//			return;
+//		}
+//		if (attemptsToSaveUnsaved > NUM_ATTEMPTS_BEFORE_STOP_SAVING_UNSAVED) {
+//			Window.alert("Unable to save your recent data to the Beyobe server.  Please retry when you have a signal.");
+//			nextTimeToSaveUnsaved  = System.currentTimeMillis() + WAIT_MS_BEFORE_NEXT_ATTEMPT;
+//			//set a timer
+//			retryTimer = new Timer() {
+//		      public void run() {
+//		        if (isDirty()) {
+//		        	doSaveUnsavedToServer();
+//		        }
+//		        cancelRetryTimer();
+//		      }
+//		    };
+//		    retryTimer.schedule(WAIT_MS_BEFORE_NEXT_ATTEMPT);
+//			return;
+//		}
+//		doSaveUnsavedToServer();
 	}
 	
-	private void doSaveUnsavedToServer() {
+	public void doSaveUnsavedToServer() {
 		if (! isDirty()) {
-			attemptsToSaveUnsaved = 0;
-			nextTimeToSaveUnsaved = 0;
-			cancelRetryTimer();
+//			attemptsToSaveUnsaved = 0;
+//			nextTimeToSaveUnsaved = 0;
+//			cancelRetryTimer();
 			return;
 		}
 		
@@ -427,15 +439,18 @@ public class DataBus {
 		App.parcelClient.sendParcel(parcel);
 	}
 
-	private void cancelRetryTimer() {
-		if (retryTimer != null) {
-			retryTimer.cancel();
-			retryTimer = null;
-		}
-	}
+//	private void cancelRetryTimer() {
+//		if (retryTimer != null) {
+//			retryTimer.cancel();
+//			retryTimer = null;
+//		}
+//	}
 	
 	private boolean isDirty() {
-		if (unsavedQuestions.size()==0 && unsavedData.size()==0) dirty = false;
+		if (unsavedQuestions.size()==0 && unsavedData.size()==0) {
+			dirty = false;
+			App.tagdayView.setInfoStatus(InfoStatus.UNSAVED);
+		}
 		return dirty;
 	}
 }

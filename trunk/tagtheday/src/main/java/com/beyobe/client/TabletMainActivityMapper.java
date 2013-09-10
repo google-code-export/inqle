@@ -2,6 +2,8 @@ package com.beyobe.client;
 
 import java.util.logging.Logger;
 
+import com.beyobe.client.activities.InfoActivity;
+import com.beyobe.client.activities.InfoPlace;
 import com.beyobe.client.activities.LoginActivity;
 import com.beyobe.client.activities.LoginPlace;
 import com.beyobe.client.activities.QuestionActivity;
@@ -29,6 +31,9 @@ public class TabletMainActivityMapper implements ActivityMapper {
 		}
 		if (place instanceof LoginPlace) {
 			return new LoginActivity(place);
+		}
+		if (place instanceof InfoPlace) {
+			return new InfoActivity((InfoPlace)place);
 		}
 //		if (place instanceof SignupPlace) {
 //			return new SignupActivity(place);
