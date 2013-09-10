@@ -1,0 +1,13 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:mgwt="urn:import:com.googlecode.mgwt.ui.client.widget">
+  <ui:style>
+    .mainPanel {
+	
+	 }
+  </ui:style>
+  <g:VerticalPanel ui:field="panel">
+    <g:StackPanel ui:field="stackPanel"/>
+  </g:VerticalPanel>
+</ui:UiBinder> 

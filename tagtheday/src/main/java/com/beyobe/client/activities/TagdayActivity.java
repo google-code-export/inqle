@@ -17,7 +17,6 @@ import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.mvp.client.Animation;
 
 /**
- * TODO:
  * @author donohue
  *
  */

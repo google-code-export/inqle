@@ -18,4 +18,12 @@ public interface Icons extends ClientBundle {
 	ImageResource warn32();
 	ImageResource disc24();
 	ImageResource disc32();
+	ImageResource info24();
+	ImageResource info32();
+	ImageResource bargraph24();
+	ImageResource bargraph32();
+	ImageResource sprocket24();
+	ImageResource sprocket32();
+	ImageResource bulb24();
+	ImageResource bulb32();
 }

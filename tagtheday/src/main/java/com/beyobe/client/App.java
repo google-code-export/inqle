@@ -38,6 +38,8 @@ import com.beyobe.client.event.TagClickedEventHandler;
 import com.beyobe.client.event.UnsubscribeEvent;
 import com.beyobe.client.event.UnsubscribeEventHandler;
 import com.beyobe.client.icons.Icons;
+import com.beyobe.client.views.InfoView;
+import com.beyobe.client.views.InfoViewImpl;
 import com.beyobe.client.views.LoginView;
 import com.beyobe.client.views.LoginViewImpl;
 import com.beyobe.client.views.QuestionView;
@@ -85,6 +87,7 @@ public class App {
 	
 	protected static PopinDialog answerPopin;
 	private static Logger log = Logger.getLogger(App.class.getName());
+	public static InfoView infoView = new InfoViewImpl();
 	
 	
 	public static void registerEvents() {

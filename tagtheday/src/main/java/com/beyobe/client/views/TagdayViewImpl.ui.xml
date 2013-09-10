@@ -57,9 +57,9 @@
 	        <g:Label ui:field="yearLabel"/>
 	      </g:VerticalPanel>
 	      
-	       <g:HorizontalPanel styleName='{style.menuPanelItem}'>
-	         <g:Image ui:field="todayIcon" title="today" resource="{icons.today32}" styleName="{style.clickableIcon}" />
-	       </g:HorizontalPanel>
+	       <g:HorizontalPanel styleName='{style.menuPanelItem}' ui:field="toggleImagePanel"/>
+<!-- 	         <g:Image ui:field="todayIcon" title="today" resource="{icons.today32}" styleName="{style.clickableIcon}" /> -->
+<!-- 	       </g:HorizontalPanel> -->
 		  </g:HorizontalPanel>
 		</g:north>
     <g:center>
