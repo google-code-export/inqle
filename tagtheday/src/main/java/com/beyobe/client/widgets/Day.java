@@ -10,18 +10,21 @@ import com.beyobe.client.beans.AnswerStatus;
 import com.beyobe.client.beans.Datum;
 import com.beyobe.client.beans.Question;
 import com.beyobe.client.event.DataCapturedEvent;
+import com.beyobe.client.event.EditQuestionEvent;
 import com.beyobe.client.event.TagClickedEvent;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.beyobe.client.icons.Icons;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.googlecode.mgwt.dom.client.event.tap.TapEvent;
 import com.googlecode.mgwt.dom.client.event.tap.TapHandler;
 import com.googlecode.mgwt.ui.client.widget.RoundPanel;
-import com.googlecode.mgwt.ui.client.widget.ScrollPanel;
+import com.googlecode.mgwt.ui.client.widget.touch.TouchDelegate;
 
 public class Day extends Composite implements Block, TapHandler {
 	private static final String DAY_LABEL_FORMAT = "EEEE, MMMM d, y";
@@ -49,9 +52,12 @@ public class Day extends Composite implements Block, TapHandler {
 //				  panel.setHeight((Window.getClientHeight() - 120) + "px");
 //			  }
 //		}, ResizeEvent.getType() );
+		
+		HorizontalPanel topRow = new HorizontalPanel();
+		topRow.setWidth("100%");
 		dateLabel = new Label(getLabelText());
 		dateLabel.addStyleName("ttd-fullDateLabel");
-		
+		topRow.add(dateLabel);
 //		ScrollPanel scrollPanel = new ScrollPanel();
 		roundPanel = new RoundPanel();
 //		tagsPanel.setWidth("90%");
@@ -67,8 +73,21 @@ public class Day extends Composite implements Block, TapHandler {
 //			  }
 //		}, ResizeEvent.getType() );
 		
-		roundPanel.add(dateLabel);
-//		panel.add(tagsPanel);
+		
+		
+		Icons icons = GWT.create(Icons.class);
+		Image addTagIcon = new Image(icons.add24());
+		TouchDelegate addTagTd = new TouchDelegate(addTagIcon);
+		addTagTd.addTapHandler(new TapHandler() {
+			@Override
+			public void onTap(TapEvent e) {
+				App.eventBus.fireEvent(new EditQuestionEvent(null));
+			}
+		});
+		addTagIcon.addStyleName("ttd-addTagDayIcon");
+		topRow.add(addTagIcon);
+		
+		roundPanel.add(topRow);
 		
 		start = new Date(point.getYear(), point.getMonth(), point.getDate());
 		long startMS = start.getTime();

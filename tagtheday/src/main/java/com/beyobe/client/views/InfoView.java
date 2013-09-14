@@ -12,4 +12,6 @@ public interface InfoView extends IsWidget {
         
         InfoStatus getInfoStatus();
     }
+
+	void setInfoStatusTab(InfoStatus infoStatus);
 }

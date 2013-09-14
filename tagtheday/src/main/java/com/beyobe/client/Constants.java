@@ -13,12 +13,13 @@ public class Constants {
 //	public static final String URL_BEYOBE_SIGNUP = "http://localhost:8082/user/register";
 	
 	//UHURU
-//	public static final String URL_BEYOBE_SERVICE = "http://qds-beyobe.uhurucloud.com/service/";
-//	public static final String URL_BEYOBE_SIGNUP = "http://vlad.imcserver.ro/dpd/user/register";
+//	public static final String URL_BEYOBE_SERVICE = "http://qds.beyobe.org/service/";
+	public static final String URL_BEYOBE_SIGNUP = "http://vlad.imcserver.ro/dpd/user/register";
+	public static final String URL_BEYOBE_SERVICE = "http://qds-beyobe.uhurucloud.com/service/";
 	
 	//STATIC
-	public static final String URL_BEYOBE_SERVICE = "http://qds.beyobe.com/service/";
-	public static final String URL_BEYOBE_SIGNUP = "http://vlad.imcserver.ro/dpd/user/register";
+//	public static final String URL_BEYOBE_SERVICE = "http://qds.beyobe.com/service/";
+//	public static final String URL_BEYOBE_SIGNUP = "http://vlad.imcserver.ro/dpd/user/register";
 	
 	public static final Integer DEFAULT_TEXTFIELD_MAX_LENGTH = 50;
 	public static final Integer DEFAULT_MEMOFIELD_MAX_LENGTH = 2000;
