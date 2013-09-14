@@ -23,6 +23,7 @@ public class InfoActivity extends AbstractActivity implements InfoView.Presenter
         InfoView infoView = App.infoView;
         infoView.setPresenter(this);
         containerWidget.setWidget(infoView.asWidget());
+        infoView.setInfoStatusTab(place.getInfoStatus());
     }
 
 	/**

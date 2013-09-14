@@ -1,7 +1,9 @@
 package com.beyobe.client;
 
+import com.beyobe.client.activities.InfoPlace;
 import com.beyobe.client.activities.LoginPlace;
 import com.beyobe.client.activities.QuestionPlace;
+import com.beyobe.client.activities.TagdayPlace;
 import com.google.gwt.place.shared.Place;
 import com.googlecode.mgwt.mvp.client.Animation;
 import com.googlecode.mgwt.mvp.client.AnimationMapper;
@@ -21,6 +23,9 @@ public class TabletMainAnimationMapper implements AnimationMapper {
 //			return Animation.SLIDE;
 //		}
 		if (newPlace instanceof LoginPlace) {
+			return Animation.SLIDE_REVERSE;
+		}
+		if (newPlace instanceof TagdayPlace && oldPlace instanceof InfoPlace) {
 			return Animation.SLIDE_REVERSE;
 		}
 		return Animation.SLIDE;

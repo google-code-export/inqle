@@ -2,12 +2,59 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:mgwt="urn:import:com.googlecode.mgwt.ui.client.widget">
+  
+  <ui:with field="icons" type="com.beyobe.client.icons.Icons"/>
+  
   <ui:style>
     .mainPanel {
-	
-	 }
+      width: 100%;
+      height: 100%;
+      align: center;
+    }
+    .scrollPanel {
+      
+    }
+    
+    .infosPanel {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .titleBar {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .message {
+      color: #0B61A4;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .pointerLink {
+       cursor:pointer;
+       color:blue;
+       font-size: 1.1em;
+    }
+     .submitButton {
+       margin-top: 16px;
+       margin-bottom: 14px;
+       font-size: 1.1em;
+    }
+    .clickableIcon{
+        cursor: hand;
+        cursor: pointer;            
+    }
+    .infoArea {
+	     margin-bottom: 8px;
+	   }
   </ui:style>
-  <g:VerticalPanel ui:field="panel">
-    <g:StackPanel ui:field="stackPanel"/>
-  </g:VerticalPanel>
+<!--   <g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}"> -->
+  <mgwt:ScrollPanel ui:field="scrollPanel" styleName="{style.scrollPanel}">
+   <g:VerticalPanel ui:field="infosPanel" styleName="{style.infosPanel}">
+     <g:Image ui:field="backIcon" title="Back" resource="{icons.prev32}" styleName="{style.clickableIcon}" />
+     <g:Label styleName="ttd-form-header" text="Alerts" />
+     <g:VerticalPanel ui:field="alertPanel" styleName="{style.infoArea}"/>
+     <g:Label styleName="ttd-form-header" text="About" />
+     <g:VerticalPanel ui:field="aboutPanel" styleName="{style.infoArea}"/>
+   </g:VerticalPanel>
+  </mgwt:ScrollPanel>
+<!--   </g:VerticalPanel> -->
 </ui:UiBinder> 
