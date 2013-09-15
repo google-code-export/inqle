@@ -40,20 +40,25 @@
     }
     .clickableIcon{
         cursor: hand;
-        cursor: pointer;            
+        cursor: pointer;
     }
     .infoArea {
 	     margin-bottom: 8px;
+	   }
+	   .marginedPanel {
+	     margin: 10px 10px 10px 10px;
 	   }
   </ui:style>
 <!--   <g:VerticalPanel ui:field="panel" styleName="{style.mainPanel}"> -->
   <mgwt:ScrollPanel ui:field="scrollPanel" styleName="{style.scrollPanel}">
    <g:VerticalPanel ui:field="infosPanel" styleName="{style.infosPanel}">
+      <g:VerticalPanel styleName="{style.marginedPanel}">
      <g:Image ui:field="backIcon" title="Back" resource="{icons.prev32}" styleName="{style.clickableIcon}" />
-     <g:Label styleName="ttd-form-header" text="Alerts" />
+     <g:Label styleName="ttd-form-title" text="Alerts" />
      <g:VerticalPanel ui:field="alertPanel" styleName="{style.infoArea}"/>
-     <g:Label styleName="ttd-form-header" text="About" />
+     <g:Label styleName="ttd-form-title" text="About" />
      <g:VerticalPanel ui:field="aboutPanel" styleName="{style.infoArea}"/>
+     </g:VerticalPanel>
    </g:VerticalPanel>
   </mgwt:ScrollPanel>
 <!--   </g:VerticalPanel> -->

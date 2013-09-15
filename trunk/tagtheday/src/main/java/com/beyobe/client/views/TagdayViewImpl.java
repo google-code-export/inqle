@@ -169,6 +169,7 @@ public class TagdayViewImpl extends Composite implements TagdayView, SwipeStartH
 					App.placeController.goTo(new InfoPlace(InfoStatus.UNSAVED));
 				}
 			});
+            warnIcon.addStyleName("ttd-warnIcon");
 //            daysPanel.setHeight("100%");
             daysPanel.setWidth("100%");
             
